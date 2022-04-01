@@ -1,0 +1,105 @@
+*{
+    margin: 0;
+    font-family: 'Roboto',sans-serif,monospace;
+}
+
+body{
+    background: #161616;
+}
+
+#topbar{
+    background: #393939;
+    position: absolute;
+    left: 10px;
+    right: 10px;
+    height: 50px;
+    top: 10px;
+    border-radius: 10px;
+    padding: 0;
+}
+
+.toolbarButton{
+    text-align: center;
+    justify-content: center;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    float:left;
+    border-radius: 10px;
+    padding-right: 10px;
+    user-select: none;
+}
+.toolbarButton:hover{
+    background: rgba(255,255,255,0.1);
+    float:left;
+
+}
+
+.toolbarButton:active{
+    background: rgba(255,255,255,0.2);
+    float:left;
+}
+
+#notesDiv{
+    position: absolute;
+    top:70px;
+    left:10px;
+    right:10px;
+    bottom:10px;
+    color:white;
+    
+}
+
+.note{
+    border-radius: 10px;
+    display: inline-block;
+    margin: 5px;
+    padding: 10px;
+    user-select: none;
+    cursor: pointer;
+}
+
+
+.dialogBox{
+    border-radius: 10px;
+    padding: 10px;
+    background-color: #393939;
+    color:white;
+    
+}
+
+.dialogBox span,textarea{
+    display: block;
+    border-radius: 10px;
+    border: none;
+}
+
+.dialogBox textarea{
+    background-color: #393939;
+    color:white;
+}
+
+.dialogBox button{
+    background-color: transparent;
+    border:none;
+    color:white;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 14px;
+    cursor: pointer;
+    
+}
+
+.dialogBox *{
+    margin: 5px;
+    display: block;
+}
+.dialogBox button:hover{
+    background-color: rgba(255,255,255,0.1);
+
+}
+.dialogBox button:active{
+    background-color: rgba(255,255,255,0.2);
+
+}
