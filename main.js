@@ -6,6 +6,7 @@ let CurrentColorSchemeString;
 let LightThemeColors = JSON.parse(fs.readFileSync("colors_light.json"));
 let DarkThemeColors = JSON.parse(fs.readFileSync("colors_dark.json"));
 let Settings;
+let SearchBox=document.getElementById("searchBox");
 (fs.access(dataDir,fs.constants.F_OK,(err)=>{
     if(err){
         console.log("Data directory doesn't exist. Creating one.");
@@ -36,7 +37,7 @@ note json format
 (fs.access(dataDir+"/settings.json",fs.constants.F_OK,(err)=>{
     if(err){
         console.log("Data file doesn't exist. Creating one.");
-        fs.writeFileSync(dataDir+"/settings.json",'{"theme":"light"}',(err)=>{});
+        fs.writeFileSync(dataDir+"/settings.json",'{"theme":"light","corner_radius":"10px"}',(err)=>{});
     }
 }));
 Settings=JSON.parse(fs.readFileSync(dataDir+"/settings.json"));
@@ -51,11 +52,12 @@ if(Settings.theme=="dark"){
     document.getElementById("menuImg").src="dark_theme.svg";
 }
 ApplyTheme();
+
 function ApplyTheme(){
-    document.body.style.background=CurrentColorScheme.background;
-    document.body.style.color=CurrentColorScheme.foreground;
-    document.getElementById("topbar").style.background=CurrentColorScheme.background;
-    document.getElementById("topbar").style.color=CurrentColorScheme.foreground;
+    document.documentElement.style.setProperty("--background",CurrentColorScheme.background);
+    document.documentElement.style.setProperty("--foreground",CurrentColorScheme.foreground);
+    document.documentElement.style.setProperty("--shadow",CurrentColorScheme.shadow);
+    document.documentElement.style.setProperty("--radius",Settings.corner_radius);
     if(CurrentColorSchemeString=="light") {
         document.getElementById("addImg").style.filter="invert(100%)";
         //document.getElementById("menuImg").style.filter="invert(100%)";
@@ -74,6 +76,23 @@ let NotesJSON;
 var EditedNote;
 
 ReloadNotes();
+
+SearchBox.addEventListener("input",()=>{
+    NotesContainer.childNodes.forEach((element)=>{
+        if(SearchBox.value==""){
+            element.style.display="inline-block";
+        }
+        else{
+            if(String.prototype.includes.call(String.prototype.toLowerCase.call(element.firstChild.innerText),String.prototype.toLowerCase.call(SearchBox.value))
+            || String.prototype.includes.call(String.prototype.toLowerCase.call(element.lastChild.innerText),String.prototype.toLowerCase.call(SearchBox.value))){
+                element.style.display="inline-block";
+            }
+            else{
+                element.style.display="none";
+            }
+        }
+    });
+});
 
 function NewNoteClickHandler(){
     var n= NewNote();

@@ -1,10 +1,17 @@
+:root{
+    --background: #393939;
+    --foreground: #ffffff;
+    --shadow: #000000;
+    --radius: var(--radius);
+}
+
 *{
     margin: 0;
     font-family: 'Roboto',sans-serif,monospace;
 }
 
 body{
-    background: #161616 ;
+    background: var(--background) ;
 }
 
 #topbar{
@@ -14,10 +21,12 @@ body{
     right: 20px;
     height: 50px;
     top: 20px;
-    border-radius: 10px;
+    border-radius: var(--radius);
     padding: 0;
     /*box-shadow: 0px 0px 10px black ;*/
 }
+
+
 
 .toolbarButton{
     text-align: center;
@@ -27,21 +36,39 @@ body{
     align-items: center;
     cursor: pointer;
     float:left;
-    border-radius: 10px;
+    border-radius: var(--radius);
     
     user-select: none;
-    background: #393939;
-    box-shadow: 0px 0px 10px black ;
+    background: var(--background);
+    box-shadow: 0px 0px 10px var(--shadow) ;
 }
 .toolbarButton:hover{
-    box-shadow: 0px 0px 15px black ;
+    animation: 0.2s zoom ease forwards;
+    box-shadow: 0px 0px 15px var(--shadow) ;
     float:left;
 
 }
 
+#searchBarContainer{
+    margin-left: 10px;
+    
+    background-color: black;
+}
+#searchBarContainer input{
+    font-size:18px;
+    padding: 10px;
+    outline: transparent;
+    height:50px;
+    border-radius: var(--radius);
+    appearance: none;
+    background: var(--background);
+    color: var(--text);
+    border: 0px solid transparent;
+}
 .toolbarButton:active{
-    box-shadow: 0px 0px 20px black ;
+    box-shadow: 0px 0px 20px var(--shadow) ;
     float:left;
+    animation: clickCollapse 0.2s ease forwards;
 }
 
 #notesDiv{
@@ -50,23 +77,36 @@ body{
     left:10px;
     right:10px;
     bottom:10px;
-    color:white;
+    color:var(--foreground);
     
 }
 
 .note{
-    border-radius: 10px;
+    border-radius: var(--radius);
     display: inline-block;
     margin: 10px;
     padding: 10px;
     user-select: none;
     cursor: pointer;
     border: 2px solid transparent;
-    box-shadow: 0px 0px 10px black ;
+    box-shadow: 0px 0px 10px var(--shadow) ;
 }
 
 .note:hover{
-    box-shadow: 0px 0px 15px black ;
+    box-shadow: 0px 0px 15px var(--shadow) ;
+    animation: 0.2s zoom ease forwards;
+}
+
+@keyframes zoom{
+    to{
+        transform: scale(1.05);
+    }
+}
+
+@keyframes clickCollapse{
+    to{
+        transform: scale(0.95);
+    }
 }
 
 .note h6{
@@ -75,19 +115,20 @@ body{
 }
 
 .note:active{
-    box-shadow: 0px 0px 20px black ;
+    box-shadow: 0px 0px 20px var(--shadow) ;
+    animation: clickCollapse 0.2s ease forwards;
 }
 .dialogBox{
-    border-radius: 10px;
-    padding: 10px;
-    background-color: #393939;
-    color:white;
+    border-radius: var(--radius);
+    padding: 20px;
+    background-color: var(--background);
+    color:var(--foreground);
     animation: pop 0.1s ease forwards;
 }
 
 .dialogBox span,textarea{
     display: block;
-    border-radius: 10px;
+    border-radius: var(--radius);
     border: none;
 }
 
@@ -99,7 +140,7 @@ body{
     padding: 10px;
     width: 300px;
     height: 150px;
-    
+    margin: 10px;
 }
 
 .collapsebox{
@@ -123,20 +164,21 @@ body{
     }
 }
 .dialogBox input[type="text"]{
-    background-color: #393939;
+    background-color: var(--background);
     color:white;
     box-shadow: rgba(0,0,0,0.6) 0px 0px 15px;
     outline: transparent;
     padding: 10px;
     width: 300px;
     
-    border-radius: 10px;
+    border-radius: var(--radius);
 }
 .dialogBox input[type="text"]{
     box-shadow: rgba(0,0,0,0.85) 0px 0px 15px;
 }
 .dialogBox textarea:hover{
     box-shadow: rgba(0,0,0,0.85) 0px 0px 15px;
+    animation: 0.2s zoom ease forwards;
 }
 .dialogBox input[type="text"]{
     box-shadow: rgba(0,0,0,1) 0px 0px 15px;
@@ -152,7 +194,7 @@ body{
     border:none;
     
     padding: 10px;
-    border-radius: 10px;
+    border-radius: var(--radius);
     font-size: 14px;
     cursor: pointer;
     box-shadow: rgba(0,0,0,0.6) 0px 0px 15px;
@@ -168,10 +210,12 @@ body{
 .dialogBox button:hover{
     background-color: rgba(255,255,255,0.1);
     box-shadow: rgba(0,0,0,0.8) 0px 0px 15px;
+    animation: 0.2s zoom ease forwards;
 }
 .dialogBox button:active{
     background-color: rgba(255,255,255,0.6);
     box-shadow: rgba(0,0,0,1) 0px 0px 15px;
+    animation: clickCollapse 0.2s ease forwards;
 }
 
 .dialogBox input[type="color"]{
@@ -181,7 +225,7 @@ body{
 input[type="color"]{
     width: 30px;
     height: 30px;
-    border-radius: 6px;
+    border-radius: var(--radius);
     border: none;
     padding: 0;
     appearance: none;
@@ -195,13 +239,14 @@ input[type="color"]::-webkit-color-swatch-wrapper{
 }
 
 input[type="color"]::-webkit-color-swatch{
-    border-radius: 5px;
+    border-radius: var(--radius);
     border: solid 1px transparent;
 
     box-shadow: rgba(0,0,0,1) 0px 0px 10px;
 }
 
 input[type="color"]:hover{
-    
+    animation: 0.2s zoom ease forwards;
     box-shadow: rgba(0,0,0,0.7) 0px 0px 10px;
 }
+
