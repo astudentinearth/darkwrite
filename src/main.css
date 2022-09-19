@@ -1,0 +1,75 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities; 
+@tailwind variants;
+:root{
+    --background-default:white;
+    --shadow: rgba(0,0,0,0.2);
+    --text-default: black;
+    --font: "Roboto";
+    --border: none;
+}
+
+.app_root{
+    background-color: var(--background-default);
+    color:var(--text-default);
+    font-family: var(--font);
+}
+
+.border-default{
+    border: var(--border);
+}
+
+.div_tasks{
+    box-shadow: 0px 5px 15px 2px var(--shadow);
+}
+
+.shadow-default{
+    box-shadow: 0px 4px 30px 2px var(--shadow);
+} 
+.shadow-default-hover{
+    @apply shadow-default transition-shadow duration-100;
+}
+.shadow-default-hover:hover{
+    box-shadow: 0px 4px 32px 4px var(--shadow);
+}
+.background-default{
+    background-color: var(--background-default);
+}
+
+.text-default{
+    color: var(--text-default);
+}
+
+.note-edit-dialog{
+    background-color: transparent;
+}
+
+.note-edit-dialog.open{
+    background-color: rgba(0,0,0,0.3);
+}
+
+
+.dropdown{
+    @apply appearance-none background-default border-default text-default shadow-default-hover p-2 rounded-xl cursor-pointer;
+}
+
+input[type=text]{
+    background-color: var(--background-default);
+    color: var(--text-default);
+    @apply shadow-default rounded-xl p-2 border-default;
+}
+
+input[type=time]{
+    background-color: var(--background-default);
+    color: var(--text-default);
+    @apply shadow-default rounded-xl p-2 border-default;
+}
+
+.button{
+    @apply background-default shadow-default-hover rounded-xl p-4 cursor-pointer;
+}
+
+.hide-outline:focus{
+    outline:none;
+}
