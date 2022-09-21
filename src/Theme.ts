@@ -5,7 +5,6 @@ import {appDir, homeDir} from "../node_modules/@tauri-apps/api/path"
 import { GlobalSettings } from "./GlobalSettings";
 let HOME:string;
 let APPDIR:string; // this has a slash in the end!
-let DynamicThemeInterval:any;
 const LightTheme_Fallback=`{
     "name":"Darkwrite Light",
     "background": "#ffffff",
@@ -81,16 +80,15 @@ class Themes{
 }
 // reads the theme files and creates theme objects 
 async function SetupThemes(){
-    clearInterval(DynamicThemeInterval);
-    console.log("Setting themes up...");
+    console.log("[INFO] Setting themes up");
     APPDIR=await appDir();
     HOME=await homeDir();
     // apply fallback themes if the files are not there
    
-    console.log("Checking for color schemes directory...");
+    console.log("[INFO] Checking for color schemes directory");
     
     if (await invoke("path_exists",{targetPath:APPDIR+"color-schemes/"})==false){
-        console.log("Color schemes directory doesn't exist. Creating it and copying default themes.");
+        console.log("[WARNING] Color schemes directory doesn't exist. Creating it and copying default themes.");
         await createDir(APPDIR+"color-schemes");
         await writeFile(APPDIR+"color-schemes/colors_light.json",LightTheme_Fallback);
         await writeFile(APPDIR+"color-schemes/colors_dark.json",DarkTheme_Fallback);
@@ -113,22 +111,20 @@ async function SetupThemes(){
             Themes.CurrentTheme=Theme.Light;
             Themes.CurrentThemeJSON=Themes.LightThemeJSON;    
             break;
-
-        case Theme.Dynamic:
-            
-            break;
         }
-
+    console.log("[INFO] Applying theme preferences");
     ApplyTheme(GlobalSettings.ThemeMode);
 }
 
 
 // Applies a theme
+// TODO: Separate the inner part to a separate function: duplicate code. Give the JSON object to the new function to apply it.
 function ApplyTheme(theme:Theme){
+    console.log("[INFO from ApplyTheme()] Applying theme");
     document.documentElement.style.setProperty("--font",GlobalSettings.Font);
     switch(theme){
         case Theme.Dark:
-            
+            console.log("[INFO from ApplyTheme] Setting up dark theme");
             document.documentElement.style.setProperty("--background-default",String(Themes.DarkThemeJSON["background"]));
             document.documentElement.style.setProperty("--text-default",String(Themes.DarkThemeJSON["foreground"]));
             document.documentElement.style.setProperty("--shadow",String(Themes.DarkThemeJSON["shadow"]));
@@ -137,10 +133,12 @@ function ApplyTheme(theme:Theme){
                 document.documentElement.style.setProperty("--border",Themes.DarkThemeJSON["border"])
             }
             else{
+                console.log("[WARNING from ApplyTheme] Selected theme doesn't make use of the 'border' property. No border will be used.");
                 document.documentElement.style.setProperty("--border","none");
             }
             break;
         case Theme.Light:
+            console.log("[INFO from ApplyTheme] Setting up light theme");
             document.documentElement.style.setProperty("--background-default",String(Themes.LightThemeJSON["background"]));
             document.documentElement.style.setProperty("--text-default",String(Themes.LightThemeJSON["foreground"]));
             document.documentElement.style.setProperty("--shadow",String(Themes.LightThemeJSON["shadow"]));
@@ -149,14 +147,17 @@ function ApplyTheme(theme:Theme){
                 document.documentElement.style.setProperty("--border",Themes.LightThemeJSON["border"])
             }
             else{
+                console.log("[WARNING from ApplyTheme] Selected theme doesn't make use of the 'border' property. No border will be used.");
                 document.documentElement.style.setProperty("--border","none");
             }
             break;
         default:
+            console.log("[WARNING from ApplyTheme()] Default case triggered. Falling back to light theme.");
             ApplyTheme(Theme.Light);
             break;
     }
 }
+
 // Switches the theme
 function SwitchTheme(){
     if (Themes.CurrentTheme==Theme.Dark){
@@ -169,7 +170,6 @@ function SwitchTheme(){
 
 enum Theme{
     Light=0,
-    Dynamic=1,
-    Dark=2,
+    Dark=1,
 }
 export {Themes,Theme,SetupThemes,ApplyTheme,SwitchTheme,APPDIR};

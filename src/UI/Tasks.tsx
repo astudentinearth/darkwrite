@@ -23,13 +23,13 @@ function TaskInputChanged(){
 
 async function LoadTasks(){
     let APPDIR=await appDir();
-    console.log("Loading tasks...");
+    console.log("[INFO from LoadTasks()] Loading tasks");
     if(!await invoke("path_exists",{targetPath:APPDIR+"tasks.json"})){
-        console.log("Tasks file not found. Creating it.");
+        console.log("[WARNING] Tasks file not found. Initializing a file with no tasks");
         await writeFile(APPDIR+"tasks.json",`{"tasks":[]}`);
         return [] as string[];
     }
-    console.log("Reading file...");
+    console.log("[INFO from LoadTasks()] Reading tasks file");
     let tasksFile:string=await readTextFile(APPDIR+"tasks.json");
     let tasksJSON=JSON.parse(tasksFile);
     console.log(tasksJSON.tasks);
@@ -38,7 +38,7 @@ async function LoadTasks(){
 
 async function SaveTasks(){
     let APPDIR=await appDir();
-    console.log("Saving tasks...");
+    console.log("[INFO from SaveTasks()] Saving tasks");
     await writeFile(APPDIR+"tasks.json",JSON.stringify({tasks:getTasks()}));
 }
 
@@ -51,9 +51,6 @@ tasks json format
 function Tasks(){
     const [tasks,setTasks] = useState([] as string[]); // an array of strings that represent tasks
     useEffect(()=>{
-        LoadTasks().then((ret)=>{
-            setTasks(ret);
-        });
     },[]);
     changeTasks=setTasks;
     getTasks=returnTasks;

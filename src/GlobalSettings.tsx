@@ -1,36 +1,45 @@
-import { SetupThemes, Theme } from "./Theme";
+import { Theme } from "./Theme";
 import { readTextFile,writeTextFile } from "@tauri-apps/api/fs";
 import { appDir } from "@tauri-apps/api/path";
 import { invoke } from "@tauri-apps/api";
-import {LoadTasks} from "./UI/Tasks";
 let settings_json:any;
 let APPDIR:string;
 const DefaultSettings:string=`
 {
     "version":"1",
     "theme":"dark",
-    "darkThemeStart":"18:00",
-    "darkThemeEnd":"06:00",
     "lightSchemeFile":"colors_light.json",
     "darkSchemeFile":"colors_dark.json",
-    "font":"Roboto",
+    "font":"Roboto"
 }
 `;
 
 async function LoadSettings(){
+    console.log("[INFO] Loading settings");
     APPDIR=await appDir();
-    console.log("Checking if app data directory exists...");
-    if (await invoke("path_exists",{targetPath: APPDIR})==false){
-        console.log("App directory doesn't exist. Creating it.");
+    console.log("[INFO] Checking if app data directory exists...");
+    if (await invoke("path_exists",{targetPath: APPDIR})===false){ //to be migrated to tauri fs:exists
+        console.log("[WARNING] App directory doesn't exist. Creating it.");
         invoke ("createDir",{ dir: APPDIR});
     }
-    let settingsExists = await invoke("path_exists",{targetPath:await appDir()+"settings.json"});
-    if (settingsExists==false){
-        console.log("Settings file not found. Generating...");
+    console.log("[INFO] Checking for settings file")
+    let settingsExists = await invoke("path_exists",{targetPath:APPDIR+"settings.json"});
+    if (settingsExists===false){
+        console.log("[WARNING] Settings file not found. Creating default settings file");
         await writeTextFile(await appDir()+"settings.json",DefaultSettings);
     }
+    
     let settings_string:string = await readTextFile(await appDir()+"settings.json");
+    console.log(settings_string)
+    //TODO: Handle broken config files
+    if(settings_string.trim()==="" || settings_string === null || settings_string === undefined){
+        console.log("here1")
+        console.error("[ERROR] Something went wrong, and we couldn't load the settings. We can't proceed further.");
+        return;
+    }
+    console.log("here 2")
     settings_json=JSON.parse(settings_string);
+    console.log("here 3")
     switch (settings_json.theme){
         case "dark":
             GlobalSettings.ThemeMode=Theme.Dark;
@@ -38,20 +47,14 @@ async function LoadSettings(){
         case "light":
             GlobalSettings.ThemeMode=Theme.Light;
             break;
-        case "dynamic":
-            GlobalSettings.ThemeMode=Theme.Dynamic;
-            break;
         default:
             GlobalSettings.ThemeMode=Theme.Light;
             break;
     }
-    GlobalSettings.DarkThemeStart=settings_json.darkThemeStart;
-    GlobalSettings.DarkThemeEnd=settings_json.darkThemeEnd;
     GlobalSettings.LightSchemeFile=settings_json.lightSchemeFile;
     GlobalSettings.DarkSchemeFile=settings_json.darkSchemeFile;
     GlobalSettings.Font=settings_json.font;
-    await SetupThemes();
-    await LoadTasks();
+    console.log("[INFO] LoadSettings() finished.")
 }
 
 class GlobalSettings{
@@ -61,11 +64,12 @@ class GlobalSettings{
     public static LightSchemeFile:string;
     public static DarkSchemeFile:string;
     public static Font:string;
-    public static Version:string="1.0b1";
+    public static Version:string="1.0d";
 }
 
 function SaveAllSettings(){
-    settings_json.version="1";
+    console.log("[INFO] Saving all settings.");
+    settings_json.version=GlobalSettings.Version;
     settings_json.font=GlobalSettings.Font;
     switch(GlobalSettings.ThemeMode){
         case Theme.Light:
@@ -75,18 +79,12 @@ function SaveAllSettings(){
         case Theme.Dark:
             settings_json.theme="dark";
             break;
-        
-        case Theme.Dynamic:
-            settings_json.theme="dynamic";
-            break;
     }
-    
-    settings_json.darkThemeStart=GlobalSettings.DarkThemeStart;
-    settings_json.darkThemeEnd=GlobalSettings.DarkThemeEnd;
     settings_json.darkSchemeFile=GlobalSettings.DarkSchemeFile;
     settings_json.lightSchemeFile=GlobalSettings.LightSchemeFile;
     let settings_string = JSON.stringify(settings_json);
     writeTextFile(APPDIR+"settings.json",settings_string).then(()=>{
+        console.log("[INFO] Settings saved. Reloading settings")
         LoadSettings();
     });
 }

@@ -3,19 +3,17 @@ import { GlobalSettings, SaveAllSettings } from "../../GlobalSettings";
 import { Theme } from "../../Theme";
 
 function setLightTheme(){
+    console.log("[INFO] Theme preference has been changed to light theme.");
     GlobalSettings.ThemeMode=Theme.Light;
     SaveAllSettings();
 }
 
 function setDarkTheme(){
+    console.log("[INFO] Theme preference has been changed to dark theme.");
     GlobalSettings.ThemeMode=Theme.Dark;
     SaveAllSettings();
 }
 
-function setDynamicTheme(){
-    GlobalSettings.ThemeMode=Theme.Dynamic;
-    SaveAllSettings();
-}
 
 function ThemeApplet(){
     return <div className=" background-default p-4 my-4 rounded-2xl border-default shadow-default">
@@ -54,21 +52,19 @@ function ThemeApplet(){
 function handleFont(e:any){
     
     if(e.keyCode==13){
-        console.log("saving fonts...");
         let fontbox:any = document.getElementById("fontBox");
         GlobalSettings.Font=fontbox.value;
+        console.log(`[INFO] User has changed their font to ${fontbox.value}`);
         SaveAllSettings();
     }
 }
 
 function SaveColorSchemes(){
-
     let lightSchemeChooser:any=document.getElementById("lightColorScheme");
     let darkSchemeChooser:any=document.getElementById("darkColorScheme");
-
-    
     GlobalSettings.DarkSchemeFile=darkSchemeChooser.value;
     GlobalSettings.LightSchemeFile=lightSchemeChooser.value;
+    console.log("[INFO] Saving user color scheme preferences.");
     SaveAllSettings();
 }
 export default ThemeApplet;

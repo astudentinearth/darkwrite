@@ -31,9 +31,13 @@
     "bundle": {
       "active": true,
       "category": "Productivity",
-      "copyright": "",
+      "copyright": "Copyright (c) 2022 astudentinearth",
       "deb": {
-        "depends": []
+        "depends": [],
+        "files": {
+          "/usr/share/doc/io.astudentinearth.github.darkwrite/copyright/LICENSE":"../LICENSE",
+          "/usr/share/doc/io.astudentinearth.github.darkwrite/copyright/3rd-party-licenses.txt":"../3rd-party-licenses.txt"
+        }
       },
       "externalBin": [],
       "icon": [
