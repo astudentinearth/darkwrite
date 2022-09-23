@@ -20,13 +20,11 @@ function ShowTasks(){
 }
 function MainToolbar(){
 	return <div className="main_toolbar inline-block text-default transition-all h-14 m-4 absolute left-0 right-0 bottom-0 top-0 duration-500">
-		<div onClick={ShowTasks} className="h-14 transition-all border-default active:scale-90 w-14 float-left m-1 rounded-2xl flex cursor-pointer shadow-default-hover background-default align-middle justify-center items-center"><i className="bi-list-task text-default text-3xl"></i></div>
-		<div className="h-14 active:scale-90 transition-all w-14 border-default float-left m-1 rounded-2xl flex cursor-pointer shadow-default-hover background-default align-middle justify-center items-center"><i className="bi-plus-lg text-default text-3xl"></i></div>
-		<input type="text" placeholder="Type here to search" border-default className="background-default transition-all hide-outline active:scale-90 shadow-default-hover h-14 w-80 p-6 text-xl rounded-2xl m-1"></input>
-		<div onClick={ShowSettings} className="h-14 active:scale-90 w-14 transition-all border-default float-right m-1 rounded-2xl flex cursor-pointer shadow-default-hover background-default align-middle justify-center items-center"><i className="bi-list text-default text-3xl"></i></div>
- 
-		<div onClick={SwitchTheme} className="h-14 transition-all active:scale-90 w-14 border-default float-right m-1 rounded-2xl cursor-pointer shadow-default-hover  hidden background-default align-middle justify-center items-center"><i className="bi-moon text-default text-3xl"></i></div>
-		   </div>;
+		<div onClick={ShowTasks} className="toolbar-button float-left"><i className="bi-list-task text-default text-3xl"></i></div>
+		<div className="toolbar-button float-left"><i className="bi-plus-lg text-default text-3xl"></i></div>
+		<input type="text" placeholder="Type here to search" className="background-secondary transition-all hide-outline active:scale-90 shadow-default-hover h-14 w-80 p-6 text-xl rounded-2xl m-1"></input>
+		<div onClick={ShowSettings} className="toolbar-button float-right align-middle justify-center items-center"><i className="bi-list text-default text-3xl"></i></div>
+    </div>;
 }
 function ShowSettings(){
 	let settings:any = document.getElementById("settingsUI");

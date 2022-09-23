@@ -1,22 +1,25 @@
 import React from "react";
 import { GlobalSettings, SaveAllSettings } from "../../GlobalSettings";
-import { Theme } from "../../Theme";
+import { Theme,ApplyTheme, SetupThemes } from "../../Theme";
 
 function setLightTheme(){
     console.log("[INFO] Theme preference has been changed to light theme.");
     GlobalSettings.ThemeMode=Theme.Light;
     SaveAllSettings();
+    SetupThemes().then(()=>{ApplyTheme(Theme.Light);});
 }
 
 function setDarkTheme(){
     console.log("[INFO] Theme preference has been changed to dark theme.");
     GlobalSettings.ThemeMode=Theme.Dark;
     SaveAllSettings();
+    SetupThemes().then(()=>{ApplyTheme(Theme.Dark);});
+    
 }
 
 
 function ThemeApplet(){
-    return <div className=" background-default p-4 my-4 rounded-2xl border-default shadow-default">
+    return <div className=" background-secondary p-4 my-4 rounded-2xl border-default shadow-default">
         <span className="text-2xl m-4 font-bold block text-default">Theme</span>
         <div className="inline-block p-2">
             <div className="float-left text-center m-4">
@@ -42,11 +45,8 @@ function ThemeApplet(){
                 <option>Darkwrite</option>
                 <option>Darkwrite Light</option>
             </select>
-        </div>
-        <span className="text-xl m-4 text-default hidden">Dynamic theme options</span>
-        <span className="p-4 hidden">Turn off dark mode at: </span><input className="hidden" type="time" value="06:00"></input>
-        <span className="p-4 hidden">Turn on dark mode at: </span><input className="hidden" type="time" value="18:00"></input><br></br><br></br>
-        <span className="p-4">Font (press enter to save): </span><input id="fontBox" tabIndex={0}  type="text" onKeyDown={handleFont} defaultValue="Roboto"></input>
+        </div><br></br>
+        <span className="p-4">Font (press enter to save): </span><input id="fontBox" className="rounded-xl background-secondary text-default" tabIndex={0}  type="text" onKeyDown={handleFont} defaultValue="Roboto"></input>
     </div>
 }
 function handleFont(e:any){
@@ -66,5 +66,6 @@ function SaveColorSchemes(){
     GlobalSettings.LightSchemeFile=lightSchemeChooser.value;
     console.log("[INFO] Saving user color scheme preferences.");
     SaveAllSettings();
+    SetupThemes().then(()=>{ApplyTheme(GlobalSettings.ThemeMode);});
 }
 export default ThemeApplet;

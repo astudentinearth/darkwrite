@@ -2,6 +2,7 @@ import React from "react";
 import ThemeApplet from "./SettingsApplets/ThemeApplet";
 import About from "./SettingsApplets/About";
 import {SaveAllSettings,LoadSettings,GlobalSettings} from "../GlobalSettings"
+import DebugInfo from "./SettingsApplets/DebugInfo";
 function Settings(){
     return <div className="background-default absolute left-0 hidden p-4 z-20 right-0 top-0 bottom-0" id="settingsUI">
         <div className="w-full ">
@@ -12,6 +13,7 @@ function Settings(){
 
             <ThemeApplet></ThemeApplet>
             <About></About>
+            <DebugInfo></DebugInfo>
         </div>
     </div>
 }

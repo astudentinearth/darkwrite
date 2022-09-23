@@ -10,7 +10,7 @@ let getTasks:any;
 function TaskInputChanged(){
     // Manage the "press enter" tip
     // If there is something in the box, show the tooltip
-    let TaskInput:any = document.getElementById("taskInput");
+    /*let TaskInput:any = document.getElementById("taskInput");
     let TaskInputTip:any = document.getElementById("taskInputTip");
     if(String(TaskInput.value)==""){
         TaskInputTip.style.setProperty("display","none");
@@ -18,7 +18,7 @@ function TaskInputChanged(){
     else{
         TaskInputTip.style.setProperty("display","inline");
         
-    }
+    }*/
 } 
 
 async function LoadTasks(){
@@ -51,6 +51,11 @@ tasks json format
 function Tasks(){
     const [tasks,setTasks] = useState([] as string[]); // an array of strings that represent tasks
     useEffect(()=>{
+        const load = async ()=>{
+            let _tasks =await LoadTasks();
+            setTasks(_tasks);
+        }
+        load();
     },[]);
     changeTasks=setTasks;
     getTasks=returnTasks;
@@ -78,12 +83,14 @@ function Tasks(){
             taskInput.value="";
         }
     }
-    return <div id="TaskPanel" className="div_tasks fixed w-72 overflow-y-auto border-default shadow-xl background-default shadow-default text-default 3md:block rounded-2xl 3md:bottom-0 3md:left-0 bottom-0 top-20  z-10 m-5 open transition-all" >
-        <input onChange={TaskInputChanged} tabIndex={0} type="text" onKeyDown={InputKeyDown} id="taskInput" placeholder="A new task" className="m-4 border-default hide-outline background-default active:scale-90 shadow-default-hover h-10 p-2 text-xl rounded-lg"></input>
+    return <div id="TaskPanel" className="div_tasks fixed w-72 overflow-y-auto border-default background-secondary text-default  rounded-2xl 3md:bottom-0 3md:left-0 bottom-0 top-20  z-10 m-5 open transition-all" >
+        <div className="flex">
+        <input onChange={TaskInputChanged} tabIndex={0} type="text" onKeyDown={InputKeyDown} id="taskInput" placeholder="A new task" className="border-default flex-1 flex hide-outline background-secondary h-12 p-2 text-xl"></input>
         <span id="taskInputTip" className="text-default opacity-50 mx-4 hidden">Press enter to add this task.</span>
-        <div id="tasksDiv">
-            {tasks.map((task)=><div onClick={()=>removeTask(task)} className="m-4 flex items-center cursor-pointer shadow-default-hover rounded-xl">
-                        <span className="text-default p-2 text-sm">{task}</span>
+        </div>
+         <div id="tasksDiv">
+            {tasks.map((task)=><div onClick={()=>removeTask(task)} className="flex items-center background-secondary cursor-pointer hover:brightness-125">
+                        <span className="text-default p-2 text-md">{task}</span>
                         </div>)}
         </div>
     </div>  

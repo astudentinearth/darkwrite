@@ -25,7 +25,11 @@
         "removeFile": true,
         "renameFile": true,
         "scope": ["$APP/**/*"],
-        "writeFile": true
+        "writeFile": true,
+        "exists": true
+      },
+      "os":{
+        "all": true
       }
     },
     "bundle": {

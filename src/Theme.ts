@@ -8,14 +8,16 @@ let APPDIR:string; // this has a slash in the end!
 const LightTheme_Fallback=`{
     "name":"Darkwrite Light",
     "background": "#ffffff",
-    "foreground": "#000000",
-    "shadow": "rgba(0,0,0,0.2)"
+    "foreground": "#000000", 
+    "background-secondary":"#e5e5e5",
+    "shadow": "rgba(40,40,40,0.3)"
 }
 `;
 const DarkTheme_Fallback=`{
     "name":"Darkwrite",
     "background": "#393939",
     "foreground": "#ffffff",
+    "background-secondary":"#494949",
     "shadow": "rgba(0,0,0,0.2)"
 }`;
 const PastelPink=`
@@ -125,31 +127,21 @@ function ApplyTheme(theme:Theme){
     switch(theme){
         case Theme.Dark:
             console.log("[INFO from ApplyTheme] Setting up dark theme");
-            document.documentElement.style.setProperty("--background-default",String(Themes.DarkThemeJSON["background"]));
-            document.documentElement.style.setProperty("--text-default",String(Themes.DarkThemeJSON["foreground"]));
-            document.documentElement.style.setProperty("--shadow",String(Themes.DarkThemeJSON["shadow"]));
+            document.documentElement.style.setProperty("--background-default",Themes.DarkThemeJSON["background"]||"#373737");
+            document.documentElement.style.setProperty("--text-default",Themes.DarkThemeJSON["foreground"] || "#FFFFFF");
+            document.documentElement.style.setProperty("--shadow",Themes.DarkThemeJSON["shadow"] || "rgba(0,0,0,0.2)");
+            document.documentElement.style.setProperty("--border",Themes.DarkThemeJSON["border"]||"none")
+            document.documentElement.style.setProperty("--background-secondary",Themes.DarkThemeJSON["background-secondary"]||(Themes.DarkThemeJSON["background"]||"#494949"))
             Themes.CurrentTheme=Theme.Dark;
-            if(Themes.DarkThemeJSON.border){
-                document.documentElement.style.setProperty("--border",Themes.DarkThemeJSON["border"])
-            }
-            else{
-                console.log("[WARNING from ApplyTheme] Selected theme doesn't make use of the 'border' property. No border will be used.");
-                document.documentElement.style.setProperty("--border","none");
-            }
             break;
         case Theme.Light:
             console.log("[INFO from ApplyTheme] Setting up light theme");
-            document.documentElement.style.setProperty("--background-default",String(Themes.LightThemeJSON["background"]));
-            document.documentElement.style.setProperty("--text-default",String(Themes.LightThemeJSON["foreground"]));
-            document.documentElement.style.setProperty("--shadow",String(Themes.LightThemeJSON["shadow"]));
+            document.documentElement.style.setProperty("--background-default",Themes.LightThemeJSON["background"]||"#373737");
+            document.documentElement.style.setProperty("--text-default",Themes.LightThemeJSON["foreground"]||"#000000");
+            document.documentElement.style.setProperty("--shadow",Themes.LightThemeJSON["shadow"]||"rgba(0,0,0,0.2)");
+            document.documentElement.style.setProperty("--border",Themes.LightThemeJSON["border"]||"none")
+            document.documentElement.style.setProperty("--background-secondary",Themes.LightThemeJSON["background-secondary"]||(Themes.LightThemeJSON["background"]||"#e5e5e5"))
             Themes.CurrentTheme=Theme.Light;
-            if(Themes.LightThemeJSON.border){
-                document.documentElement.style.setProperty("--border",Themes.LightThemeJSON["border"])
-            }
-            else{
-                console.log("[WARNING from ApplyTheme] Selected theme doesn't make use of the 'border' property. No border will be used.");
-                document.documentElement.style.setProperty("--border","none");
-            }
             break;
         default:
             console.log("[WARNING from ApplyTheme()] Default case triggered. Falling back to light theme.");
