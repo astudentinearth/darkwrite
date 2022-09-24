@@ -3,6 +3,8 @@ import { invoke } from "@tauri-apps/api/tauri";
 import React from "react";
 import { GlobalSettings } from "../GlobalSettings";
 import { Themes ,SwitchTheme,APPDIR} from "../Theme";
+import ToolbarButton from "./Components/ToolbarButton";
+import { ShowSettings } from "./Settings";
 
 function ShowTasks(){
 	let TaskPanel:any = document.getElementById("TaskPanel");
@@ -20,56 +22,11 @@ function ShowTasks(){
 }
 function MainToolbar(){
 	return <div className="main_toolbar inline-block text-default transition-all h-14 m-4 absolute left-0 right-0 bottom-0 top-0 duration-500">
-		<div onClick={ShowTasks} className="toolbar-button float-left"><i className="bi-list-task text-default text-3xl"></i></div>
-		<div className="toolbar-button float-left"><i className="bi-plus-lg text-default text-3xl"></i></div>
+		<ToolbarButton float="float-left" icon="bi-list-task" onClick={ShowTasks}></ToolbarButton>
+		<ToolbarButton float="float-left" icon="bi-plus-lg"></ToolbarButton>
 		<input type="text" placeholder="Type here to search" className="background-secondary transition-all hide-outline active:scale-90 shadow-default-hover h-14 w-80 p-6 text-xl rounded-2xl m-1"></input>
-		<div onClick={ShowSettings} className="toolbar-button float-right align-middle justify-center items-center"><i className="bi-list text-default text-3xl"></i></div>
+		<ToolbarButton float="float-right" icon="bi-list" onClick={()=>ShowSettings()}></ToolbarButton>
     </div>;
 }
-function ShowSettings(){
-	let settings:any = document.getElementById("settingsUI");
-	let lightSchemeChooser:any=document.getElementById("lightColorScheme");
-	let darkSchemeChooser:any=document.getElementById("darkColorScheme");
-	while (lightSchemeChooser.firstChild){ 
-		lightSchemeChooser.removeChild(lightSchemeChooser.lastChild);
-	}
-	while (darkSchemeChooser.firstChild){
-		darkSchemeChooser.removeChild(darkSchemeChooser.lastChild);
-	}
-	
-	invoke("listdir",{dir:APPDIR+"color-schemes/"}).then((ret:any)=>{
-		console.log(ret);
-		let lightThemeIndex:Number=0;
-		let darkThemeIndex:Number=0;
-		ret.forEach((element:any) => {
-			console.log(element);
-			readTextFile(APPDIR+"color-schemes/"+element).then((read:string)=>{
-				let scheme_json:any=JSON.parse(read);
-				let _opt = document.createElement("option");
-				
-				_opt.label=scheme_json.name;
-				_opt.value=element;
 
-				let __opt = document.createElement("option");
-			   
-				__opt.label=scheme_json.name;
-				__opt.value=element;
-				lightSchemeChooser.appendChild(__opt);
-				darkSchemeChooser.appendChild(_opt);
-				if(GlobalSettings.LightSchemeFile==element){
-					lightSchemeChooser.selectedIndex=lightSchemeChooser.options.length-1;
-				}
-				if(GlobalSettings.DarkSchemeFile==element){
-					darkSchemeChooser.selectedIndex=darkSchemeChooser.options.length-1;
-				}//
-			});
-		});
-		let fontinput:any=document.getElementById("fontBox");
-		fontinput.value=GlobalSettings.Font;
-		settings.style.setProperty("display","block");
-	});
-
-   
-
-}
 export default MainToolbar;

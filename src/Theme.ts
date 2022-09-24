@@ -7,9 +7,11 @@ let HOME:string;
 let APPDIR:string; // this has a slash in the end!
 const LightTheme_Fallback=`{
     "name":"Darkwrite Light",
-    "background": "#ffffff",
+    "background": "#f1f1f1",
     "foreground": "#000000", 
-    "background-secondary":"#e5e5e5",
+    "background-secondary":"#ffffff",
+    "background-hover":"#e7e7e7",
+    "background-active":"#dfdfdf",
     "shadow": "rgba(40,40,40,0.3)"
 }
 `;
@@ -18,6 +20,8 @@ const DarkTheme_Fallback=`{
     "background": "#393939",
     "foreground": "#ffffff",
     "background-secondary":"#494949",
+    "background-hover":"#565656",
+    "background-active":"#606060",
     "shadow": "rgba(0,0,0,0.2)"
 }`;
 const PastelPink=`
@@ -132,6 +136,8 @@ function ApplyTheme(theme:Theme){
             document.documentElement.style.setProperty("--shadow",Themes.DarkThemeJSON["shadow"] || "rgba(0,0,0,0.2)");
             document.documentElement.style.setProperty("--border",Themes.DarkThemeJSON["border"]||"none")
             document.documentElement.style.setProperty("--background-secondary",Themes.DarkThemeJSON["background-secondary"]||(Themes.DarkThemeJSON["background"]||"#494949"))
+            document.documentElement.style.setProperty("--background-hover",Themes.DarkThemeJSON["background-hover"]||(Themes.DarkThemeJSON["background"]||"#494949"))
+            document.documentElement.style.setProperty("--background-active",Themes.DarkThemeJSON["background-active"]||(Themes.DarkThemeJSON["background"]||"#494949"))
             Themes.CurrentTheme=Theme.Dark;
             break;
         case Theme.Light:
@@ -141,6 +147,8 @@ function ApplyTheme(theme:Theme){
             document.documentElement.style.setProperty("--shadow",Themes.LightThemeJSON["shadow"]||"rgba(0,0,0,0.2)");
             document.documentElement.style.setProperty("--border",Themes.LightThemeJSON["border"]||"none")
             document.documentElement.style.setProperty("--background-secondary",Themes.LightThemeJSON["background-secondary"]||(Themes.LightThemeJSON["background"]||"#e5e5e5"))
+            document.documentElement.style.setProperty("--background-hover",Themes.LightThemeJSON["background-hover"]||(Themes.LightThemeJSON["background"]||"#494949"))
+            document.documentElement.style.setProperty("--background-active",Themes.LightThemeJSON["background-active"]||(Themes.LightThemeJSON["background"]||"#494949"))
             Themes.CurrentTheme=Theme.Light;
             break;
         default:

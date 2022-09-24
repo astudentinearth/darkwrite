@@ -89,7 +89,7 @@ function Tasks(){
         <span id="taskInputTip" className="text-default opacity-50 mx-4 hidden">Press enter to add this task.</span>
         </div>
          <div id="tasksDiv">
-            {tasks.map((task)=><div onClick={()=>removeTask(task)} className="flex items-center background-secondary cursor-pointer hover:brightness-125">
+            {tasks.map((task)=><div onClick={()=>removeTask(task)} className="task-item">
                         <span className="text-default p-2 text-md">{task}</span>
                         </div>)}
         </div>

@@ -9,6 +9,8 @@
     --font: "Roboto";
     --border: none;
     --background-secondary:#e5e5e5;
+    --background-hover:#e7e7e7;
+    --background-active:#efefef;
 }
 
 .app_root{
@@ -29,7 +31,7 @@
     box-shadow: 0px 4px 18px 0px var(--shadow);
 } 
 .shadow-default-hover{
-    @apply shadow-default transition-shadow duration-100;
+    @apply shadow-default transition-shadow duration-200;
 }
 
 .shadow-default-hover:hover{
@@ -78,15 +80,39 @@ input[type=time]{
 }
 
 .toolbar-button{
-    @apply h-14 transition-all border-default active:scale-90 w-14 m-1 rounded-2xl flex cursor-pointer shadow-default-hover background-secondary align-middle justify-center items-center;
+    @apply h-14 transition-all duration-200 border-default w-14 m-1 rounded-2xl flex cursor-pointer shadow-default background-secondary align-middle justify-center items-center;
 }
-
+.task-item{
+    @apply flex items-center background-secondary cursor-pointer;
+}
+.toolbar-button:hover,.task-item:hover{
+    @apply bg-hover;
+}
+.toolbar-button:active,.task-item:active{
+    @apply bg-active;
+}
 #taskInput{
     box-shadow: none;
     border-bottom: 1px;
     border-left: 0px;
     border-right: 0px;
     border-top:0px;
-    border-color: #999999;
+    border-color: #aaaaaa;
     border-style: solid;
+}
+
+.block{
+    display:block;
+}
+
+.hidden{
+    display:none;
+}
+
+.bg-hover{
+    background-color: var(--background-hover);
+}
+
+.bg-active{
+    background-color:var(--background-active);
 }

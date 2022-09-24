@@ -617,6 +617,10 @@ video {
   margin: 1.25rem;
 }
 
+.m-3 {
+  margin: 0.75rem;
+}
+
 .mx-4 {
   margin-left: 1rem;
   margin-right: 1rem;
@@ -681,10 +685,6 @@ video {
 
 .w-64 {
   width: 16rem;
-}
-
-.w-14 {
-  width: 3.5rem;
 }
 
 .w-72 {
@@ -766,15 +766,6 @@ video {
   text-align: center;
 }
 
-.align-middle {
-  vertical-align: middle;
-}
-
-.text-3xl {
-  font-size: 1.875rem;
-  line-height: 2.25rem;
-}
-
 .text-xl {
   font-size: 1.25rem;
   line-height: 1.75rem;
@@ -788,6 +779,11 @@ video {
 .text-sm {
   font-size: 0.875rem;
   line-height: 1.25rem;
+}
+
+.text-3xl {
+  font-size: 1.875rem;
+  line-height: 2.25rem;
 }
 
 .font-bold {
@@ -814,6 +810,10 @@ video {
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
 
+.outline {
+  outline-style: solid;
+}
+
 .transition-all {
   transition-property: all;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
@@ -826,18 +826,12 @@ video {
   transition-duration: 150ms;
 }
 
-.duration-500 {
-  transition-duration: 500ms;
-}
-
 .duration-200 {
   transition-duration: 200ms;
 }
 
-.hover\:brightness-125:hover {
-  --tw-brightness: brightness(1.25);
-  -webkit-filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
-          filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
+.duration-500 {
+  transition-duration: 500ms;
 }
 
 .active\:scale-90:active {
@@ -855,10 +849,6 @@ video {
   .\33md\:left-0 {
     left: 0px;
   }
-
-  .\33md\:flex {
-    display: flex;
-  }
 }
 
 :root{
@@ -868,6 +858,8 @@ video {
   --font: "Roboto";
   --border: none;
   --background-secondary:#e5e5e5;
+  --background-hover:#e7e7e7;
+  --background-active:#efefef;
 }
 
 .app_root{
@@ -891,7 +883,7 @@ video {
 .shadow-default-hover {
   transition-property: box-shadow;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 100ms;
+  transition-duration: 200ms;
   box-shadow: 0px 4px 18px 0px var(--shadow);
 }
 
@@ -928,7 +920,7 @@ video {
   border: var(--border);
   transition-property: box-shadow;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 100ms;
+  transition-duration: 200ms;
   box-shadow: 0px 4px 18px 0px var(--shadow);
 }
 
@@ -963,7 +955,7 @@ input[type=time]{
   padding: 1rem;
   transition-property: box-shadow;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 100ms;
+  transition-duration: 200ms;
   box-shadow: 0px 4px 18px 0px var(--shadow);
 }
 
@@ -990,26 +982,26 @@ input[type=time]{
   border-radius: 1rem;
   vertical-align: middle;
   transition-property: all;
-  border: var(--border);
-  transition-property: box-shadow;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 100ms;
+  transition-duration: 200ms;
+  border: var(--border);
   box-shadow: 0px 4px 18px 0px var(--shadow);
-}
-
-.toolbar-button:hover{
-  box-shadow: 0px 4px 18px 2px var(--shadow);
-}
-
-.toolbar-button{
   background-color: var(--background-secondary);
 }
 
-.toolbar-button:active {
-  --tw-scale-x: .9;
-  --tw-scale-y: .9;
-  -webkit-transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
-          transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+.task-item {
+  display: flex;
+  cursor: pointer;
+  align-items: center;
+  background-color: var(--background-secondary);
+}
+
+.toolbar-button:hover, .task-item:hover{
+  background-color: var(--background-hover);
+}
+
+.toolbar-button:active, .task-item:active{
+  background-color:var(--background-active);
 }
 
 #taskInput{
@@ -1018,6 +1010,22 @@ input[type=time]{
   border-left: 0px;
   border-right: 0px;
   border-top:0px;
-  border-color: #999999;
+  border-color: #aaaaaa;
   border-style: solid;
+}
+
+.block{
+  display:block;
+}
+
+.hidden{
+  display:none;
+}
+
+.bg-hover{
+  background-color: var(--background-hover);
+}
+
+.bg-active{
+  background-color:var(--background-active);
 }
