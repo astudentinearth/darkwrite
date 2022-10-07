@@ -1,15 +1,18 @@
 /**
      * Returns a toolbar button component
      * Props:
-     * float: which way should the component float. e.g. : float-left
+     * style: css style
      * onClick: click action
      * icon: icon to be shown
+     * class: extra class names
+     * color: [normal | accent] specify color style
      **/
 function ToolbarButton(props:any){
     
-    return <div className={"toolbar-button " + props.float || "float-left"}
+    return <div className={(props.class || "")+(props.color=="accent" ? " toolbar-button-accent" : "toolbar-button")} 
+    style={props.style}
     onClick={props.onClick}>
-        <i className={"text-default text-3xl "+props.icon}></i>
+        <i className={"text-3xl "+props.icon}></i>
     </div>;
 }
 export default ToolbarButton;

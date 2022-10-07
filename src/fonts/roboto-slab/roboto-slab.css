@@ -1,0 +1,64 @@
+/* roboto-slab-black */
+@font-face {
+	font-family: Roboto Slab;
+	font-style: normal;
+	font-weight: 900;
+	src: local("Roboto Slab Black"), local("RobotoSlab-Black"), url(roboto-slab-black.woff2) format("woff2");
+}
+/* roboto-slab-bold */
+@font-face {
+	font-family: Roboto Slab;
+	font-style: normal;
+	font-weight: 700;
+	src: local("Roboto Slab Bold"), local("RobotoSlab-Bold"), url(roboto-slab-bold.woff2) format("woff2");
+}
+/* roboto-slab-extrabold */
+@font-face {
+	font-family: Roboto Slab;
+	font-style: normal;
+	font-weight: 400;
+	src: local("Roboto Slab ExtraBold"), local("RobotoSlab-ExtraBold"), url(roboto-slab-extrabold.woff2) format("woff2");
+}
+/* roboto-slab-extralight */
+@font-face {
+	font-family: Roboto Slab;
+	font-style: normal;
+	font-weight: 400;
+	src: local("Roboto Slab ExtraLight"), local("RobotoSlab-ExtraLight"), url(roboto-slab-extralight.woff2) format("woff2");
+}
+/* roboto-slab-light */
+@font-face {
+	font-family: Roboto Slab;
+	font-style: normal;
+	font-weight: 300;
+	src: local("Roboto Slab Light"), local("RobotoSlab-Light"), url(roboto-slab-light.woff2) format("woff2");
+}
+/* roboto-slab-medium */
+@font-face {
+	font-family: Roboto Slab;
+	font-style: normal;
+	font-weight: 500;
+	src: local("Roboto Slab Medium"), local("RobotoSlab-Medium"), url(roboto-slab-medium.woff2) format("woff2");
+}
+/* roboto-slab-regular */
+@font-face {
+	font-family: Roboto Slab;
+	font-style: normal;
+	font-weight: 400;
+	src: local("Roboto Slab Regular"), local("RobotoSlab-Regular"), url(roboto-slab-regular.woff2) format("woff2");
+}
+/* roboto-slab-semibold */
+@font-face {
+	font-family: Roboto Slab;
+	font-style: normal;
+	font-weight: 400;
+	src: local("Roboto Slab SemiBold"), local("RobotoSlab-SemiBold"), url(roboto-slab-semibold.woff2) format("woff2");
+}
+/* roboto-slab-thin */
+@font-face {
+	font-family: Roboto Slab;
+	font-style: normal;
+	font-weight: 100;
+	src: local("Roboto Slab Thin"), local("RobotoSlab-Thin"), url(roboto-slab-thin.woff2) format("woff2");
+}
+

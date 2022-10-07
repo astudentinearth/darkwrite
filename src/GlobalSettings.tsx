@@ -1,4 +1,4 @@
-import { Theme } from "./Theme";
+import { SetupThemes, Theme } from "./Theme";
 import { readTextFile,writeTextFile } from "@tauri-apps/api/fs";
 import { appDir } from "@tauri-apps/api/path";
 import { invoke } from "@tauri-apps/api";
@@ -10,7 +10,12 @@ const DefaultSettings:string=`
     "theme":"dark",
     "lightSchemeFile":"colors_light.json",
     "darkSchemeFile":"colors_dark.json",
-    "font":"Roboto"
+    "font":"Roboto",
+    "accentColor":"87 104 225",
+    "sansFont":"Roboto",
+    "serifFont":"Roboto Slab",
+    "monoFont":"Roboto Mono",
+    "handFont":"Yellowtail"
 }
 `;
 
@@ -37,9 +42,7 @@ async function LoadSettings(){
         console.error("[ERROR] Something went wrong, and we couldn't load the settings. We can't proceed further.");
         return;
     }
-    console.log("here 2")
     settings_json=JSON.parse(settings_string);
-    console.log("here 3")
     switch (settings_json.theme){
         case "dark":
             GlobalSettings.ThemeMode=Theme.Dark;
@@ -51,24 +54,44 @@ async function LoadSettings(){
             GlobalSettings.ThemeMode=Theme.Light;
             break;
     }
-    GlobalSettings.LightSchemeFile=settings_json.lightSchemeFile;
-    GlobalSettings.DarkSchemeFile=settings_json.darkSchemeFile;
-    GlobalSettings.Font=settings_json.font;
+    console.table(settings_json)
+    GlobalSettings.LightSchemeFile=settings_json.lightSchemeFile ?? "colors_light.json";
+    GlobalSettings.DarkSchemeFile=settings_json.darkSchemeFile ?? "colors_dark.json";
+    GlobalSettings.Font=settings_json.font ?? "Roboto";
+    GlobalSettings.SansFont=settings_json.sansFont ?? "Roboto";
+    GlobalSettings.SerifFont=settings_json.serifFont ?? "Roboto Slab";
+    GlobalSettings.HandwritingFont=settings_json.handFont ?? "Yellowtail";
+    GlobalSettings.MonospaceFont=settings_json.monoFont ?? "Roboto Mono";
+    GlobalSettings.AccentColor=settings_json.accentColor ?? "87 104 255";
+    
     console.log("[INFO] LoadSettings() finished.")
 }
 
 class GlobalSettings{
     public static ThemeMode:Theme;
-    public static DarkThemeStart:string;
-    public static DarkThemeEnd:string;
     public static LightSchemeFile:string;
     public static DarkSchemeFile:string;
     public static Font:string;
     public static Version:string="1.0d";
+    public static AccentColor:string="87 104 255";
+    public static SansFont:string="Roboto";
+    public static SerifFont:string="Roboto Slab";
+    public static HandwritingFont:string="Yellowtail";
+    public static MonospaceFont:string="Roboto Mono";
 }
 
 function SaveAllSettings(){
     console.log("[INFO] Saving all settings.");
+    let newJSON={"version":GlobalSettings.Version,
+    "theme":GlobalSettings.ThemeMode===Theme.Dark ? "dark" : "light",
+    "lightSchemeFile":GlobalSettings.LightSchemeFile ?? "colors_light.json",
+    "darkSchemeFile":GlobalSettings.DarkSchemeFile ?? "colors_dark.json",
+    "font":GlobalSettings.Font ?? "Roboto",
+    "accentColor":GlobalSettings.AccentColor,
+    "sansFont":GlobalSettings.SansFont ?? "Roboto",
+    "serifFont":GlobalSettings.SerifFont ?? "Roboto Slab",
+    "monoFont":GlobalSettings.MonospaceFont ?? "Roboto Mono",
+    "handFont":GlobalSettings.HandwritingFont ?? "Yellowtail"};
     settings_json.version=GlobalSettings.Version;
     settings_json.font=GlobalSettings.Font;
     switch(GlobalSettings.ThemeMode){
@@ -82,10 +105,10 @@ function SaveAllSettings(){
     }
     settings_json.darkSchemeFile=GlobalSettings.DarkSchemeFile;
     settings_json.lightSchemeFile=GlobalSettings.LightSchemeFile;
-    let settings_string = JSON.stringify(settings_json);
+    let settings_string = JSON.stringify(newJSON);
     writeTextFile(APPDIR+"settings.json",settings_string).then(()=>{
         console.log("[INFO] Settings saved. Reloading settings")
-        LoadSettings();
+        LoadSettings().then(()=>SetupThemes());
     });
 }
 

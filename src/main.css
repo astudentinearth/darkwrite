@@ -3,14 +3,19 @@
 @tailwind utilities; 
 @tailwind variants;
 :root{
-    --background-default:white;
+    --background-default:255, 255, 255;
     --shadow: rgba(0,0,0,0.2);
     --text-default: black;
     --font: "Roboto";
     --border: none;
-    --background-secondary:#e5e5e5;
-    --background-hover:#e7e7e7;
-    --background-active:#efefef;
+    --background-secondary:229, 229, 229;
+    --background-hover:231, 231, 231;
+    --background-active:239, 239, 239;
+    --accent: 87 104 255;
+    --font-serif: "Roboto Slab";
+    --font-sans: "Roboto";
+    --font-mono: "Roboto Mono";
+    --font-hand: "Yellowtail";
 }
 
 .app_root{
@@ -23,46 +28,34 @@
     border: var(--border);
 }
 
-.div_tasks{
-    box-shadow: 0px 5px 20px 2px var(--shadow);
-}
-
 .shadow-default{
-    box-shadow: 0px 4px 18px 0px var(--shadow);
+    @apply drop-shadow-lg shadow-black/20;
 } 
 .shadow-default-hover{
     @apply shadow-default transition-shadow duration-200;
 }
 
 .shadow-default-hover:hover{
-    box-shadow: 0px 4px 18px 2px var(--shadow);
+    box-shadow: 0px 6px 18px -4px var(--shadow);
 }
 .background-default{
-    background-color: var(--background-default);
+    @apply bg-primary;
 }
 .background-secondary{
-    background-color: var(--background-secondary);
+    @apply bg-secondary;
 }
 .text-default{
     color: var(--text-default);
 }
 
-.note-edit-dialog{
-    background-color: transparent;
-}
-
-.note-edit-dialog.open{
-    background-color: rgba(0,0,0,0.3);
-}
-
-
 .dropdown{
     @apply appearance-none background-secondary border-default text-default shadow-default-hover p-2 rounded-xl cursor-pointer;
 }
 
-input[type=text]{
+input[type=text]:not(#taskInput){
     color: var(--text-default);
-    @apply shadow-default p-2 border-default;
+    
+    @apply border-default;
 }
 
 input[type=time]{
@@ -80,25 +73,29 @@ input[type=time]{
 }
 
 .toolbar-button{
-    @apply h-14 transition-all duration-200 border-default w-14 m-1 rounded-2xl flex cursor-pointer shadow-default background-secondary align-middle justify-center items-center;
+    @apply h-12 transition-all text-default backdrop-blur-md bg-secondary/20 duration-200 w-12 mx-1 rounded-2xl flex cursor-pointer align-middle justify-center items-center;
+}
+
+.toolbar-button-accent{
+    @apply h-12 transition-all text-white backdrop-blur-md bg-accent/40 duration-200 w-12 mx-1 rounded-2xl flex cursor-pointer align-middle justify-center items-center;
+}
+.toolbar-button-accent:hover{
+    @apply brightness-110;
 }
 .task-item{
-    @apply flex items-center background-secondary cursor-pointer;
+    @apply flex items-center cursor-pointer;
 }
 .toolbar-button:hover,.task-item:hover{
-    @apply bg-hover;
+    @apply bg-hover/50;
 }
 .toolbar-button:active,.task-item:active{
-    @apply bg-active;
+    @apply bg-active/50;
 }
-#taskInput{
+.no-shadow{
     box-shadow: none;
-    border-bottom: 1px;
-    border-left: 0px;
-    border-right: 0px;
-    border-top:0px;
-    border-color: #aaaaaa;
-    border-style: solid;
+}
+.taskinputdiv{
+    box-shadow: 0px 6px 16px -3px var(--shadow);
 }
 
 .block{
@@ -109,10 +106,51 @@ input[type=time]{
     display:none;
 }
 
-.bg-hover{
-    background-color: var(--background-hover);
+
+.flex-right{
+    margin-left: auto;
+    order:2;
 }
 
-.bg-active{
-    background-color:var(--background-active);
+
+
+@layer components{
+    .search-box{
+        background-repeat: no-repeat;
+        background-position: 10px center;
+        background-size: 16px;
+    }
+}
+
+.open{
+    @apply left-2;
+}
+
+input[type=color]{
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+input[type=color]::-webkit-color-swatch{
+    border:none;
+    border-radius: 16px;
+}
+input[type=color]::-webkit-color-swatch-wrapper{
+    padding:0%
+}
+
+.f-serif{
+    font-family: var(--font-serif);
+}
+
+.f-sans{
+    font-family: var(--font-sans);
+}
+
+.f-mono{
+    font-family: var(--font-mono);
+}
+
+.f-hand{
+    font-family: var(--font-hand);
 }

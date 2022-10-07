@@ -20,7 +20,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "cross-env BROWSER=none react-scripts start",
+    "start": "cross-env BROWSER=none react-scripts start & npm run twcss",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",

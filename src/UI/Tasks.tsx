@@ -1,7 +1,6 @@
 import { invoke } from "@tauri-apps/api";
 import React, { useState } from "react";
 import { useEffect } from "react";
-import TaskItem from "./TaskItem"
 import { readTextFile, writeFile,BaseDirectory } from "@tauri-apps/api/fs";
 import {appDir, homeDir} from "../../node_modules/@tauri-apps/api/path"
 import { GlobalSettings } from "../GlobalSettings";
@@ -62,7 +61,6 @@ function Tasks(){
     function returnTasks(){
         return tasks;
     }
-    
     function AddTask(task:string){
         let t=[...tasks];
         t.push(task)
@@ -83,9 +81,14 @@ function Tasks(){
             taskInput.value="";
         }
     }
-    return <div id="TaskPanel" className="div_tasks fixed w-72 overflow-y-auto border-default background-secondary text-default  rounded-2xl 3md:bottom-0 3md:left-0 bottom-0 top-20  z-10 m-5 open transition-all" >
+    return <div id="TaskPanel" className="div_tasks w-72 overflow-y-auto text-default  z-10 open transition-all" >
         <div className="flex">
-        <input onChange={TaskInputChanged} tabIndex={0} type="text" onKeyDown={InputKeyDown} id="taskInput" placeholder="A new task" className="border-default flex-1 flex hide-outline background-secondary h-12 p-2 text-xl"></input>
+        <div className="flex-1 flex taskinputdiv">
+            <input onChange={TaskInputChanged} tabIndex={0} type="text" onKeyDown={InputKeyDown} id="taskInput" placeholder="A new task" className="border-default inline-block hide-outline w-[240px] bg-secondary/25 h-12 p-2 text-xl"></input>
+            <div className="bg-accent w-12 h-12" >
+
+            </div>
+        </div>
         <span id="taskInputTip" className="text-default opacity-50 mx-4 hidden">Press enter to add this task.</span>
         </div>
          <div id="tasksDiv">

@@ -1,81 +1,56 @@
 import { invoke } from "@tauri-apps/api";
 import { createDir,readTextFile, writeFile } from "@tauri-apps/api/fs";
-import React from "react";
-import {appDir, homeDir} from "../node_modules/@tauri-apps/api/path"
+import {appDir} from "../node_modules/@tauri-apps/api/path"
 import { GlobalSettings } from "./GlobalSettings";
-let HOME:string;
+
+enum Theme{
+    Light=0,
+    Dark=1,
+}
 let APPDIR:string; // this has a slash in the end!
-const LightTheme_Fallback=`{
+const LightTheme=`{
     "name":"Darkwrite Light",
-    "background": "#f1f1f1",
+    "background": "241 241 241",
     "foreground": "#000000", 
-    "background-secondary":"#ffffff",
-    "background-hover":"#e7e7e7",
-    "background-active":"#dfdfdf",
+    "background-secondary":"255 255 255",
+    "background-hover":"231 231 231",
+    "background-active":"223 223 223",
     "shadow": "rgba(40,40,40,0.3)"
 }
 `;
-const DarkTheme_Fallback=`{
+const DarkTheme=`{
     "name":"Darkwrite",
-    "background": "#393939",
+    "background": "57 57 57",
     "foreground": "#ffffff",
-    "background-secondary":"#494949",
-    "background-hover":"#565656",
-    "background-active":"#606060",
+    "background-secondary":"73 73 73",
+    "background-hover":"86 86 86",
+    "background-active":"96 96 96",
     "shadow": "rgba(0,0,0,0.2)"
 }`;
-const PastelPink=`
-    {"name":"Pastel Pink",
-    "background":"#cfa0d9",
-    "foreground":"#ffffff",
-    "shadow":"rgba(0,0,0,0.1)"}
-`
-const BlackoutNeonBlue=`
-    {"name":"Blackout Neon Blue",
-    "background":"#0d0d0d",
-    "foreground":"#ffffff",
-    "shadow":"rgba(29, 52, 153, 0.3)"}
-`
-const BlackoutNeonGreen=`
-    {"name":"Blackout Neon Green",
-    "background":"#0d0d0d",
-    "foreground":"#ffffff",
-    "shadow":"rgba(15, 148, 28, 0.3)"}
-`
-const Sky=`
-    {"name":"Sky",
-    "background":"#a5c9c8",
-    "foreground":"#000000",
-    "shadow":"rgba(0,0,0,0.1)"}
-`
-const GreenOnBlack=`
-    {"name":"Green on Black",
-    "background":"#000000",
-    "foreground":"#11ff11",
-    "shadow":"transparent",
-    "border":"2px solid #00ff00"}
-`
-const BlueOnBlack=`
-    {"name":"Blue on Black",
-    "background":"#000000",
-    "foreground":"#1111ff",
-    "shadow":"transparent",
-    "border":"2px solid #0000ff"}
-`
-const WhiteOnBlack=`
-    {"name":"White on Black",
-    "background":"#000000",
-    "foreground":"#ffffff",
-    "shadow":"transparent",
-    "border":"2px solid #ffffff"}
-`
-const RedOnBlack=`
-    {"name":"Red on Black",
-    "background":"#000000",
-    "foreground":"#ff1111",
-    "shadow":"transparent",
-    "border":"2px solid #ff0000"}
-`
+/**
+     * Returns HEX color code from given 3 RGB channels
+     * @param rgb: Red, green and blue channels separated with whitespaces
+     */
+function RGBToHex(rgb:string){
+    let channels = rgb.split(' ');
+    if(channels.length!==3){
+        console.error("Can't convert RGB to hexadecimal. Invalid number of channels.");
+    }
+    let r = Number(channels[0]).toString(16);
+    let g = Number(channels[1]).toString(16);
+    let b = Number(channels[2]).toString(16);
+    return "#"+r+g+b;
+}
+
+function HexToRGB(hex:string){
+    let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+        r: parseInt(result[1],16),
+        g: parseInt(result[2],16),
+        b: parseInt(result[3],16)
+    } : null;
+}
+
 class Themes{
     public static LightTheme: string; // stringified json of the light theme
     public static LightThemeJSON: any; // json of the light theme
@@ -88,20 +63,15 @@ class Themes{
 async function SetupThemes(){
     console.log("[INFO] Setting themes up");
     APPDIR=await appDir();
-    HOME=await homeDir();
     // apply fallback themes if the files are not there
    
     console.log("[INFO] Checking for color schemes directory");
     
-    if (await invoke("path_exists",{targetPath:APPDIR+"color-schemes/"})==false){
+    if (await invoke("path_exists",{targetPath:APPDIR+"color-schemes/"})===false){
         console.log("[WARNING] Color schemes directory doesn't exist. Creating it and copying default themes.");
         await createDir(APPDIR+"color-schemes");
-        await writeFile(APPDIR+"color-schemes/colors_light.json",LightTheme_Fallback);
-        await writeFile(APPDIR+"color-schemes/colors_dark.json",DarkTheme_Fallback);
-        await writeFile(APPDIR+"color-schemes/blackout_neon_green.json",BlackoutNeonGreen);
-        await writeFile(APPDIR+"color-schemes/blackout_neon_blue.json",BlackoutNeonBlue);
-        await writeFile(APPDIR+"color-schemes/sky.json",Sky);
-        await writeFile(APPDIR+"color-schemes/pastel_pink.json",PastelPink);
+        await writeFile(APPDIR+"color-schemes/colors_light.json",LightTheme);
+        await writeFile(APPDIR+"color-schemes/colors_dark.json",DarkTheme);
     }
     Themes.LightTheme=await readTextFile(APPDIR+"color-schemes/"+GlobalSettings.LightSchemeFile);
     Themes.DarkTheme=await readTextFile(APPDIR+"color-schemes/"+GlobalSettings.DarkSchemeFile);
@@ -128,6 +98,11 @@ async function SetupThemes(){
 function ApplyTheme(theme:Theme){
     console.log("[INFO from ApplyTheme()] Applying theme");
     document.documentElement.style.setProperty("--font",GlobalSettings.Font);
+    document.documentElement.style.setProperty("--font-sans",GlobalSettings.SansFont);
+    document.documentElement.style.setProperty("--font-serif",GlobalSettings.SerifFont);
+    document.documentElement.style.setProperty("--font-hand",GlobalSettings.HandwritingFont);
+    document.documentElement.style.setProperty("--font-mono",GlobalSettings.MonospaceFont);
+    document.documentElement.style.setProperty("--accent",GlobalSettings.AccentColor);
     switch(theme){
         case Theme.Dark:
             console.log("[INFO from ApplyTheme] Setting up dark theme");
@@ -160,7 +135,7 @@ function ApplyTheme(theme:Theme){
 
 // Switches the theme
 function SwitchTheme(){
-    if (Themes.CurrentTheme==Theme.Dark){
+    if (Themes.CurrentTheme===Theme.Dark){
         ApplyTheme(Theme.Light)
     }
     else{
@@ -168,8 +143,4 @@ function SwitchTheme(){
     }
 }
 
-enum Theme{
-    Light=0,
-    Dark=1,
-}
-export {Themes,Theme,SetupThemes,ApplyTheme,SwitchTheme,APPDIR};
+export {Themes,Theme,SetupThemes,ApplyTheme,SwitchTheme,APPDIR,HexToRGB,RGBToHex};
