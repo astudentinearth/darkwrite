@@ -6,11 +6,10 @@
 // use
 use std::fs;
 use std::path::Path;
-
 fn main() {
   
   tauri::Builder::default()
-  .invoke_handler(tauri::generate_handler![readfile,path_exists,createDir,listdir])  
+  .invoke_handler(tauri::generate_handler![readfile,path_exists,createDir,listdir,openURL])  
   .run(tauri::generate_context!())
     .expect("error while running tauri application");
 }
@@ -39,8 +38,13 @@ fn listdir(dir:String) -> Vec<String>{
   let entries = fs::read_dir(dir).unwrap();
   let mut ret = Vec::new();
   for i in entries{
-    let mut x=i.unwrap().path().file_name().unwrap().to_string_lossy().into_owned();
+    let x=i.unwrap().path().file_name().unwrap().to_string_lossy().into_owned();
     ret.push(x);
   }
   ret.into()
+}
+
+#[tauri::command]
+fn openURL(url:String) {
+  open::that(url).unwrap();
 }

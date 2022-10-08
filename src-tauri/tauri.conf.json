@@ -67,7 +67,10 @@
       "windows": {
         "certificateThumbprint": null,
         "digestAlgorithm": "sha256",
-        "timestampUrl": ""
+        "timestampUrl": "",
+        "wix":{
+          "license": "../LICENSE"
+        }
       }
     },
     "security": {

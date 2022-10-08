@@ -906,6 +906,11 @@ video {
   color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 
+.text-accent {
+  --tw-text-opacity: 1;
+  color: rgb(var(--accent) / var(--tw-text-opacity));
+}
+
 .opacity-50 {
   opacity: 0.5;
 }
@@ -978,6 +983,10 @@ video {
 
 .hover\:bg-hover\/25:hover {
   background-color: rgb(var(--background-hover) / 0.25);
+}
+
+.hover\:underline:hover {
+  text-decoration-line: underline;
 }
 
 .active\:bg-active:active {
