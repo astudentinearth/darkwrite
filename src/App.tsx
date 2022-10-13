@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import './index.css';
 import '../node_modules/bootstrap-icons/font/bootstrap-icons.css';
-import { Theme,Themes,SetupThemes, ApplyTheme } from './Theme';
+import { Theme,Themes,SetupThemes, ApplyTheme, ApplyWallpaper } from './Theme';
 // import MainToolbar from './UI/MainToolbar';
 import {LoadTasks, Tasks} from './UI/Tasks';
 // import {homeDir,appDir} from "../node_modules/@tauri-apps/api/path"
@@ -24,7 +24,7 @@ function App() {
   },[]);
   return (
     <div className="App background-default">
-      <div className='app_root select-none absolute text-default transition-all w-full h-full duration-200'>
+      <div className='app_root bg-center bg-cover bg-no-repeat select-none absolute text-default transition-all w-full h-full duration-200'>
         <MainToolbar></MainToolbar>
         <Sidebar></Sidebar>
         <Settings></Settings>
@@ -39,5 +39,6 @@ async function Init(){
   document.body.classList.add("background-default");
   await SetupThemes();
   await LoadTasks();
+  await ApplyWallpaper();
 }
 export default App;

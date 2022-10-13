@@ -17,4 +17,14 @@ interface IAppData{
     tasks:INote[]
 }
 
-export type {INote,ITask,IAppData}
+
+function Uint8ArrayToBase64(buf:Uint8Array){
+    let len=buf.byteLength;
+    let bin = '';
+    for(let i = 0; i<len;i++){
+        bin+=String.fromCharCode(buf[i]);
+    }
+    return window.btoa(bin);
+}
+export { Uint8ArrayToBase64 };
+export type { INote, ITask, IAppData };

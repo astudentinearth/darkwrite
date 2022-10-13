@@ -30,6 +30,14 @@
       },
       "os":{
         "all": true
+      },
+      "dialog": {
+        "all": false,
+        "ask": false,
+        "confirm": false,
+        "message": false,
+        "open": true,
+        "save": false
       }
     },
     "bundle": {

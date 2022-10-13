@@ -7,17 +7,7 @@ import { GlobalSettings } from "../GlobalSettings";
 let changeTasks:any;
 let getTasks:any;
 function TaskInputChanged(){
-    // Manage the "press enter" tip
-    // If there is something in the box, show the tooltip
-    /*let TaskInput:any = document.getElementById("taskInput");
-    let TaskInputTip:any = document.getElementById("taskInputTip");
-    if(String(TaskInput.value)==""){
-        TaskInputTip.style.setProperty("display","none");
-    }
-    else{
-        TaskInputTip.style.setProperty("display","inline");
-        
-    }*/
+
 } 
 
 async function LoadTasks(){
@@ -85,11 +75,10 @@ function Tasks(){
         <div className="flex">
         <div className="flex-1 flex taskinputdiv">
             <input onChange={TaskInputChanged} tabIndex={0} type="text" onKeyDown={InputKeyDown} id="taskInput" placeholder="A new task" className="border-default inline-block hide-outline w-[240px] bg-secondary/25 h-12 p-2 text-xl"></input>
-            <div className="bg-accent w-12 h-12" >
-
+            <div className="bg-accent/75 cursor-pointer transition-all hover:brightness-125 w-12 h-12 flex justify-center items-center" >
+                <i className="bi-plus-lg text-2xl"></i>
             </div>
         </div>
-        <span id="taskInputTip" className="text-default opacity-50 mx-4 hidden">Press enter to add this task.</span>
         </div>
          <div id="tasksDiv">
             {tasks.map((task)=><div onClick={()=>removeTask(task)} className="task-item">

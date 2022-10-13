@@ -92,19 +92,6 @@ function SaveAllSettings(){
     "serifFont":GlobalSettings.SerifFont ?? "Roboto Slab",
     "monoFont":GlobalSettings.MonospaceFont ?? "Roboto Mono",
     "handFont":GlobalSettings.HandwritingFont ?? "Yellowtail"};
-    settings_json.version=GlobalSettings.Version;
-    settings_json.font=GlobalSettings.Font;
-    switch(GlobalSettings.ThemeMode){
-        case Theme.Light:
-            settings_json.theme="light";
-            break;
-        
-        case Theme.Dark:
-            settings_json.theme="dark";
-            break;
-    }
-    settings_json.darkSchemeFile=GlobalSettings.DarkSchemeFile;
-    settings_json.lightSchemeFile=GlobalSettings.LightSchemeFile;
     let settings_string = JSON.stringify(newJSON);
     writeTextFile(APPDIR+"settings.json",settings_string).then(()=>{
         console.log("[INFO] Settings saved. Reloading settings")
