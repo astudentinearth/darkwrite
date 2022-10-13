@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React from "react";
 import SearchBox from "./Components/SearchBox";
 import ToolbarButton from "./Components/ToolbarButton";
 import { ShowSettings } from "./Settings";

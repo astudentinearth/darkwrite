@@ -1,7 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
-import {ThemeApplet,LoadColorSchemes} from "./SettingsApplets/ThemeApplet";
+import React, { useState } from "react";
 import About from "./SettingsApplets/About";
-import {SaveAllSettings,LoadSettings,GlobalSettings} from "../GlobalSettings"
+import {SaveAllSettings} from "../GlobalSettings"
 import DebugInfo from "./SettingsApplets/DebugInfo";
 import ToolbarButton from "./Components/ToolbarButton";
 import ThemeOptions from "./SettingsApplets/ThemeOptions";

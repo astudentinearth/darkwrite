@@ -1,9 +1,8 @@
 import { invoke } from "@tauri-apps/api";
 import React, { useState } from "react";
 import { useEffect } from "react";
-import { readTextFile, writeFile,BaseDirectory } from "@tauri-apps/api/fs";
-import {appDir, homeDir} from "../../node_modules/@tauri-apps/api/path"
-import { GlobalSettings } from "../GlobalSettings";
+import { readTextFile, writeFile } from "@tauri-apps/api/fs";
+import {appDir} from "../../node_modules/@tauri-apps/api/path"
 let changeTasks:any;
 let getTasks:any;
 function TaskInputChanged(){
@@ -66,7 +65,7 @@ function Tasks(){
     }
     function InputKeyDown(event:any){
         let taskInput:any=document.getElementById("taskInput");
-        if(event.keyCode===13 && taskInput.value.trim().length!=0){
+        if(event.keyCode===13 && taskInput.value.trim().length!==0){
             AddTask(taskInput.value);
             taskInput.value="";
         }

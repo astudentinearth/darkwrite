@@ -1,14 +1,9 @@
 import React, { useEffect } from 'react';
 import './index.css';
 import '../node_modules/bootstrap-icons/font/bootstrap-icons.css';
-import { Theme,Themes,SetupThemes, ApplyTheme, ApplyWallpaper } from './Theme';
-// import MainToolbar from './UI/MainToolbar';
-import {LoadTasks, Tasks} from './UI/Tasks';
-// import {homeDir,appDir} from "../node_modules/@tauri-apps/api/path"
-// import {Settings} from './UI/Settings'
-import {LoadSettings,GlobalSettings} from "./GlobalSettings"
-// import NotesPanel from "./UI/NotesPanel"
-import bg from "./feet-on-the-dashboard.png"
+import { SetupThemes, ApplyWallpaper } from './Theme';
+import {LoadTasks} from './UI/Tasks';
+import {LoadSettings} from "./GlobalSettings"
 import MainToolbar from './UI/MainToolbar';
 import Sidebar from './UI/Sidebar';
 import { Settings } from './UI/Settings';
@@ -16,7 +11,6 @@ import "./fonts/roboto/roboto.css"
 import "./fonts/roboto-mono/roboto-mono.css"
 import "./fonts/roboto-slab/roboto-slab.css"
 import "./fonts/yellowtail/yellowtail.css"
-// import Sidebar from './UI/Sidebar';
 function App() {
   useEffect(()=>{
     console.log("Application started. Initializing");

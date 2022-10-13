@@ -1,7 +1,6 @@
-import { invoke } from "@tauri-apps/api";
 import { BaseDirectory, readDir, readTextFile } from "@tauri-apps/api/fs";
 import { appDir } from "@tauri-apps/api/path";
-import React, { forwardRef, useEffect, useImperativeHandle, useState } from "react";
+import React, { forwardRef, useImperativeHandle, useState } from "react";
 import { GlobalSettings, SaveAllSettings } from "../../GlobalSettings";
 import { Theme,ApplyTheme, SetupThemes } from "../../Theme";
 import AppletBase from "../Components/SettingsApplet";
