@@ -47,6 +47,7 @@
     ]
   },
   "devDependencies": {
+    "@hello-pangea/dnd": "^16.0.1",
     "@tauri-apps/cli": "^1.0.3",
     "cross-env": "^7.0.3",
     "generate-license-file": "^1.3.0"

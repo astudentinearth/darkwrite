@@ -83,7 +83,7 @@ input[type=time]{
     @apply brightness-110;
 }
 .task-item{
-    @apply flex items-center cursor-pointer;
+    @apply flex items-center;
 }
 .toolbar-button:hover,.task-item:hover{
     @apply bg-hover/50;
@@ -93,9 +93,6 @@ input[type=time]{
 }
 .no-shadow{
     box-shadow: none;
-}
-.taskinputdiv{
-    box-shadow: 0px 6px 16px -3px var(--shadow);
 }
 
 .block{
@@ -133,8 +130,10 @@ input[type=color]{
 
 input[type=color]::-webkit-color-swatch{
     border:none;
-    border-radius: 16px;
+    @apply rounded-lg;
+
 }
+
 input[type=color]::-webkit-color-swatch-wrapper{
     padding:0%
 }

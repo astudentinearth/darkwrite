@@ -7,8 +7,8 @@ function SidebarTabView(props:any){
      */
     const [view,setView] = useState(0);
 
-    return <div>
-        <div className="tabview-header h-14 flex">
+    return <div className="flex flex-col">
+        <div className="tabview-header flex-[0_0_56px] h-14 flex">
             <div className="w-[144px] flex items-center justify-center select-none cursor-pointer" 
             style={view == 0 ? {borderBottom:"2px solid rgb(var(--accent))"} : {borderBottom:"2px solid transparent"}}
             onClick={()=>{setView(0)}}>
@@ -20,9 +20,7 @@ function SidebarTabView(props:any){
                 <span className="text-xl"><i className="bi-clipboard"></i> Boards</span>
             </div>
         </div>
-        <div>
-            {view == 0 ? <Tasks></Tasks> : <div>boards</div>}
-        </div>
+        {view == 0 ? <Tasks></Tasks> : <div>boards</div>}
     </div>
 }
 

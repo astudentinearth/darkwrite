@@ -11,6 +11,7 @@ import "./fonts/roboto/roboto.css"
 import "./fonts/roboto-mono/roboto-mono.css"
 import "./fonts/roboto-slab/roboto-slab.css"
 import "./fonts/yellowtail/yellowtail.css"
+import {NotesPanel} from './UI/NotesPanel';
 function App() {
   useEffect(()=>{
     console.log("Application started. Initializing");
@@ -22,6 +23,7 @@ function App() {
         <MainToolbar></MainToolbar>
         <Sidebar></Sidebar>
         <Settings></Settings>
+        <NotesPanel></NotesPanel>
       </div>
     </div>
   );
