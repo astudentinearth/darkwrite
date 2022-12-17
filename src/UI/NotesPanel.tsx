@@ -1,10 +1,10 @@
 import { invoke } from "@tauri-apps/api";
 import { BaseDirectory, readTextFile, writeTextFile } from "@tauri-apps/api/fs";
 import { appDir } from "@tauri-apps/api/path";
-import React from "react";
+import React, { useLayoutEffect } from "react";
 import { useEffect, useRef, useState } from "react";
 import { HexToRGB, RGBToHex } from "../Theme";
-import { ConvertJSONToINote, FontStyle, GenerateID, INote } from "../Util";
+import { ConvertJSONToINote, FontStyle, GenerateID, GetNotebooks, INote } from "../Util";
 import ToolbarButton from "./Components/ToolbarButton";
 
 /**
@@ -16,9 +16,9 @@ let getNote: (id: string) => INote;
  * Update an existing note, or create the note if it doesn't have an ID assigned.
  */
 let updateNote: (note: INote) => void;
-
+let getNotebook: ()=>string;
 let showEditor:(noteID:string) => void;
-
+let setNotebookFilter:(notebookID:string)=>void;
 function NoteEditor() {
     const [isVisible,setVisibility] = useState(false);
     const [note,setNote] = useState({} as INote);
@@ -49,11 +49,11 @@ function NoteEditor() {
         },1000);
         return ()=>clearTimeout(change);
     },[note]);
-    return <div id="noteEditDialog" className="absolute transition-all top-0 right-0
-    left-0 bottom-0 backdrop-blur-md rounded-2xl flex flex-col"
-    style={{ display: isVisible ? "flex" : "none",backgroundColor:`rgb(${HexToRGB(note.background)?.r} ${HexToRGB(note.background)?.g} ${HexToRGB(note.background)?.b} / 0.90)`}}>
+    return <div id="noteEditDialog" className="fixed transition-all top-16 right-2
+    left-[20rem] bottom-2 rounded-2xl flex flex-col"
+    style={{ display: isVisible ? "flex" : "none",backgroundColor:`rgb(${HexToRGB(note.background)?.r} ${HexToRGB(note.background)?.g} ${HexToRGB(note.background)?.b} / 1)`}}>
         <div className="rounded-t-2xl bg-secondary/75 h-14 flex items-center">
-            <ToolbarButton onClick={()=>{setVisibility(false)}} style={{"background":"transparent"}} icon="bi-chevron-left"></ToolbarButton>
+            <ToolbarButton onClick={()=>{setVisibility(false); updateNote(note)}} style={{"background":"transparent"}} icon="bi-chevron-left"></ToolbarButton>
             <input value={note.title ?? "New note"} onChange={(e)=>{setNote({...note, title:e.target.value})}} ref={titleRef} onBlur={(e)=>{
                 setNote({...note, title: e.target.value});
             }} onKeyDown={(e)=>{
@@ -151,19 +151,25 @@ function NotesPanel() {
             background: props.background,
             color: props.foreground,
             fontFamily: props.font === FontStyle.Custom ? props.customFont : ""
-        }} className={"p-4 transition-shadow cursor-pointer overflow-y-clip duration-200 inline-block m-2 rounded-2xl w-64 h-60 shadow-default-hover "+getFont()}>
+        }} className={"p-4 transition-all cursor-pointer overflow-y-clip duration-200 inline-block m-2 rounded-2xl w-64 h-60 drop-shadow-none "+getFont()}>
             <h1 className="text-2xl truncate">{props.title}</h1>
             <hr style={{ "border": `${props.foreground} 1px solid`, opacity: 0.10 }}></hr>
-            <p className="text-ellipsis break-words">{props.content}</p>
+            <span className="text-ellipsis break-words">{props.content} &nbsp;</span>
         </div>
     }
     const [notes, setNotes] = useState<INote[]>([]);
-    
+    const [notebook, setNotebook] = useState("0");
+    const isFirstRender=useRef(true);
+
+    setNotebookFilter=(notebookID:string)=>{
+        setNotebook(notebookID);
+    }; 
+    getNotebook=()=>{return notebook;};
     getNote = (id: string) => {
         for (let n of notes) {
             if (n.id === id) return n;
         }
-        return {id: id, title:"New Note", content:"", background: "#393939", foreground: "#ffffff",font: FontStyle.Sans} as INote;
+        return {id: id, title:"New Note", content:"", background: "#393939", foreground: "#ffffff",font: FontStyle.Sans,notebookID:notebook} as INote;
     }
     async function LoadNotes() {
         console.log("[INFO] Loading notes")
@@ -193,17 +199,26 @@ function NotesPanel() {
             currentNotes.push(x);
             setNotes(currentNotes);
         }
+        
     };
     async function SaveNotes() {
         console.log("[INFO] Saving notes");
-        await writeTextFile("notes.json", JSON.stringify({ "notes": notes }), { dir: BaseDirectory.App });
+        await writeTextFile("notes.json", JSON.stringify({ "notes": notes, "notebooks":GetNotebooks() }), { dir: BaseDirectory.App });
     }
     useEffect(() => {
         LoadNotes();
     }, [])
+    useLayoutEffect(()=>{
+        if(isFirstRender.current){
+            isFirstRender.current=false;
+            return;
+        }
+        console.log("saving notes")
+        SaveNotes();
+    },[notes]);
     return <div id="NotesPanel"
-        className={"notes_div p-1 absolute top-16 bottom-2 right-2 transition-all rounded-2xl left-80"}>
-        {notes.map((noteobj) => <Note onClick={()=>{showEditor(noteobj.id)}} id={noteobj.id}
+        className={"notes_div  fixed overflow-y-scroll top-16 bottom-2 right-2 transition-all rounded-2xl left-80"}>
+        {notes.filter(n=>n.notebookID==notebook).map((noteobj) => <Note onClick={()=>{showEditor(noteobj.id)}} id={noteobj.id}
             background={noteobj.background}
             foreground={noteobj.foreground}
             content={noteobj.content}
@@ -214,4 +229,4 @@ function NotesPanel() {
     </div>
 }
 
-export {showEditor, NotesPanel}
+export {showEditor, NotesPanel, getNotebook,setNotebookFilter}

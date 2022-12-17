@@ -1,5 +1,5 @@
 import { invoke } from "@tauri-apps/api";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { useEffect } from "react";
 import { readTextFile, writeFile } from "@tauri-apps/api/fs";
 import {appDir} from "../../node_modules/@tauri-apps/api/path"
@@ -46,6 +46,7 @@ function Tasks(){
         }
         load();
     },[]);
+    let taskInputRef:any = useRef(null);
     changeTasks=setTasks;
     getTasks=returnTasks;
     function returnTasks(){
@@ -54,13 +55,17 @@ function Tasks(){
     function AddTask(content:string){
         let t=[...tasks];
         let task={completed: false,content:content,id:GenerateID()} as ITask;
-        t.push(task);
+        t.unshift(task);
         setTasks(t);
         SaveTasks();
     }
     function removeTask(id:string){
         let currentTasks=[...tasks];
-
+        for (let t in currentTasks){
+           if(currentTasks[t].id===id){
+                currentTasks.splice(parseInt(t),1);
+           } 
+        }
         setTasks(currentTasks);
         console.log(tasks);
         SaveTasks();
@@ -74,8 +79,13 @@ function Tasks(){
     }
     return <div id="TaskPanel" className="w-72  overflow-y-scroll  min-h-0 text-default z-10 flex-[1_1_auto] flex-col transition-all" >
         <div className="flex taskinputdiv">
-            <input onChange={TaskInputChanged} tabIndex={0} type="text" onKeyDown={InputKeyDown} id="taskInput" placeholder="A new task" className="border-default inline-block hide-outline w-[240px] bg-secondary/25 h-12 p-2 text-xl"></input>
-            <div className="bg-accent/75 cursor-pointer transition-all hover:brightness-125 w-12 h-12 flex justify-center items-center" >
+            <input ref={taskInputRef} onChange={TaskInputChanged} tabIndex={0} type="text" onKeyDown={InputKeyDown} id="taskInput" placeholder="A new task" className="border-default inline-block hide-outline w-[240px] bg-secondary/25 h-12 p-2 text-xl"></input>
+            <div onClick={()=>{
+                if(taskInputRef.current.value.trim().length!==0){
+                    AddTask(taskInputRef.current.value);
+                    taskInputRef.current.value="";
+                }
+            }} className="bg-accent/75 cursor-pointer transition-all hover:brightness-125 w-12 h-12 flex justify-center items-center" >
                 <i className="bi-plus-lg text-2xl"></i>
             </div>
         </div>
@@ -110,7 +120,10 @@ function Tasks(){
                                                 style={item.completed ? {background: "rgb(var(--accent))"} : {}} className="w-5 h-5 ml-2 flex items-center justify-center rounded-md bg-secondary/50 hover:brigtness-125 cursor-pointer">
                                                     {item.completed ? <i className="bi-check-lg text-white"></i> : ""}
                                                 </div>
-                                                <span className="text-default p-2 text-md">{item.content}</span></div>
+                                                <span className="text-default p-2 text-md">{item.content}</span>
+                                                <div onClick={()=>{removeTask(item.id)}} className="task-delete-button ml-auto mr-4 hover:bg-secondary/20 cursor-pointer rounded-md p-1 w-6 h-6 flex items-center justify-center"><i className="bi-x-lg"></i></div>
+                                            </div>
+                                                
                                         }}
                                         </Draggable>
                                 })}

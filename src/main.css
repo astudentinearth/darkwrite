@@ -29,7 +29,7 @@
 }
 
 .shadow-default{
-    @apply drop-shadow-lg shadow-black/20;
+    @apply shadow-black/20;
 } 
 .shadow-default-hover{
     @apply shadow-default transition-shadow duration-200;
@@ -85,6 +85,15 @@ input[type=time]{
 .task-item{
     @apply flex items-center;
 }
+
+.task-item .task-delete-button{
+    visibility:hidden;
+}
+
+.task-item:hover .task-delete-button{
+    visibility: visible;
+}
+
 .toolbar-button:hover,.task-item:hover{
     @apply bg-hover/50;
 }
@@ -153,3 +162,5 @@ input[type=color]::-webkit-color-swatch-wrapper{
 .f-hand{
     font-family: var(--font-hand);
 }
+
+

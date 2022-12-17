@@ -19,7 +19,13 @@ interface INote{
     background:string,
     foreground:string,
     font:FontStyle,
-    customFontFamily?:string
+    customFontFamily?:string,
+    notebookID:string
+}
+
+interface INotebook{
+    id:string,
+    name:string
 }
 
 /**
@@ -92,7 +98,8 @@ function ConvertJSONToINote(json:any){
             background:element.background ?? "#FFFFFF",
             foreground:element.foreground ?? "#000000",
             font:FontStyleFromString(element.font) ?? FontStyle.Sans,
-            customFontFamily:element.customFontFamily ?? ""};
+            customFontFamily:element.customFontFamily ?? "",
+            notebookID:element.notebookID ?? "0"};
         ret.push(n);
         if(n.id.trim()===""){ // check if its just an empty/space string
             n.id=GenerateID();
@@ -100,6 +107,21 @@ function ConvertJSONToINote(json:any){
     });
     return ret;
 }
+function ConvertJSONToINotebook(json:any){
+    let ret:INotebook[]=[];
+    json.forEach((element:any)=>{
+        let n:INotebook={id:element.id ?? GenerateID(),
+        name:element.name ?? "Unnamed Notebook"};
+        ret.push(n);
+    });
+    return ret;
+}
+
+function GetNotebooks(){
+    // TODO: actually read the file - currently just a mock function
+    return [{id:"0",name:"default"} as INotebook,{id:"567568",name:"new"} as INotebook] as INotebook[];
+}
+
 /**
  * Generates a unique identifier to be attached to notes.
  * @returns Unique ID using the current timestamp combined with a 8 digit random number
@@ -126,5 +148,5 @@ function JSONToITaskArray(json:any){
     }
     return tasks;
 }
-export { Uint8ArrayToBase64, GenerateID, ConvertJSONToINote, FontStyle,JSONToITaskArray };
-export type {INote, ITask, IAppData };
+export { Uint8ArrayToBase64, GenerateID, ConvertJSONToINote, FontStyle,JSONToITaskArray,ConvertJSONToINotebook, GetNotebooks };
+export type {INote, ITask, IAppData, INotebook };

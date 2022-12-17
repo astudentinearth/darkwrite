@@ -19,7 +19,7 @@ function App() {
   },[]);
   return (
     <div className="App background-default">
-      <div className='app_root bg-center bg-cover bg-no-repeat select-none absolute text-default transition-all w-full h-full duration-200'>
+      <div className='app_root overflow-y-scroll bg-center bg-cover bg-no-repeat select-none absolute text-default transition-all w-full h-full duration-200'>
         <MainToolbar></MainToolbar>
         <Sidebar></Sidebar>
         <Settings></Settings>
