@@ -86,7 +86,7 @@ function Tasks(){
                     taskInputRef.current.value="";
                 }
             }} className="bg-accent/75 cursor-pointer transition-all hover:brightness-125 w-12 h-12 flex justify-center items-center" >
-                <i className="bi-plus-lg text-2xl"></i>
+                <i className="bi-plus-lg text-2xl text-white"></i>
             </div>
         </div>
         <div id="tasksDiv" className="grow min-h-0">
@@ -107,7 +107,7 @@ function Tasks(){
                                             return <div ref={_provided.innerRef} 
                                             {..._provided.draggableProps} 
                                             {..._provided.dragHandleProps}
-                                            className="task-item">
+                                            className="task-item transition-colors">
                                                 <div onClick={()=>{
                                                 let t = [...tasks];
                                                 for (let i of t){
@@ -117,7 +117,7 @@ function Tasks(){
                                                 }
                                                 setTasks(t);
                                                 SaveTasks();}} 
-                                                style={item.completed ? {background: "rgb(var(--accent))"} : {}} className="w-5 h-5 ml-2 flex items-center justify-center rounded-md bg-secondary/50 hover:brigtness-125 cursor-pointer">
+                                                style={item.completed ? {background: "rgb(var(--accent))"} : {}} className="w-5 h-5 ml-2 flex items-center justify-center rounded-md bg-secondary/75 hover:brigtness-125 cursor-pointer checkbox">
                                                     {item.completed ? <i className="bi-check-lg text-white"></i> : ""}
                                                 </div>
                                                 <span className="text-default p-2 text-md">{item.content}</span>

@@ -139,7 +139,7 @@ input[type=color]{
 
 input[type=color]::-webkit-color-swatch{
     border:none;
-    @apply rounded-lg;
+    @apply rounded-lg drop-shadow-lg;
 
 }
 
@@ -163,4 +163,28 @@ input[type=color]::-webkit-color-swatch-wrapper{
     font-family: var(--font-hand);
 }
 
+.note-shadow{
+    box-shadow: 0px 2px 10px 0px rgba(0,0,0,0.2);
+}
 
+.checkbox{
+    box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.2);
+}
+
+.background-clip-text{
+    @apply bg-clip-text;
+    -webkit-background-clip: text;
+}
+
+.note .note-actions-bar{
+    visibility:hidden;
+    opacity: 0;
+    transition: opacity 0.2s;
+    @apply bg-gradient-to-t from-black/0 to-transparent;
+} 
+
+.note:hover .note-actions-bar{
+    visibility:visible;
+    opacity: 1;
+    @apply bg-gradient-to-t from-black/40 to-transparent;
+}

@@ -42,7 +42,7 @@ function SettingsView(){
             <SidebarButton onClick={()=>{setPage(SettingsPage.Appearance)}} isActive={(page===SettingsPage.Appearance) ? "true" : ""} icon="bi-brush" title="Appearance"></SidebarButton>
             <SidebarButton onClick={()=>{setPage(SettingsPage.About)}} isActive={(page===SettingsPage.About) ? "true" : ""} icon="bi-info" title="About"></SidebarButton>
         </div>
-        <div className="absolute left-72 px-4 justify-center items-center right-0 top-0 bottom-0">
+        <div className="absolute left-72 px-4 justify-center overflow-y-scroll items-center right-0 top-0 bottom-0">
             <div className="">
                 {renderPage()}
             </div>

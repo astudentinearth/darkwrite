@@ -1,6 +1,12 @@
 /**
  * Type of font to be used in a note.
  */
+
+import { fs } from "@tauri-apps/api"
+import { BaseDirectory, readTextFile, writeTextFile } from "@tauri-apps/api/fs"
+import React from "react"
+
+
 enum FontStyle{
     Sans=0,
     Serif=1,
@@ -117,10 +123,23 @@ function ConvertJSONToINotebook(json:any){
     return ret;
 }
 
-function GetNotebooks(){
+async function GetNotebooks(){
     // TODO: actually read the file - currently just a mock function
-    return [{id:"0",name:"default"} as INotebook,{id:"567568",name:"new"} as INotebook] as INotebook[];
+    if(!await fs.exists("notebooks.json",{dir:BaseDirectory.App})){
+        console.log("Notebooks file not found");
+        await writeTextFile("notebooks.json",`{notebooks:[]}`,{dir:BaseDirectory.App});
+    }
+    let notebooks_plain = await readTextFile("notebooks.json",{dir: BaseDirectory.App});
+    console.log(notebooks_plain);
+    let notebooksJSON:any = JSON.parse(notebooks_plain);
+    if(notebooksJSON.notebooks == null) return [{id: "0",name:"My Notes"}] as INotebook[];
+    if(notebooksJSON.notebooks.length===0){
+        console.log("No notebooks were found. Creating default one.")
+        return [{id: "0",name:"My Notes"}] as INotebook[];
+    }
+    return (notebooksJSON.notebooks ?? [{id: "0",name:"My Notes"}]) as INotebook[];
 }
+
 
 /**
  * Generates a unique identifier to be attached to notes.
