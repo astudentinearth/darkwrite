@@ -103,7 +103,7 @@ function ConvertJSONToINote(json:any){
             content:element.content ?? "",
             background:element.background ?? "#FFFFFF",
             foreground:element.foreground ?? "#000000",
-            font:FontStyleFromString(element.font) ?? FontStyle.Sans,
+            font:element.font ?? FontStyle.Sans,
             customFontFamily:element.customFontFamily ?? "",
             notebookID:element.notebookID ?? "0"};
         ret.push(n);
@@ -124,7 +124,6 @@ function ConvertJSONToINotebook(json:any){
 }
 
 async function GetNotebooks(){
-    // TODO: actually read the file - currently just a mock function
     if(!await fs.exists("notebooks.json",{dir:BaseDirectory.App})){
         console.log("Notebooks file not found");
         await writeTextFile("notebooks.json",`{notebooks:[]}`,{dir:BaseDirectory.App});
