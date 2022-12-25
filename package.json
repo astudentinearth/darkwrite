@@ -26,7 +26,7 @@
     "eject": "react-scripts eject",
     "tauri": "tauri",
     "twcss": "tailwindcss -i src/main.css -o src/index.css --watch",
-    "app_build": "tailwindcss -i src/main.css -o src/index.css && generate-license-file --input package.json --output 3rd-party-licenses.txt --overwrite"
+    "app_build": "tailwindcss -i src/main.css -o src/index.css && generate-license-file --input package.json --output src/3rd-party-licenses.txt --overwrite"
   },
   "eslintConfig": {
     "extends": [

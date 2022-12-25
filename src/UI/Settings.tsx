@@ -6,6 +6,7 @@ import ToolbarButton from "./Components/ToolbarButton";
 import ThemeOptions from "./SettingsApplets/ThemeOptions";
 import FontOptions from "./SettingsApplets/Fonts";
 import WallpaperApplet from "./SettingsApplets/WallpaperApplet";
+import { Acknowledgements } from "./SettingsApplets/Acknowledgements";
 let ShowSettings:any;
 let HideSettings:any;
 enum SettingsPage{
@@ -28,7 +29,7 @@ function SettingsView(){
                     return <React.Fragment><ThemeOptions></ThemeOptions><FontOptions></FontOptions><WallpaperApplet></WallpaperApplet></React.Fragment>
                 
                 case SettingsPage.About:
-                    return <React.Fragment><About></About><DebugInfo></DebugInfo></React.Fragment>
+                    return <React.Fragment><About></About><DebugInfo></DebugInfo><Acknowledgements></Acknowledgements></React.Fragment>
             }
         
         return <DebugInfo></DebugInfo>
