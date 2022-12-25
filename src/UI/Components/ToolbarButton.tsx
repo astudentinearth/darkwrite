@@ -9,10 +9,10 @@
      **/
 function ToolbarButton(props:any){
     
-    return <div className={(props.class || "")+(props.color=="accent" ? " toolbar-button-accent" : "toolbar-button")} 
+    return <div className={(props.color=="accent" ? " toolbar-button-accent " : " toolbar-button ")+(props.class || " ")} 
     style={props.style}
     onClick={props.onClick}>
-        <i className={"text-3xl "+props.icon}></i>
+        <i className={"w-[30px] h-[30px] text-center flex items-center text-3xl "+props.icon}></i>
     </div>;
 }
 export default ToolbarButton;

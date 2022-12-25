@@ -20,13 +20,13 @@ function MainToolbar(props:any){
 			if(sidebar?.classList.contains("open")) {
 				sidebar?.classList.remove("open");
 				notesPanel?.style.setProperty("left","8px");
-                                noteEditor?.style.setProperty("left","8px");
+                noteEditor?.style.setProperty("left","18rem");
 			}
 			else {
 				sidebar?.classList.add("open");
 				notesPanel?.style.setProperty("left","20rem");
-			        noteEditor?.style.setProperty("left","20rem");
-                        };
+			    noteEditor?.style.setProperty("left","38rem");
+            };
 			
 			
 		}} style={{float:"left"}} icon="bi-layout-sidebar"></ToolbarButton>

@@ -8,6 +8,7 @@ import { ConvertJSONToINote, FontStyle, GenerateID, GetNotebooks, INote, INotebo
 import ToolbarButton from "./Components/ToolbarButton";
 import { NotebooksContext } from "../App";
 import useComponentVisible from "../useComponentVisible";
+import logo from '../res/darkwrite_icon.svg'
 import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 /**
  * Get an INote from ID
@@ -22,15 +23,17 @@ let getNotebook: () => string;
 let showEditor: (noteID: string) => void;
 let setNotebookFilter: (notebookID: string) => void;
 function NoteEditor() {
-    const [isVisible, setVisibility] = useState(false);
-    const [note, setNote] = useState({} as INote);
+    const [isVisible, setVisibility] = useState(true);
+    const [note, setNote] = useState({id:"-1"} as INote);
     showEditor = (id: string) => {
+        console.log("showing editor")
+        if (id==="-1") {setNote({id:"-1"} as INote); return;}
         let note = getNote(id);
         setNote(note);
+        updateNote(note);
         setVisibility(true);
     }
     const getFont = () => {
-        console.log("getFont() => " + note.font);
         switch (note.font) {
             case FontStyle.Sans:
                 return "f-sans";
@@ -48,82 +51,90 @@ function NoteEditor() {
     let titleRef: any = useRef(null);
     useEffect(() => {
         const change = setTimeout(() => {
-            if (isVisible === true) updateNote(note);
-        }, 1000);
+            if (note.id!=="-1") updateNote(note);
+        }, 300);
         return () => clearTimeout(change);
     }, [note]);
     return <div id="noteEditDialog" className="fixed transition-all top-16 right-2
-    left-[20rem] bottom-2 rounded-2xl flex flex-col"
-        style={{ display: isVisible ? "flex" : "none", backgroundColor: `rgb(${HexToRGB(note.background)?.r} ${HexToRGB(note.background)?.g} ${HexToRGB(note.background)?.b} / 1)` }}>
-        <div className="rounded-t-2xl bg-secondary/75 h-14 flex items-center">
-            <ToolbarButton onClick={() => { setVisibility(false); updateNote(note) }} style={{ background: "transparent", backdropFilter: "none" }} icon="bi-chevron-left"></ToolbarButton>
-            <input value={note.title ?? "New note"} onChange={(e) => { setNote({ ...note, title: e.target.value }) }} ref={titleRef} onBlur={(e) => {
-                setNote({ ...note, title: e.target.value });
-            }} onKeyDown={(e) => {
-                if (e.key === "Enter") titleRef.current.blur();
-            }} className="flex-[1_1_48px] m-1 h-12 rounded-tr-xl p-1 bg-transparent outline-none text-xl"></input>
-        </div>
-        <div className="flex-[0_1_0%] bg-secondary/75">
-            <div className="p-2">
-                <div className="bg-secondary transition-all  drop-shadow-lg shadow-black float-left w-max flex mr-1 mb-1 items-center rounded-lg">
-                    <div onClick={() => {
-                        setNote({ ...note, font: FontStyle.Sans } as INote)
-                    }}
-                        style={note.font === FontStyle.Sans ? { backgroundColor: "rgb(var(--accent))", color: "white" } : {}}
-                        className="flex f-sans float-left text-center cursor-pointer hover:bg-hover transition-all items-center justify-center w-10 bg-secondary h-10 p-2 rounded-lg"
-                    >Aa</div>
-                    <div onClick={() => {
-                        setNote({ ...note, font: FontStyle.Serif } as INote)
-                    }}
-                        style={note.font === FontStyle.Serif ? { backgroundColor: "rgb(var(--accent))", color: "white" } : {}}
-
-                        className="flex f-serif float-left text-center cursor-pointer hover:bg-hover transition-all items-center justify-center w-10 bg-secondary h-10 p-2 rounded-lg">Aa</div>
-                    <div onClick={() => {
-                        setNote({ ...note, font: FontStyle.Monospace } as INote)
-                    }}
-                        style={note.font === FontStyle.Monospace ? { backgroundColor: "rgb(var(--accent))", color: "white" } : {}}
-                        className="flex f-mono float-left text-center cursor-pointer hover:bg-hover transition-all items-center justify-center w-10 bg-secondary h-10 p-2 rounded-lg">Aa</div>
-                    <div onClick={() => {
-                        setNote({ ...note, font: FontStyle.Handwriting } as INote)
-                    }}
-                        style={note.font === FontStyle.Handwriting ? { backgroundColor: "rgb(var(--accent))", color: "white" } : {}}
-                        className="flex f-hand float-left text-center cursor-pointer hover:bg-hover transition-all items-center justify-center w-10 bg-secondary h-10 p-2 rounded-lg">Aa</div>
-                    <div onClick={() => {
-                        setNote({ ...note, font: FontStyle.Custom } as INote)
-                    }}
-                        style={note.font === FontStyle.Custom ? { backgroundColor: "rgb(var(--accent))", color: "white" } : {}}
-                        className="flex float-left text-center cursor-pointer hover:bg-hover transition-all items-center justify-center w-10 bg-secondary h-10 p-2 rounded-lg">
-                        <i className="bi-three-dots"></i>
-                    </div>
-                    <input ref={customFontRef} onBlur={(e) => {
-                        setNote({ ...note, customFontFamily: e.target.value } as INote);
-                    }} onKeyDown={(e) => {
-                        if (e.key === "Enter") {
-                            customFontRef.current.blur();
-                        }
-                    }} placeholder="Custom font" defaultValue={note.customFontFamily} style={note.font === FontStyle.Custom ? {} : { display: "none" }} className="w-48 h-10 outline-none transition-all focus:border-accent focus:border-2 p-1 bg-transparent block rounded-lg"></input>
-                </div>
-                <input type={"color"} value={note.background} onChange={(e) => {
-                    setNote({ ...note, background: e.target.value })
-                }} className="flex mr-1 mb-1 float-left text-center cursor-pointer hover:bg-hover transition-all items-center justify-center w-10 bg-secondary h-10 rounded-lg">
-
-                </input>
-                <input type={"color"} value={note.foreground} onChange={(e) => {
-                    setNote({ ...note, foreground: e.target.value })
-                }} className="flex float-left text-center cursor-pointer hover:bg-hover transition-all items-center justify-center w-10 bg-secondary h-10 rounded-lg">
-
-                </input>
-                <div className="clear-both"></div>
+    left-[38rem] bottom-2 rounded-2xl flex flex-col backdrop-blur-md"
+        style={{ display: isVisible ? "flex" : "none", backgroundColor: 
+        note.background ? `rgb(${HexToRGB(note.background)?.r} ${HexToRGB(note.background)?.g} ${HexToRGB(note.background)?.b} / 1)` : 'rgba(var(--background-secondary) / 0.5)'}}>
+        {note.id!=="-1" ? 
+        <>
+            <div className="rounded-t-2xl bg-secondary/75 h-14 flex items-center">
+                {/*<ToolbarButton onClick={() => { updateNote(note); }} style={{ background: "transparent", backdropFilter: "none" }} icon="bi-chevron-left"></ToolbarButton>*/}
+                <input value={note.title ?? "New note"} onChange={(e) => { setNote({ ...note, title: e.target.value }) }} ref={titleRef} onBlur={(e) => {
+                    setNote({ ...note, title: e.target.value });
+                }} onKeyDown={(e) => {
+                    if (e.key === "Enter") titleRef.current.blur();
+                }} className="flex-[1_1_48px] m-1 h-12 rounded-tr-xl p-1 bg-transparent outline-none text-xl"></input>
             </div>
-        </div>
-        <div className="flex-[1_1_auto] ">
-            <textarea value={note.content ?? ""} onChange={(e) => { setNote({ ...note, content: e.target.value }) }} onBlur={(e) => {
-                setNote({ ...note, content: e.target.value })
-            }} style={{ fontFamily: note.font === FontStyle.Custom ? note.customFontFamily : "", color: note.foreground }} className={"w-full h-full box-border bg-transparent p-2 outline-none resize-none " + getFont()}>
+            <div className="flex-[0_1_0%] bg-secondary/75">
+                <div className="p-2">
+                    <div className="bg-secondary transition-all  drop-shadow-lg shadow-black float-left w-max flex mr-1 mb-1 items-center rounded-lg">
+                        <div onClick={() => {
+                            setNote({ ...note, font: FontStyle.Sans } as INote)
+                        }}
+                            style={note.font === FontStyle.Sans ? { backgroundColor: "rgb(var(--accent))", color: "white" } : {}}
+                            className="flex f-sans float-left text-center cursor-pointer hover:bg-hover transition-all items-center justify-center w-10 bg-secondary h-10 p-2 rounded-lg"
+                        >Aa</div>
+                        <div onClick={() => {
+                            setNote({ ...note, font: FontStyle.Serif } as INote)
+                        }}
+                            style={note.font === FontStyle.Serif ? { backgroundColor: "rgb(var(--accent))", color: "white" } : {}}
 
-            </textarea>
-        </div>
+                            className="flex f-serif float-left text-center cursor-pointer hover:bg-hover transition-all items-center justify-center w-10 bg-secondary h-10 p-2 rounded-lg">Aa</div>
+                        <div onClick={() => {
+                            setNote({ ...note, font: FontStyle.Monospace } as INote)
+                        }}
+                            style={note.font === FontStyle.Monospace ? { backgroundColor: "rgb(var(--accent))", color: "white" } : {}}
+                            className="flex f-mono float-left text-center cursor-pointer hover:bg-hover transition-all items-center justify-center w-10 bg-secondary h-10 p-2 rounded-lg">Aa</div>
+                        <div onClick={() => {
+                            setNote({ ...note, font: FontStyle.Handwriting } as INote)
+                        }}
+                            style={note.font === FontStyle.Handwriting ? { backgroundColor: "rgb(var(--accent))", color: "white" } : {}}
+                            className="flex f-hand float-left text-center cursor-pointer hover:bg-hover transition-all items-center justify-center w-10 bg-secondary h-10 p-2 rounded-lg">Aa</div>
+                        <div onClick={() => {
+                            setNote({ ...note, font: FontStyle.Custom } as INote)
+                        }}
+                            style={note.font === FontStyle.Custom ? { backgroundColor: "rgb(var(--accent))", color: "white" } : {}}
+                            className="flex float-left text-center cursor-pointer hover:bg-hover transition-all items-center justify-center w-10 bg-secondary h-10 p-2 rounded-lg">
+                            <i className="bi-three-dots"></i>
+                        </div>
+                        <input ref={customFontRef} onBlur={(e) => {
+                            setNote({ ...note, customFontFamily: e.target.value } as INote);
+                        }} onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                                customFontRef.current.blur();
+                            }
+                        }} placeholder="Custom font" defaultValue={note.customFontFamily} style={note.font === FontStyle.Custom ? {} : { display: "none" }} className="w-36 h-10 outline-none transition-all focus:border-accent focus:border-2 p-1 bg-transparent block rounded-lg"></input>
+                    </div>
+                    <input type={"color"} value={note.background} onChange={(e) => {
+                        setNote({ ...note, background: e.target.value })
+                    }} className="flex mr-1 mb-1 float-left text-center cursor-pointer hover:bg-hover transition-all items-center justify-center w-10 bg-secondary h-10 rounded-lg">
 
+                    </input>
+                    <input type={"color"} value={note.foreground} onChange={(e) => {
+                        setNote({ ...note, foreground: e.target.value })
+                    }} className="flex float-left text-center cursor-pointer hover:bg-hover transition-all items-center justify-center w-10 bg-secondary h-10 rounded-lg">
+
+                    </input>
+                    <div className="clear-both"></div>
+                </div>
+            </div>
+            <div className="flex-[1_1_auto] ">
+                <textarea value={note.content ?? ""} onChange={(e) => { setNote({ ...note, content: e.target.value }) }} onBlur={(e) => {
+                    setNote({ ...note, content: e.target.value })
+                }} style={{ fontFamily: note.font === FontStyle.Custom ? note.customFontFamily : "", color: note.foreground }} className={"w-full h-full box-border bg-transparent p-2 outline-none resize-none " + getFont()}>
+
+                </textarea>
+            </div>
+        </> : <div className="flex flex-1 items-center justify-center flex-col text-center">
+                <img src={logo} className="w-48 h-48 block"></img>
+                <span className="block text-2xl font-bold">Welcome</span>
+                <span className="block text-xl">Create or select a note to begin.</span>
+        </div>}
+        
     </div>;
 }
 
@@ -160,6 +171,7 @@ function NotesPanel() {
             let newNotebook = { id: id, name: newNotebookRef.current.value } as INotebook;
             currentNotebooks.push(newNotebook);
             setNotebooks(currentNotebooks);
+            showEditor("-1");
             updateNote({
                 title: props.title, background: props.background,
                 foreground: props.foreground,
@@ -171,6 +183,7 @@ function NotesPanel() {
             //writeTextFile("notebooks.json",JSON.stringify({"notebooks":notebooks}),{dir:BaseDirectory.App});
         }
         const moveToNotebook = (id: string) => {
+            showEditor("-1");
             updateNote({
                 title: props.title, background: props.background,
                 foreground: props.foreground,
@@ -180,34 +193,33 @@ function NotesPanel() {
                 id: props.id
             } as INote)
         }
-        return <div  {...props.draggableProps} {...props.dragHandleProps} ref={props.innerRef} className={"transition-all relative note note-shadow cursor-default  duration-200 block m-2 rounded-2xl w-64 h-60 " + getFont()}>
-            <div style={{
+        useEffect(()=>{
+            if(props.isFilteredOut) props.innerRef.current?.style.setProperty("display","none");
+        },[]);
+        return <div ref={props.innerRef} {...props.draggableProps} onClick={props.onClick} {...props.dragHandleProps} className={"transition-all relative note select-none cursor-default duration-200 m-2 block rounded-2xl w-64"}>
+            {props.isFilteredOut ? <></> : <div style={{
                 background: props.background,
                 color: props.foreground,
-                fontFamily: props.font === FontStyle.Custom ? props.customFont : ""
+                
             }}
-                className="rounded-2xl p-2 h-60">
-                <div onClick={props.onClick} className="">
-                    <h1 className="text-2xl truncate">{props.title}</h1>
-                    <hr style={{ "border": `${props.foreground} 1px solid`, opacity: 0.10 }}></hr>
-                    <div className="h-48 overflow-y-hidden">
-                        <p className="text-ellipsis break-words whitespace-pre-line background-clip-text text-transparent" style={{ backgroundImage: `linear-gradient(${props.foreground} 100px,${props.background} 175px)` }}>{props.content} &nbsp;</p>
-
-                    </div>
+            className="rounded-2xl note-shadow  p-2 h-12 flex items-center">
+                <div className="">
+                    <h1 className={"text-2xl truncate " + getFont()} style={{fontFamily: props.font === FontStyle.Custom ? props.customFont : ""}}>{props.title}</h1>
                 </div>
                 <div className="h-10 z-10 absolute bottom-0 p-1 note-actions-bar right-0 left-0 justify-end rounded-b-2xl flex items-center">
-                    <div onClick={() => {
+                    <div onClick={(e) => {
+                        e.stopPropagation();
                         setIsComponentVisible(true);
                     }} className="hover:bg-secondary/20 cursor-pointer h-8 w-8 rounded-[12px] flex items-center justify-center">
                         <i className="bi-journal-bookmark-fill"></i>
                     </div>
-                    <div onClick={() => { deleteNote(props.id) }} className="hover:bg-secondary/20 cursor-pointer h-8 w-8 rounded-[12px] flex items-center justify-center">
+                    <div onClick={(e) => { e.stopPropagation(); showEditor("-1");deleteNote(props.id) }} className="hover:bg-secondary/20 cursor-pointer h-8 w-8 rounded-[12px] flex items-center justify-center">
                         <i className="bi-trash text-red-300"></i>
                     </div>
                 </div>
-                <div ref={ref} style={{ visibility: isComponentVisible ? "visible" : "hidden" }} tabIndex={0} className="h-36 text-default z-50 absolute top-14 justify-center right-2 bg-secondary flex-col drop-shadow-lg shadow-black cursor-default left-14 rounded-2xl flex">
+                <div onClick={(e)=>{e.stopPropagation();}} ref={ref} style={{ visibility: isComponentVisible ? "visible" : "hidden" }} tabIndex={0} className="h-36 text-default z-50 absolute top-14 justify-center right-2 bg-secondary flex-col drop-shadow-lg shadow-black cursor-default left-14 rounded-2xl flex">
                     <span className="p-2">Move to notebook</span>
-                    <div className="h-32 rounded-b-2xl overflow-y-scroll">
+                    <div className="h-32 rounded-b-2xl overflow-y-auto">
                         <div onClick={() => {
                             newNotebookContainerRef.current.style = { display: "flex" }
                         }} className="p-2 hover:bg-primary outline-primary outline-1 transition-colors"><i className="bi-plus-lg"></i> New Notebook</div>
@@ -219,7 +231,7 @@ function NotesPanel() {
                         {notebooks.map((nb: any) => <div onClick={() => { moveToNotebook(nb.id) }} className="p-2 hover:bg-primary outline-primary outline-1 transition-colors">{nb.name}</div>)}
                     </div>
                 </div>
-            </div>
+            </div>}
         </div>
     }
     const [notes, setNotes] = useState<INote[]>([]);
@@ -294,7 +306,7 @@ function NotesPanel() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [notes]);
     return <div id="NotesPanel"
-        className={"notes_div  fixed overflow-y-scroll top-16 bottom-2 right-2 transition-all rounded-2xl left-80"}>
+        className={"notes_div bg-secondary/50 backdrop-blur-md fixed overflow-y-scroll w-[17rem] top-16 bottom-2 transition-all rounded-2xl left-80"}>
         <DragDropContext onDragEnd={(result: any) => {
             if (!result.destination) return;
             console.log("reordering")
@@ -319,7 +331,8 @@ function NotesPanel() {
                                         title={item.title}
                                         innerRef={_provided.innerRef}
                                         draggableProps={_provided.draggableProps}
-                                        dragHandleProps={_provided.dragHandleProps}></Note>
+                                        dragHandleProps={_provided.dragHandleProps}
+                                        isFilteredOut={item.notebookID!==notebook}></Note>
                                 }}
                             </Draggable>
                         })}
@@ -328,8 +341,8 @@ function NotesPanel() {
                 }}
             </Droppable>
         </DragDropContext>
-        <NoteEditor></NoteEditor>
+        
     </div>
 }
 
-export { showEditor, NotesPanel, getNotebook, setNotebookFilter }
+export { showEditor, NotesPanel, getNotebook, setNotebookFilter,NoteEditor }

@@ -609,8 +609,8 @@ video {
   right: 0.5rem;
 }
 
-.left-\[20rem\] {
-  left: 20rem;
+.left-\[38rem\] {
+  left: 38rem;
 }
 
 .bottom-2 {
@@ -667,6 +667,11 @@ video {
 
 .m-4 {
   margin: 1rem;
+}
+
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .my-4 {
@@ -755,10 +760,6 @@ video {
   height: 2.5rem;
 }
 
-.h-60 {
-  height: 15rem;
-}
-
 .h-48 {
   height: 12rem;
 }
@@ -783,6 +784,10 @@ video {
   height: 1.5rem;
 }
 
+.h-\[30px\] {
+  height: 30px;
+}
+
 .h-24 {
   height: 6rem;
 }
@@ -804,6 +809,10 @@ video {
   width: 2.5rem;
 }
 
+.w-36 {
+  width: 9rem;
+}
+
 .w-48 {
   width: 12rem;
 }
@@ -818,6 +827,10 @@ video {
 
 .w-40 {
   width: 10rem;
+}
+
+.w-\[17rem\] {
+  width: 17rem;
 }
 
 .w-72 {
@@ -848,6 +861,18 @@ video {
   width: 144px;
 }
 
+.w-\[30px\] {
+  width: 30px;
+}
+
+.max-w-\[600px\] {
+  max-width: 600px;
+}
+
+.max-w-\[800px\] {
+  max-width: 800px;
+}
+
 .flex-\[1_1_48px\] {
   flex: 1 1 48px;
 }
@@ -858,6 +883,10 @@ video {
 
 .flex-\[1_1_auto\] {
   flex: 1 1 auto;
+}
+
+.flex-1 {
+  flex: 1 1 0%;
 }
 
 .flex-\[2\] {
@@ -914,10 +943,6 @@ video {
   overflow-y: auto;
 }
 
-.overflow-y-hidden {
-  overflow-y: hidden;
-}
-
 .overflow-y-scroll {
   overflow-y: scroll;
 }
@@ -926,18 +951,6 @@ video {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-.text-ellipsis {
-  text-overflow: ellipsis;
-}
-
-.whitespace-pre-line {
-  white-space: pre-line;
-}
-
-.break-words {
-  overflow-wrap: break-word;
 }
 
 .rounded-2xl {
@@ -1009,8 +1022,12 @@ video {
   background-color: rgb(var(--accent) / var(--tw-bg-opacity));
 }
 
-.bg-secondary\/20 {
-  background-color: rgb(var(--background-secondary) / 0.2);
+.bg-secondary\/50 {
+  background-color: rgb(var(--background-secondary) / 0.5);
+}
+
+.bg-secondary\/80 {
+  background-color: rgb(var(--background-secondary) / 0.8);
 }
 
 .bg-secondary\/25 {
@@ -1094,10 +1111,6 @@ video {
 
 .font-bold {
   font-weight: 700;
-}
-
-.text-transparent {
-  color: transparent;
 }
 
 .text-red-300 {
@@ -1537,4 +1550,9 @@ input[type=color]::-webkit-color-swatch-wrapper{
   --tw-gradient-to: rgb(0 0 0 / 0);
   --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
   --tw-gradient-to: transparent;
+}
+
+.remove-blur{
+  -webkit-backdrop-filter: none;
+          backdrop-filter: none;
 }

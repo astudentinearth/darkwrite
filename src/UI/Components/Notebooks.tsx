@@ -20,7 +20,7 @@ export function Notebooks(){
     }
     createNotebook=CreateNotebook;
     function NotebookItem(props:INotebookItemProps){
-        return <div onClick={()=>{setNotebook(props.notebookInfo.id);setNotebookFilter(props.notebookInfo.id)}} className="flex p-2 items-center hover:bg-secondary/50 cursor-pointer" style={{fontWeight: props.selected ? "bold" : "normal"}}>
+        return <div onClick={()=>{setNotebook(props.notebookInfo.id);setNotebookFilter(props.notebookInfo.id)}} className="flex p-2 items-center hover:bg-secondary/50 cursor-pointer" style={{background: props.selected ? "rgb(var(--accent))" : ""}}>
             {props.notebookInfo.name} 
         </div>
     }

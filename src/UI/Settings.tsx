@@ -34,16 +34,16 @@ function SettingsView(){
         return <DebugInfo></DebugInfo>
     }
     return <div>
-        <div className="background-secondary w-72 h-full fixed">
+        <div className="bg-secondary/80 backdrop-blur-md w-72 h-full fixed">
             <div className="flex items-center m-2">
-                <ToolbarButton onClick={HideSettings} icon="bi-chevron-left" float="float-left"></ToolbarButton>
+                <ToolbarButton onClick={HideSettings} icon="bi-chevron-left" class="bg-transparent remove-blur " float="float-left"></ToolbarButton>
                 <span className="text-2xl font-bold">Settings</span>
             </div>
             <SidebarButton onClick={()=>{setPage(SettingsPage.Appearance)}} isActive={(page===SettingsPage.Appearance) ? "true" : ""} icon="bi-brush" title="Appearance"></SidebarButton>
             <SidebarButton onClick={()=>{setPage(SettingsPage.About)}} isActive={(page===SettingsPage.About) ? "true" : ""} icon="bi-info" title="About"></SidebarButton>
         </div>
-        <div className="absolute left-72 px-4 justify-center overflow-y-scroll items-center right-0 top-0 bottom-0">
-            <div className="">
+        <div className="absolute bg-primary left-72 px-4 overflow-y-scroll right-0 top-0 bottom-0">
+            <div className="mx-auto max-w-[600px]">
                 {renderPage()}
             </div>
         </div>
@@ -65,7 +65,7 @@ function Settings(){
     }
     HideSettings=hideSettings;
     
-    return <div className={"background-default absolute left-0 z-20 right-0 top-0 bottom-0 "} style={{display:visibility}} id="settingsUI">
+    return <div className={"absolute left-0 z-20 right-0 top-0 bottom-0 "} style={{display:visibility}} id="settingsUI">
         {visibility==="block" ? <SettingsView></SettingsView> : <></>}
 </div>
 }

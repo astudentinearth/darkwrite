@@ -11,7 +11,7 @@ import "./fonts/roboto/roboto.css"
 import "./fonts/roboto-mono/roboto-mono.css"
 import "./fonts/roboto-slab/roboto-slab.css"
 import "./fonts/yellowtail/yellowtail.css"
-import {NotesPanel} from './UI/NotesPanel';
+import {NoteEditor, NotesPanel} from './UI/NotesPanel';
 import { GetNotebooks, INotebook } from './Util';
 import { BaseDirectory, writeTextFile } from '@tauri-apps/api/fs';
 
@@ -43,6 +43,7 @@ function App() {
           <Sidebar></Sidebar>
           <Settings></Settings>
           <NotesPanel></NotesPanel>
+          <NoteEditor></NoteEditor>
         </NotebooksContext.Provider>
       </div>
     </div>
