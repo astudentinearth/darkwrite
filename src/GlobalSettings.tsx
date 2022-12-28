@@ -1,27 +1,15 @@
 import { SetupThemes, Theme } from "./Theme";
-import { readTextFile,writeTextFile } from "@tauri-apps/api/fs";
-import { appDir } from "@tauri-apps/api/path";
+import { BaseDirectory, readTextFile,writeTextFile } from "@tauri-apps/api/fs";
+import { appConfigDir } from "@tauri-apps/api/path";
 import { invoke } from "@tauri-apps/api";
+import { DefaultSettings } from "./Util";
 let settings_json:any;
 let APPDIR:string;
-const DefaultSettings:string=`
-{
-    "version":"1",
-    "theme":"dark",
-    "lightSchemeFile":"colors_light.json",
-    "darkSchemeFile":"colors_dark.json",
-    "font":"Roboto",
-    "accentColor":"87 104 225",
-    "sansFont":"Roboto",
-    "serifFont":"Roboto Slab",
-    "monoFont":"Roboto Mono",
-    "handFont":"Yellowtail"
-}
-`;
+
 
 async function LoadSettings(){
     console.log("[INFO] Loading settings");
-    APPDIR=await appDir();
+    APPDIR=await appConfigDir();
     console.log("[INFO] Checking if app data directory exists...");
     if (await invoke("path_exists",{targetPath: APPDIR})===false){ //to be migrated to tauri fs:exists
         console.log("[WARNING] App directory doesn't exist. Creating it.");
@@ -31,18 +19,22 @@ async function LoadSettings(){
     let settingsExists = await invoke("path_exists",{targetPath:APPDIR+"settings.json"});
     if (settingsExists===false){
         console.log("[WARNING] Settings file not found. Creating default settings file");
-        await writeTextFile(await appDir()+"settings.json",DefaultSettings);
+        await writeTextFile("settings.json",DefaultSettings,{dir:BaseDirectory.App});
     }
     
-    let settings_string:string = await readTextFile(await appDir()+"settings.json");
+    let settings_string:string = await readTextFile(await appConfigDir()+"settings.json");
     console.log(settings_string)
     //TODO: Handle broken config files
     if(settings_string.trim()==="" || settings_string === null || settings_string === undefined){
-        console.log("here1")
         console.error("[ERROR] Something went wrong, and we couldn't load the settings. We can't proceed further.");
         return;
     }
     settings_json=JSON.parse(settings_string);
+    if(settings_json==null){
+        console.error("Settings JSON object is null/undefined. Configuration may have a syntax error. Falling back to default settings.");
+        settings_string=DefaultSettings;
+        settings_json=JSON.parse(DefaultSettings);
+    }
     switch (settings_json.theme){
         case "dark":
             GlobalSettings.ThemeMode=Theme.Dark;
@@ -54,7 +46,6 @@ async function LoadSettings(){
             GlobalSettings.ThemeMode=Theme.Light;
             break;
     }
-    console.table(settings_json)
     GlobalSettings.LightSchemeFile=settings_json.lightSchemeFile ?? "colors_light.json";
     GlobalSettings.DarkSchemeFile=settings_json.darkSchemeFile ?? "colors_dark.json";
     GlobalSettings.Font=settings_json.font ?? "Roboto";
@@ -63,8 +54,6 @@ async function LoadSettings(){
     GlobalSettings.HandwritingFont=settings_json.handFont ?? "Yellowtail";
     GlobalSettings.MonospaceFont=settings_json.monoFont ?? "Roboto Mono";
     GlobalSettings.AccentColor=settings_json.accentColor ?? "87 104 255";
-    
-    console.log("[INFO] LoadSettings() finished.")
 }
 
 class GlobalSettings{

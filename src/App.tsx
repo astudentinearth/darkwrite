@@ -11,9 +11,10 @@ import "./fonts/roboto/roboto.css"
 import "./fonts/roboto-mono/roboto-mono.css"
 import "./fonts/roboto-slab/roboto-slab.css"
 import "./fonts/yellowtail/yellowtail.css"
-import {NoteEditor, NotesPanel} from './UI/NotesPanel';
+import {NotesPanel} from './UI/NotesPanel';
 import { GetNotebooks, INotebook } from './Util';
 import { BaseDirectory, writeTextFile } from '@tauri-apps/api/fs';
+import { NoteEditor } from './UI/NoteEditor';
 
 export const NotebooksContext:any = React.createContext({notebooks: [] as INotebook[],setNotebooks:()=>{}})
 

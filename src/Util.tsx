@@ -166,5 +166,19 @@ function JSONToITaskArray(json:any){
     }
     return tasks;
 }
-export { Uint8ArrayToBase64, GenerateID, ConvertJSONToINote, FontStyle,JSONToITaskArray,ConvertJSONToINotebook, GetNotebooks };
+
+const DefaultSettings:string=`
+{
+    "version":"1",
+    "theme":"dark",
+    "lightSchemeFile":"colors_light.json",
+    "darkSchemeFile":"colors_dark.json",
+    "font":"Roboto",
+    "accentColor":"87 104 225",
+    "sansFont":"Roboto",
+    "serifFont":"Roboto Slab",
+    "monoFont":"Roboto Mono",
+    "handFont":"Yellowtail"
+}`
+export { Uint8ArrayToBase64, GenerateID, ConvertJSONToINote, FontStyle,JSONToITaskArray,ConvertJSONToINotebook, GetNotebooks, DefaultSettings };
 export type {INote, ITask, IAppData, INotebook };

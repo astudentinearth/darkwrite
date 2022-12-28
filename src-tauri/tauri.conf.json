@@ -48,7 +48,7 @@
         "depends": [],
         "files": {
           "/usr/share/doc/io.github.astudentinearth.darkwrite/copyright/LICENSE":"../LICENSE",
-          "/usr/share/doc/io.github.astudentinearth.darkwrite/copyright/3rd-party-licenses.txt":"../3rd-party-licenses.txt",
+          "/usr/share/doc/io.github.astudentinearth.darkwrite/copyright/3rd-party-licenses.txt":"../src/3rd-party-licenses.txt",
           "/usr/share/doc/io.github.astudentinearth.darkwrite/copyright/apache-2.0.txt":"../src/fonts/LICENSE.txt"      
         }
       },
