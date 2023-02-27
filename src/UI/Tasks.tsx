@@ -31,14 +31,8 @@ async function SaveTasks(){
     await writeFile(APPDIR+"tasks.json",JSON.stringify({tasks:getTasks()}));
 }
 
-/*/
-tasks json format
-{
-    "tasks":["","",""...]
-}
-*/ 
 function Tasks(){
-    const [tasks,setTasks] = useState([] as ITask[]); // an array of strings that represent tasks
+    const [tasks,setTasks] = useState([] as ITask[]);
     useEffect(()=>{
         const load = async ()=>{
             let _tasks =await LoadTasks();
@@ -77,19 +71,19 @@ function Tasks(){
             taskInput.value="";
         }
     }
-    return <div id="TaskPanel" className="w-72  overflow-y-scroll  min-h-0 text-default z-10 flex-[1_1_auto] flex-col transition-all" >
-        <div className="flex taskinputdiv">
+    return <div id="TaskPanel" className="w-72 flex flex-col overflow-x-hidden flex-[1_1_auto] overflow-y-auto min-h-0 relative text-default z-10 transition-all" >
+        <div className="flex h-12 flex-[0_1_auto]">
             <input ref={taskInputRef} onChange={TaskInputChanged} tabIndex={0} type="text" onKeyDown={InputKeyDown} id="taskInput" placeholder="A new task" className="border-default inline-block hide-outline w-[240px] bg-secondary/25 h-12 p-2 text-xl"></input>
             <div onClick={()=>{
                 if(taskInputRef.current.value.trim().length!==0){
                     AddTask(taskInputRef.current.value);
                     taskInputRef.current.value="";
                 }
-            }} className="bg-accent/75 cursor-pointer transition-all hover:brightness-125 w-12 h-12 flex justify-center items-center" >
+            }} className="bg-accent/75 cursor-pointer transition-all hover:brightness-125 w-12 h-12 flex flex-[1_0_auto] justify-center items-center" >
                 <i className="bi-plus-lg text-2xl text-white"></i>
             </div>
         </div>
-        <div id="tasksDiv" className="grow min-h-0">
+        <div id="tasksDiv" className="flex-[1_0_auto] bg-black">
             <DragDropContext onDragEnd={(result:any)=>{
                     if(!result.destination) return;
                     const items = Array.from(tasks);
@@ -100,7 +94,7 @@ function Tasks(){
                 }}>
                     <Droppable droppableId="tasksDrop">
                         {(provided)=>{
-                            return <div ref={provided.innerRef} {...provided.droppableProps}>
+                            return <div className="" ref={provided.innerRef} {...provided.droppableProps}>
                                 {tasks.map((item,index)=>{
                                     return <Draggable draggableId={item.id.toString()} key={item.id.toString()} index={index}>
                                         {(_provided)=>{

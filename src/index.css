@@ -889,12 +889,16 @@ video {
   flex: 2;
 }
 
+.flex-\[1_0_auto\] {
+  flex: 1 0 auto;
+}
+
 .flex-\[0_0_56px\] {
   flex: 0 0 56px;
 }
 
-.grow {
-  flex-grow: 1;
+.flex-\[0_1_auto\] {
+  flex: 0 1 auto;
 }
 
 .cursor-pointer {
@@ -937,6 +941,10 @@ video {
 
 .overflow-y-auto {
   overflow-y: auto;
+}
+
+.overflow-x-hidden {
+  overflow-x: hidden;
 }
 
 .overflow-y-scroll {
@@ -1034,14 +1042,14 @@ video {
   background-color: rgb(var(--accent) / 0.75);
 }
 
-.bg-white {
-  --tw-bg-opacity: 1;
-  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
-}
-
 .bg-black {
   --tw-bg-opacity: 1;
   background-color: rgb(0 0 0 / var(--tw-bg-opacity));
+}
+
+.bg-white {
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
 }
 
 .bg-cover {
@@ -1286,10 +1294,15 @@ video {
   --font-hand: "Yellowtail";
 }
 
+html{
+  overflow-y:hidden;
+}
+
 .app_root{
   background-color: var(--background-default);
   color:var(--text-default);
   font-family: var(--font);
+  overflow-y:hidden;
 }
 
 .border-default{
@@ -1551,4 +1564,26 @@ input[type=color]::-webkit-color-swatch-wrapper{
 .remove-blur{
   -webkit-backdrop-filter: none;
           backdrop-filter: none;
+}
+
+::-webkit-scrollbar{
+  width: 5px;
+}
+
+::-webkit-scrollbar-track{
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb{
+  background: #888;
+  border-radius: 5px;
+  margin-top: 2px;
+  margin-bottom: 2px;
+  display:block;
+  width: 2px;
+  border: 1px solid transparent;
+}
+
+::-webkit-scrollbar-thumb:hover{
+  background: #555;
 }
