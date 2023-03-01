@@ -3,11 +3,13 @@ import { BaseDirectory, readTextFile,writeTextFile } from "@tauri-apps/api/fs";
 import { appConfigDir } from "@tauri-apps/api/path";
 import { invoke } from "@tauri-apps/api";
 import { DefaultSettings } from "./Util";
+import React, { Dispatch, SetStateAction, useContext } from "react";
 let settings_json:any;
 let APPDIR:string;
 
 
 async function LoadSettings(){
+    let _settings:GlobalSettings = new GlobalSettings();
     console.log("[INFO] Loading settings");
     APPDIR=await appConfigDir();
     console.log("[INFO] Checking if app data directory exists...");
@@ -27,7 +29,7 @@ async function LoadSettings(){
     //TODO: Handle broken config files
     if(settings_string.trim()==="" || settings_string === null || settings_string === undefined){
         console.error("[ERROR] Something went wrong, and we couldn't load the settings. We can't proceed further.");
-        return;
+        return GlobalSettings.GetDefault();
     }
     settings_json=JSON.parse(settings_string);
     if(settings_json==null){
@@ -37,54 +39,68 @@ async function LoadSettings(){
     }
     switch (settings_json.theme){
         case "dark":
-            GlobalSettings.ThemeMode=Theme.Dark;
+            _settings.ThemeMode=Theme.Dark;
             break;
         case "light":
-            GlobalSettings.ThemeMode=Theme.Light;
+            _settings.ThemeMode=Theme.Light;
             break;
         default:
-            GlobalSettings.ThemeMode=Theme.Light;
+            _settings.ThemeMode=Theme.Light;
             break;
     }
-    GlobalSettings.LightSchemeFile=settings_json.lightSchemeFile ?? "colors_light.json";
-    GlobalSettings.DarkSchemeFile=settings_json.darkSchemeFile ?? "colors_dark.json";
-    GlobalSettings.Font=settings_json.font ?? "Roboto";
-    GlobalSettings.SansFont=settings_json.sansFont ?? "Roboto";
-    GlobalSettings.SerifFont=settings_json.serifFont ?? "Roboto Slab";
-    GlobalSettings.HandwritingFont=settings_json.handFont ?? "Yellowtail";
-    GlobalSettings.MonospaceFont=settings_json.monoFont ?? "Roboto Mono";
-    GlobalSettings.AccentColor=settings_json.accentColor ?? "87 104 255";
+    _settings.LightSchemeFile=settings_json.lightSchemeFile ?? "colors_light.json";
+    _settings.DarkSchemeFile=settings_json.darkSchemeFile ?? "colors_dark.json";
+    _settings.Font=settings_json.font ?? "Roboto";
+    _settings.SansFont=settings_json.sansFont ?? "Roboto";
+    _settings.SerifFont=settings_json.serifFont ?? "Roboto Slab";
+    _settings.HandwritingFont=settings_json.handFont ?? "Yellowtail";
+    _settings.MonospaceFont=settings_json.monoFont ?? "Roboto Mono";
+    _settings.AccentColor=settings_json.accentColor ?? "87 104 255";
+    _settings.DisableBlur=settings_json.disableBlur ?? false;
+    return _settings;
 }
 
 class GlobalSettings{
-    public static ThemeMode:Theme;
-    public static LightSchemeFile:string;
-    public static DarkSchemeFile:string;
-    public static Font:string;
-    public static Version:string="1.0d";
-    public static AccentColor:string="87 104 255";
-    public static SansFont:string="Roboto";
-    public static SerifFont:string="Roboto Slab";
-    public static HandwritingFont:string="Yellowtail";
-    public static MonospaceFont:string="Roboto Mono";
+    public ThemeMode:Theme=Theme.Dark;
+    public LightSchemeFile:string="colors_light.json";
+    public DarkSchemeFile:string="colors_dark.json";
+    public Font:string="Roboto";
+    public Version:string="1.0d";
+    public AccentColor:string="87 104 255";
+    public SansFont:string="Roboto";
+    public SerifFont:string="Roboto Slab";
+    public HandwritingFont:string="Yellowtail";
+    public MonospaceFont:string="Roboto Mono";
+    public DisableBlur:boolean=false;
+    public static GetDefault(){
+        return new GlobalSettings();
+    }
 }
 
-function SaveAllSettings(){
+export interface ISettingsContext{
+    settings: GlobalSettings,
+    updateSettings: Dispatch<SetStateAction<GlobalSettings>>;
+}
+
+export const SettingsContext = React.createContext<ISettingsContext>({settings:GlobalSettings.GetDefault(),updateSettings:()=>{}});
+
+function SaveAllSettings(context:ISettingsContext){
     console.log("[INFO] Saving all settings.");
-    let newJSON={"version":GlobalSettings.Version,
-    "theme":GlobalSettings.ThemeMode===Theme.Dark ? "dark" : "light",
-    "lightSchemeFile":GlobalSettings.LightSchemeFile ?? "colors_light.json",
-    "darkSchemeFile":GlobalSettings.DarkSchemeFile ?? "colors_dark.json",
-    "font":GlobalSettings.Font ?? "Roboto",
-    "accentColor":GlobalSettings.AccentColor,
-    "sansFont":GlobalSettings.SansFont ?? "Roboto",
-    "serifFont":GlobalSettings.SerifFont ?? "Roboto Slab",
-    "monoFont":GlobalSettings.MonospaceFont ?? "Roboto Mono",
-    "handFont":GlobalSettings.HandwritingFont ?? "Yellowtail"};
+    const {settings} = context;
+    let newJSON={"version":settings.Version,
+    "theme":settings.ThemeMode===Theme.Dark ? "dark" : "light",
+    "lightSchemeFile":settings.LightSchemeFile ?? "colors_light.json",
+    "darkSchemeFile":settings.DarkSchemeFile ?? "colors_dark.json",
+    "font":settings.Font ?? "Roboto",
+    "accentColor":settings.AccentColor,
+    "sansFont":settings.SansFont ?? "Roboto",
+    "serifFont":settings.SerifFont ?? "Roboto Slab",
+    "monoFont":settings.MonospaceFont ?? "Roboto Mono",
+    "handFont":settings.HandwritingFont ?? "Yellowtail"};
     let settings_string = JSON.stringify(newJSON);
     writeTextFile(APPDIR+"settings.json",settings_string).then(()=>{
         console.log("[INFO] Settings saved. Reloading settings")
-        LoadSettings().then(()=>SetupThemes());
+        LoadSettings().then(()=>SetupThemes(context));
     });
 }
 

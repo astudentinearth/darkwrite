@@ -1,7 +1,7 @@
 import { invoke } from "@tauri-apps/api";
 import { BaseDirectory, createDir,readBinaryFile,readTextFile, writeFile } from "@tauri-apps/api/fs";
 import {appDir} from "../node_modules/@tauri-apps/api/path"
-import { GlobalSettings } from "./GlobalSettings";
+import { GlobalSettings, ISettingsContext, SettingsContext } from "./GlobalSettings";
 import { Uint8ArrayToBase64 } from "./Util";
 
 enum Theme{
@@ -61,8 +61,9 @@ class Themes{
     public static CurrentThemeJSON:any; // json of current theme
 }
 // reads the theme files and creates theme objects 
-async function SetupThemes(){
+async function SetupThemes(settingsContext:ISettingsContext){
     console.log("[INFO] Setting themes up");
+    const {settings,updateSettings} = settingsContext;
     APPDIR=await appDir();
     // apply fallback themes if the files are not there
    
@@ -74,12 +75,12 @@ async function SetupThemes(){
         await writeFile(APPDIR+"color-schemes/colors_light.json",LightTheme);
         await writeFile(APPDIR+"color-schemes/colors_dark.json",DarkTheme);
     }
-    Themes.LightTheme=await readTextFile(APPDIR+"color-schemes/"+GlobalSettings.LightSchemeFile);
-    Themes.DarkTheme=await readTextFile(APPDIR+"color-schemes/"+GlobalSettings.DarkSchemeFile);
+    Themes.LightTheme=await readTextFile(APPDIR+"color-schemes/"+settings.LightSchemeFile);
+    Themes.DarkTheme=await readTextFile(APPDIR+"color-schemes/"+settings.DarkSchemeFile);
     Themes.LightThemeJSON=JSON.parse(Themes.LightTheme);
     Themes.DarkThemeJSON=JSON.parse(Themes.DarkTheme);
     
-    switch(GlobalSettings.ThemeMode){
+    switch(settings.ThemeMode){
         case Theme.Dark:
             Themes.CurrentTheme=Theme.Dark;
             Themes.CurrentThemeJSON=Themes.DarkThemeJSON;    
@@ -90,20 +91,21 @@ async function SetupThemes(){
             break;
         }
     console.log("[INFO] Applying theme preferences");
-    ApplyTheme(GlobalSettings.ThemeMode);
+    ApplyTheme(settings.ThemeMode,settingsContext);
 }
 
 
 // Applies a theme
 // TODO: Separate the inner part to a separate function: duplicate code. Give the JSON object to the new function to apply it.
-function ApplyTheme(theme:Theme){
+function ApplyTheme(theme:Theme, context:ISettingsContext){
+    const {settings,updateSettings} = context;
     console.log("[INFO from ApplyTheme()] Applying theme");
-    document.documentElement.style.setProperty("--font",GlobalSettings.Font);
-    document.documentElement.style.setProperty("--font-sans",GlobalSettings.SansFont);
-    document.documentElement.style.setProperty("--font-serif",GlobalSettings.SerifFont);
-    document.documentElement.style.setProperty("--font-hand",GlobalSettings.HandwritingFont);
-    document.documentElement.style.setProperty("--font-mono",GlobalSettings.MonospaceFont);
-    document.documentElement.style.setProperty("--accent",GlobalSettings.AccentColor);
+    document.documentElement.style.setProperty("--font",settings.Font);
+    document.documentElement.style.setProperty("--font-sans",settings.SansFont);
+    document.documentElement.style.setProperty("--font-serif",settings.SerifFont);
+    document.documentElement.style.setProperty("--font-hand",settings.HandwritingFont);
+    document.documentElement.style.setProperty("--font-mono",settings.MonospaceFont);
+    document.documentElement.style.setProperty("--accent",settings.AccentColor);
     switch(theme){
         case Theme.Dark:
             console.log("[INFO from ApplyTheme] Setting up dark theme");
@@ -129,20 +131,20 @@ function ApplyTheme(theme:Theme){
             break;
         default:
             console.log("[WARNING from ApplyTheme()] Default case triggered. Falling back to light theme.");
-            ApplyTheme(Theme.Light);
+            ApplyTheme(Theme.Light,context);
             break;
     }
 }
 
 // Switches the theme
-function SwitchTheme(){
+/*function SwitchTheme(){
     if (Themes.CurrentTheme===Theme.Dark){
         ApplyTheme(Theme.Light)
     }
     else{
         ApplyTheme(Theme.Dark)
     }
-}
+}*/
 
 async function ApplyWallpaper(){
     let ext="";
@@ -163,4 +165,4 @@ async function ApplyWallpaper(){
 
 
 
-export {Themes,Theme,SetupThemes,ApplyWallpaper,ApplyTheme,SwitchTheme,APPDIR,HexToRGB,RGBToHex};
+export {Themes,Theme,SetupThemes,ApplyWallpaper,ApplyTheme,/*SwitchTheme,*/APPDIR,HexToRGB,RGBToHex};

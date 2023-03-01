@@ -1,7 +1,7 @@
 import { BaseDirectory, readDir, readTextFile } from "@tauri-apps/api/fs";
 import { appDir } from "@tauri-apps/api/path";
-import React, { forwardRef, useImperativeHandle, useState } from "react";
-import { GlobalSettings, SaveAllSettings } from "../../GlobalSettings";
+import React, { forwardRef, useContext, useImperativeHandle, useState } from "react";
+import { GlobalSettings, SaveAllSettings, SettingsContext } from "../../GlobalSettings";
 import { Theme,ApplyTheme, SetupThemes } from "../../Theme";
 import AppletBase from "../Components/SettingsApplet";
 let LoadColorSchemes:any;
@@ -9,6 +9,8 @@ let LoadColorSchemes:any;
 const ThemeApplet=forwardRef((props,ref)=>{
 	const [colorSchemes,setColorSchemes] = useState([] as IColorSchemeData[])
 	const [,updateState] = useState({});
+	const settingsContext = useContext(SettingsContext);
+	const {settings,updateSettings} = settingsContext;
 	const loadColorSchemes= async()=>{
 		console.log("loading colors")
 		let schemes:IColorSchemeData[] = [] as IColorSchemeData[];
@@ -43,45 +45,55 @@ const ThemeApplet=forwardRef((props,ref)=>{
 	function SaveColorSchemes(){
 		let lightSchemeChooser:any=document.getElementById("lightColorScheme");
 		let darkSchemeChooser:any=document.getElementById("darkColorScheme");
-		GlobalSettings.DarkSchemeFile=darkSchemeChooser.value;
-		GlobalSettings.LightSchemeFile=lightSchemeChooser.value;
+		updateSettings({...settings,DarkSchemeFile:darkSchemeChooser.value,LightSchemeFile:lightSchemeChooser.value});
 		console.log("[INFO] Saving user color scheme preferences.");
-		SaveAllSettings();
-		SetupThemes().then(()=>{ApplyTheme(GlobalSettings.ThemeMode);});
+		//SaveAllSettings(settingsContext);
+		SetupThemes(settingsContext).then(()=>{ApplyTheme(settings.ThemeMode,settingsContext);});
 		LoadColorSchemes();
 	}
 	LoadColorSchemes=loadColorSchemes;
 	function setLightTheme(){
 		console.log("[INFO] Theme preference has been changed to light theme.");
-		GlobalSettings.ThemeMode=Theme.Light;
-		SaveAllSettings();
-		SetupThemes().then(()=>{ApplyTheme(Theme.Light);});
+		updateSettings({...settings,ThemeMode:Theme.Light});
+		//SaveAllSettings(settingsContext);
+		SetupThemes(settingsContext).then(()=>{ApplyTheme(Theme.Light,settingsContext);});
 		updateState({});
 	}
 	
 	function setDarkTheme(){
 		console.log("[INFO] Theme preference has been changed to dark theme.");
-		GlobalSettings.ThemeMode=Theme.Dark;
-		SaveAllSettings();
-		SetupThemes().then(()=>{ApplyTheme(Theme.Dark);});
+		updateSettings({...settings,ThemeMode:Theme.Dark});
+		//SaveAllSettings(settingsContext);
+		SetupThemes(settingsContext).then(()=>{ApplyTheme(Theme.Dark,settingsContext);});
 		updateState({});
+	}
+	
+	function handleFont(e:any){
+	
+		if(e.keyCode===13){
+			let fontbox:any = document.getElementById("fontBox");
+			updateSettings({...settings,Font:fontbox.value});
+			console.log(`[INFO] User has changed their font to ${fontbox.value}`);
+			//SaveAllSettings(settingsContext);
+			SetupThemes(settingsContext);
+		}
 	}
 	
 	
 	return <AppletBase title="Colors">
 		<div className="inline-block p-2">
 			<div className="float-left text-center m-4">
-				<div onClick={setLightTheme} style={{boxShadow: GlobalSettings.ThemeMode==Theme.Light ? "0px 0px 0px 3px #6d9dc4" : ""}} className="w-40 bg-white  shadow-default-hover h-24 rounded-xl flex justify-center items-center"><i className="text-black text-3xl bi-brightness-high-fill"></i></div>
+				<div onClick={setLightTheme} style={{boxShadow: settings.ThemeMode==Theme.Light ? "0px 0px 0px 3px #6d9dc4" : ""}} className="w-40 bg-white  shadow-default-hover h-24 rounded-xl flex justify-center items-center"><i className="text-black text-3xl bi-brightness-high-fill"></i></div>
 				<span className="text-default inline-block p-2 text-center">Light</span>
 			</div>
 			<div className="float-left text-center m-4">
-				<div onClick={setDarkTheme} style={{boxShadow: GlobalSettings.ThemeMode==Theme.Dark ? "0px 0px 0px 3px #6d9dc4" : ""}} className="w-40 bg-black shadow-default-hover h-24 rounded-xl flex justify-center items-center"><i className="text-white text-3xl bi-moon"></i></div>
+				<div onClick={setDarkTheme} style={{boxShadow: settings.ThemeMode==Theme.Dark ? "0px 0px 0px 3px #6d9dc4" : ""}} className="w-40 bg-black shadow-default-hover h-24 rounded-xl flex justify-center items-center"><i className="text-white text-3xl bi-moon"></i></div>
 				<span className="text-default inline-block p-2 text-center">Dark</span>
 			</div>
 		</div>
 		<div>
 			<span className="p-4">Light color scheme: </span>
-			<select id="lightColorScheme" value={GlobalSettings.LightSchemeFile||"colors_light.json"} onChange={SaveColorSchemes} className="dropdown">
+			<select id="lightColorScheme" value={settings.LightSchemeFile||"colors_light.json"} onChange={SaveColorSchemes} className="dropdown">
 				{colorSchemes.map(s=><option value={s.SchemeFileName}>
 					{s.ColorSchemeName}
 				</option>)}
@@ -90,7 +102,7 @@ const ThemeApplet=forwardRef((props,ref)=>{
 		<br></br>
 		<div>
 			<span className="p-4">Dark color scheme: </span>
-			<select id="darkColorScheme" value={GlobalSettings.DarkSchemeFile||"colors_dark.json"} onChange={SaveColorSchemes} className="dropdown">
+			<select id="darkColorScheme" value={settings.DarkSchemeFile||"colors_dark.json"} onChange={SaveColorSchemes} className="dropdown">
 			{colorSchemes.map(s=><option value={s.SchemeFileName}>
 					{s.ColorSchemeName}
 				</option>)}
@@ -99,16 +111,6 @@ const ThemeApplet=forwardRef((props,ref)=>{
 		<span className="p-4">Font (press enter to save): </span><input id="fontBox" className="rounded-xl background-secondary text-default" tabIndex={0}  type="text" onKeyDown={handleFont} defaultValue="Roboto"></input>
 	</AppletBase>
 })
-function handleFont(e:any){
-	
-	if(e.keyCode===13){
-		let fontbox:any = document.getElementById("fontBox");
-		GlobalSettings.Font=fontbox.value;
-		console.log(`[INFO] User has changed their font to ${fontbox.value}`);
-		SaveAllSettings();
-		SetupThemes();
-	}
-}
 
 
 interface IColorSchemeData{
