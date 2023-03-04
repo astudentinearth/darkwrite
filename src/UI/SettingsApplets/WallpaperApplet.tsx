@@ -1,9 +1,10 @@
 import { open } from "@tauri-apps/api/dialog";
 import { appDir } from "@tauri-apps/api/path";
-import { BaseDirectory, copyFile, removeFile } from "@tauri-apps/api/fs";
+import { BaseDirectory, copyFile, readBinaryFile, removeFile, writeTextFile } from "@tauri-apps/api/fs";
 import AppletBase from "../Components/SettingsApplet";
 import { ApplyWallpaper } from "../../Theme";
 import { invoke } from "@tauri-apps/api";
+import { Uint8ArrayToBase64 } from "../../Util";
 
 function WallpaperApplet(){
     return<AppletBase title="Wallpaper">
@@ -20,16 +21,17 @@ function WallpaperApplet(){
                 });
                 if(wp==null) {console.error("Wallpaper is null."); return;}
                 let ext = wp.split(".").pop();
-                await copyFile(wp,(await appDir()+"wallpaper."+ext));
+                let bin = await readBinaryFile(wp);
+                let base64:any = await Uint8ArrayToBase64(bin);
+                /*`data:image/${ext=="png" ? "png" : "jpeg"};base64,${base64}` */
+                await writeTextFile("wallpaper.base64",base64,{dir:BaseDirectory.App});
                 await ApplyWallpaper();
             }}>Choose wallpaper</div>
             <div className="bg-secondary drop-shadow-md p-2 mx-2
             inline-block hover:brightness-125 cursor-pointer rounded-xl" onClick={async ()=>{
-                if (await invoke("path_exists",{targetPath: await appDir()+"wallpaper.png"})) removeFile("wallpaper.png",{dir:BaseDirectory.App});
-                if (await invoke("path_exists",{targetPath: await appDir()+"wallpaper.jpg"})) removeFile("wallpaper.jpg",{dir:BaseDirectory.App});
-                if (await invoke("path_exists",{targetPath: await appDir()+"wallpaper.jpeg"})) removeFile("wallpaper.jpeg",{dir:BaseDirectory.App});
-                let approot:any = document.querySelector(".app_root");
-                approot.style.setProperty("background-image","");
+                if (await invoke("path_exists",{targetPath: await appDir()+"wallpaper.base64"})) removeFile("wallpaper.base64",{dir:BaseDirectory.App});
+                let bgimg:any = document.querySelector("#bgImage");
+                bgimg.style.setProperty("background-image","");
             }}>Remove wallpaper</div><br></br>
         </div>
     </AppletBase>

@@ -190,7 +190,7 @@ function NotesPanel() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [notes]);
     return <div id="NotesPanel"
-        className={"notes_div bg-secondary/50 backdrop-blur-md fixed overflow-y-scroll w-[17rem] top-16 bottom-2 transition-all rounded-2xl left-80"}>
+        className={"notes_div bg-secondary/80 backdrop-blur-md fixed overflow-y-scroll w-[17rem] top-16 bottom-2 transition-all rounded-2xl left-80"}>
         <DragDropContext onDragEnd={(result: any) => {
             if (!result.destination) return;
             console.log("reordering")

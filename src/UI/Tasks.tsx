@@ -83,7 +83,7 @@ function Tasks(){
                 <i className="bi-plus-lg text-2xl text-white"></i>
             </div>
         </div>
-        <div id="tasksDiv" className="flex-[1_0_auto] bg-black">
+        <div id="tasksDiv" className="flex-[1_0_auto]">
             <DragDropContext onDragEnd={(result:any)=>{
                     if(!result.destination) return;
                     const items = Array.from(tasks);

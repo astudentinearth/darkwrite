@@ -81,13 +81,19 @@ function FontStyleFromString(str:string){
  * @param buf Target byte array (Uint8Array)
  * @returns Base64 encoded string
  */
-function Uint8ArrayToBase64(buf:Uint8Array){
-    let len=buf.byteLength;
+async function Uint8ArrayToBase64(buf:Uint8Array){
+    /*let len=buf.byteLength;
     let bin = '';
     for(let i = 0; i<len;i++){
         bin+=String.fromCharCode(buf[i]);
     }
-    return window.btoa(bin);
+    return window.btoa(bin);*/
+    const dataURL = await new Promise((r)=>{
+        const reader = new FileReader();
+        reader.onload = () => r(reader.result);
+        reader.readAsDataURL(new Blob([buf]));
+    })
+    return dataURL;
 }
 
 /**

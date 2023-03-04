@@ -1,5 +1,5 @@
 import { invoke } from "@tauri-apps/api";
-import { BaseDirectory, createDir,readBinaryFile,readTextFile, writeFile } from "@tauri-apps/api/fs";
+import { BaseDirectory, createDir,exists,readBinaryFile,readTextFile, writeFile } from "@tauri-apps/api/fs";
 import {appDir} from "../node_modules/@tauri-apps/api/path"
 import { GlobalSettings, ISettingsContext, SettingsContext } from "./GlobalSettings";
 import { Uint8ArrayToBase64 } from "./Util";
@@ -147,20 +147,10 @@ function ApplyTheme(theme:Theme, context:ISettingsContext){
 }*/
 
 async function ApplyWallpaper(){
-    let ext="";
-    console.log("here");
-    if (await invoke("path_exists",{targetPath: await appDir()+"wallpaper.png"})) ext="png";
-    if (await invoke("path_exists",{targetPath: await appDir()+"wallpaper.jpg"})) ext="jpg";
-    if (await invoke("path_exists",{targetPath: await appDir()+"wallpaper.jpeg"})) ext="jpeg";
-    if (ext==="") return;
-    console.log("here2");
-    let format=ext==="png" ? "png" : "jpeg";
-    let bin = await readBinaryFile("wallpaper."+ext,{dir: BaseDirectory.App});
-    console.log("here3");
-    console.log("here4");
-    let base64 = Uint8ArrayToBase64(bin);
-    let approot:any = document.querySelector(".app_root");
-    approot.style.setProperty("background-image",`url("data:image/${format};base64,${base64}")`)
+    if(!await exists("wallpaper.base64",{dir: BaseDirectory.App})) return;
+    let bin = await readTextFile("wallpaper.base64",{dir: BaseDirectory.App});
+    let bgimg:any = document.querySelector("#bgImage");
+    bgimg.style.setProperty("background-image",`url("${bin}")`);
 }
 
 

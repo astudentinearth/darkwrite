@@ -78,11 +78,11 @@ input[type=time]{
 }
 
 .toolbar-button{
-    @apply h-12 transition-all text-default backdrop-blur-md bg-secondary/20 duration-200 w-12 mx-1 rounded-2xl flex cursor-pointer align-middle justify-center items-center;
+    @apply h-12 transition-all text-default backdrop-blur-md bg-secondary duration-200 w-12 mx-1 rounded-2xl flex cursor-pointer align-middle justify-center items-center;
 }
 
 .toolbar-button-accent{
-    @apply h-12 transition-all text-white backdrop-blur-md bg-accent/40 duration-200 w-12 mx-1 rounded-2xl flex cursor-pointer align-middle justify-center items-center;
+    @apply h-12 transition-all text-white backdrop-blur-md bg-accent duration-200 w-12 mx-1 rounded-2xl flex cursor-pointer align-middle justify-center items-center;
 }
 
 .toolbar-button-accent:hover{
@@ -101,10 +101,10 @@ input[type=time]{
 }
 
 .toolbar-button:hover,.task-item:hover{
-    @apply bg-hover/50;
+    @apply bg-hover;
 }
 .toolbar-button:active,.task-item:active{
-    @apply bg-active/50;
+    @apply bg-active;
 }
 .no-shadow{
     box-shadow: none;

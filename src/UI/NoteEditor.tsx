@@ -39,9 +39,9 @@ export function NoteEditor() {
         return () => clearTimeout(change);
     }, [note]);
     return <div id="noteEditDialog" className="fixed transition-all top-16 right-2
-    left-[38rem] bottom-2 rounded-2xl flex flex-col backdrop-blur-md"
+    left-[38rem] bottom-2 rounded-2xl flex flex-col backdrop-blur-md "
         style={{ display: isVisible ? "flex" : "none", backgroundColor: 
-        note.background ? `rgb(${HexToRGB(note.background)?.r} ${HexToRGB(note.background)?.g} ${HexToRGB(note.background)?.b} / 1)` : 'rgba(var(--background-secondary) / 0.5)'}}>
+        note.background ? `rgb(${HexToRGB(note.background)?.r} ${HexToRGB(note.background)?.g} ${HexToRGB(note.background)?.b} / 1)` : 'rgba(var(--background-secondary) / 1)'}}>
         {note.id!=="-1" ? 
         <>
             <div className="rounded-t-2xl bg-secondary/75 h-14 flex items-center">
