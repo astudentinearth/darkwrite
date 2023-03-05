@@ -1,22 +1,22 @@
 import AppletBase from "../Components/SettingsApplet";
 import thirdParty from '../../3rd-party-licenses.txt?raw'
-import { useRef } from "react";
+import cargoLicenses from "../../3rd-party-cargo.json?raw"
+import { useRef, useState } from "react";
 
 export function Acknowledgements(){
     let textRef:any = useRef(null);
+    const [showCrates, updateShowCrates] = useState(false);
     return <AppletBase title="Open Source Licenses">
-        <div onClick={()=>{textRef.current.style.setProperty("display","block")}} className="hover:underline cursor-pointer text-accent m-2 ">View</div>
+        <div onClick={()=>{textRef.current.style.setProperty("display","block")}} className="hover:underline cursor-pointer text-accent m-2 ">View licenses for npm packages</div>
         <div ref={textRef} className="hidden">
-            {`License for open-rs
-            The MIT License (MIT)
-
-            Copyright © 2015 Sebastian Thiel
-            
-            Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-            
-            The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-            
-            THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.`}
             {thirdParty}</div>
+        <div onClick={()=>{updateShowCrates(true)}} className="hover:underline cursor-pointer text-accent m-2 ">View licenses for Rust crates</div>
+        <div>
+            {showCrates ? JSON.parse(cargoLicenses).third_party_libraries.map((x:any)=><div>
+                <span className="text-2xl font-bold">{x.package_name}</span><span className="p-2 text-sm">{x.license}</span>
+                <hr></hr>
+                {x.licenses.map((l:any) => <p className="text-sm">{l.text}</p>)}
+            </div>) :<></>}
+        </div>    
     </AppletBase>
 }
