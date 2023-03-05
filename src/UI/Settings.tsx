@@ -7,7 +7,7 @@ import ThemeOptions from "./SettingsApplets/ThemeOptions";
 import FontOptions from "./SettingsApplets/Fonts";
 import WallpaperApplet from "./SettingsApplets/WallpaperApplet";
 import { Acknowledgements } from "./SettingsApplets/Acknowledgements";
-import { AdvancedSettings } from "./SettingsApplets/Advanced";
+//import { AdvancedSettings } from "./SettingsApplets/Advanced";
 let ShowSettings:any;
 let HideSettings:any;
 enum SettingsPage{
@@ -33,8 +33,8 @@ function SettingsView(){
                 case SettingsPage.About:
                     return <React.Fragment><About></About><DebugInfo></DebugInfo><Acknowledgements></Acknowledgements></React.Fragment>
 
-                case SettingsPage.Advanced:
-                    return <React.Fragment><AdvancedSettings></AdvancedSettings></React.Fragment>
+                /*case SettingsPage.Advanced:
+                    return <React.Fragment><AdvancedSettings></AdvancedSettings></React.Fragment>*/
             }
         
         return <DebugInfo></DebugInfo>
@@ -46,7 +46,7 @@ function SettingsView(){
                 <span className="text-2xl font-bold">Settings</span>
             </div>
             <SidebarButton onClick={()=>{setPage(SettingsPage.Appearance)}} isActive={(page===SettingsPage.Appearance) ? "true" : ""} icon="bi-brush" title="Appearance"></SidebarButton>
-            <SidebarButton onClick={()=>{setPage(SettingsPage.Advanced)}} isActive={(page===SettingsPage.Advanced) ? "true" : ""} icon="bi-toggles" title="Advanced"></SidebarButton>
+            {/*<SidebarButton onClick={()=>{setPage(SettingsPage.Advanced)}} isActive={(page===SettingsPage.Advanced) ? "true" : ""} icon="bi-toggles" title="Advanced"></SidebarButton>*/}
             <SidebarButton onClick={()=>{setPage(SettingsPage.About)}} isActive={(page===SettingsPage.About) ? "true" : ""} icon="bi-info" title="About"></SidebarButton>
         </div>
         <div className="absolute bg-primary left-72 px-4 overflow-y-scroll right-0 top-0 bottom-0">
