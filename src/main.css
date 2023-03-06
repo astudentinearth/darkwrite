@@ -3,19 +3,21 @@
 @tailwind utilities; 
 @tailwind variants;
 :root{
-    --background-default:255, 255, 255;
+    --background-default:255 255 255;
     --shadow: rgba(0,0,0,0.2);
     --text-default: black;
     --font: "Roboto";
     --border: none;
-    --background-secondary:229, 229, 229;
-    --background-hover:231, 231, 231;
-    --background-active:239, 239, 239;
+    --background-secondary:229 229 229;
+    --background-hover:231 231 231;
+    --background-active:239 239 239;
     --accent: 87 104 255;
     --font-serif: "Roboto Slab";
     --font-sans: "Roboto";
     --font-mono: "Roboto Mono";
     --font-hand: "Yellowtail";
+    --background-disabled: 204 204 204;
+    --text-disabled: 153 153 153;
 }
 
 html{

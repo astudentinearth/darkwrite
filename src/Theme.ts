@@ -16,7 +16,9 @@ const LightTheme=`{
     "background-secondary":"255 255 255",
     "background-hover":"231 231 231",
     "background-active":"223 223 223",
-    "shadow": "rgba(40,40,40,0.3)"
+    "shadow": "rgba(40,40,40,0.3)",
+    "text-disabled": "153 153 153",
+    "background-disabled":"204 204 204"
 }
 `;
 const DarkTheme=`{
@@ -26,7 +28,9 @@ const DarkTheme=`{
     "background-secondary":"73 73 73",
     "background-hover":"86 86 86",
     "background-active":"96 96 96",
-    "shadow": "rgba(0,0,0,0.2)"
+    "shadow": "rgba(0,0,0,0.2)",
+    "text-disabled": "170 170 170",
+    "background-disabled": "89 89 89"
 }`;
 /**
      * Returns HEX color code from given 3 RGB channels
@@ -72,9 +76,9 @@ async function SetupThemes(settingsContext:ISettingsContext){
     if (await invoke("path_exists",{targetPath:APPDIR+"color-schemes/"})===false){
         console.log("[WARNING] Color schemes directory doesn't exist. Creating it and copying default themes.");
         await createDir(APPDIR+"color-schemes");
-        await writeFile(APPDIR+"color-schemes/colors_light.json",LightTheme);
-        await writeFile(APPDIR+"color-schemes/colors_dark.json",DarkTheme);
     }
+    await writeFile(APPDIR+"color-schemes/colors_light.json",LightTheme);
+    await writeFile(APPDIR+"color-schemes/colors_dark.json",DarkTheme);
     Themes.LightTheme=await readTextFile(APPDIR+"color-schemes/"+settings.LightSchemeFile);
     Themes.DarkTheme=await readTextFile(APPDIR+"color-schemes/"+settings.DarkSchemeFile);
     Themes.LightThemeJSON=JSON.parse(Themes.LightTheme);
@@ -109,24 +113,28 @@ function ApplyTheme(theme:Theme, context:ISettingsContext){
     switch(theme){
         case Theme.Dark:
             console.log("[INFO from ApplyTheme] Setting up dark theme");
-            document.documentElement.style.setProperty("--background-default",Themes.DarkThemeJSON["background"]||"#373737");
+            document.documentElement.style.setProperty("--background-default",Themes.DarkThemeJSON["background"]||"57 57 57");
             document.documentElement.style.setProperty("--text-default",Themes.DarkThemeJSON["foreground"] || "#FFFFFF");
             document.documentElement.style.setProperty("--shadow",Themes.DarkThemeJSON["shadow"] || "rgba(0,0,0,0.2)");
             document.documentElement.style.setProperty("--border",Themes.DarkThemeJSON["border"]||"none")
-            document.documentElement.style.setProperty("--background-secondary",Themes.DarkThemeJSON["background-secondary"]||(Themes.DarkThemeJSON["background"]||"#494949"))
-            document.documentElement.style.setProperty("--background-hover",Themes.DarkThemeJSON["background-hover"]||(Themes.DarkThemeJSON["background"]||"#494949"))
-            document.documentElement.style.setProperty("--background-active",Themes.DarkThemeJSON["background-active"]||(Themes.DarkThemeJSON["background"]||"#494949"))
+            document.documentElement.style.setProperty("--background-secondary",Themes.DarkThemeJSON["background-secondary"]||"73 73 73")
+            document.documentElement.style.setProperty("--background-hover",Themes.DarkThemeJSON["background-hover"]||"86 86 86")
+            document.documentElement.style.setProperty("--background-active",Themes.DarkThemeJSON["background-active"]||"96 96 96")
+            document.documentElement.style.setProperty("--background-disabled",Themes.DarkThemeJSON["background-disabled"]||"89 89 89")
+            document.documentElement.style.setProperty("--text-disabled",Themes.DarkThemeJSON["text-disabled"]||"170 170 170")
             Themes.CurrentTheme=Theme.Dark;
             break;
         case Theme.Light:
             console.log("[INFO from ApplyTheme] Setting up light theme");
-            document.documentElement.style.setProperty("--background-default",Themes.LightThemeJSON["background"]||"#373737");
+            document.documentElement.style.setProperty("--background-default",Themes.LightThemeJSON["background"]||"241 241 241");
             document.documentElement.style.setProperty("--text-default",Themes.LightThemeJSON["foreground"]||"#000000");
             document.documentElement.style.setProperty("--shadow",Themes.LightThemeJSON["shadow"]||"rgba(0,0,0,0.2)");
             document.documentElement.style.setProperty("--border",Themes.LightThemeJSON["border"]||"none")
-            document.documentElement.style.setProperty("--background-secondary",Themes.LightThemeJSON["background-secondary"]||(Themes.LightThemeJSON["background"]||"#e5e5e5"))
-            document.documentElement.style.setProperty("--background-hover",Themes.LightThemeJSON["background-hover"]||(Themes.LightThemeJSON["background"]||"#494949"))
-            document.documentElement.style.setProperty("--background-active",Themes.LightThemeJSON["background-active"]||(Themes.LightThemeJSON["background"]||"#494949"))
+            document.documentElement.style.setProperty("--background-secondary",Themes.LightThemeJSON["background-secondary"]||"255 255 255")
+            document.documentElement.style.setProperty("--background-hover",Themes.LightThemeJSON["background-hover"]||("231 231 231"))
+            document.documentElement.style.setProperty("--background-active",Themes.LightThemeJSON["background-active"]||("223 223 223"))
+            document.documentElement.style.setProperty("--background-disabled",Themes.LightThemeJSON["background-disabled"]||"204 204 204")
+            document.documentElement.style.setProperty("--text-disabled",Themes.LightThemeJSON["text-disabled"]||"153 153 153")
             Themes.CurrentTheme=Theme.Light;
             break;
         default:

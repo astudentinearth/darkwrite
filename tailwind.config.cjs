@@ -15,7 +15,9 @@ module.exports = {
         secondary: 'rgb(var(--background-secondary) / <alpha-value>)',
         hover: 'rgb(var(--background-hover) / <alpha-value>)',
         active: 'rgb(var(--background-active) / <alpha-value>)',
-        accent: 'rgb(var(--accent) / <alpha-value>)'
+        accent: 'rgb(var(--accent) / <alpha-value>)',
+        disabledText: 'rgb(var(--text-disabled) / <alpha-value>)',
+        disabled: 'rgb(var(--background-disabled) / <alpha-value>)'
       }
     },
     
