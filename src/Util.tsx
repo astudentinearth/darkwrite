@@ -43,6 +43,11 @@ interface ITask{
     completed:boolean
 }
 
+export const DraggableTypes={
+    TASK: "TASK",
+    NOTE: "NOTE"
+}
+
 /**
  * User data interface to be loaded. Contains notes and tasks.
  */

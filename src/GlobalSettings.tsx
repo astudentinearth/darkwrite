@@ -1,5 +1,5 @@
 import { SetupThemes, Theme } from "./Theme";
-import { BaseDirectory, readTextFile,writeTextFile } from "@tauri-apps/api/fs";
+import { BaseDirectory, exists, readTextFile,writeTextFile } from "@tauri-apps/api/fs";
 import { appConfigDir } from "@tauri-apps/api/path";
 import { invoke } from "@tauri-apps/api";
 import { DefaultSettings } from "./Util";
@@ -18,7 +18,7 @@ async function LoadSettings(){
         invoke ("createDir",{ dir: APPDIR});
     }
     console.log("[INFO] Checking for settings file")
-    let settingsExists = await invoke("path_exists",{targetPath:APPDIR+"settings.json"});
+    let settingsExists = await exists("settings.json",{dir:BaseDirectory.App});
     if (settingsExists===false){
         console.log("[WARNING] Settings file not found. Creating default settings file");
         await writeTextFile("settings.json",DefaultSettings,{dir:BaseDirectory.App});
@@ -98,7 +98,7 @@ function SaveAllSettings(context:ISettingsContext){
     "monoFont":settings.MonospaceFont ?? "Roboto Mono",
     "handFont":settings.HandwritingFont ?? "Yellowtail"};
     let settings_string = JSON.stringify(newJSON);
-    writeTextFile(APPDIR+"settings.json",settings_string).then(()=>{
+    writeTextFile("settings.json",settings_string,{dir:BaseDirectory.App}).then(()=>{
         console.log("[INFO] Settings saved. Reloading settings")
         LoadSettings().then(()=>SetupThemes(context));
     });

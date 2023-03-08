@@ -1,15 +1,22 @@
 import { invoke } from "@tauri-apps/api";
-import React, { useRef, useState } from "react";
+import update from 'immutability-helper'
+import React, { useCallback, useRef, useState } from "react";
 import { useEffect } from "react";
 import { readTextFile, writeFile } from "@tauri-apps/api/fs";
 import {appDir} from "../../node_modules/@tauri-apps/api/path"
-import { GenerateID, ITask, JSONToITaskArray } from "../Util";
-import {DragDropContext, Draggable, Droppable} from '@hello-pangea/dnd';
+import { DraggableTypes, GenerateID, ITask, JSONToITaskArray } from "../Util";
+import { TaskItem } from "./Components/TaskItem";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 let changeTasks:any;
 let getTasks:any;
 function TaskInputChanged(){
 
 } 
+
+interface TasksContainerState {
+    tasks: ITask[]
+}
 
 async function LoadTasks(){
     let APPDIR=await appDir();
@@ -71,6 +78,26 @@ function Tasks(){
             taskInput.value="";
         }
     }
+    const reorder = useCallback((dragIndex: number, hoverIndex: number)=>{
+        console.log("reorder")
+        setTasks((prevTasks: ITask[])=>
+            update(prevTasks,{
+                $splice: [
+                    [dragIndex,1],
+                    [hoverIndex,0,prevTasks[dragIndex] as ITask]
+                ]
+            })
+        );
+    },[])
+    const renderTask = useCallback((todo: ITask, index:number)=>{
+        return ( <TaskItem index={index} 
+        content={todo.content} 
+        id={todo.id} 
+        completed={todo.completed}
+        reorder={reorder}
+        type={"todo"}
+        key={todo.id}></TaskItem>)
+    },[])
     return <div id="TaskPanel" className="w-72 flex flex-col overflow-x-hidden flex-[1_1_auto] overflow-y-auto min-h-0 relative text-default z-10 transition-all" >
         <div className="flex h-12 flex-[0_1_auto]">
             <input ref={taskInputRef} onChange={TaskInputChanged} tabIndex={0} type="text" onKeyDown={InputKeyDown} id="taskInput" placeholder="A new task" className="border-default inline-block hide-outline w-[240px] bg-secondary/25 h-12 p-2 text-xl"></input>
@@ -83,50 +110,11 @@ function Tasks(){
                 <i className="bi-plus-lg text-2xl text-white"></i>
             </div>
         </div>
-        <div id="tasksDiv" className="flex-[1_0_auto]">
-            <DragDropContext onDragEnd={(result:any)=>{
-                    if(!result.destination) return;
-                    const items = Array.from(tasks);
-                    const [reordered] = items.splice(result.source.index, 1);
-                    items.splice(result.destination.index,0,reordered);
-                    setTasks(items);
-                    SaveTasks();
-                }}>
-                    <Droppable droppableId="tasksDrop">
-                        {(provided)=>{
-                            return <div className="" ref={provided.innerRef} {...provided.droppableProps}>
-                                {tasks.map((item,index)=>{
-                                    return <Draggable draggableId={item.id.toString()} key={item.id.toString()} index={index}>
-                                        {(_provided)=>{
-                                            return <div ref={_provided.innerRef} 
-                                            {..._provided.draggableProps} 
-                                            {..._provided.dragHandleProps}
-                                            className="task-item transition-colors">
-                                                <div onClick={()=>{
-                                                let t = [...tasks];
-                                                for (let i of t){
-                                                    if(i.id===item.id){
-                                                        i.completed=i.completed ? false : true;
-                                                    }
-                                                }
-                                                setTasks(t);
-                                                SaveTasks();}} 
-                                                style={item.completed ? {background: "rgb(var(--accent))"} : {}} className="w-5 h-5 ml-2 flex items-center justify-center rounded-md bg-secondary/75 hover:brigtness-125 cursor-pointer checkbox">
-                                                    {item.completed ? <i className="bi-check-lg text-white"></i> : ""}
-                                                </div>
-                                                <span className="text-default p-2 text-md">{item.content}</span>
-                                                <div onClick={()=>{removeTask(item.id)}} className="task-delete-button ml-auto mr-4 hover:bg-secondary/20 cursor-pointer rounded-md p-1 w-6 h-6 flex items-center justify-center"><i className="bi-x-lg"></i></div>
-                                            </div>
-                                                
-                                        }}
-                                        </Draggable>
-                                })}
-                                {provided.placeholder}
-                            </div>
-                        }}
-                    </Droppable>
-                </DragDropContext>
-	    </div>
+        <DndProvider debugMode={true} backend={HTML5Backend}>
+            <div id="tasksDiv" className="flex-[1_0_auto]">
+                {tasks.map((task,i)=>renderTask(task,i))}
+            </div>
+        </DndProvider>
     </div>  
 }
 

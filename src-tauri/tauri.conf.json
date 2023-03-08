@@ -95,7 +95,8 @@
         "title": "Darkwrite",
         "width": 800,
         "minHeight": 300,
-        "minWidth": 800
+        "minWidth": 800,
+        "fileDropEnabled": false
       }
     ]
   }
