@@ -1,6 +1,6 @@
 import { invoke } from "@tauri-apps/api";
 import update from 'immutability-helper'
-import React, { useCallback, useRef, useState } from "react";
+import React, { Dispatch, SetStateAction, useCallback, useRef, useState } from "react";
 import { useEffect } from "react";
 import { readTextFile, writeFile } from "@tauri-apps/api/fs";
 import {appDir} from "../../node_modules/@tauri-apps/api/path"
@@ -10,9 +10,12 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 let changeTasks:any;
 let getTasks:any;
-function TaskInputChanged(){
+export const TasksContext = React.createContext<ITasksContext>({tasks: [], setTasks: ()=>{}});
 
-} 
+interface ITasksContext{
+    tasks: ITask[]
+    setTasks: Dispatch<SetStateAction<ITask[]>>
+}
 
 interface TasksContainerState {
     tasks: ITask[]
@@ -32,7 +35,7 @@ async function LoadTasks(){
     return JSONToITaskArray(tasksJSON) ?? [] as ITask[];
 }
 
-async function SaveTasks(){
+export async function SaveTasks(){
     let APPDIR=await appDir();
     console.log("[INFO from SaveTasks()] Saving tasks");
     await writeFile(APPDIR+"tasks.json",JSON.stringify({tasks:getTasks()}));
@@ -88,6 +91,7 @@ function Tasks(){
                 ]
             })
         );
+        SaveTasks();
     },[])
     const renderTask = useCallback((todo: ITask, index:number)=>{
         return ( <TaskItem index={index} 
@@ -99,22 +103,24 @@ function Tasks(){
         key={todo.id}></TaskItem>)
     },[])
     return <div id="TaskPanel" className="w-72 flex flex-col overflow-x-hidden flex-[1_1_auto] overflow-y-auto min-h-0 relative text-default z-10 transition-all" >
-        <div className="flex h-12 flex-[0_1_auto]">
-            <input ref={taskInputRef} onChange={TaskInputChanged} tabIndex={0} type="text" onKeyDown={InputKeyDown} id="taskInput" placeholder="A new task" className="border-default inline-block hide-outline w-[240px] bg-secondary/25 h-12 p-2 text-xl"></input>
-            <div onClick={()=>{
-                if(taskInputRef.current.value.trim().length!==0){
-                    AddTask(taskInputRef.current.value);
-                    taskInputRef.current.value="";
-                }
-            }} className="bg-accent/75 cursor-pointer transition-all hover:brightness-125 w-12 h-12 flex flex-[1_0_auto] justify-center items-center" >
-                <i className="bi-plus-lg text-2xl text-white"></i>
+       <TasksContext.Provider value={{tasks, setTasks}}>
+            <div className="flex h-12 flex-[0_1_auto]">
+                <input ref={taskInputRef} tabIndex={0} type="text" onKeyDown={InputKeyDown} id="taskInput" placeholder="A new task" className="border-default inline-block hide-outline w-[240px] bg-secondary/25 h-12 p-2 text-xl"></input>
+                <div onClick={()=>{
+                    if(taskInputRef.current.value.trim().length!==0){
+                        AddTask(taskInputRef.current.value);
+                        taskInputRef.current.value="";
+                    }
+                }} className="bg-accent/75 cursor-pointer transition-all hover:brightness-125 w-12 h-12 flex flex-[1_0_auto] justify-center items-center" >
+                    <i className="bi-plus-lg text-2xl text-white"></i>
+                </div>
             </div>
-        </div>
-        <DndProvider debugMode={true} backend={HTML5Backend}>
-            <div id="tasksDiv" className="flex-[1_0_auto]">
-                {tasks.map((task,i)=>renderTask(task,i))}
-            </div>
-        </DndProvider>
+            <DndProvider debugMode={true} backend={HTML5Backend}>
+                <div id="tasksDiv" className="flex-[1_0_auto]">
+                    {tasks.map((task,i)=>renderTask(task,i))}
+                </div>
+            </DndProvider>
+       </TasksContext.Provider>
     </div>  
 }
 
