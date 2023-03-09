@@ -1,7 +1,8 @@
-import { FC, useRef } from "react"
+import { FC, useContext, useRef } from "react"
 import { useDrop,useDrag } from "react-dnd"
 import { Identifier, XYCoord } from "dnd-core"
 import { DraggableTypes } from "../../Util"
+import { SaveTasks, TasksContext } from "../Tasks"
 
 export interface TaskItemProps{
     id: string
@@ -14,6 +15,7 @@ export interface TaskItemProps{
 
 export const TaskItem: FC<TaskItemProps> = ({id,content,completed,index,reorder,type})=>{
     const ref = useRef<HTMLDivElement>(null);
+    const {tasks, setTasks} = useContext(TasksContext);
     const [{handlerId},drop] = useDrop<
     TaskItemProps,
     void,
@@ -47,11 +49,28 @@ export const TaskItem: FC<TaskItemProps> = ({id,content,completed,index,reorder,
     drag(drop(ref));
     return <div ref={ref} data-handler-id={handlerId}
     className="task-item transition-colors">
-        <div 
+        <div onClick={()=>{
+            let currentTasks = [...tasks];
+            for (let t of currentTasks){
+                if(t.id!==id) continue;
+                t.completed = t.completed ? false : true;
+            }
+            setTasks(currentTasks);
+            SaveTasks();
+        }}
         style={completed ? {background: "rgb(var(--accent))"} : {}} className="w-5 h-5 ml-2 flex items-center justify-center rounded-md bg-secondary/75 hover:brigtness-125 cursor-pointer checkbox">
             {completed ? <i className="bi-check-lg text-white"></i> : ""}
         </div>
         <span className="text-default p-2 text-md">{content}</span>
-        <div onClick={()=>{/*removeTask(item.id)*/}} className="task-delete-button ml-auto mr-4 hover:bg-secondary/20 cursor-pointer rounded-md p-1 w-6 h-6 flex items-center justify-center"><i className="bi-x-lg"></i></div>
+        <div onClick={()=>{
+            let currentTasks=[...tasks];
+            for (let t in currentTasks){
+               if(currentTasks[t].id===id){
+                    currentTasks.splice(parseInt(t),1);
+               } 
+            }
+            setTasks(currentTasks);
+            SaveTasks();
+        }} className="task-delete-button ml-auto mr-4 hover:bg-secondary/20 cursor-pointer rounded-md p-1 w-6 h-6 flex items-center justify-center"><i className="bi-x-lg"></i></div>
     </div>
 }
