@@ -6,8 +6,10 @@ import { readTextFile, writeFile } from "@tauri-apps/api/fs";
 import {appDir} from "../../node_modules/@tauri-apps/api/path"
 import { DraggableTypes, GenerateID, ITask, JSONToITaskArray } from "../Util";
 import { TaskItem } from "./Components/TaskItem";
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
+import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
+import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from "@dnd-kit/sortable";
+import { DragEndEvent } from "@dnd-kit/core/dist/types";
+import {restrictToVerticalAxis} from "@dnd-kit/modifiers";
 let changeTasks:any;
 let getTasks:any;
 export const TasksContext = React.createContext<ITasksContext>({tasks: [], setTasks: ()=>{}});
@@ -41,8 +43,32 @@ export async function SaveTasks(){
     await writeFile(APPDIR+"tasks.json",JSON.stringify({tasks:getTasks()}));
 }
 
+class TasksPointerSensor extends PointerSensor{
+    static activators = [{
+            eventName: 'onPointerDown',
+            handler: ({nativeEvent: event} : React.PointerEvent<Element>) =>{
+                if (!(event.target instanceof Element)) return;
+                if(!event.isPrimary || event.button!==0 || isInteractiveElement([...(event.target as Element).classList] as string[])){
+                    return false;
+                }
+                return true;
+            },
+        },
+    ];
+}
+
+function isInteractiveElement(elementClassNames: string[]){
+    const interactiveElements = ["checkbox","task-delete-button","ignore-drag"];
+    console.log(elementClassNames);
+    for(let name of elementClassNames){
+        if (interactiveElements.includes(name)) return true;
+    }
+    return false;
+}
+
 function Tasks(){
     const [tasks,setTasks] = useState([] as ITask[]);
+    const sensors = useSensors(useSensor(TasksPointerSensor))
     useEffect(()=>{
         const load = async ()=>{
             let _tasks =await LoadTasks();
@@ -81,30 +107,29 @@ function Tasks(){
             taskInput.value="";
         }
     }
-    const reorder = useCallback((dragIndex: number, hoverIndex: number)=>{
-        console.log("reorder")
-        setTasks((prevTasks: ITask[])=>
-            update(prevTasks,{
-                $splice: [
-                    [dragIndex,1],
-                    [hoverIndex,0,prevTasks[dragIndex] as ITask]
-                ]
+    const reorder = (event: DragEndEvent)=>{
+        const {active,over} = event;
+        if(!over) return;
+        if (active.id !== over.id){
+            setTasks((tasks)=>{
+                const oldIndex = tasks.map(function (e){return e.id}).indexOf(active.id.toString());
+                const newIndex = tasks.map(function (e){return e.id}).indexOf(over.id.toString());
+                return arrayMove(tasks,oldIndex,newIndex);
             })
-        );
-        SaveTasks();
-    },[])
+            SaveTasks();
+        }
+    }
     const renderTask = useCallback((todo: ITask, index:number)=>{
         return ( <TaskItem index={index} 
         content={todo.content} 
         id={todo.id} 
         completed={todo.completed}
-        reorder={reorder}
         type={"todo"}
         key={todo.id}></TaskItem>)
     },[])
     return <div id="TaskPanel" className="w-72 flex flex-col overflow-x-hidden flex-[1_1_auto] overflow-y-auto min-h-0 relative text-default z-10 transition-all" >
        <TasksContext.Provider value={{tasks, setTasks}}>
-            <div className="flex h-12 flex-[0_1_auto]">
+            <div className="flex h-12 flex-[0_1_auto] w-72">
                 <input ref={taskInputRef} tabIndex={0} type="text" onKeyDown={InputKeyDown} id="taskInput" placeholder="A new task" className="border-default inline-block hide-outline w-[240px] bg-secondary/25 h-12 p-2 text-xl"></input>
                 <div onClick={()=>{
                     if(taskInputRef.current.value.trim().length!==0){
@@ -115,11 +140,19 @@ function Tasks(){
                     <i className="bi-plus-lg text-2xl text-white"></i>
                 </div>
             </div>
-            <DndProvider debugMode={true} backend={HTML5Backend}>
-                <div id="tasksDiv" className="flex-[1_0_auto]">
-                    {tasks.map((task,i)=>renderTask(task,i))}
-                </div>
-            </DndProvider>
+            <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragEnd={reorder}
+            modifiers={[restrictToVerticalAxis]}>
+                <SortableContext
+                items={tasks}
+                strategy={verticalListSortingStrategy}>
+                    <div id="tasksDiv" className="flex-[1_0_auto]">
+                        {tasks.map((task,i)=>renderTask(task,i))}
+                    </div>
+                </SortableContext>
+            </DndContext>
        </TasksContext.Provider>
     </div>  
 }
