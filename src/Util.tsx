@@ -177,8 +177,7 @@ const DefaultSettings:string=`
 {
     "version":"1",
     "theme":"dark",
-    "lightSchemeFile":"colors_light.json",
-    "darkSchemeFile":"colors_dark.json",
+    "themeFile":"colors_dark.json",
     "font":"Roboto",
     "accentColor":"87 104 225",
     "sansFont":"Roboto",

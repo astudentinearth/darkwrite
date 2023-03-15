@@ -4,10 +4,6 @@ import {appDir} from "../node_modules/@tauri-apps/api/path"
 import { GlobalSettings, ISettingsContext, SettingsContext } from "./GlobalSettings";
 import { Uint8ArrayToBase64 } from "./Util";
 
-enum Theme{
-    Light=0,
-    Dark=1,
-}
 let APPDIR:string; // this has a slash in the end!
 const LightTheme=`{
     "name":"Darkwrite Light",
@@ -57,11 +53,7 @@ function HexToRGB(hex:string){
 }
 
 class Themes{
-    public static LightTheme: string; // stringified json of the light theme
-    public static LightThemeJSON: any; // json of the light theme
-    public static DarkTheme:string; // stringified json of the dark theme
-    public static DarkThemeJSON:any; // json of the dark theme
-    public static CurrentTheme:Theme; // current theme as enum
+    public static CurrentTheme:string; // current theme file name
     public static CurrentThemeJSON:any; // json of current theme
 }
 // reads the theme files and creates theme objects 
@@ -79,29 +71,17 @@ async function SetupThemes(settingsContext:ISettingsContext){
     }
     await writeFile(APPDIR+"color-schemes/colors_light.json",LightTheme);
     await writeFile(APPDIR+"color-schemes/colors_dark.json",DarkTheme);
-    Themes.LightTheme=await readTextFile(APPDIR+"color-schemes/"+settings.LightSchemeFile);
-    Themes.DarkTheme=await readTextFile(APPDIR+"color-schemes/"+settings.DarkSchemeFile);
-    Themes.LightThemeJSON=JSON.parse(Themes.LightTheme);
-    Themes.DarkThemeJSON=JSON.parse(Themes.DarkTheme);
-    
-    switch(settings.ThemeMode){
-        case Theme.Dark:
-            Themes.CurrentTheme=Theme.Dark;
-            Themes.CurrentThemeJSON=Themes.DarkThemeJSON;    
-            break;
-        case Theme.Light:
-            Themes.CurrentTheme=Theme.Light;
-            Themes.CurrentThemeJSON=Themes.LightThemeJSON;    
-            break;
-        }
+    let text = await readTextFile(APPDIR+"color-schemes/"+settings.ThemeFile);
+    let json = JSON.parse(text);
+    if (json) Themes.CurrentThemeJSON = json;
     console.log("[INFO] Applying theme preferences");
-    ApplyTheme(settings.ThemeMode,settingsContext);
+    ApplyTheme(settings.ThemeFile,settingsContext);
 }
 
 
 // Applies a theme
 // TODO: Separate the inner part to a separate function: duplicate code. Give the JSON object to the new function to apply it.
-function ApplyTheme(theme:Theme, context:ISettingsContext){
+function ApplyTheme(themeFileName:string, context:ISettingsContext){
     const {settings,updateSettings} = context;
     console.log("[INFO from ApplyTheme()] Applying theme");
     document.documentElement.style.setProperty("--font",settings.Font);
@@ -110,38 +90,17 @@ function ApplyTheme(theme:Theme, context:ISettingsContext){
     document.documentElement.style.setProperty("--font-hand",settings.HandwritingFont);
     document.documentElement.style.setProperty("--font-mono",settings.MonospaceFont);
     document.documentElement.style.setProperty("--accent",settings.AccentColor);
-    switch(theme){
-        case Theme.Dark:
-            console.log("[INFO from ApplyTheme] Setting up dark theme");
-            document.documentElement.style.setProperty("--background-default",Themes.DarkThemeJSON["background"]||"57 57 57");
-            document.documentElement.style.setProperty("--text-default",Themes.DarkThemeJSON["foreground"] || "#FFFFFF");
-            document.documentElement.style.setProperty("--shadow",Themes.DarkThemeJSON["shadow"] || "rgba(0,0,0,0.2)");
-            document.documentElement.style.setProperty("--border",Themes.DarkThemeJSON["border"]||"none")
-            document.documentElement.style.setProperty("--background-secondary",Themes.DarkThemeJSON["background-secondary"]||"73 73 73")
-            document.documentElement.style.setProperty("--background-hover",Themes.DarkThemeJSON["background-hover"]||"86 86 86")
-            document.documentElement.style.setProperty("--background-active",Themes.DarkThemeJSON["background-active"]||"96 96 96")
-            document.documentElement.style.setProperty("--background-disabled",Themes.DarkThemeJSON["background-disabled"]||"89 89 89")
-            document.documentElement.style.setProperty("--text-disabled",Themes.DarkThemeJSON["text-disabled"]||"170 170 170")
-            Themes.CurrentTheme=Theme.Dark;
-            break;
-        case Theme.Light:
-            console.log("[INFO from ApplyTheme] Setting up light theme");
-            document.documentElement.style.setProperty("--background-default",Themes.LightThemeJSON["background"]||"241 241 241");
-            document.documentElement.style.setProperty("--text-default",Themes.LightThemeJSON["foreground"]||"#000000");
-            document.documentElement.style.setProperty("--shadow",Themes.LightThemeJSON["shadow"]||"rgba(0,0,0,0.2)");
-            document.documentElement.style.setProperty("--border",Themes.LightThemeJSON["border"]||"none")
-            document.documentElement.style.setProperty("--background-secondary",Themes.LightThemeJSON["background-secondary"]||"255 255 255")
-            document.documentElement.style.setProperty("--background-hover",Themes.LightThemeJSON["background-hover"]||("231 231 231"))
-            document.documentElement.style.setProperty("--background-active",Themes.LightThemeJSON["background-active"]||("223 223 223"))
-            document.documentElement.style.setProperty("--background-disabled",Themes.LightThemeJSON["background-disabled"]||"204 204 204")
-            document.documentElement.style.setProperty("--text-disabled",Themes.LightThemeJSON["text-disabled"]||"153 153 153")
-            Themes.CurrentTheme=Theme.Light;
-            break;
-        default:
-            console.log("[WARNING from ApplyTheme()] Default case triggered. Falling back to light theme.");
-            ApplyTheme(Theme.Light,context);
-            break;
-    }
+    console.log("[INFO from ApplyTheme()] Setting up dark theme");
+    document.documentElement.style.setProperty("--background-default",Themes.CurrentThemeJSON["background"]||"57 57 57");
+    document.documentElement.style.setProperty("--text-default",Themes.CurrentThemeJSON["foreground"] || "#FFFFFF");
+    document.documentElement.style.setProperty("--shadow",Themes.CurrentThemeJSON["shadow"] || "rgba(0,0,0,0.2)");
+    document.documentElement.style.setProperty("--border",Themes.CurrentThemeJSON["border"]||"none")
+    document.documentElement.style.setProperty("--background-secondary",Themes.CurrentThemeJSON["background-secondary"]||"73 73 73")
+    document.documentElement.style.setProperty("--background-hover",Themes.CurrentThemeJSON["background-hover"]||"86 86 86")
+    document.documentElement.style.setProperty("--background-active",Themes.CurrentThemeJSON["background-active"]||"96 96 96")
+    document.documentElement.style.setProperty("--background-disabled",Themes.CurrentThemeJSON["background-disabled"]||"89 89 89")
+    document.documentElement.style.setProperty("--text-disabled",Themes.CurrentThemeJSON["text-disabled"]||"170 170 170")
+    Themes.CurrentTheme=themeFileName;
 }
 
 // Switches the theme
@@ -163,4 +122,4 @@ async function ApplyWallpaper(){
 
 
 
-export {Themes,Theme,SetupThemes,ApplyWallpaper,ApplyTheme,/*SwitchTheme,*/APPDIR,HexToRGB,RGBToHex};
+export {Themes,SetupThemes,ApplyWallpaper,ApplyTheme,/*SwitchTheme,*/APPDIR,HexToRGB,RGBToHex};

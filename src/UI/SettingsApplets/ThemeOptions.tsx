@@ -1,12 +1,20 @@
 import { BaseDirectory, readDir, readTextFile } from "@tauri-apps/api/fs";
 import { useContext,useEffect, useRef, useState } from "react";
 import { GlobalSettings, SaveAllSettings, SettingsContext } from "../../GlobalSettings";
-import { ApplyTheme, HexToRGB, RGBToHex, SetupThemes, Theme } from "../../Theme";
+import { ApplyTheme, HexToRGB, RGBToHex, SetupThemes } from "../../Theme";
 import AppletBase from "../Components/SettingsApplet";
 
 interface IColorSchemeData{
 	SchemeFileName:string,
-	ColorSchemeName:string
+	ColorSchemeName:string,
+    background:string,
+    foreground:string,
+    secondaryBackground:string,
+    hoverBackground:string,
+    activeBackground:string,
+    shadow:string,
+    disabledText:string,
+    disabledBackground:string
 }
 
 function ThemeOptions(){
@@ -17,10 +25,10 @@ function ThemeOptions(){
 
     let select_dark:any = useRef(null);
     let select_light:any = useRef(null);
-    function ChangeTheme(mode:Theme){
-        updateSettings({...settings,ThemeMode:mode})
+    function ChangeTheme(themeFile:string){
+        updateSettings({...settings,ThemeFile:themeFile})
         //SaveAllSettings(settingsContext);
-        SetupThemes(settingsContext).then(()=>{ApplyTheme(settings.ThemeMode, settingsContext);});
+        SetupThemes(settingsContext).then(()=>{ApplyTheme(settings.ThemeFile, settingsContext);});
         updateState({});
     }
     useEffect(()=>{
@@ -29,9 +37,20 @@ function ThemeOptions(){
             let fileNames=fsEntries.map(e => e.name);
             let schemes:IColorSchemeData[] = [] as IColorSchemeData[];
             for(const f of fileNames){
+                if (!f) return;
                 const contents = await readTextFile("color-schemes/"+f,{dir:BaseDirectory.App});
                 let _json = JSON.parse(contents);
-                let scheme = {SchemeFileName: f,ColorSchemeName: _json.name || f} as IColorSchemeData;
+                let scheme: IColorSchemeData = {SchemeFileName: f, 
+                    ColorSchemeName: _json.name ?? "Unnamed Theme",
+                    background: _json.background ?? "57 57 57",
+                    foreground: _json.foreground ?? "#ffffff",
+                    secondaryBackground: _json["background-secondary"] ?? "73 73 73",
+                    hoverBackground: _json["background-hover"] ?? "86 86 86",
+                    activeBackground: _json["background-active"] ?? "96 96 96",
+                    shadow: _json.shadow ?? "rgba(0,0,0,0.2)",
+                    disabledText: _json["text-disabled"] ?? "170 170 170",
+                    disabledBackground: _json["background-disabled"] ?? "89 89 89"
+                }
                 schemes.push(scheme);
             }
             console.log(schemes);
@@ -41,21 +60,24 @@ function ThemeOptions(){
         
     },[]);
     return <AppletBase title="Colors">
-        <div className="flex items-center justify-center p-2">
-			
-                <div  className="float-left text-center m-4">
-                    <div onContextMenu={(event)=>{
-                        event.stopPropagation();
-                        event.nativeEvent.stopImmediatePropagation();
-                    }} onClick={()=>{ChangeTheme(Theme.Light)}} style={{boxShadow: settings.ThemeMode===Theme.Light ? "0px 0px 0px 3px rgb(var(--accent))" : ""}} className="w-40 bg-white  shadow-default-hover h-24 rounded-xl flex justify-center items-center"><i className="text-black text-3xl bi-brightness-high-fill"></i></div>
-                    <span className="text-default inline-block p-2 text-center">Light</span>
-                </div>
-                <div className="float-left text-center m-4">
-                    <div onClick={()=>{ChangeTheme(Theme.Dark)}} style={{boxShadow: settings.ThemeMode===Theme.Dark ? "0px 0px 0px 3px rgb(var(--accent))" : ""}} className="w-40 bg-black shadow-default-hover h-24 rounded-xl flex justify-center items-center"><i className="text-white text-3xl bi-moon"></i></div>
-                    <span className="text-default inline-block p-2 text-center">Dark</span>
-                </div>
-            
-		</div>
+            <div className="overflow-y-scroll select-none mx-2 rounded-2xl bg-secondary shadow-lg" >
+                {colors.map(e=><div className="p-2 hover:bg-hover cursor-pointer 
+                rounded-2xl w-48 h-12 flex items-center flex-row float-left m-2" 
+                style={settings.ThemeFile===e.SchemeFileName ? {background: "rgb(var(--accent))", color:"white"}:{}}
+                onClick={()=>{
+                    if(e.SchemeFileName!==settings.ThemeFile){
+                        updateSettings({...settings,ThemeFile:e.SchemeFileName});
+                        //SaveAllSettings(settingsContext);
+                        updateState({});
+                    }
+                }}>
+                    <div className="rounded-lg h-8 w-8 note-shadow" style={{background: `rgb(${e.background})`}}>
+                        <div className="w-3 h-6 m-1 rounded-md note-shadow" style={{background: `rgb(${e.secondaryBackground})`}}></div>
+                    </div>
+                    <span className="ml-4">{e.ColorSchemeName}</span>
+                    
+                </div>)}
+            </div>
         <div className="flex h-12 items-center p-2 justify-center">
             <span>Accent color:&nbsp;</span>
             <input type="color"
@@ -70,33 +92,7 @@ function ThemeOptions(){
                 //SaveAllSettings(settingsContext);
              }}></input>
         </div>
-        <div className="flex justify-center items-center">
-            <div className="overflow-y-scroll select-none float-left w-48 h-48 rounded-2xl bg-secondary shadow-lg" >
-                <span className="text-center block">Light colors</span>
-                {colors.map(e=><div className="p-2 hover:bg-hover cursor-pointer" 
-                style={settings.LightSchemeFile===e.SchemeFileName ? {background: "rgb(var(--accent))", color:"white"}:{}}
-                onClick={()=>{
-                    if(e.SchemeFileName!==settings.LightSchemeFile){
-                        updateSettings({...settings,LightSchemeFile:e.SchemeFileName});
-                        //SaveAllSettings(settingsContext);
-                        updateState({});
-                    }
-                }}
-                >{e.ColorSchemeName}</div>)}
-            </div>
-            <div className="overflow-y-scroll select-none mx-2 w-48 h-48 rounded-2xl bg-secondary shadow-lg" >
-                <span className="text-center block">Dark colors</span>
-                {colors.map(e=><div className="p-2 hover:bg-hover cursor-pointer" 
-                style={settings.DarkSchemeFile===e.SchemeFileName ? {background: "rgb(var(--accent))", color:"white"}:{}}
-                onClick={()=>{
-                    if(e.SchemeFileName!==settings.DarkSchemeFile){
-                        updateSettings({...settings,DarkSchemeFile:e.SchemeFileName});
-                        //SaveAllSettings(settingsContext);
-                        updateState({});
-                    }
-                }}>{e.ColorSchemeName}</div>)}
-            </div>
-        </div>
+        
     </AppletBase>
 }
 

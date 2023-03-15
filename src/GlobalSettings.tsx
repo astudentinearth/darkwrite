@@ -1,4 +1,4 @@
-import { SetupThemes, Theme } from "./Theme";
+import { SetupThemes } from "./Theme";
 import { BaseDirectory, readTextFile,writeTextFile } from "@tauri-apps/api/fs";
 import { appConfigDir } from "@tauri-apps/api/path";
 import { invoke } from "@tauri-apps/api";
@@ -37,19 +37,6 @@ async function LoadSettings(){
         settings_string=DefaultSettings;
         settings_json=JSON.parse(DefaultSettings);
     }
-    switch (settings_json.theme){
-        case "dark":
-            _settings.ThemeMode=Theme.Dark;
-            break;
-        case "light":
-            _settings.ThemeMode=Theme.Light;
-            break;
-        default:
-            _settings.ThemeMode=Theme.Light;
-            break;
-    }
-    _settings.LightSchemeFile=settings_json.lightSchemeFile ?? "colors_light.json";
-    _settings.DarkSchemeFile=settings_json.darkSchemeFile ?? "colors_dark.json";
     _settings.Font=settings_json.font ?? "Roboto";
     _settings.SansFont=settings_json.sansFont ?? "Roboto";
     _settings.SerifFont=settings_json.serifFont ?? "Roboto Slab";
@@ -57,13 +44,12 @@ async function LoadSettings(){
     _settings.MonospaceFont=settings_json.monoFont ?? "Roboto Mono";
     _settings.AccentColor=settings_json.accentColor ?? "87 104 255";
     _settings.DisableBlur=settings_json.disableBlur ?? false;
+    _settings.ThemeFile = settings_json.themeFile ?? "colors_dark.json";
     return _settings;
 }
 
 class GlobalSettings{
-    public ThemeMode:Theme=Theme.Dark;
-    public LightSchemeFile:string="colors_light.json";
-    public DarkSchemeFile:string="colors_dark.json";
+    public ThemeFile:string="colors_dark.json";
     public Font:string="Roboto";
     public Version:string="1.0d";
     public AccentColor:string="87 104 255";
@@ -88,9 +74,7 @@ function SaveAllSettings(context:ISettingsContext){
     console.log("[INFO] Saving all settings.");
     const {settings} = context;
     let newJSON={"version":settings.Version,
-    "theme":settings.ThemeMode===Theme.Dark ? "dark" : "light",
-    "lightSchemeFile":settings.LightSchemeFile ?? "colors_light.json",
-    "darkSchemeFile":settings.DarkSchemeFile ?? "colors_dark.json",
+    "themeFile":settings.ThemeFile ?? "colors_dark.json",
     "font":settings.Font ?? "Roboto",
     "accentColor":settings.AccentColor,
     "sansFont":settings.SansFont ?? "Roboto",
