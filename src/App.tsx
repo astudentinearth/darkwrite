@@ -50,7 +50,7 @@ function App() {
   },[settings]);
   return (
     <div className="App background-default">
-      <div className='app_root overflow-y-scroll bg-center bg-cover bg-no-repeat select-none absolute text-default transition-all w-full h-full duration-200'>
+      <div className='app_root overflow-y-hidden bg-center bg-cover bg-no-repeat select-none absolute text-default transition-all w-full h-full duration-200'>
         <div id="bgImage" className="absolute z-0 left-0 right-0 top-0 bottom-0 m-0 p-0 w-full h-full"></div>
         <SettingsContext.Provider value={{settings,updateSettings}}>
           <NotebooksContext.Provider value={notebooksValue}>

@@ -1,15 +1,27 @@
 import { invoke } from "@tauri-apps/api";
-import React, { useRef, useState } from "react";
+import update from 'immutability-helper'
+import React, { Dispatch, SetStateAction, useCallback, useRef, useState } from "react";
 import { useEffect } from "react";
 import { readTextFile, writeFile } from "@tauri-apps/api/fs";
 import {appDir} from "../../node_modules/@tauri-apps/api/path"
-import { GenerateID, ITask, JSONToITaskArray } from "../Util";
-import {DragDropContext, Draggable, Droppable} from '@hello-pangea/dnd';
+import { DraggableTypes, GenerateID, ITask, JSONToITaskArray } from "../Util";
+import { TaskItem } from "./Components/TaskItem";
+import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
+import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from "@dnd-kit/sortable";
+import { DragEndEvent } from "@dnd-kit/core/dist/types";
+import {restrictToVerticalAxis} from "@dnd-kit/modifiers";
 let changeTasks:any;
 let getTasks:any;
-function TaskInputChanged(){
+export const TasksContext = React.createContext<ITasksContext>({tasks: [], setTasks: ()=>{}});
 
-} 
+interface ITasksContext{
+    tasks: ITask[]
+    setTasks: Dispatch<SetStateAction<ITask[]>>
+}
+
+interface TasksContainerState {
+    tasks: ITask[]
+}
 
 async function LoadTasks(){
     let APPDIR=await appDir();
@@ -25,14 +37,38 @@ async function LoadTasks(){
     return JSONToITaskArray(tasksJSON) ?? [] as ITask[];
 }
 
-async function SaveTasks(){
+export async function SaveTasks(){
     let APPDIR=await appDir();
     console.log("[INFO from SaveTasks()] Saving tasks");
     await writeFile(APPDIR+"tasks.json",JSON.stringify({tasks:getTasks()}));
 }
 
+class TasksPointerSensor extends PointerSensor{
+    static activators = [{
+            eventName: 'onPointerDown',
+            handler: ({nativeEvent: event} : React.PointerEvent<Element>) =>{
+                if (!(event.target instanceof Element)) return;
+                if(!event.isPrimary || event.button!==0 || isInteractiveElement([...(event.target as Element).classList] as string[])){
+                    return false;
+                }
+                return true;
+            },
+        },
+    ];
+}
+
+function isInteractiveElement(elementClassNames: string[]){
+    const interactiveElements = ["checkbox","task-delete-button","ignore-drag"];
+    console.log(elementClassNames);
+    for(let name of elementClassNames){
+        if (interactiveElements.includes(name)) return true;
+    }
+    return false;
+}
+
 function Tasks(){
     const [tasks,setTasks] = useState([] as ITask[]);
+    const sensors = useSensors(useSensor(TasksPointerSensor))
     useEffect(()=>{
         const load = async ()=>{
             let _tasks =await LoadTasks();
@@ -71,62 +107,53 @@ function Tasks(){
             taskInput.value="";
         }
     }
+    const reorder = (event: DragEndEvent)=>{
+        const {active,over} = event;
+        if(!over) return;
+        if (active.id !== over.id){
+            setTasks((tasks)=>{
+                const oldIndex = tasks.map(function (e){return e.id}).indexOf(active.id.toString());
+                const newIndex = tasks.map(function (e){return e.id}).indexOf(over.id.toString());
+                return arrayMove(tasks,oldIndex,newIndex);
+            })
+            SaveTasks();
+        }
+    }
+    const renderTask = useCallback((todo: ITask, index:number)=>{
+        return ( <TaskItem index={index} 
+        content={todo.content} 
+        id={todo.id} 
+        completed={todo.completed}
+        type={"todo"}
+        key={todo.id}></TaskItem>)
+    },[])
     return <div id="TaskPanel" className="w-72 flex flex-col overflow-x-hidden flex-[1_1_auto] overflow-y-auto min-h-0 relative text-default z-10 transition-all" >
-        <div className="flex h-12 flex-[0_1_auto]">
-            <input ref={taskInputRef} onChange={TaskInputChanged} tabIndex={0} type="text" onKeyDown={InputKeyDown} id="taskInput" placeholder="A new task" className="border-default inline-block hide-outline w-[240px] bg-secondary/25 h-12 p-2 text-xl"></input>
-            <div onClick={()=>{
-                if(taskInputRef.current.value.trim().length!==0){
-                    AddTask(taskInputRef.current.value);
-                    taskInputRef.current.value="";
-                }
-            }} className="bg-accent/75 cursor-pointer transition-all hover:brightness-125 w-12 h-12 flex flex-[1_0_auto] justify-center items-center" >
-                <i className="bi-plus-lg text-2xl text-white"></i>
+       <TasksContext.Provider value={{tasks, setTasks}}>
+            <div className="flex h-12 flex-[0_1_auto] w-72">
+                <input ref={taskInputRef} tabIndex={0} type="text" onKeyDown={InputKeyDown} id="taskInput" placeholder="A new task" className="border-default inline-block hide-outline w-[240px] bg-secondary/25 h-12 p-2 text-xl"></input>
+                <div onClick={()=>{
+                    if(taskInputRef.current.value.trim().length!==0){
+                        AddTask(taskInputRef.current.value);
+                        taskInputRef.current.value="";
+                    }
+                }} className="bg-accent/75 cursor-pointer transition-all hover:brightness-125 w-12 h-12 flex flex-[1_0_auto] justify-center items-center" >
+                    <i className="bi-plus-lg text-2xl text-white"></i>
+                </div>
             </div>
-        </div>
-        <div id="tasksDiv" className="flex-[1_0_auto]">
-            <DragDropContext onDragEnd={(result:any)=>{
-                    if(!result.destination) return;
-                    const items = Array.from(tasks);
-                    const [reordered] = items.splice(result.source.index, 1);
-                    items.splice(result.destination.index,0,reordered);
-                    setTasks(items);
-                    SaveTasks();
-                }}>
-                    <Droppable droppableId="tasksDrop">
-                        {(provided)=>{
-                            return <div className="" ref={provided.innerRef} {...provided.droppableProps}>
-                                {tasks.map((item,index)=>{
-                                    return <Draggable draggableId={item.id.toString()} key={item.id.toString()} index={index}>
-                                        {(_provided)=>{
-                                            return <div ref={_provided.innerRef} 
-                                            {..._provided.draggableProps} 
-                                            {..._provided.dragHandleProps}
-                                            className="task-item transition-colors">
-                                                <div onClick={()=>{
-                                                let t = [...tasks];
-                                                for (let i of t){
-                                                    if(i.id===item.id){
-                                                        i.completed=i.completed ? false : true;
-                                                    }
-                                                }
-                                                setTasks(t);
-                                                SaveTasks();}} 
-                                                style={item.completed ? {background: "rgb(var(--accent))"} : {}} className="w-5 h-5 ml-2 flex items-center justify-center rounded-md bg-secondary/75 hover:brigtness-125 cursor-pointer checkbox">
-                                                    {item.completed ? <i className="bi-check-lg text-white"></i> : ""}
-                                                </div>
-                                                <span className="text-default p-2 text-md">{item.content}</span>
-                                                <div onClick={()=>{removeTask(item.id)}} className="task-delete-button ml-auto mr-4 hover:bg-secondary/20 cursor-pointer rounded-md p-1 w-6 h-6 flex items-center justify-center"><i className="bi-x-lg"></i></div>
-                                            </div>
-                                                
-                                        }}
-                                        </Draggable>
-                                })}
-                                {provided.placeholder}
-                            </div>
-                        }}
-                    </Droppable>
-                </DragDropContext>
-	    </div>
+            <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragEnd={reorder}
+            modifiers={[restrictToVerticalAxis]}>
+                <SortableContext
+                items={tasks}
+                strategy={verticalListSortingStrategy}>
+                    <div id="tasksDiv" className="flex-[1_0_auto]">
+                        {tasks.map((task,i)=>renderTask(task,i))}
+                    </div>
+                </SortableContext>
+            </DndContext>
+       </TasksContext.Provider>
     </div>  
 }
 

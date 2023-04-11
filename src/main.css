@@ -175,7 +175,7 @@ input[type=color]::-webkit-color-swatch-wrapper{
     box-shadow: 0px 2px 10px 0px rgba(0,0,0,0.2);
 }
 
-.checkbox{
+.checkbox-shadow{
     box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.2);
 }
 
