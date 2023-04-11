@@ -6,7 +6,7 @@ import { fs } from "@tauri-apps/api"
 import { BaseDirectory, readTextFile, writeTextFile } from "@tauri-apps/api/fs"
 import React from "react"
 
-
+/** @deprecated */
 enum FontStyle{
     Sans=0,
     Serif=1,
@@ -17,6 +17,7 @@ enum FontStyle{
 
 /**
  * Data structure for a note.
+ * @deprecated use NoteInfo and NoteHeader instead
  */
 interface INote{
     id:string,
@@ -28,7 +29,7 @@ interface INote{
     customFontFamily?:string,
     notebookID:string
 }
-
+/** @deprecated Use NotebookInfo instead */
 interface INotebook{
     id:string,
     name:string
@@ -105,6 +106,7 @@ async function Uint8ArrayToBase64(buf:Uint8Array){
  * Converts a JSON object to INote
  * @param json target json object
  * @returns INote based on the JSON object with missing params completed
+ * TODO: Pending reimplementation for new format
  */
 function ConvertJSONToINote(json:any){
     let ret:INote[]=[];
@@ -163,7 +165,9 @@ function GenerateID(){
     return id;
 }
 
-
+/** Convert the data from tasks.json to an array of tasks with null checking.
+ * @returns ITask[]
+ */
 function JSONToITaskArray(json:any){
     let tasks = [] as ITask[];
     for(let t of json.tasks){
@@ -177,7 +181,7 @@ function JSONToITaskArray(json:any){
     }
     return tasks;
 }
-
+// TODO: Move to a JSON object
 const DefaultSettings:string=`
 {
     "version":"1",
@@ -190,5 +194,51 @@ const DefaultSettings:string=`
     "monoFont":"Roboto Mono",
     "handFont":"Yellowtail"
 }`
+
+/** Color and font data for note */
+export interface NoteFormatting{
+    /** Hexadecimal representation of the note background color */
+    background: string;
+    /** Hexadecimal representation of the note text color */
+    foreground: string;
+    /** Font family name of the note */
+    font: string;
+}
+/**
+ * Basic notebook data
+ */
+export interface NotebookInfo{
+    /** Unique identifier for the notebook */
+    id: string; 
+    /** Name of the notebook */
+    name: string;
+}
+
+/** Minimum required information for the note to be rendered in a list */
+export interface NoteHeader{
+    /** ID of the note */
+    id: string;
+    /** Formatting information of the note */
+    formatting: NoteFormatting;
+    /** Title of the note */
+    title: string;
+    /** Identifier of the notebook which the note belongs to */
+    notebookID: string;
+    /** Whether the note is pinned or not */
+    pinned: boolean;
+    /** Pinning index of the note among other pinned notes */
+    pinIndex: number;
+    /** Timestamp of note creation */
+    creationTime: number;
+}
+
+/** Complete information about the note, including its contents
+ *  @extends NoteHeader
+ */
+export interface NoteInfo extends NoteHeader{
+    /** Text content of the note */
+    content: string;
+}
+
 export { Uint8ArrayToBase64, GenerateID, ConvertJSONToINote, FontStyle,JSONToITaskArray,ConvertJSONToINotebook, GetNotebooks, DefaultSettings };
 export type {INote, ITask, IAppData, INotebook };
