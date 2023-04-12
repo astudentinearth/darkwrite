@@ -11,7 +11,7 @@ function MainToolbar(props:any){
 	 */
 	return <div className="text-default transition-all 
 	h-14 p-1 fixed z-20
-	drop-shadow-md left-0 right-0 bottom-0 top-0 duration-200 
+    left-0 right-0 bottom-0 top-0 duration-200 
 	text-center items-center">
 		<ToolbarButton onClick={()=>{
 			const notesPanel = document.getElementById("NotesPanel");

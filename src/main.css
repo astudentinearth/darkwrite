@@ -79,12 +79,17 @@ input[type=time]{
     outline:none;
 }
 
+.box-shadow-4-8-20{
+    box-shadow: 0px 4px 8px 0px rgba(0,0,0,.2);
+}
+
 .toolbar-button{
-    @apply h-12 transition-all text-default backdrop-blur-md bg-secondary duration-200 w-12 mx-1 rounded-2xl flex cursor-pointer align-middle justify-center items-center;
+    @apply h-12 transition-all box-shadow-4-8-20 text-default backdrop-blur-md bg-secondary duration-200 w-12 mx-1 rounded-2xl flex cursor-pointer align-middle justify-center items-center; 
 }
 
 .toolbar-button-accent{
-    @apply h-12 transition-all text-white backdrop-blur-md bg-accent duration-200 w-12 mx-1 rounded-2xl flex cursor-pointer align-middle justify-center items-center;
+    @apply h-12 transition-all box-shadow-4-8-20 text-white backdrop-blur-md bg-accent duration-200 w-12 mx-1 rounded-2xl flex cursor-pointer align-middle justify-center items-center;
+   
 }
 
 .toolbar-button-accent:hover{
@@ -124,6 +129,7 @@ input[type=time]{
 .flex-right{
     margin-left: auto;
     order:2;
+    
 }
 
 

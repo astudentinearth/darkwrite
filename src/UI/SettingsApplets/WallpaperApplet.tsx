@@ -5,6 +5,7 @@ import AppletBase from "../Components/SettingsApplet";
 import { ApplyWallpaper } from "../../Theme";
 import { invoke } from "@tauri-apps/api";
 import { Uint8ArrayToBase64 } from "../../Util";
+import { Button, ButtonColor, ButtonShape } from "../Components/Button";
 
 function WallpaperApplet(){
     return<AppletBase title="Wallpaper">
@@ -33,7 +34,7 @@ function WallpaperApplet(){
                 let bgimg:any = document.querySelector("#bgImage");
                 bgimg.style.setProperty("background-image","");
             }}>Remove wallpaper</div><br></br>
-        </div>
+        </div> 
     </AppletBase>
 }
 
