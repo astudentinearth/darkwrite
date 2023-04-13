@@ -96,6 +96,14 @@ sudo zypper in -t pattern devel_basis
 ### Nix
 Go to https://tauri.app/v1/guides/getting-started/prerequisites#setting-up-linux and follow instructions for NixOS. NixOS requires some configuration I can't explain here. I also have no idea about how Nix packaging works ¯\_(ツ)_/¯
 
+### Gentoo
+If you are on Gentoo, don't bloat up your system by building webkit2gtk. It will also be a pain for you when updating @world set. I recommend simply using the AppImage like any normal person. But if there is not an AppImage available for the specific commit you need/you will make changes to the code, or simply want to contribute to the project, here you go. I might write an ebuild after setting up a Gentoo virtual machine.
+
+I had to look up dependency for their equivalents on the Gentoo package index, I hope this saves you some time. Make sure you have configured `ACCEPT_LICENSE` variable in your portage configuration properly. The command below should work on stable (not bleeding edge) systems, but if you are on bleeding edge (i.e. your `ACCEPT_KEYWORDS` is set to `~amd64`), this should also work(will add extra overhead to your updates however).  
+You need to enable the `npm` local use flag for `net-libs/nodejs` to have npm installed.
+```emerge -av net-libs/webkit-gtk net-misc/curl net-misc/wget dev-libs/openssl x11-misc/appmenu-gtk-module x11-libs/gtk+ dev-libs/libappindicator gnome-base/librsvg sys-devel/binutils sys-devel/gcc sys-devel/libtool net-libs/nodejs```
+This command has the potential of taking hours because of the WebKit engine, so be patient. Once you are done, proceed with the steps below to install Rust and continue with the build.
+
 ## Rust
 The following command is enough to install Rust. 
 ```curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh```  
