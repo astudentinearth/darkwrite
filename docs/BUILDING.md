@@ -43,7 +43,8 @@ Install the packages below that correspond to your distribution. (Source: Tauri 
 If you are feeling great today, also add Vim to make your day even better.
 **Make sure you update your system packages beforehand to avoid partial upgrades.**  
 ### Debian / Ubuntu
-I recommend building on Ubuntu 22.04 (any flavor of Ubuntu is OK), which is also used for building with GitHub Actions. If you are on Linux Mint/LMDE, PeppermintOS, Kali Linux, Raspberry Pi OS or elementaryOS these should also work. *I probably will not package Darkwrite as a snap.*
+I recommend building on Ubuntu 22.04 (any flavor of Ubuntu is OK), which is also used for building with GitHub Actions. If you are on Linux Mint/LMDE, PeppermintOS, Kali Linux, Raspberry Pi OS or elementaryOS these should also work. *I probably will not package Darkwrite as a snap.*  
+If you are on SteamOS 2 for whatever reason, do something good for yourself by switching to something else.
 ```
 sudo apt update
 sudo apt install libwebkit2gtk-4.0-dev \
