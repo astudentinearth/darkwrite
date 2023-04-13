@@ -9,6 +9,9 @@ A `PKGBUILD` file will be created for Arch Linux systems once Darkwrite reaches 
 Clone the repository and enter it.
 
 # Building on Windows
+I'm continuing development on Windows for now. As far as I'm concerned, Linux in a virtual machine runs Darkwrite faster than Edge WebView2. I had to cripple down blur effects quite a bit so Edge could handle it. I also had to recently switch to dnd-kit as drag-drop library, because HTML5 drag-drop and native file drop functionality doesn't work with Tauri on Windows for whatever reason.  
+
+Darkwrite stores application data in `%USERPROFILE%/AppData/Roaming/io.github.astudentinearth.darkwrite` directory.
 ### C++ Build Tools Setup
 Download the [Visual Studio Community installer.](https://visualstudio.microsoft.com/)
 Once the installer launches, choose "Desktop development with C++" and "Windows 10 SDK" workloads to be installed.
@@ -23,13 +26,22 @@ Go to https://www.rust-lang.org/tools/install and get rustup. The installer will
 Download (preferably the latest version of) Node.js from the official site. It should come with npm by default.
 
 ## Build
-Building is very straight forward. `npm run tauri build` should do it for you. The resulting package will be placed in `src-tauri\target\release`
+Building is very straight forward. 
+```
+npm install
+npm run tauri build
+```
+
+...should do it for you. The resulting package will be placed in `src-tauri\target\release`
 
 # Building on Linux
+Darkwrite stores application data at `$XDG_CONFIG_HOME/io.github.astudentinearth.darkwrite` or `$HOME/.config/io.github.astudentinearth.darkwrite`.
+**Do NOT run Darkwrite with root privileges under any circumstances. Darkwrite doesn't access anywhere outside its configuration folder by default, but a bug in the backend might nuke your system, you never know.**
 ## System dependencies
 Install the packages below that correspond to your distribution. (Source: Tauri Documentation)
-**Make sure you update your system packages beforehand to avoid partial upgrades.**
+**Make sure you update your system packages beforehand to avoid partial upgrades.**  
 ### Debian / Ubuntu
+I recommend building on Ubuntu 22.04 (any flavor of Ubuntu is OK), which is also used for building with GitHub Actions. If you are on Linux Mint/LMDE, PeppermintOS, Kali Linux, Raspberry Pi OS or elementaryOS these should also work. *I probably will not package Darkwrite as a snap.*
 ```
 sudo apt update
 sudo apt install libwebkit2gtk-4.0-dev \
@@ -42,6 +54,7 @@ sudo apt install libwebkit2gtk-4.0-dev \
     librsvg2-dev
 ```
 ### Arch Linux
+This should apply to pretty much every Arch-based system(including Garuda Linux and EndeavourOS), unless they replace these with custom repositories. I used Arch Linux extensively while creating Darkwrite, and it should run just fine. **Manjaro might have dependency issues when building with the future PKGBUILD since they hold packages back.** If you are using SteamOS I recommend just getting the AppImage, use your CPU power for your library instead :)
 ```
 sudo pacman -Syu
 sudo pacman -S --needed \
@@ -57,6 +70,7 @@ sudo pacman -S --needed \
     libvips
 ```
 ### Fedora (and its spins)
+Fedora 36/37/38 and Nobara should work.
 ```
 sudo dnf check-update
 sudo dnf install webkit2gtk4.0-devel \
@@ -68,6 +82,7 @@ sudo dnf install webkit2gtk4.0-devel \
 sudo dnf group install "C Development Tools and Libraries"
 ```
 ### openSUSE
+Both Leap and Tumbleweed editions should work fine.
 ```
 sudo zypper up
 sudo zypper in webkit2gtk3-soup2-devel \
@@ -79,7 +94,7 @@ sudo zypper in webkit2gtk3-soup2-devel \
 sudo zypper in -t pattern devel_basis
 ```
 ### Nix
-Go to https://tauri.app/v1/guides/getting-started/prerequisites#setting-up-linux and follow instructions for NixOS. NixOS requires some configuration I can't explain here.
+Go to https://tauri.app/v1/guides/getting-started/prerequisites#setting-up-linux and follow instructions for NixOS. NixOS requires some configuration I can't explain here. I also have no idea about how Nix packaging works ¯\_(ツ)_/¯
 
 ## Rust
 The following command is enough to install Rust. 
@@ -88,11 +103,15 @@ The following command is enough to install Rust.
 Alternatively you can install using your distribution's package manager.
 
 ## Build
-`npm run tauri build` will compile Darkwrite. It will drop the Debian package and the AppImage to somewhere in `src-tauri/target/release`
+```
+npm install
+npm run tauri build
+```
+...will compile Darkwrite. It will drop the Debian package and the AppImage to somewhere in `src-tauri/target/release`
 
 # Building on macOS
 Disclaimer: I don't own a Mac. If you see any inaccuracy in these instructions, feel free to raise an issue or create a pull request. These instructions are based on Tauri's official documentation.
-
+Accorring to Tauri API documentation, application data goes to `$HOME/Library/Application Support`.
 ## Dependencies
 Install CLang and macOS development dependencies with the following command:
 ```xcode-select --install```
@@ -102,4 +121,11 @@ To install Rust, you can use the following command.
 **The same disclaimer I wrote on the Linux part still applies :)**
 
 ## Build
-Run `npm run tauri dev`. This should drop a `.dmg` somewhere in `src-tauri/target/release`. **Note that the .dmg is not signed, so Apple might complain about unidentified developer. You can create an exception in System Preferences.**
+```
+npm install
+npm run tauri dev
+```
+...should drop a `.dmg` somewhere in `src-tauri/target/release`. **Note that the .dmg is not signed, so Apple might complain about unidentified developer. You can create an exception in System Preferences.**
+
+# Updating manual builds
+Darkwrite dependencies may get updated as a part of project progression. Therefore I recommend running `npm install` before every compilation to ensure correct node dependencies are available. I also recommend updating your Rust toolchain and Node.JS/npm from time to time. (If you are on Linux and installed Rust, node or npm using your package manager, they should get updated automatically with your system.)
