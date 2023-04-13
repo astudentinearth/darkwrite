@@ -6,7 +6,7 @@ Tauri hasn't added Flatpak support yet. Flatpak bundling support may be added in
 A `PKGBUILD` file will be created for Arch Linux systems once Darkwrite reaches beta stage.
 
 # First step for all platforms
-Clone the repository and enter it.
+Clone the repository and enter it. I strongly recommend installing Git if you haven't already.
 
 # Building on Windows
 I'm continuing development on Windows for now. As far as I'm concerned, Linux in a virtual machine runs Darkwrite faster than Edge WebView2. I had to cripple down blur effects quite a bit so Edge could handle it. I also had to recently switch to dnd-kit as drag-drop library, because HTML5 drag-drop and native file drop functionality doesn't work with Tauri on Windows for whatever reason.  
@@ -36,7 +36,8 @@ npm run tauri build
 
 # Building on Linux
 Darkwrite stores application data at `$XDG_CONFIG_HOME/io.github.astudentinearth.darkwrite` or `$HOME/.config/io.github.astudentinearth.darkwrite`.
-**Do NOT run Darkwrite with root privileges under any circumstances. Darkwrite doesn't access anywhere outside its configuration folder by default, but a bug in the backend might nuke your system, you never know.**
+**Do NOT run Darkwrite with root privileges under any circumstances. Darkwrite doesn't access anywhere outside its configuration folder by default, but a bug in the backend might nuke your system, you never know.**  
+A pic of your `neofetch` is highly appreciated when creating an issue.
 ## System dependencies
 Install the packages below that correspond to your distribution. (Source: Tauri Documentation)
 If you are feeling great today, also add Vim to make your day even better.
@@ -107,6 +108,14 @@ You need to enable the `npm` local use flag for `net-libs/nodejs` to have npm in
 ```emerge -av net-libs/webkit-gtk net-misc/curl net-misc/wget dev-libs/openssl x11-misc/appmenu-gtk-module x11-libs/gtk+ dev-libs/libappindicator gnome-base/librsvg sys-devel/binutils sys-devel/gcc sys-devel/libtool net-libs/nodejs```
 This command has the potential of taking hours because of the WebKit engine, so be patient. Once you are done, proceed with the steps below to install Rust and continue with the build. Go ahead and post your beautiful dwm setup at r/unixporn in the end.
 
+### LFS
+Assuming you have proceeded to BLFS and got a desktop running, you can install the same dependencies listed in the Gentoo section.
+
+### Void Linux
+Install `libwebkitgtk60 libwebkitgtk60-devel curl wget openssl openssl-devel appmenu-gtk-module appmenu-gtk-module-devel gtk+3 gtk+3-devel libappindicator libappindicator-devel gcc librsvg librsvg-devel binutils` packages using xbps. I don't know if these packages are overkill/insufficient. I have never used Void before.
+Install NodeJS and npm using `nvm`.
+*Note: I don't know if Darkwrite works with musl.*
+
 ## Rust
 The following command is enough to install Rust. 
 ```curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh```  
@@ -139,4 +148,4 @@ npm run tauri dev
 ...should drop a `.dmg` somewhere in `src-tauri/target/release`. **Note that the .dmg is not signed, so Apple might complain about unidentified developer. You can create an exception in System Preferences.**
 
 # Updating manual builds
-Darkwrite dependencies may get updated as a part of project progression. Therefore I recommend running `npm install` before every compilation to ensure correct node dependencies are available. I also recommend updating your Rust toolchain and Node.JS/npm from time to time. (If you are on Linux and installed Rust, node or npm using your package manager, they should get updated automatically with your system.)
+Darkwrite dependencies may get updated as a part of project progression. Therefore I recommend running `npm install` before every compilation to ensure correct node dependencies are available. I also recommend updating your Rust toolchain and Node.JS / npm from time to time. (If you are on Linux and installed Rust, node or npm using your package manager, they should get updated automatically with your system.)
