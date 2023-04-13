@@ -106,7 +106,9 @@ These steps should work on both OpenRC and systemd, but I can't give a guarantee
 I had to look up dependency for their equivalents on the Gentoo package index, I hope this saves you some time. Make sure you have configured `ACCEPT_LICENSE` variable in your portage configuration properly. The command below should work on stable (not bleeding edge) systems, but if you are on bleeding edge (i.e. your `ACCEPT_KEYWORDS` is set to `~amd64`), this should also work(will add extra overhead to your updates however).  
 You need to enable the `npm` local use flag for `net-libs/nodejs` to have npm installed.
 ```emerge -av net-libs/webkit-gtk net-misc/curl net-misc/wget dev-libs/openssl x11-misc/appmenu-gtk-module x11-libs/gtk+ dev-libs/libappindicator gnome-base/librsvg sys-devel/binutils sys-devel/gcc sys-devel/libtool net-libs/nodejs```
-This command has the potential of taking hours because of the WebKit engine, so be patient. Once you are done, proceed with the steps below to install Rust and continue with the build. Go ahead and post your beautiful dwm setup at r/unixporn in the end.
+This command has the potential of taking hours because of the WebKit engine, so be patient. Once you are done, proceed with the steps below to install Rust and continue with the build. Go ahead and post your beautiful dwm setup at r/unixporn in the end.  
+
+Note: If you are using LibreSSL for whatever reason, good chance it won't work.
 
 ### LFS
 Assuming you have proceeded to BLFS and got a desktop running, you can install the same dependencies listed in the Gentoo section.
