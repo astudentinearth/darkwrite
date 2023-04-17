@@ -1,0 +1,14 @@
+Darkwrite developer console
+This console is used for testing backend code during development, I don't recommend you mess here :)
+The output displayed will be gone if you leave this page.
+
+help - Displays this message
+ListNotebooks - Lists all notebook IDs and names
+ListAllNotes - Lists all notes (regardless of notebook)
+Search <query> - Tests search algorithm. (Actually you test it yourself.) Everything after the command is part of the query, no need to replace spaces with %20
+
+All parameters beyond this point must have spaces replaced with %20 for the parser to work.
+CreateNotebook <name> - Creates a new notebook with a random ID
+DeleteNotebook <id> - Nukes a notebook with everything inside
+ListNoteHeaders <notebook id> - Lists note IDs and titles in a notebook
+RenameNotebook <id> <new name> - Renames a notebook

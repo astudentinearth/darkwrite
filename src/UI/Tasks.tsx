@@ -42,7 +42,7 @@ export async function SaveTasks(){
     console.log("[INFO from SaveTasks()] Saving tasks");
     await writeFile(APPDIR+"tasks.json",JSON.stringify({tasks:getTasks()}));
 }
-
+//@ts-ignore
 class TasksPointerSensor extends PointerSensor{
     static activators = [{
             eventName: 'onPointerDown',
@@ -68,6 +68,7 @@ function isInteractiveElement(elementClassNames: string[]){
 
 function Tasks(){
     const [tasks,setTasks] = useState([] as ITask[]);
+    //@ts-ignore
     const sensors = useSensors(useSensor(TasksPointerSensor))
     useEffect(()=>{
         const load = async ()=>{

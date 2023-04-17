@@ -45,7 +45,7 @@ function SettingsView(){
         return <DebugInfo></DebugInfo>
     }
     return <div>
-        <div className="bg-secondary/80 backdrop-blur-md w-72 h-full fixed">
+        <div className="bg-secondary w-72 h-full fixed">
             <div className="flex items-center m-2">
                 <ToolbarButton onClick={HideSettings} icon="bi-chevron-left" class="bg-transparent remove-blur " float="float-left"></ToolbarButton>
                 <span className="text-2xl font-bold">Settings</span>

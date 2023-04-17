@@ -123,6 +123,14 @@ export async function GetNoteContentFromHeader(header: NoteHeader){
     return json.content.toString();
 }
 
+export async function GetNoteInfoFromHeader(header: NoteHeader){
+    let str = await readTextFile(`notes/${header.notebookID}/${header.id}.json`,{dir:BaseDirectory.App});
+    let json = JSON.parse(str);
+    if(json.content == null) return {...header, content: ""} as NoteInfo;
+
+    return {...header, content: json.content.toString()} as NoteInfo;
+}
+
 export async function MoveNoteToNotebook(header: NoteHeader, notebookID: string){
     try {
         let str = await readTextFile(`notes/${header.notebookID}/${header.id}.json`);
