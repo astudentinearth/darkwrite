@@ -225,11 +225,11 @@ export interface NoteHeader{
     /** Identifier of the notebook which the note belongs to */
     notebookID: string;
     /** Whether the note is pinned or not */
-    pinned: boolean;
+    pinned?: boolean;
     /** Pinning index of the note among other pinned notes */
-    pinIndex: number;
+    pinIndex?: number;
     /** Timestamp of note creation */
-    creationTime: number;
+    modificationTime?: number;
 }
 
 /** Complete information about the note, including its contents

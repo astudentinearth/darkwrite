@@ -1,3 +1,6 @@
+import { W } from "@tauri-apps/api/event-2a9960e7";
+import { NoteInfo } from "../../Util";
+import { GetAllNoteHeaders, GetNoteHeaders } from "../../backend/Note";
 import { CreateNotebook, DeleteNotebook, GetNotebookHeaders, RenameNotebook } from "../../backend/Notebook";
 import AppletBase from "../Components/SettingsApplet";
 import { KeyboardEvent, useRef } from "react";
@@ -24,14 +27,21 @@ export function DevConsole(){
 }
 
 async function exec (cmd: string){
-    let tokens: string[] = cmd.split(' ');
+    let tokens: string[] = cmd.trim().split(' ');
     if(tokens.length==0) return "";
+    let outstr = "";
     switch(tokens[0]){
         case "ListNotebooks":
             let notebooks = await GetNotebookHeaders();
-            let outstr = "";
             for (let n of notebooks){
                 outstr+="ID: "+n.id+" | Name: "+n.name+"\n";
+            }
+            return outstr;
+
+        case "ListAllNotes":
+            let notes = await GetAllNoteHeaders();
+            for (let n of notes){
+                outstr+="ID: "+n.id+" | Title: "+n.title+"\n";
             }
             return outstr;
     }
@@ -46,6 +56,14 @@ async function exec (cmd: string){
             if(tokens[1]==null) return "Missing notebook id.";
             await DeleteNotebook(tokens[1]);
             return "If such notebook existed, its now gone forever.";
+
+        case "ListNoteHeaders":
+            if(tokens[1]==null) return "Missing notebook id.";
+            let headers = await GetNoteHeaders(tokens[1]);
+            for(let n of headers){
+                outstr+="ID: "+n.id+" | Title: "+n.title+"\n";
+            }
+            return outstr;
     }
     if(tokens.length<3) return "Unknown command.";
     switch(tokens[0]){

@@ -873,12 +873,12 @@ video {
   width: 30px;
 }
 
-.w-3 {
-  width: 0.75rem;
-}
-
 .w-96 {
   width: 24rem;
+}
+
+.w-3 {
+  width: 0.75rem;
 }
 
 .max-w-\[600px\] {
@@ -942,11 +942,6 @@ video {
 .select-text {
   -webkit-user-select: text;
           user-select: text;
-}
-
-.select-all {
-  -webkit-user-select: all;
-          user-select: all;
 }
 
 .resize-none {
