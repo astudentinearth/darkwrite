@@ -13,8 +13,9 @@ import "./fonts/roboto-slab/roboto-slab.css"
 import "./fonts/yellowtail/yellowtail.css"
 import {NotesPanel} from './UI/NotesPanel';
 import { GetNotebooks, INotebook } from './Util';
-import { BaseDirectory, writeTextFile } from '@tauri-apps/api/fs';
+import { BaseDirectory, createDir, exists, writeTextFile } from '@tauri-apps/api/fs';
 import { NoteEditor } from './UI/NoteEditor';
+import { GetNotebookHeaders } from './backend/Notebook';
 
 export const NotebooksContext:any = React.createContext({notebooks: [] as INotebook[],setNotebooks:()=>{}})
 
@@ -29,12 +30,13 @@ function App() {
     async function Init(){
       updateSettings(await LoadSettings());
       document.body.classList.add("background-default");
+      if(!await exists("notes/",{dir:BaseDirectory.App})) createDir("notes",{dir:BaseDirectory.App});
       await SetupThemes({settings,updateSettings});
       await LoadTasks();
       await ApplyWallpaper();
     }
     Init().then(async ()=>{
-      
+      GetNotebookHeaders(); 
       setNotebooks(await GetNotebooks());
     });
   },[]);
