@@ -8,10 +8,11 @@ use std::fs;
 use std::path::{Path};
 
 mod dir;
+mod font;
 fn main() {
   
   tauri::Builder::default()
-  .invoke_handler(tauri::generate_handler![readfile,path_exists,createDir,listdir,openURL,dir::dir::is_directory])  
+  .invoke_handler(tauri::generate_handler![readfile,path_exists,createDir,listdir,openURL,dir::dir::is_directory,font::get_fonts])  
   .run(tauri::generate_context!())
     .expect("error while running tauri application");
 }

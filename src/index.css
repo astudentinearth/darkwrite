@@ -693,10 +693,6 @@ video {
   margin: 1rem;
 }
 
-.m-\[-16px\] {
-  margin: -16px;
-}
-
 .mx-auto {
   margin-left: auto;
   margin-right: auto;
@@ -819,6 +815,10 @@ video {
 
 .h-\[30px\] {
   height: 30px;
+}
+
+.max-h-\[600px\] {
+  max-height: 600px;
 }
 
 .min-h-0 {
@@ -1111,11 +1111,6 @@ video {
 
 .bg-accent\/75 {
   background-color: rgb(var(--accent) / 0.75);
-}
-
-.bg-black {
-  --tw-bg-opacity: 1;
-  background-color: rgb(0 0 0 / var(--tw-bg-opacity));
 }
 
 .bg-cover {

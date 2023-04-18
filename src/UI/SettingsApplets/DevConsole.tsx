@@ -6,6 +6,7 @@ import AppletBase from "../Components/SettingsApplet";
 import { KeyboardEvent, useEffect, useRef } from "react";
 import { TestSearch } from "../../backend/Search.test";
 import helptxt from "./DevConsoleHelp.txt?raw"
+import { getFonts } from "../../API";
 
 /** A component with one input field and a span element to show output. Used for testing backend methods. Not every function might be available. */
 export function DevConsole(){
@@ -29,7 +30,7 @@ export function DevConsole(){
     return <div className="left-4 mx-auto right-4 top-4 bottom-4 absolute my-auto overflow-y-scroll bg-secondary drop-shadow-md p-4 rounded-xl">
         <div className="overflow-x-scroll flex justify-between items-stretch flex-col gap-2 ">
             <input id="devConsole" className="w-full flex bg-primary drop-shadow-md p-2 rounded-md outline-none" style={{fontFamily:"Roboto Mono"}} placeholder=" $ ~ Use %20 for spaces in parameters!" ref={inpRef} onKeyDown={runConsoleCommand}></input>
-            <span className="select-text flex p-2 bg-primary whitespace-nowrap w-full drop-shadow-md rounded-md overflow-x-scroll" style={{fontFamily:"Roboto Mono"}} ref={output}></span>
+            <span className="select-text flex p-2 bg-primary whitespace-nowrap w-full drop-shadow-md max-h-[600px] overflow-y-scroll rounded-md overflow-x-scroll" style={{fontFamily:"Roboto Mono"}} ref={output}></span>
         </div>
     </div>
 }
@@ -59,6 +60,13 @@ async function exec (cmd: string){
         case "Search":
             let q = cmd.trim().substring(7);
             return TestSearch(q);
+
+        case "ListFonts":
+            let fonts:any = await getFonts();
+            for (let f of fonts){
+                outstr+=f+"\n";
+            }
+            return outstr;
     }
     if(tokens.length<2) return "Unknown command.";
     switch(tokens[0]){
