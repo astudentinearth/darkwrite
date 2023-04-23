@@ -84,11 +84,11 @@ input[type=time]{
 }
 
 .toolbar-button{
-    @apply h-12 transition-all box-shadow-4-8-20 text-default backdrop-blur-md bg-secondary duration-200 w-12 mx-1 rounded-2xl flex cursor-pointer align-middle justify-center items-center; 
+    @apply h-12 transition-all box-shadow-4-8-20 text-default backdrop-blur-md bg-secondary duration-200 w-12 rounded-2xl flex cursor-pointer align-middle justify-center items-center; 
 }
 
 .toolbar-button-accent{
-    @apply h-12 transition-all box-shadow-4-8-20 text-white backdrop-blur-md bg-accent duration-200 w-12 mx-1 rounded-2xl flex cursor-pointer align-middle justify-center items-center;
+    @apply h-12 transition-all box-shadow-4-8-20 text-white backdrop-blur-md bg-accent duration-200 w-12 rounded-2xl flex cursor-pointer align-middle justify-center items-center;
    
 }
 
@@ -227,4 +227,18 @@ input[type=color]::-webkit-color-swatch-wrapper{
 
 ::-webkit-scrollbar-thumb:hover{
     background: #777;
+}
+
+#mainToolbar > *:not(:first-child){
+    @apply ml-2;
+}
+
+.sidebar-open{
+    width: 18rem !important;
+    /*display: flex !important;*/
+}
+
+.sidebar-closed{
+    width: 0px !important;
+    margin-right: 0px !important;
 }

@@ -38,8 +38,7 @@ export function NoteEditor() {
         }, 300);
         return () => clearTimeout(change);
     }, [note]);
-    return <div id="noteEditDialog" className="fixed transition-all top-16 right-2
-    left-[38rem] bottom-2 rounded-2xl flex flex-col backdrop-blur-md "
+    return <div id="noteEditDialog" className="transition-all bottom-2 rounded-2xl flex flex-grow flex-col backdrop-blur-md "
         style={{ display: isVisible ? "flex" : "none", backgroundColor: 
         note.background ? `rgb(${HexToRGB(note.background)?.r} ${HexToRGB(note.background)?.g} ${HexToRGB(note.background)?.b} / 1)` : 'rgba(var(--background-secondary) / 1)'}}>
         {note.id!=="-1" ? 

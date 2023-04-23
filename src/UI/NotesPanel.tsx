@@ -3,12 +3,13 @@ import { BaseDirectory, readTextFile, writeTextFile } from "@tauri-apps/api/fs";
 import { appConfigDir } from "@tauri-apps/api/path";
 import React, { useContext, useLayoutEffect } from "react";
 import { useEffect, useRef, useState } from "react";
-import { ConvertJSONToINote, FontStyle, GenerateID, GetNotebooks, INote, INotebook } from "../Util";
+import { ConvertJSONToINote, FontStyle, GenerateID, GetNotebooks, INote, INotebook, NoteFormatting, NoteHeader } from "../Util";
 import ToolbarButton from "./Components/ToolbarButton";
 import { NotebooksContext } from "../App";
 import useComponentVisible from "../useComponentVisible";
 import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 import { showEditor } from "./NoteEditor";
+import { NoteItem } from "./Components/NoteItem";
 /**
  * Get an INote from ID
  */
@@ -27,97 +28,7 @@ let setNotebookFilter: (notebookID: string) => void;
 
 function NotesPanel() {
     const { notebooks, setNotebooks }: any = useContext(NotebooksContext);
-    function Note(props: any) {
-        let newNotebookRef: any = useRef(null);
-        let newNotebookContainerRef: any = useRef(null);
-        const { ref, isComponentVisible, setIsComponentVisible }: any = useComponentVisible(false);
-        const getFont = () => {
-            switch (props.font) {
-                case FontStyle.Sans:
-                    return "f-sans";
-
-                case FontStyle.Serif:
-                    return "f-serif";
-
-                case FontStyle.Monospace:
-                    return "f-mono";
-
-                case FontStyle.Handwriting:
-                    return "f-hand"
-
-                default:
-                    return "";
-            }
-        }
-        const moveToNewNotebook = () => {
-            let currentNotebooks: any = [...notebooks];
-            let id = GenerateID();
-            let newNotebook = { id: id, name: newNotebookRef.current.value } as INotebook;
-            currentNotebooks.push(newNotebook);
-            setNotebooks(currentNotebooks);
-            showEditor("-1");
-            updateNote({
-                title: props.title, background: props.background,
-                foreground: props.foreground,
-                content: props.content, font: props.font,
-                customFontFamily: props.customFont,
-                notebookID: id,
-                id: props.id
-            } as INote)
-            //writeTextFile("notebooks.json",JSON.stringify({"notebooks":notebooks}),{dir:BaseDirectory.App});
-        }
-        const moveToNotebook = (id: string) => {
-            showEditor("-1");
-            updateNote({
-                title: props.title, background: props.background,
-                foreground: props.foreground,
-                content: props.content, font: props.font,
-                customFontFamily: props.customFont,
-                notebookID: id,
-                id: props.id
-            } as INote)
-        }
-        useEffect(()=>{
-            if(props.isFilteredOut) props.innerRef.current?.style.setProperty("display","none");
-        },[]);
-        return <div ref={props.innerRef} {...props.draggableProps} onClick={props.onClick} {...props.dragHandleProps} className={"transition-all relative note select-none cursor-default duration-200 m-2 block rounded-2xl w-64"}>
-            {props.isFilteredOut ? <></> : <div style={{
-                background: props.background,
-                color: props.foreground,
-                
-            }}
-            className="rounded-2xl note-shadow  p-2 h-12 flex items-center">
-                <div className="">
-                    <h1 className={"text-2xl truncate " + getFont()} style={{fontFamily: props.font === FontStyle.Custom ? props.customFont : ""}}>{props.title}</h1>
-                </div>
-                <div className="h-10 z-10 absolute bottom-0 p-1 note-actions-bar right-0 left-0 justify-end rounded-b-2xl flex items-center">
-                    <div onClick={(e) => {
-                        e.stopPropagation();
-                        setIsComponentVisible(true);
-                    }} className="hover:bg-secondary/20 cursor-pointer h-8 w-8 rounded-[12px] flex items-center justify-center">
-                        <i className="bi-journal-bookmark-fill"></i>
-                    </div>
-                    <div onClick={(e) => { e.stopPropagation(); showEditor("-1");deleteNote(props.id) }} className="hover:bg-secondary/20 cursor-pointer h-8 w-8 rounded-[12px] flex items-center justify-center">
-                        <i className="bi-trash text-red-300"></i>
-                    </div>
-                </div>
-                <div onClick={(e)=>{e.stopPropagation();}} ref={ref} style={{ visibility: isComponentVisible ? "visible" : "hidden" }} tabIndex={0} className="h-36 text-default z-50 absolute top-14 justify-center right-2 bg-secondary flex-col drop-shadow-lg shadow-black cursor-default left-14 rounded-2xl flex">
-                    <span className="p-2">Move to notebook</span>
-                    <div className="h-32 rounded-b-2xl overflow-y-auto">
-                        <div onClick={() => {
-                            newNotebookContainerRef.current.style = { display: "flex" }
-                        }} className="p-2 hover:bg-primary outline-primary outline-1 transition-colors"><i className="bi-plus-lg"></i> New Notebook</div>
-                        <div ref={newNotebookContainerRef} style={{ display: "none" }} className="flex">
-                            <input ref={newNotebookRef} className="block w-40 p-1 bg-primary flex-[2]" placeholder="Notebook name"></input>
-                            <div onClick={() => { moveToNewNotebook() }} className="bg-accent w-8 flex items-center justify-center cursor-pointer hover:brightness-110 transition-[filter]"><i className="bi-chevron-right text-white"></i></div>
-                        </div>
-
-                        {notebooks.map((nb: any) => <div onClick={() => { moveToNotebook(nb.id) }} className="p-2 hover:bg-primary outline-primary outline-1 transition-colors">{nb.name}</div>)}
-                    </div>
-                </div>
-            </div>}
-        </div>
-    }
+    
     const [notes, setNotes] = useState<INote[]>([]);
     const [notebook, setNotebook] = useState("0");
     const isFirstRender = useRef(true);
@@ -190,43 +101,10 @@ function NotesPanel() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [notes]);
     return <div id="NotesPanel"
-        className={"notes_div bg-secondary/80 backdrop-blur-md fixed overflow-y-scroll w-[17rem] top-16 bottom-2 transition-all rounded-2xl left-80"}>
-        <DragDropContext onDragEnd={(result: any) => {
-            if (!result.destination) return;
-            console.log("reordering")
-            const items = Array.from(notes);
-            const [reordered] = items.splice(result.source.index, 1);
-            items.splice(result.destination.index, 0, reordered);
-            setNotes(items);
-            SaveNotes();
-        }}>
-            <Droppable droppableId="notesDrop">
-                {(provided) => {
-                    return <div ref={provided.innerRef} {...provided.droppableProps}>
-                        {notes.map((item, index) => {
-                            return <Draggable draggableId={item.id.toString()} key={item.id.toString()} index={index}>
-                                {(_provided) => {
-                                    return <Note onClick={() => { showEditor(item.id) }} id={item.id}
-                                        background={item.background}
-                                        foreground={item.foreground}
-                                        content={item.content}
-                                        font={item.font}
-                                        customFont={item.customFontFamily}
-                                        title={item.title}
-                                        innerRef={_provided.innerRef}
-                                        draggableProps={_provided.draggableProps}
-                                        dragHandleProps={_provided.dragHandleProps}
-                                        isFilteredOut={item.notebookID!==notebook}></Note>
-                                }}
-                            </Draggable>
-                        })}
-                        {provided.placeholder}
-                    </div>
-                }}
-            </Droppable>
-        </DragDropContext>
-        
+        className={"notes_div bg-secondary/80 overflow-x-hidden mr-2 flex-shrink-0 backdrop-blur-md h-full overflow-y-scroll w-[17rem] p-2 transition-all flex-col rounded-2xl"}>
+       <div className="absolute w-16 h-16 left-[-30px] top-[-30px] bg-black"></div>
+       <NoteItem header={{id: "5327459834706", title: "RJKELGBNLKJERG", formatting: {background: "#ffffff", foreground: "#000000", font :"SpaceMono Nerd Font"} as NoteFormatting, notebookID: "245346"} as NoteHeader}></NoteItem>
     </div>
 }
-
+ 
 export { showEditor, NotesPanel, getNotebook, setNotebookFilter,updateNote,getNote }
