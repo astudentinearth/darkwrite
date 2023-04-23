@@ -11,7 +11,7 @@ async function LoadSettings(){
     console.log("[INFO] Checking for settings file")
     let settingsExists = await exists("settings.json",{dir:BaseDirectory.App});
     if (settingsExists===false){
-        console.log("[WARNING] Settings file not found. Creating default settings file");
+        console.warn("[WARNING] Settings file not found. Creating default settings file");
         await writeTextFile("settings.json",DefaultSettings,{dir:BaseDirectory.App});
     }
     
@@ -28,6 +28,7 @@ async function LoadSettings(){
         settings_string=DefaultSettings;
         settings_json=JSON.parse(DefaultSettings);
     }
+    console.warn(settings_json.font);
     _settings.Font=settings_json.font ?? "Roboto";
     _settings.SansFont=settings_json.sansFont ?? "Roboto";
     _settings.SerifFont=settings_json.serifFont ?? "Roboto Slab";
@@ -62,7 +63,7 @@ export interface ISettingsContext{
 export const SettingsContext = React.createContext<ISettingsContext>({settings:GlobalSettings.GetDefault(),updateSettings:()=>{}});
 
 function SaveAllSettings(context:ISettingsContext){
-    console.log("[INFO] Saving all settings.");
+    console.warn("[INFO] Saving all settings.");
     const {settings} = context;
     let newJSON={"version":settings.Version,
     "themeFile":settings.ThemeFile ?? "colors_dark.json",

@@ -46,10 +46,9 @@ function App() {
       return;
     }
     writeTextFile("notebooks.json",JSON.stringify({"notebooks":notebooks}),{dir:BaseDirectory.App});
-  },[notebooks]);
-  useEffect(()=>{
+    console.warn("Calling SaveAllSettings from LayoutEffect")
     SaveAllSettings({settings,updateSettings});
-  },[settings]);
+  },[notebooks,settings]);
   return (
     <div className="App absolute left-0 right-0 bottom-0 top-0 background-default">
      <div className='overflow-y-hidden select-none relative p-2 right-0 bottom-0 items-stretch gap-2 flex flex-col text-default transition-all w-full h-full duration-200'>
