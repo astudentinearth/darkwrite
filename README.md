@@ -1,6 +1,6 @@
 ![Darkwrite Logo](res/readme.png)
 ### Notes and todo, the way you want.
-[Follow me on Twitter](https://twitter.com/astudentinearth)  
+[Follow me on Twitter](https://twitter.com/codingwithburak)  
 Darkwrite is a simple and easy way to organize your notes and todos. 
 ### Customization beyond expectations
 The look and feel is very tweakable. You can change the color theme as well as the user interface font. You can also add a wallpaper if you want to. You can change the font of each note individually as well.
