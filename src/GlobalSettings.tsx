@@ -5,18 +5,9 @@ import { invoke } from "@tauri-apps/api";
 import { DefaultSettings } from "./Util";
 import React, { Dispatch, SetStateAction, useContext } from "react";
 let settings_json:any;
-let APPDIR:string;
-
 
 async function LoadSettings(){
     let _settings:GlobalSettings = new GlobalSettings();
-    console.log("[INFO] Loading settings");
-    APPDIR=await appConfigDir();
-    console.log("[INFO] Checking if app data directory exists...");
-    if (await invoke("path_exists",{targetPath: APPDIR})===false){ //to be migrated to tauri fs:exists
-        console.log("[WARNING] App directory doesn't exist. Creating it.");
-        invoke ("createDir",{ dir: APPDIR});
-    }
     console.log("[INFO] Checking for settings file")
     let settingsExists = await exists("settings.json",{dir:BaseDirectory.App});
     if (settingsExists===false){
@@ -88,4 +79,4 @@ function SaveAllSettings(context:ISettingsContext){
     });
 }
 
-export {LoadSettings, GlobalSettings,SaveAllSettings,APPDIR};
+export {LoadSettings, GlobalSettings,SaveAllSettings};

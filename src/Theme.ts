@@ -1,10 +1,8 @@
 import { invoke } from "@tauri-apps/api";
 import { BaseDirectory, createDir,exists,readBinaryFile,readTextFile, writeFile } from "@tauri-apps/api/fs";
-import {appDir} from "../node_modules/@tauri-apps/api/path"
 import { GlobalSettings, ISettingsContext, SettingsContext } from "./GlobalSettings";
 import { Uint8ArrayToBase64 } from "./Util";
 
-let APPDIR:string; // this has a slash in the end!
 const LightTheme=`{
     "name":"Darkwrite Light",
     "background": "241 241 241",
@@ -60,18 +58,17 @@ class Themes{
 async function SetupThemes(settingsContext:ISettingsContext){
     console.log("[INFO] Setting themes up");
     const {settings,updateSettings} = settingsContext;
-    APPDIR=await appDir();
     // apply fallback themes if the files are not there
    
     console.log("[INFO] Checking for color schemes directory");
     
-    if (await invoke("path_exists",{targetPath:APPDIR+"color-schemes/"})===false){
+    if (await exists("color-schemes/",{dir: BaseDirectory.App})===false){
         console.log("[WARNING] Color schemes directory doesn't exist. Creating it and copying default themes.");
-        await createDir(APPDIR+"color-schemes");
+        await createDir("color-schemes",{dir: BaseDirectory.App});
     }
-    await writeFile(APPDIR+"color-schemes/colors_light.json",LightTheme);
-    await writeFile(APPDIR+"color-schemes/colors_dark.json",DarkTheme);
-    let text = await readTextFile(APPDIR+"color-schemes/"+settings.ThemeFile);
+    await writeFile("color-schemes/colors_light.json",LightTheme,{dir: BaseDirectory.App});
+    await writeFile("color-schemes/colors_dark.json",DarkTheme,{dir: BaseDirectory.App});
+    let text = await readTextFile("color-schemes/"+settings.ThemeFile,{dir: BaseDirectory.App});
     let json = JSON.parse(text);
     if (json) Themes.CurrentThemeJSON = json;
     console.log("[INFO] Applying theme preferences");
@@ -122,4 +119,4 @@ async function ApplyWallpaper(){
 
 
 
-export {Themes,SetupThemes,ApplyWallpaper,ApplyTheme,/*SwitchTheme,*/APPDIR,HexToRGB,RGBToHex};
+export {Themes,SetupThemes,ApplyWallpaper,ApplyTheme,/*SwitchTheme,*/HexToRGB,RGBToHex};

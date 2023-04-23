@@ -1,6 +1,5 @@
 import { open } from "@tauri-apps/api/dialog";
-import { appDir } from "@tauri-apps/api/path";
-import { BaseDirectory, copyFile, readBinaryFile, removeFile, writeTextFile } from "@tauri-apps/api/fs";
+import { BaseDirectory, copyFile, exists, readBinaryFile, removeFile, writeTextFile } from "@tauri-apps/api/fs";
 import AppletBase from "../Components/SettingsApplet";
 import { ApplyWallpaper } from "../../Theme";
 import { invoke } from "@tauri-apps/api";
@@ -30,7 +29,7 @@ function WallpaperApplet(){
             }}>Choose wallpaper</div>
             <div className="bg-secondary drop-shadow-md p-2 mx-2
             inline-block hover:brightness-125 cursor-pointer rounded-xl" onClick={async ()=>{
-                if (await invoke("path_exists",{targetPath: await appDir()+"wallpaper.base64"})) removeFile("wallpaper.base64",{dir:BaseDirectory.App});
+                if (await exists("wallpaper.base64",{dir: BaseDirectory.App})) removeFile("wallpaper.base64",{dir:BaseDirectory.App});
                 let bgimg:any = document.querySelector("#bgImage");
                 bgimg.style.setProperty("background-image","");
             }}>Remove wallpaper</div><br></br>

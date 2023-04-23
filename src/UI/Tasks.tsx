@@ -2,8 +2,7 @@ import { invoke } from "@tauri-apps/api";
 import update from 'immutability-helper'
 import React, { Dispatch, SetStateAction, useCallback, useRef, useState } from "react";
 import { useEffect } from "react";
-import { readTextFile, writeFile } from "@tauri-apps/api/fs";
-import {appDir} from "../../node_modules/@tauri-apps/api/path"
+import { BaseDirectory, exists, readTextFile, writeFile } from "@tauri-apps/api/fs";
 import { DraggableTypes, GenerateID, ITask, JSONToITaskArray } from "../Util";
 import { TaskItem } from "./Components/TaskItem";
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
@@ -24,23 +23,21 @@ interface TasksContainerState {
 }
 
 async function LoadTasks(){
-    let APPDIR=await appDir();
     console.log("[INFO from LoadTasks()] Loading tasks");
-    if(!await invoke("path_exists",{targetPath:APPDIR+"tasks.json"})){
+    if(!await exists("tasks.json",{dir: BaseDirectory.App})){
         console.log("[WARNING] Tasks file not found. Initializing a file with no tasks");
-        await writeFile(APPDIR+"tasks.json",`{"tasks":[]}`);
+        await writeFile("tasks.json",`{"tasks":[]}`,{dir: BaseDirectory.App});
         return [] as ITask[];
     }
     console.log("[INFO from LoadTasks()] Reading tasks file");
-    let tasksFile:string=await readTextFile(APPDIR+"tasks.json");
+    let tasksFile:string=await readTextFile("tasks.json",{dir: BaseDirectory.App});
     let tasksJSON=JSON.parse(tasksFile);
     return JSONToITaskArray(tasksJSON) ?? [] as ITask[];
 }
 
 export async function SaveTasks(){
-    let APPDIR=await appDir();
     console.log("[INFO from SaveTasks()] Saving tasks");
-    await writeFile(APPDIR+"tasks.json",JSON.stringify({tasks:getTasks()}));
+    await writeFile("tasks.json",JSON.stringify({tasks:getTasks()}),{dir: BaseDirectory.App});
 }
 //@ts-ignore
 class TasksPointerSensor extends PointerSensor{
