@@ -18,7 +18,7 @@ async function LoadSettings(){
     let settings_string:string = await readTextFile(await appConfigDir()+"settings.json");
     console.log(settings_string)
     //TODO: Handle broken config files
-    if(settings_string.trim()==="" || settings_string === null || settings_string === undefined){
+    if(settings_string.trim()==="" || settings_string == null){
         console.error("[ERROR] Something went wrong, and we couldn't load the settings. We can't proceed further.");
         return GlobalSettings.GetDefault();
     }
