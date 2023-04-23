@@ -1324,12 +1324,12 @@ video {
 
 html{
   overflow-y:hidden;
+  font-family: var(--font);
 }
 
 .app_root{
   background-color: var(--background-default);
   color:var(--text-default);
-  font-family: var(--font);
   overflow-y:hidden;
 }
 
