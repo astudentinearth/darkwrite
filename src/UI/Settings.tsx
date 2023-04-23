@@ -46,10 +46,10 @@ function SettingsView(){
     }
     return <div>
         <div className="bg-secondary w-72 h-full fixed">
-            <div className="flex items-center m-2">
-                <ToolbarButton onClick={HideSettings} icon="bi-chevron-left" class="bg-transparent remove-blur " float="float-left"></ToolbarButton>
-                <span className="text-2xl font-bold">Settings</span>
-            </div>
+            <button onClick={HideSettings} className="bg-transparent flex items-center p-2 m-2 hover:bg-hover rounded-xl">
+                <i className="bi-chevron-left text-xl"></i> &nbsp;
+                <span className="text-xl font-bold">Settings</span>
+            </button>
             <SidebarButton onClick={()=>{setPage(SettingsPage.Appearance)}} isActive={(page===SettingsPage.Appearance) ? "true" : ""} icon="bi-brush" title="Appearance"></SidebarButton>
             {/*<SidebarButton onClick={()=>{setPage(SettingsPage.Advanced)}} isActive={(page===SettingsPage.Advanced) ? "true" : ""} icon="bi-toggles" title="Advanced"></SidebarButton>*/}
             <SidebarButton onClick={()=>{setPage(SettingsPage.Developer)}} isActive={(page===SettingsPage.Developer) ? "true" : ""} icon="bi-terminal-fill" title="Developer Console"></SidebarButton>
