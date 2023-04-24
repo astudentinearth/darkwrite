@@ -5,6 +5,7 @@ import { ApplyWallpaper, DeleteWallpaper } from "../../Theme";
 import { invoke } from "@tauri-apps/api";
 import { Uint8ArrayToBase64 } from "../../Util";
 import { Button, ButtonColor, ButtonShape } from "../Components/Button";
+import { Slider } from "../Components/Slider";
 
 function WallpaperApplet(){
     return<AppletBase title="Wallpaper">
@@ -31,7 +32,7 @@ function WallpaperApplet(){
             }}></Button>
             <Button shape={ButtonShape.Round12} width={200} textContent="Remove wallpaper" onClick={async ()=>{
               await DeleteWallpaper();
-            }}></Button><br></br>
+            }}></Button>
         </div> 
     </AppletBase>
 }
