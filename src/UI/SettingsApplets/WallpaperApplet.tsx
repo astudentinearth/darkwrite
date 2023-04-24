@@ -8,9 +8,8 @@ import { Button, ButtonColor, ButtonShape } from "../Components/Button";
 
 function WallpaperApplet(){
     return<AppletBase title="Wallpaper">
-        <div className="flex items-center justify-center">
-            <div className="bg-accent drop-shadow-md p-2 mx-2
-            inline-block hover:brightness-125 cursor-pointer rounded-xl"
+        <div className="flex items-center gap-2 justify-center">
+            <Button shape={ButtonShape.Round12} width={200} color={ButtonColor.Accent} textContent="Choose wallpaper"
             onClick={async ()=>{
                 await DeleteWallpaper();
                 const wp:any = await open({
@@ -29,11 +28,10 @@ function WallpaperApplet(){
                 /*`data:image/${ext=="png" ? "png" : "jpeg"};base64,${base64}` 
                 await writeTextFile("wallpaper.base64",base64,{dir:BaseDirectory.App});*/
                 await ApplyWallpaper();
-            }}>Choose wallpaper</div>
-            <div className="bg-secondary drop-shadow-md p-2 mx-2
-            inline-block hover:brightness-125 cursor-pointer rounded-xl" onClick={async ()=>{
+            }}></Button>
+            <Button shape={ButtonShape.Round12} width={200} textContent="Remove wallpaper" onClick={async ()=>{
               await DeleteWallpaper();
-            }}>Remove wallpaper</div><br></br>
+            }}></Button><br></br>
         </div> 
     </AppletBase>
 }

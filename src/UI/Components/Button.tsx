@@ -1,3 +1,5 @@
+import { useRef } from "react"
+
 /** Button general properties */
 export interface ButtonProps{
     /** Defines the color style - */
@@ -13,7 +15,7 @@ export interface ButtonProps{
     /** Button height (default fits content) */
     height?: number | "auto"
     /** Click event handler */
-    onClick?: ()=>void 
+    onClick?: ()=>any
 }
 
 /** Coloring options for buttons */
@@ -59,7 +61,24 @@ function GenerateButtonStyle(props: ButtonProps) : React.CSSProperties{
 
 /** Returns a button component */
 export function Button(props:ButtonProps){
-    return <button onClick={props.onClick} style={GenerateButtonStyle(props)} className="p-2 box-shadow-4-8-20 flex items-center justify-center text-center">
+    let ref = useRef<HTMLButtonElement>(null);
+    return <button ref={ref} onClick={props.onClick}
+     style={GenerateButtonStyle(props)} 
+     onMouseEnter={()=>{
+        if(props.color == ButtonColor.Accent){
+            ref.current?.style.setProperty("filter","brightness(120%)");
+            return;
+        }
+        ref.current?.style.setProperty("background","rgb(var(--background-hover) / 1)")
+     }}
+     onMouseLeave={()=>{
+        if(props.color == ButtonColor.Accent){
+            ref.current?.style.setProperty("filter","brightness(100%)");
+            return;
+        }
+        ref.current?.style.setProperty("background","rgb(var(--background-secondary) / 1 )")
+     }}
+     className="p-2 box-shadow-4-8-20 transition-all flex items-center justify-center text-center">
         <i className={props.icon+" text-[16px]"}></i>
         <span className="text-[16px] pl-2">{props.textContent}</span>
     </button>
