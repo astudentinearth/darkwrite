@@ -52,7 +52,7 @@ function App() {
   return (
     <div className="App absolute left-0 right-0 bottom-0 top-0 background-default">
      <div className='overflow-y-hidden select-none relative p-2 right-0 bottom-0 items-stretch gap-2 flex flex-col text-default transition-all w-full h-full duration-200'>
-      <div id="bgImage" className="absolute z-0 left-0 right-0 top-0 bottom-0 m-0 p-0 w-full h-full"></div>
+      <img id="bgImage" className="absolute z-0 left-0 right-0 top-0 bottom-0 m-0 p-0 w-full h-full"></img>
      
         <SettingsContext.Provider value={{settings,updateSettings}}>
           <NotebooksContext.Provider value={notebooksValue}>

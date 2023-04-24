@@ -1,7 +1,9 @@
 import { invoke } from "@tauri-apps/api";
-import { BaseDirectory, createDir,exists,readBinaryFile,readTextFile, writeFile } from "@tauri-apps/api/fs";
+import { BaseDirectory, createDir,exists,readBinaryFile,readTextFile, removeFile, writeFile } from "@tauri-apps/api/fs";
 import { GlobalSettings, ISettingsContext, SettingsContext } from "./GlobalSettings";
 import { Uint8ArrayToBase64 } from "./Util";
+import { appConfigDir, join } from "@tauri-apps/api/path";
+import {convertFileSrc} from "@tauri-apps/api/tauri";
 
 const LightTheme=`{
     "name":"Darkwrite Light",
@@ -111,12 +113,34 @@ function ApplyTheme(themeFileName:string, context:ISettingsContext){
 }*/
 
 async function ApplyWallpaper(){
-    if(!await exists("wallpaper.base64",{dir: BaseDirectory.App})) return;
-    let bin = await readTextFile("wallpaper.base64",{dir: BaseDirectory.App});
+    let ext = "";
     let bgimg:any = document.querySelector("#bgImage");
-    bgimg.style.setProperty("background-image",`url("${bin}")`);
+    if(await exists("wallpaper.png",{dir: BaseDirectory.App})) ext="png";
+    if(await exists("wallpaper.jpg",{dir: BaseDirectory.App})) ext="jpg";
+    if(await exists("wallpaper.jpeg",{dir: BaseDirectory.App})) ext="jpeg";
+    if(ext==""){
+        bgimg.style.setProperty("display","none");
+        return;
+    }
+    let filePath = await join(await appConfigDir(), "wallpaper."+ext);
+    let assetURL = convertFileSrc(filePath);
+
+    //let bin = await readTextFile("wallpaper.base64",{dir: BaseDirectory.App});
+   
+    bgimg.src = assetURL+"?t="+Date.now().toString();
+    bgimg.style.setProperty("display","");
+    //bgimg.style.setProperty("background-image",`url("${bin}")`);
 }
 
-
+export async function DeleteWallpaper(){
+    let bgimg:any = document.querySelector("#bgImage");
+    bgimg.style.setProperty("display","none");
+    let ext = "";
+    if(await exists("wallpaper.png",{dir: BaseDirectory.App})) ext="png";
+    if(await exists("wallpaper.jpg",{dir: BaseDirectory.App})) ext="jpg";
+    if(await exists("wallpaper.jpeg",{dir: BaseDirectory.App})) ext="jpeg";
+    if(ext=="") return;
+    await removeFile("wallpaper."+ext,{dir: BaseDirectory.App});
+}
 
 export {Themes,SetupThemes,ApplyWallpaper,ApplyTheme,/*SwitchTheme,*/HexToRGB,RGBToHex};
