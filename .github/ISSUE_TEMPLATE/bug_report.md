@@ -1,3 +1,12 @@
+---
+name: Bug report
+about: Create a report to help us improve
+title: A descriptive title for the bug report
+labels: bug
+assignees: astudentinearth
+
+---
+
 ### Bug summary
 Describe us what happened. 
 
