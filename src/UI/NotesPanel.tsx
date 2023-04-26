@@ -2,7 +2,7 @@ import { invoke } from "@tauri-apps/api";
 import { BaseDirectory, readTextFile, writeTextFile } from "@tauri-apps/api/fs";
 import { appConfigDir } from "@tauri-apps/api/path";
 import { useContext, useEffect, useLayoutEffect, useRef, useState } from "react";
-import { NotebooksContext } from "../App";
+import { NotebooksContext } from "../NotebooksContext";
 import { ConvertJSONToINote, FontStyle, GetNotebooks, INote, NoteFormatting, NoteHeader } from "../Util";
 import { NoteItem } from "./Components/NoteItem";
 import { showEditor } from "./NoteEditor";
@@ -101,6 +101,7 @@ function NotesPanel() {
        <NoteItem header={{id: "5327459834706", title: "RJKELGBNLKJERG", formatting: {background: "#ffffff", foreground: "#000000", font :"SpaceMono Nerd Font"} as NoteFormatting, notebookID: "245346"} as NoteHeader}></NoteItem>
     </div>
 }
+
 
 export { showEditor, NotesPanel, getNotebook, setNotebookFilter, updateNote, getNote };
 

@@ -1,8 +1,6 @@
-import { Dispatch, SetStateAction } from "react";
+import React from "react";
 import { GlobalSettings } from "./Settings";
+import { ISettingsContext } from "./ISettingsContext";
 
 
-export interface ISettingsContext {
-    settings: GlobalSettings;
-    updateSettings: Dispatch<SetStateAction<GlobalSettings>>;
-}
+export const SettingsContext = React.createContext<ISettingsContext>({ settings: GlobalSettings.GetDefault(), updateSettings: () => { return; } });

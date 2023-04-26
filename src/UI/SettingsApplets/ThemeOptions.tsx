@@ -1,6 +1,6 @@
 import { BaseDirectory, readDir, readTextFile } from "@tauri-apps/api/fs";
 import { ChangeEvent, MouseEvent, useContext, useEffect, useState } from "react";
-import { SettingsContext } from "../../GlobalSettings";
+import { SettingsContext } from "../../SettingsContext";
 import { HexToRGB, RGBToHex } from "../../Theme";
 import AppletBase from "../Components/SettingsApplet";
 

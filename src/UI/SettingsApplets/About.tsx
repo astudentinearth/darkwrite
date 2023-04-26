@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { openURL } from "../../API";
-import { SettingsContext } from "../../GlobalSettings";
+import { SettingsContext } from "../../SettingsContext";
 import logo from "./darkwrite_icon.png";
 
 function About(){

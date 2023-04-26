@@ -1,8 +1,7 @@
 import { BaseDirectory, exists, readTextFile, writeTextFile } from "@tauri-apps/api/fs";
 import { appConfigDir } from "@tauri-apps/api/path";
-import React from "react";
 import { GlobalSettings } from "./Settings";
-import { ISettingsContext } from "./SettingsContext";
+import { ISettingsContext } from "./ISettingsContext";
 import { SetupThemes } from "./Theme";
 import { DefaultSettings } from "./Util";
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -32,8 +31,6 @@ async function LoadSettings(){
     console.warn(settings_json.font);
     return GlobalSettings.fromJSON(settings_json);
 }
-
-export const SettingsContext = React.createContext<ISettingsContext>({settings:GlobalSettings.GetDefault(),updateSettings:()=>{return;}});
 
 function SaveAllSettings(context:ISettingsContext){
     console.warn("[INFO] Saving all settings.");

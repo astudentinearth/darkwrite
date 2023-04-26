@@ -1,7 +1,7 @@
 import { BaseDirectory, createDir, exists, readTextFile, removeFile, writeFile } from "@tauri-apps/api/fs";
 import { appConfigDir, join } from "@tauri-apps/api/path";
 import { convertFileSrc } from "@tauri-apps/api/tauri";
-import { ISettingsContext } from "./SettingsContext";
+import { ISettingsContext } from "./ISettingsContext";
 
 const LightTheme=`{
     "name":"Darkwrite Light",

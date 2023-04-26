@@ -1,5 +1,5 @@
 import { useContext, useRef } from "react";
-import { SettingsContext } from "../../GlobalSettings";
+import { SettingsContext } from "../../SettingsContext";
 import AppletBase from "../Components/SettingsApplet";
 
 function FontOptions(){

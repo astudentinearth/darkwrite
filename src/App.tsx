@@ -1,7 +1,8 @@
 import { BaseDirectory, createDir, exists, writeTextFile } from '@tauri-apps/api/fs';
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import '../node_modules/bootstrap-icons/font/bootstrap-icons.css';
-import { LoadSettings, SaveAllSettings, SettingsContext } from "./GlobalSettings";
+import { LoadSettings, SaveAllSettings } from "./GlobalSettings";
+import { SettingsContext } from "./SettingsContext";
 import { GlobalSettings } from "./Settings";
 import { ApplyWallpaper, SetupThemes } from './Theme';
 import { NoteContextMenu } from './UI/Components/NoteContextMenu';
@@ -17,10 +18,7 @@ import "./fonts/roboto-mono/roboto-mono.css";
 import "./fonts/roboto-slab/roboto-slab.css";
 import "./fonts/roboto/roboto.css";
 import "./fonts/yellowtail/yellowtail.css";
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const NotebooksContext:any = React.createContext({notebooks: [] as INotebook[],setNotebooks: ()=>{return;}})
-
+import { NotebooksContext } from './NotebooksContext';
 
 function App() {
   const [notebooks,setNotebooks] = useState([] as INotebook[]);

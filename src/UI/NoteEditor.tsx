@@ -2,7 +2,6 @@
 import { useEffect, useRef, useState } from "react";
 import { HexToRGB } from "../Theme";
 import { FontStyle, INote } from "../Util";
-import { getNote, updateNote } from "./NotesPanel";
 import logo from '../res/darkwrite_icon.svg'
 
 export let showEditor: (noteID: string) => void;
@@ -12,9 +11,6 @@ export function NoteEditor() {
     showEditor = (id: string) => {
         console.log("showing editor")
         if (id==="-1") {setNote({id:"-1"} as INote); return;}
-        const note = getNote(id);
-        setNote(note);
-        updateNote(note);
         setVisibility(true);
     }
     const getFont = () => {
@@ -34,8 +30,7 @@ export function NoteEditor() {
     const customFontRef: any = useRef(null);
     const titleRef: any = useRef(null);
     useEffect(() => {
-        const change = setTimeout(() => {
-            if (note.id!=="-1") updateNote(note);
+        const change = setTimeout(() => {return;
         }, 300);
         return () => clearTimeout(change);
     }, [note]);
