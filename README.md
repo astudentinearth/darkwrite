@@ -24,4 +24,4 @@ Feel free to create an issue if you have any suggestions :)
 See [BUILDING.md](docs/BUILDING.md)
 
 # License
-Licensed under GNU General Public License, version 3 or any later versionat your option.
+Licensed under GNU General Public License, version 3 or any later version at your option.
