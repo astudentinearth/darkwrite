@@ -1,24 +1,26 @@
 /* eslint-disable no-case-declarations */
-import { KeyboardEvent, useEffect, useRef } from "react";
+import { KeyboardEvent, useContext, useEffect, useRef } from "react";
 import { getFonts } from "../../API";
 import { GetAllNoteHeaders, GetNoteHeaders } from "../../backend/Note";
 import { CreateNotebook, DeleteNotebook, GetNotebookHeaders, RenameNotebook } from "../../backend/Notebook";
 import { TestSearch } from "../../backend/Search.test";
 import helptxt from "./DevConsoleHelp.txt?raw";
+import { LocaleContext, LocaleContextType } from "../../localization/LocaleContext";
 
 /** A component with one input field and a span element to show output. Used for testing backend methods. Not every function might be available. */
 export function DevConsole(){
     const inpRef = useRef<HTMLInputElement>(null);
     const output = useRef<HTMLSpanElement>(null);
+    const lc = useContext(LocaleContext);
     function runConsoleCommand(event: KeyboardEvent<HTMLInputElement>){
         if(event.key!="Enter") return;
         if (inpRef.current == null) return;
         const cmd = inpRef.current.value;
         if(cmd=="" || cmd.trim() == "" || cmd == null) return;
-        if(output.current==null) { exec(cmd); return}
-        exec(cmd).then((ret)=>{
+        if(output.current==null) { exec(cmd, lc); return}
+        exec(cmd, lc).then((ret)=>{
             if(output.current==null) return;
-            output.current.innerText=ret;
+            output.current.innerText=ret as string;
         });
     }
     useEffect(()=>{
@@ -33,10 +35,11 @@ export function DevConsole(){
     </div>
 }
 
-async function exec (cmd: string){
+async function exec (cmd: string, localeContext?:LocaleContextType){
     const tokens: string[] = cmd.trim().split(' ');
     if(tokens.length==0) return "";
     let outstr = "";
+    
     switch(tokens[0]){
         case "ListNotebooks":
             const notebooks = await GetNotebookHeaders();
@@ -85,6 +88,11 @@ async function exec (cmd: string){
                 outstr+="ID: "+n.id+" | Title: "+n.title+"\n";
             }
             return outstr;
+
+        case "SetLocale":
+            localeContext?.setLocale(tokens[1]);
+            return;
+
     }
     if(tokens.length<3) return "Unknown command.";
     switch(tokens[0]){

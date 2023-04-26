@@ -19,6 +19,7 @@ import "./fonts/roboto-slab/roboto-slab.css";
 import "./fonts/roboto/roboto.css";
 import "./fonts/yellowtail/yellowtail.css";
 import { NotebooksContext } from './NotebooksContext';
+import { LocaleContext } from './localization/LocaleContext';
 
 function App() {
   const [notebooks,setNotebooks] = useState([] as INotebook[]);
@@ -26,7 +27,7 @@ function App() {
   const notebooksValue = {notebooks,setNotebooks};
   const isFirstRender=useRef(true);
   const bgImgRef = useRef<HTMLImageElement>(null);
-  
+  const [locale, setLocale] = useState("en_us");
   useEffect(()=>{
     console.log("Application started. Initializing");
     async function Init(){
@@ -56,15 +57,17 @@ function App() {
      <div className='overflow-y-hidden select-none relative p-2 right-0 bottom-0 items-stretch gap-2 flex flex-col text-default transition-all w-full h-full duration-200'>
         <SettingsContext.Provider value={{settings,updateSettings}}>
           <NotebooksContext.Provider value={notebooksValue}>
-            <img id="bgImage" ref={bgImgRef} style={{filter: `blur(${settings.WallpaperBlurRadius}px)`}} className="absolute z-0 left-0 right-0 top-0 bottom-0 m-0 p-0 w-full h-full"></img>
-              <MainToolbar></MainToolbar>
-              <div className='flex-grow flex flex-row'>
-                <Sidebar></Sidebar>
-                <Settings></Settings>
-                <NotesPanel></NotesPanel>
-                <NoteEditor></NoteEditor>
-                <NoteContextMenu></NoteContextMenu>
-              </div>
+            <LocaleContext.Provider value={{locale, setLocale}}>
+              <img id="bgImage" ref={bgImgRef} style={{filter: `blur(${settings.WallpaperBlurRadius}px)`}} className="absolute z-0 left-0 right-0 top-0 bottom-0 m-0 p-0 w-full h-full"></img>
+                <MainToolbar></MainToolbar>
+                <div className='flex-grow flex flex-row'>
+                  <Sidebar></Sidebar>
+                  <Settings></Settings>
+                  <NotesPanel></NotesPanel>
+                  <NoteEditor></NoteEditor>
+                  <NoteContextMenu></NoteContextMenu>
+                </div>
+            </LocaleContext.Provider>
           </NotebooksContext.Provider>
         </SettingsContext.Provider>
       </div>

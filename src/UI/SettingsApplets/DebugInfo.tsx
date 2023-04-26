@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { getTauriVersion } from "@tauri-apps/api/app";
 import { arch, platform, type, version } from "@tauri-apps/api/os";
+import { LocaleContext, GetLocalizedResource } from "../../localization/LocaleContext";
 function DebugInfo(){
     const [debugInfo,setDebugInfo]=useState({} as IDebugInfo);
-    
+    const {locale} = useContext(LocaleContext);
     useEffect(()=>{
         const LoadDebugInfo=async ()=>{
             const info:IDebugInfo={} as IDebugInfo;
@@ -18,7 +19,7 @@ function DebugInfo(){
         LoadDebugInfo();
     },[])
     return <div className="background-secondary items-center p-8 rounded-2xl border-default shadow-default my-4">
-        <span className="text-2xl font-bold block text-default">Debug Info</span>
+        <span className="text-2xl font-bold block text-default">{GetLocalizedResource("debugInfoAppletTitle",locale)}</span>
         <span>Tauri Version: {debugInfo.tauriVersion}</span><br></br>
         <span>Architecture: {debugInfo.architecture}</span><br></br>
         <span>OS: {debugInfo.operatingSystem}</span><br></br>

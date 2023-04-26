@@ -1,0 +1,21 @@
+{
+    "lang": "Türkçe (Turkish)",
+    "settingsTitle": "Ayarlar",
+    "appearancePageName": "Görünüm",
+    "developerConsolePageName": "Geliştirici Konsolu",
+    "aboutPageName": "Hakkında",
+    "aboutAppletLicenseLink": "Lisans Bilgisi",
+    "aboutAppletTitle": "Hakkında",
+    "debugInfoAppletTitle": "Hata Ayıklama Bilgisi",
+    "ossLicensesAppletTitle": "Açık Kaynak Lisansları",
+    "ossLicensesViewForNPM": "npm paketleri için lisansları görüntüle",
+    "ossLicensesViewForRS": "Rust paketleri için lisansları görüntüle",
+    "themeAppletTitle": "Renkler",
+    "themeAppletAccentColorLabel": "Tema rengi",
+    "fontAppletTitle": "Yazı Tipleri",
+    "fontAppletUILabel":"Arayüz",
+    "wallpaperAppletTitle": "Arka Plan",
+    "wallpaperAppletBlurLabel": "Bulanıklaştır",
+    "wallpaperAppletChooseButton": "Arka Plan Seç",
+    "wallpaperAppletRemoveButton": "Arka Planı Kaldır"
+}

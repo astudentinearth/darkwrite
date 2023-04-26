@@ -1,0 +1,21 @@
+{
+    "lang": "English",
+    "settingsTitle": "Settings",
+    "appearancePageName": "Appearance",
+    "developerConsolePageName": "Developer Console",
+    "aboutPageName": "About",
+    "aboutAppletLicenseLink": "License Information",
+    "aboutAppletTitle": "About",
+    "debugInfoAppletTitle": "Debug Info",
+    "ossLicensesAppletTitle": "Open Source Licenses",
+    "ossLicensesViewForNPM": "View licenses for npm packages",
+    "ossLicensesViewForRS": "View licenses for Rust crates",
+    "themeAppletTitle": "Colors",
+    "themeAppletAccentColorLabel": "Accent color",
+    "fontAppletTitle": "Fonts",
+    "fontAppletUILabel":"User Interface",
+    "wallpaperAppletTitle": "Wallpaper",
+    "wallpaperAppletBlurLabel": "Blur",
+    "wallpaperAppletChooseButton": "Choose Wallpaper",
+    "wallpaperAppletRemoveButton": "Remove Wallpaper"
+}

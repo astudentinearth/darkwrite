@@ -3,7 +3,7 @@ import { ChangeEvent, MouseEvent, useContext, useEffect, useState } from "react"
 import { SettingsContext } from "../../SettingsContext";
 import { HexToRGB, RGBToHex } from "../../Theme";
 import AppletBase from "../Components/SettingsApplet";
-
+import { GetLocalizedResource, LocaleContext } from "../../localization/LocaleContext";
 interface IColorSchemeData{
 	SchemeFileName:string,
 	ColorSchemeName:string,
@@ -22,7 +22,7 @@ function ThemeOptions(){
     const [colors,setColors] = useState([] as IColorSchemeData[]);
     const settingsContext = useContext(SettingsContext);
     const {settings,updateSettings} = settingsContext;
-
+    const {locale} = useContext(LocaleContext);
     useEffect(()=>{
         const loadSchemes = async () => {
             const fsEntries = await readDir("color-schemes",{dir:BaseDirectory.App});
@@ -51,7 +51,7 @@ function ThemeOptions(){
         loadSchemes()
         
     },[]);
-    return <AppletBase title="Colors">
+    return <AppletBase title={GetLocalizedResource("themeAppletTitle",locale)}>
             <div className="overflow-y-scroll select-none mx-2 rounded-2xl bg-secondary shadow-lg" >
                 {colors.map(e=><div key={e.SchemeFileName} className="p-2 hover:bg-hover cursor-pointer transition-all
                 rounded-2xl w-48 h-12 flex items-center flex-row float-left m-2" 
@@ -77,7 +77,7 @@ function ThemeOptions(){
                 </div>)}
             </div>
         <div className="flex h-12 items-center p-2 justify-center">
-            <span>Accent color:&nbsp;</span>
+            <span>{GetLocalizedResource("themeAppletAccentColorLabel",locale)}:&nbsp;</span>
             <input type="color"
              defaultValue={RGBToHex(settings.AccentColor)}
              className="appearance-none w-6 outline-none border-none rounded-full bg-transparent"
