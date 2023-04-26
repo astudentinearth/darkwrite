@@ -2,6 +2,7 @@ import { useState,useEffect,useRef } from "react";
 
 export default function useComponentVisible(initalIsVisible:boolean){
     const [isComponentVisible,setIsComponentVisible] = useState(initalIsVisible);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const ref:any = useRef(null);
     const handleClickOutside = (event:MouseEvent)=>{
         

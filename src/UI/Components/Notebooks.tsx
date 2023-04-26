@@ -1,16 +1,15 @@
 import { useEffect, useState } from "react";
-import { GenerateID, GetNotebooks, INotebook } from "../../Util"
-import { getNotebook, setNotebookFilter } from "../NotesPanel";
-
+import { GenerateID, GetNotebooks, INotebook } from "../../Util";
+import { setNotebookFilter } from "../NotesPanel";
 export let createNotebook:(name:string)=>string;
 export let getLoadedNotebooks:()=>INotebook[];
 export function Notebooks(){
     const [notebook,setNotebook] = useState("0");
     const [notebooks,setNotebooks] = useState([] as INotebook[])
     function CreateNotebook(name:string){
-        let currentNotebooks = [...notebooks];
-        let id = GenerateID();
-        let newNotebook = {id:id,name:name} as INotebook;
+        const currentNotebooks = [...notebooks];
+        const id = GenerateID();
+        const newNotebook = {id:id,name:name} as INotebook;
         currentNotebooks.push(newNotebook);
         setNotebooks(currentNotebooks)
         return id;

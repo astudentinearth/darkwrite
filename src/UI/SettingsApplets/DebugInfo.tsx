@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import { getTauriVersion } from "@tauri-apps/api/app";
 import { arch, platform, type, version } from "@tauri-apps/api/os";
 function DebugInfo(){
-    let [debugInfo,setDebugInfo]=useState({} as IDebugInfo);
+    const [debugInfo,setDebugInfo]=useState({} as IDebugInfo);
     
     useEffect(()=>{
         const LoadDebugInfo=async ()=>{
-            let info:IDebugInfo={} as IDebugInfo;
+            const info:IDebugInfo={} as IDebugInfo;
             info.tauriVersion=await getTauriVersion();
             info.architecture=await arch();
             info.operatingSystem=await type();

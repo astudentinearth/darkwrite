@@ -7,10 +7,10 @@ import { isDirectory } from "./Filesystem";
  */
 export async function CreateNotebook(name:string){
     // Generate an ID. If that ID for some reason already exists, recurse the function and try again with a new ID
-    let id = GenerateID();
+    const id = GenerateID();
     if(await exists("notes/"+id, {dir: BaseDirectory.App})) CreateNotebook(name);
     await createDir("notes/"+id,{dir: BaseDirectory.App, recursive: true});
-    let info = {name: name, id: id} as NotebookInfo;
+    const info = {name: name, id: id} as NotebookInfo;
     await writeFile("notes/"+id+"/_notebookinf.json",JSON.stringify(info),{dir:BaseDirectory.App});
 }
 
@@ -18,16 +18,16 @@ export async function CreateNotebook(name:string){
  * @returns An array of NotebookInfo objects
  */
 export async function GetNotebookHeaders() : Promise<NotebookInfo[]> {
-    let entries:FileEntry[] = await readDir("notes",{dir: BaseDirectory.App});
-    let headers:NotebookInfo[] = [];
-    for(let entry of entries){
+    const entries:FileEntry[] = await readDir("notes",{dir: BaseDirectory.App});
+    const headers:NotebookInfo[] = [];
+    for(const entry of entries){
         if(!await isDirectory(entry.path)) continue;
         try {
             console.log(entry.path);
             if(!await exists(entry.path+"/_notebookinf.json",{dir: BaseDirectory.App})) continue;
-            let inf = await readTextFile(entry.path+"/_notebookinf.json",{dir: BaseDirectory.App});
+            const inf = await readTextFile(entry.path+"/_notebookinf.json",{dir: BaseDirectory.App});
             if (inf == null) continue;
-            let json = JSON.parse(inf);
+            const json = JSON.parse(inf);
             headers.push({...json} as NotebookInfo);
         } catch (error) {
             if(error instanceof Error) console.error(error.message,error.cause,error.name,error.stack);
@@ -51,9 +51,9 @@ export async function RenameNotebook(id: string, newName: string){
     if(!await exists(`notes/${id}/`,{dir: BaseDirectory.App})) return 1;
     if(!await exists(`notes/${id}/_notebookinf.json`,{dir: BaseDirectory.App})) return 2;
     try {
-        let inf = await readTextFile(`notes/${id}/_notebookinf.json`,{dir: BaseDirectory.App});
+        const inf = await readTextFile(`notes/${id}/_notebookinf.json`,{dir: BaseDirectory.App});
         if (inf==null) return 99;
-        let info = JSON.parse(inf) as NotebookInfo;
+        const info = JSON.parse(inf) as NotebookInfo;
         if(info == null) return 99;
         info.name=newName;
         writeTextFile(`notes/${id}/_notebookinf.json`,JSON.stringify(info),{dir:BaseDirectory.App});

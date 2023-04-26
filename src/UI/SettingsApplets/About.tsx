@@ -1,7 +1,7 @@
-import React, { useContext } from "react";
-import logo from "./darkwrite_icon.png"
-import { GlobalSettings, SettingsContext } from "../../GlobalSettings";
+import { useContext } from "react";
 import { openURL } from "../../API";
+import { SettingsContext } from "../../GlobalSettings";
+import logo from "./darkwrite_icon.png";
 
 function About(){
     const context = useContext(SettingsContext);

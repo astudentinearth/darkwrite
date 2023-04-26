@@ -1,10 +1,7 @@
-import { FC, useContext, useRef } from "react"
-import { useDrop,useDrag } from "react-dnd"
-import { Identifier, XYCoord } from "dnd-core"
-import { DraggableTypes } from "../../Util"
-import { SaveTasks, TasksContext } from "../Tasks"
 import { useSortable } from "@dnd-kit/sortable"
-import {CSS} from "@dnd-kit/utilities"
+import { CSS } from "@dnd-kit/utilities"
+import { useContext } from "react"
+import { SaveTasks, TasksContext } from "../Tasks"
 
 export interface TaskItemProps{
     id: string
@@ -87,8 +84,8 @@ export function TaskItem(props:TaskItemProps){
     return <div ref={setNodeRef} style={style} {...attributes} {...listeners}
     className="task-item transition-colors">
         <div onClick={()=>{
-            let currentTasks = [...tasks];
-            for (let t of currentTasks){
+            const currentTasks = [...tasks];
+            for (const t of currentTasks){
                 if(t.id!==props.id) continue;
                 t.completed = t.completed ? false : true;
             }
@@ -101,8 +98,8 @@ export function TaskItem(props:TaskItemProps){
         <span className="text-default p-2 text-md">{props.content}</span>
         <div onClick={(event)=>{
             event?.stopPropagation();
-            let currentTasks=[...tasks];
-            for (let t in currentTasks){
+            const currentTasks=[...tasks];
+            for (const t in currentTasks){
                if(currentTasks[t].id===props.id){
                     currentTasks.splice(parseInt(t),1);
                } 

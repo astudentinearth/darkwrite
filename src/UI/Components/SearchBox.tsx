@@ -1,6 +1,7 @@
 import { useRef } from "react";
 
 function SearchBox(){
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const searchbox:any = useRef(null);
     return <div onClick={()=>{searchbox.current.focus();}} className="flex box-shadow-4-8-20 float-left items-center h-12 hover:bg-hover transition-all rounded-2xl bg-secondary">
         <svg className="absolute ml-4" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">

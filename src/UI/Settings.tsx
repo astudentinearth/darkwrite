@@ -1,13 +1,12 @@
-import React, { useContext, useState } from "react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import React, { useState } from "react";
 import About from "./SettingsApplets/About";
-import {SaveAllSettings, SettingsContext} from "../GlobalSettings"
-import DebugInfo from "./SettingsApplets/DebugInfo";
-import ToolbarButton from "./Components/ToolbarButton";
-import ThemeOptions from "./SettingsApplets/ThemeOptions";
-import FontOptions from "./SettingsApplets/Fonts";
-import WallpaperApplet from "./SettingsApplets/WallpaperApplet";
 import { Acknowledgements } from "./SettingsApplets/Acknowledgements";
+import DebugInfo from "./SettingsApplets/DebugInfo";
 import { DevConsole } from "./SettingsApplets/DevConsole";
+import FontOptions from "./SettingsApplets/Fonts";
+import ThemeOptions from "./SettingsApplets/ThemeOptions";
+import WallpaperApplet from "./SettingsApplets/WallpaperApplet";
 //import { AdvancedSettings } from "./SettingsApplets/Advanced";
 let ShowSettings:any;
 let HideSettings:any;
@@ -20,9 +19,10 @@ enum SettingsPage{
 
 function SettingsView(){
     const [page,setPage] = useState(SettingsPage.Appearance);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     function SidebarButton(props:any){
         return <div onClick={props.onClick}
-        className="rounded-xl hover:bg-hover flex items-center p-2 m-2 cursor-pointer active:bg-active"
+        className="rounded-xl transition-colors hover:bg-hover flex items-center p-2 m-2 cursor-pointer active:bg-active"
         style={(props.isActive==="true" ? {background:"rgb(var(--accent))",color:"white"} : {})}>
             <i className={"text-xl "+props.icon}></i><span className="text-xl pl-2">{props.title}</span>
         </div>
@@ -66,7 +66,6 @@ function SettingsView(){
 function Settings(){
     const [visibility,setVisibility] = useState("none");
     const [,updateState]=useState({});
-    const {settings,updateSettings} = useContext(SettingsContext);
     function showSettings(){
         console.log("showing settings");
         updateState({});
@@ -84,4 +83,5 @@ function Settings(){
 </div>
 }
 
-export {Settings,ShowSettings};
+export { Settings, ShowSettings };
+

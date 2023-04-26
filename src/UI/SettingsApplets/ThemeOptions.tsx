@@ -1,7 +1,7 @@
 import { BaseDirectory, readDir, readTextFile } from "@tauri-apps/api/fs";
-import { useContext,useEffect, useRef, useState } from "react";
-import { GlobalSettings, SaveAllSettings, SettingsContext } from "../../GlobalSettings";
-import { ApplyTheme, HexToRGB, RGBToHex, SetupThemes } from "../../Theme";
+import { ChangeEvent, MouseEvent, useContext, useEffect, useState } from "react";
+import { SettingsContext } from "../../GlobalSettings";
+import { HexToRGB, RGBToHex } from "../../Theme";
 import AppletBase from "../Components/SettingsApplet";
 
 interface IColorSchemeData{
@@ -23,24 +23,16 @@ function ThemeOptions(){
     const settingsContext = useContext(SettingsContext);
     const {settings,updateSettings} = settingsContext;
 
-    let select_dark:any = useRef(null);
-    let select_light:any = useRef(null);
-    function ChangeTheme(themeFile:string){
-        updateSettings({...settings,ThemeFile:themeFile})
-        //SaveAllSettings(settingsContext);
-        SetupThemes(settingsContext).then(()=>{ApplyTheme(settings.ThemeFile, settingsContext);});
-        updateState({});
-    }
     useEffect(()=>{
         const loadSchemes = async () => {
             const fsEntries = await readDir("color-schemes",{dir:BaseDirectory.App});
-            let fileNames=fsEntries.map(e => e.name);
-            let schemes:IColorSchemeData[] = [] as IColorSchemeData[];
+            const fileNames=fsEntries.map(e => e.name);
+            const schemes:IColorSchemeData[] = [] as IColorSchemeData[];
             for(const f of fileNames){
                 if (!f) return;
                 const contents = await readTextFile("color-schemes/"+f,{dir:BaseDirectory.App});
-                let _json = JSON.parse(contents);
-                let scheme: IColorSchemeData = {SchemeFileName: f, 
+                const _json = JSON.parse(contents);
+                const scheme: IColorSchemeData = {SchemeFileName: f, 
                     ColorSchemeName: _json.name ?? "Unnamed Theme",
                     background: _json.background ?? "57 57 57",
                     foreground: _json.foreground ?? "#ffffff",
@@ -61,9 +53,15 @@ function ThemeOptions(){
     },[]);
     return <AppletBase title="Colors">
             <div className="overflow-y-scroll select-none mx-2 rounded-2xl bg-secondary shadow-lg" >
-                {colors.map(e=><div className="p-2 hover:bg-hover cursor-pointer 
+                {colors.map(e=><div key={e.SchemeFileName} className="p-2 hover:bg-hover cursor-pointer transition-all
                 rounded-2xl w-48 h-12 flex items-center flex-row float-left m-2" 
                 style={settings.ThemeFile===e.SchemeFileName ? {background: "rgb(var(--accent))", color:"white"}:{}}
+                onMouseEnter={(event:MouseEvent<HTMLDivElement>)=>{
+                    if(settings.ThemeFile===e.SchemeFileName) (event.target as HTMLDivElement).style.setProperty("filter","brightness(120%)");
+                }}
+                onMouseLeave={(event:MouseEvent<HTMLDivElement>)=>{
+                    if(settings.ThemeFile===e.SchemeFileName) (event.target as HTMLDivElement).style.setProperty("filter","");
+                }}
                 onClick={()=>{
                     if(e.SchemeFileName!==settings.ThemeFile){
                         updateSettings({...settings,ThemeFile:e.SchemeFileName});
@@ -83,8 +81,10 @@ function ThemeOptions(){
             <input type="color"
              defaultValue={RGBToHex(settings.AccentColor)}
              className="appearance-none w-6 outline-none border-none rounded-full bg-transparent"
-             onChange={(event:any)=>{
-                let rgb:any = HexToRGB(event.target.value);
+             onChange={(event:ChangeEvent)=>{
+                if(event.target==null) return;
+                const rgb = HexToRGB((event.target as HTMLInputElement).value);
+                if(rgb==null) return;
                 updateSettings({...settings,AccentColor:rgb.r+" "+rgb.g+" "+rgb.b});
                 document.documentElement.style.setProperty("--accent",settings.AccentColor);
              }}

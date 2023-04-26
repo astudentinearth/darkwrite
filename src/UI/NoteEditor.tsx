@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useRef, useState } from "react";
 import { HexToRGB } from "../Theme";
 import { FontStyle, INote } from "../Util";
@@ -11,7 +12,7 @@ export function NoteEditor() {
     showEditor = (id: string) => {
         console.log("showing editor")
         if (id==="-1") {setNote({id:"-1"} as INote); return;}
-        let note = getNote(id);
+        const note = getNote(id);
         setNote(note);
         updateNote(note);
         setVisibility(true);
@@ -30,8 +31,8 @@ export function NoteEditor() {
                 return "";
         }
     }
-    let customFontRef: any = useRef(null);
-    let titleRef: any = useRef(null);
+    const customFontRef: any = useRef(null);
+    const titleRef: any = useRef(null);
     useEffect(() => {
         const change = setTimeout(() => {
             if (note.id!=="-1") updateNote(note);

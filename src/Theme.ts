@@ -1,9 +1,7 @@
-import { invoke } from "@tauri-apps/api";
-import { BaseDirectory, createDir,exists,readBinaryFile,readTextFile, removeFile, writeFile } from "@tauri-apps/api/fs";
-import { GlobalSettings, ISettingsContext, SettingsContext } from "./GlobalSettings";
-import { Uint8ArrayToBase64 } from "./Util";
+import { BaseDirectory, createDir, exists, readTextFile, removeFile, writeFile } from "@tauri-apps/api/fs";
 import { appConfigDir, join } from "@tauri-apps/api/path";
-import {convertFileSrc} from "@tauri-apps/api/tauri";
+import { convertFileSrc } from "@tauri-apps/api/tauri";
+import { ISettingsContext } from "./SettingsContext";
 
 const LightTheme=`{
     "name":"Darkwrite Light",
@@ -33,18 +31,18 @@ const DarkTheme=`{
      * @param rgb: Red, green and blue channels separated with whitespaces
      */
 function RGBToHex(rgb:string){
-    let channels = rgb.split(' ');
+    const channels = rgb.split(' ');
     if(channels.length!==3){
         console.error("Can't convert RGB to hexadecimal. Invalid number of channels.");
     }
-    let r = Number(channels[0]).toString(16);
-    let g = Number(channels[1]).toString(16);
-    let b = Number(channels[2]).toString(16);
+    const r = Number(channels[0]).toString(16);
+    const g = Number(channels[1]).toString(16);
+    const b = Number(channels[2]).toString(16);
     return "#"+r+g+b;
 }
 
 function HexToRGB(hex:string){
-    let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
     return result ? {
         r: parseInt(result[1],16),
         g: parseInt(result[2],16),
@@ -54,12 +52,13 @@ function HexToRGB(hex:string){
 
 class Themes{
     public static CurrentTheme:string; // current theme file name
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public static CurrentThemeJSON:any; // json of current theme
 }
 // reads the theme files and creates theme objects 
 async function SetupThemes(settingsContext:ISettingsContext){
     console.log("[INFO] Setting themes up");
-    const {settings,updateSettings} = settingsContext;
+    const {settings} = settingsContext;
     // apply fallback themes if the files are not there
    
     console.log("[INFO] Checking for color schemes directory");
@@ -70,8 +69,8 @@ async function SetupThemes(settingsContext:ISettingsContext){
     }
     await writeFile("color-schemes/colors_light.json",LightTheme,{dir: BaseDirectory.App});
     await writeFile("color-schemes/colors_dark.json",DarkTheme,{dir: BaseDirectory.App});
-    let text = await readTextFile("color-schemes/"+settings.ThemeFile,{dir: BaseDirectory.App});
-    let json = JSON.parse(text);
+    const text = await readTextFile("color-schemes/"+settings.ThemeFile,{dir: BaseDirectory.App});
+    const json = JSON.parse(text);
     if (json) Themes.CurrentThemeJSON = json;
     console.log("[INFO] Applying theme preferences");
     ApplyTheme(settings.ThemeFile,settingsContext);
@@ -81,13 +80,9 @@ async function SetupThemes(settingsContext:ISettingsContext){
 // Applies a theme
 // TODO: Separate the inner part to a separate function: duplicate code. Give the JSON object to the new function to apply it.
 function ApplyTheme(themeFileName:string, context:ISettingsContext){
-    const {settings,updateSettings} = context;
+    const {settings} = context;
     console.log("[INFO from ApplyTheme()] Applying theme");
     document.documentElement.style.setProperty("--font",settings.Font);
-    document.documentElement.style.setProperty("--font-sans",settings.SansFont);
-    document.documentElement.style.setProperty("--font-serif",settings.SerifFont);
-    document.documentElement.style.setProperty("--font-hand",settings.HandwritingFont);
-    document.documentElement.style.setProperty("--font-mono",settings.MonospaceFont);
     document.documentElement.style.setProperty("--accent",settings.AccentColor);
     console.log("[INFO from ApplyTheme()] Setting up dark theme");
     document.documentElement.style.setProperty("--background-default",Themes.CurrentThemeJSON["background"]||"57 57 57");
@@ -114,7 +109,8 @@ function ApplyTheme(themeFileName:string, context:ISettingsContext){
 
 async function ApplyWallpaper(){
     let ext = "";
-    let bgimg:any = document.querySelector("#bgImage");
+    const bgimg = document.querySelector<HTMLImageElement>("#bgImage");
+    if(bgimg==null) return;
     if(await exists("wallpaper.png",{dir: BaseDirectory.App})) ext="png";
     if(await exists("wallpaper.jpg",{dir: BaseDirectory.App})) ext="jpg";
     if(await exists("wallpaper.jpeg",{dir: BaseDirectory.App})) ext="jpeg";
@@ -122,8 +118,8 @@ async function ApplyWallpaper(){
         bgimg.style.setProperty("display","none");
         return;
     }
-    let filePath = await join(await appConfigDir(), "wallpaper."+ext);
-    let assetURL = convertFileSrc(filePath);
+    const filePath = await join(await appConfigDir(), "wallpaper."+ext);
+    const assetURL = convertFileSrc(filePath);
 
     //let bin = await readTextFile("wallpaper.base64",{dir: BaseDirectory.App});
    
@@ -133,7 +129,8 @@ async function ApplyWallpaper(){
 }
 
 export async function DeleteWallpaper(){
-    let bgimg:any = document.querySelector("#bgImage");
+    const bgimg = document.querySelector<HTMLImageElement>("#bgImage");
+    if(bgimg==null) return;
     bgimg.style.setProperty("display","none");
     let ext = "";
     if(await exists("wallpaper.png",{dir: BaseDirectory.App})) ext="png";
@@ -143,4 +140,4 @@ export async function DeleteWallpaper(){
     await removeFile("wallpaper."+ext,{dir: BaseDirectory.App});
 }
 
-export {Themes,SetupThemes,ApplyWallpaper,ApplyTheme,/*SwitchTheme,*/HexToRGB,RGBToHex};
+export { Themes, SetupThemes, ApplyWallpaper, ApplyTheme, /*SwitchTheme,*/ HexToRGB, RGBToHex };

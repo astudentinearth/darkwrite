@@ -1,10 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /**
  * Type of font to be used in a note.
  */
 
 import { fs } from "@tauri-apps/api"
 import { BaseDirectory, readTextFile, writeTextFile } from "@tauri-apps/api/fs"
-import React from "react"
 
 /** @deprecated */
 enum FontStyle{
@@ -59,30 +59,6 @@ interface IAppData{
 
 
 /**
- * Get a font style from string
- * @param str 
- * @returns Relevant FontStyle
- */
-function FontStyleFromString(str:string){
-    switch(str){
-        case "sans":
-            return FontStyle.Sans;
-
-        case "serif":
-            return FontStyle.Serif;
-
-        case "handwriting":
-            return FontStyle.Handwriting;
-
-        case "mono":
-            return FontStyle.Monospace;
-
-        default:
-            return FontStyle.Custom;
-    }
-}
-
-/**
  * Converts a byte array to base64
  * @param buf Target byte array (Uint8Array)
  * @returns Base64 encoded string
@@ -109,9 +85,9 @@ async function Uint8ArrayToBase64(buf:Uint8Array){
  * TODO: Pending reimplementation for new format
  */
 function ConvertJSONToINote(json:any){
-    let ret:INote[]=[];
+    const ret:INote[]=[];
     json.forEach((element:any) => {
-        let n: INote={id:element.id ?? GenerateID(), // if there is not an id, give it an id
+        const n: INote={id:element.id ?? GenerateID(), // if there is not an id, give it an id
             title:element.title ?? "",
             content:element.content ?? "",
             background:element.background ?? "#FFFFFF",
@@ -126,24 +102,15 @@ function ConvertJSONToINote(json:any){
     });
     return ret;
 }
-function ConvertJSONToINotebook(json:any){
-    let ret:INotebook[]=[];
-    json.forEach((element:any)=>{
-        let n:INotebook={id:element.id ?? GenerateID(),
-        name:element.name ?? "Unnamed Notebook"};
-        ret.push(n);
-    });
-    return ret;
-}
 
 async function GetNotebooks(){
     if(!await fs.exists("notebooks.json",{dir:BaseDirectory.App})){
         console.log("Notebooks file not found");
         await writeTextFile("notebooks.json",`{notebooks:[]}`,{dir:BaseDirectory.App});
     }
-    let notebooks_plain = await readTextFile("notebooks.json",{dir: BaseDirectory.App});
+    const notebooks_plain = await readTextFile("notebooks.json",{dir: BaseDirectory.App});
     console.log(notebooks_plain);
-    let notebooksJSON:any = JSON.parse(notebooks_plain);
+    const notebooksJSON:any = JSON.parse(notebooks_plain);
     if(notebooksJSON.notebooks == null) return [{id: "0",name:"My Notes"}] as INotebook[];
     if(notebooksJSON.notebooks.length===0){
         console.log("No notebooks were found. Creating default one.")
@@ -159,9 +126,9 @@ async function GetNotebooks(){
  */
 function GenerateID(){
     // time.getTime + 8 digit random number
-    let t = new Date();
-    let n = Math.floor(Math.random()*(10**8));
-    let id:string = t.getTime().toString() + n.toString();
+    const t = new Date();
+    const n = Math.floor(Math.random()*(10**8));
+    const id:string = t.getTime().toString() + n.toString();
     return id;
 }
 
@@ -169,8 +136,8 @@ function GenerateID(){
  * @returns ITask[]
  */
 function JSONToITaskArray(json:any){
-    let tasks = [] as ITask[];
-    for(let t of json.tasks){
+    const tasks = [] as ITask[];
+    for(const t of json.tasks){
         tasks.push(
             {
                 content: t.content ?? "Task",
@@ -182,7 +149,7 @@ function JSONToITaskArray(json:any){
     return tasks;
 }
 // TODO: Move to a JSON object
-const DefaultSettings:string=`
+const DefaultSettings=`
 {
     "version":"1",
     "theme":"dark",
@@ -240,5 +207,6 @@ export interface NoteInfo extends NoteHeader{
     content: string;
 }
 
-export { Uint8ArrayToBase64, GenerateID, ConvertJSONToINote, FontStyle,JSONToITaskArray,ConvertJSONToINotebook, GetNotebooks, DefaultSettings };
-export type {INote, ITask, IAppData, INotebook };
+export { Uint8ArrayToBase64, GenerateID, ConvertJSONToINote, FontStyle, JSONToITaskArray, GetNotebooks, DefaultSettings }
+export type { INote, ITask, IAppData, INotebook }
+

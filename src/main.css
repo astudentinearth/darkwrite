@@ -2,6 +2,17 @@
 @tailwind components;
 @tailwind utilities; 
 @tailwind variants;
+
+
+@layer components{
+    .search-box{
+        background-repeat: no-repeat;
+        background-position: 10px center;
+        background-size: 16px;
+    }
+}
+
+
 :root{
     --background-default:255 255 255;
     --shadow: rgba(0,0,0,0.2);
@@ -12,10 +23,6 @@
     --background-hover:231 231 231;
     --background-active:239 239 239;
     --accent: 87 104 255;
-    --font-serif: "Roboto Slab";
-    --font-sans: "Roboto";
-    --font-mono: "Roboto Mono";
-    --font-hand: "Yellowtail";
     --background-disabled: 204 204 204;
     --text-disabled: 153 153 153;
 }
@@ -31,23 +38,6 @@ html{
     overflow-y:hidden;
 }
 
-.border-default{
-    border: var(--border);
-}
-
-.shadow-default{
-    @apply shadow-black/20;
-} 
-.shadow-default-hover{
-    @apply shadow-default transition-shadow duration-200;
-}
-
-.shadow-default-hover:hover{
-    box-shadow: 0px 6px 18px -4px var(--shadow);
-}
-.background-default{
-    @apply bg-primary;
-}
 .background-secondary{
     @apply bg-secondary;
 }
@@ -55,24 +45,8 @@ html{
     color: var(--text-default);
 }
 
-.dropdown{
-    @apply appearance-none background-secondary border-default text-default shadow-default-hover p-2 rounded-xl cursor-pointer;
-}
-
 input[type=text]:not(#taskInput){
     color: var(--text-default);
-    
-    @apply border-default;
-}
-
-input[type=time]{
-    background-color: var(--background-default);
-    color: var(--text-default);
-    @apply shadow-default rounded-xl p-2 border-default;
-}
-
-.button{
-    @apply background-default shadow-default-hover rounded-xl p-4 cursor-pointer;
 }
 
 .hide-outline:focus{
@@ -96,7 +70,8 @@ input[type=time]{
     @apply brightness-110;
 }
 .task-item{
-    @apply flex items-center;
+    display: flex;
+    align-items: center;
 }
 
 .task-item .task-delete-button{
@@ -113,33 +88,10 @@ input[type=time]{
 .toolbar-button:active,.task-item:active{
     @apply bg-active;
 }
-.no-shadow{
-    box-shadow: none;
-}
-
-.block{
-    display:block;
-}
-
-.hidden{
-    display:none;
-}
-
 
 .flex-right{
     margin-left: auto;
-    order:2;
-    
-}
-
-
-
-@layer components{
-    .search-box{
-        background-repeat: no-repeat;
-        background-position: 10px center;
-        background-size: 16px;
-    }
+    order:2; 
 }
 
 .open{
@@ -185,28 +137,6 @@ input[type=color]::-webkit-color-swatch-wrapper{
     box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.2);
 }
 
-.background-clip-text{
-    @apply bg-clip-text;
-    -webkit-background-clip: text;
-}
-
-.note .note-actions-bar{
-    visibility:hidden;
-    opacity: 0;
-    transition: opacity 0.2s;
-    @apply bg-gradient-to-t from-black/0 to-transparent;
-} 
-
-.note:hover .note-actions-bar{
-    visibility:visible;
-    opacity: 1;
-    @apply bg-gradient-to-t from-black/40 to-transparent;
-}
-
-.remove-blur{
-    backdrop-filter: none;
-}
-
 ::-webkit-scrollbar{
     width: 5px;
 }
@@ -230,12 +160,11 @@ input[type=color]::-webkit-color-swatch-wrapper{
 }
 
 #mainToolbar > *:not(:first-child){
-    @apply ml-2;
+    margin-left: 8px;
 }
 
 .sidebar-open{
     width: 18rem !important;
-    /*display: flex !important;*/
 }
 
 .sidebar-closed{
@@ -248,7 +177,7 @@ input[type=color]::-webkit-color-swatch-wrapper{
     appearance: none;
     width:100%;
     height: 4px;
-    background: rgb(var(--background-secondary));
+    background: linear-gradient(to right, rgb(var(--accent)) 0%, rgb(var(--accent)) 50%, rgb(var(--background-secondary)) 50%, rgb(var(--background-secondary)));
     filter: drop-shadow(0 2px 2px rgba(0,0,0,0.2));
     outline: none;
     border-radius: 99px;
@@ -263,4 +192,16 @@ input[type=color]::-webkit-color-swatch-wrapper{
     cursor: pointer;
     filter: drop-shadow(0 0 2px rgba(0,0,0,0.2));
     background: white;
+}
+
+.select1{
+    appearance: none;
+    background-color: transparent;
+    border: none;
+    padding: 2px;
+    text-align: center;
+}
+
+.select1:hover{
+    background: rgb(var(--background-hover));
 }

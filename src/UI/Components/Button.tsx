@@ -1,4 +1,4 @@
-import { useRef } from "react"
+import React, { useRef } from "react"
 
 /** Button general properties */
 export interface ButtonProps{
@@ -15,7 +15,7 @@ export interface ButtonProps{
     /** Button height (default fits content) */
     height?: number | "auto"
     /** Click event handler */
-    onClick?: ()=>any
+    onClick?: ()=>unknown
 }
 
 /** Coloring options for buttons */
@@ -42,7 +42,7 @@ export enum ButtonShape{
 
 /** Generates appropriate button styles from given properties */
 function GenerateButtonStyle(props: ButtonProps) : React.CSSProperties{
-    let style = { } as React.CSSProperties;
+    const style = { } as React.CSSProperties;
     if (props.color == null || props.color===ButtonColor.Default){ 
         style.background="rgba(var(--background-secondary) / 1)";
     }
@@ -61,7 +61,7 @@ function GenerateButtonStyle(props: ButtonProps) : React.CSSProperties{
 
 /** Returns a button component */
 export function Button(props:ButtonProps){
-    let ref = useRef<HTMLButtonElement>(null);
+    const ref = useRef<HTMLButtonElement>(null);
     return <button ref={ref} onClick={props.onClick}
      style={GenerateButtonStyle(props)} 
      onMouseEnter={()=>{

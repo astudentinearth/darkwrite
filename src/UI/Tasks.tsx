@@ -1,26 +1,21 @@
-import { invoke } from "@tauri-apps/api";
-import update from 'immutability-helper'
-import React, { Dispatch, SetStateAction, useCallback, useRef, useState } from "react";
-import { useEffect } from "react";
-import { BaseDirectory, exists, readTextFile, writeFile } from "@tauri-apps/api/fs";
-import { DraggableTypes, GenerateID, ITask, JSONToITaskArray } from "../Util";
-import { TaskItem } from "./Components/TaskItem";
-import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
-import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from "@dnd-kit/sortable";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { DndContext, PointerSensor, closestCenter, useSensor, useSensors } from "@dnd-kit/core";
 import { DragEndEvent } from "@dnd-kit/core/dist/types";
-import {restrictToVerticalAxis} from "@dnd-kit/modifiers";
+import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
+import { SortableContext, arrayMove, verticalListSortingStrategy } from "@dnd-kit/sortable";
+import { BaseDirectory, exists, readTextFile, writeFile } from "@tauri-apps/api/fs";
+import React, { Dispatch, SetStateAction, useCallback, useEffect, useRef, useState } from "react";
+import { GenerateID, ITask, JSONToITaskArray } from "../Util";
+import { TaskItem } from "./Components/TaskItem";
 let changeTasks:any;
 let getTasks:any;
-export const TasksContext = React.createContext<ITasksContext>({tasks: [], setTasks: ()=>{}});
+export const TasksContext = React.createContext<ITasksContext>({tasks: [], setTasks: ()=>{return;}});
 
 interface ITasksContext{
     tasks: ITask[]
     setTasks: Dispatch<SetStateAction<ITask[]>>
 }
 
-interface TasksContainerState {
-    tasks: ITask[]
-}
 
 async function LoadTasks(){
     console.log("[INFO from LoadTasks()] Loading tasks");
@@ -30,8 +25,8 @@ async function LoadTasks(){
         return [] as ITask[];
     }
     console.log("[INFO from LoadTasks()] Reading tasks file");
-    let tasksFile:string=await readTextFile("tasks.json",{dir: BaseDirectory.App});
-    let tasksJSON=JSON.parse(tasksFile);
+    const tasksFile:string=await readTextFile("tasks.json",{dir: BaseDirectory.App});
+    const tasksJSON=JSON.parse(tasksFile);
     return JSONToITaskArray(tasksJSON) ?? [] as ITask[];
 }
 
@@ -39,6 +34,7 @@ export async function SaveTasks(){
     console.log("[INFO from SaveTasks()] Saving tasks");
     await writeFile("tasks.json",JSON.stringify({tasks:getTasks()}),{dir: BaseDirectory.App});
 }
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-ignore
 class TasksPointerSensor extends PointerSensor{
     static activators = [{
@@ -57,7 +53,7 @@ class TasksPointerSensor extends PointerSensor{
 function isInteractiveElement(elementClassNames: string[]){
     const interactiveElements = ["checkbox","task-delete-button","ignore-drag"];
     console.log(elementClassNames);
-    for(let name of elementClassNames){
+    for(const name of elementClassNames){
         if (interactiveElements.includes(name)) return true;
     }
     return false;
@@ -65,41 +61,31 @@ function isInteractiveElement(elementClassNames: string[]){
 
 function Tasks(){
     const [tasks,setTasks] = useState([] as ITask[]);
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     //@ts-ignore
     const sensors = useSensors(useSensor(TasksPointerSensor))
     useEffect(()=>{
         const load = async ()=>{
-            let _tasks =await LoadTasks();
+            const _tasks =await LoadTasks();
             setTasks(_tasks);
         }
         load();
     },[]);
-    let taskInputRef:any = useRef(null);
+    const taskInputRef:any = useRef(null);
     changeTasks=setTasks;
     getTasks=returnTasks;
     function returnTasks(){
         return tasks;
     }
     function AddTask(content:string){
-        let t=[...tasks];
-        let task={completed: false,content:content,id:GenerateID()} as ITask;
+        const t=[...tasks];
+        const task={completed: false,content:content,id:GenerateID()} as ITask;
         t.unshift(task);
         setTasks(t);
         SaveTasks();
     }
-    function removeTask(id:string){
-        let currentTasks=[...tasks];
-        for (let t in currentTasks){
-           if(currentTasks[t].id===id){
-                currentTasks.splice(parseInt(t),1);
-           } 
-        }
-        setTasks(currentTasks);
-        console.log(tasks);
-        SaveTasks();
-    }
     function InputKeyDown(event:any){
-        let taskInput:any=document.getElementById("taskInput");
+        const taskInput:any=document.getElementById("taskInput");
         if(event.keyCode===13 && taskInput.value.trim().length!==0){
             AddTask(taskInput.value);
             taskInput.value="";
@@ -156,4 +142,5 @@ function Tasks(){
 }
 
 
-export {Tasks,LoadTasks,getTasks,changeTasks};
+export { Tasks, LoadTasks, getTasks, changeTasks };
+

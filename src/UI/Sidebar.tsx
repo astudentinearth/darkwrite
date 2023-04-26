@@ -1,4 +1,3 @@
-import { useEffect, useRef } from "react";
 import SidebarTabView from "./Components/SidebarTabView";
 
 function Sidebar(){
