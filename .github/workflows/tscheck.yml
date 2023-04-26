@@ -1,0 +1,33 @@
+# Check for TypeScript code issues and try compiling
+
+name: eslint and tsc
+on:
+  push:
+    branches:
+      - '*'
+      
+env:
+  CI: false
+  
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    name: ESLint Check
+    steps:
+      - name: Install node
+        uses: actions/setup-node@v2.5.2
+        with:
+          node-version: 16
+        
+      - name: Checkout
+        uses: actions/checkout@v3.5.2
+      
+      - name: Dependencies
+        run: npm ci
+        
+      - name: Lint
+        run: npx eslint src/**/*.{ts,tsx}
+        
+      - name: Bundle
+        run: npx tsc
