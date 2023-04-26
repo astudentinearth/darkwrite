@@ -1,38 +1,37 @@
----
-name: Bug report
-about: Create a report to help us improve
-title: ''
-labels: ''
-assignees: ''
+### Bug summary
+Describe us what happened. 
 
----
-
-**Describe the bug**
-A clear and concise description of what the bug is.
-
-**To Reproduce**
-Steps to reproduce the behavior:
+### Steps to reproduce
+Tell us how you triggered the bug.
 1. Go to '...'
 2. Click on '....'
 3. Scroll down to '....'
 4. See error
 
-**Expected behavior**
-A clear and concise description of what you expected to happen.
+### Expected behaviour
+What should have happened normally?
 
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
+### Screenshots, videos, etc.
+Put images/videos of the bug occuring if you have any.
 
-**Desktop (please complete the following information):**
- - OS: [e.g. iOS]
- - Browser [e.g. chrome, safari]
- - Version [e.g. 22]
+### App and system information
+Darkwrite version:  
+Operating system: Windows, macOS, or Linux
 
-**Smartphone (please complete the following information):**
- - Device: [e.g. iPhone6]
- - OS: [e.g. iOS8.1]
- - Browser [e.g. stock browser, safari]
- - Version [e.g. 22]
+If you are a Windows user, fill the section below  
+Windows version, build number and edition:  
+WebView2 Version: (You can find this in Add or Remove Programs)  
+Release channel: Release, Release Preview, Beta, Dev, Canary
 
-**Additional context**
-Add any other context about the problem here.
+If you are a Linux user, fill the section below  
+Distribution and version:  
+Desktop environment:  
+Windowing system: X11 or Wayland
+
+If you are a macOS user, fill the section below
+Device:  
+macOS version:  
+WebView version:  
+
+### Additional info
+Anything you might want to add
