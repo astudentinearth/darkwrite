@@ -4,6 +4,7 @@ export class GlobalSettings {
     public Version = "1.0d";
     public AccentColor = "87 104 255";
     public WallpaperBlurRadius = 0;
+    public Locale = "en_us";
     public static GetDefault() {
         return new GlobalSettings();
     }
@@ -13,7 +14,8 @@ export class GlobalSettings {
             "font": s.Font,
             "accentColor": s.AccentColor,
             "version": s.Version,
-            "wallpaperBlurRadius": s.WallpaperBlurRadius
+            "wallpaperBlurRadius": s.WallpaperBlurRadius,
+            "locale": s.Locale
         };
         return json;
     }
@@ -24,6 +26,7 @@ export class GlobalSettings {
         s.Font = json.font ?? "Roboto";
         s.AccentColor = json.accentColor ?? "87 104 255";
         s.WallpaperBlurRadius = json.wallpaperBlurRadius ?? 0;
+        s.Locale = json.locale ?? "en_us";
         return s;
     }
 }

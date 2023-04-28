@@ -198,8 +198,9 @@ input[type=color]::-webkit-color-swatch-wrapper{
     appearance: none;
     background-color: transparent;
     border: none;
-    padding: 2px;
+    padding: 4px;
     text-align: center;
+    border-radius: 4px;
 }
 
 .select1:hover{

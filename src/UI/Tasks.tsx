@@ -4,9 +4,10 @@ import { DragEndEvent } from "@dnd-kit/core/dist/types";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 import { SortableContext, arrayMove, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { BaseDirectory, exists, readTextFile, writeFile } from "@tauri-apps/api/fs";
-import React, { Dispatch, SetStateAction, useCallback, useEffect, useRef, useState } from "react";
+import React, { Dispatch, SetStateAction, useCallback, useContext, useEffect, useRef, useState } from "react";
 import { GenerateID, ITask, JSONToITaskArray } from "../Util";
 import { TaskItem } from "./Components/TaskItem";
+import { GetLocalizedResource, LocaleContext } from "../localization/LocaleContext";
 let changeTasks:any;
 let getTasks:any;
 export const TasksContext = React.createContext<ITasksContext>({tasks: [], setTasks: ()=>{return;}});
@@ -64,6 +65,7 @@ function Tasks(){
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     //@ts-ignore
     const sensors = useSensors(useSensor(TasksPointerSensor))
+    const {locale} = useContext(LocaleContext);
     useEffect(()=>{
         const load = async ()=>{
             const _tasks =await LoadTasks();
@@ -114,7 +116,7 @@ function Tasks(){
     return <div id="TaskPanel" className="w-72 flex flex-col overflow-x-hidden flex-[1_1_auto] overflow-y-auto min-h-0 relative text-default z-10 transition-all" >
        <TasksContext.Provider value={{tasks, setTasks}}>
             <div className="flex h-12 flex-[0_1_auto] w-72">
-                <input ref={taskInputRef} tabIndex={0} type="text" onKeyDown={InputKeyDown} id="taskInput" placeholder="A new task" className="border-default inline-block hide-outline w-[240px] bg-secondary/25 h-12 p-2 text-xl"></input>
+                <input ref={taskInputRef} tabIndex={0} type="text" onKeyDown={InputKeyDown} id="taskInput" placeholder={GetLocalizedResource("taskBoxPlaceholder",locale)} className="border-default inline-block hide-outline w-[240px] bg-secondary/25 h-12 p-2 text-xl"></input>
                 <div onClick={()=>{
                     if(taskInputRef.current.value.trim().length!==0){
                         AddTask(taskInputRef.current.value);

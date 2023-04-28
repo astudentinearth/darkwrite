@@ -17,5 +17,12 @@
     "wallpaperAppletTitle": "Arka Plan",
     "wallpaperAppletBlurLabel": "Bulanıklaştır",
     "wallpaperAppletChooseButton": "Arka Plan Seç",
-    "wallpaperAppletRemoveButton": "Arka Planı Kaldır"
+    "wallpaperAppletRemoveButton": "Arka Planı Kaldır",
+    "searchBoxPlaceholder": "Ara",
+    "alphabeticalSort": "Alfabetik",
+    "newestFirstSort": "Yeniden eskiye",
+    "oldestFirstSort": "Eskiden yeniye",
+    "lastModifiedSort": "Son değiştirilen",
+    "taskBoxPlaceholder": "Yeni görev",
+    "defaultNotebookName": "Notlarım"
 }

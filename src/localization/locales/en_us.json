@@ -17,5 +17,12 @@
     "wallpaperAppletTitle": "Wallpaper",
     "wallpaperAppletBlurLabel": "Blur",
     "wallpaperAppletChooseButton": "Choose Wallpaper",
-    "wallpaperAppletRemoveButton": "Remove Wallpaper"
+    "wallpaperAppletRemoveButton": "Remove Wallpaper",
+    "searchBoxPlaceholder": "Search",
+    "alphabeticalSort": "Alphabetical",
+    "newestFirstSort": "Newest first",
+    "oldestFirstSort": "Oldest first",
+    "lastModifiedSort": "Last modified",
+    "taskBoxPlaceholder": "A new task",
+    "defaultNotebookName": "My Notes"
 }

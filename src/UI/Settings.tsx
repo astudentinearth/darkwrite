@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useContext, useState } from "react";
+import React, { ChangeEvent, useContext, useState } from "react";
 import About from "./SettingsApplets/About";
 import { Acknowledgements } from "./SettingsApplets/Acknowledgements";
 import DebugInfo from "./SettingsApplets/DebugInfo";
@@ -8,6 +8,7 @@ import FontOptions from "./SettingsApplets/Fonts";
 import ThemeOptions from "./SettingsApplets/ThemeOptions";
 import WallpaperApplet from "./SettingsApplets/WallpaperApplet";
 import { GetLocalizedResource, LocaleContext } from "../localization/LocaleContext";
+import { SettingsContext } from "../SettingsContext";
 //import { AdvancedSettings } from "./SettingsApplets/Advanced";
 let ShowSettings:any;
 let HideSettings:any;
@@ -21,6 +22,7 @@ enum SettingsPage{
 function SettingsView(){
     const [page,setPage] = useState(SettingsPage.Appearance);
     const {locale} = useContext(LocaleContext);
+    const {settings, updateSettings} = useContext(SettingsContext);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     function SidebarButton(props:any){
         return <div onClick={props.onClick}
@@ -56,6 +58,13 @@ function SettingsView(){
             {/*<SidebarButton onClick={()=>{setPage(SettingsPage.Advanced)}} isActive={(page===SettingsPage.Advanced) ? "true" : ""} icon="bi-toggles" title="Advanced"></SidebarButton>*/}
             <SidebarButton onClick={()=>{setPage(SettingsPage.Developer)}} isActive={(page===SettingsPage.Developer) ? "true" : ""} icon="bi-terminal-fill" title={GetLocalizedResource("developerConsolePageName",locale)}></SidebarButton>
             <SidebarButton onClick={()=>{setPage(SettingsPage.About)}} isActive={(page===SettingsPage.About) ? "true" : ""} icon="bi-info" title={GetLocalizedResource("aboutPageName",locale)}></SidebarButton>
+            <select onChange={(event: ChangeEvent)=>{
+                if(event.target==null) return;
+                updateSettings({...settings, Locale:(event.target as HTMLSelectElement).value});
+            }} defaultValue={settings.Locale} className="select1 h-8 flex ml-4 bg-secondary box-shadow-4-8-20">
+                <option value={"en_us"}>English</option>
+                <option value={"tr_tr"}>Turkish (Türkçe)</option>
+            </select>
         </div>
         <div className="absolute bg-primary left-72 px-4 overflow-y-scroll right-0 top-0 bottom-0">
             <div className="mx-auto max-w-[600px]">

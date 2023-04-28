@@ -36,6 +36,9 @@ export async function GetNotebookHeaders() : Promise<NotebookInfo[]> {
     }
     console.log("Found following notebook headers");
     console.table(headers);
+    if(headers.length===0){
+        CreateNotebook("$default");
+    }
     return headers;
 }
 

@@ -41,6 +41,7 @@ function App() {
     Init().then(async ()=>{
       GetNotebookHeaders(); 
       setNotebooks(await GetNotebooks());
+      setLocale(settings.Locale);
     });
   },[]);
   useLayoutEffect(()=>{
@@ -50,6 +51,7 @@ function App() {
     }
     writeTextFile("notebooks.json",JSON.stringify({"notebooks":notebooks}),{dir:BaseDirectory.App});
     SaveAllSettings({settings,updateSettings});
+    setLocale(settings.Locale);
   },[notebooks,settings]);
 
   return (

@@ -7,6 +7,7 @@ import { ConvertJSONToINote, FontStyle, GetNotebooks, INote, NoteFormatting, Not
 import { NoteItem } from "./Components/NoteItem";
 import { showEditor } from "./NoteEditor";
 import React from "react";
+import { GetLocalizedResource, LocaleContext } from "../localization/LocaleContext";
 /**
  * Get an INote from ID
  */
@@ -30,7 +31,7 @@ function NotesPanel() {
     const [notes, setNotes] = useState<INote[]>([]);
     const [notebook, setNotebook] = useState("0");
     const isFirstRender = useRef(true);
-
+    const {locale} = useContext(LocaleContext);
     setNotebookFilter = (notebookID: string) => {
         setNotebook(notebookID);
     };
@@ -92,10 +93,10 @@ function NotesPanel() {
         className={"notes_div bg-secondary/80 gap-1 mr-2 relative flex-shrink-0 backdrop-blur-md h-full overflow-y-scroll w-[17rem] p-2 transition-all flex-col rounded-2xl"}>
        <div className="h-8 rounded-lg mb-2 flex items-center">
         <select className="select1">
-            <option>Alphabetical</option>
-            <option>Last modified</option>
-            <option>Newest first</option>
-            <option>Oldest first</option>
+            <option>{GetLocalizedResource("alphabeticalSort",locale)}</option>
+            <option>{GetLocalizedResource("lastModifiedSort",locale)}</option>
+            <option>{GetLocalizedResource("newestFirstSort",locale)}</option>
+            <option>{GetLocalizedResource("oldestFirstSort",locale)}</option>
         </select>
        </div>
        <NoteItem header={{id: "5327459834706", title: "RJKELGBNLKJERG", formatting: {background: "#ffffff", foreground: "#000000", font :"SpaceMono Nerd Font"} as NoteFormatting, notebookID: "245346"} as NoteHeader}></NoteItem>
