@@ -7,6 +7,7 @@ interface NoteProps{
 
 export function NoteItem(props:NoteProps){
     const {foreground, background, font} = props.header.formatting;
+    console.log("%c"+JSON.stringify(props.header.formatting),"color:cyan");
     /* const {attributes, listeners, 
         setNodeRef, transform, transition} = useSortable({
             id: props.header.id, 
@@ -17,9 +18,10 @@ export function NoteItem(props:NoteProps){
         ShowNoteContextMenu({posX: event.clientX, posY: event.clientY, targetNote: props.header});
     }
 
-    return <div onContextMenu={handleContextMenu} className="p-2 flex overflow-auto shrink justify-between w-[16rem] rounded-lg note-shadow select-none cursor-default" style={{background: background ?? "#ffffff",
-    color: foreground ?? "#000000",
-    fontFamily: font ?? "Roboto"}}>
-        <span>{props.header.title}</span>
+    return <div onContextMenu={handleContextMenu} className="p-2 flex overflow-auto shrink justify-between w-[16rem] rounded-lg note-shadow select-none cursor-default" 
+    style={{background: background ?? "#ffffff",
+    fontFamily: font ?? "Roboto",
+    marginTop: "4px"}}>
+        <span style={{color: foreground ?? "#000000"}}>{props.header.title}</span>
     </div>
 }

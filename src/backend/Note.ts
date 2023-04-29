@@ -68,7 +68,7 @@ export async function GetNoteHeaders(notebookID:string){
         const {id, notebookID, pinIndex, pinned, modificationTime, title} = json;
         let {formatting} = json;
         formatting = {background: formatting.background ?? "#FFFFFF", 
-                foreground: formatting.background ?? "#000000",
+                foreground: formatting.foreground ?? "#000000",
                 font: formatting.font ?? "sans-serif"} as NoteFormatting;
         const inf = {id, notebookID, pinIndex, pinned, modificationTime, title, formatting} as NoteHeader;
         headers.push(inf);
@@ -94,7 +94,7 @@ export async function GetAllNoteHeaders(){
                 const {id, notebookID, pinIndex, pinned, modificationTime, title} = json;
                 let {formatting} = json;
                 formatting = {background: formatting.background ?? "#FFFFFF", 
-                        foreground: formatting.background ?? "#000000",
+                        foreground: formatting.foreground ?? "#000000",
                         font: formatting.font ?? "sans-serif"} as NoteFormatting;
                 const inf = {id, notebookID, pinIndex, pinned, modificationTime, title, formatting} as NoteHeader;
                 headers.push(inf);

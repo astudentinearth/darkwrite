@@ -24,5 +24,10 @@
 	"wallpaperAppletBlurLabel": "Blur",
 	"wallpaperAppletChooseButton": "Choose Wallpaper",
 	"wallpaperAppletRemoveButton": "Remove Wallpaper",
-	"wallpaperAppletTitle": "Wallpaper"
+	"wallpaperAppletTitle": "Wallpaper",
+	"newNotebookContextMenuItem": "New notebook",
+	"moveToNotebookContextMenuItem": "Move to notebook",
+	"exportAsMDContextMenuItem": "Export as Markdown",
+	"exportAsTXTContextMenuItem": "Export as text file",
+	"deleteContextMenuItem": "Delete"
 }

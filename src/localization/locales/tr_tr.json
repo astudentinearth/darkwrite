@@ -24,5 +24,10 @@
 	"wallpaperAppletBlurLabel": "Bulanıklaştır",
 	"wallpaperAppletChooseButton": "Arka Plan Seç",
 	"wallpaperAppletRemoveButton": "Arka Planı Kaldır",
-	"wallpaperAppletTitle": "Arka Plan"
+	"wallpaperAppletTitle": "Arka Plan",
+	"newNotebookContextMenuItem": "Yeni Not Defteri",
+	"moveToNotebookContextMenuItem": "Not Defterine Taşı",
+	"exportAsMDContextMenuItem": "Markdown olarak dışa aktar",
+	"exportAsTXTContextMenuItem": "Metin dosyası olarak dışa aktar",
+	"deleteContextMenuItem": "Sil"
 }

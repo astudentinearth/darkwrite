@@ -56,7 +56,7 @@ function App() {
 
   return (
     <div className="App absolute left-0 right-0 bottom-0 top-0 background-default">
-     <div className='overflow-y-hidden select-none relative p-2 right-0 bottom-0 items-stretch gap-2 flex flex-col text-default transition-all w-full h-full duration-200'>
+     <div className='overflow-y-hidden overflow-x-hidden select-none relative p-2 right-0 bottom-0 items-stretch gap-2 flex flex-col text-default transition-all w-full h-full duration-200'>
         <SettingsContext.Provider value={{settings,updateSettings}}>
           <NotebooksContext.Provider value={notebooksValue}>
             <LocaleContext.Provider value={{locale, setLocale}}>

@@ -1,13 +1,10 @@
-import { invoke } from "@tauri-apps/api";
-import { BaseDirectory, readTextFile, writeTextFile } from "@tauri-apps/api/fs";
-import { appConfigDir } from "@tauri-apps/api/path";
-import { useContext, useEffect, useLayoutEffect, useRef, useState } from "react";
-import { NotebooksContext } from "../NotebooksContext";
-import { ConvertJSONToINote, FontStyle, GetNotebooks, INote, NoteFormatting, NoteHeader } from "../Util";
+import { ChangeEvent, useContext, useEffect, useState } from "react";
+import { INote,  NoteHeader } from "../Util";
+import { GetNoteHeaders } from "../backend/Note";
+import { GetLocalizedResource, LocaleContext } from "../localization/LocaleContext";
 import { NoteItem } from "./Components/NoteItem";
 import { showEditor } from "./NoteEditor";
-import React from "react";
-import { GetLocalizedResource, LocaleContext } from "../localization/LocaleContext";
+import { SortNotes, SortingMethod } from "./Utils/NoteList";
 /**
  * Get an INote from ID
  */
@@ -26,80 +23,43 @@ let setNotebookFilter: (notebookID: string) => void;
 
 function NotesPanel() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const {setNotebooks }: any = useContext(NotebooksContext);
-    
-    const [notes, setNotes] = useState<INote[]>([]);
-    const [notebook, setNotebook] = useState("0");
-    const isFirstRender = useRef(true);
+    const [sortingMethod, setSortingMethod] = useState<SortingMethod>(SortingMethod.ALPHABETICAL);
+    const [notes, setNotes] = useState<NoteHeader[]>([]);
+    const [notebook, setNotebook] = useState("168174330492789615250");
     const {locale} = useContext(LocaleContext);
     setNotebookFilter = (notebookID: string) => {
         setNotebook(notebookID);
     };
-    getNotebook = () => { return notebook; };
-    getNote = (id: string) => {
-        for (const n of notes) {
-            if (n.id === id) return n;
-        }
-        return { id: id, title: "New Note", content: "", background: "#393939", foreground: "#ffffff", font: FontStyle.Sans, notebookID: notebook } as INote;
-    }
-    async function LoadNotes() {
-        console.log("[INFO] Loading notes")
-        setNotebooks(await GetNotebooks());
-        const APPDIR = await appConfigDir();
-        if (!await invoke("path_exists", { targetPath: APPDIR + "notes.json" })) {
-            writeTextFile(APPDIR + "notes.json", `{"notes":[]}`);
-        }
-        const notesFile = await readTextFile(APPDIR + "notes.json");
-        const notesJSON = JSON.parse(notesFile);
-        const _notes = ConvertJSONToINote(notesJSON.notes);
-        setNotes(_notes);
-    }
-    updateNote = (x: INote) => {
-        console.log(`Updating note: ${x.id}`)
-        let done = false;
-        for (const i in notes) {
-            if (x.id === notes[i].id) {
-                const currentNotes = Array.from(notes);
-                currentNotes[i] = x;
-                setNotes(currentNotes);
-                done = true;
-                return;
-            }
-        }
-        if (done === false) {
-            const currentNotes = Array.from(notes);
-            currentNotes.push(x);
-            setNotes(currentNotes);
-        }
-
-    };
-    async function SaveNotes() {
-        console.log("[INFO] Saving notes");
-        await writeTextFile("notes.json", JSON.stringify({ "notes": notes }), { dir: BaseDirectory.App });
-    }
     useEffect(() => {
-
-        LoadNotes();
-    }, [])
-    useLayoutEffect(() => {
-        if (isFirstRender.current) {
-            isFirstRender.current = false;
-            return;
+        async function Load(){
+            const headers:NoteHeader[] = await GetNoteHeaders(notebook);
+            console.table(headers);
+            setNotes(headers);
         }
-        console.log("saving notes")
-        SaveNotes();
-    }, [notes]);
+        Load();
+        return;
+    }, [])
+    useEffect(()=>{
+        setNotes(SortNotes(sortingMethod, notes));
+    },[notes,sortingMethod])
     return <div id="NotesPanel"
-        className={"notes_div bg-secondary/80 gap-1 mr-2 relative flex-shrink-0 backdrop-blur-md h-full overflow-y-scroll w-[17rem] p-2 transition-all flex-col rounded-2xl"}>
-       <div className="h-8 rounded-lg mb-2 flex items-center">
-        <select className="select1">
-            <option>{GetLocalizedResource("alphabeticalSort",locale)}</option>
-            <option>{GetLocalizedResource("lastModifiedSort",locale)}</option>
-            <option>{GetLocalizedResource("newestFirstSort",locale)}</option>
-            <option>{GetLocalizedResource("oldestFirstSort",locale)}</option>
+        className={"notes_div bg-secondary/80 mr-2 relative flex-shrink-0 backdrop-blur-md h-full overflow-y-scroll w-[17rem] p-2 transition-all flex-col rounded-2xl"}>
+       <div className="h-8 rounded-lg mb-2 flex items-center gap-2 flex-row">
+        <select defaultValue={sortingMethod} onChange={(event: ChangeEvent)=>{
+            if(event.target==null) return;
+            const target = event.target as HTMLSelectElement;
+            const method = SortingMethod[target.value];
+            setSortingMethod(method);
+        }} className="select1 bg-secondary">
+            <option value={SortingMethod.ALPHABETICAL}>{GetLocalizedResource("alphabeticalSort",locale)}</option>
+            <option value={SortingMethod.LASTMODIFIED}>{GetLocalizedResource("lastModifiedSort",locale)}</option>
+            <option value={SortingMethod.NEWEST}>{GetLocalizedResource("newestFirstSort",locale)}</option>
+            <option value={SortingMethod.OLDEST}>{GetLocalizedResource("oldestFirstSort",locale)}</option>
         </select>
        </div>
-       <NoteItem header={{id: "5327459834706", title: "RJKELGBNLKJERG", formatting: {background: "#ffffff", foreground: "#000000", font :"SpaceMono Nerd Font"} as NoteFormatting, notebookID: "245346"} as NoteHeader}></NoteItem>
+       {notes.map((n)=>{
+        return <NoteItem key={n.id} header={n}></NoteItem>
+       })}
     </div>
 }
 
