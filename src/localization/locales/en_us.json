@@ -10,7 +10,7 @@
 	"fontAppletTitle": "Fonts",
 	"fontAppletUILabel": "User Interface",
 	"lang": "English",
-	"lastModifiedSort": "Last modified",
+	"lastModifiedSort": "Recent",
 	"newestFirstSort": "Newest first",
 	"oldestFirstSort": "Oldest first",
 	"ossLicensesAppletTitle": "Open Source Licenses",
@@ -29,5 +29,7 @@
 	"moveToNotebookContextMenuItem": "Move to notebook",
 	"exportAsMDContextMenuItem": "Export as Markdown",
 	"exportAsTXTContextMenuItem": "Export as text file",
-	"deleteContextMenuItem": "Delete"
+	"deleteContextMenuItem": "Delete",
+	"noteEditorWelcomeMessage": "Welcome",
+	"noteEditorWelcomeMessage2": "Create or open a note to begin"
 }

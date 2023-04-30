@@ -2,7 +2,7 @@ import { BaseDirectory, FileEntry, createDir, exists, readDir, readTextFile, rem
 import { NotebookInfo, GenerateID } from "../Util";
 import { isDirectory } from "./Filesystem";
 
-/** Creates a new notebook
+/** Creates a new notebook and returns its ID
  * @param name Notebook name
  */
 export async function CreateNotebook(name:string){
@@ -12,6 +12,7 @@ export async function CreateNotebook(name:string){
     await createDir("notes/"+id,{dir: BaseDirectory.App, recursive: true});
     const info = {name: name, id: id} as NotebookInfo;
     await writeFile("notes/"+id+"/_notebookinf.json",JSON.stringify(info),{dir:BaseDirectory.App});
+    return id;
 }
 
 /** Gets all notebook names and IDs
@@ -34,11 +35,12 @@ export async function GetNotebookHeaders() : Promise<NotebookInfo[]> {
             console.error("An error occured while loading notebook headers. Aborting.");
         }
     }
+    if(entries.length == 0){
+        const id = await CreateNotebook("Notebook");
+        headers.push({id: id, name: "Notebook"});
+    }
     console.log("Found following notebook headers");
     console.table(headers);
-    if(headers.length===0){
-        CreateNotebook("$default");
-    }
     return headers;
 }
 

@@ -1,42 +1,41 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEffect, useRef, useState } from "react";
+import { Dispatch, SetStateAction, useContext, useEffect, useRef, useState } from "react";
 import { HexToRGB } from "../Theme";
-import { FontStyle, INote } from "../Util";
-import logo from '../res/darkwrite_icon.svg'
+import { NoteInfo } from "../Util";
+import { SaveNote } from "../backend/Note";
+import { GetLocalizedResource, LocaleContext } from "../localization/LocaleContext";
+import logo from '../res/darkwrite_icon.svg';
+import { NotifyNoteModification } from "./NotesPanel";
 
-export let showEditor: (noteID: string) => void;
+export let ForceSaveOpenNote: ()=>void;
+
+let updateNote: Dispatch<SetStateAction<NoteInfo>>;
+
 export function NoteEditor() {
-    const [isVisible, setVisibility] = useState(true);
-    const [note, setNote] = useState({id:"-1"} as INote);
-    showEditor = (id: string) => {
-        console.log("showing editor")
-        if (id==="-1") {setNote({id:"-1"} as INote); return;}
-        setVisibility(true);
-    }
-    const getFont = () => {
-        switch (note.font) {
-            case FontStyle.Sans:
-                return "f-sans";
-            case FontStyle.Serif:
-                return "f-serif";
-            case FontStyle.Monospace:
-                return "f-mono";
-            case FontStyle.Handwriting:
-                return "f-hand";
-            default:
-                return "";
-        }
-    }
-    const customFontRef: any = useRef(null);
+    const [note, setNote] = useState<NoteInfo>({id: "-1"} as NoteInfo);
     const titleRef: any = useRef(null);
+    const {locale} = useContext(LocaleContext);
     useEffect(() => {
-        const change = setTimeout(() => {return;
+        const change = setTimeout(() => {
+            if(note.id==="-1") return;
+            const time = Date.now()
+            SaveNote({...note, modificationTime: time});
+            setNote({...note, modificationTime: time})
+            NotifyNoteModification(note);
         }, 300);
         return () => clearTimeout(change);
     }, [note]);
+    updateNote=setNote;
+    ForceSaveOpenNote=()=>{
+        if(note.id==="-1") return;
+        SaveNote(note);
+    }
+    NotifyNoteDeletion=(id)=>{
+        if(note.id===id)
+        setNote({id: "-1"} as NoteInfo);
+    }
     return <div id="noteEditDialog" className="transition-all bottom-2 rounded-2xl flex flex-grow flex-col backdrop-blur-md "
-        style={{ display: isVisible ? "flex" : "none", backgroundColor: 
-        note.background ? `rgb(${HexToRGB(note.background)?.r} ${HexToRGB(note.background)?.g} ${HexToRGB(note.background)?.b} / 1)` : 'rgba(var(--background-secondary) / 1)'}}>
+        style={{ backgroundColor: note.formatting?.background!=null ? `rgb(${HexToRGB(note.formatting.background)?.r} ${HexToRGB(note.formatting.background)?.g} ${HexToRGB(note.formatting.background)?.b} / 1)` : 'rgba(var(--background-secondary) / 1)'}}>
         {note.id!=="-1" ? 
         <>
             <div className="rounded-t-2xl bg-secondary/75 h-14 flex items-center">
@@ -49,51 +48,13 @@ export function NoteEditor() {
             </div>
             <div className="flex-[0_1_0%] bg-secondary/75">
                 <div className="p-2">
-                    <div className="bg-secondary transition-all  drop-shadow-lg shadow-black float-left w-max flex mr-1 mb-1 items-center rounded-lg">
-                        <div onClick={() => {
-                            setNote({ ...note, font: FontStyle.Sans } as INote)
-                        }}
-                            style={note.font === FontStyle.Sans ? { backgroundColor: "rgb(var(--accent))", color: "white" } : {}}
-                            className="flex f-sans float-left text-center cursor-pointer hover:bg-hover transition-all items-center justify-center w-10 bg-secondary h-10 p-2 rounded-lg"
-                        >Aa</div>
-                        <div onClick={() => {
-                            setNote({ ...note, font: FontStyle.Serif } as INote)
-                        }}
-                            style={note.font === FontStyle.Serif ? { backgroundColor: "rgb(var(--accent))", color: "white" } : {}}
-
-                            className="flex f-serif float-left text-center cursor-pointer hover:bg-hover transition-all items-center justify-center w-10 bg-secondary h-10 p-2 rounded-lg">Aa</div>
-                        <div onClick={() => {
-                            setNote({ ...note, font: FontStyle.Monospace } as INote)
-                        }}
-                            style={note.font === FontStyle.Monospace ? { backgroundColor: "rgb(var(--accent))", color: "white" } : {}}
-                            className="flex f-mono float-left text-center cursor-pointer hover:bg-hover transition-all items-center justify-center w-10 bg-secondary h-10 p-2 rounded-lg">Aa</div>
-                        <div onClick={() => {
-                            setNote({ ...note, font: FontStyle.Handwriting } as INote)
-                        }}
-                            style={note.font === FontStyle.Handwriting ? { backgroundColor: "rgb(var(--accent))", color: "white" } : {}}
-                            className="flex f-hand float-left text-center cursor-pointer hover:bg-hover transition-all items-center justify-center w-10 bg-secondary h-10 p-2 rounded-lg">Aa</div>
-                        <div onClick={() => {
-                            setNote({ ...note, font: FontStyle.Custom } as INote)
-                        }}
-                            style={note.font === FontStyle.Custom ? { backgroundColor: "rgb(var(--accent))", color: "white" } : {}}
-                            className="flex float-left text-center cursor-pointer hover:bg-hover transition-all items-center justify-center w-10 bg-secondary h-10 p-2 rounded-lg">
-                            <i className="bi-three-dots"></i>
-                        </div>
-                        <input ref={customFontRef} onBlur={(e) => {
-                            setNote({ ...note, customFontFamily: e.target.value } as INote);
-                        }} onKeyDown={(e) => {
-                            if (e.key === "Enter") {
-                                customFontRef.current.blur();
-                            }
-                        }} placeholder="Custom font" defaultValue={note.customFontFamily} style={note.font === FontStyle.Custom ? {} : { display: "none" }} className="w-36 h-10 outline-none transition-all focus:border-accent focus:border-2 p-1 bg-transparent block rounded-lg"></input>
-                    </div>
-                    <input type={"color"} value={note.background} onChange={(e) => {
-                        setNote({ ...note, background: e.target.value })
+                    <input type={"color"} value={note.formatting.background} onChange={(e) => {
+                        setNote({ ...note, formatting:{...note.formatting,background: e.target.value} })
                     }} className="flex mr-1 mb-1 float-left text-center cursor-pointer hover:bg-hover transition-all items-center justify-center w-10 bg-secondary h-10 rounded-lg">
 
                     </input>
-                    <input type={"color"} value={note.foreground} onChange={(e) => {
-                        setNote({ ...note, foreground: e.target.value })
+                    <input type={"color"} value={note.formatting.foreground} onChange={(e) => {
+                        setNote({ ...note, formatting: {...note.formatting, foreground: e.target.value} })
                     }} className="flex float-left text-center cursor-pointer hover:bg-hover transition-all items-center justify-center w-10 bg-secondary h-10 rounded-lg">
 
                     </input>
@@ -103,15 +64,22 @@ export function NoteEditor() {
             <div className="flex-[1_1_auto] ">
                 <textarea value={note.content ?? ""} onChange={(e) => { setNote({ ...note, content: e.target.value }) }} onBlur={(e) => {
                     setNote({ ...note, content: e.target.value })
-                }} style={{ fontFamily: note.font === FontStyle.Custom ? note.customFontFamily : "", color: note.foreground }} className={"w-full h-full box-border bg-transparent p-2 outline-none resize-none " + getFont()}>
+                }} style={{ fontFamily: note.formatting.font, color: note.formatting.foreground}} className={"w-full h-full box-border bg-transparent p-2 outline-none resize-none"}>
 
                 </textarea>
             </div>
         </> : <div className="flex flex-1 items-center justify-center flex-col text-center">
                 <img src={logo} className="w-48 h-48 block"></img>
-                <span className="block text-2xl font-bold">Welcome</span>
-                <span className="block text-xl">Create or select a note to begin.</span>
+                <span className="block text-2xl font-bold">{GetLocalizedResource("noteEditorWelcomeMessage", locale)}</span>
+                <span className="block text-xl">{GetLocalizedResource("noteEditorWelcomeMessage2", locale)}</span>
         </div>}
         
     </div>;
 }
+
+export function ShowNoteEditor(note: NoteInfo){
+    ForceSaveOpenNote();
+    updateNote(note);
+}
+
+export let NotifyNoteDeletion: (id: string) => void;
