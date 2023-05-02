@@ -3,6 +3,9 @@ import { NoteHeader, NoteInfo, NotebookInfo } from "../../Util";
 import useComponentVisible from "../../useComponentVisible";
 import { GetNotebookHeaders } from "../../backend/Notebook";
 import { GetLocalizedResource, LocaleContext } from "../../localization/LocaleContext";
+import { FastDeleteNote } from "../../backend/Note";
+import { NotifyNoteDeletion } from "../NoteEditor";
+import { RefreshNotesPanel } from "../NotesPanel";
 
 let updateCurrentNote: Dispatch<SetStateAction<NoteHeader | NoteInfo>>;
 
@@ -46,7 +49,11 @@ export function NoteContextMenu(){
                     </li>
                     <li className='p-2 select-none cursor-pointer transition-colors hover:bg-hover rounded-lg'><i className='bi-markdown-fill'></i>&nbsp;{GetLocalizedResource("exportAsMDContextMenuItem",locale)}</li>
                     <li className='p-2 select-none cursor-pointer transition-colors hover:bg-hover rounded-lg'><i className='bi-file-earmark-text-fill'></i>&nbsp;{GetLocalizedResource("exportAsTXTContextMenuItem",locale)}</li>
-                    <li className='p-2 select-none cursor-pointer text-red-400 transition-colors hover:bg-hover rounded-lg'><i className='bi-trash-fill'></i>&nbsp;{GetLocalizedResource("deleteContextMenuItem",locale)}</li>
+                    <li onClick={()=>{
+                        NotifyNoteDeletion(currentNote.id);
+                        FastDeleteNote(currentNote.id, currentNote.notebookID).then(()=>{RefreshNotesPanel()});
+                        ncmv.setIsComponentVisible(false);
+                    }} className='p-2 select-none cursor-pointer text-red-400 transition-colors hover:bg-hover rounded-lg'><i className='bi-trash-fill'></i>&nbsp;{GetLocalizedResource("deleteContextMenuItem",locale)}</li>
                 </ul>
             </div>
 }

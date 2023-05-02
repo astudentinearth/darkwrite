@@ -48,7 +48,7 @@ export async function DeleteNote(id: string){
  */
 export async function FastDeleteNote(id: string, notebookID: string){
     try {
-        await removeFile(`notes/${notebookID}/${id}.json`);
+        await removeFile(`notes/${notebookID}/${id}.json`,{dir:BaseDirectory.App});
     } catch (error) {
         console.error("Could not fast delete note. Maybe its gone already?");
     }

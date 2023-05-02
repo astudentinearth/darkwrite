@@ -7,6 +7,7 @@ import { SortNotes, SortingMethod } from "./Utils/NoteList";
 import { ActiveNotebookContext } from "./ActiveNotebookContext";
 
 export let NotifyNoteModification: (note: NoteInfo)=>void;
+export let RefreshNotesPanel: ()=>void;
 
 function NotesPanel() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -14,13 +15,13 @@ function NotesPanel() {
     const [notes, setNotes] = useState<NoteHeader[]>([]);
     const {notebookID} = useContext(ActiveNotebookContext);
     const {locale} = useContext(LocaleContext);
-    useEffect(() => {
-        if(notebookID==="0") return;
-        async function Load(){
+    async function Load(){
             const headers:NoteHeader[] = await GetNoteHeaders(notebookID);
             console.table(headers);
             setNotes(headers);
-        }
+    }
+    useEffect(() => {
+        if(notebookID==="0") return;
         Load();
         return;
     }, [notebookID])
@@ -37,6 +38,9 @@ function NotesPanel() {
             items[i]=note;
             setNotes(items);
         }
+    }
+    RefreshNotesPanel=()=>{
+        Load();
     }
     return <div id="NotesPanel"
         className={"notes_div bg-secondary/80 mr-2 relative flex-shrink-0 backdrop-blur-md h-full overflow-y-scroll w-[17rem] p-2 transition-all flex-col rounded-2xl"}>
