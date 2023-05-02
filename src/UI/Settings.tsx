@@ -48,7 +48,7 @@ function SettingsView(){
         
         return <DebugInfo></DebugInfo>
     }
-    return <div>
+    return <div className="">
         <div className="bg-secondary w-72 h-full fixed">
             <button onClick={HideSettings} className="bg-transparent flex items-center p-2 m-2 hover:bg-hover rounded-xl">
                 <i className="bi-chevron-left text-xl"></i> &nbsp;
@@ -89,7 +89,7 @@ function Settings(){
     }
     HideSettings=hideSettings;
     
-    return <div className={"absolute left-0 z-20 right-0 top-0 bottom-0 "} style={{display:visibility}} id="settingsUI">
+    return <div className={"absolute left-0 right-0 top-0 bottom-0 z-[100]"} style={{display:visibility}} id="settingsUI">
         {visibility==="block" ? <SettingsView></SettingsView> : <></>}
 </div>
 }

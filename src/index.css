@@ -101,32 +101,17 @@ input[type=text]:not(#taskInput){
 input[type=color]{
     appearance: none;
     -webkit-appearance: none;
+    box-shadow: 0 2px 8px 0 rgba(0,0,0, 0.1);
 }
 
 input[type=color]::-webkit-color-swatch{
     border:none;
-    @apply rounded-lg drop-shadow-lg;
+    @apply rounded-lg;
 
 }
 
 input[type=color]::-webkit-color-swatch-wrapper{
     padding:0%
-}
-
-.f-serif{
-    font-family: var(--font-serif);
-}
-
-.f-sans{
-    font-family: var(--font-sans);
-}
-
-.f-mono{
-    font-family: var(--font-mono);
-}
-
-.f-hand{
-    font-family: var(--font-hand);
 }
 
 .note-shadow{
@@ -202,6 +187,22 @@ input[type=color]::-webkit-color-swatch-wrapper{
     text-align: center;
     border-radius: 8px;
     box-shadow: 0 2px 4.5px 0 rgba(0,0,0, 0.2);
+}
+
+.font-select{
+    appearance: none;
+    background-color: rgb(var(--background-secondary));
+    border: none;
+    padding: 4px;
+    text-align: center;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px 0 rgba(0,0,0, 0.1);
+    font-size: 16px;
+    display: grid;
+}
+
+.box-shadow-0-2-8-0{
+    box-shadow: 0 2px 8px 0 rgba(0,0,0, 0.1);
 }
 
 .select1:hover{

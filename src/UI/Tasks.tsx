@@ -66,6 +66,7 @@ function Tasks(){
     //@ts-ignore
     const sensors = useSensors(useSensor(TasksPointerSensor))
     const {locale} = useContext(LocaleContext);
+    const isFirstRender=useRef(true);
     useEffect(()=>{
         const load = async ()=>{
             const _tasks =await LoadTasks();
@@ -73,6 +74,13 @@ function Tasks(){
         }
         load();
     },[]);
+    useEffect(()=>{
+        if(isFirstRender.current){
+            isFirstRender.current=false;
+            return;
+        }
+        SaveTasks();
+    },[tasks])
     const taskInputRef:any = useRef(null);
     changeTasks=setTasks;
     getTasks=returnTasks;

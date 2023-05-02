@@ -38,9 +38,9 @@ function MainToolbar(){
 				sidebar?.classList.remove("sidebar-closed");
 				sidebar?.classList.add("sidebar-open");
             }
-		}} style={{float:"left"}} icon="bi-layout-sidebar"></ToolbarButton>
+		}} style={{float:"left"}} icon="bi-layout-sidebar-inset"></ToolbarButton>
 		<ToolbarButton onClick={()=>{ShowNoteEditor({...TemplateNoteInfo, id: GenerateID(), notebookID: notebookID})}} color="accent" style={{float:"left"}} icon="bi-plus-lg"></ToolbarButton>
-		<ToolbarButton onClick={()=>{ShowSettings();}} style={{float:"right"}} icon="bi-gear"></ToolbarButton>
+		<ToolbarButton onClick={()=>{ShowSettings();}} style={{float:"right"}} icon="bi-gear-fill"></ToolbarButton>
 		<SearchBox></SearchBox>
 	</div>;
 }
