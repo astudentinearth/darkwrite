@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { openURL } from "../../API";
 import { SettingsContext } from "../../SettingsContext";
 import logo from "./darkwrite_icon.png";
