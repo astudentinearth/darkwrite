@@ -1,11 +1,11 @@
 [package]
-name = "app"
-version = "0.1.0"
-description = "darkwrite"
+name = "darkwrite"
+version = "1.0.0-alpha.2"
+description = "Darkwrite Backend Code"
 authors = ["astudentinearth"]
-license = ""
+license = "GPL-3.0-or-later"
 repository = ""
-default-run = "app"
+default-run = "darkwrite"
 edition = "2021"
 rust-version = "1.57"
 
