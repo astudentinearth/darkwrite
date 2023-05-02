@@ -19,7 +19,7 @@ export function TaskItem(props:TaskItemProps){
         transition
     }
     return <div ref={setNodeRef} style={style} {...attributes} {...listeners}
-    className="task-item transition-colors">
+    className="task-item transition-colors hover:bg-hover rounded-xl cursor-default">
         <div onClick={()=>{
             const currentTasks = [...tasks];
             for (const t of currentTasks){
