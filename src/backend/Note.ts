@@ -136,7 +136,7 @@ export async function GetNoteInfoFromHeader(header: NoteHeader){
 
 export async function MoveNoteToNotebook(header: NoteHeader, notebookID: string){
     try {
-        const str = await readTextFile(`notes/${header.notebookID}/${header.id}.json`);
+        const str = await readTextFile(`notes/${header.notebookID}/${header.id}.json`,{dir:BaseDirectory.App});
         const json = JSON.parse(str);
         json.notebookID=notebookID;
         await writeTextFile(`notes/${notebookID}/${header.id}.json`,JSON.stringify(json),{dir: BaseDirectory.App}); // We write before deleting!

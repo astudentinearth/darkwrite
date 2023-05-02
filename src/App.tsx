@@ -21,6 +21,7 @@ import { NotebooksContext, NotebooksContextType } from './NotebooksContext';
 import { LocaleContext } from './localization/LocaleContext';
 import { ActiveNotebookContext } from './UI/ActiveNotebookContext';
 import { NotebookInfo } from './Util';
+import { MoveToNewNotebookDialog } from './UI/Components/MoveToNewNotebookDialog';
 
 function App() {
   const [notebooks,setNotebooks] = useState<NotebookInfo[]>([] as NotebookInfo[]);
@@ -73,6 +74,8 @@ function App() {
                     <NoteEditor></NoteEditor>
                     <NoteContextMenu></NoteContextMenu>
                   </div>
+                  <MoveToNewNotebookDialog>
+                  </MoveToNewNotebookDialog>
               </ActiveNotebookContext.Provider>
             </LocaleContext.Provider>
           </NotebooksContext.Provider>

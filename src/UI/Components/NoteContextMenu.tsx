@@ -3,9 +3,11 @@ import { NoteHeader, NoteInfo, NotebookInfo } from "../../Util";
 import useComponentVisible from "../../useComponentVisible";
 import { GetNotebookHeaders } from "../../backend/Notebook";
 import { GetLocalizedResource, LocaleContext } from "../../localization/LocaleContext";
-import { FastDeleteNote } from "../../backend/Note";
-import { NotifyNoteDeletion } from "../NoteEditor";
+import { FastDeleteNote, MoveNoteToNotebook } from "../../backend/Note";
+import { NotifyNoteDeletion, NotifyNoteMovement } from "../NoteEditor";
 import { RefreshNotesPanel } from "../NotesPanel";
+import { ActiveNotebookContext } from "../ActiveNotebookContext";
+import { ShowMoveToNewNoteDialog } from "./MoveToNewNotebookDialog";
 
 let updateCurrentNote: Dispatch<SetStateAction<NoteHeader | NoteInfo>>;
 
@@ -26,6 +28,7 @@ export function NoteContextMenu(){
     const [currentNote, setCurrentNote] = useState<NoteInfo | NoteHeader>({} as NoteInfo);
     const [notebooks, setNotebooks] = useState<NotebookInfo[]>([]);
     const {locale} = useContext(LocaleContext);
+    const {notebookID} = useContext(ActiveNotebookContext);
     updateCurrentNote = setCurrentNote;
     ncmv = noteContextMenuVisibility;
     useEffect(()=>{
@@ -41,9 +44,15 @@ export function NoteContextMenu(){
                         <span className="flex-grow">&nbsp;{GetLocalizedResource("moveToNotebookContextMenuItem",locale)}</span>
                         <i className="bi-chevron-right"></i>
                         <ul className="absolute p-1 w-64 left-[15.5rem] top-0 rounded-xl bg-primary/90 backdrop-blur-md" style={{boxShadow:"0 4px 36px 0px rgba(0,0,0,0.4)"}}>
-                            <li className='p-2 select-none cursor-pointer transition-colors hover:bg-hover rounded-lg'><i className='bi-plus-lg'></i>&nbsp;{GetLocalizedResource("newNotebookContextMenuItem",locale)}</li>
-                            {notebooks.map((n)=>
-                            <li key={n.id} className='p-2 select-none cursor-pointer transition-colors hover:bg-hover rounded-lg'><i className='bi-journal'></i>&nbsp;{n.name}</li>
+                            <li onClick={()=>{
+                                ShowMoveToNewNoteDialog(currentNote);
+                                ncmv.setIsComponentVisible(false);
+                            }} className='p-2 select-none cursor-pointer transition-colors hover:bg-hover rounded-lg'><i className='bi-plus-lg'></i>&nbsp;{GetLocalizedResource("newNotebookContextMenuItem",locale)}</li>
+                            {notebooks.map((n)=> notebookID!==n.id ?
+                            <li key={n.id} onClick={()=>{
+                                MoveNoteToNotebook(currentNote,n.id).then(()=>{RefreshNotesPanel(); NotifyNoteMovement(currentNote)});
+                                ncmv.setIsComponentVisible(false);
+                            }} className='p-2 select-none cursor-pointer transition-colors hover:bg-hover rounded-lg'><i className='bi-journal'></i>&nbsp;{n.name}</li> : <></>
                             )}
                         </ul>
                     </li>

@@ -2,13 +2,14 @@
 import { Dispatch, SetStateAction, useContext, useEffect, useRef, useState } from "react";
 import { getFonts } from "../API";
 import { HexToRGB } from "../Theme";
-import { NoteInfo } from "../Util";
+import { NoteHeader, NoteInfo } from "../Util";
 import { SaveNote } from "../backend/Note";
 import { GetLocalizedResource, LocaleContext } from "../localization/LocaleContext";
 import logo from '../res/darkwrite_icon.svg';
 import { NotifyNoteModification } from "./NotesPanel";
 
 export let ForceSaveOpenNote: ()=>void;
+export let NotifyNoteMovement: (note: NoteHeader | NoteInfo) => void;
 
 let updateNote: Dispatch<SetStateAction<NoteInfo>>;
 
@@ -60,7 +61,11 @@ export function NoteEditor() {
         if(note.id===id)
         setNote({id: "-1"} as NoteInfo);
     }
-
+    NotifyNoteMovement=(n)=>{
+        if(n.id===note.id){
+            setNote({id: "-1"} as NoteInfo);
+        }
+    }
     return <div id="noteEditDialog" ref={editorRootRef} className="transition-all z-30 bottom-2 rounded-2xl flex flex-grow flex-col backdrop-blur-md "
         style={{ backgroundColor: note.formatting?.background!=null ? `rgb(${HexToRGB(note.formatting.background)?.r} ${HexToRGB(note.formatting.background)?.g} ${HexToRGB(note.formatting.background)?.b} / 1)` : 'rgba(var(--background-secondary) / 1)'}}>
         {note.id!=="-1" ? 

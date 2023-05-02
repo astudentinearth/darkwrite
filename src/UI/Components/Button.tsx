@@ -79,7 +79,7 @@ export function Button(props:ButtonProps){
         ref.current?.style.setProperty("background","rgb(var(--background-secondary) / 1 )")
      }}
      className="p-2 box-shadow-4-8-20 transition-all flex items-center justify-center text-center">
-        <i className={props.icon+" text-[16px]"}></i>
-        <span className="text-[16px] pl-2">{props.textContent}</span>
+        <i style={{display: props.icon==null ? "none" : "inline"}} className={props.icon+" text-[16px] mr-2"}></i>
+        <span className="text-[16px]">{props.textContent}</span>
     </button>
 }

@@ -31,5 +31,9 @@
 	"exportAsTXTContextMenuItem": "Export as text file",
 	"deleteContextMenuItem": "Delete",
 	"noteEditorWelcomeMessage": "Welcome",
-	"noteEditorWelcomeMessage2": "Create or open a note to begin"
+	"noteEditorWelcomeMessage2": "Create or open a note to begin",
+	"buttonOK": "OK",
+	"buttonCancel": "Cancel",
+	"moveToNewNotebookDialogTitle": "Moving to new notebook",
+	"moveToNewNotebookDialogLabel": "Notebook name"
 }
