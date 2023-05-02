@@ -5,7 +5,7 @@ import { Notebooks } from "./Notebooks";
 function SidebarTabView(){
     const [view,setView] = useState(0);
     const activeStyle:React.CSSProperties = {background:"rgb(var(--accent) /0.5)",borderRadius:"99px"};
-    return <div className="flex flex-col transition-all">
+    return <div className="flex flex-col h-full transition-all">
         <div className="tabview-header flex-[0_0_56px] h-14 flex">
             <div className="w-[144px] flex items-center justify-center select-none cursor-pointer" 
             

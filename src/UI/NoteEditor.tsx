@@ -1,22 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { KeyboardEvent, Dispatch, SetStateAction, useContext, useEffect, useRef, useState, useReducer } from "react";
+import { Dispatch, SetStateAction, useContext, useEffect, useRef, useState } from "react";
+import { getFonts } from "../API";
 import { HexToRGB } from "../Theme";
 import { NoteInfo } from "../Util";
 import { SaveNote } from "../backend/Note";
 import { GetLocalizedResource, LocaleContext } from "../localization/LocaleContext";
 import logo from '../res/darkwrite_icon.svg';
 import { NotifyNoteModification } from "./NotesPanel";
-import { getFonts } from "../API";
 
 export let ForceSaveOpenNote: ()=>void;
 
 let updateNote: Dispatch<SetStateAction<NoteInfo>>;
 
-interface FindStateType{
-    indexes: number[],
-    currentIndex: number,
-    query: string
-}
 
 export function NoteEditor() {
     const [note, setNote] = useState<NoteInfo>({id: "-1"} as NoteInfo);

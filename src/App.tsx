@@ -66,7 +66,7 @@ function App() {
               <ActiveNotebookContext.Provider value={{notebookID: activeNotebook, setNotebookID: setActiveNotebook}}>
                 <img id="bgImage" ref={bgImgRef} style={{filter: `blur(${settings.WallpaperBlurRadius}px)`}} className="absolute z-0 left-0 right-0 top-0 bottom-0 m-0 p-0 w-full h-full"></img>
                   <MainToolbar></MainToolbar>
-                  <div className='flex-grow flex flex-row'>
+                  <div className='flex-grow min-h-0 flex flex-row w-full h-full'>
                     <Sidebar></Sidebar>
                     <Settings></Settings>
                     <NotesPanel></NotesPanel>
