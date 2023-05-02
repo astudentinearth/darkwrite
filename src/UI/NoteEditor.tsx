@@ -69,7 +69,7 @@ export function NoteEditor() {
                     <div className="w-8 h-8 transition-colors hover:bg-hover box-shadow-0-2-8-0 bg-secondary rounded-lg mr-1 float-left flex items-center justify-center" onClick={()=>{setExpanded(!expanded)}}>
                         {expanded ? <i className="bi-arrows-angle-contract"></i> : <i className="bi-arrows-angle-expand"></i>}
                     </div>
-                    <select className="font-select transition-colors hover:bg-hover block w-32 flex-shrink float-left mr-1 h-8" defaultValue={note.formatting.font} onChange={(e)=>{setNote({...note, formatting: {...note.formatting, font:e.target.value}})}}>
+                    <select style={{fontFamily: note.formatting.font}} className="font-select transition-colors hover:bg-hover block w-32 flex-shrink float-left mr-1 h-8" value={note.formatting.font} onChange={(e)=>{setNote({...note, formatting: {...note.formatting, font:e.target.value}})}}>
                         {fonts.map((f)=><option key={f} value={f}>{f}</option>)}
                     </select>
                     <input type={"color"} value={note.formatting.background} onChange={(e) => {
