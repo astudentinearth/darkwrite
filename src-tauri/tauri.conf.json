@@ -37,7 +37,7 @@
         "confirm": false,
         "message": false,
         "open": true,
-        "save": false
+        "save": true
       },
       "protocol": {
         "all": false,

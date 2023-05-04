@@ -3,7 +3,7 @@ import { NoteHeader, NoteInfo, NotebookInfo } from "../../Util";
 import useComponentVisible from "../../useComponentVisible";
 import { GetNotebookHeaders } from "../../backend/Notebook";
 import { GetLocalizedResource, LocaleContext } from "../../localization/LocaleContext";
-import { FastDeleteNote, MoveNoteToNotebook } from "../../backend/Note";
+import { ExportAsMarkdown, ExportAsText, FastDeleteNote, GetNoteInfoFromHeader, MoveNoteToNotebook } from "../../backend/Note";
 import { NotifyNoteDeletion, NotifyNoteMovement } from "../NoteEditor";
 import { RefreshNotesPanel } from "../NotesPanel";
 import { ActiveNotebookContext } from "../ActiveNotebookContext";
@@ -56,8 +56,20 @@ export function NoteContextMenu(){
                             )}
                         </ul>
                     </li>
-                    <li className='p-2 select-none cursor-pointer transition-colors hover:bg-hover rounded-lg'><i className='bi-markdown-fill'></i>&nbsp;{GetLocalizedResource("exportAsMDContextMenuItem",locale)}</li>
-                    <li className='p-2 select-none cursor-pointer transition-colors hover:bg-hover rounded-lg'><i className='bi-file-earmark-text-fill'></i>&nbsp;{GetLocalizedResource("exportAsTXTContextMenuItem",locale)}</li>
+                    <li onClick={async ()=>{
+                        ncmv.setIsComponentVisible(false);
+                        if("content" in currentNote) ExportAsMarkdown(currentNote);
+                        else{
+                            ExportAsMarkdown(await GetNoteInfoFromHeader(currentNote));
+                        }
+                    }} className='p-2 select-none cursor-pointer transition-colors hover:bg-hover rounded-lg'><i className='bi-markdown-fill'></i>&nbsp;{GetLocalizedResource("exportAsMDContextMenuItem",locale)}</li>
+                    <li onClick={async ()=>{
+                        ncmv.setIsComponentVisible(false);
+                        if("content" in currentNote) ExportAsText(currentNote);
+                        else{
+                            ExportAsText(await GetNoteInfoFromHeader(currentNote));
+                        }
+                    }} className='p-2 select-none cursor-pointer transition-colors hover:bg-hover rounded-lg'><i className='bi-file-earmark-text-fill'></i>&nbsp;{GetLocalizedResource("exportAsTXTContextMenuItem",locale)}</li>
                     <li onClick={()=>{
                         NotifyNoteDeletion(currentNote.id);
                         FastDeleteNote(currentNote.id, currentNote.notebookID).then(()=>{RefreshNotesPanel()});

@@ -1,7 +1,7 @@
 import { BaseDirectory, FileEntry, exists, readDir, readTextFile, removeFile, writeTextFile } from "@tauri-apps/api/fs";
 import { NoteFormatting, NoteHeader, NoteInfo } from "../Util";
 import { isDirectory } from "./Filesystem";
-
+import { save } from "@tauri-apps/api/dialog";
 /** Saves a note/creates it if it doesnt exist */
 export async function SaveNote(note: NoteInfo){
     if(!await exists(`notes/${note.notebookID}/`,{dir:BaseDirectory.App})) return;
@@ -144,4 +144,28 @@ export async function MoveNoteToNotebook(header: NoteHeader, notebookID: string)
     } catch (error) {
         console.log("Something went wrong while moving a note");
     }
+}
+
+export async function ExportAsMarkdown(note: NoteInfo){
+    const md = `# ${note.title}\n${note.content}`;
+    const filepath = await save({filters:[{
+        name: "Markdown File",
+        extensions: ["md"]
+    }],
+    defaultPath: `${note.title}.md`,
+    title: "Save as Markdown"});
+    if (filepath==null) return;
+    await writeTextFile(filepath, md);
+}
+
+export async function ExportAsText(note: NoteInfo){
+    const txt = `${note.title}\n---------------------------------------\n${note.content}`;
+    const filepath = await save({filters:[{
+        name: "Plain Text File",
+        extensions: ["txt"]
+    }],
+    defaultPath: `${note.title}.txt`,
+    title: "Save as plain text"});
+    if (filepath==null) return;
+    await writeTextFile(filepath, txt);
 }

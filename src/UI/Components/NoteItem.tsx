@@ -9,14 +9,12 @@ interface NoteProps{
 
 export function NoteItem(props:NoteProps){
     const {foreground, background, font} = props.header.formatting;
-    console.log("%c"+JSON.stringify(props.header.formatting),"color:cyan");
     /* const {attributes, listeners, 
         setNodeRef, transform, transition} = useSortable({
             id: props.header.id, 
             disabled: !props.header.pinned}) */
     const handleContextMenu = (event: MouseEvent<HTMLDivElement>)=>{
         event.preventDefault();
-        console.log(event.clientX);
         ShowNoteContextMenu({posX: event.clientX, posY: event.clientY, targetNote: props.header});
     }
 
