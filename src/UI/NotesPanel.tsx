@@ -43,7 +43,7 @@ function NotesPanel() {
         Load();
     }
     return <div id="NotesPanel"
-        className={"notes_div bg-secondary/80 mr-2 relative flex-shrink-0 backdrop-blur-md h-full overflow-y-scroll w-[17rem] p-2 transition-all flex-col rounded-2xl"}>
+        className={"notes_div bg-secondary/80 mr-2 relative overflow-x-hidden flex-shrink-0 backdrop-blur-md h-full overflow-y-scroll w-[17rem] p-2 transition-all flex-col rounded-2xl"}>
        <div className="h-8 rounded-lg mb-2 flex items-center gap-2 flex-row">
         <select defaultValue={sortingMethod} onChange={(event: ChangeEvent)=>{
             if(event.target==null) return;
