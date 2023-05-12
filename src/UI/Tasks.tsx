@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { DndContext, PointerSensor, closestCenter, useSensor, useSensors } from "@dnd-kit/core";
+import { DndContext, closestCenter, useSensor, useSensors } from "@dnd-kit/core";
 import { DragEndEvent } from "@dnd-kit/core/dist/types";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 import { SortableContext, arrayMove, verticalListSortingStrategy } from "@dnd-kit/sortable";
@@ -8,6 +8,7 @@ import React, { Dispatch, SetStateAction, useCallback, useContext, useEffect, us
 import { GenerateID, ITask, JSONToITaskArray } from "../Util";
 import { TaskItem } from "./Components/TaskItem";
 import { GetLocalizedResource, LocaleContext } from "../localization/LocaleContext";
+import { TasksPointerSensor } from "./TasksPointerSensor";
 let changeTasks:any;
 let getTasks:any;
 export const TasksContext = React.createContext<ITasksContext>({tasks: [], setTasks: ()=>{return;}});
@@ -35,31 +36,6 @@ export async function SaveTasks(){
     console.log("[INFO from SaveTasks()] Saving tasks");
     await writeFile("tasks.json",JSON.stringify({tasks:getTasks()}),{dir: BaseDirectory.App});
 }
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-//@ts-ignore
-class TasksPointerSensor extends PointerSensor{
-    static activators = [{
-            eventName: 'onPointerDown',
-            handler: ({nativeEvent: event} : React.PointerEvent<Element>) =>{
-                if (!(event.target instanceof Element)) return;
-                if(!event.isPrimary || event.button!==0 || isInteractiveElement([...(event.target as Element).classList] as string[])){
-                    return false;
-                }
-                return true;
-            },
-        },
-    ];
-}
-
-function isInteractiveElement(elementClassNames: string[]){
-    const interactiveElements = ["checkbox","task-delete-button","ignore-drag"];
-    console.log(elementClassNames);
-    for(const name of elementClassNames){
-        if (interactiveElements.includes(name)) return true;
-    }
-    return false;
-}
-
 function Tasks(){
     const [tasks,setTasks] = useState([] as ITask[]);
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment

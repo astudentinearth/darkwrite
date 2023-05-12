@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="8"
+   height="12"
+   viewBox="0 0 2.1166665 3.175"
+   version="1.1"
+   id="svg5"
+   fill="current"
+   sodipodi:docname="grip.svg"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview6"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     showguides="true"
+     inkscape:zoom="36.291667"
+     inkscape:cx="1.543054"
+     inkscape:cy="8.087256"
+     inkscape:window-width="1860"
+     inkscape:window-height="1020"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg5" />
+  <defs
+     id="defs2" />
+  <g
+     id="g1465"
+     transform="translate(0.66145831)">
+    <path
+       id="rect113"
+       style="stroke-width:0.195408"
+       d="m 0.13229168,0 c 0.0732896,0 0.13229168,0.12873181 0.13229168,0.28863635 V 2.8863636 c 0,0.1599045 -0.0590021,0.2886363 -0.13229168,0.2886363 C 0.05900206,3.1749999 0,3.0462681 0,2.8863636 V 0.28863635 C 0,0.12873181 0.05900206,0 0.13229168,0 Z" />
+    <path
+       id="rect113-3"
+       style="stroke-width:0.195408"
+       d="M 0.6614583,0 C 0.7347479,0 0.79374997,0.12873181 0.79374997,0.28863635 V 2.8863636 c 0,0.1599045 -0.0590021,0.2886363 -0.13229167,0.2886363 -0.0732896,0 -0.13229168,-0.1287318 -0.13229168,-0.2886363 V 0.28863635 C 0.52916662,0.12873181 0.58816873,0 0.6614583,0 Z" />
+  </g>
+  <rect
+     style="fill:#222222;stroke-width:0.264583;fill-opacity:0"
+     id="rect1519"
+     width="2.1166666"
+     height="3.175"
+     x="0"
+     y="0"
+     rx="0"
+     ry="0" />
+</svg>

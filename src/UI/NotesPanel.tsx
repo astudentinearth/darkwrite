@@ -1,23 +1,39 @@
-import { ChangeEvent, useContext, useEffect, useState } from "react";
+import { ChangeEvent, useCallback, useContext, useEffect, useState } from "react";
 import { NoteHeader, NoteInfo } from "../Util";
-import { GetNoteHeaders } from "../backend/Note";
+import { GetNoteHeaders, GetNoteInfoFromHeader, SaveNote } from "../backend/Note";
 import { GetLocalizedResource, LocaleContext } from "../localization/LocaleContext";
 import { NoteItem } from "./Components/NoteItem";
 import { SortNotes, SortingMethod } from "./Utils/NoteList";
 import { ActiveNotebookContext } from "./ActiveNotebookContext";
+import { 
+    DndContext, 
+    DragEndEvent, 
+    closestCenter,
+    useSensor, 
+    useSensors} from "@dnd-kit/core";
+import {
+    arrayMove,
+    SortableContext,
+    verticalListSortingStrategy
+} from "@dnd-kit/sortable"
+import { TasksPointerSensor } from "./TasksPointerSensor";
+import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
+import { NotifyPinChange } from "./NoteEditor";
 
 export let NotifyNoteModification: (note: NoteInfo)=>void;
 export let RefreshNotesPanel: ()=>void;
+export let PinNote: (n: NoteHeader)=>void;
+export let UnpinNote: (n:NoteHeader)=>void;
 
 function NotesPanel() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [sortingMethod, setSortingMethod] = useState<SortingMethod>(SortingMethod.ALPHABETICAL);
     const [notes, setNotes] = useState<NoteHeader[]>([]);
+    const [pinnedNotes, setPinnedNotes] = useState<NoteHeader[]>([]);
     const {notebookID} = useContext(ActiveNotebookContext);
     const {locale} = useContext(LocaleContext);
     async function Load(){
             const headers:NoteHeader[] = await GetNoteHeaders(notebookID);
-            console.table(headers);
             setNotes(headers);
     }
     useEffect(() => {
@@ -25,6 +41,10 @@ function NotesPanel() {
         Load();
         return;
     }, [notebookID])
+    useEffect(()=>{
+        const pinned = notes.filter((n)=>(n.pinned===true && n.pinIndex!=null)).sort((a,b)=>((a.pinIndex ?? 0) - (b.pinIndex ?? 0)));
+        setPinnedNotes(pinned);
+    }, [notes])
     NotifyNoteModification = (note)=>{
         const items = [...notes];
         const ids = items.map((i)=>i.id);
@@ -42,9 +62,77 @@ function NotesPanel() {
     RefreshNotesPanel=()=>{
         Load();
     }
+    PinNote=(n)=>{
+        const notes_cpy = [...notes];
+        for (const x of notes_cpy){
+            if(x.id===n.id){ 
+                x.pinned=true;
+                x.pinIndex=pinnedNotes.length;
+                savepin(x);
+            }
+        }
+        setNotes(notes_cpy);
+        NotifyPinChange(n);
+    }
+    const savepin = async (p: NoteHeader)=>{
+        let inf = await GetNoteInfoFromHeader(p);
+        inf = {...p, content: inf.content};
+        await SaveNote(inf);
+    };
+    UnpinNote=(n)=>{
+        const notes_cpy = [...notes];
+        for (const x of notes_cpy){
+            if(x.id===n.id){ 
+                x.pinned=false;
+                x.pinIndex=undefined;
+                savepin(x);
+            }
+        }
+        setNotes(notes_cpy);
+        NotifyPinChange(n);
+    }
+    const renderpins = useCallback(()=>{
+        const items = pinnedNotes.map((n)=>{
+            if(n.pinned==false || n.pinned == null) {console.log("not pinned"); return <></>;}
+            return <NoteItem key={n.id} header={n}></NoteItem>
+        }); 
+        return items;
+    },[pinnedNotes,notes])
+    
+    const sensors = useSensors(
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        //@ts-ignore
+        useSensor(TasksPointerSensor)
+    );
+    
+    const handlePinMove = (event:DragEndEvent)=>{
+        const {active, over} = event;
+        console.log(active)
+        console.log(over)
+        if(!over) return;
+        if (active.id!==over.id){
+            const oldIndex = pinnedNotes.map((e)=>{return e.id}).indexOf(active.id.toString());
+            const newIndex = pinnedNotes.map((e)=>{return e.id}).indexOf(over.id.toString());
+            const newOrder = arrayMove(pinnedNotes,oldIndex,newIndex);
+            const final: NoteHeader[] = [];
+            console.log(newOrder);
+            for (let i=0;i<newOrder.length;i++){
+                newOrder[i].pinIndex = i;
+                final.push(newOrder[i]);
+            }
+            console.log(final);
+            setPinnedNotes(final);
+            for (const p of pinnedNotes){
+                savepin(p);
+            }
+        }   
+        
+        return
+    }
+
     return <div id="NotesPanel"
-        className={"notes_div bg-secondary/80 mr-2 relative overflow-x-hidden flex-shrink-0 backdrop-blur-md h-full overflow-y-scroll w-[17rem] p-2 transition-all flex-col rounded-2xl"}>
-       <div className="h-8 rounded-lg mb-2 flex items-center gap-2 flex-row">
+        className={"notes_div bg-secondary/80 mr-2 relative overflow-x-hidden flex-shrink-0 backdrop-blur-md h-full overflow-y-scroll w-[17rem] transition-all flex-col rounded-2xl"}>
+       <div className="h-8 rounded-lg m-2 flex items-center gap-2 flex-row">
         <select defaultValue={sortingMethod} onChange={(event: ChangeEvent)=>{
             if(event.target==null) return;
             const target = event.target as HTMLSelectElement;
@@ -57,9 +145,21 @@ function NotesPanel() {
             <option value={SortingMethod.OLDEST}>{GetLocalizedResource("oldestFirstSort",locale)}</option>
         </select>
        </div>
-       {SortNotes(sortingMethod, notes).map((n)=>{
-        return <NoteItem key={n.id} header={n}></NoteItem>
-       })}
+       
+       <div className="bg-primary/75 rounded-xl m-1">
+            <DndContext modifiers={[restrictToVerticalAxis]} sensors={sensors} collisionDetection={closestCenter} onDragEnd={handlePinMove}>
+                <SortableContext items={pinnedNotes} strategy={verticalListSortingStrategy}>
+                    <div className="py-1" style={{display: pinnedNotes.length===0 ? "none" : "block"}}>
+                        {renderpins()}
+                    </div>
+                </SortableContext>
+            </DndContext>
+       </div>
+       <div className="m-1">
+        {SortNotes(sortingMethod, notes).map((n)=>{ if(n.pinned===true) return;
+            return <NoteItem key={n.id} header={n}></NoteItem>
+        })}
+       </div>
     </div>
 }
 

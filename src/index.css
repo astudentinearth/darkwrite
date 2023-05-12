@@ -83,6 +83,14 @@ input[type=text]:not(#taskInput){
     visibility: visible;
 }
 
+.note-root:hover .note-pin-button{
+    display: flex;
+}
+
+.note-root .note-pin-button{
+    display: none;
+}
+
 .toolbar-button:hover,.task-item:hover{
     @apply bg-hover;
 }

@@ -10,6 +10,8 @@ import { NotifyNoteModification } from "./NotesPanel";
 
 export let ForceSaveOpenNote: ()=>void;
 export let NotifyNoteMovement: (note: NoteHeader | NoteInfo) => void;
+export let NotifyPinChange: (note: NoteHeader | NoteInfo) => void;
+
 
 let updateNote: Dispatch<SetStateAction<NoteInfo>>;
 
@@ -26,11 +28,12 @@ export function NoteEditor() {
         if(editorRootRef.current==null) return;
         if(expanded===true){
             editorRootRef.current.style.setProperty("left", `${editorRootRef.current.getBoundingClientRect().x}px`);
-            editorRootRef.current.style.setProperty("position", "absolute");
+            
             editorRootRef.current.style.setProperty("left", "8px");
             editorRootRef.current.style.setProperty("right", "8px");
-            editorRootRef.current.style.setProperty("top", "72px");
+            editorRootRef.current.style.setProperty("top", `${editorRootRef.current.getBoundingClientRect().y}px`);
             editorRootRef.current.style.setProperty("bottom", "8px");
+            editorRootRef.current.style.setProperty("position", "absolute");
         }
         else{
             editorRootRef.current.style.setProperty("position", "static");
@@ -66,6 +69,11 @@ export function NoteEditor() {
             setNote({id: "-1"} as NoteInfo);
         }
     }
+    NotifyPinChange=(n)=>{
+        if(n.id===note.id){
+            setNote({...note, pinned: n.pinned, pinIndex: n.pinIndex})
+        }
+    }
     return <div id="noteEditDialog" ref={editorRootRef} className="transition-all z-30 bottom-2 rounded-2xl flex flex-grow flex-col backdrop-blur-md "
         style={{ backgroundColor: note.formatting?.background!=null ? `rgb(${HexToRGB(note.formatting.background)?.r} ${HexToRGB(note.formatting.background)?.g} ${HexToRGB(note.formatting.background)?.b} / 1)` : 'rgba(var(--background-secondary) / 1)'}}>
         {note.id!=="-1" ? 
@@ -98,7 +106,7 @@ export function NoteEditor() {
                         titleRef.current.blur();
                         textAreaRef.current?.focus();
                     }
-                }} className="flex-[1_1_48px] m-1 h-12 rounded-tr-xl p-1 bg-transparent outline-none text-xl"></input>
+                }} className="flex-[1_1_48px] w-full p-2 flex h-12 rounded-tr-xl bg-transparent outline-none text-xl"></input>
                 <div style={{background: note.formatting.foreground}} className="mx-2 h-[1px] opacity-50"></div>
             </div>
             <div className="flex-[1_1_auto] ">
