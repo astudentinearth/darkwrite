@@ -2,7 +2,7 @@ import { NoteInfo } from "../Util";
 import { GetAllNoteHeaders, GetNoteInfoFromHeader } from "./Note";
 import escapeStringRegexp from "escape-string-regexp";
 
-interface SearchResult{
+export interface SearchResult{
     note: NoteInfo,
     titleExactMatch?: boolean, // unused
     matchingTitleWordCount?: number,
