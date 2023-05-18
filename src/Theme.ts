@@ -2,30 +2,10 @@ import { BaseDirectory, createDir, exists, readTextFile, removeFile, writeFile }
 import { appConfigDir, join } from "@tauri-apps/api/path";
 import { convertFileSrc } from "@tauri-apps/api/tauri";
 import { ISettingsContext } from "./ISettingsContext";
+import LightTheme from "./res/themes/colors_light.json?raw";
+import DarkTheme from "./res/themes/colors_dark.json?raw";
+import Blackout from "./res/themes/blackout.json?raw";
 
-const LightTheme=`{
-    "name":"Darkwrite Light",
-    "background": "241 241 241",
-    "foreground": "#000000", 
-    "background-secondary":"255 255 255",
-    "background-hover":"231 231 231",
-    "background-active":"223 223 223",
-    "shadow": "rgba(40,40,40,0.3)",
-    "text-disabled": "153 153 153",
-    "background-disabled":"204 204 204"
-}
-`;
-const DarkTheme=`{
-    "name":"Darkwrite",
-    "background": "57 57 57",
-    "foreground": "#ffffff",
-    "background-secondary":"73 73 73",
-    "background-hover":"86 86 86",
-    "background-active":"96 96 96",
-    "shadow": "rgba(0,0,0,0.2)",
-    "text-disabled": "170 170 170",
-    "background-disabled": "89 89 89"
-}`;
 /**
      * Returns HEX color code from given 3 RGB channels
      * @param rgb: Red, green and blue channels separated with whitespaces
@@ -69,6 +49,7 @@ async function SetupThemes(settingsContext:ISettingsContext){
     }
     await writeFile("color-schemes/colors_light.json",LightTheme,{dir: BaseDirectory.App});
     await writeFile("color-schemes/colors_dark.json",DarkTheme,{dir: BaseDirectory.App});
+    await writeFile("color-schemes/blackout.json",Blackout,{dir: BaseDirectory.App});
     const text = await readTextFile("color-schemes/"+settings.ThemeFile,{dir: BaseDirectory.App});
     const json = JSON.parse(text);
     if (json) Themes.CurrentThemeJSON = json;
@@ -94,6 +75,7 @@ function ApplyTheme(themeFileName:string, context:ISettingsContext){
     document.documentElement.style.setProperty("--background-active",Themes.CurrentThemeJSON["background-active"]||"96 96 96")
     document.documentElement.style.setProperty("--background-disabled",Themes.CurrentThemeJSON["background-disabled"]||"89 89 89")
     document.documentElement.style.setProperty("--text-disabled",Themes.CurrentThemeJSON["text-disabled"]||"170 170 170")
+    document.documentElement.style.setProperty("--widget",Themes.CurrentThemeJSON["widget"]||"73 73 73")
     Themes.CurrentTheme=themeFileName;
 }
 

@@ -1,0 +1,12 @@
+{
+    "name":"Blackout",
+    "background": "10 10 10",
+    "foreground": "#ffffff",
+    "background-secondary":"27 27 27",
+    "background-hover":"45 45 45",
+    "background-active":"50 50 50",
+    "shadow": "rgba(0,0,0,0.2)",
+    "text-disabled": "170 170 170",
+    "background-disabled": "89 89 89",
+    "widget": "35 35 35"
+}

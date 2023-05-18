@@ -23,7 +23,7 @@ function FontOptions(){
                             uiFontRef.current.blur();
                         }
                     }}
-                    className="appaearance-none bg-secondary drop-shadow-md rounded-lg w-48 text-center"></input>
+                    className="appaearance-none bg-widget drop-shadow-md rounded-lg w-48 h-8 text-center"></input>
                 </div>
         </div>
     </AppletBase>

@@ -87,12 +87,12 @@ export function NoteEditor() {
                     </select>
                     <input type={"color"} value={note.formatting.background} onChange={(e) => {
                         setNote({ ...note, formatting:{...note.formatting,background: e.target.value} })
-                    }} className="flex color-input-fill mr-1 mb-1 float-left text-center cursor-pointer hover:bg-hover transition-all items-center justify-center w-8 bg-secondary h-8 rounded-lg">
+                    }} className="flex color-input-fill mr-1 mb-1 float-left text-center cursor-pointer hover:bg-hover transition-all items-center justify-center w-8 bg-widget h-8 rounded-lg">
 
                     </input>
                     <input type={"color"} value={note.formatting.foreground} onChange={(e) => {
                         setNote({ ...note, formatting: {...note.formatting, foreground: e.target.value} })
-                    }} className="flex float-left mr-1 text-center cursor-pointer hover:bg-hover transition-all items-center justify-center w-8 bg-secondary h-8 rounded-lg">
+                    }} className="flex float-left mr-1 text-center cursor-pointer hover:bg-hover transition-all items-center justify-center w-8 bg-widget h-8 rounded-lg">
 
                     </input>
                     <div className="clear-both"></div>

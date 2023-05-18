@@ -44,7 +44,7 @@ export enum ButtonShape{
 function GenerateButtonStyle(props: ButtonProps) : React.CSSProperties{
     const style = { } as React.CSSProperties;
     if (props.color == null || props.color===ButtonColor.Default){ 
-        style.background="rgba(var(--background-secondary) / 1)";
+        style.background="rgba(var(--widget) / 1)";
     }
     else {
         style.background="rgba(var(--accent) / 1)";

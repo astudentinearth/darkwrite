@@ -20,7 +20,8 @@ module.exports = {
         accent: 'rgb(var(--accent) / <alpha-value>)',
         disabledtext: 'rgb(var(--text-disabled) / <alpha-value>)',
         disabled: 'rgb(var(--background-disabled) / <alpha-value>)',
-        defaulttext: 'rgb(var(--text-default) / <alpha-value>)'
+        defaulttext: 'rgb(var(--text-default) / <alpha-value>)',
+        widget: 'rgb(var(--widget) / <alpha-value>)'
       }
     },
     

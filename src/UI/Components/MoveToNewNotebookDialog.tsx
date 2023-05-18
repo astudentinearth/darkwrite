@@ -29,7 +29,7 @@ export function MoveToNewNotebookDialog(props:any){
             <h1 className="font-bold text-xl">{GetLocalizedResource("moveToNewNotebookDialogTitle",locale)}</h1>
             <div className="flex items-center">
                 <span>{GetLocalizedResource("moveToNewNotebookDialogLabel",locale)}:</span>
-                <input ref={nameRef} className="bg-secondary ml-2 box-shadow-4-8-20 text-xl rounded-lg"></input>
+                <input ref={nameRef} className="bg-widget ml-2 box-shadow-4-8-20 text-xl rounded-lg"></input>
             </div>
             <div className="flex items-center gap-2 justify-end">
                 <Button onClick={()=>{

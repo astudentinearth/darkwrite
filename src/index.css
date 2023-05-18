@@ -25,6 +25,7 @@
     --accent: 87 104 255;
     --background-disabled: 204 204 204;
     --text-disabled: 153 153 153;
+    --widget: 232 232 232;
 }
 
 html{
@@ -171,7 +172,7 @@ input[type=color]::-webkit-color-swatch-wrapper{
     appearance: none;
     width:100%;
     height: 4px;
-    background: linear-gradient(to right, rgb(var(--accent)) 0%, rgb(var(--accent)) 50%, rgb(var(--background-secondary)) 50%, rgb(var(--background-secondary)));
+    background: linear-gradient(to right, rgb(var(--accent)) 0%, rgb(var(--accent)) 50%, rgb(var(--widget)) 50%, rgb(var(--widget)));
     filter: drop-shadow(0 2px 2px rgba(0,0,0,0.2));
     outline: none;
     border-radius: 99px;
@@ -190,7 +191,7 @@ input[type=color]::-webkit-color-swatch-wrapper{
 
 .select1{
     appearance: none;
-    background-color: transparent;
+    background-color: rgb(--widget);
     border: none;
     padding: 4px;
     text-align: center;
@@ -200,7 +201,7 @@ input[type=color]::-webkit-color-swatch-wrapper{
 
 .font-select{
     appearance: none;
-    background-color: rgb(var(--background-secondary));
+    background-color: rgb(var(--widget));
     border: none;
     padding: 4px;
     text-align: center;
@@ -225,3 +226,4 @@ input[type=color]::-webkit-color-swatch-wrapper{
 #moveToNotebookItem:hover ul{
     visibility: visible;
 }
+
