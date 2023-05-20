@@ -5,7 +5,7 @@ import { ShowNoteEditor } from "../NoteEditor";
 import { GetNoteInfoFromHeader } from "../../backend/Note";
 import { useSortable } from "@dnd-kit/sortable";
 import {CSS} from "@dnd-kit/utilities"
-import { PinNote, UnpinNote } from "../NotesPanel";
+import { PinNote, UnpinNote } from "../NotesPanelMethods";
 import {ReactComponent as GripSVG} from "../../res/grip.svg"
 interface NoteProps{
     header: NoteHeader,

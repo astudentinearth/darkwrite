@@ -5,7 +5,7 @@ import { GetNotebookHeaders } from "../../backend/Notebook";
 import { GetLocalizedResource, LocaleContext } from "../../localization/LocaleContext";
 import { ExportAsMarkdown, ExportAsText, FastDeleteNote, GetNoteInfoFromHeader, MoveNoteToNotebook } from "../../backend/Note";
 import { NotifyNoteDeletion, NotifyNoteMovement } from "../NoteEditor";
-import { RefreshNotesPanel } from "../NotesPanel";
+import { RefreshNotesPanel } from "../NotesPanelMethods";
 import { ActiveNotebookContext } from "../ActiveNotebookContext";
 import { ShowMoveToNewNoteDialog } from "./MoveToNewNotebookDialog";
 

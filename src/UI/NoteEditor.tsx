@@ -6,7 +6,7 @@ import { NoteHeader, NoteInfo } from "../Util";
 import { SaveNote } from "../backend/Note";
 import { GetLocalizedResource, LocaleContext } from "../localization/LocaleContext";
 import logo from '../res/darkwrite_icon.svg';
-import { NotifyNoteModification } from "./NotesPanel";
+import { NotifyNoteModification } from "./NotesPanelMethods";
 
 export let ForceSaveOpenNote: ()=>void;
 export let NotifyNoteMovement: (note: NoteHeader | NoteInfo) => void;
@@ -78,8 +78,8 @@ export function NoteEditor() {
         style={{ backgroundColor: note.formatting?.background!=null ? `rgb(${HexToRGB(note.formatting.background)?.r} ${HexToRGB(note.formatting.background)?.g} ${HexToRGB(note.formatting.background)?.b} / 1)` : 'rgba(var(--background-secondary) / 1)'}}>
         {note.id!=="-1" ? 
         <>
-            <div className="flex-[0_1_0%] rounded-t-2xl flex flex-wrap p-2 bg-primary">
-                    <div className="w-8 h-8 transition-colors hover:bg-hover box-shadow-0-2-8-0 bg-secondary rounded-lg mr-1 float-left flex items-center justify-center" onClick={()=>{setExpanded(!expanded)}}>
+            <div className="flex-[0_1_0%] rounded-t-2xl flex flex-wrap p-2 bg-secondary">
+                    <div className="w-8 h-8 transition-colors hover:bg-hover box-shadow-0-2-8-0 bg-widget rounded-lg mr-1 float-left flex items-center justify-center" onClick={()=>{setExpanded(!expanded)}}>
                         {expanded ? <i className="bi-arrows-angle-contract"></i> : <i className="bi-arrows-angle-expand"></i>}
                     </div>
                     <select style={{fontFamily: note.formatting.font}} className="font-select transition-colors hover:bg-hover block w-32 flex-shrink float-left mr-1 h-8" value={note.formatting.font} onChange={(e)=>{setNote({...note, formatting: {...note.formatting, font:e.target.value}})}}>

@@ -1,29 +1,26 @@
+import {
+    DndContext,
+    DragEndEvent,
+    closestCenter,
+    useSensor,
+    useSensors
+} from "@dnd-kit/core";
+import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
+import {
+    SortableContext,
+    arrayMove,
+    verticalListSortingStrategy
+} from "@dnd-kit/sortable";
 import { ChangeEvent, useCallback, useContext, useEffect, useState } from "react";
-import { NoteHeader, NoteInfo } from "../Util";
+import { NoteHeader } from "../Util";
 import { GetNoteHeaders, GetNoteInfoFromHeader, SaveNote } from "../backend/Note";
 import { GetLocalizedResource, LocaleContext } from "../localization/LocaleContext";
-import { NoteItem } from "./Components/NoteItem";
-import { SortNotes, SortingMethod } from "./Utils/NoteList";
 import { ActiveNotebookContext } from "./ActiveNotebookContext";
-import { 
-    DndContext, 
-    DragEndEvent, 
-    closestCenter,
-    useSensor, 
-    useSensors} from "@dnd-kit/core";
-import {
-    arrayMove,
-    SortableContext,
-    verticalListSortingStrategy
-} from "@dnd-kit/sortable"
-import { TasksPointerSensor } from "./TasksPointerSensor";
-import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
+import { NoteItem } from "./Components/NoteItem";
 import { NotifyPinChange } from "./NoteEditor";
-
-export let NotifyNoteModification: (note: NoteInfo)=>void;
-export let RefreshNotesPanel: ()=>void;
-export let PinNote: (n: NoteHeader)=>void;
-export let UnpinNote: (n:NoteHeader)=>void;
+import { NotesPanelMethods, SetNotesPanelMethods } from "./NotesPanelMethods";
+import { TasksPointerSensor } from "./TasksPointerSensor";
+import { SortNotes, SortingMethod } from "./Utils/NoteList";
 
 function NotesPanel() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -45,52 +42,58 @@ function NotesPanel() {
         const pinned = notes.filter((n)=>(n.pinned===true && n.pinIndex!=null)).sort((a,b)=>((a.pinIndex ?? 0) - (b.pinIndex ?? 0)));
         setPinnedNotes(pinned);
     }, [notes])
-    NotifyNoteModification = (note)=>{
-        const items = [...notes];
-        const ids = items.map((i)=>i.id);
-        if(note.notebookID!==notebookID) return;
-        if(!ids.includes(note.id)) {
-            items.push(note);
-            setNotes(items);
-        }
-        for (const i in items){
-            if(items[i].id!==note.id) continue;
-            items[i]=note;
-            setNotes(items);
-        }
-    }
-    RefreshNotesPanel=()=>{
-        Load();
-    }
-    PinNote=(n)=>{
-        const notes_cpy = [...notes];
-        for (const x of notes_cpy){
-            if(x.id===n.id){ 
-                x.pinned=true;
-                x.pinIndex=pinnedNotes.length;
-                savepin(x);
+    const methods:NotesPanelMethods = {
+        NotifyNoteModification: (note)=>{
+            const items = [...notes];
+            const ids = items.map((i)=>i.id);
+            if(note.notebookID!==notebookID) return;
+            if(!ids.includes(note.id)) {
+                items.push(note);
+                setNotes(items);
             }
+            for (const i in items){
+                if(items[i].id!==note.id) continue;
+                items[i]=note;
+                setNotes(items);
+            }
+        },
+        RefreshNotesPanel: ()=>{
+        Load();
+        },
+        PinNote: (n)=>{
+            const notes_cpy = [...notes];
+            for (const x of notes_cpy){
+                if(x.id===n.id){ 
+                    x.pinned=true;
+                    x.pinIndex=pinnedNotes.length;
+                    savepin(x);
+                }
+            }
+            setNotes(notes_cpy);
+            NotifyPinChange(n);
+        },
+        UnpinNote: (n)=>{
+            const notes_cpy = [...notes];
+            for (const x of notes_cpy){
+                if(x.id===n.id){ 
+                    x.pinned=false;
+                    x.pinIndex=undefined;
+                    savepin(x);
+                }
+            }
+            setNotes(notes_cpy);
+            NotifyPinChange(n);
         }
-        setNotes(notes_cpy);
-        NotifyPinChange(n);
     }
+    
+    SetNotesPanelMethods(methods);
+    
     const savepin = async (p: NoteHeader)=>{
         let inf = await GetNoteInfoFromHeader(p);
         inf = {...p, content: inf.content};
         await SaveNote(inf);
     };
-    UnpinNote=(n)=>{
-        const notes_cpy = [...notes];
-        for (const x of notes_cpy){
-            if(x.id===n.id){ 
-                x.pinned=false;
-                x.pinIndex=undefined;
-                savepin(x);
-            }
-        }
-        setNotes(notes_cpy);
-        NotifyPinChange(n);
-    }
+
     const renderpins = useCallback(()=>{
         const items = pinnedNotes.map((n)=>{
             if(n.pinned==false || n.pinned == null) {console.log("not pinned"); return <></>;}

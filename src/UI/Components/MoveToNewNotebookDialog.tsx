@@ -5,7 +5,7 @@ import { Button, ButtonColor } from "./Button";
 import { CreateNotebook, GetNotebookHeaders } from "../../backend/Notebook";
 import { MoveNoteToNotebook } from "../../backend/Note";
 import { NotifyNoteMovement } from "../NoteEditor";
-import { RefreshNotesPanel } from "../NotesPanel";
+import { RefreshNotesPanel } from "../NotesPanelMethods";
 import { NotebooksContext } from "../../NotebooksContext";
 import { ActiveNotebookContext } from "../ActiveNotebookContext";
 import { GetLocalizedResource, LocaleContext } from "../../localization/LocaleContext";
