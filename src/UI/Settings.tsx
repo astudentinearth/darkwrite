@@ -77,6 +77,9 @@ function SettingsView(){
 function Settings(){
     const [visibility,setVisibility] = useState("none");
     const [,updateState]=useState({});
+    document.addEventListener("keydown",(e)=>{
+        if(e.key==="Escape" && visibility==="block") HideSettings();
+    })
     function showSettings(){
         console.log("showing settings");
         updateState({});

@@ -1,23 +1,11 @@
 import { useContext } from "react";
-import { GenerateID, NoteInfo } from "../Util";
+import { GenerateID } from "../Util";
 import { ActiveNotebookContext } from "./ActiveNotebookContext";
 import SearchBox from "./Components/SearchBox";
 import ToolbarButton from "./Components/ToolbarButton";
 import { ShowNoteEditor } from "./NoteEditor";
 import { ShowSettings } from "./Settings";
-
-const TemplateNoteInfo: NoteInfo= {
-	id: "0",
-	notebookID: "0",
-	formatting: {
-		background: "#393939",
-		foreground: "#ffffff",
-		font: "Roboto"
-	},
-	pinned: false,
-	title: "New Note",
-	content: ""
-}
+import { TemplateNoteInfo } from "./TemplateNoteInfo";
 
 function MainToolbar(){
 	/**

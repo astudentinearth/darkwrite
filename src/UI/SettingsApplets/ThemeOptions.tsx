@@ -52,9 +52,9 @@ function ThemeOptions(){
         
     },[]);
     return <AppletBase title={GetLocalizedResource("themeAppletTitle",locale)}>
-            <div className="overflow-y-scroll select-none mx-2 rounded-2xl bg-secondary shadow-lg" >
+            <div className="overflow-y-scroll select-none mx-2 rounded-2xl flex flex-row flex-wrap bg-secondary shadow-lg" >
                 {colors.map(e=><div key={e.SchemeFileName} className="p-2 hover:bg-hover cursor-pointer transition-all
-                rounded-2xl w-48 h-12 flex items-center flex-row float-left m-2" 
+                rounded-2xl w-40 h-12 flex items-center flex-row m-2" 
                 style={settings.ThemeFile===e.SchemeFileName ? {background: "rgb(var(--accent))", color:"white"}:{}}
                 onMouseEnter={(event:MouseEvent<HTMLDivElement>)=>{
                     if(settings.ThemeFile===e.SchemeFileName) (event.target as HTMLDivElement).style.setProperty("filter","brightness(120%)");

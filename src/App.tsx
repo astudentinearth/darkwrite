@@ -7,7 +7,7 @@ import { GlobalSettings } from "./Settings";
 import { ApplyWallpaper, SetupThemes } from './Theme';
 import { NoteContextMenu } from './UI/Components/NoteContextMenu';
 import MainToolbar from './UI/MainToolbar';
-import { NoteEditor } from './UI/NoteEditor';
+import { NoteEditor, ShowNoteEditor } from './UI/NoteEditor';
 import { NotesPanel } from './UI/NotesPanel';
 import { Settings } from './UI/Settings';
 import Sidebar from './UI/Sidebar';
@@ -20,8 +20,10 @@ import "./fonts/yellowtail/yellowtail.css";
 import { NotebooksContext, NotebooksContextType } from './NotebooksContext';
 import { LocaleContext } from './localization/LocaleContext';
 import { ActiveNotebookContext } from './UI/ActiveNotebookContext';
-import { NotebookInfo } from './Util';
+import { GenerateID, NotebookInfo } from './Util';
 import { MoveToNewNotebookDialog } from './UI/Components/MoveToNewNotebookDialog';
+import {type, OsType} from '@tauri-apps/api/os'
+import { TemplateNoteInfo } from './UI/TemplateNoteInfo';
 
 function App() {
   const [notebooks,setNotebooks] = useState<NotebookInfo[]>([] as NotebookInfo[]);
@@ -31,6 +33,7 @@ function App() {
   const isFirstRender=useRef(true);
   const bgImgRef = useRef<HTMLImageElement>(null);
   const [locale, setLocale] = useState("en_us");
+  let platform:OsType;
   useEffect(()=>{
     console.log("Application started. Initializing");
     async function Init(){
@@ -41,9 +44,22 @@ function App() {
       await LoadTasks();
       await ApplyWallpaper();
       setNotebooks(await GetNotebookHeaders());
+      platform = await type();
     }
     Init().then(()=>{
       setLocale(settings.Locale);
+      document.addEventListener("keydown", async (event: KeyboardEvent)=>{
+        // Search: CTRL + K, Cmd + K, CTRL+/, Cmd+/
+        if((event.ctrlKey || event.metaKey) && (event.key==="/" || event.key==="k")){
+          document.getElementById("searchInput")?.focus();
+          return;
+        }
+        // New note: CTRL+N or Cmd+N
+        if((event.ctrlKey || event.metaKey) && event.key==="n"){
+          ShowNoteEditor({...TemplateNoteInfo, id: GenerateID(), notebookID: activeNotebook})
+          return;
+        }
+      })
     });
   },[]);
   useLayoutEffect(()=>{

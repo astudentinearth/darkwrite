@@ -8,7 +8,7 @@
    version="1.1"
    id="svg5"
    inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
-   sodipodi:docname="darkwrite_icon.svg"
+   sodipodi:docname="darkwrite_icon_flat.svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -26,9 +26,9 @@
      inkscape:document-units="px"
      showgrid="true"
      showguides="false"
-     inkscape:zoom="26.346415"
-     inkscape:cx="16.966255"
-     inkscape:cy="16.871365"
+     inkscape:zoom="18.629729"
+     inkscape:cx="9.4472657"
+     inkscape:cy="16.452199"
      inkscape:window-width="1860"
      inkscape:window-height="1020"
      inkscape:window-x="0"
@@ -151,8 +151,7 @@
        ry="4.6666665" />
     <g
        id="g1310"
-       transform="matrix(0.93205518,0,0,0.93205518,-25.954134,1.5531447)"
-       style="filter:url(#filter1358)">
+       transform="matrix(0.93205518,0,0,0.93205518,-25.954134,1.5531447)">
       <path
          id="rect279"
          style="fill:#ffffff;stroke-width:1.05"
@@ -167,7 +166,7 @@
          d="m 45.000002,5 h 6.825" />
       <path
          id="path1296"
-         style="fill:#cccccc;filter:url(#filter1482)"
+         style="fill:#cccccc"
          d="m 52,15 h -4 c -1.662,0 -3,-1.338 -3,-3 V 5 h 3 -3 l 5,5 5,5 z"
          sodipodi:nodetypes="ssscssccs" />
     </g>
