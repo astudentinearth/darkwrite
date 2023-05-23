@@ -67,9 +67,12 @@ function App() {
       isFirstRender.current=false;
       return;
     }
-    writeTextFile("notebooks.json",JSON.stringify({"notebooks":notebooks}),{dir:BaseDirectory.App});
-    SaveAllSettings({settings,updateSettings});
-    setLocale(settings.Locale);
+    const change = setTimeout(() => {
+      writeTextFile("notebooks.json",JSON.stringify({"notebooks":notebooks}),{dir:BaseDirectory.App});
+      SaveAllSettings({settings,updateSettings});
+      setLocale(settings.Locale);
+    }, 300);
+    return () => clearTimeout(change);
   },[notebooks,settings]);
   useEffect(()=>{
     if(notebooks.length!=0) setActiveNotebook(notebooks[0].id);
