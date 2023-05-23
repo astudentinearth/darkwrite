@@ -35,5 +35,8 @@
 	"buttonOK": "Tamam",
 	"buttonCancel": "İptal",
 	"moveToNewNotebookDialogTitle": "Yeni not defterine taşınıyor",
-	"moveToNewNotebookDialogLabel": "Not defteri adı"
+	"moveToNewNotebookDialogLabel": "Not defteri adı",
+	"warningTitle": "Uyarı",
+	"devConsoleWarningText": "Bu araç hata ayıklama ve test etme amaçları içindir, ne yaptığınızı bilmiyorsanız bu aracı kullanmamalısınız. Bu aracın hatalı kullanımı veri kaybına yol açabilir.",
+	"acceptRiskAndContinue": "Riskleri kabul et ve devam et"
 }

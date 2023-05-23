@@ -35,5 +35,8 @@
 	"buttonOK": "OK",
 	"buttonCancel": "Cancel",
 	"moveToNewNotebookDialogTitle": "Moving to new notebook",
-	"moveToNewNotebookDialogLabel": "Notebook name"
+	"moveToNewNotebookDialogLabel": "Notebook name",
+	"warningTitle": "Warning",
+	"devConsoleWarningText": "This tool is intended for debugging and testing purposes, and you should not use this tool unless you know what you are doing. Misuse of this tool might cause data loss.",
+	"acceptRiskAndContinue": "Accept risk and continue"
 }

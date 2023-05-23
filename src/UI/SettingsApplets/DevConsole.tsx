@@ -5,13 +5,16 @@ import { GetAllNoteHeaders, GetNoteHeaders } from "../../backend/Note";
 import { CreateNotebook, DeleteNotebook, GetNotebookHeaders, RenameNotebook } from "../../backend/Notebook";
 import { TestSearch } from "../../backend/Search.test";
 import helptxt from "./DevConsoleHelp.txt?raw";
-import { LocaleContext, LocaleContextType } from "../../localization/LocaleContext";
+import { GetLocalizedResource, LocaleContext, LocaleContextType } from "../../localization/LocaleContext";
+import {ReactComponent as WarningIcon} from '../../res/warning.svg'
+import { Button } from "../Components/Button";
 
 /** A component with one input field and a span element to show output. Used for testing backend methods. Not every function might be available. */
 export function DevConsole(){
     const inpRef = useRef<HTMLInputElement>(null);
     const output = useRef<HTMLSpanElement>(null);
     const lc = useContext(LocaleContext);
+    const warningRef = useRef<HTMLDivElement>(null);
     function runConsoleCommand(event: KeyboardEvent<HTMLInputElement>){
         if(event.key!="Enter") return;
         if (inpRef.current == null) return;
@@ -28,6 +31,14 @@ export function DevConsole(){
         output.current.innerText=helptxt;
     })
     return <div className="left-4 mx-auto right-4 top-4 bottom-4 absolute my-auto overflow-y-scroll bg-secondary drop-shadow-md p-4 rounded-xl">
+        <div ref={warningRef} className="absolute flex justify-center items-center z-50 bg-secondary/50 backdrop-blur-sm m-[-1rem] right-4 left-4 top-4 bottom-4 rounded-xl">
+            <div className="flex-col bg-primary/90 box-shadow-4-8-20 w-64 p-4 gap-2 rounded-2xl items-center flex justify-center">
+                <WarningIcon width={128} height={128}></WarningIcon>
+                <span className="font-bold text-2xl">{GetLocalizedResource("warningTitle", lc.locale)}</span>
+                <span className="text-center">{GetLocalizedResource("devConsoleWarningText", lc.locale)}</span>
+                <Button onClick={()=>{warningRef.current?.style.setProperty("display","none")}} textContent={GetLocalizedResource("acceptRiskAndContinue", lc.locale)}></Button>
+            </div>
+        </div>
         <div className="overflow-x-scroll flex justify-between items-stretch flex-col gap-2 ">
             <input id="devConsole" className="w-full flex bg-primary drop-shadow-md p-2 rounded-md outline-none" style={{fontFamily:"Roboto Mono"}} placeholder=" $ ~ Use %20 for spaces in parameters!" ref={inpRef} onKeyDown={runConsoleCommand}></input>
             <span className="select-text flex p-2 bg-primary whitespace-nowrap w-full drop-shadow-md max-h-[600px] overflow-y-scroll rounded-md overflow-x-scroll" style={{fontFamily:"Roboto Mono"}} ref={output}></span>
