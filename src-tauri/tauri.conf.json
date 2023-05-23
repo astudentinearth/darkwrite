@@ -98,9 +98,9 @@
         "height": 600,
         "resizable": true,
         "title": "Darkwrite",
-        "width": 800,
-        "minHeight": 300,
-        "minWidth": 800,
+        "width": 900,
+        "minHeight": 450,
+        "minWidth": 900,
         "fileDropEnabled": true
       }
     ]
