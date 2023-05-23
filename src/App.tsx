@@ -81,7 +81,7 @@ function App() {
           <NotebooksContext.Provider value={notebooksValue}>
             <LocaleContext.Provider value={{locale, setLocale}}>
               <ActiveNotebookContext.Provider value={{notebookID: activeNotebook, setNotebookID: setActiveNotebook}}>
-                <img id="bgImage" ref={bgImgRef} style={{filter: `blur(${settings.WallpaperBlurRadius}px)`}} className="absolute z-0 left-0 right-0 top-0 bottom-0 m-0 p-0 w-full h-full"></img>
+                <img id="bgImage" ref={bgImgRef} style={{filter: `blur(${settings.WallpaperBlurRadius}px) brightness(${settings.WallpaperBrightness}%) grayscale(${settings.WallpaperGrayscale}%)`}} className="absolute z-0 left-0 right-0 top-0 bottom-0 m-0 p-0 w-full h-full"></img>
                   <MainToolbar></MainToolbar>
                   <div className='flex-grow min-h-0 flex flex-row w-full h-full'>
                     <Sidebar></Sidebar>

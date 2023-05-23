@@ -10,12 +10,14 @@ import { GetLocalizedResource, LocaleContext } from "../../localization/LocaleCo
 
 function WallpaperApplet(){
     const blurValRef = useRef<HTMLSpanElement>(null);
+    const brightnessValRef = useRef<HTMLSpanElement>(null);
+    const grayscaleValRef = useRef<HTMLSpanElement>(null);
     const {settings, updateSettings} = useContext(SettingsContext);
     const {locale} = useContext(LocaleContext);
     return<AppletBase title={GetLocalizedResource("wallpaperAppletTitle",locale)}>
-        <div className="flex-col items-center gap-2 justify-center">
-            <div className="flex items-center gap-2">
-                <span ref={blurValRef} className="w-24 block">{GetLocalizedResource("wallpaperAppletBlurLabel",locale)}: {settings.WallpaperBlurRadius}px</span>
+        <div className="flex-col gap-2 flex">
+            <div className="flex flex-col gap-2">
+                <span ref={blurValRef} className="block">{GetLocalizedResource("wallpaperAppletBlurLabel",locale)}: {settings.WallpaperBlurRadius}px</span>
                 <Slider defaultValue={settings.WallpaperBlurRadius} min={0} max={64} onChange={(event)=>{
                     if(event.target!=null && blurValRef.current!=null){
                         blurValRef.current.innerText="Blur: " + (event.target as HTMLInputElement).value + "px";
@@ -23,7 +25,25 @@ function WallpaperApplet(){
                     updateSettings({...settings, WallpaperBlurRadius: (parseInt((event.target as HTMLInputElement).value))});
                 }}></Slider>
             </div>
-            <div className="flex items-center justify-center gap-6 text-center">
+            <div className="flex flex-col gap-2">
+                <span ref={brightnessValRef} className="block">{GetLocalizedResource("wallpaperBrightnessLabel",locale)}: {settings.WallpaperBrightness}%</span>
+                <Slider defaultValue={settings.WallpaperBrightness} min={0} max={200} onChange={(event)=>{
+                    if(event.target!=null && brightnessValRef.current!=null){
+                        brightnessValRef.current.innerText=GetLocalizedResource("wallpaperBrightnessLabel", locale)+ ": " + (event.target as HTMLInputElement).value + "%";
+                    }
+                    updateSettings({...settings, WallpaperBrightness: (parseInt((event.target as HTMLInputElement).value))});
+                }}></Slider>
+            </div>
+            <div className="flex flex-col gap-2">
+                <span ref={grayscaleValRef} className="block">{GetLocalizedResource("wallpaperGrayscaleLabel",locale)}: {settings.WallpaperGrayscale}%</span>
+                <Slider defaultValue={settings.WallpaperGrayscale} min={0} max={100} onChange={(event)=>{
+                    if(event.target!=null && grayscaleValRef.current!=null){
+                        grayscaleValRef.current.innerText=GetLocalizedResource("wallpaperGrayscaleLabel", locale)+ ": " + (event.target as HTMLInputElement).value + "%";
+                    }
+                    updateSettings({...settings, WallpaperGrayscale: (parseInt((event.target as HTMLInputElement).value))});
+                }}></Slider>
+            </div>
+            <div className="flex items-center mt-2 justify-center gap-6 text-center">
                 <Button shape={ButtonShape.Round12} width={200} color={ButtonColor.Accent} textContent={GetLocalizedResource("wallpaperAppletChooseButton",locale)}
                 onClick={async ()=>{
                     await DeleteWallpaper();
