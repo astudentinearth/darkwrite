@@ -9,12 +9,15 @@ use std::path::{Path};
 
 mod dir;
 mod font;
+mod backup;
+
 fn main() {
   
   tauri::Builder::default()
-  .invoke_handler(tauri::generate_handler![readfile,path_exists,createDir,listdir,openURL,dir::dir::is_directory,font::get_fonts])  
+  .invoke_handler(tauri::generate_handler![readfile,path_exists,createDir,listdir,openURL,dir::dir::is_directory,font::get_fonts,backup::export_data])  
   .run(tauri::generate_context!())
     .expect("error while running tauri application");
+  
 }
 
 #[tauri::command]
