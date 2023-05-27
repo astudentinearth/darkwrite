@@ -28,8 +28,6 @@
   "scripts": {
     "start": "conc 'npm:vite-watch'",
     "build": "cross-env CI=false tsc && npm run app_build && vite build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
     "tauri": "tauri",
     "vite-watch": "cross-env BROWSER=none vite",
     "app_build": "generate-license-file --input package.json --output src/3rd-party-licenses.txt --overwrite",
