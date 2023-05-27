@@ -5,7 +5,7 @@ import { HexToRGB } from "../Theme";
 import { NoteHeader, NoteInfo } from "../Util";
 import { SaveNote } from "../backend/Note";
 import { GetLocalizedResource, LocaleContext } from "../localization/LocaleContext";
-import logo from '../res/darkwrite_icon.svg';
+import logo from '../res/darkwrite_icon.png';
 import { NotifyNoteModification } from "./NotesPanelMethods";
 
 export let ForceSaveOpenNote: ()=>void;
@@ -117,7 +117,7 @@ export function NoteEditor() {
                 </textarea>
             </div>
         </> : <div className="flex flex-1 items-center justify-center flex-col text-center">
-                <img src={logo} className="w-48 h-48 block"></img>
+                <img src={logo} className="w-48 h-48 block drop-shadow-lg"></img>
                 <span className="block text-2xl font-bold">{GetLocalizedResource("noteEditorWelcomeMessage", locale)}</span>
                 <span className="block text-xl">{GetLocalizedResource("noteEditorWelcomeMessage2", locale)}</span>
         </div>}
