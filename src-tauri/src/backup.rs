@@ -1,9 +1,5 @@
-use zip::result::ZipError;
-use zip::write::FileOptions;
 use std::fs::File;
-use std::path::{Path, PathBuf};
-use zip::ZipWriter;
-use tauri::api::dialog;
+use std::path::{PathBuf};
 use zip_extensions::write::zip_create_from_directory;
 
 #[tauri::command]
