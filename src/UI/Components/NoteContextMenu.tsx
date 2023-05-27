@@ -38,7 +38,7 @@ export function NoteContextMenu(){
         }
         if(ncmv.isComponentVisible==true) loadNotebooks();
     },[currentNote])
-    return <div style={{visibility: noteContextMenuVisibility.isComponentVisible ? "visible" : "collapse", boxShadow:"0 4px 36px 0px rgba(0,0,0,0.4)"}} ref={noteContextMenuVisibility.ref} className="p-1 w-64 rounded-xl bg-primary/90 backdrop-blur-md left-16 z-30 absolute">
+    return <div style={{visibility: noteContextMenuVisibility.isComponentVisible ? "visible" : "collapse", boxShadow:"0 4px 36px 0px rgba(0,0,0,0.4)"}} ref={noteContextMenuVisibility.ref} className="p-1 w-64 rounded-xl bg-primary/90 max-h-80 backdrop-blur-md left-16 z-30 absolute">
                 <ul>
                     <li id="moveToNotebookItem" className='p-2 select-none cursor-pointer flex transition-colors hover:bg-hover rounded-lg'><i className='bi-journals'></i>
                         <span className="flex-grow">&nbsp;{GetLocalizedResource("moveToNotebookContextMenuItem",locale)}</span>
@@ -81,7 +81,13 @@ export function NoteContextMenu(){
 
 export function ShowNoteContextMenu(properties: NoteContextMenuProperties){
     ncmv.ref.current.style.setProperty("left", `${properties.posX}px`);
-    ncmv.ref.current.style.setProperty("top", `${properties.posY}px`);
+    const rect = ncmv.ref.current.getBoundingClientRect();
+    if(properties.posY > window.innerHeight-rect.height){
+        ncmv.ref.current.style.setProperty("top", `${properties.posY-rect.height}px`);
+    }
+    else{
+        ncmv.ref.current.style.setProperty("top", `${properties.posY}px`);
+    }
     updateCurrentNote(properties.targetNote);
     ncmv.setIsComponentVisible(true);
 }

@@ -1,6 +1,6 @@
 /* eslint-disable no-case-declarations */
 import { KeyboardEvent, useContext, useEffect, useRef } from "react";
-import { getFonts } from "../../API";
+import { exportApplicationData, getFonts } from "../../API";
 import { GetAllNoteHeaders, GetNoteHeaders } from "../../backend/Note";
 import { CreateNotebook, DeleteNotebook, GetNotebookHeaders, RenameNotebook } from "../../backend/Notebook";
 import { TestSearch } from "../../backend/Search.test";
@@ -79,6 +79,10 @@ async function exec (cmd: string, localeContext?:LocaleContextType){
                 outstr+=f+"\n";
             }
             return outstr;
+        
+        case "Export":
+            exportApplicationData();
+            return "";
     }
     if(tokens.length<2) return "Unknown command.";
     switch(tokens[0]){
