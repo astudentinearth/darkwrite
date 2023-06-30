@@ -8,7 +8,7 @@ import { TestSearch } from "../../backend/Search.test";
 import helptxt from "./DevConsoleHelp.txt?raw";
 import { GetLocalizedResource, LocaleContext, LocaleContextType } from "../../localization/LocaleContext";
 import {ReactComponent as WarningIcon} from '../../res/warning.svg'
-import { Button } from "../Components/Button";
+import { Button } from "../components/Button";
 
 /** A component with one input field and a span element to show output. Used for testing backend methods. Not every function might be available. */
 export function DevConsole(){

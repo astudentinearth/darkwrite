@@ -1,4 +1,4 @@
-import SidebarTabView from "./Components/SidebarTabView";
+import SidebarTabView from "./components/SidebarTabView";
 
 function Sidebar(){
     return <div id="sidebar" className="div_tasks flex flex-shrink-0 flex-grow-0 w-72

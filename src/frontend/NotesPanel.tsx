@@ -16,7 +16,7 @@ import { NoteHeader } from "../Util";
 import { GetNoteHeaders, GetNoteInfoFromHeader, SaveNote } from "../backend/Note";
 import { GetLocalizedResource, LocaleContext } from "../localization/LocaleContext";
 import { ActiveNotebookContext } from "../data/ActiveNotebookContext";
-import { NoteItem } from "./Components/NoteItem";
+import { NoteItem } from "./components/NoteItem";
 import { NotifyPinChange } from "./NoteEditor";
 import { NotesPanelMethods, SetNotesPanelMethods } from "./NotesPanelMethods";
 import { TasksPointerSensor } from "./TasksPointerSensor";

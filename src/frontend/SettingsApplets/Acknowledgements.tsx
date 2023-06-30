@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import AppletBase from "../Components/SettingsApplet";
+import AppletBase from "../components/SettingsApplet";
 import thirdParty from '../../3rd-party-licenses.txt?raw'
 import cargoLicenses from "../../3rd-party-cargo.json?raw"
 import { useContext, useRef, useState } from "react";

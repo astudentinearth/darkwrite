@@ -5,13 +5,13 @@ import { LoadSettings, SaveAllSettings } from "./GlobalSettings";
 import { SettingsContext } from "./data/SettingsContext";
 import { GlobalSettings } from "./Settings";
 import { ApplyWallpaper, SetupThemes } from './Theme';
-import { NoteContextMenu } from './UI/Components/NoteContextMenu';
-import MainToolbar from './UI/MainToolbar';
-import { NoteEditor, ShowNoteEditor } from './UI/NoteEditor';
-import { NotesPanel } from './UI/NotesPanel';
-import { Settings } from './UI/Settings';
-import Sidebar from './UI/Sidebar';
-import { LoadTasks } from './UI/Tasks';
+import { NoteContextMenu } from './frontend/components/NoteContextMenu';
+import MainToolbar from './frontend/MainToolbar';
+import { NoteEditor, ShowNoteEditor } from './frontend/NoteEditor';
+import { NotesPanel } from './frontend/NotesPanel';
+import { Settings } from './frontend/Settings';
+import Sidebar from './frontend/Sidebar';
+import { LoadTasks } from './frontend/Tasks';
 import { GetNotebookHeaders } from './backend/Notebook';
 import "./fonts/roboto-mono/roboto-mono.css";
 import "./fonts/roboto-slab/roboto-slab.css";
@@ -21,9 +21,9 @@ import { NotebooksContext, NotebooksContextType } from './data/NotebooksContext'
 import { LocaleContext } from './localization/LocaleContext';
 import { ActiveNotebookContext } from './data/ActiveNotebookContext';
 import { GenerateID, NotebookInfo } from './Util';
-import { MoveToNewNotebookDialog } from './UI/Components/MoveToNewNotebookDialog';
+import { MoveToNewNotebookDialog } from './frontend/components/MoveToNewNotebookDialog';
 import {type, OsType} from '@tauri-apps/api/os'
-import { TemplateNoteInfo } from './UI/TemplateNoteInfo';
+import { TemplateNoteInfo } from './frontend/TemplateNoteInfo';
 
 function App() {
   const [notebooks,setNotebooks] = useState<NotebookInfo[]>([] as NotebookInfo[]);

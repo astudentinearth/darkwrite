@@ -1,8 +1,8 @@
 import { useContext } from "react";
 import { GenerateID } from "../Util";
 import { ActiveNotebookContext } from "../data/ActiveNotebookContext";
-import SearchBox from "./Components/SearchBox";
-import ToolbarButton from "./Components/ToolbarButton";
+import SearchBox from "./components/SearchBox";
+import ToolbarButton from "./components/ToolbarButton";
 import { ShowNoteEditor } from "./NoteEditor";
 import { ShowSettings } from "./Settings";
 import { TemplateNoteInfo } from "./TemplateNoteInfo";

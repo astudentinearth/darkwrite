@@ -6,7 +6,7 @@ import { SortableContext, arrayMove, verticalListSortingStrategy } from "@dnd-ki
 import { BaseDirectory, exists, readTextFile, writeFile } from "@tauri-apps/api/fs";
 import React, { Dispatch, SetStateAction, useCallback, useContext, useEffect, useRef, useState } from "react";
 import { GenerateID, ITask, JSONToITaskArray } from "../Util";
-import { TaskItem } from "./Components/TaskItem";
+import { TaskItem } from "./components/TaskItem";
 import { GetLocalizedResource, LocaleContext } from "../localization/LocaleContext";
 import { TasksPointerSensor } from "./TasksPointerSensor";
 let changeTasks:any;

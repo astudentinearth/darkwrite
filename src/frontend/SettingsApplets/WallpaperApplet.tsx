@@ -3,9 +3,9 @@ import { BaseDirectory, copyFile } from "@tauri-apps/api/fs";
 import { useContext, useRef } from "react";
 import { SettingsContext } from "../../data/SettingsContext";
 import { ApplyWallpaper, DeleteWallpaper } from "../../Theme";
-import { Button, ButtonColor, ButtonShape } from "../Components/Button";
-import AppletBase from "../Components/SettingsApplet";
-import { Slider } from "../Components/Slider";
+import { Button, ButtonColor, ButtonShape } from "../components/Button";
+import AppletBase from "../components/SettingsApplet";
+import { Slider } from "../components/Slider";
 import { GetLocalizedResource, LocaleContext } from "../../localization/LocaleContext";
 
 function WallpaperApplet(){
