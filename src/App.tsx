@@ -2,7 +2,7 @@ import { BaseDirectory, createDir, exists, writeTextFile } from '@tauri-apps/api
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import '../node_modules/bootstrap-icons/font/bootstrap-icons.css';
 import { LoadSettings, SaveAllSettings } from "./GlobalSettings";
-import { SettingsContext } from "./data/SettingsContext";
+import { SettingsContext } from "./context/SettingsContext";
 import { GlobalSettings } from "./Settings";
 import { ApplyWallpaper, SetupThemes } from './Theme';
 import { NoteContextMenu } from './frontend/components/NoteContextMenu';
@@ -17,9 +17,9 @@ import "./fonts/roboto-mono/roboto-mono.css";
 import "./fonts/roboto-slab/roboto-slab.css";
 import "./fonts/roboto/roboto.css";
 import "./fonts/yellowtail/yellowtail.css";
-import { NotebooksContext, NotebooksContextType } from './data/NotebooksContext';
+import { NotebooksContext, NotebooksContextType } from './context/NotebooksContext';
 import { LocaleContext } from './localization/LocaleContext';
-import { ActiveNotebookContext } from './data/ActiveNotebookContext';
+import { ActiveNotebookContext } from './context/ActiveNotebookContext';
 import { GenerateID, NotebookInfo } from './Util';
 import { MoveToNewNotebookDialog } from './frontend/components/MoveToNewNotebookDialog';
 import {type, OsType} from '@tauri-apps/api/os'

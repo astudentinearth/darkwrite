@@ -1,7 +1,7 @@
 import { useContext } from "react";
-import { NotebooksContext } from "../../data/NotebooksContext";
+import { NotebooksContext } from "../../context/NotebooksContext";
 import { NotebookInfo } from "../../Util";
-import { ActiveNotebookContext } from "../../data/ActiveNotebookContext";
+import { ActiveNotebookContext } from "../../context/ActiveNotebookContext";
 export function Notebooks(){
     const {notebookID, setNotebookID} = useContext(ActiveNotebookContext);
     const {notebooks} = useContext(NotebooksContext);

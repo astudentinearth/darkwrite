@@ -1,7 +1,7 @@
 import { open } from "@tauri-apps/api/dialog";
 import { BaseDirectory, copyFile } from "@tauri-apps/api/fs";
 import { useContext, useRef } from "react";
-import { SettingsContext } from "../../data/SettingsContext";
+import { SettingsContext } from "../../context/SettingsContext";
 import { ApplyWallpaper, DeleteWallpaper } from "../../Theme";
 import { Button, ButtonColor, ButtonShape } from "../components/Button";
 import AppletBase from "../components/SettingsApplet";

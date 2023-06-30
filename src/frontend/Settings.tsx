@@ -8,7 +8,7 @@ import FontOptions from "./settings/Fonts";
 import ThemeOptions from "./settings/ThemeOptions";
 import WallpaperApplet from "./settings/WallpaperApplet";
 import { GetLocalizedResource, LocaleContext } from "../localization/LocaleContext";
-import { SettingsContext } from "../data/SettingsContext";
+import { SettingsContext } from "../context/SettingsContext";
 //import { AdvancedSettings } from "./SettingsApplets/Advanced";
 let ShowSettings:any;
 let HideSettings:any;

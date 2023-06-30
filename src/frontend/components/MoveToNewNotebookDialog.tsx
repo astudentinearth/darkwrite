@@ -6,8 +6,8 @@ import { CreateNotebook, GetNotebookHeaders } from "../../backend/Notebook";
 import { MoveNoteToNotebook } from "../../backend/Note";
 import { NotifyNoteMovement } from "../NoteEditor";
 import { RefreshNotesPanel } from "../NotesPanelMethods";
-import { NotebooksContext } from "../../data/NotebooksContext";
-import { ActiveNotebookContext } from "../../data/ActiveNotebookContext";
+import { NotebooksContext } from "../../context/NotebooksContext";
+import { ActiveNotebookContext } from "../../context/ActiveNotebookContext";
 import { GetLocalizedResource, LocaleContext } from "../../localization/LocaleContext";
 
 export let ShowMoveToNewNoteDialog: (note: NoteHeader | NoteInfo) => void;

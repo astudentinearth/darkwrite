@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { openURL } from "../../lib/URL";
-import { SettingsContext } from "../../data/SettingsContext";
+import { SettingsContext } from "../../context/SettingsContext";
 import logo from "/res/darkwrite_icon.png";
 import { GetLocalizedResource, LocaleContext } from "../../localization/LocaleContext";
 import {getVersion} from "@tauri-apps/api/app";
