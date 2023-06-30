@@ -22,9 +22,7 @@ Your notes will be the most colorful and the most enjoyable to look at. Change t
 You can easily move your notes to another notebook, or create a new one, by right clicking your notes.
 
 # Development Status
-The application is nearly feature complete for first release. It's much more stable than before, and it's usable in it's current state. However it's not very well tested and there may be minor changes ahead, which may cause major headaches later.   
-The development roadmap until first stable release will mostly form around optimization and UX improvements as well as writing documentation. Every part of code will be documented in detail, which would make it easier for others to contribute.
-A website will be launched on GitHub Pages, which will live inside this repository.
+Darkwrite is currently extremely unstable as it is undergoing an UI redesign, works for implementing rich text editing and possibly many backend changes.
 Feel free to create an issue if you have any suggestions :)
 
 # Building
