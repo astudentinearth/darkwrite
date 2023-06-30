@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { openURL } from "../../API";
+import { openURL } from "../../lib/API";
 import { SettingsContext } from "../../SettingsContext";
 import logo from "/res/darkwrite_icon.png";
 import { GetLocalizedResource, LocaleContext } from "../../localization/LocaleContext";

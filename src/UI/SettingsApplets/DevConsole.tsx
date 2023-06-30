@@ -1,6 +1,6 @@
 /* eslint-disable no-case-declarations */
 import { KeyboardEvent, useContext, useEffect, useRef } from "react";
-import { exportApplicationData, getFonts } from "../../API";
+import { exportApplicationData, getFonts } from "../../lib/API";
 import { GetAllNoteHeaders, GetNoteHeaders } from "../../backend/Note";
 import { CreateNotebook, DeleteNotebook, GetNotebookHeaders, RenameNotebook } from "../../backend/Notebook";
 import { TestSearch } from "../../backend/Search.test";

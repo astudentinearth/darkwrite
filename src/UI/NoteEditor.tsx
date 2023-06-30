@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Dispatch, SetStateAction, useContext, useEffect, useRef, useState } from "react";
-import { getFonts } from "../API";
+import { getFonts } from "../lib/API";
 import { HexToRGB } from "../Theme";
 import { NoteHeader, NoteInfo } from "../Util";
 import { SaveNote } from "../backend/Note";
