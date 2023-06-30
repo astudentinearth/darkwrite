@@ -7,7 +7,7 @@
    viewBox="0 0 32 32"
    version="1.1"
    id="svg5"
-   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
    sodipodi:docname="darkwrite_icon.svg"
    inkscape:export-filename="darkwrite_icon.png"
    inkscape:export-xdpi="1536"
@@ -30,12 +30,12 @@
      showgrid="true"
      showguides="false"
      inkscape:zoom="24.254233"
-     inkscape:cx="15.564293"
-     inkscape:cy="17.17226"
-     inkscape:window-width="1860"
-     inkscape:window-height="1020"
-     inkscape:window-x="0"
-     inkscape:window-y="0"
+     inkscape:cx="16.100282"
+     inkscape:cy="14.018172"
+     inkscape:window-width="1920"
+     inkscape:window-height="1009"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
      inkscape:window-maximized="1"
      inkscape:current-layer="layer1">
     <inkscape:grid
@@ -53,11 +53,11 @@
        inkscape:collect="always"
        id="linearGradient4587">
       <stop
-         style="stop-color:#0c0c0c;stop-opacity:1;"
+         style="stop-color:#1e1f2c;stop-opacity:1;"
          offset="0"
          id="stop4583" />
       <stop
-         style="stop-color:#2d2d2d;stop-opacity:1;"
+         style="stop-color:#33334d;stop-opacity:1;"
          offset="1"
          id="stop4585" />
     </linearGradient>
@@ -359,10 +359,10 @@
        inkscape:collect="always"
        xlink:href="#linearGradient4587"
        id="linearGradient4655"
-       x1="65"
+       x1="17.288876"
        y1="30"
-       x2="35"
-       y2="-5"
+       x2="2"
+       y2="2"
        gradientUnits="userSpaceOnUse"
        gradientTransform="translate(35)" />
     <filter

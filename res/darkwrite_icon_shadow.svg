@@ -9,6 +9,9 @@
    id="svg5"
    inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
    sodipodi:docname="darkwrite_icon_shadow.svg"
+   inkscape:export-filename="darkwrite_icon_shadow.png"
+   inkscape:export-xdpi="1536"
+   inkscape:export-ydpi="1536"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -26,9 +29,9 @@
      inkscape:document-units="px"
      showgrid="true"
      showguides="false"
-     inkscape:zoom="22.627418"
-     inkscape:cx="5.9441161"
-     inkscape:cy="16.396038"
+     inkscape:zoom="12.127117"
+     inkscape:cx="6.0607975"
+     inkscape:cy="7.5863043"
      inkscape:window-width="1920"
      inkscape:window-height="1009"
      inkscape:window-x="-8"
@@ -50,11 +53,11 @@
        inkscape:collect="always"
        id="linearGradient4587">
       <stop
-         style="stop-color:#0c0c0c;stop-opacity:1;"
+         style="stop-color:#1e1f2c;stop-opacity:1;"
          offset="0"
          id="stop4583" />
       <stop
-         style="stop-color:#2d2d2d;stop-opacity:1;"
+         style="stop-color:#33334d;stop-opacity:1;"
          offset="1"
          id="stop4585" />
     </linearGradient>
@@ -356,10 +359,10 @@
        inkscape:collect="always"
        xlink:href="#linearGradient4587"
        id="linearGradient4655"
-       x1="65"
+       x1="17.288876"
        y1="30"
-       x2="35"
-       y2="-5"
+       x2="2"
+       y2="2"
        gradientUnits="userSpaceOnUse"
        gradientTransform="translate(35)" />
     <filter
@@ -434,6 +437,42 @@
          result="composite2"
          id="feComposite7017" />
     </filter>
+    <filter
+       style="color-interpolation-filters:sRGB;"
+       inkscape:label="Drop Shadow"
+       id="filter748"
+       x="-0.042857143"
+       y="-0.042857143"
+       width="1.0857143"
+       height="1.1">
+      <feFlood
+         flood-opacity="0.67451"
+         flood-color="rgb(0,0,0)"
+         result="flood"
+         id="feFlood738" />
+      <feComposite
+         in="flood"
+         in2="SourceGraphic"
+         operator="in"
+         result="composite1"
+         id="feComposite740" />
+      <feGaussianBlur
+         in="composite1"
+         stdDeviation="0.5"
+         result="blur"
+         id="feGaussianBlur742" />
+      <feOffset
+         dx="0"
+         dy="0.4"
+         result="offset"
+         id="feOffset744" />
+      <feComposite
+         in="SourceGraphic"
+         in2="offset"
+         operator="over"
+         result="composite2"
+         id="feComposite746" />
+    </filter>
   </defs>
   <g
      inkscape:label="Layer 1"
@@ -441,7 +480,7 @@
      id="layer1"
      transform="translate(-35)">
     <rect
-       style="fill:url(#linearGradient4655);fill-opacity:1;stroke-width:0.933333;filter:url(#filter7019)"
+       style="fill:url(#linearGradient4655);fill-opacity:1;stroke-width:0.933333;filter:url(#filter748)"
        id="rect115-5"
        width="28"
        height="28"
