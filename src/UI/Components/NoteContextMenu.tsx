@@ -1,6 +1,6 @@
 import React, { Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
 import { NoteHeader, NoteInfo, NotebookInfo } from "../../Util";
-import useComponentVisible from "../../useComponentVisible";
+import useComponentVisible from "../../hooks/useComponentVisible";
 import { GetNotebookHeaders } from "../../backend/Notebook";
 import { GetLocalizedResource, LocaleContext } from "../../localization/LocaleContext";
 import { ExportAsMarkdown, ExportAsText, FastDeleteNote, GetNoteInfoFromHeader, MoveNoteToNotebook } from "../../backend/Note";
