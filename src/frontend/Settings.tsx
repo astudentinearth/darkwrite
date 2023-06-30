@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { ChangeEvent, useContext, useState } from "react";
-import About from "./SettingsApplets/About";
-import { Acknowledgements } from "./SettingsApplets/Acknowledgements";
-import DebugInfo from "./SettingsApplets/DebugInfo";
-import { DevConsole } from "./SettingsApplets/DevConsole";
-import FontOptions from "./SettingsApplets/Fonts";
-import ThemeOptions from "./SettingsApplets/ThemeOptions";
-import WallpaperApplet from "./SettingsApplets/WallpaperApplet";
+import About from "./settings/About";
+import { Acknowledgements } from "./settings/Acknowledgements";
+import DebugInfo from "./settings/DebugInfo";
+import { DevConsole } from "./settings/DevConsole";
+import FontOptions from "./settings/Fonts";
+import ThemeOptions from "./settings/ThemeOptions";
+import WallpaperApplet from "./settings/WallpaperApplet";
 import { GetLocalizedResource, LocaleContext } from "../localization/LocaleContext";
 import { SettingsContext } from "../data/SettingsContext";
 //import { AdvancedSettings } from "./SettingsApplets/Advanced";
