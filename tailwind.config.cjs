@@ -3,7 +3,7 @@
 module.exports = {
   content: ["./src/App.tsx",
             "./src/index.tsx",
-            "./src/UI/**/*"],
+            "./src/frontend/**/*"],
   darkMode: 'class',
   theme: {
     extend: {
@@ -13,15 +13,20 @@ module.exports = {
         '3md':'920px'
       },
       colors:{
-        primary: 'rgb(var(--background-default) / <alpha-value>)',
-        secondary: 'rgb(var(--background-secondary) / <alpha-value>)',
-        hover: 'rgb(var(--background-hover) / <alpha-value>)',
-        active: 'rgb(var(--background-active) / <alpha-value>)',
-        accent: 'rgb(var(--accent) / <alpha-value>)',
-        disabledtext: 'rgb(var(--text-disabled) / <alpha-value>)',
-        disabled: 'rgb(var(--background-disabled) / <alpha-value>)',
-        defaulttext: 'rgb(var(--text-default) / <alpha-value>)',
-        widget: 'rgb(var(--widget) / <alpha-value>)'
+        base: 'rgb(var(--base) / <alpha-value>)',
+        bg1: 'rgb(var(--bg1) / <alpha-value>)',
+        bg2: 'rgb(var(--bg2) / <alpha-value>)',
+        widget: 'rgb(var(--widget) / <alpha-value>)',
+        "widget-hover": 'rgb(var(--widget-hover) / <alpha-value>)',
+        "widget-active": 'rgb(var(--widget-active) / <alpha-value>)',
+        "widget-disabled": 'rgb(var(--widget-disabled) / <alpha-value>)',
+        primary: 'rgb(var(--primary) / <alpha-value>)',
+        "text-disabled": 'rgb(var(--text-disabled) / <alpha-value>)',
+        "text-default": 'rgb(var(--text) / <alpha-value>)',
+        success: 'rgb(var(--success) / <alpha-value>)',
+        danger: 'rgb(var(--danger) / <alpha-value>)',
+        info: 'rgb(var(--info) / <alpha-value>)',
+        warning: 'rgb(var(--warning) / <alpha-value>)'
       }
     },
     

@@ -24,6 +24,7 @@ import { GenerateID, NotebookInfo } from './Util';
 import { MoveToNewNotebookDialog } from './frontend/components/MoveToNewNotebookDialog';
 import {type, OsType} from '@tauri-apps/api/os'
 import { TemplateNoteInfo } from './frontend/TemplateNoteInfo';
+import MainLayout from './frontend/Layout';
 
 function App() {
   const [notebooks,setNotebooks] = useState<NotebookInfo[]>([] as NotebookInfo[]);
@@ -34,7 +35,7 @@ function App() {
   const bgImgRef = useRef<HTMLImageElement>(null);
   const [locale, setLocale] = useState("en_us");
   let platform:OsType;
-  useEffect(()=>{
+  /*useEffect(()=>{
     console.log("Application started. Initializing");
     async function Init(){
       updateSettings(await LoadSettings());
@@ -76,11 +77,10 @@ function App() {
   },[notebooks,settings]);
   useEffect(()=>{
     if(notebooks.length!=0) setActiveNotebook(notebooks[0].id);
-  },[notebooks])
+  },[notebooks])*/
   return (
-    <div className="App absolute left-0 right-0 bottom-0 top-0 background-default">
-     <div className='overflow-y-hidden overflow-x-hidden select-none relative p-2 right-0 bottom-0 items-stretch gap-2 flex flex-col text-default transition-all w-full h-full duration-200'>
-        <SettingsContext.Provider value={{settings,updateSettings}}>
+    <div className="App">
+     {/*<SettingsContext.Provider value={{settings,updateSettings}}>
           <NotebooksContext.Provider value={notebooksValue}>
             <LocaleContext.Provider value={{locale, setLocale}}>
               <ActiveNotebookContext.Provider value={{notebookID: activeNotebook, setNotebookID: setActiveNotebook}}>
@@ -98,8 +98,8 @@ function App() {
               </ActiveNotebookContext.Provider>
             </LocaleContext.Provider>
           </NotebooksContext.Provider>
-        </SettingsContext.Provider>
-      </div>
+        </SettingsContext.Provider>*/}
+        <MainLayout></MainLayout>
     </div>
   );
 }

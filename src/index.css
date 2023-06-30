@@ -14,7 +14,8 @@
 
 
 :root{
-    --background-default:255 255 255;
+    /* ignore these */
+    /*--background-default:255 255 255;
     --shadow: rgba(0,0,0,0.2);
     --text-default: black;
     --font: "Roboto";
@@ -23,9 +24,30 @@
     --background-hover:231 231 231;
     --background-active:239 239 239;
     --accent: 87 104 255;
-    --background-disabled: 204 204 204;
-    --text-disabled: 153 153 153;
-    --widget: 232 232 232;
+    --background-disabled: 204 204 204;*/
+
+    /* new system */
+
+    --primary: 127 132 217;
+
+    /* backgrounds */
+    --base: 30 31 44;
+    --bg1: 38 38 60;
+    --bg2: 44 44 69;
+    --widget: 51 51 77;
+    --widget-disabled: 113 113 134;
+    --widget-hover: 56 56 85;
+    --widget-active: 77 77 116;
+
+    /* secondary colors */
+    --success: 73 255 55;
+    --danger: 255 84 84;
+    --info: 91 196 233;
+    --warning: 255 136 66;
+
+    /* text */
+    --text: 255 255 255;
+    --text-disabled: 184 184 184;
 }
 
 html{
@@ -39,9 +61,6 @@ html{
     overflow-y:hidden;
 }
 
-.background-secondary{
-    @apply bg-secondary;
-}
 .text-default{
     color: var(--text-default);
 }
@@ -59,11 +78,11 @@ input[type=text]:not(#taskInput){
 }
 
 .toolbar-button{
-    @apply h-12 transition-all box-shadow-4-8-20 text-default backdrop-blur-md bg-secondary duration-200 w-12 rounded-2xl flex cursor-pointer align-middle justify-center items-center; 
+    @apply h-12 transition-all box-shadow-4-8-20 text-default backdrop-blur-md duration-200 w-12 rounded-2xl flex cursor-pointer align-middle justify-center items-center; 
 }
 
 .toolbar-button-accent{
-    @apply h-12 transition-all box-shadow-4-8-20 text-white backdrop-blur-md bg-accent duration-200 w-12 rounded-2xl flex cursor-pointer align-middle justify-center items-center;
+    @apply h-12 transition-all box-shadow-4-8-20 text-white backdrop-blur-md duration-200 w-12 rounded-2xl flex cursor-pointer align-middle justify-center items-center;
    
 }
 
@@ -90,13 +109,6 @@ input[type=text]:not(#taskInput){
 
 .note-root .note-pin-button{
     display: none;
-}
-
-.toolbar-button:hover,.task-item:hover{
-    @apply bg-hover;
-}
-.toolbar-button:active,.task-item:active{
-    @apply bg-active;
 }
 
 .flex-right{
@@ -227,3 +239,6 @@ input[type=color]::-webkit-color-swatch-wrapper{
     visibility: visible;
 }
 
+.sidebar-expanded{
+    width: 600px;
+}
