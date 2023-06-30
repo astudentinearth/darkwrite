@@ -1,5 +1,5 @@
 import React, { Dispatch, SetStateAction } from 'react';
-import { NotebookInfo } from './Util';
+import { NotebookInfo } from '../Util';
 
 
 export interface NotebooksContextType{

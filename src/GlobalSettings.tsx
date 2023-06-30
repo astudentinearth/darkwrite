@@ -1,7 +1,7 @@
 import { BaseDirectory, exists, readTextFile, writeTextFile } from "@tauri-apps/api/fs";
 import { appConfigDir } from "@tauri-apps/api/path";
 import { GlobalSettings } from "./Settings";
-import { ISettingsContext } from "./ISettingsContext";
+import { ISettingsContext } from "./data/ISettingsContext";
 import { SetupThemes } from "./Theme";
 import { DefaultSettings } from "./Util";
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -1,5 +1,5 @@
 import React from "react";
-import { GlobalSettings } from "./Settings";
+import { GlobalSettings } from "../Settings";
 import { ISettingsContext } from "./ISettingsContext";
 
 

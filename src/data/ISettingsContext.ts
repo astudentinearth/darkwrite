@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
-import { GlobalSettings } from "./Settings";
+import { GlobalSettings } from "../Settings";
 
 
 export interface ISettingsContext {

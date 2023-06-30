@@ -6,7 +6,7 @@ import { GetLocalizedResource, LocaleContext } from "../../localization/LocaleCo
 import { ExportAsMarkdown, ExportAsText, FastDeleteNote, GetNoteInfoFromHeader, MoveNoteToNotebook } from "../../backend/Note";
 import { NotifyNoteDeletion, NotifyNoteMovement } from "../NoteEditor";
 import { RefreshNotesPanel } from "../NotesPanelMethods";
-import { ActiveNotebookContext } from "../ActiveNotebookContext";
+import { ActiveNotebookContext } from "../../data/ActiveNotebookContext";
 import { ShowMoveToNewNoteDialog } from "./MoveToNewNotebookDialog";
 
 let updateCurrentNote: Dispatch<SetStateAction<NoteHeader | NoteInfo>>;

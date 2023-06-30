@@ -1,7 +1,7 @@
 import { BaseDirectory, createDir, exists, readTextFile, removeFile, writeFile } from "@tauri-apps/api/fs";
 import { appConfigDir, join } from "@tauri-apps/api/path";
 import { convertFileSrc } from "@tauri-apps/api/tauri";
-import { ISettingsContext } from "./ISettingsContext";
+import { ISettingsContext } from "./data/ISettingsContext";
 import LightTheme from "./res/themes/colors_light.json?raw";
 import DarkTheme from "./res/themes/colors_dark.json?raw";
 import Blackout from "./res/themes/blackout.json?raw";

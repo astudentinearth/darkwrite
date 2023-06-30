@@ -15,7 +15,7 @@ import { ChangeEvent, useCallback, useContext, useEffect, useState } from "react
 import { NoteHeader } from "../Util";
 import { GetNoteHeaders, GetNoteInfoFromHeader, SaveNote } from "../backend/Note";
 import { GetLocalizedResource, LocaleContext } from "../localization/LocaleContext";
-import { ActiveNotebookContext } from "./ActiveNotebookContext";
+import { ActiveNotebookContext } from "../data/ActiveNotebookContext";
 import { NoteItem } from "./Components/NoteItem";
 import { NotifyPinChange } from "./NoteEditor";
 import { NotesPanelMethods, SetNotesPanelMethods } from "./NotesPanelMethods";

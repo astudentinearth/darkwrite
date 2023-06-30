@@ -1,5 +1,5 @@
 import { useContext, useRef } from "react";
-import { SettingsContext } from "../../SettingsContext";
+import { SettingsContext } from "../../data/SettingsContext";
 import AppletBase from "../Components/SettingsApplet";
 import { GetLocalizedResource, LocaleContext } from "../../localization/LocaleContext";
 
