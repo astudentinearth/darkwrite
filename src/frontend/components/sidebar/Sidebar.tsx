@@ -20,6 +20,7 @@ function reducer(state:SidebarState, action:string){
     return newstate;
 }
 
+
 export function Sidebar(){
     const [state, dispatch] = useReducer(reducer, {paneVisible: false, view: "notes"})
     
