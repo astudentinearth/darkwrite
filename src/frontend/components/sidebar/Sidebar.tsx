@@ -1,6 +1,7 @@
 import { useEffect, useReducer, useRef } from "react";
 import SidebarIcons from "./SidebarIcons";
 import { Button } from "../ui/Button";
+import { TextBox } from "../ui/TextBox";
 
 interface SidebarState{
     paneVisible: boolean,

@@ -12,6 +12,12 @@
     }
 }
 
+@layer utilities{
+    .active-outline{
+        border: 1px solid rgb(var(--primary));
+    }
+    
+}
 
 :root{
     /* ignore these */
@@ -63,6 +69,8 @@ html{
     color:var(--text-default);
     overflow-y:hidden;
 }
+
+
 
 .text-default{
     color: var(--text-default);
