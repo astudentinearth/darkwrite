@@ -1,5 +1,6 @@
-import { useEffect, useReducer, useRef, useState } from "react";
+import { useEffect, useReducer, useRef } from "react";
 import SidebarIcons from "./SidebarIcons";
+import { Button } from "../ui/Button";
 
 interface SidebarState{
     paneVisible: boolean,
@@ -28,8 +29,11 @@ export function Sidebar(){
     useEffect(()=>{
         sidebarRef.current?.style.setProperty("width",state.paneVisible ? "320px" : "64px")
     },[state.paneVisible])
-    return  <div ref={sidebarRef} className="flex duration-100 transition-all flex-row bg-bg2 gap-2 rounded-2xl">
+    return  <div ref={sidebarRef} className="flex duration-100 overflow-x-clip transition-all flex-row bg-bg2 gap-2 rounded-2xl">
             <SidebarIcons dispatch={dispatch} view={state.view} state={state}></SidebarIcons>
+            <div className="flex flex-col gap-2">
+                
+            </div>
         </div>
 
 }

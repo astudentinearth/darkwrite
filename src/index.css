@@ -48,6 +48,9 @@
     /* text */
     --text: 255 255 255;
     --text-disabled: 184 184 184;
+
+    /* outline */
+    --outline: 68 68 107;
 }
 
 html{
@@ -71,6 +74,10 @@ input[type=text]:not(#taskInput){
 
 .hide-outline:focus{
     outline:none;
+}
+
+.default-outline{
+    border: 1px solid rgb(var(--outline));
 }
 
 .box-shadow-4-8-20{

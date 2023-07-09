@@ -26,7 +26,8 @@ module.exports = {
         success: 'rgb(var(--success) / <alpha-value>)',
         danger: 'rgb(var(--danger) / <alpha-value>)',
         info: 'rgb(var(--info) / <alpha-value>)',
-        warning: 'rgb(var(--warning) / <alpha-value>)'
+        warning: 'rgb(var(--warning) / <alpha-value>)',
+        border: 'rgb(var(--outline) / <alpha-value>)'
       }
     },
     
