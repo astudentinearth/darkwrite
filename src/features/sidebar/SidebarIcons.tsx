@@ -16,11 +16,21 @@ const ICON_MAP={
 
 const DEFAULT_ITEMS:SidebarItem[] = ["notes", "favorites", "search", "notebooks", "tags", "todos", "spacer", "settings"]
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export default function SidebarIcons(props: {dispatch: React.Dispatch<any>, view: string, state:any,items?:SidebarItem[]}){
+interface SidebarIconViewProps {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    dispatch: React.Dispatch<any>;
+    view: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    state: any;
+    items?: SidebarItem[];
+    docked?: boolean;
+}
+
+
+export default function SidebarIcons(props: SidebarIconViewProps){
     const isActive = (view:string)=>{return view===props.view && props.state.paneVisible}
 
-    return <div className="flex flex-col flex-shrink-0 w-16 bg-bg1 items-center select-none gap-2 rounded-2xl p-2">
+    return <div className={`flex flex-col bg-bg2 flex-shrink-0 w-16 items-center select-none gap-2 p-2 ${props.docked ? "rounded-none" : "rounded-2xl"}`}>
         {(props.items || DEFAULT_ITEMS).map((i)=>{
                     if(i==="spacer") return <div className="flex-grow"></div>
                     return <SidebarButton onClick={()=>{props.dispatch(i)}} icon={ICON_MAP[i]} key={i} active={isActive(i)}></SidebarButton>

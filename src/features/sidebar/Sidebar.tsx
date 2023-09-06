@@ -6,6 +6,10 @@ interface SidebarState{
     view: string
 }
 
+interface SidebarProps{
+    docked?: boolean; // float by default
+}
+
 /**
      * 
      * @param state 
@@ -21,15 +25,14 @@ function reducer(state:SidebarState, action:string){
 }
 
 
-export function Sidebar(){
+export function Sidebar(props: SidebarProps){
     const [state, dispatch] = useReducer(reducer, {paneVisible: false, view: "notes"})
-    
     const sidebarRef = useRef<HTMLDivElement>(null);
     useEffect(()=>{
         sidebarRef.current?.style.setProperty("width",state.paneVisible ? "320px" : "64px")
     },[state.paneVisible])
-    return  <div ref={sidebarRef} className="flex duration-100 overflow-x-clip transition-all flex-row bg-bg2 gap-2 rounded-2xl">
-            <SidebarIcons dispatch={dispatch} view={state.view} state={state}></SidebarIcons>
+    return  <div ref={sidebarRef} className={`flex bg-bg1 duration-100 overflow-x-clip transition-all flex-row gap-2 ${props.docked ? "rounded-none" : "rounded-2xl"}`}>
+            <SidebarIcons {...props} dispatch={dispatch} view={state.view} state={state}></SidebarIcons>
             <div className="flex flex-col gap-2">
                 
             </div>
