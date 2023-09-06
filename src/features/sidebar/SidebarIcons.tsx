@@ -1,8 +1,8 @@
-import { useCallback } from "react";
 import { SidebarButton } from "./SidebarButton"
 
 export type SidebarItem = "notes" | "favorites" | "search" | "notebooks" | "tags" | "todos" | "settings" | "spacer";
 
+// view: boostrap-icon
 const ICON_MAP={
     "notes": "stickies",
     "favorites": "star",
@@ -16,6 +16,7 @@ const ICON_MAP={
 
 const DEFAULT_ITEMS:SidebarItem[] = ["notes", "favorites", "search", "notebooks", "tags", "todos", "spacer", "settings"]
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function SidebarIcons(props: {dispatch: React.Dispatch<any>, view: string, state:any,items?:SidebarItem[]}){
     const isActive = (view:string)=>{return view===props.view && props.state.paneVisible}
 
