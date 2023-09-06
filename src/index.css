@@ -16,7 +16,12 @@
     .active-outline{
         border: 1px solid rgb(var(--primary));
     }
-    
+    .text-title{
+        @apply text-2xl font-bold;
+    }
+    .text-body{
+        font-size: 16px;
+    }
 }
 
 :root{
@@ -64,22 +69,6 @@ html{
     font-family: var(--font);
 }
 
-.app_root{
-    background-color: var(--background-default);
-    color:var(--text-default);
-    overflow-y:hidden;
-}
-
-
-
-.text-default{
-    color: var(--text-default);
-}
-
-input[type=text]:not(#taskInput){
-    color: var(--text-default);
-}
-
 .hide-outline:focus{
     outline:none;
 }
@@ -92,7 +81,7 @@ input[type=text]:not(#taskInput){
     box-shadow: 0px 4px 8px 0px rgba(0,0,0,.2);
 }
 
-.toolbar-button{
+/*.toolbar-button{
     @apply h-12 transition-all box-shadow-4-8-20 text-default backdrop-blur-md duration-200 w-12 rounded-2xl flex cursor-pointer align-middle justify-center items-center; 
 }
 
@@ -103,7 +92,8 @@ input[type=text]:not(#taskInput){
 
 .toolbar-button-accent:hover{
     @apply brightness-110;
-}
+}*/
+
 .task-item{
     display: flex;
     align-items: center;

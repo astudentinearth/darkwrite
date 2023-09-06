@@ -3,7 +3,8 @@
 module.exports = {
   content: ["./src/App.tsx",
             "./src/index.tsx",
-            "./src/frontend/**/*"],
+            "./src/frontend/**/*",
+            "./src/features/**/*.tsx"],
   darkMode: 'class',
   theme: {
     extend: {
