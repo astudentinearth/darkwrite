@@ -1,6 +1,7 @@
 import { useEffect, useReducer, useRef } from "react";
 import SidebarIcons from "./SidebarIcons";
 import { CheckBox } from "../../frontend/components";
+import {TasksView, TagsView, NotebooksView, NotesView, FavoritesView, SettingsSidebarView, SearchView} from "./views"
 
 interface SidebarState{
     paneVisible: boolean,
@@ -25,6 +26,24 @@ function reducer(state:SidebarState, action:string){
     return newstate;
 }
 
+function GetView(name: string){
+    switch(name){
+        case "notes":
+            return <NotesView/>
+        case "favorites":
+            return <FavoritesView/>
+        case "search":
+            return <SearchView/>
+        case "notebooks":
+            return <NotebooksView/>
+        case "tags":
+            return <TagsView/>
+        case "todos":
+            return <TasksView/>
+        case "settings":
+            return <SettingsSidebarView/>
+    }
+}
 
 export function Sidebar(props: SidebarProps){
     const [state, dispatch] = useReducer(reducer, {paneVisible: false, view: "notes"})
@@ -32,15 +51,10 @@ export function Sidebar(props: SidebarProps){
     useEffect(()=>{
         sidebarRef.current?.style.setProperty("width",state.paneVisible ? "320px" : "64px")
     },[state.paneVisible])
-    return  <div ref={sidebarRef} className={`flex bg-bg1 duration-100 overflow-x-clip transition-all flex-row gap-2 ${props.docked ? "rounded-none" : "rounded-2xl"}`}>
+    return  <div ref={sidebarRef} className={`flex bg-bg1 duration-100 overflow-x-clip transition-all flex-row ${props.docked ? "rounded-none" : "rounded-2xl"}`}>
             <SidebarIcons {...props} dispatch={dispatch} view={state.view} state={state}></SidebarIcons>
-            <div className="flex flex-col gap-2">
-                <CheckBox></CheckBox>
-                <CheckBox disabled></CheckBox>
-                <CheckBox checked onChange={(v)=>{console.log(v)}}></CheckBox>
-                <CheckBox disabled checked></CheckBox>
-                
+            <div className="flex-grow overflow-x-hidden text-text-default overflow-y-auto">
+                {GetView(state.view)}
             </div>
         </div>
-
 }

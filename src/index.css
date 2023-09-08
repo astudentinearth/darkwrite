@@ -29,7 +29,6 @@
     /*--background-default:255 255 255;
     --shadow: rgba(0,0,0,0.2);
     --text-default: black;
-    --font: "Roboto";
     --border: none;
     --background-secondary:229 229 229;
     --background-hover:231 231 231;
@@ -62,6 +61,9 @@
 
     /* outline */
     --outline: 68 68 107;
+
+    /* font */
+    --font: "Roboto";
 }
 
 html{
