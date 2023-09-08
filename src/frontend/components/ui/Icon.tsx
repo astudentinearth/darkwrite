@@ -1,4 +1,4 @@
-export default function Icon(props: {icon: string, size?: number, color?: string}){
+export function Icon(props: {icon: string, size?: number, color?: string}){
     return <i className={`bi-${props.icon} select-none`} 
     style={{
         "fontSize": (props.size==null ? "16px" : `${props.size}px`),

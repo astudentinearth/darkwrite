@@ -1,5 +1,5 @@
 import { CSSProperties } from "react"
-import Icon from "../../frontend/components/Icon"
+import {Icon} from "../../frontend/components"
 
 const ACTIVE_STYLE:CSSProperties = {
     "background": "rgb(var(--primary))"

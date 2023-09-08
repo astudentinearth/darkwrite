@@ -1,5 +1,6 @@
 import { useEffect, useReducer, useRef } from "react";
 import SidebarIcons from "./SidebarIcons";
+import { CheckBox } from "../../frontend/components";
 
 interface SidebarState{
     paneVisible: boolean,
@@ -34,6 +35,10 @@ export function Sidebar(props: SidebarProps){
     return  <div ref={sidebarRef} className={`flex bg-bg1 duration-100 overflow-x-clip transition-all flex-row gap-2 ${props.docked ? "rounded-none" : "rounded-2xl"}`}>
             <SidebarIcons {...props} dispatch={dispatch} view={state.view} state={state}></SidebarIcons>
             <div className="flex flex-col gap-2">
+                <CheckBox></CheckBox>
+                <CheckBox disabled></CheckBox>
+                <CheckBox checked onChange={(v)=>{console.log(v)}}></CheckBox>
+                <CheckBox disabled checked></CheckBox>
                 
             </div>
         </div>
