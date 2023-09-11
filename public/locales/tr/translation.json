@@ -40,5 +40,30 @@
 	"wallpaperAppletTitle": "Arka Plan",
 	"wallpaperBrightnessLabel": "Parlaklık",
 	"wallpaperGrayscaleLabel": "Siyah beyaz",
-	"warningTitle": "Uyarı"
+	"warningTitle": "Uyarı",
+	"sidebar":{
+		"views":{
+			"notes":{
+				"title":"Notlar"
+			},
+			"favorites":{
+				"title":"Favoriler"
+			},
+			"tags":{
+				"title":"Etiketler"
+			},
+			"todos":{
+				"title":"Görevler"
+			},
+			"settings":{
+				"title":"Ayarlar"
+			},
+			"notebooks":{
+				"title":"Not defterleri"
+			},
+			"search":{
+				"title":"Arama"
+			}
+		}
+	}
 }

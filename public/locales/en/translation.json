@@ -40,5 +40,30 @@
 	"wallpaperAppletTitle": "Wallpaper",
 	"wallpaperBrightnessLabel": "Brightness",
 	"wallpaperGrayscaleLabel": "Grayscale",
-	"warningTitle": "Warning"
+	"warningTitle": "Warning",
+	"sidebar":{
+		"views":{
+			"notes":{
+				"title":"Notes"
+			},
+			"favorites":{
+				"title":"Favorites"
+			},
+			"tags":{
+				"title":"Tags"
+			},
+			"todos":{
+				"title":"Tasks"
+			},
+			"settings":{
+				"title":"Settings"
+			},
+			"notebooks":{
+				"title":"Notebooks"
+			},
+			"search":{
+				"title":"Search"
+			}
+		}
+	}
 }
