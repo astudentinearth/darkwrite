@@ -139,6 +139,8 @@ function NotesPanel() {
         <select defaultValue={sortingMethod} onChange={(event: ChangeEvent)=>{
             if(event.target==null) return;
             const target = event.target as HTMLSelectElement;
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            //@ts-ignore
             const method = SortingMethod[target.value];
             setSortingMethod(method);
         }} className="select1 bg-secondary">

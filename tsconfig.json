@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "suppressImplicitAnyIndexErrors": true,
     "target": "ESNext",
     "lib": [
       "dom",
@@ -20,7 +19,8 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "strictNullChecks": true
   },
   "include": [
     "src"
