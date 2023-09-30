@@ -9,3 +9,9 @@ const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 root.render(
     <App />
 );
+
+declare global {
+    interface Window{
+        __TAURI__: Record<string, unknown>
+    }
+}
