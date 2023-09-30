@@ -6,5 +6,9 @@ import { invoke } from "@tauri-apps/api";
  */
 
 export async function openURL(url: string) {
-    invoke("openURL", { url: url });
+    if(window.__TAURI__ == null){ // Running in browser
+        window.open(url, "_blank");
+        return;
+    }
+    else invoke("openURL", { url: url });
 }
