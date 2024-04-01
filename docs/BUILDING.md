@@ -1,9 +1,8 @@
 # Building Darkwrite
-This page contains instructions on compiling Darkwrite from source code.  
+This page contains instructions on compiling a production build of Darkwrite.
 ## Introduction
 To build Darkwrite, you must have npm and a Rust environment ready. Darkwrite uses Tauri 1.x as of writing, which supports building an installer package for Windows, a `.dmg` image for macOS, `.deb`, for Debian-based systems and `.AppImage` for all Linux distributions.  
-Tauri hasn't added Flatpak support yet. Flatpak bundling support may be added in the future.  
-A `PKGBUILD` file will be created for Arch Linux systems once Darkwrite reaches beta stage.
+Tauri hasn't added Flatpak support yet. Flatpak bundling support may be added in the future. 
 
 # First step for all platforms
 Clone the repository and enter it. I strongly recommend installing Git if you haven't already.
@@ -131,7 +130,7 @@ To install Rust, you can use the following command.
 ## Build
 ```
 npm install
-npm run tauri dev
+npm run tauri build
 ```
 ...should drop a `.dmg` somewhere in `src-tauri/target/release`. **Note that the .dmg is not signed, so Apple might complain about unidentified developer. You can create an exception in System Preferences.**
 
