@@ -2,60 +2,24 @@
   "$schema": "../node_modules/@tauri-apps/cli/schema.json",
   "build": {
     "beforeBuildCommand": "npm run build",
-    "beforeDevCommand": "npm run start",
+    "beforeDevCommand": "npm run dev",
     "devPath": "http://localhost:5173",
     "distDir": "../dist"
   },
   "package": {
     "productName": "darkwrite",
-    "version": "1.0.0-alpha.3"
+    "version": "0.1.0"
   },
   "tauri": {
     "allowlist": {
-      "path":{
-        "all": true
-      },
-      "fs":{
-        "all": true,
-        "copyFile": true,
-        "createDir": true,
-        "readDir": true,
-        "readFile": true,
-        "removeDir": true,
-        "removeFile": true,
-        "renameFile": true,
-        "scope": ["$APP/**/*"],
-        "writeFile": true,
-        "exists": true
-      },
-      "os":{
-        "all": true
-      },
-      "dialog": {
-        "all": false,
-        "ask": false,
-        "confirm": false,
-        "message": false,
-        "open": true,
-        "save": true
-      },
-      "protocol": {
-        "all": false,
-        "asset": true,
-        "assetScope": ["$APP/**/*"]
-      }
+      "all": false
     },
     "bundle": {
       "active": true,
-      "category": "Productivity",
-      "copyright": "Copyright (c) 2022 astudentinearth",
+      "category": "DeveloperTool",
+      "copyright": "",
       "deb": {
-        "depends": [],
-        "files": {
-          "/usr/share/doc/io.github.astudentinearth.darkwrite/copyright/LICENSE":"../LICENSE",
-          "/usr/share/doc/io.github.astudentinearth.darkwrite/copyright/3rd-party-licenses.txt":"../src/3rd-party-licenses.txt",
-          "/usr/share/doc/io.github.astudentinearth.darkwrite/copyright/apache-2.0.txt":"../src/fonts/LICENSE.txt"      
-        }
+        "depends": []
       },
       "externalBin": [],
       "icon": [
@@ -65,7 +29,7 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "io.github.astudentinearth.darkwrite",
+      "identifier": "com.tauri.dev",
       "longDescription": "",
       "macOS": {
         "entitlements": null,
@@ -80,14 +44,11 @@
       "windows": {
         "certificateThumbprint": null,
         "digestAlgorithm": "sha256",
-        "timestampUrl": "",
-        "wix":{
-          "license": "../LICENSE"
-        }
+        "timestampUrl": ""
       }
     },
     "security": {
-      "csp": "default-src 'self'; img-src 'self' asset: https://asset.localhost"
+      "csp": null
     },
     "updater": {
       "active": false
@@ -98,10 +59,7 @@
         "height": 600,
         "resizable": true,
         "title": "Darkwrite",
-        "width": 900,
-        "minHeight": 450,
-        "minWidth": 900,
-        "fileDropEnabled": true
+        "width": 800
       }
     ]
   }
