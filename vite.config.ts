@@ -7,7 +7,8 @@ import path from 'path'
 export default defineConfig({
   plugins: [react()],
   test: {
-    environment: "jsdom"
+    environment: "jsdom",
+    globals: true
   },
   clearScreen: false,
   server:{
