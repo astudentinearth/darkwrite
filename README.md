@@ -1,30 +1,21 @@
-# React + TypeScript + Vite
+![Darkwrite Logo](res/readme.png)  
+  
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/astudentinearth/darkwrite/tscheck.yml?label=tests&style=for-the-badge)
+![GitHub](https://img.shields.io/github/license/astudentinearth/darkwrite?style=for-the-badge)
+![GitHub Repo stars](https://img.shields.io/github/stars/astudentinearth/darkwrite?color=yellow&style=for-the-badge)
+![Windows](https://img.shields.io/badge/-WINDOWS-blue?logo=windows11&style=for-the-badge)
+![Mac](https://img.shields.io/badge/-mac-black?logo=apple&style=for-the-badge)
+![Linux](https://img.shields.io/badge/-linux-gray?logo=linux&style=for-the-badge&logoColor=white)
+![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/astudentinearth/darkwrite?style=for-the-badge)
+# Notes and todo, the way you want.
+[Follow me on Twitter](https://twitter.com/codingwithburak)  
+Darkwrite is a simple and easy way to organize your notes and todos.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Development Status
+This program is under heavy development and everything may change. It's not in a usable state yet. Star this repository so you will know when a release is out.
 
-Currently, two official plugins are available:
+# Building
+See [BUILDING.md](docs/BUILDING.md)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+# License
+Licensed under GNU General Public License, version 3 or any later version at your option.
