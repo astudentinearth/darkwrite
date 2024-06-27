@@ -1,8 +1,0 @@
-/* yellowtail-regular */
-@font-face {
-	font-family: Yellowtail;
-	font-style: normal;
-	font-weight: 400;
-	src: local("Yellowtail Regular"), local("Yellowtail-Regular"), url(yellowtail-regular.woff2) format("woff2");
-}
-
