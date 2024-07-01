@@ -1,34 +1,21 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable'
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div className='w-full h-full'>
+      <ResizablePanelGroup direction='horizontal' className='w-full h-full bg-slate-500'>
+        <ResizablePanel defaultSize={20} maxSize={30} minSize={10}>
+          <div className='bg-background h-full'>
+            <h1>Sidebar</h1>
+          </div>
+        </ResizablePanel>
+        <ResizableHandle></ResizableHandle>
+        <ResizablePanel maxSize={100}>
+          <div className='bg-view-1 h-full'>Editor</div>
+        </ResizablePanel>
+      </ResizablePanelGroup>
+    </div>
   )
 }
 
