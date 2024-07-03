@@ -27,5 +27,5 @@
       "@/*": ["./*"]
     },
   },
-  "include": ["src"]
+  "include": ["src", "electron"]
 }
