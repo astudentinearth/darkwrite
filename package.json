@@ -8,7 +8,8 @@
     "build": "tsc && vite build &6 electron-builder",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "tauri": "tauri"
+    "tauri": "tauri",
+    "preinstall": "npx only-allow pnpm"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.0",

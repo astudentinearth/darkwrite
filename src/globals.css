@@ -52,9 +52,31 @@
     #root{
       @apply w-full h-full m-0 p-0;
     }
+    .titlebar{
+      -webkit-app-region: drag;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
   }
 
 html, body, #root, #root>div{
   height: 100%;
   width: 100%;
+}
+
+.resize-handle{
+  pointer-events: none;
+}
+
+.resize-handle::before{
+  content: '';
+  height: 100%;
+  position: absolute;
+  left: -16px;
+  right: -16px;
+  background: rgba(255,0,0,0.1);
+  z-index: 20;
+  cursor: ew-resize;
+  pointer-events: all;
 }
