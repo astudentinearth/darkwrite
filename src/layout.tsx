@@ -38,10 +38,10 @@ export default function Layout(){
 
     return <div className="flex [&>div]:flex-shrink-0 w-full h-full bg-view-1">
         <Sidebar collapseCallback={()=>{setSidebarCollapsed(true)}} collapsed={isSidebarCollapsed} width={width} className={cn(isSidebarCollapsed && "hidden")}></Sidebar>
-        <div onMouseDown={handleMouseDown} className={cn("w-[1px] bg-border h-full flex cursor-ew-resize resize-handle relative", isSidebarCollapsed && "hidden")}></div>
+        <div data-testid="sidebar-resize-handle" onMouseDown={handleMouseDown} className={cn("w-[1px] bg-border h-full flex cursor-ew-resize resize-handle relative", isSidebarCollapsed && "hidden")}></div>
         <div className='h-full flex flex-col flex-grow'>
             <div className='titlebar w-full h-12 bg-background flex-shrink-0 flex [&>div]:flex-shrink-0 p-2 justify-start gap-1'>
-                <Button size={"icon32"} variant={"ghost"} 
+                <Button data-testid="button-expand-sidebar" size={"icon32"} variant={"ghost"} 
                 className={cn("flex-shrink-0", !isSidebarCollapsed && "hidden")} 
                 onClick={()=>{setSidebarCollapsed(false)}}
                 title="Show sidebar">
