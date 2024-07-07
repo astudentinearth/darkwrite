@@ -3,6 +3,7 @@ import { Sidebar } from "@/features/sidebar";
 import { PanelRightClose } from "lucide-react";
 import { Button } from "./components/ui/button";
 import { cn } from "./lib/utils";
+import { Input } from "./components/ui/input";
 
 const [MIN_WIDTH, DEFAULT_WIDTH, MAX_WIDTH] = [180, 240, 400]
 
@@ -29,9 +30,18 @@ export default function Layout(){
                     initialX.current = e.clientX; // update initial position for next event
                 }})
         window.addEventListener("mouseup", ()=>isResizing.current=false)
+        window.navigator.windowControlsOverlay?.addEventListener("geometrychange", adjustTitlebarWidth);
     }, []);
 
-    useEffect(()=>{
+    useEffect(()=>{adjustTitlebarWidth();}, [width, isSidebarCollapsed]);
+
+    // enter resize mode if handle triggers mouse down
+    const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>)=>{
+        initialX.current = e.clientX;
+        isResizing.current = true;
+    }
+
+    const adjustTitlebarWidth = ()=>{
         if(window.navigator.windowControlsOverlay == null || !headerRef.current) return; // check if electron gave us the object
         if(!window.navigator.windowControlsOverlay.visible) return; // we don't care if there is no overlay
         const rect = window.navigator.windowControlsOverlay.getTitlebarAreaRect();
@@ -39,12 +49,6 @@ export default function Layout(){
         if(isSidebarCollapsed) headerWidth = rect.width;// if the sidebar is collapsed we take all space
         else headerWidth = rect.width - (width + 1);  // if the sidebar is visible we take the sidebar out
         headerRef.current.style.width = `${headerWidth}px`;
-    }, [width, isSidebarCollapsed]);
-
-    // enter resize mode if handle triggers mouse down
-    const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>)=>{
-        initialX.current = e.clientX;
-        isResizing.current = true;
     }
 
     return <div className="flex [&>div]:flex-shrink-0 w-full h-full bg-view-1">
@@ -58,6 +62,7 @@ export default function Layout(){
                 title="Show sidebar">
                     <PanelRightClose width={20} height={20}></PanelRightClose>
                 </Button>
+                <Input className=""></Input>
             </div>
         </div>
     </div>
