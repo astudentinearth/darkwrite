@@ -65,6 +65,7 @@
     .titlebar .spacer{
       -webkit-app-region: drag !important;
     }
+    
   }
 
 html, body, #root, #root>div{
