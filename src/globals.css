@@ -57,7 +57,14 @@
       -webkit-user-select: none;
       user-select: none;
     }
-
+    .titlebar *{
+      -webkit-app-region: no-drag;
+      -webkit-user-select: auto;
+      user-select: auto;
+    }
+    .titlebar .spacer{
+      -webkit-app-region: drag !important;
+    }
   }
 
 html, body, #root, #root>div{
@@ -67,16 +74,17 @@ html, body, #root, #root>div{
 
 .resize-handle{
   pointer-events: none;
+  user-select: none;
 }
 
 .resize-handle::before{
   content: '';
   height: 100%;
   position: absolute;
-  left: -16px;
-  right: -16px;
-  background: rgba(255,0,0,0.1);
+  left: -8px;
+  right: -8px;
   z-index: 20;
   cursor: ew-resize;
   pointer-events: all;
+  user-select: none;
 }

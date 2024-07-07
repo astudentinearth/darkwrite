@@ -1,10 +1,15 @@
 import { useEffect, useRef, useState } from "react";
+import { Sidebar } from "@/features/sidebar";
+import { PanelRightClose, SquarePen } from "lucide-react";
+import { Button } from "./components/ui/button";
+import { cn } from "./lib/utils";
 
 const [MIN_WIDTH, DEFAULT_WIDTH, MAX_WIDTH] = [180, 240, 400]
 
 export default function Layout(){
     // component state
     const [width, setWidth] = useState(DEFAULT_WIDTH);
+    const [isSidebarCollapsed, setSidebarCollapsed] = useState(false);
     const initialX = useRef(0);
     const isResizing = useRef(false);
     
@@ -32,14 +37,17 @@ export default function Layout(){
     }
 
     return <div className="flex [&>div]:flex-shrink-0 w-full h-full bg-view-1">
-        <div className='bg-background h-full flex flex-col' style={{width: `${width}px`}}>
-            <div className='titlebar w-full h-9 bg-background'></div>
-            <h1>Sidebar</h1>
-          </div>
-        <div onMouseDown={handleMouseDown} className="w-[1px] bg-border h-full flex cursor-ew-resize resize-handle relative"></div>
+        <Sidebar collapseCallback={()=>{setSidebarCollapsed(true)}} collapsed={isSidebarCollapsed} width={width} className={cn(isSidebarCollapsed && "hidden")}></Sidebar>
+        <div onMouseDown={handleMouseDown} className={cn("w-[1px] bg-border h-full flex cursor-ew-resize resize-handle relative", isSidebarCollapsed && "hidden")}></div>
         <div className='h-full flex flex-col flex-grow'>
-            <div className='titlebar w-full h-9 bg-background'></div>
-            Editor
+            <div className='titlebar w-full h-12 bg-background flex-shrink-0 flex [&>div]:flex-shrink-0 p-2 justify-start gap-1'>
+                <Button size={"icon32"} variant={"ghost"} 
+                className={cn("flex-shrink-0", !isSidebarCollapsed && "hidden")} 
+                onClick={()=>{setSidebarCollapsed(false)}}
+                title="Show sidebar">
+                    <PanelRightClose width={20} height={20}></PanelRightClose>
+                </Button>
+            </div>
         </div>
     </div>
 }
