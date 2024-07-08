@@ -1,6 +1,6 @@
 import { expect, it } from "vitest";
 import { screen, render, fireEvent } from "@testing-library/react";
-import Layout from "./layout";
+import {Layout} from "./layout";
 
 it("should hide the sidebar and show expand button", ()=>{
     render(<Layout></Layout>);
