@@ -1,4 +1,4 @@
-import Layout from "./layout"
+import {Layout} from "@/features/layout"
 
 
 function App() {
