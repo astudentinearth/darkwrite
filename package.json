@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "electron-vite dev",
     "build": "tsc && vite build &6 electron-builder",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
@@ -12,6 +12,9 @@
     "preinstall": "npx only-allow pnpm"
   },
   "dependencies": {
+    "@electron-toolkit/preload": "^3.0.1",
+    "@electron-toolkit/utils": "^3.0.0",
+    "@radix-ui/react-dropdown-menu": "^2.1.1",
     "@radix-ui/react-slot": "^1.1.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
@@ -27,6 +30,7 @@
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
+    "@electron-toolkit/tsconfig": "^1.0.1",
     "@testing-library/dom": "^10.2.0",
     "@testing-library/jest-dom": "^6.4.6",
     "@testing-library/react": "^16.0.0",
@@ -39,6 +43,7 @@
     "autoprefixer": "^10.4.19",
     "electron": "^31.1.0",
     "electron-builder": "^24.13.3",
+    "electron-vite": "^2.3.0",
     "eslint": "^8.57.0",
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-react-refresh": "^0.4.7",
@@ -51,5 +56,5 @@
     "vite-plugin-electron-renderer": "^0.14.5",
     "vitest": "^1.6.0"
   },
-  "main": "dist-electron/main.js"
+  "main": "out/main/main.js"
 }

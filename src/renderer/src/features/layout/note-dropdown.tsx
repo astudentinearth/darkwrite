@@ -1,6 +1,6 @@
 
-import { Button } from "@/components/ui/button";
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuItem, DropdownMenuContent } from "@/components/ui/dropdown-menu";
+import { Button } from "@renderer/components/ui/button";
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuItem, DropdownMenuContent } from "@renderer/components/ui/dropdown-menu";
 import { ChevronDown } from "lucide-react";
 
 export function NoteDropdown(){

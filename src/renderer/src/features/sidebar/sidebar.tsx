@@ -1,5 +1,5 @@
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { Button } from "@renderer/components/ui/button";
+import { cn } from "@renderer/lib/utils";
 import { PanelRightOpen, SquarePen } from "lucide-react";
 
 

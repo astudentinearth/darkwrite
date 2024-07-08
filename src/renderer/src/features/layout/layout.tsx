@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Sidebar } from "@/features/sidebar";
+import { Sidebar } from "@renderer/features/sidebar";
 import { cn } from "../../lib/utils";
 import { Titlebar } from "./titlebar";
 
