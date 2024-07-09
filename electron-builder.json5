@@ -1,15 +1,14 @@
 // @see - https://www.electron.build/configuration/configuration
 {
   "$schema": "https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json",
-  "appId": "YourAppID",
-  "asar": true,
-  "productName": "YourAppName",
+  "appId": "io.github.astudentinearth.darkwrite",
+  "asar": false,
+  "productName": "darkwrite",
   "directories": {
     "output": "release/${version}"
   },
-  "files": [
-    "dist",
-    "dist-electron"
+  "files": [  
+    "out"
   ],
   "mac": {
     "target": [

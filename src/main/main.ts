@@ -1,10 +1,11 @@
 import { app, BrowserWindow } from 'electron'
 import { createRequire } from 'node:module'
-import path, { join } from 'node:path'
+import { join } from 'node:path'
 import {is} from '@electron-toolkit/utils'
 import icon from "../../resources/icon256.png?asset";
 import { readUserPrefs } from './api/settings';
-
+import log from "electron-log/main.js"
+log.initialize();
 const require = createRequire(import.meta.url)
 
 
@@ -12,6 +13,7 @@ let win: BrowserWindow | null
 
 function createWindow() {
   const prefs = readUserPrefs();
+  log.debug("creating main window")
   win = new BrowserWindow({
     icon,
     webPreferences: {

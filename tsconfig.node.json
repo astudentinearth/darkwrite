@@ -5,7 +5,7 @@
     "composite": true,
     "types": ["electron-vite/node", "vitest/globals"],
     "paths": {
-      "@common/*": ["src/common/*"]
+      "@common/*": ["./src/common/*"]
     }
   }
 }
