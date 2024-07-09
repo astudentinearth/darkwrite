@@ -36,7 +36,6 @@ export function Layout(){
         }
     }, []);
 
-    useEffect(()=>{adjustTitlebarWidth();}, [width]);
     
     // This effect must manage the event listener, or the event won't know about the sidebar. DO NOT REMOVE
     useEffect(()=>{
@@ -45,7 +44,7 @@ export function Layout(){
         return ()=>{
             window.navigator.windowControlsOverlay?.removeEventListener("geometrychange", adjustTitlebarWidth);
         }
-    }, [isSidebarCollapsed]);
+    }, [isSidebarCollapsed, width]);
     
     // enter resize mode if handle triggers mouse down
     const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>)=>{

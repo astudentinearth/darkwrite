@@ -17,14 +17,14 @@ function createWindow() {
   win = new BrowserWindow({
     icon,
     webPreferences: {
-        preload: join(__dirname, '../preload/index.js'),
+        preload: join(__dirname, '../preload/index.mjs'),
     },
     titleBarStyle: process.platform === "win32" ? "hidden" : "default", //TODO: Implement experimental support for macOS later
     titleBarOverlay: process.platform === "win32" ? {
       color: "#131313",
       symbolColor: "#ffffff",
       height: 48
-    } : false
+    } : false,
   })
 
   // Test active push message to Renderer-process.
