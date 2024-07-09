@@ -3,6 +3,7 @@ import { createRequire } from 'node:module'
 import path, { join } from 'node:path'
 import {is} from '@electron-toolkit/utils'
 import icon from "../../resources/icon256.png?asset";
+import { readUserPrefs } from './api/settings';
 
 const require = createRequire(import.meta.url)
 
@@ -10,6 +11,7 @@ const require = createRequire(import.meta.url)
 let win: BrowserWindow | null
 
 function createWindow() {
+  const prefs = readUserPrefs();
   win = new BrowserWindow({
     icon,
     webPreferences: {

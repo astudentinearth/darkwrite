@@ -1,17 +1,11 @@
 {
+  "extends": "@electron-toolkit/tsconfig/tsconfig.node.json",
+  "include": ["electron.vite.config.*", "src/main/**/*", "src/preload/**/*", "src/common/**/*"],
   "compilerOptions": {
     "composite": true,
-    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
-    "skipLibCheck": true,
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "allowSyntheticDefaultImports": true,
-    "strict": true,
-    "noEmit": true,
-    "baseUrl": ".",
+    "types": ["electron-vite/node", "vitest/globals"],
     "paths": {
       "@common/*": ["src/common/*"]
     }
-  },
-  "include": ["vite.config.ts"]
+  }
 }

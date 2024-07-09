@@ -1,3 +1,4 @@
+import path from 'path';
 import {defineProject} from 'vitest/config'
 
 export default defineProject({
@@ -5,4 +6,9 @@ export default defineProject({
         environment: "node",
         globals: true,
     },
+    resolve:{
+        alias:{
+            '@common': path.resolve("../common")
+        }
+    }
 });

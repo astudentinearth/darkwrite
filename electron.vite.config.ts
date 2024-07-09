@@ -4,7 +4,12 @@ import path from "path";
 
 export default defineConfig({
     main:{
-        plugins: [externalizeDepsPlugin()]
+        plugins: [externalizeDepsPlugin()],
+        resolve:{
+            alias:{
+                "@common": path.resolve("src/common")
+            }
+        }
     },
     preload: {
         plugins: [externalizeDepsPlugin()]
@@ -13,7 +18,8 @@ export default defineConfig({
         plugins: [react()],
         resolve:{
             alias:{
-                "@renderer":path.resolve("src/renderer/src")
+                "@renderer":path.resolve("src/renderer/src"),
+                "@common": path.resolve("src/common")
             }
         }
     }
