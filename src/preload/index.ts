@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { contextBridge } from 'electron'
+import { contextBridge, ipcRenderer } from 'electron'
 
-contextBridge.exposeInMainWorld('electron', {
-  
+contextBridge.exposeInMainWorld('api', {
+  showAppMenu: ()=>ipcRenderer.invoke("show-app-menu"),
+  somevar: 2
 })

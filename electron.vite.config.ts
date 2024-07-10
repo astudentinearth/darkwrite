@@ -12,6 +12,14 @@ export default defineConfig({
     },
     preload: {
         plugins: [externalizeDepsPlugin()],
+        build:{
+            target: "node20",
+            rollupOptions: {
+                output: {
+                    format: "cjs"
+                }
+            }
+        }
     },
     renderer: {
         plugins: [react()],

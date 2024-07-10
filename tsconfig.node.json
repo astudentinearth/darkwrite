@@ -6,6 +6,7 @@
     "types": ["electron-vite/node", "vitest/globals"],
     "paths": {
       "@common/*": ["./src/common/*"]
-    }
+    },
+    "target": "ESNext"
   }
 }

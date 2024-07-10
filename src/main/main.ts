@@ -5,6 +5,7 @@ import {is} from '@electron-toolkit/utils'
 import icon from "../../resources/icon256.png?asset";
 import { readUserPrefs } from './api/settings';
 import log from "electron-log/main.js"
+import {initAppMenu} from "./menu"
 log.initialize();
 const require = createRequire(import.meta.url)
 
@@ -17,7 +18,7 @@ function createWindow() {
   win = new BrowserWindow({
     icon,
     webPreferences: {
-        preload: join(__dirname, '../preload/index.mjs'),
+        preload: join(__dirname, '../preload/index.cjs'),
     },
     titleBarStyle: process.platform === "win32" ? "hidden" : "default", //TODO: Implement experimental support for macOS later
     titleBarOverlay: process.platform === "win32" ? {
@@ -26,7 +27,6 @@ function createWindow() {
       height: 48
     } : false,
   })
-
   // Test active push message to Renderer-process.
   win.webContents.on('did-finish-load', () => {
     win?.webContents.send('main-process-message', (new Date).toLocaleString())
@@ -37,6 +37,8 @@ function createWindow() {
   } else {
     win.loadFile(join(__dirname, '../renderer/index.html'))
   }
+
+  initAppMenu();
 }
 
 // Quit when all windows are closed, except on macOS. There, it's common

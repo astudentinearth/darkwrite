@@ -3,6 +3,7 @@ import { cn } from "@renderer/lib/utils";
 import { PanelRightOpen, Search, SquarePen } from "lucide-react";
 import { NotesWidget } from "./notes";
 import { NavigationWidget } from "./navigation";
+import { showAppMenu } from "@renderer/lib/app-menu";
 
 
 export type SidebarProps = React.HTMLAttributes<HTMLDivElement> & {
@@ -15,8 +16,8 @@ export function Sidebar(props: SidebarProps){
     const {width,  collapseCallback} = props;
     return <div data-testid="container-sidebar" className={cn('bg-background h-full flex flex-col', props.className)} style={{width: `${width}px`}}>
         <div className='titlebar w-full h-12 bg-background flex-shrink-0 flex [&>button]:flex-shrink-0 p-2 items-center gap-1'>
-            <Button data-testid="button-darkwrite" size={"icon32"} variant={"ghost"} className="flex-shrink-0" title="Menu">
-            <img src="icon64.png" className="flex-shrink-0 w-5 h-5"></img>
+            <Button onClick={()=>{showAppMenu()}} data-testid="button-darkwrite" size={"icon32"} variant={"ghost"} className="flex-shrink-0" title="Menu">
+                <img src="icon64.png" className="flex-shrink-0 w-5 h-5"></img>
             </Button>
             <div className="flex-grow titlebar spacer"></div>
             <Button data-testid="button-search" size={"icon32"} variant={"ghost"} className="flex-shrink-0" title="Search">
