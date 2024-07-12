@@ -7,5 +7,7 @@ export interface NoteMetada{
     modified: Date,
     isFavorite?: boolean,
     parentID?: string,
-    subnotes?: string[]
+    subnotes?: string[],
+    isTrashed?: boolean,
+    todoListID?: string // set to a list UUID to show todos in this page
 }

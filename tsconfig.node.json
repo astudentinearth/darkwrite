@@ -7,6 +7,9 @@
     "paths": {
       "@common/*": ["./src/common/*"]
     },
-    "target": "ESNext"
+    "target": "ESNext",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "strictPropertyInitialization": false
   }
 }

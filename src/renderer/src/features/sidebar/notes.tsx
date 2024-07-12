@@ -53,14 +53,14 @@ function NoteItem(props: {note: NoteMetada, selected?: boolean}){
 
     useEffect(()=>{getChildren()}, [])
     return <Collapsible open={open} onOpenChange={setOpen}>
-        <div className={cn("rounded-[8px] hover:bg-secondary/50 hover:text-foreground active:bg-secondary/25 transition-colors grid grid-cols-[20px_24px_1fr] select-none p-1 h-8 overflow-hidden", selected ? "text-foreground" : "text-foreground/60", )}>
+        <div className={cn("rounded-[8px] hover:bg-secondary/50 hover:text-foreground font-medium active:bg-secondary/25 transition-colors grid grid-cols-[20px_24px_1fr] select-none p-1 h-8 overflow-hidden", selected ? "text-foreground" : "text-foreground/60", )}>
             <CollapsibleTrigger onClick={(e)=>{e.stopPropagation()}}>
                 <div className="w-5 h-5 hover:bg-secondary/50 rounded-[4px] justify-center items-center flex">
                     {open ? <ChevronDown size={14}></ChevronDown> : <ChevronRight size={14}></ChevronRight>}
                 </div>
             </CollapsibleTrigger>
             <span className="inline-block w-6 h-6">{note.icon}</span>
-            <span className={cn("text-ellipsis whitespace-nowrap block overflow-hidden")}>{note.title}</span>
+            <span className={cn("text-ellipsis whitespace-nowrap block overflow-hidden text-sm self-center")}>{note.title}</span>
         </div>
         <CollapsibleContent className="pl-2">
             {render()}

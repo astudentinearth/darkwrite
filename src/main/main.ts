@@ -1,3 +1,4 @@
+import "reflect-metadata"
 import { app, BrowserWindow } from 'electron'
 import { createRequire } from 'node:module'
 import { join } from 'node:path'
@@ -6,6 +7,9 @@ import icon from "../../resources/icon256.png?asset";
 import { readUserPrefs } from './api/settings';
 import log from "electron-log/main.js"
 import {initAppMenu} from "./menu"
+import { AppDataSource } from './db';
+
+
 log.initialize();
 const require = createRequire(import.meta.url)
 
@@ -59,4 +63,6 @@ app.on('activate', () => {
   }
 })
 
-app.whenReady().then(createWindow)
+app.whenReady().then(()=>{
+  AppDataSource.initialize().then(createWindow);
+})
