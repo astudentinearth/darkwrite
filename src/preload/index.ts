@@ -13,5 +13,8 @@ contextBridge.exposeInMainWorld('api', {
     update: (note: NoteMetada)=>ipcRenderer.invoke("update-note", note),
     getAll: ()=>ipcRenderer.invoke("get-all-notes"),
     setTrashStatus: (id: string, state: boolean)=>ipcRenderer.invoke("set-trash-status", id ,state)
+  },
+  settings: {
+    load: ()=>ipcRenderer.invoke("load-user-settings")
   }
 })

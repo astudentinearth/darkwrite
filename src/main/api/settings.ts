@@ -1,5 +1,5 @@
 import { FileHandle, open, writeFile } from "fs/promises";
-import { app } from "electron";
+import { app, ipcMain } from "electron";
 import { join } from "path";
 import { DEFAULT_USER_SETTINGS, UserSettings, buildUserSettings } from "@common/settings";
 import { isNodeError, isValidJSON } from "../util";
@@ -59,3 +59,9 @@ export async function writeUserPrefs(prefs: UserSettings){
         if(isNodeError(err)) log.error(err.message);
     }
 }
+
+/// IPC handlers
+
+ipcMain.handle("load-user-settings", async ()=>{
+    return await readUserPrefs();
+})

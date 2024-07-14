@@ -1,4 +1,5 @@
 import { NoteMetada } from '@common/note'
+import { UserSettings } from '@common/settings'
 import { ElectronAPI } from '@electron-toolkit/preload'
 
 declare global {
@@ -15,6 +16,9 @@ declare global {
         update: (note: NoteMetada)=>Promise<void>,
         getAll: ()=>Promise<NoteMetada[]>,
         setTrashStatus: ()=>Promise<void>
+      },
+      settings: {
+        load: ()=>Promise<UserSettings | null>
       }
     }
   }
