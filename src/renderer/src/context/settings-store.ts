@@ -7,9 +7,12 @@ type SettingsAction = {
     setSidebarCollapsed: (val: boolean) => void
 }
 
-export const useSettingsStore = create<UserSettings & SettingsAction>((set)=>({
+export const useSettingsStore = create<UserSettings & SettingsAction>((set, get)=>({
     ...DEFAULT_USER_SETTINGS,
     overwrite: (data) => set(()=>({...data})),
-    setSidebarCollapsed: (val) => set(produce((state: UserSettings)=>{state.state.sidebarCollapsed = val}))
+    setSidebarCollapsed: (val) => set(produce((state: UserSettings)=>{state.state.sidebarCollapsed = val})),
+    save: async ()=>{
+        await window.api.settings.save(get())
+    }
 }))
 

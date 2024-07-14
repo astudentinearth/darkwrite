@@ -2,15 +2,16 @@ import { useEffect, useRef, useState } from "react";
 import { Sidebar } from "@renderer/features/sidebar";
 import { cn } from "../../lib/utils";
 import { Titlebar } from "./titlebar";
-import { useSettingsStore } from "@renderer/context/settings-store";
+import { useLocalStore } from "@renderer/context/local-state";
 
 const [MIN_WIDTH, DEFAULT_WIDTH, MAX_WIDTH] = [180, 240, 400]
 
 export function Layout(){
     // component state
-    const [width, setWidth] = useState(DEFAULT_WIDTH);
-    const isSidebarCollapsed = useSettingsStore((state)=>state.state.sidebarCollapsed);
-    const setSidebarCollapsed = useSettingsStore((state)=>state.setSidebarCollapsed);
+    const width = useLocalStore((state)=>state.sidebarWidth);
+    const setWidth = useLocalStore((state)=>state.setCalculatedWidth)
+    const isSidebarCollapsed = useLocalStore((state)=>state.isSidebarCollapsed);
+    const setSidebarCollapsed = useLocalStore((state)=>state.setSidebarCollapsed);
     //const [isSidebarCollapsed, setSidebarCollapsed] = useState(false);
     const initialX = useRef(0);
     const isResizing = useRef(false);
@@ -26,7 +27,7 @@ export function Layout(){
                 if(e.clientX > MAX_WIDTH) return // only allow resizing between min and max range
                 if(e.clientX < MIN_WIDTH) return
                 const change = e.clientX - initialX.current; // calculate change in position
-                setWidth((w)=>{return calculateWidth(w, change)})
+                setWidth(change);
                 initialX.current = e.clientX; // update initial position for next event
             }
         }

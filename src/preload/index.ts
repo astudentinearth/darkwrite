@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { NoteMetada } from '@common/note'
+import { UserSettings } from '@common/settings'
 import { contextBridge, ipcRenderer } from 'electron'
 
 contextBridge.exposeInMainWorld('api', {
@@ -15,6 +16,7 @@ contextBridge.exposeInMainWorld('api', {
     setTrashStatus: (id: string, state: boolean)=>ipcRenderer.invoke("set-trash-status", id ,state)
   },
   settings: {
-    load: ()=>ipcRenderer.invoke("load-user-settings")
+    load: ()=>ipcRenderer.invoke("load-user-settings"),
+    save: (data: UserSettings)=>ipcRenderer.invoke("save-user-settings", data)
   }
 })

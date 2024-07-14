@@ -18,7 +18,8 @@ declare global {
         setTrashStatus: ()=>Promise<void>
       },
       settings: {
-        load: ()=>Promise<UserSettings | null>
+        load: ()=>Promise<UserSettings | null>,
+        save: (data: UserSettings)=>Promise<void>
       }
     }
   }

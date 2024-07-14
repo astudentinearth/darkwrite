@@ -65,3 +65,7 @@ export async function writeUserPrefs(prefs: UserSettings){
 ipcMain.handle("load-user-settings", async ()=>{
     return await readUserPrefs();
 })
+
+ipcMain.handle("save-user-settings", async (_event, data:UserSettings)=>{
+    writeUserPrefs(data);
+})
