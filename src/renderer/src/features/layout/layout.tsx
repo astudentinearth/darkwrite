@@ -2,13 +2,16 @@ import { useEffect, useRef, useState } from "react";
 import { Sidebar } from "@renderer/features/sidebar";
 import { cn } from "../../lib/utils";
 import { Titlebar } from "./titlebar";
+import { useSettingsStore } from "@renderer/context/settings-store";
 
 const [MIN_WIDTH, DEFAULT_WIDTH, MAX_WIDTH] = [180, 240, 400]
 
 export function Layout(){
     // component state
     const [width, setWidth] = useState(DEFAULT_WIDTH);
-    const [isSidebarCollapsed, setSidebarCollapsed] = useState(false);
+    const isSidebarCollapsed = useSettingsStore((state)=>state.state.sidebarCollapsed);
+    const setSidebarCollapsed = useSettingsStore((state)=>state.setSidebarCollapsed);
+    //const [isSidebarCollapsed, setSidebarCollapsed] = useState(false);
     const initialX = useRef(0);
     const isResizing = useRef(false);
     const headerRef = useRef<HTMLDivElement>(null); // editor-side header bar
