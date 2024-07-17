@@ -37,8 +37,8 @@ export class Note implements NoteMetada{
         return this.parentID == null ? false : true;
     }
 
-    static async create() {
-        await window.api.note.create("Untitled page");
+    static async create(parent?: string) {
+        await window.api.note.create("Untitled page", parent);
         useNotesStore.getState().fetch();
     }
 }
