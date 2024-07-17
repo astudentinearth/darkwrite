@@ -22,15 +22,16 @@ export class NoteEntity implements NoteMetada{
     isFavorite?: boolean 
 
     @Column("varchar", {nullable: true})
-    parentID?: string
+    parentID?: string | null
 
     @Column("text", {name: "subnotes"})
-    private subnotes_str: string;
+    private subnotes_str: string = "";
 
     @Column("boolean", {nullable: true})
     isTrashed?: boolean
     
     get subnotes(): string[]{
+        if(this.subnotes_str === "") return []
         return JSON.parse(this.subnotes_str);
     }
 
@@ -38,6 +39,16 @@ export class NoteEntity implements NoteMetada{
         this.subnotes_str = JSON.stringify(value);
     }
 
+    addSubnote(id: string){
+        const newArr = [...this.subnotes];
+        newArr.push(id);
+        this.subnotes = newArr;
+    }
+
+    removeSubnote(id:string){
+        const newArr = [...this.subnotes].filter((x)=>x!==id);
+        this.subnotes = newArr;
+    }
     @Column("varchar", {nullable: true})
     todoListID?: string | undefined;
 }

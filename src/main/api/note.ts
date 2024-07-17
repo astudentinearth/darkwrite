@@ -3,7 +3,7 @@ import { AppDataSource } from "../db";
 import { NoteEntity } from "../db/entity/note";
 import { randomUUID } from "crypto";
 import { join } from "path";
-import { app, ipcMain } from "electron";
+import { app } from "electron";
 import fse from "fs-extra"
 import { isNodeError } from "../util";
 import log from "electron-log"
@@ -30,6 +30,14 @@ export async function createNote(title: string, parent?: string){
         const filename = join(notesDir, `${note.id}.md`);
         await fse.ensureFile(filename);
         await AppDataSource.manager.save(note);
+
+        if(parent!=null){
+            const parentNote = await AppDataSource.getRepository(NoteEntity).createQueryBuilder("note").where("note.id = :id", {id: parent}).getOne();
+            if(parentNote==null) log.warn("A note was created with a non-existent parent");
+            parentNote?.addSubnote(note.id);
+            console.log(parentNote?.subnotes);
+            if(parentNote) AppDataSource.manager.save(parentNote);
+        }
     } catch (error) {
         if(error instanceof Error) log.error(error.message)
     }
@@ -97,14 +105,14 @@ export async function moveNote(sourceID: string, destID: (string | undefined)){
         if(source?.parentID != null){
             // Note alrady has a parent, lets remove the relationship first
             const oldParent = await AppDataSource.getRepository(NoteEntity).createQueryBuilder("note").where("note.id = :id", {id: source.parentID}).getOne();
-            if(oldParent){
-                oldParent.subnotes.filter((x)=>x!==source.id);
+            if(oldParent != null){
+                oldParent.removeSubnote(source.id);
                 await AppDataSource.getRepository(NoteEntity).save(oldParent);
             }
         }
         if(destID == null && source != null){
             // We are moving the note to the top level
-            source.parentID = undefined; // set parent to null
+            source.parentID = null; // set parent to null
             source.subnotes = [];
             await AppDataSource.getRepository(NoteEntity).save(source);
             return;
@@ -113,7 +121,7 @@ export async function moveNote(sourceID: string, destID: (string | undefined)){
         if(source == null || dest==null) return;
         source.parentID = destID;
         source.subnotes = [];
-        dest.subnotes.push(source.id);
+        dest.addSubnote(source.id);
         await AppDataSource.getRepository(NoteEntity).save(source);
         await AppDataSource.getRepository(NoteEntity).save(dest);
 
@@ -142,8 +150,11 @@ export async function updateNote(note: NoteMetada){
 export async function getAllNotes(){
     try{
         const notes = await AppDataSource.getRepository(NoteEntity).find();
-        // this might not cast right away
-        return notes;
+        const arr: NoteMetada[] = [];
+        for(const n of notes){
+            arr.push({...n, subnotes: n.subnotes}); // spread does not get() for us methods
+        }
+        return arr;
     }
     catch(error){
         if(error instanceof Error) log.error(error.message);
@@ -167,37 +178,3 @@ export async function setTrashStatus(id: string, state: boolean){
         if(error instanceof Error) log.error(error.message);
     }
 }
-
-// IPC Handlers
-
-ipcMain.handle("create-note", async (_event, title: string, parent?: string)=>{
-    await createNote(title, parent);
-});
-
-ipcMain.handle("set-note-contents", async (_event, id: string, content: string)=>{
-    await setNoteContents(id, content);
-});
-
-ipcMain.handle("get-note-contents", async (_event, id: string)=>{
-    return await getNoteContents(id);
-});
-
-ipcMain.handle("delete-note", async (_event, id: string)=>{
-    await deleteNote(id);
-})
-
-ipcMain.handle("move-note", async (_event, sourceID: string, destID: string)=>{
-    await moveNote(sourceID, destID);
-})
-
-ipcMain.handle("update-note", async (_event, note: NoteMetada)=>{
-    await updateNote(note);
-})
-
-ipcMain.handle("get-all-notes", async ()=>{
-    return await getAllNotes();
-})
-
-ipcMain.handle("set-trash-status", async (_event, id:string, state: boolean)=>{
-    await setTrashStatus(id, state);
-})

@@ -8,6 +8,7 @@ import { readUserPrefs } from './api/settings';
 import log from "electron-log/main.js"
 import {initAppMenu} from "./menu"
 import { AppDataSource } from './db';
+import "./ipc"
 
 
 log.initialize();

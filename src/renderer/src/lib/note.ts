@@ -1,5 +1,6 @@
 
 import { NoteMetada } from "@common/note";
+import { useNotesStore } from "@renderer/context/notes-context";
 
 //TODO: Remove mocks when API is built
 
@@ -13,7 +14,7 @@ export class Note implements NoteMetada{
         public modified: Date,
         public isFavorite?: boolean,
         public subnotes: string[] = [],
-        public parentID?:string){}
+        public parentID?:string | null){}
     
     async getContents(){
         //TODO: Call electron API to load contents
@@ -35,11 +36,22 @@ export class Note implements NoteMetada{
     hasParent(): boolean{
         return this.parentID == null ? false : true;
     }
+
+    static async create() {
+        await window.api.note.create("Untitled page");
+        useNotesStore.getState().fetch();
+    }
 }
 
 export async function getAllNotes(){
     //TODO: IPC call here
-    return FAKE_NOTES_FOR_DEVELOPMENT;
+    const notes = await window.api.note.getAll();
+    const arr: Note[]=[]
+    for(const n of notes){
+        const note = new Note(n.id, n.title, n.icon, n.created, n.modified, n.isFavorite, n.subnotes, n.parentID);
+        arr.push(note);
+    }
+    return arr;
 }
 
 //TODO: Build a faker for this maybe

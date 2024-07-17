@@ -4,6 +4,7 @@ import { PanelRightOpen, Search, SquarePen } from "lucide-react";
 import { NotesWidget } from "./notes";
 import { NavigationWidget } from "./navigation";
 import { showAppMenu } from "@renderer/lib/app-menu";
+import { Note } from "@renderer/lib/note";
 
 
 export type SidebarProps = React.HTMLAttributes<HTMLDivElement> & {
@@ -23,7 +24,7 @@ export function Sidebar(props: SidebarProps){
             <Button data-testid="button-search" size={"icon32"} variant={"ghost"} className="flex-shrink-0" title="Search">
                 <Search width={20} height={20}></Search>
             </Button>
-            <Button data-testid="button-create-note" size={"icon32"} variant={"ghost"} className="flex-shrink-0" title="Create note">
+            <Button onClick={Note.create} data-testid="button-create-note" size={"icon32"} variant={"ghost"} className="flex-shrink-0" title="Create note">
                 <SquarePen width={20} height={20}></SquarePen>
             </Button>
             <Button data-testid="button-collapse-sidebar" size={"icon32"} variant={"ghost"} className="flex-shrink-0" onClick={collapseCallback} title="Hide sidebar">
