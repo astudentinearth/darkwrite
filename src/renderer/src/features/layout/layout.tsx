@@ -3,6 +3,7 @@ import { Sidebar } from "@renderer/features/sidebar";
 import { cn } from "../../lib/utils";
 import { Titlebar } from "./titlebar";
 import { useLocalStore } from "@renderer/context/local-state";
+import { Outlet } from "react-router-dom";
 
 const [MIN_WIDTH, DEFAULT_WIDTH, MAX_WIDTH] = [180, 240, 400]
 
@@ -77,6 +78,7 @@ export function Layout(){
         <div data-testid="sidebar-resize-handle" onMouseDown={handleMouseDown} className={cn("w-[1px] bg-border h-full flex cursor-ew-resize resize-handle relative", isSidebarCollapsed && "hidden")}></div>
         <div className='h-full flex flex-col flex-grow'>
             <Titlebar refObject={headerRef} expandCallback={()=>{setSidebarCollapsed(false)}} isSidebarCollapsed={isSidebarCollapsed}></Titlebar>
+            <Outlet/>
         </div>
     </div>
 }

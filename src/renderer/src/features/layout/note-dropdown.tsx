@@ -6,7 +6,7 @@ import { ChevronDown } from "lucide-react";
 export function NoteDropdown(){
     return <DropdownMenu>
         <DropdownMenuTrigger asChild>
-            <Button variant={"ghost"} className="px-2 h-auto gap-1"><ChevronDown></ChevronDown> Note dropdown</Button>
+            <Button variant={"ghost"} className="px-2 h-auto gap-1"><ChevronDown size={18}></ChevronDown> Note dropdown</Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
             <DropdownMenuItem>Parent note</DropdownMenuItem>

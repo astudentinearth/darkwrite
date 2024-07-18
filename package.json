@@ -37,6 +37,7 @@
     "react-dom": "^18.3.1",
     "react-i18next": "^14.1.2",
     "react-resizable-panels": "^2.0.19",
+    "react-router-dom": "^6.25.1",
     "reflect-metadata": "^0.2.2",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",

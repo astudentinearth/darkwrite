@@ -6,6 +6,7 @@ import { getAllNotes, Note } from "@renderer/lib/note";
 import { cn } from "@renderer/lib/utils";
 import { ChevronDown, ChevronRight, Plus } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export function NotesWidget(){
     const notes = useNotesStore((state)=>state.notes);
@@ -40,6 +41,7 @@ function NoteItem(props: {note: NoteMetada, selected?: boolean}){
     const notes = useNotesStore((state)=>state.notes);
     const [subnotes, setSubnotes] = useState([] as Note[]);
     const [open, setOpen] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(()=>{
         const sub = notes.filter((n)=>note.subnotes?.includes(n.id));
@@ -52,7 +54,7 @@ function NoteItem(props: {note: NoteMetada, selected?: boolean}){
     }, [subnotes])
 
     return <Collapsible open={open} onOpenChange={setOpen}>
-        <div className={cn("rounded-[8px] note-item hover:bg-secondary/50 hover:text-foreground font-medium active:bg-secondary/25 transition-colors grid grid-cols-[20px_24px_1fr] hover:grid-cols-[20px_24px_1fr_24px] select-none p-1 h-8 overflow-hidden", selected ? "text-foreground" : "text-foreground/60", )}>
+        <div onClick={()=>navigate({pathname: "/page", search: `?id=${note.id}`})} className={cn("rounded-[8px] note-item hover:bg-secondary/50 hover:text-foreground font-medium active:bg-secondary/25 transition-colors grid grid-cols-[20px_24px_1fr] hover:grid-cols-[20px_24px_1fr_24px] select-none p-1 h-8 overflow-hidden", selected ? "text-foreground" : "text-foreground/60", )}>
             <CollapsibleTrigger onClick={(e)=>{e.stopPropagation()}}>
                 <div className="w-5 h-5 hover:bg-secondary/50 rounded-[4px] justify-center items-center flex">
                     {open ? <ChevronDown size={14}></ChevronDown> : <ChevronRight size={14}></ChevronRight>}
