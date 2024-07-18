@@ -33,6 +33,7 @@
     "i18next-http-backend": "^2.5.2",
     "immer": "^10.1.1",
     "lucide-react": "^0.397.0",
+    "node-emoji": "^2.1.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-i18next": "^14.1.2",
