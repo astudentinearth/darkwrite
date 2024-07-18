@@ -7,6 +7,7 @@ import { cn } from "@renderer/lib/utils";
 import { ChevronDown, ChevronRight, Plus } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import * as emoji from "node-emoji"
 
 export function NotesWidget(){
     const notes = useNotesStore((state)=>state.notes);
@@ -60,7 +61,7 @@ function NoteItem(props: {note: NoteMetada, selected?: boolean}){
                     {open ? <ChevronDown size={14}></ChevronDown> : <ChevronRight size={14}></ChevronRight>}
                 </div>
             </CollapsibleTrigger>
-            <span className="inline-block w-6 h-6">{note.icon === "" ? "📄" : note.icon}</span>
+            <span className="inline-block w-6 h-6">{emoji.emojify(note.icon, {fallback: "📄"})}</span>
             <span className={cn("text-ellipsis whitespace-nowrap block overflow-hidden text-sm self-center")}>{note.title}</span>
             <Button size="icon24" className="justify-self-end btn-add" variant={"ghost"} onClick={(e)=>{
                 e.stopPropagation();
