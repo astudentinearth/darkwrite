@@ -11,7 +11,7 @@ import log from "electron-log"
 const notesDir = join(app.getPath("userData"), "notes/");
 
 /**
- * Creates a new note by creating a database entry and a Markdown file. A randomly generated UUID is assigned.
+ * Creates a new note by creating a database entry and a JSON file. A randomly generated UUID is assigned.
  * @param title Title of the note
  * @param parent Parent of the note
  */
@@ -27,7 +27,7 @@ export async function createNote(title: string, parent?: string){
         note.subnotes = [];
         note.icon = "";
         note.id = randomUUID();
-        const filename = join(notesDir, `${note.id}.md`);
+        const filename = join(notesDir, `${note.id}.json`);
         await fse.ensureFile(filename);
         await AppDataSource.manager.save(note);
 
@@ -44,13 +44,13 @@ export async function createNote(title: string, parent?: string){
 }
 
 /**
- * Updates the Markdown file corresponding to the given ID
+ * Updates the JSON file corresponding to the given ID
  * @param id Target note UUID
  * @param content New contents to **overwrite** with
  */
 export async function setNoteContents(id: string, content: string){
     try {
-        const filename = join(notesDir, `${id}.md`);
+        const filename = join(notesDir, `${id}.json`);
         await fse.ensureFile(filename);
         await fse.writeFile(filename, content);
     } catch (error) {
@@ -59,13 +59,13 @@ export async function setNoteContents(id: string, content: string){
 }
 
 /**
- * Loads data from a note's Markdown file
+ * Loads data from a note's JSON file
  * @param id UUID of the note to load data from
- * @returns Markdown contents of the note as string
+ * @returns JSON contents of the note as string
  */
 export async function getNoteContents(id: string){
     try {
-        const filename = join(notesDir, `${id}.md`);
+        const filename = join(notesDir, `${id}.json`);
         const data = await fse.readFile(filename);
         return data;
     } catch (error) {
@@ -85,7 +85,7 @@ export async function getNoteContents(id: string){
  */
 export async function deleteNote(id: string){
     try {
-        const filename = join(notesDir, `${id}.md`);
+        const filename = join(notesDir, `${id}.json`);
         await fse.remove(filename);
         await AppDataSource.createQueryBuilder().delete().from(NoteEntity).where("id = :id", {id}).execute();
     } catch (error) {
