@@ -8,6 +8,7 @@ import { ChevronDown, ChevronRight, Plus } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import * as emoji from "node-emoji"
+import { useEditorState } from "@renderer/context/editor-state";
 
 export function NotesWidget(){
     const notes = useNotesStore((state)=>state.notes);
@@ -40,6 +41,8 @@ export function NotesWidget(){
 
 function NoteItem(props: {note: NoteMetada}){
     const {note} = props;
+    const activePage = useEditorState((state)=>state.page) // used to reflect changes live instead of a full re-fetch
+    const forceSave = useEditorState((state)=>state.forceSave);
     const notes = useNotesStore((state)=>state.notes);
     const [subnotes, setSubnotes] = useState([] as Note[]);
     const [active, setActive] = useState(false);
@@ -67,14 +70,14 @@ function NoteItem(props: {note: NoteMetada}){
     }, [params, location, note.id])
 
     return <Collapsible open={open} onOpenChange={setOpen}>
-        <div onClick={()=>navigate({pathname: "/page", search: `?id=${note.id}`})} className={cn("rounded-[8px] mb-0.5 note-item hover:bg-secondary/50 hover:text-foreground font-medium active:bg-secondary/25 transition-colors grid grid-cols-[20px_24px_1fr] hover:grid-cols-[20px_24px_1fr_24px] select-none p-1 h-8 overflow-hidden", active ? "text-foreground bg-secondary/80" : "text-foreground/60", )}>
+        <div onClick={()=>{forceSave();navigate({pathname: "/page", search: `?id=${note.id}`})}} className={cn("rounded-[8px] mb-0.5 note-item hover:bg-secondary/50 hover:text-foreground font-medium active:bg-secondary/25 transition-colors grid grid-cols-[20px_24px_1fr] hover:grid-cols-[20px_24px_1fr_24px] select-none p-1 h-8 overflow-hidden", active ? "text-foreground bg-secondary/80" : "text-foreground/60", )}>
             <CollapsibleTrigger onClick={(e)=>{e.stopPropagation()}}>
                 <div className="w-5 h-5 hover:bg-secondary/50 rounded-[4px] justify-center items-center flex">
                     {open ? <ChevronDown size={14}></ChevronDown> : <ChevronRight size={14}></ChevronRight>}
                 </div>
             </CollapsibleTrigger>
-            <span className="inline-block w-6 h-6">{emoji.emojify(note.icon, {fallback: "📄"})}</span>
-            <span className={cn("text-ellipsis whitespace-nowrap block overflow-hidden text-sm self-center")}>{note.title}</span>
+            <span className="inline-block w-6 h-6">{emoji.emojify(active ? activePage.icon : note.icon, {fallback: "📄"})}</span>
+            <span className={cn("text-ellipsis whitespace-nowrap block overflow-hidden text-sm self-center")}>{active ? activePage.title : note.title}</span>
             <Button size="icon24" className="justify-self-end btn-add" variant={"ghost"} onClick={(e)=>{
                 e.stopPropagation();
                 Note.create(note.id).then(()=>setOpen(true));

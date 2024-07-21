@@ -15,7 +15,8 @@ declare global {
         move: (sourceID: string, destID: (string | undefined))=>Promise<void>,
         update: (note: NoteMetada)=>Promise<void>,
         getAll: ()=>Promise<NoteMetada[]>,
-        setTrashStatus: ()=>Promise<void>
+        setTrashStatus: (id: string, state: boolean)=>Promise<void>,
+        getNote: (id:string)=>Promise<NoteMetada | null>
       },
       settings: {
         load: ()=>Promise<UserSettings | null>,

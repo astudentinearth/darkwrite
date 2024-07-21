@@ -178,3 +178,17 @@ export async function setTrashStatus(id: string, state: boolean){
         if(error instanceof Error) log.error(error.message);
     }
 }
+
+/**
+ * Finds a single note
+ * @param id 
+ */
+export async function getNote(id: string){
+    try {
+        const note = await AppDataSource.getRepository(NoteEntity).createQueryBuilder("note").where("note.id = :id", {id}).getOne();
+        return note;
+    } catch (error) {
+        if(error instanceof Error) log.error(error.message);
+        return null;
+    }
+}

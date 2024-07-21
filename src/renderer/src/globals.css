@@ -44,6 +44,7 @@
 
   @layer base {
     * {
+      box-sizing: border-box;
       @apply border-border;
     }
     body {

@@ -1,7 +1,7 @@
 import { NoteMetada } from "@common/note";
 import { UserSettings } from "@common/settings";
 import { ipcMain } from "electron";
-import { createNote, setNoteContents, getNoteContents, deleteNote, moveNote, updateNote, getAllNotes, setTrashStatus } from "./api/note";
+import { createNote, setNoteContents, getNoteContents, deleteNote, moveNote, updateNote, getAllNotes, setTrashStatus, getNote } from "./api/note";
 import { readUserPrefs, writeUserPrefs } from "./api/settings";
 
 // notes
@@ -46,4 +46,8 @@ ipcMain.handle("load-user-settings", async ()=>{
 
 ipcMain.handle("save-user-settings", async (_event, data:UserSettings)=>{
     writeUserPrefs(data);
+})
+
+ipcMain.handle("get-note", async (_event, id: string)=>{
+    return await getNote(id);
 })

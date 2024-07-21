@@ -1,10 +1,12 @@
 
 import { NoteMetada } from "@common/note";
 import { useNotesStore } from "@renderer/context/notes-context";
+import { immerable, produce } from "immer";
 
 //TODO: Remove mocks when API is built
 
 export class Note implements NoteMetada{
+    [immerable] = true;
     private contents: string | null = null;
     constructor(
         public id: string,
@@ -14,19 +16,24 @@ export class Note implements NoteMetada{
         public modified: Date,
         public isFavorite?: boolean,
         public subnotes: string[] = [],
-        public parentID?:string | null){}
+        public parentID?:string | null,
+        public todoListID?: string){}
     
     async getContents(){
-        //TODO: Call electron API to load contents
-        return "Lorem ipsum dolor sit amet"
+        return await window.api.note.getContents(this.id);
+    }
+
+    async saveContents(content: string){
+        await window.api.note.setContents(this.id, content);
     }
 
     async save(){
-        //TODO: Call electron API to save all values here
+        await window.api.note.update(this);
+        useNotesStore.getState().fetch();
     }
 
     async trash(){
-        //TODO: trash the note
+        await window.api.note.setTrashStatus(this.id, true);
     }
     
     hasSubnotes(): boolean{
@@ -37,9 +44,30 @@ export class Note implements NoteMetada{
         return this.parentID == null ? false : true;
     }
 
+    setTitle(title: string) {
+        return produce(this, (draft) => {
+            draft.title = title;
+        })
+    }
+
+    setIcon(icon: string){
+        return produce(this, draft=>{
+            draft.icon = icon
+        })
+    }
+
     static async create(parent?: string) {
         await window.api.note.create("Untitled page", parent);
         useNotesStore.getState().fetch();
+    }
+
+    static empty(){
+        const n = new Note("","","",new Date(), new Date(),false,[],"","");
+        return n;
+    }
+
+    static from(n: NoteMetada){
+        return new Note(n.id, n.title, n.icon, n.created, n.modified, n.isFavorite, n.subnotes, n.parentID, n.todoListID);
     }
 }
 
@@ -48,7 +76,7 @@ export async function getAllNotes(){
     const notes = await window.api.note.getAll();
     const arr: Note[]=[]
     for(const n of notes){
-        const note = new Note(n.id, n.title, n.icon, n.created, n.modified, n.isFavorite, n.subnotes, n.parentID);
+        const note = new Note(n.id, n.title, n.icon, n.created, n.modified, n.isFavorite, n.subnotes, n.parentID, n.todoListID);
         arr.push(note);
     }
     return arr;
