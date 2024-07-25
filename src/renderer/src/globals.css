@@ -83,8 +83,8 @@ html, body, #root, #root>div{
   content: '';
   height: 100%;
   position: absolute;
-  left: -8px;
-  right: -8px;
+  left: -4px;
+  right: -4px;
   z-index: 20;
   cursor: ew-resize;
   pointer-events: all;

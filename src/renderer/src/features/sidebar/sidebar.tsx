@@ -5,6 +5,7 @@ import { NotesWidget } from "./notes";
 import { NavigationWidget } from "./navigation";
 import { showAppMenu } from "@renderer/lib/app-menu";
 import CreatePageButton from "./create-page-button";
+import { ScrollArea } from "@renderer/components/ui/scroll-area";
 
 
 export type SidebarProps = React.HTMLAttributes<HTMLDivElement> & {
@@ -31,10 +32,12 @@ export function Sidebar(props: SidebarProps){
                 <PanelRightOpen width={20} height={20}></PanelRightOpen>
             </Button>
         </div>
-        <div className="h-full overflow-auto flex-col flex p-2 gap-2">
-            <NavigationWidget></NavigationWidget>
-            <CreatePageButton></CreatePageButton>
-            <NotesWidget></NotesWidget>
-        </div>
+        <ScrollArea className="h-full p-2 pb-0">
+            <div className="flex gap-2 flex-col mb-2">
+                <NavigationWidget></NavigationWidget>
+                <CreatePageButton></CreatePageButton>
+                <NotesWidget></NotesWidget>
+            </div>
+        </ScrollArea>
     </div>
 }
