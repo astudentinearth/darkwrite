@@ -18,6 +18,8 @@
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.1",
     "@electron-toolkit/utils": "^3.0.0",
+    "@emoji-mart/data": "^1.2.1",
+    "@emoji-mart/react": "^1.1.1",
     "@radix-ui/react-collapsible": "^1.1.0",
     "@radix-ui/react-dropdown-menu": "^2.1.1",
     "@radix-ui/react-scroll-area": "^1.1.0",
@@ -28,6 +30,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "electron-log": "^5.1.5",
+    "emoji-mart": "^5.6.0",
     "fs-extra": "^11.2.0",
     "i18next": "^23.11.5",
     "i18next-browser-languagedetector": "^8.0.0",
