@@ -4,6 +4,7 @@ import { ChevronDown, ChevronRight } from "lucide-react";
 import { useCallback, useEffect, useState, DragEvent} from "react";
 import { NoteItem } from "./note-item";
 import { cn } from "@renderer/lib/utils";
+import { NoteDropZone } from "./note-drop-zone";
 
 export function NotesWidget(){
     const notes = useNotesStore((state)=>state.notes);
@@ -15,7 +16,15 @@ export function NotesWidget(){
     },[fetchNotes])
 
     const render = useCallback(()=>{
-        return notes?.filter((n)=>!n.hasParent()).map((n, i)=><NoteItem note={n} key={i}></NoteItem>)
+        const target = notes?.filter((n)=>!n.hasParent());
+        const elements: JSX.Element[] = [];
+        if(target.length === 0) return elements;
+        for(let i = 0; i < target.length; i++){
+            elements.push(<NoteDropZone key={i} belowID={target[i].id} parentID={null}></NoteDropZone>)
+            elements.push(<NoteItem note={target[i]} key={target[i].id}></NoteItem>)
+        }
+        elements.push(<NoteDropZone last parentID={null}></NoteDropZone>);
+        return elements;
     }, [notes])
 
     const handleDrop = (event: DragEvent<HTMLElement>)=>{
@@ -23,7 +32,6 @@ export function NotesWidget(){
         const data = event.dataTransfer.getData("text/plain");
         window.api.note.move(data, undefined).then(()=>{fetchNotes()})
         setDragOver(false);
-    
     }
 
     const handleDragOver = (event: DragEvent<HTMLElement>)=>{

@@ -17,7 +17,8 @@ export class Note implements NoteMetada{
         public isFavorite?: boolean,
         public subnotes: string[] = [],
         public parentID?:string | null,
-        public todoListID?: string){}
+        public todoListID?: string,
+        public index?: number | undefined){}
     
     async getContents(){
         return await window.api.note.getContents(this.id);

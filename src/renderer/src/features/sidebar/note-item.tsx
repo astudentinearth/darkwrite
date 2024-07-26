@@ -9,6 +9,7 @@ import { ChevronDown, ChevronRight, Plus } from "lucide-react";
 import { useState, useEffect, useCallback, DragEvent } from "react";
 import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
 import { emojify } from "node-emoji";
+import { NoteDropZone } from "./note-drop-zone";
 
 export function NoteItem({note}: {note: NoteMetada}){
     const activePage = useEditorState((state)=>state.page) // used to reflect changes live instead of a full re-fetch
@@ -32,7 +33,15 @@ export function NoteItem({note}: {note: NoteMetada}){
     }, [notes, note.subnotes])
 
     const render = useCallback(()=>{
-        return subnotes.length == 0 ? <span className="text-sm text-foreground/50 px-2">No pages</span> : subnotes.map((n)=><NoteItem note={n}></NoteItem>)
+        const target = [...subnotes];
+        const elements: JSX.Element[] = [];
+        if(target.length === 0) return <span className="text-sm text-foreground/50 px-2">No pages</span>;
+        for(let i = 0; i < target.length; i++){
+            elements.push(<NoteDropZone belowID={target[i].id} parentID={note.id}></NoteDropZone>)
+            elements.push(<NoteItem note={target[i]} key={target[i].id}></NoteItem>)
+        }
+        elements.push(<NoteDropZone last parentID={note.id}></NoteDropZone>);
+        return elements;
     }, [subnotes])
 
     useEffect(()=>{
@@ -72,7 +81,7 @@ export function NoteItem({note}: {note: NoteMetada}){
 
     return <Collapsible open={open} onOpenChange={setOpen}>
         <div draggable onDragStart={handleDragStart} onDrop={handleDrop} onDragEnd={handleDragEnd} onDragLeave={handleDragLeave} onDragOver={handleDragOver} onClick={()=>{forceSave();navigate({pathname: "/page", search: `?id=${note.id}`})}} 
-        className={cn("rounded-[8px] mb-0.5 note-item hover:bg-secondary/50 hover:text-foreground font-medium active:bg-secondary/25 transition-colors grid grid-cols-[20px_24px_1fr] hover:grid-cols-[20px_24px_1fr_24px] select-none p-1 h-8 overflow-hidden", 
+        className={cn("rounded-[8px] note-item hover:bg-secondary/50 hover:text-foreground font-medium active:bg-secondary/25 transition-colors grid grid-cols-[20px_24px_1fr] hover:grid-cols-[20px_24px_1fr_24px] select-none p-1 h-8 overflow-hidden", 
                     active ? "text-foreground bg-secondary/80" : "text-foreground/60", 
                     dragOver && " outline-dashed outline-border outline-1")}>
             <CollapsibleTrigger onClick={(e)=>{e.stopPropagation()}}>

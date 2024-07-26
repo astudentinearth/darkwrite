@@ -16,7 +16,8 @@ declare global {
         update: (note: NoteMetada)=>Promise<void>,
         getAll: ()=>Promise<NoteMetada[]>,
         setTrashStatus: (id: string, state: boolean)=>Promise<void>,
-        getNote: (id:string)=>Promise<NoteMetada | null>
+        getNote: (id:string)=>Promise<NoteMetada | null>,
+        saveAll: (notes: NoteMetada[])=>Promise<void>
       },
       settings: {
         load: ()=>Promise<UserSettings | null>,

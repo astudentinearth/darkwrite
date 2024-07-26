@@ -134,7 +134,7 @@ export async function moveNote(sourceID: string, destID: (string | undefined)){
 export async function updateNote(note: NoteMetada){
     try {
         // this cast might not work but it's worth trying
-        await AppDataSource.getRepository(NoteEntity).save(note);
+        await AppDataSource.getRepository(NoteEntity).save(NoteEntity.fromMetadata(note));
     } catch (error) {
         if(error instanceof Error) log.error(error.message)
     }
@@ -146,7 +146,7 @@ export async function updateNote(note: NoteMetada){
  */
 export async function getAllNotes(){
     try{
-        const notes = await AppDataSource.getRepository(NoteEntity).find();
+        const notes = await AppDataSource.getRepository(NoteEntity).find({order: {index: "ASC"}});
         const arr: NoteMetada[] = [];
         for(const n of notes){
             arr.push({...n, subnotes: n.subnotes}); // spread does not get() for us methods
@@ -187,5 +187,17 @@ export async function getNote(id: string){
     } catch (error) {
         if(error instanceof Error) log.error(error.message);
         return null;
+    }
+}
+
+/**
+ * Updates an array of notes at once
+ * @param notes 
+ */
+export async function saveNotes(notes: NoteMetada[]){
+    try {
+        await AppDataSource.getRepository(NoteEntity).save(NoteEntity.fromMetadataArray(notes));
+    } catch (error) {
+        if(error instanceof Error) log.error(error.message);
     }
 }

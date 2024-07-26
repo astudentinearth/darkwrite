@@ -14,7 +14,8 @@ contextBridge.exposeInMainWorld('api', {
     update: (note: NoteMetada)=>ipcRenderer.invoke("update-note", note),
     getAll: ()=>ipcRenderer.invoke("get-all-notes"),
     setTrashStatus: (id: string, state: boolean)=>ipcRenderer.invoke("set-trash-status", id ,state),
-    getNote: (id:string)=>ipcRenderer.invoke("get-note", id)
+    getNote: (id:string)=>ipcRenderer.invoke("get-note", id),
+    saveAll: (notes: NoteMetada[])=>ipcRenderer.invoke("save-notes", notes)
   },
   settings: {
     load: ()=>ipcRenderer.invoke("load-user-settings"),

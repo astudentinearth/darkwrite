@@ -9,5 +9,6 @@ export interface NoteMetada{
     parentID?: string | null,
     subnotes?: string[],
     isTrashed?: boolean,
-    todoListID?: string // set to a list UUID to show todos in this page
+    todoListID?: string // set to a list UUID to show todos in this page,
+    index?: number
 }

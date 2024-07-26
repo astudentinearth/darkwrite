@@ -49,6 +49,30 @@ export class NoteEntity implements NoteMetada{
         const newArr = [...this.subnotes].filter((x)=>x!==id);
         this.subnotes = newArr;
     }
+
     @Column("varchar", {nullable: true})
     todoListID?: string | undefined;
+
+    @Column("int", {nullable: true})
+    index?: number | undefined;
+
+    static fromMetadata(data: NoteMetada){
+        const entity = new NoteEntity();
+        entity.created = data.created;
+        entity.icon = data.icon;
+        entity.id = data.id;
+        entity.index = data.index;
+        entity.isFavorite = data.isFavorite;
+        entity.isTrashed = data.isTrashed;
+        entity.modified = data.modified;
+        entity.parentID = data.parentID;
+        entity.subnotes = data.subnotes ?? [];
+        entity.title = data.title;
+        entity.todoListID = data.todoListID;
+        return entity;
+    }
+
+    static fromMetadataArray(data: NoteMetada[]){
+        return data.map((x)=>this.fromMetadata(x));
+    }
 }
