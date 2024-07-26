@@ -32,7 +32,7 @@ export function Sidebar(props: SidebarProps){
                 <PanelRightOpen width={20} height={20}></PanelRightOpen>
             </Button>
         </div>
-        <ScrollArea className="h-full p-2 pb-0">
+        <ScrollArea className="h-full px-2 py-0">
             <div className="flex gap-2 flex-col mb-2">
                 <NavigationWidget></NavigationWidget>
                 <CreatePageButton></CreatePageButton>
