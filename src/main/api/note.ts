@@ -35,7 +35,6 @@ export async function createNote(title: string, parent?: string){
             const parentNote = await AppDataSource.getRepository(NoteEntity).createQueryBuilder("note").where("note.id = :id", {id: parent}).getOne();
             if(parentNote==null) log.warn("A note was created with a non-existent parent");
             parentNote?.addSubnote(note.id);
-            console.log(parentNote?.subnotes);
             if(parentNote) AppDataSource.manager.save(parentNote);
         }
     } catch (error) {
@@ -113,14 +112,12 @@ export async function moveNote(sourceID: string, destID: (string | undefined)){
         if(destID == null && source != null){
             // We are moving the note to the top level
             source.parentID = null; // set parent to null
-            source.subnotes = [];
             await AppDataSource.getRepository(NoteEntity).save(source);
             return;
         }
         const dest = await AppDataSource.getRepository(NoteEntity).createQueryBuilder("note").where("note.id = :id", {id: destID}).getOne();
         if(source == null || dest==null) return;
         source.parentID = destID;
-        source.subnotes = [];
         dest.addSubnote(source.id);
         await AppDataSource.getRepository(NoteEntity).save(source);
         await AppDataSource.getRepository(NoteEntity).save(dest);

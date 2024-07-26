@@ -62,9 +62,7 @@ export function Layout(){
         if(!window.navigator.windowControlsOverlay.visible) return; // we don't care if there is no overlay
         const rect = window.navigator.windowControlsOverlay.getTitlebarAreaRect();
         let headerWidth:number = 0;
-        console.log(isSidebarCollapsed);
         if(isSidebarCollapsed){ 
-            console.log(`${window.innerWidth} ${rect.width} ${rect.x}`)
             headerWidth = rect.width;
         }// if the sidebar is collapsed we take all space
         else{ 

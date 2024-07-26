@@ -50,7 +50,7 @@ export function EditorRoot(){
     return <div className="h-full overflow-auto flex flex-col items-center px-12">
         <div className="mt-20 max-w-[960px] flex-shrink-0 w-full flex flex-col"> {/* header */}
             <Button variant={"ghost"} className="text-5xl h-16 w-16">{emojify(page.icon, {fallback: "📄"})}</Button>
-            <textarea onInput={handleTitleChange} ref={titleRef} rows={1} cols={1} className="text-4xl px-3 box-border bg-black border-none p-2 overflow-hidden h-auto flex-grow resize-none outline-none font-semibold block" value={page.title}></textarea>
+            <textarea onInput={handleTitleChange} ref={titleRef} rows={1} cols={1} className="text-4xl px-3 box-border bg-transparent border-none p-2 overflow-hidden h-auto flex-grow resize-none outline-none font-semibold block" value={page.title}></textarea>
         </div>
         {page.id !== "" ?
             (
