@@ -15,24 +15,22 @@ export function NoteDropdown(){
     const notes = useNotesStore((state)=>state.notes);
     const [parentNodes, setParentNodes] = useState<Note[]>([]);
     const [title, setTitle] = useState<string>("Darkwrite");
-
-    const resolveUpperTree = (note: Note)=>{
-        if(note.parentID == null) setParentNodes([]);
-        const nodes:Note[] = [];
-        for(let id = note.parentID; id != null;){ // start from the first parent
-            const parent = notes.find((n)=>n.id===id); // find the parent
-            if(parent){ 
-                nodes.push(parent); // add it to nodes
-                id = parent.parentID; // attempt resolving the next parent
-            }
-            else break
-        }
-        setParentNodes(nodes);
-    }
-
     useEffect(()=>{
         const id = search.get("id");
         const path = location.pathname;
+        const resolveUpperTree = (note: Note)=>{
+            if(note.parentID == null) setParentNodes([]);
+            const nodes:Note[] = [];
+            for(let id = note.parentID; id != null;){ // start from the first parent
+                const parent = notes.find((n)=>n.id===id); // find the parent
+                if(parent){ 
+                    nodes.push(parent); // add it to nodes
+                    id = parent.parentID; // attempt resolving the next parent
+                }
+                else break
+            }
+            setParentNodes(nodes);
+        }
         if(id==null && path!=="/page"){
             switch(path){
                 case "/": {setTitle("Home"); break}

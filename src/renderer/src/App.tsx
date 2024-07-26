@@ -14,9 +14,7 @@ function App() {
       else store.overwrite(prefs);
       console.log(JSON.stringify(prefs));
     })
-  }, []);
-
-
+  }, [store]);
 
   return (
     <div className='w-full h-full'>

@@ -1,11 +1,11 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { Sidebar } from "@renderer/features/sidebar";
 import { cn } from "../../lib/utils";
 import { Titlebar } from "./titlebar";
 import { useLocalStore } from "@renderer/context/local-state";
 import { Outlet } from "react-router-dom";
 
-const [MIN_WIDTH, DEFAULT_WIDTH, MAX_WIDTH] = [180, 240, 400]
+const [MIN_WIDTH, MAX_WIDTH] = [180, 240, 400]
 
 export function Layout(){
     // component state
@@ -17,9 +17,6 @@ export function Layout(){
     const initialX = useRef(0);
     const isResizing = useRef(false);
     const headerRef = useRef<HTMLDivElement>(null); // editor-side header bar
-    
-    // clamp the width between min and max
-    const calculateWidth = (previous:number, change: number) => (previous + change > MAX_WIDTH || previous + change < MIN_WIDTH) ? (previous + change > MAX_WIDTH ? MAX_WIDTH : MIN_WIDTH) : previous + change;
     
     // add event listeners
     useEffect(()=>{

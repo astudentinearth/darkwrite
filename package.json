@@ -52,6 +52,9 @@
   "devDependencies": {
     "@electron-toolkit/tsconfig": "^1.0.1",
     "@electron/rebuild": "^3.6.0",
+    "@eslint/compat": "^1.1.1",
+    "@eslint/eslintrc": "^3.1.0",
+    "@eslint/js": "^9.7.0",
     "@testing-library/dom": "^10.2.0",
     "@testing-library/jest-dom": "^6.4.6",
     "@testing-library/react": "^16.0.0",
@@ -69,6 +72,7 @@
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-react-refresh": "^0.4.7",
     "generate-license-file": "^3.5.0",
+    "globals": "^15.8.0",
     "jsdom": "^24.1.0",
     "memfs": "^4.9.3",
     "postcss": "^8.4.38",

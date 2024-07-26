@@ -1,13 +1,5 @@
 import { getAllNotes, Note } from "@renderer/lib/note";
-import React, { Dispatch, SetStateAction } from "react";
 import {create} from "zustand"
-
-/*export interface NotesContextType{
-    notes: Note[],
-    setNotes: Dispatch<SetStateAction<Note[]>>,
-}
-
-export const NotesContext = React.createContext<NotesContextType>({notes: [], setNotes: ()=>{}});*/
 
 type NotesStore = {
     notes: Note[]
@@ -18,7 +10,7 @@ type NoteActions = {
     fetch: ()=>Promise<void>
 }
 
-export const useNotesStore = create<NotesStore & NoteActions>((set, get)=>({
+export const useNotesStore = create<NotesStore & NoteActions>((set)=>({
     notes: [],
     setNotes: (val)=>set(()=>({notes: val})),
     fetch: async ()=>{
