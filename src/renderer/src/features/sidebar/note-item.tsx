@@ -44,12 +44,14 @@ export function NoteItem({note}: {note: NoteMetada}){
     }, [params, location, note.id])
 
     const handleDragStart = (event: DragEvent<HTMLElement>)=>{
+        event.stopPropagation();
         event.dataTransfer.setData("text/plain", note.id)
         event.dataTransfer.effectAllowed="move";
     }
 
     const handleDrop = (event: DragEvent<HTMLElement>)=>{
         event.preventDefault();
+        event.stopPropagation();
         const data = event.dataTransfer.getData("text/plain");
         if(data === note.id){setDragOver(false); return;}
         else {
@@ -60,6 +62,7 @@ export function NoteItem({note}: {note: NoteMetada}){
 
     const handleDragOver = (event: DragEvent<HTMLElement>)=>{
         event.preventDefault();
+        event.stopPropagation();
         const data = event.dataTransfer.getData("text/plain");
         setDragOver(note.id!==data);
     }

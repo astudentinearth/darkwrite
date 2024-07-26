@@ -1,13 +1,15 @@
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@renderer/components/ui/collapsible";
 import { useNotesStore } from "@renderer/context/notes-context";
 import { ChevronDown, ChevronRight } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, DragEvent} from "react";
 import { NoteItem } from "./note-item";
+import { cn } from "@renderer/lib/utils";
 
 export function NotesWidget(){
     const notes = useNotesStore((state)=>state.notes);
     const fetchNotes = useNotesStore((state)=>state.fetch);
     const [open, setOpen] = useState(true);
+    const [dragOver, setDragOver] = useState(false);
     useEffect(()=>{
         fetchNotes();
     },[fetchNotes])
@@ -16,8 +18,22 @@ export function NotesWidget(){
         return notes?.filter((n)=>!n.hasParent()).map((n, i)=><NoteItem note={n} key={i}></NoteItem>)
     }, [notes])
 
-    return <div className="bg-card/75 rounded-[12px] p-1">
-        <Collapsible open={open} onOpenChange={setOpen}>
+    const handleDrop = (event: DragEvent<HTMLElement>)=>{
+        event.preventDefault();
+        const data = event.dataTransfer.getData("text/plain");
+        window.api.note.move(data, undefined).then(()=>{fetchNotes()})
+        setDragOver(false);
+    
+    }
+
+    const handleDragOver = (event: DragEvent<HTMLElement>)=>{
+        event.preventDefault();
+        setDragOver(true);
+    }
+    const handleDragLeave = ()=>{setDragOver(false)};
+    const handleDragEnd = ()=>{setDragOver(false)};
+    return <div className={cn("bg-card/75 rounded-[12px] p-1", dragOver && "bg-card/90")}>
+        <Collapsible onDrop={handleDrop} onDragEnd={handleDragEnd} onDragLeave={handleDragLeave} onDragOver={handleDragOver} open={open} onOpenChange={setOpen}>
             <CollapsibleTrigger asChild>
                 <div className="flex items-center select-none text-foreground/50 hover:text-foreground transition-colors text-sm p-1">
                     {open ? <ChevronDown size={14}></ChevronDown> : <ChevronRight size={14}></ChevronRight>}

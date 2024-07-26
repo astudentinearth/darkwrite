@@ -5,7 +5,7 @@ import { Titlebar } from "./titlebar";
 import { useLocalStore } from "@renderer/context/local-state";
 import { Outlet } from "react-router-dom";
 
-const [MIN_WIDTH, MAX_WIDTH] = [180, 240, 400]
+const [MIN_WIDTH, , MAX_WIDTH] = [180, 240, 400]
 
 export function Layout(){
     // component state
