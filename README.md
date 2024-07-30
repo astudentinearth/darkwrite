@@ -18,4 +18,4 @@ This program is under heavy development and everything may change. It's not in a
 See [BUILDING.md](docs/BUILDING.md)
 
 # License
-Licensed under GNU General Public License, version 3 or any later version at your option.
+Licensed under GNU Affero General Public License, version 3 or any later version at your option.
