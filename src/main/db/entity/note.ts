@@ -29,6 +29,9 @@ export class NoteEntity implements NoteMetada{
 
     @Column("boolean", {nullable: true})
     isTrashed?: boolean
+
+    @Column("int", {nullable: true})
+    favoriteIndex?: number
     
     get subnotes(): string[]{
         if(this.subnotes_str === "") return []
@@ -69,6 +72,7 @@ export class NoteEntity implements NoteMetada{
         entity.subnotes = data.subnotes ?? [];
         entity.title = data.title;
         entity.todoListID = data.todoListID;
+        entity.favoriteIndex = data.favoriteIndex;
         return entity;
     }
 

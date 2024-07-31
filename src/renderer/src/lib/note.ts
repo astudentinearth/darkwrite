@@ -3,7 +3,6 @@ import { NoteMetada } from "@common/note";
 import { useNotesStore } from "@renderer/context/notes-context";
 import { immerable, produce } from "immer";
 
-//TODO: Remove mocks when API is built
 
 export class Note implements NoteMetada{
     [immerable] = true;
@@ -19,7 +18,8 @@ export class Note implements NoteMetada{
         public parentID?:string | null,
         public todoListID?: string,
         public index?: number | undefined,
-        public isTrashed?: boolean){}
+        public isTrashed?: boolean,
+        public favoriteIndex?: number){}
     
     async getContents(){
         return await window.api.note.getContents(this.id);
@@ -72,12 +72,11 @@ export class Note implements NoteMetada{
     }
 
     static from(n: NoteMetada){
-        return new Note(n.id, n.title, n.icon, n.created, n.modified, n.isFavorite, n.subnotes, n.parentID, n.todoListID, n.index, n.isTrashed);
+        return new Note(n.id, n.title, n.icon, n.created, n.modified, n.isFavorite, n.subnotes, n.parentID, n.todoListID, n.index, n.isTrashed, n.favoriteIndex);
     }
 }
 
 export async function getAllNotes(){
-    //TODO: IPC call here
     const notes = await window.api.note.getAll();
     const arr: Note[]=[]
     for(const n of notes){

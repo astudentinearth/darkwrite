@@ -11,4 +11,5 @@ export interface NoteMetada{
     isTrashed?: boolean,
     todoListID?: string // set to a list UUID to show todos in this page,
     index?: number
+    favoriteIndex?: number
 }

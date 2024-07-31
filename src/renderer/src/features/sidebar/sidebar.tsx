@@ -6,6 +6,7 @@ import { NavigationWidget } from "./navigation";
 import { showAppMenu } from "@renderer/lib/app-menu";
 import CreatePageButton from "./create-page-button";
 import { ScrollArea } from "@renderer/components/ui/scroll-area";
+import { FavortiesWidget } from "./favorites";
 
 
 export type SidebarProps = React.HTMLAttributes<HTMLDivElement> & {
@@ -22,10 +23,10 @@ export function Sidebar(props: SidebarProps){
                 <img src="icon64.png" className="flex-shrink-0 w-5 h-5"></img>
             </Button>
             <div className="flex-grow titlebar spacer"></div>
-            <Button data-testid="button-edit-widgets" size={"icon32"} variant={"ghost"} className="flex-shrink-0" title="Edit sidebar">
+            <Button data-testid="button-edit-widgets" size={"icon32"} variant={"ghost"} className="flex-shrink-0" title="Edit sidebar" disabled>
                 <LayoutDashboard width={20} height={20}></LayoutDashboard>
             </Button>
-            <Button data-testid="button-search" size={"icon32"} variant={"ghost"} className="flex-shrink-0" title="Search">
+            <Button data-testid="button-search" size={"icon32"} variant={"ghost"} className="flex-shrink-0" title="Search" disabled>
                 <Search width={20} height={20}></Search>
             </Button>
             <Button data-testid="button-collapse-sidebar" size={"icon32"} variant={"ghost"} className="flex-shrink-0" onClick={collapseCallback} title="Hide sidebar">
@@ -36,6 +37,7 @@ export function Sidebar(props: SidebarProps){
             <div className="flex gap-2 flex-col mb-2">
                 <NavigationWidget></NavigationWidget>
                 <CreatePageButton></CreatePageButton>
+                <FavortiesWidget></FavortiesWidget>
                 <NotesWidget></NotesWidget>
             </div>
         </ScrollArea>

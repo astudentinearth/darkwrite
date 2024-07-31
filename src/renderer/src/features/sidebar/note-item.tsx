@@ -12,7 +12,7 @@ import { emojify } from "node-emoji";
 import { NoteDropZone } from "./note-drop-zone";
 import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuSeparator, ContextMenuTrigger } from "@renderer/components/ui/context-menu";
 
-export function NoteItem({note}: {note: NoteMetada}){
+export function NoteItem({note, noDrop, noDrag}: {note: NoteMetada, noDrop?: boolean, noDrag?:boolean}){
     const activePage = useEditorState((state)=>state.page) // used to reflect changes live instead of a full re-fetch
     const forceSave = useEditorState((state)=>state.forceSave);
     const notes = useNotesStore((state)=>state.notes);
@@ -35,11 +35,12 @@ export function NoteItem({note}: {note: NoteMetada}){
 
     const render = useCallback(()=>{
         const target = [...subnotes];
+        target.filter((n)=>!n.isTrashed);
         const elements: JSX.Element[] = [];
         if(target.length === 0) return <span className="text-sm text-foreground/50 px-2">No pages</span>;
         for(let i = 0; i < target.length; i++){
             elements.push(<NoteDropZone key={i} belowID={target[i].id} parentID={note.id}></NoteDropZone>)
-            elements.push(<NoteItem note={target[i]} key={target[i].id}></NoteItem>)
+            elements.push(<NoteItem noDrop={noDrop} noDrag={noDrag} note={target[i]} key={target[i].id}></NoteItem>)
         }
         elements.push(<NoteDropZone last parentID={note.id} key={"$"}></NoteDropZone>);
         return elements;
@@ -84,7 +85,7 @@ export function NoteItem({note}: {note: NoteMetada}){
     return <ContextMenu>
         <ContextMenuTrigger>
             <Collapsible open={open} onOpenChange={setOpen}>
-            <div draggable onDragStart={handleDragStart} onDrop={handleDrop} onDragEnd={handleDragEnd} onDragLeave={handleDragLeave} onDragOver={handleDragOver} onClick={()=>{forceSave();navigate({pathname: "/page", search: `?id=${note.id}`})}} 
+            <div draggable onDragStart={noDrag ? ()=>{} : handleDragStart} onDrop={noDrop ? ()=>{} :  handleDrop} onDragEnd={noDrag ? ()=>{} : handleDragEnd} onDragLeave={noDrag ? ()=>{} : handleDragLeave} onDragOver={noDrag ? ()=>{} : handleDragOver} onClick={()=>{forceSave();navigate({pathname: "/page", search: `?id=${note.id}`})}} 
             className={cn("rounded-[8px] note-item hover:bg-secondary/50 hover:text-foreground font-medium active:bg-secondary/25 transition-colors grid grid-cols-[20px_24px_1fr] hover:grid-cols-[20px_24px_1fr_24px] select-none p-1 h-8 overflow-hidden", 
                         active ? "text-foreground bg-secondary/80" : "text-foreground/60", 
                         dragOver && " outline-dashed outline-border outline-1")}>
@@ -108,7 +109,7 @@ export function NoteItem({note}: {note: NoteMetada}){
             </Collapsible>
         </ContextMenuTrigger>
         <ContextMenuContent className="w-64 rounded-lg">
-            <ContextMenuItem onClick={()=>{const n = Note.from(note); n.isFavorite = !n.isFavorite; n.save()}}><Star className={cn(note.isFavorite ? "text-yellow-300 fill-yellow-300" : "opacity-75")} size={20}></Star>&nbsp; {note.isFavorite ? "Remove from favorites" : "Add to favorites"}</ContextMenuItem>
+            <ContextMenuItem onClick={()=>{const n = Note.from(note); n.isFavorite = !n.isFavorite; n.favoriteIndex=0;n.save()}}><Star className={cn(note.isFavorite ? "text-yellow-300 fill-yellow-300" : "opacity-75")} size={20}></Star>&nbsp; {note.isFavorite ? "Remove from favorites" : "Add to favorites"}</ContextMenuItem>
             <ContextMenuSeparator></ContextMenuSeparator>
             <ContextMenuItem onClick={()=>{Note.create(note.id)}}><FilePlus2  className="opacity-75" size={20}></FilePlus2> &nbsp; New subpage</ContextMenuItem>
             <ContextMenuItem disabled><Forward className="opacity-75" size={20}></Forward>&nbsp; Move to</ContextMenuItem>
