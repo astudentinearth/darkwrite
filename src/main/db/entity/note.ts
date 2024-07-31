@@ -12,10 +12,10 @@ export class NoteEntity implements NoteMetada{
     @Column("varchar")
     icon: string
 
-    @Column("date")
+    @Column("datetime")
     created: Date
 
-    @Column("date")
+    @Column("datetime")
     modified: Date 
 
     @Column("boolean", {nullable: true})

@@ -18,7 +18,8 @@ export class Note implements NoteMetada{
         public subnotes: string[] = [],
         public parentID?:string | null,
         public todoListID?: string,
-        public index?: number | undefined){}
+        public index?: number | undefined,
+        public isTrashed?: boolean){}
     
     async getContents(){
         return await window.api.note.getContents(this.id);
@@ -35,6 +36,7 @@ export class Note implements NoteMetada{
 
     async trash(){
         await window.api.note.setTrashStatus(this.id, true);
+        useNotesStore.getState().fetch();
     }
     
     hasSubnotes(): boolean{
@@ -68,7 +70,7 @@ export class Note implements NoteMetada{
     }
 
     static from(n: NoteMetada){
-        return new Note(n.id, n.title, n.icon, n.created, n.modified, n.isFavorite, n.subnotes, n.parentID, n.todoListID);
+        return new Note(n.id, n.title, n.icon, n.created, n.modified, n.isFavorite, n.subnotes, n.parentID, n.todoListID, n.index, n.isTrashed);
     }
 }
 
@@ -77,7 +79,7 @@ export async function getAllNotes(){
     const notes = await window.api.note.getAll();
     const arr: Note[]=[]
     for(const n of notes){
-        const note = new Note(n.id, n.title, n.icon, n.created, n.modified, n.isFavorite, n.subnotes, n.parentID, n.todoListID);
+        const note = Note.from(n);
         arr.push(note);
     }
     return arr;

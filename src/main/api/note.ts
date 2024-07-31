@@ -168,7 +168,7 @@ export async function setTrashStatus(id: string, state: boolean){
     try {
         await AppDataSource.getRepository(NoteEntity)
         .createQueryBuilder("note")
-        .where("note.id = :id", {id})
+        .where("id = :id", {id})
         .update({isTrashed: state})
         .execute();
     } catch (error) {

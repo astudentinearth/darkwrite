@@ -16,10 +16,11 @@ export function NotesWidget(){
     },[fetchNotes])
 
     const render = useCallback(()=>{
-        const target = notes?.filter((n)=>!n.hasParent());
+        const target = notes?.filter((n)=>(!n.hasParent() && !n.isTrashed));
         const elements: JSX.Element[] = [];
         if(target.length === 0) return elements;
         for(let i = 0; i < target.length; i++){
+            console.log(target[i].isTrashed);
             elements.push(<NoteDropZone key={i} belowID={target[i].id} parentID={null}></NoteDropZone>)
             elements.push(<NoteItem note={target[i]} key={target[i].id}></NoteItem>)
         }

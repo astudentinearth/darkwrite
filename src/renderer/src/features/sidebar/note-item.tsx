@@ -5,11 +5,12 @@ import { useEditorState } from "@renderer/context/editor-state";
 import { useNotesStore } from "@renderer/context/notes-context";
 import { Note } from "@renderer/lib/note";
 import { cn } from "@renderer/lib/utils";
-import { ChevronDown, ChevronRight, Plus } from "lucide-react";
+import { ArrowRightFromLine, ChevronDown, ChevronRight, Copy, FilePlus2, Forward, Plus, Star, Trash } from "lucide-react";
 import { useState, useEffect, useCallback, DragEvent } from "react";
 import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
 import { emojify } from "node-emoji";
 import { NoteDropZone } from "./note-drop-zone";
+import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuSeparator, ContextMenuTrigger } from "@renderer/components/ui/context-menu";
 
 export function NoteItem({note}: {note: NoteMetada}){
     const activePage = useEditorState((state)=>state.page) // used to reflect changes live instead of a full re-fetch
@@ -79,27 +80,43 @@ export function NoteItem({note}: {note: NoteMetada}){
     const handleDragLeave = ()=>{setDragOver(false)};
     const handleDragEnd = ()=>{setDragOver(false)};
 
-    return <Collapsible open={open} onOpenChange={setOpen}>
-        <div draggable onDragStart={handleDragStart} onDrop={handleDrop} onDragEnd={handleDragEnd} onDragLeave={handleDragLeave} onDragOver={handleDragOver} onClick={()=>{forceSave();navigate({pathname: "/page", search: `?id=${note.id}`})}} 
-        className={cn("rounded-[8px] note-item hover:bg-secondary/50 hover:text-foreground font-medium active:bg-secondary/25 transition-colors grid grid-cols-[20px_24px_1fr] hover:grid-cols-[20px_24px_1fr_24px] select-none p-1 h-8 overflow-hidden", 
-                    active ? "text-foreground bg-secondary/80" : "text-foreground/60", 
-                    dragOver && " outline-dashed outline-border outline-1")}>
-            <CollapsibleTrigger onClick={(e)=>{e.stopPropagation()}}>
-                <div className="w-5 h-5 hover:bg-secondary/50 rounded-[4px] justify-center items-center flex">
-                    {open ? <ChevronDown size={14}></ChevronDown> : <ChevronRight size={14}></ChevronRight>}
+    return <ContextMenu>
+        <ContextMenuTrigger>
+            <Collapsible open={open} onOpenChange={setOpen}>
+            <div draggable onDragStart={handleDragStart} onDrop={handleDrop} onDragEnd={handleDragEnd} onDragLeave={handleDragLeave} onDragOver={handleDragOver} onClick={()=>{forceSave();navigate({pathname: "/page", search: `?id=${note.id}`})}} 
+            className={cn("rounded-[8px] note-item hover:bg-secondary/50 hover:text-foreground font-medium active:bg-secondary/25 transition-colors grid grid-cols-[20px_24px_1fr] hover:grid-cols-[20px_24px_1fr_24px] select-none p-1 h-8 overflow-hidden", 
+                        active ? "text-foreground bg-secondary/80" : "text-foreground/60", 
+                        dragOver && " outline-dashed outline-border outline-1")}>
+                <CollapsibleTrigger onClick={(e)=>{e.stopPropagation()}}>
+                    <div className="w-5 h-5 hover:bg-secondary/50 rounded-[4px] justify-center items-center flex">
+                        {open ? <ChevronDown size={14}></ChevronDown> : <ChevronRight size={14}></ChevronRight>}
+                    </div>
+                </CollapsibleTrigger>
+                <span className="inline-block w-6 h-6">{emojify(active ? activePage.icon : note.icon, {fallback: "📄"})}</span>
+                <span className={cn("text-ellipsis whitespace-nowrap block overflow-hidden text-sm self-center")}>{active ? activePage.title : note.title}</span>
+                <Button size="icon24" className="justify-self-end btn-add" variant={"ghost"} onClick={(e)=>{
+                    e.stopPropagation();
+                    Note.create(note.id).then(()=>setOpen(true));
+                }}>
+                    {<Plus size={18}></Plus>}
+                </Button>
                 </div>
-            </CollapsibleTrigger>
-            <span className="inline-block w-6 h-6">{emojify(active ? activePage.icon : note.icon, {fallback: "📄"})}</span>
-            <span className={cn("text-ellipsis whitespace-nowrap block overflow-hidden text-sm self-center")}>{active ? activePage.title : note.title}</span>
-            <Button size="icon24" className="justify-self-end btn-add" variant={"ghost"} onClick={(e)=>{
-                e.stopPropagation();
-                Note.create(note.id).then(()=>setOpen(true));
-            }}>
-                {<Plus size={18}></Plus>}
-            </Button>
-        </div>
-        <CollapsibleContent className="pl-2 flex flex-col">
-            {render()}
-        </CollapsibleContent>
-    </Collapsible>
+                <CollapsibleContent className="pl-2 flex flex-col">
+                    {render()}
+                </CollapsibleContent>
+            </Collapsible>
+        </ContextMenuTrigger>
+        <ContextMenuContent className="w-64 rounded-lg">
+            <ContextMenuItem disabled><Star className="opacity-75" size={20}></Star>&nbsp; Add to favorites</ContextMenuItem>
+            <ContextMenuSeparator></ContextMenuSeparator>
+            <ContextMenuItem onClick={()=>{Note.create(note.id)}}><FilePlus2  className="opacity-75" size={20}></FilePlus2> &nbsp; New subpage</ContextMenuItem>
+            <ContextMenuItem disabled><Forward className="opacity-75" size={20}></Forward>&nbsp; Move to</ContextMenuItem>
+            <ContextMenuItem disabled><Copy className="opacity-75" size={20}></Copy>&nbsp; Duplicate</ContextMenuItem>
+            <ContextMenuItem disabled><ArrowRightFromLine className="opacity-75" size={20}></ArrowRightFromLine>&nbsp; Export</ContextMenuItem>
+            <ContextMenuSeparator></ContextMenuSeparator>
+            <ContextMenuItem onClick={()=>{Note.from(note).trash()}} className="text-destructive focus:bg-destructive/50 focus:text-destructive-foreground"><Trash className="opacity-75" size={20}></Trash>&nbsp; Move to trash</ContextMenuItem>
+            <ContextMenuSeparator></ContextMenuSeparator>
+            <span className="text-foreground/50 text-sm p-2">Last edited: {note.modified.toLocaleString()}</span>
+        </ContextMenuContent>
+    </ContextMenu>
 }
