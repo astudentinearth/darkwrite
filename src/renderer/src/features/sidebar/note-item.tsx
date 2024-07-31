@@ -38,10 +38,10 @@ export function NoteItem({note}: {note: NoteMetada}){
         const elements: JSX.Element[] = [];
         if(target.length === 0) return <span className="text-sm text-foreground/50 px-2">No pages</span>;
         for(let i = 0; i < target.length; i++){
-            elements.push(<NoteDropZone belowID={target[i].id} parentID={note.id}></NoteDropZone>)
+            elements.push(<NoteDropZone key={i} belowID={target[i].id} parentID={note.id}></NoteDropZone>)
             elements.push(<NoteItem note={target[i]} key={target[i].id}></NoteItem>)
         }
-        elements.push(<NoteDropZone last parentID={note.id}></NoteDropZone>);
+        elements.push(<NoteDropZone last parentID={note.id} key={"$"}></NoteDropZone>);
         return elements;
     }, [subnotes])
 
@@ -62,6 +62,7 @@ export function NoteItem({note}: {note: NoteMetada}){
     const handleDrop = (event: DragEvent<HTMLElement>)=>{
         event.preventDefault();
         event.stopPropagation();
+        console.log("Dropping to item")
         const data = event.dataTransfer.getData("text/plain");
         if(data === note.id){setDragOver(false); return;}
         else {

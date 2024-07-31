@@ -21,6 +21,10 @@ export function EditorRoot(){
         })();
     },[params, setPage])
     
+    useEffect(()=>{
+        console.log("Page changed", page);
+    }, [page])
+
     return <div className="h-full overflow-auto flex flex-col items-center px-12">
         <EditorCover></EditorCover>
         {page.id !== "" ?

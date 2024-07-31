@@ -14,5 +14,5 @@ type editorStateAction = {
 export const useEditorState = create<editorState & editorStateAction>((set, get)=>({
     page: Note.empty(),
     setPage: (n: Note)=>set({page: n}),
-    forceSave: ()=>{get().page.save()}
+    forceSave: ()=>{console.log("Force saving note",get().page); get().page.save();}
 }))

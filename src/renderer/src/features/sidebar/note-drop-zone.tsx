@@ -8,6 +8,7 @@ export function NoteDropZone({parentID, belowID, last}: {parentID?: string | nul
     const handleDrop = async (event: DragEvent<HTMLElement>)=>{
         event.preventDefault();
         event.stopPropagation();
+        console.log("Dropping to zone")
         const data = event.dataTransfer.getData("text/plain");
         setDragOver(false);
 

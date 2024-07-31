@@ -30,6 +30,8 @@ export class Note implements NoteMetada{
     }
 
     async save(){
+        if(this.id==="") return;
+        console.log("Saving note from class member", this)
         await window.api.note.update(this);
         useNotesStore.getState().fetch();
     }

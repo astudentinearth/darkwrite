@@ -134,7 +134,7 @@ export async function moveNote(sourceID: string, destID: (string | undefined)){
 export async function updateNote(note: NoteMetada){
     try {
         // this cast might not work but it's worth trying
-        await AppDataSource.getRepository(NoteEntity).save(NoteEntity.fromMetadata(note));
+        await AppDataSource.getRepository(NoteEntity).save(note);
     } catch (error) {
         if(error instanceof Error) log.error(error.message)
     }
