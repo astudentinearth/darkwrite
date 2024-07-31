@@ -107,7 +107,7 @@ export function NoteItem({note}: {note: NoteMetada}){
             </Collapsible>
         </ContextMenuTrigger>
         <ContextMenuContent className="w-64 rounded-lg">
-            <ContextMenuItem disabled><Star className="opacity-75" size={20}></Star>&nbsp; Add to favorites</ContextMenuItem>
+            <ContextMenuItem onClick={()=>{const n = Note.from(note); n.isFavorite = !n.isFavorite; n.save()}}><Star className={cn(note.isFavorite ? "text-yellow-300 fill-yellow-300" : "opacity-75")} size={20}></Star>&nbsp; {note.isFavorite ? "Remove from favorites" : "Add to favorites"}</ContextMenuItem>
             <ContextMenuSeparator></ContextMenuSeparator>
             <ContextMenuItem onClick={()=>{Note.create(note.id)}}><FilePlus2  className="opacity-75" size={20}></FilePlus2> &nbsp; New subpage</ContextMenuItem>
             <ContextMenuItem disabled><Forward className="opacity-75" size={20}></Forward>&nbsp; Move to</ContextMenuItem>
