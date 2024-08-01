@@ -25,7 +25,7 @@ export async function createNote(title: string, parent?: string){
         note.isFavorite = false;
         note.isTrashed = false;
         note.subnotes = [];
-        note.icon = ":page_facing_up:";
+        note.icon = "1f4c4";
         note.id = randomUUID();
         const filename = join(notesDir, `${note.id}.json`);
         await fse.ensureFile(filename);

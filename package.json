@@ -33,6 +33,7 @@
     "clsx": "^2.1.1",
     "electron-log": "^5.1.5",
     "emoji-mart": "^5.6.0",
+    "emoji-picker-react": "^4.11.1",
     "fs-extra": "^11.2.0",
     "i18next": "^23.11.5",
     "i18next-browser-languagedetector": "^8.0.0",

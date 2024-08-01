@@ -11,6 +11,7 @@ import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
 import { emojify } from "node-emoji";
 import { NoteDropZone } from "./note-drop-zone";
 import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuSeparator, ContextMenuTrigger } from "@renderer/components/ui/context-menu";
+import { Emoji, EmojiStyle } from "emoji-picker-react";
 
 export function NoteItem({note, noDrop, noDrag}: {note: NoteMetada, noDrop?: boolean, noDrag?:boolean}){
     const activePage = useEditorState((state)=>state.page) // used to reflect changes live instead of a full re-fetch
@@ -94,8 +95,8 @@ export function NoteItem({note, noDrop, noDrag}: {note: NoteMetada, noDrop?: boo
                         {open ? <ChevronDown size={14}></ChevronDown> : <ChevronRight size={14}></ChevronRight>}
                     </div>
                 </CollapsibleTrigger>
-                <span className="inline-block w-6 h-6">{emojify(active ? activePage.icon : note.icon, {fallback: "📄"})}</span>
-                <span className={cn("text-ellipsis whitespace-nowrap block overflow-hidden text-sm self-center")}>{active ? activePage.title : note.title}</span>
+                <div className="flex w-6 h-6 items-center justify-center [&>span]:block [&>span]:leading-[18px] translate-x-[-15%]"><Emoji size={18} emojiStyle={EmojiStyle.NATIVE} unified={(active ? activePage.icon : note.icon)}></Emoji></div>
+                <span className={cn("text-ellipsis whitespace-nowrap block overflow-hidden text-sm self-center pl-1")}>{active ? activePage.title : note.title}</span>
                 <Button size="icon24" className="justify-self-end btn-add" variant={"ghost"} onClick={(e)=>{
                     e.stopPropagation();
                     Note.create(note.id).then(()=>setOpen(true));

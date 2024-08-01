@@ -7,6 +7,7 @@ import { ChevronDown } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useSearchParams, useLocation, useNavigate } from "react-router-dom";
 import { emojify } from "node-emoji";
+import { Emoji } from "emoji-picker-react";
 
 export function NoteDropdown(){
     const [search] = useSearchParams();
@@ -15,6 +16,7 @@ export function NoteDropdown(){
     const notes = useNotesStore((state)=>state.notes);
     const [parentNodes, setParentNodes] = useState<Note[]>([]);
     const [title, setTitle] = useState<string>("Darkwrite");
+    const [note, setNote] = useState<Note>(Note.empty());
     useEffect(()=>{
         const id = search.get("id");
         const path = location.pathname;
@@ -40,8 +42,7 @@ export function NoteDropdown(){
         else{
             // set title
             const note = notes.find((n)=>n.id===id);
-            if(note) setTitle(emojify(note.icon, {fallback: "📄"}) + ` ${note.title}`);
-            else setTitle("Untitled page");
+            if(note) setNote(note);
 
             // get parent nodes
             if(note) resolveUpperTree(note);
@@ -49,10 +50,10 @@ export function NoteDropdown(){
     }, [search, location, notes]);
     return <DropdownMenu>
         <DropdownMenuTrigger asChild>
-            <Button variant={"ghost"} className="px-2 h-auto gap-1"><ChevronDown size={18}></ChevronDown>{title}</Button>
+            <Button variant={"ghost"} className="px-2 h-auto gap-1 [&>span]:leading-[18px]"><ChevronDown size={18}></ChevronDown><Emoji emojiStyle="native" size={18} unified={note.icon}></Emoji>&nbsp;{note.title}</Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
-            {parentNodes.map((n)=><DropdownMenuItem key={n.id} onClick={()=>navigate({pathname: "/page", search: `?id=${n.id}`})}>{emojify(n.icon, {fallback: "📄"})} {n.title}</DropdownMenuItem>)}
+            {parentNodes.map((n)=><DropdownMenuItem key={n.id} onClick={()=>navigate({pathname: "/page", search: `?id=${n.id}`})} className="[&>span]:leading-[18px]"><Emoji size={18} emojiStyle="native" unified={n.icon}></Emoji>&nbsp; {n.title}</DropdownMenuItem>)}
             {parentNodes.length===0 ? <span className="text-sm text-foreground/50 p-2 inline-block">No pages above</span>: <></>}
         </DropdownMenuContent>
     </DropdownMenu>
