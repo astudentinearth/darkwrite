@@ -46,7 +46,7 @@ export function NoteDropdown(){
             // get parent nodes
             if(note) resolveUpperTree(note);
         }
-    }, [search, location]);
+    }, [search, location, notes]);
     return <DropdownMenu>
         <DropdownMenuTrigger asChild>
             <Button variant={"ghost"} className="px-2 h-auto gap-1"><ChevronDown size={18}></ChevronDown>{title}</Button>
