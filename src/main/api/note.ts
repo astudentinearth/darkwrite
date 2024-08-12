@@ -112,9 +112,10 @@ export async function moveNote(sourceID: string, destID: (string | undefined)){
  * Updates the database entry for given note
  * @param note 
  */
-export async function updateNote(note: NoteMetada){
+export async function updateNote(note: Partial<NoteMetada>){
+
     try {
-        // this cast might not work but it's worth trying
+        if(!note.id) throw new Error("No identifier was passed to updateNote.");
         await AppDataSource.getRepository(NoteEntity).save(note);
     } catch (error) {
         if(error instanceof Error) log.error(error.message)

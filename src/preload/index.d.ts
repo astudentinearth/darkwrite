@@ -13,7 +13,7 @@ declare global {
         getContents: (id: string)=>Promise<string>,
         delete: (id: string)=>Promise<void>,
         move: (sourceID: string, destID: (string | undefined))=>Promise<void>,
-        update: (note: NoteMetada)=>Promise<void>,
+        update: (note: Partial<NoteMetada>)=>Promise<void>,
         getAll: ()=>Promise<NoteMetada[]>,
         setTrashStatus: (id: string, state: boolean)=>Promise<void>,
         getNote: (id:string)=>Promise<NoteMetada | null>,
