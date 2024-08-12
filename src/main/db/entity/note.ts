@@ -24,8 +24,6 @@ export class NoteEntity implements NoteMetada{
     @Column("varchar", {nullable: true})
     parentID?: string | null
 
-    @Column("text", {name: "subnotes"})
-    private subnotes_str: string = "";
 
     @Column("boolean", {nullable: true})
     isTrashed?: boolean
@@ -33,26 +31,6 @@ export class NoteEntity implements NoteMetada{
     @Column("int", {nullable: true})
     favoriteIndex?: number
     
-    get subnotes(): string[]{
-        if(this.subnotes_str === "") return []
-        return JSON.parse(this.subnotes_str);
-    }
-
-    set subnotes(value: string[]){
-        this.subnotes_str = JSON.stringify(value);
-    }
-
-    addSubnote(id: string){
-        const newArr = [...this.subnotes];
-        newArr.push(id);
-        this.subnotes = newArr;
-    }
-
-    removeSubnote(id:string){
-        const newArr = [...this.subnotes].filter((x)=>x!==id);
-        this.subnotes = newArr;
-    }
-
     @Column("varchar", {nullable: true})
     todoListID?: string | undefined;
 
@@ -69,7 +47,6 @@ export class NoteEntity implements NoteMetada{
         entity.isTrashed = data.isTrashed;
         entity.modified = data.modified;
         entity.parentID = data.parentID;
-        entity.subnotes = data.subnotes ?? [];
         entity.title = data.title;
         entity.todoListID = data.todoListID;
         entity.favoriteIndex = data.favoriteIndex;

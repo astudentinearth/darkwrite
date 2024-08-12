@@ -24,19 +24,11 @@ export async function createNote(title: string, parent?: string){
         note.parentID = parent;
         note.isFavorite = false;
         note.isTrashed = false;
-        note.subnotes = [];
         note.icon = "1f4c4";
         note.id = randomUUID();
         const filename = join(notesDir, `${note.id}.json`);
         await fse.ensureFile(filename);
         await AppDataSource.manager.save(note);
-
-        if(parent!=null){
-            const parentNote = await AppDataSource.getRepository(NoteEntity).createQueryBuilder("note").where("note.id = :id", {id: parent}).getOne();
-            if(parentNote==null) log.warn("A note was created with a non-existent parent");
-            parentNote?.addSubnote(note.id);
-            if(parentNote) AppDataSource.manager.save(parentNote);
-        }
     } catch (error) {
         if(error instanceof Error) log.error(error.message)
     }
@@ -101,26 +93,15 @@ export async function moveNote(sourceID: string, destID: (string | undefined)){
     if(sourceID === destID) return;
     try {
         const source = await AppDataSource.getRepository(NoteEntity).createQueryBuilder("note").where("note.id = :id", {id: sourceID}).getOne();
-        if(source?.parentID != null){
-            // Note alrady has a parent, lets remove the relationship first
-            const oldParent = await AppDataSource.getRepository(NoteEntity).createQueryBuilder("note").where("note.id = :id", {id: source.parentID}).getOne();
-            if(oldParent != null){
-                oldParent.removeSubnote(source.id);
-                await AppDataSource.getRepository(NoteEntity).save(oldParent);
-            }
-        }
         if(destID == null && source != null){
             // We are moving the note to the top level
             source.parentID = null; // set parent to null
             await AppDataSource.getRepository(NoteEntity).save(source);
             return;
         }
-        const dest = await AppDataSource.getRepository(NoteEntity).createQueryBuilder("note").where("note.id = :id", {id: destID}).getOne();
-        if(source == null || dest==null) return;
+        if(source == null) return;
         source.parentID = destID;
-        dest.addSubnote(source.id);
         await AppDataSource.getRepository(NoteEntity).save(source);
-        await AppDataSource.getRepository(NoteEntity).save(dest);
 
     } catch (error) {
         if(error instanceof Error) log.error(error.message)
@@ -144,14 +125,10 @@ export async function updateNote(note: NoteMetada){
  * Loads every row in the notes table
  * @returns a whole lot of notes
  */
-export async function getAllNotes(){
+export async function getAllNotes(): Promise<NoteMetada[] | null>{
     try{
         const notes = await AppDataSource.getRepository(NoteEntity).find({order: {index: "ASC"}});
-        const arr: NoteMetada[] = [];
-        for(const n of notes){
-            arr.push({...n, subnotes: n.subnotes}); // spread does not get() for us methods
-        }
-        return arr;
+        return notes;
     }
     catch(error){
         if(error instanceof Error) log.error(error.message);
