@@ -2,6 +2,7 @@ import { Note } from "@common/note"
 import { createNote, getNotes, saveAll, updateNote } from "@renderer/lib/api/note"
 import { produce } from "immer"
 import {create} from "zustand"
+import {debounce} from "lodash"
 
 type NotesStore = {
     notes: Note[]
@@ -15,12 +16,17 @@ type NoteActions = {
     move: (src: string, dest: string|null)=>Promise<void>,
     update: (data: Partial<Note>)=>Promise<void>,
     restoreFromTrash: (id: string)=>Promise<void>,
-    getOne: (id: string)=>(Note | undefined)
+    getOne: (id: string)=>(Note | undefined),
+    debouncedUpdate: (data: Partial<Note>)=>void
     /*
     findSubnotes: (id: string)=>Note[],
     
     */
 }
+
+export const debouncedSave = debounce((data: Partial<Note>)=>{
+    if(data.id && data.id !== "") updateNote(data);
+}, 200);
 
 export const useNotesStore = create<NotesStore & NoteActions>((set, get)=>({
     notes: [],
@@ -82,6 +88,18 @@ export const useNotesStore = create<NotesStore & NoteActions>((set, get)=>({
         await updateNote(updated[index]);
     },
 
+    debouncedUpdate(data) {
+        if(data.id == null) return;
+        const i = get().notes.findIndex(n => n.id === data.id);
+        const updated = produce(get().notes, draft =>{
+            if(i!=-1){
+                draft[i] = {...draft[i], ...data};
+            }
+        })
+        set({notes: updated});
+        debouncedSave(updated[i]);
+    },
+
     getOne(id) {
         return get().notes.find(n=>n.id===id);
     },
@@ -106,3 +124,4 @@ export function findSubnotes(parentID: string){
     const subnotes = useNotesStore.getState().notes.filter((n)=>n.parentID===parentID);
     return subnotes;
 }
+

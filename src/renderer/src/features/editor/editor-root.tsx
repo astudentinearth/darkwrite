@@ -9,14 +9,16 @@ import { Note } from "@common/note";
 export function EditorRoot(){
     const page = useEditorState((state)=>state.page);
     const setPage = useEditorState((state)=>state.setPage)
+    const setID = useEditorState((state)=>state.setID);
     const [params] = useSearchParams();
     useEffect(()=>{
         (async ()=>{
             const id = params.get("id");
-            if(!id) {setPage({} as Note); return}
+            if(!id) {setPage({} as Note); setID(""); return}
             const result = await window.api.note.getNote(id);
             if(!result) return;
             setPage(result);
+            setID(id);
         })();
     },[params, setPage])
     
