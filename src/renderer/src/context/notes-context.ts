@@ -17,7 +17,9 @@ type NoteActions = {
     update: (data: Partial<Note>)=>Promise<void>,
     restoreFromTrash: (id: string)=>Promise<void>,
     getOne: (id: string)=>(Note | undefined),
-    debouncedUpdate: (data: Partial<Note>)=>void
+    debouncedUpdate: (data: Partial<Note>)=>void,
+    updateMany: (data: Partial<Note>[])=>void,
+    updateAll: (notes: Note[])=>Promise<void>
     /*
     findSubnotes: (id: string)=>Note[],
     
@@ -25,7 +27,7 @@ type NoteActions = {
 }
 
 export const debouncedSave = debounce((data: Partial<Note>)=>{
-    if(data.id && data.id !== "") updateNote(data);
+    if(data.id != null && data.id !== "") updateNote(data);
 }, 200);
 
 export const useNotesStore = create<NotesStore & NoteActions>((set, get)=>({
@@ -78,6 +80,19 @@ export const useNotesStore = create<NotesStore & NoteActions>((set, get)=>({
         await updateNote(updated[i]);
     },
 
+    async updateMany(data) {
+        const updated = produce(get().notes, draft=>{
+            for(const n of data){
+                if(n.id==null) continue;
+                const i = draft.findIndex((x)=>x.id===n.id);
+                if(i==-1) continue;
+                draft[i] = {...draft[i], ...data}
+            }
+        })
+        set({notes: updated});
+        await saveAll(updated);
+    },
+
     async restoreFromTrash(id) {
         const index = get().notes.findIndex(n=>n.id===id);
         if(index==-1) return;
@@ -102,6 +117,11 @@ export const useNotesStore = create<NotesStore & NoteActions>((set, get)=>({
 
     getOne(id) {
         return get().notes.find(n=>n.id===id);
+    },
+
+    async updateAll(notes) {
+        set({notes});
+        await saveAll(notes);
     },
 }))
 

@@ -3,27 +3,29 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@rendere
 import Picker from "@emoji-mart/react";
 import EmojiPicker, {Emoji, EmojiStyle, Theme} from "emoji-picker-react";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
-import { useEditorState } from "@renderer/context/editor-state";
 import { useNotesStore } from "@renderer/context/notes-context";
+import { Note } from "@common/note";
+import { useEditorState } from "@renderer/context/editor-state";
 
 export function EditorCover(){
+    const id = useEditorState((state)=>state.id);
     const notes = useNotesStore((state)=>state.notes);
     const debouncedUpdate = useNotesStore((s)=>s.debouncedUpdate);
-    
-    const id = useEditorState((state)=>state.id);
-    const targetNote = notes.find((n)=>n.id===id);
+    const [targetNote, setTargetNote] = useState<Note|undefined>(undefined)
     const [emojiOpen, setEmojiOpen] = useState(false);
-    
     const titleRef = useRef<HTMLTextAreaElement>(null);
     
     useEffect(()=>{adjustHeight()}, [targetNote?.title])
+    useEffect(()=>{
+        setTargetNote(notes.find((n)=>n.id===id))
+    }, [notes, id])
     useEffect(()=>{
         const resize = ()=>{
             adjustHeight();
         }
         window.addEventListener("resize", resize);
         return ()=>{window.removeEventListener("resize", resize)};
-    })
+    }, [])
     const adjustHeight = ()=>{
         if(!titleRef.current) return
         titleRef.current.style.height = "auto";

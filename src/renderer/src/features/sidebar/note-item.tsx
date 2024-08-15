@@ -14,21 +14,28 @@ import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuSeparator,
 import { Emoji, EmojiStyle } from "emoji-picker-react";
 
 export function NoteItem({note, noDrop, noDrag}: {note: Note, noDrop?: boolean, noDrag?:boolean}){
-    const activePage = useEditorState((state)=>state.page) // used to reflect changes live instead of a full re-fetch
-    const forceSave = useEditorState((state)=>state.forceSave);
+    // global state
     const notes = useNotesStore((state)=>state.notes);
-    const fetchNotes = useNotesStore((state)=>state.fetch);
+    const [params] = useSearchParams();
+    const location = useLocation();
+
+    // global actions
+    const forceSave = useEditorState((state)=>state.forceSave);    
     const update = useNotesStore((state)=>state.update);
     const trash = useNotesStore((state)=>state.moveToTrash);
+    const move = useNotesStore((state)=>state.move);
+    const navigate = useNavigate();
+
+    // local state
     const [subnotes, setSubnotes] = useState([] as Note[]);
     const [active, setActive] = useState(false);
     const [open, setOpen] = useState(false);
     const [dragOver, setDragOver] = useState(false);
 
-    const navigate = useNavigate();
-    const [params] = useSearchParams();
-    const location = useLocation();
     
+    
+    
+
 
     useEffect(()=>{
         const sub = findSubnotes(note.id);
@@ -69,7 +76,8 @@ export function NoteItem({note, noDrop, noDrag}: {note: Note, noDrop?: boolean, 
         const data = event.dataTransfer.getData("text/plain");
         if(data === note.id){setDragOver(false); return;}
         else {
-            window.api.note.move(data, note.id).then(()=>{fetchNotes()})
+
+            move(data, note.id);
             setDragOver(false);
         }
     }
@@ -105,8 +113,8 @@ export function NoteItem({note, noDrop, noDrag}: {note: Note, noDrop?: boolean, 
                         {open ? <ChevronDown size={14}></ChevronDown> : <ChevronRight size={14}></ChevronRight>}
                     </div>
                 </CollapsibleTrigger>
-                <div className="flex w-6 h-6 items-center justify-center [&>span]:block [&>span]:leading-[18px] translate-x-[-15%]"><Emoji size={18} emojiStyle={EmojiStyle.NATIVE} unified={(active ? activePage.icon : note.icon)}></Emoji></div>
-                <span className={cn("text-ellipsis whitespace-nowrap block overflow-hidden text-sm self-center pl-1")}>{active ? activePage.title : note.title}</span>
+                <div className="flex w-6 h-6 items-center justify-center [&>span]:block [&>span]:leading-[18px] translate-x-[-15%]"><Emoji size={18} emojiStyle={EmojiStyle.NATIVE} unified={note.icon}></Emoji></div>
+                <span className={cn("text-ellipsis whitespace-nowrap block overflow-hidden text-sm self-center pl-1")}>{note.title}</span>
                 <Button size="icon24" className="justify-self-end btn-add" variant={"ghost"} onClick={(e)=>{
                     e.stopPropagation();
                     newSubnote();

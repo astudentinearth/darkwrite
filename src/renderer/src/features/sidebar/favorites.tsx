@@ -2,31 +2,34 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@renderer/c
 import { cn } from "@renderer/lib/utils";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
-import { useNotesStore } from "@renderer/context/notes-context";
+import { getFavorites, useNotesStore } from "@renderer/context/notes-context";
 import { FavoriteItem } from "./favorite-item";
 import { DragDropContext, Droppable, DropResult } from "@hello-pangea/dnd";
 import { Note } from "@common/note";
+import { produce } from "immer";
 
 export function FavortiesWidget(){
     const notes = useNotesStore((state)=>state.notes);
-    const fetchNotes = useNotesStore((state)=>state.fetch);
+    const updateMany = useNotesStore((state)=>state.updateMany);
     const [open, setOpen] = useState(true);
     const [target, setTarget] = useState<Note[]>([]);
 
     useEffect(()=>{
-        const favorites = notes?.filter((n)=>(!n.isTrashed && n.isFavorite));
+        const favorites = notes.filter((n)=>n.isFavorite);
         for(let i = 0; i < favorites.length; i++){
             if(favorites[i].favoriteIndex == null ) { favorites[i].favoriteIndex == favorites.length }
-        }   
+        }
+        console.log(favorites);
         setTarget(favorites);
     },[notes])
 
     const render = useCallback(()=>{
         const elements: JSX.Element[] = [];
-        target.sort((a, b) => (a.favoriteIndex ?? 0) - (b.favoriteIndex ?? 0));
-        if(target.length === 0) return elements;
-        for(let i = 0; i < target.length; i++){
-            elements.push(<FavoriteItem note={target[i]} key={target[i].id} index={i}></FavoriteItem>)
+        const arr = [...target];
+        arr.sort((a, b) => (a.favoriteIndex ?? 0) - (b.favoriteIndex ?? 0));
+        if(arr.length === 0) return elements;
+        for(let i = 0; i < arr.length; i++){
+            elements.push(<FavoriteItem note={arr[i]} key={arr[i].id} index={i}></FavoriteItem>)
         }
         return elements;
     }, [target])
@@ -35,15 +38,14 @@ export function FavortiesWidget(){
         const {destination, source } = result;
         if(!destination) return;
         if(destination.droppableId === source.droppableId && destination.index === source.index) return;
-        const newState = Array.from(target);
-        const [removed] = newState.splice(source.index,1);
-        newState.splice(destination.index, 0, removed);
-        for(let i = 0; i < newState.length; i++){
-            newState[i].favoriteIndex = i;
-        }
-        await window.api.note.saveAll(newState);
-        setTarget(newState);
-        await fetchNotes();
+        const updated = produce(target, draft=>{
+            const [removed] = draft.splice(source.index,1);
+            draft.splice(destination.index, 0, removed);
+            for(let i = 0; i < draft.length; i++){
+                draft[i].favoriteIndex = i;
+            }
+        })
+        updateMany(updated);
     }
 
     return <div className={cn("bg-card/75 rounded-[12px] p-1")}>

@@ -9,6 +9,7 @@ import { NoteDropZone } from "./note-drop-zone";
 export function NotesWidget(){
     const notes = useNotesStore((state)=>state.notes);
     const fetchNotes = useNotesStore((state)=>state.fetch);
+    const move = useNotesStore((state)=>state.move);
     const [open, setOpen] = useState(true);
     const [dragOver, setDragOver] = useState(false);
     useEffect(()=>{
@@ -20,11 +21,10 @@ export function NotesWidget(){
         const elements: JSX.Element[] = [];
         if(target.length === 0) return elements;
         for(let i = 0; i < target.length; i++){
-            console.log(target[i].isTrashed);
             elements.push(<NoteDropZone key={i} belowID={target[i].id} parentID={null}></NoteDropZone>)
             elements.push(<NoteItem note={target[i]} key={target[i].id}></NoteItem>)
         }
-        elements.push(<NoteDropZone last parentID={null}></NoteDropZone>);
+        elements.push(<NoteDropZone key={"$last"} last parentID={null}></NoteDropZone>);
         return elements;
     }, [notes])
 
@@ -32,7 +32,7 @@ export function NotesWidget(){
         event.preventDefault();
         const data = event.dataTransfer.getData("text/plain");
         console.log("Dropping to top")
-        window.api.note.move(data, undefined).then(()=>{fetchNotes()})
+        move(data, null);
         setDragOver(false);
     }
 

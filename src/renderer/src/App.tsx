@@ -12,7 +12,6 @@ function App() {
     window.api.settings.load().then((prefs)=>{
       if(prefs == null) throw new Error("Could not load user settings");
       else store.overwrite(prefs);
-      console.log(JSON.stringify(prefs));
     })
   }, []);
 

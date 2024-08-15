@@ -1,6 +1,7 @@
 import { Note } from "@common/note"
 import { updateNote } from "@renderer/lib/api/note"
 import { create } from "zustand"
+import { useNotesStore } from "./notes-context"
 
 type editorState = {
     page: Note,
@@ -20,5 +21,9 @@ export const useEditorState = create<editorState & editorStateAction>((set, get)
     setID(id) {
         set({id})
     },
-    forceSave: ()=>{console.log("Force saving note",get().page); updateNote(get().page)}
+    forceSave: ()=>{
+        if(get().id === "") return;
+        const note = useNotesStore.getState().getOne(get().id);
+        if(note) useNotesStore.getState().update(note);
+    }
 }))
