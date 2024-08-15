@@ -18,19 +18,19 @@ export function NoteDropZone({parentID, belowID, last}: {parentID?: string | nul
         const note = arr[noteIndex];
 
         // detatch note from its parent
-        const parentIndex = arr.findIndex((n)=>n.id===note.parentID);
+        /*const parentIndex = arr.findIndex((n)=>n.id===note.parentID);
         if(parentIndex !== -1){
             arr[parentIndex].subnotes = arr[parentIndex].subnotes.filter((n)=>n!==note.id); // get rid of the subnote
-        }
+        }*/
         
         // assign new parent
         note.parentID = parentID;
 
         // add subnote to destination
-        if(parentID != null){
+        /*if(parentID != null){
             const destIndex = arr.findIndex((n)=>n.id===parentID);
             arr[destIndex].subnotes.push(data);
-        }
+        }*/
         const belowIndex = arr.findIndex((n)=>n.id===belowID);// find note below this drop zone
         console.log(`%c Before moving | source ${noteIndex} | below ${belowIndex}`, "color:cyan")
 

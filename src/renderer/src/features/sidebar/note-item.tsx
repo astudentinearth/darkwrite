@@ -2,7 +2,7 @@ import { Note } from "@common/note";
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@renderer/components/ui/collapsible";
 import { Button } from "@renderer/components/ui/button";
 import { useEditorState } from "@renderer/context/editor-state";
-import { useNotesStore } from "@renderer/context/notes-context";
+import { createNewNote, findSubnotes, useNotesStore } from "@renderer/context/notes-context";
 
 import { cn } from "@renderer/lib/utils";
 import { ArrowRightFromLine, ChevronDown, ChevronRight, Copy, FilePlus2, Forward, Plus, Star, Trash } from "lucide-react";
@@ -18,7 +18,8 @@ export function NoteItem({note, noDrop, noDrag}: {note: Note, noDrop?: boolean, 
     const forceSave = useEditorState((state)=>state.forceSave);
     const notes = useNotesStore((state)=>state.notes);
     const fetchNotes = useNotesStore((state)=>state.fetch);
-    
+    const update = useNotesStore((state)=>state.update);
+    const trash = useNotesStore((state)=>state.moveToTrash);
     const [subnotes, setSubnotes] = useState([] as Note[]);
     const [active, setActive] = useState(false);
     const [open, setOpen] = useState(false);
@@ -30,9 +31,9 @@ export function NoteItem({note, noDrop, noDrag}: {note: Note, noDrop?: boolean, 
     
 
     useEffect(()=>{
-        const sub = notes.filter((n)=>note.subnotes?.includes(n.id));
+        const sub = findSubnotes(note.id);
         setSubnotes(sub);
-    }, [notes, note.subnotes])
+    }, [notes, note.id])
 
     const render = useCallback(()=>{
         const target = [...subnotes];
@@ -80,6 +81,15 @@ export function NoteItem({note, noDrop, noDrag}: {note: Note, noDrop?: boolean, 
         setDragOver(note.id!==data);
     }
 
+    const newSubnote = async ()=>{
+        const sub = await createNewNote(note.id);
+        if(sub){
+            forceSave();
+            navigate({pathname: "/page", search: `?id=${sub.id}`})
+            setOpen(true);
+        }
+    }
+
     const handleDragLeave = ()=>{setDragOver(false)};
     const handleDragEnd = ()=>{setDragOver(false)};
 
@@ -99,7 +109,7 @@ export function NoteItem({note, noDrop, noDrag}: {note: Note, noDrop?: boolean, 
                 <span className={cn("text-ellipsis whitespace-nowrap block overflow-hidden text-sm self-center pl-1")}>{active ? activePage.title : note.title}</span>
                 <Button size="icon24" className="justify-self-end btn-add" variant={"ghost"} onClick={(e)=>{
                     e.stopPropagation();
-                    Note.create(note.id).then(()=>setOpen(true));
+                    newSubnote();
                 }}>
                     {<Plus size={18}></Plus>}
                 </Button>
@@ -110,14 +120,14 @@ export function NoteItem({note, noDrop, noDrag}: {note: Note, noDrop?: boolean, 
             </Collapsible>
         </ContextMenuTrigger>
         <ContextMenuContent className="w-64 rounded-lg">
-            <ContextMenuItem onClick={()=>{const n = Note.from(note); n.isFavorite = !n.isFavorite; n.favoriteIndex=0;n.save()}}><Star className={cn(note.isFavorite ? "text-yellow-300 fill-yellow-300" : "opacity-75")} size={20}></Star>&nbsp; {note.isFavorite ? "Remove from favorites" : "Add to favorites"}</ContextMenuItem>
+            <ContextMenuItem onClick={()=>{update({...note, favoriteIndex: 0, isFavorite: !note.isFavorite})}}><Star className={cn(note.isFavorite ? "text-yellow-300 fill-yellow-300" : "opacity-75")} size={20}></Star>&nbsp; {note.isFavorite ? "Remove from favorites" : "Add to favorites"}</ContextMenuItem>
             <ContextMenuSeparator></ContextMenuSeparator>
-            <ContextMenuItem onClick={()=>{Note.create(note.id)}}><FilePlus2  className="opacity-75" size={20}></FilePlus2> &nbsp; New subpage</ContextMenuItem>
+            <ContextMenuItem onClick={newSubnote}><FilePlus2  className="opacity-75" size={20}></FilePlus2> &nbsp; New subpage</ContextMenuItem>
             <ContextMenuItem disabled><Forward className="opacity-75" size={20}></Forward>&nbsp; Move to</ContextMenuItem>
             <ContextMenuItem disabled><Copy className="opacity-75" size={20}></Copy>&nbsp; Duplicate</ContextMenuItem>
             <ContextMenuItem disabled><ArrowRightFromLine className="opacity-75" size={20}></ArrowRightFromLine>&nbsp; Export</ContextMenuItem>
             <ContextMenuSeparator></ContextMenuSeparator>
-            <ContextMenuItem onClick={()=>{Note.from(note).trash()}} className="text-destructive focus:bg-destructive/50 focus:text-destructive-foreground"><Trash className="opacity-75" size={20}></Trash>&nbsp; Move to trash</ContextMenuItem>
+            <ContextMenuItem onClick={()=>{trash(note.id)}} className="text-destructive focus:bg-destructive/50 focus:text-destructive-foreground"><Trash className="opacity-75" size={20}></Trash>&nbsp; Move to trash</ContextMenuItem>
             <ContextMenuSeparator></ContextMenuSeparator>
             <span className="text-foreground/50 text-sm p-2">Last edited: {note.modified.toLocaleString()}</span>
         </ContextMenuContent>

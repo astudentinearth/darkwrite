@@ -16,7 +16,7 @@ export function NotesWidget(){
     },[fetchNotes])
 
     const render = useCallback(()=>{
-        const target = notes?.filter((n)=>(!n.hasParent() && !n.isTrashed));
+        const target = notes?.filter((n)=>(n.parentID == null && !n.isTrashed));
         const elements: JSX.Element[] = [];
         if(target.length === 0) return elements;
         for(let i = 0; i < target.length; i++){

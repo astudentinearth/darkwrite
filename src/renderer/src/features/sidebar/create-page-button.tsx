@@ -1,10 +1,10 @@
 import { Button } from "@renderer/components/ui/button";
-import { createNote } from "@renderer/lib/api/note";
+import { createNewNote } from "@renderer/context/notes-context";
 import { cn } from "@renderer/lib/utils";
 import { SquarePen } from "lucide-react";
 
 export default function CreatePageButton(){
-    return <Button  onClick={()=>{createNote("Untitled")}} variant={"ghost"} className={cn("justify-start flex-shrink-0 bg-card/75 rounded-[12px] p-2 hover:bg-secondary/50 text-foreground/75 hover:text-foreground active:bg-secondary/25 transition-colors grid grid-cols-[24px_1fr] select-none pl-3 overflow-hidden")}>
+    return <Button  onClick={()=>{createNewNote()}} variant={"ghost"} className={cn("justify-start flex-shrink-0 bg-card/75 rounded-[12px] p-2 hover:bg-secondary/50 text-foreground/75 hover:text-foreground active:bg-secondary/25 transition-colors grid grid-cols-[24px_1fr] select-none pl-3 overflow-hidden")}>
         <SquarePen size={16}></SquarePen>
         <span className="justify-self-start">New page</span>
     </Button>
