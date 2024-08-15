@@ -1,5 +1,5 @@
 
-export interface NoteMetada{
+export interface Note{
     id: string,
     title: string,
     icon: string,

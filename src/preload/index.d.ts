@@ -1,4 +1,4 @@
-import { NoteMetada } from '@common/note'
+import { Note } from '@common/note'
 import { UserSettings } from '@common/settings'
 import { ElectronAPI } from '@electron-toolkit/preload'
 
@@ -8,16 +8,16 @@ declare global {
     api: {
       showAppMenu: ()=>void,
       note:{
-        create: (title: string, parent?: string)=>Promise<void>,
+        create: (title: string, parent?: string)=>Promise<Note | null>,
         setContents: (id: string, content: string)=>Promise<void>,
         getContents: (id: string)=>Promise<string>,
         delete: (id: string)=>Promise<void>,
         move: (sourceID: string, destID: (string | undefined))=>Promise<void>,
-        update: (note: Partial<NoteMetada>)=>Promise<void>,
-        getAll: ()=>Promise<NoteMetada[]>,
+        update: (note: Partial<Note>)=>Promise<void>,
+        getAll: ()=>Promise<Note[]>,
         setTrashStatus: (id: string, state: boolean)=>Promise<void>,
-        getNote: (id:string)=>Promise<NoteMetada | null>,
-        saveAll: (notes: NoteMetada[])=>Promise<void>
+        getNote: (id:string)=>Promise<Note | null>,
+        saveAll: (notes: Note[])=>Promise<void>
       },
       settings: {
         load: ()=>Promise<UserSettings | null>,

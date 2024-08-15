@@ -1,10 +1,10 @@
 import { useEditorState } from "@renderer/context/editor-state";
-import { Note } from "@renderer/lib/note";
 import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { EditorCover } from "./cover";
 import { ListEditor } from "./list-editor";
 import { TextEditor } from "./text-editor";
+import { Note } from "@common/note";
 
 export function EditorRoot(){
     const page = useEditorState((state)=>state.page);
@@ -13,11 +13,10 @@ export function EditorRoot(){
     useEffect(()=>{
         (async ()=>{
             const id = params.get("id");
-            if(!id) {setPage(Note.empty()); return}
+            if(!id) {setPage({} as Note); return}
             const result = await window.api.note.getNote(id);
             if(!result) return;
-            const n = Note.from(result);
-            setPage(n);
+            setPage(result);
         })();
     },[params, setPage])
     

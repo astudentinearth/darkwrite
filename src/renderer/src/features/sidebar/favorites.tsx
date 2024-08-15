@@ -5,7 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useNotesStore } from "@renderer/context/notes-context";
 import { FavoriteItem } from "./favorite-item";
 import { DragDropContext, Droppable, DropResult } from "@hello-pangea/dnd";
-import { Note } from "@renderer/lib/note";
+import { Note } from "@common/note";
 
 export function FavortiesWidget(){
     const notes = useNotesStore((state)=>state.notes);
@@ -32,7 +32,7 @@ export function FavortiesWidget(){
     }, [target])
 
     const dragEnd = async (result: DropResult)=>{
-        const {destination, source, draggableId } = result;
+        const {destination, source } = result;
         if(!destination) return;
         if(destination.droppableId === source.droppableId && destination.index === source.index) return;
         const newState = Array.from(target);

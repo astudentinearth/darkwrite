@@ -1,9 +1,9 @@
-import { NoteMetada } from "@common/note";
+import { Note } from "@common/note";
 
 const API = window.api.note; // electron API
 
 export async function createNote(title:string, parent?: string){
-    API.create(title, parent);
+    return await API.create(title, parent);
 }
 
 export async function updateContents(id: string, content: string){
@@ -22,7 +22,7 @@ export async function moveNote(sourceID: string, destinationID: string){
     await API.move(sourceID, destinationID);
 }
 
-export async function updateNote(data: Partial<NoteMetada>){
+export async function updateNote(data: Partial<Note>){
     if(!data.id) return;
     await API.update(data);
 }
@@ -44,6 +44,6 @@ export async function getNote(id:string){
     return await API.getNote(id);
 }
 
-export async function saveAll(notes: NoteMetada[]){
+export async function saveAll(notes: Note[]){
     await API.saveAll(notes);
 }

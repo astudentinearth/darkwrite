@@ -1,8 +1,8 @@
-import { NoteMetada } from "@common/note";
+import { Note } from "@common/note";
 import {Entity, Column, PrimaryColumn} from "typeorm";
 
 @Entity("notes")
-export class NoteEntity implements NoteMetada{
+export class NoteEntity implements Note{
     @PrimaryColumn("varchar")
     id: string
 
@@ -37,7 +37,7 @@ export class NoteEntity implements NoteMetada{
     @Column("int", {nullable: true})
     index?: number | undefined;
 
-    static fromMetadata(data: NoteMetada){
+    static fromMetadata(data: Note){
         const entity = new NoteEntity();
         entity.created = data.created;
         entity.icon = data.icon;
@@ -53,7 +53,7 @@ export class NoteEntity implements NoteMetada{
         return entity;
     }
 
-    static fromMetadataArray(data: NoteMetada[]){
+    static fromMetadataArray(data: Note[]){
         return data.map((x)=>this.fromMetadata(x));
     }
 }

@@ -1,4 +1,4 @@
-import { NoteMetada } from "@common/note";
+import { Note } from "@common/note";
 import { UserSettings } from "@common/settings";
 import { ipcMain } from "electron";
 import { createNote, setNoteContents, getNoteContents, deleteNote, moveNote, updateNote, getAllNotes, setTrashStatus, getNote, saveNotes } from "./api/note";
@@ -7,7 +7,7 @@ import { readUserPrefs, writeUserPrefs } from "./api/settings";
 // notes
 
 ipcMain.handle("create-note", async (_event, title: string, parent?: string)=>{
-    await createNote(title, parent);
+    return await createNote(title, parent);
 });
 
 ipcMain.handle("set-note-contents", async (_event, id: string, content: string)=>{
@@ -26,7 +26,7 @@ ipcMain.handle("move-note", async (_event, sourceID: string, destID: string)=>{
     await moveNote(sourceID, destID);
 })
 
-ipcMain.handle("update-note", async (_event, note: NoteMetada)=>{
+ipcMain.handle("update-note", async (_event, note: Note)=>{
     await updateNote(note);
 })
 
@@ -52,6 +52,6 @@ ipcMain.handle("get-note", async (_event, id: string)=>{
     return await getNote(id);
 })
 
-ipcMain.handle("save-notes", async (_event, notes: NoteMetada[])=>{
+ipcMain.handle("save-notes", async (_event, notes: Note[])=>{
     await saveNotes(notes);
 })

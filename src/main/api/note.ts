@@ -1,4 +1,4 @@
-import { NoteMetada } from "@common/note";
+import { Note } from "@common/note";
 import { AppDataSource } from "../db";
 import { NoteEntity } from "../db/entity/note";
 import { randomUUID } from "crypto";
@@ -29,8 +29,10 @@ export async function createNote(title: string, parent?: string){
         const filename = join(notesDir, `${note.id}.json`);
         await fse.ensureFile(filename);
         await AppDataSource.manager.save(note);
+        return note;
     } catch (error) {
-        if(error instanceof Error) log.error(error.message)
+        if(error instanceof Error) log.error(error.message);
+        return null;
     }
 }
 
@@ -112,7 +114,7 @@ export async function moveNote(sourceID: string, destID: (string | undefined)){
  * Updates the database entry for given note
  * @param note 
  */
-export async function updateNote(note: Partial<NoteMetada>){
+export async function updateNote(note: Partial<Note>){
 
     try {
         if(!note.id) throw new Error("No identifier was passed to updateNote.");
@@ -126,7 +128,7 @@ export async function updateNote(note: Partial<NoteMetada>){
  * Loads every row in the notes table
  * @returns a whole lot of notes
  */
-export async function getAllNotes(): Promise<NoteMetada[] | null>{
+export async function getAllNotes(): Promise<Note[] | null>{
     try{
         const notes = await AppDataSource.getRepository(NoteEntity).find({order: {index: "ASC"}});
         return notes;
@@ -172,7 +174,7 @@ export async function getNote(id: string){
  * Updates an array of notes at once
  * @param notes 
  */
-export async function saveNotes(notes: NoteMetada[]){
+export async function saveNotes(notes: Note[]){
     try {
         await AppDataSource.getRepository(NoteEntity).save(NoteEntity.fromMetadataArray(notes));
     } catch (error) {

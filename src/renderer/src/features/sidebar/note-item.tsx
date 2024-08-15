@@ -1,9 +1,9 @@
-import { NoteMetada } from "@common/note";
+import { Note } from "@common/note";
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@renderer/components/ui/collapsible";
 import { Button } from "@renderer/components/ui/button";
 import { useEditorState } from "@renderer/context/editor-state";
 import { useNotesStore } from "@renderer/context/notes-context";
-import { Note } from "@renderer/lib/note";
+
 import { cn } from "@renderer/lib/utils";
 import { ArrowRightFromLine, ChevronDown, ChevronRight, Copy, FilePlus2, Forward, Plus, Star, Trash } from "lucide-react";
 import { useState, useEffect, useCallback, DragEvent } from "react";
@@ -13,7 +13,7 @@ import { NoteDropZone } from "./note-drop-zone";
 import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuSeparator, ContextMenuTrigger } from "@renderer/components/ui/context-menu";
 import { Emoji, EmojiStyle } from "emoji-picker-react";
 
-export function NoteItem({note, noDrop, noDrag}: {note: NoteMetada, noDrop?: boolean, noDrag?:boolean}){
+export function NoteItem({note, noDrop, noDrag}: {note: Note, noDrop?: boolean, noDrag?:boolean}){
     const activePage = useEditorState((state)=>state.page) // used to reflect changes live instead of a full re-fetch
     const forceSave = useEditorState((state)=>state.forceSave);
     const notes = useNotesStore((state)=>state.notes);
