@@ -19,11 +19,11 @@ export function FavortiesWidget(){
         for(let i = 0; i < favorites.length; i++){
             if(favorites[i].favoriteIndex == null ) { favorites[i].favoriteIndex == favorites.length }
         }
-        console.log(favorites);
+        favorites.sort((a, b) => (a.favoriteIndex ?? 0) - (b.favoriteIndex ?? 0));
         setTarget(favorites);
     },[notes])
 
-    const render = useCallback(()=>{
+    const render = ()=>{
         const elements: JSX.Element[] = [];
         const arr = [...target];
         arr.sort((a, b) => (a.favoriteIndex ?? 0) - (b.favoriteIndex ?? 0));
@@ -32,7 +32,7 @@ export function FavortiesWidget(){
             elements.push(<FavoriteItem note={arr[i]} key={arr[i].id} index={i}></FavoriteItem>)
         }
         return elements;
-    }, [target])
+    }
 
     const dragEnd = async (result: DropResult)=>{
         const {destination, source } = result;
@@ -44,8 +44,10 @@ export function FavortiesWidget(){
             for(let i = 0; i < draft.length; i++){
                 draft[i].favoriteIndex = i;
             }
+            draft.sort((a,b)=>(a.favoriteIndex ?? 0) - (b.favoriteIndex ?? 0));
         })
-        updateMany(updated);
+        console.log(updated);
+        await updateMany(updated);
     }
 
     return <div className={cn("bg-card/75 rounded-[12px] p-1")}>

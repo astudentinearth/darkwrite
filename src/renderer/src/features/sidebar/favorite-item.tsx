@@ -2,6 +2,7 @@ import { Note } from "@common/note";
 import { Draggable } from "@hello-pangea/dnd";
 import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuSeparator, ContextMenuTrigger } from "@renderer/components/ui/context-menu";
 import { useEditorState } from "@renderer/context/editor-state";
+import { useNotesStore } from "@renderer/context/notes-context";
 import { moveToTrash, updateNote } from "@renderer/lib/api/note";
 import { cn } from "@renderer/lib/utils";
 import { Emoji, EmojiStyle } from "emoji-picker-react";
@@ -13,6 +14,8 @@ export function FavoriteItem({note, index}: {note: Note, index: number}){
     const [active, setActive] = useState(false);
     const forceSave = useEditorState((state)=>state.forceSave);
     const navigate = useNavigate();
+    const update = useNotesStore((state)=>state.update);
+    const trash = useNotesStore((state)=>state.moveToTrash);
     const [params] = useSearchParams();
     const location = useLocation();
     useEffect(()=>{
@@ -38,10 +41,10 @@ export function FavoriteItem({note, index}: {note: Note, index: number}){
             </Draggable>
         </ContextMenuTrigger>
         <ContextMenuContent className="w-64 rounded-lg">
-            <ContextMenuItem onClick={()=>{updateNote({id: note.id, isFavorite: !note.isFavorite, favoriteIndex: 0})}}><Star className={cn(note.isFavorite ? "text-yellow-300 fill-yellow-300" : "opacity-75")} size={20}></Star>&nbsp; {note.isFavorite ? "Remove from favorites" : "Add to favorites"}</ContextMenuItem>
+            <ContextMenuItem onClick={()=>{update({id: note.id, isFavorite: !note.isFavorite, favoriteIndex: 0})}}><Star className={cn(note.isFavorite ? "text-yellow-300 fill-yellow-300" : "opacity-75")} size={20}></Star>&nbsp; {note.isFavorite ? "Remove from favorites" : "Add to favorites"}</ContextMenuItem>
             <ContextMenuSeparator></ContextMenuSeparator>
             <ContextMenuItem disabled><ArrowRightFromLine className="opacity-75" size={20}></ArrowRightFromLine>&nbsp; Export</ContextMenuItem>
-            <ContextMenuItem onClick={()=>{moveToTrash(note.id)}} className="text-destructive focus:bg-destructive/50 focus:text-destructive-foreground"><Trash className="opacity-75" size={20}></Trash>&nbsp; Move to trash</ContextMenuItem>
+            <ContextMenuItem onClick={()=>{trash(note.id)}} className="text-destructive focus:bg-destructive/50 focus:text-destructive-foreground"><Trash className="opacity-75" size={20}></Trash>&nbsp; Move to trash</ContextMenuItem>
             <ContextMenuSeparator></ContextMenuSeparator>
             <span className="text-foreground/50 text-sm p-2">Last edited: {note.modified.toLocaleString()}</span>
         </ContextMenuContent>

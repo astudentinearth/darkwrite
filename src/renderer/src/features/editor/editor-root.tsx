@@ -20,7 +20,6 @@ export function EditorRoot(){
         if(!id) {setPage({} as Note); setID(""); return}
         const result = getOne(id);
         if(!result) return;
-        console.log("sdf")
         setPage(result);
         setID(id);
     },[params, setPage, setID, getOne, notes])

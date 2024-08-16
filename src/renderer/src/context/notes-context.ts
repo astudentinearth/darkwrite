@@ -18,7 +18,7 @@ type NoteActions = {
     restoreFromTrash: (id: string)=>Promise<void>,
     getOne: (id: string)=>(Note | undefined),
     debouncedUpdate: (data: Partial<Note>)=>void,
-    updateMany: (data: Partial<Note>[])=>void,
+    updateMany: (data: Partial<Note>[])=>Promise<void>,
     updateAll: (notes: Note[])=>Promise<void>
     /*
     findSubnotes: (id: string)=>Note[],
@@ -86,7 +86,7 @@ export const useNotesStore = create<NotesStore & NoteActions>((set, get)=>({
                 if(n.id==null) continue;
                 const i = draft.findIndex((x)=>x.id===n.id);
                 if(i==-1) continue;
-                draft[i] = {...draft[i], ...data}
+                draft[i] = {...draft[i], ...n}
             }
         })
         set({notes: updated});
