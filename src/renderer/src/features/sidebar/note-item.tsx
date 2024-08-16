@@ -12,6 +12,7 @@ import { emojify } from "node-emoji";
 import { NoteDropZone } from "./note-drop-zone";
 import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuSeparator, ContextMenuTrigger } from "@renderer/components/ui/context-menu";
 import { Emoji, EmojiStyle } from "emoji-picker-react";
+import { useNavigateToNote } from "@renderer/hooks/use-navigate-to-note";
 
 export function NoteItem({note, noDrop, noDrag}: {note: Note, noDrop?: boolean, noDrag?:boolean}){
     // global state
@@ -25,6 +26,7 @@ export function NoteItem({note, noDrop, noDrag}: {note: Note, noDrop?: boolean, 
     const trash = useNotesStore((state)=>state.moveToTrash);
     const move = useNotesStore((state)=>state.move);
     const navigate = useNavigate();
+    const navToNote = useNavigateToNote();
 
     // local state
     const [subnotes, setSubnotes] = useState([] as Note[]);
@@ -92,8 +94,7 @@ export function NoteItem({note, noDrop, noDrag}: {note: Note, noDrop?: boolean, 
     const newSubnote = async ()=>{
         const sub = await createNewNote(note.id);
         if(sub){
-            forceSave();
-            navigate({pathname: "/page", search: `?id=${sub.id}`})
+            navToNote(sub.id);
             setOpen(true);
         }
     }

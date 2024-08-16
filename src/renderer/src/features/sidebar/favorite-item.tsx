@@ -1,19 +1,17 @@
 import { Note } from "@common/note";
 import { Draggable } from "@hello-pangea/dnd";
 import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuSeparator, ContextMenuTrigger } from "@renderer/components/ui/context-menu";
-import { useEditorState } from "@renderer/context/editor-state";
 import { useNotesStore } from "@renderer/context/notes-context";
-import { moveToTrash, updateNote } from "@renderer/lib/api/note";
+import { useNavigateToNote } from "@renderer/hooks/use-navigate-to-note";
 import { cn } from "@renderer/lib/utils";
 import { Emoji, EmojiStyle } from "emoji-picker-react";
 import { ArrowRightFromLine, Star, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 
 export function FavoriteItem({note, index}: {note: Note, index: number}){
     const [active, setActive] = useState(false);
-    const forceSave = useEditorState((state)=>state.forceSave);
-    const navigate = useNavigate();
+    const navToNote = useNavigateToNote();
     const update = useNotesStore((state)=>state.update);
     const trash = useNotesStore((state)=>state.moveToTrash);
     const [params] = useSearchParams();
@@ -30,7 +28,7 @@ export function FavoriteItem({note, index}: {note: Note, index: number}){
         <ContextMenuTrigger>
             <Draggable draggableId={note.id} index={index}>
                 {(provided)=>
-                    <div {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef} onClick={()=>{forceSave();navigate({pathname: "/page", search: `?id=${note.id}`})}} 
+                    <div {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef} onClick={()=>{navToNote(note.id)}} 
                         className={cn("rounded-[8px] !cursor-default note-item hover:bg-secondary/50 hover:text-foreground font-medium active:bg-secondary/25 transition-colors grid grid-cols-[20px_24px_1fr] select-none p-1 h-8 overflow-hidden", 
                                     active ? "text-foreground bg-secondary/80" : "text-foreground/60", )}>
                         <div></div>
