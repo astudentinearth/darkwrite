@@ -1,3 +1,5 @@
+/// <reference types="vite/client" />
+/// <reference types="vitest/globals" />
 interface Navigator{
     windowControlsOverlay?: WindowControlsOverlay;
 }

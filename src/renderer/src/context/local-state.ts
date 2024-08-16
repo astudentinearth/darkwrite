@@ -19,7 +19,7 @@ type localStoreAction = {
     setCalculatedWidth: (change: number) => void
 }
 
-export const useLocalStore = create(
+export const useLocalStore = create<localStore & localStoreAction>()(
     persist<localStore & localStoreAction>(
         (set) => ({
             isSidebarCollapsed: false,

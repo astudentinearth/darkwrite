@@ -14,7 +14,7 @@ type editorStateAction = {
     setID: (id:string)=>void
 }
 
-export const useEditorState = create<editorState & editorStateAction>((set, get)=>({
+export const useEditorState = create<editorState & editorStateAction>()((set, get)=>({
     page: {} as Note,
     setPage: (n: Note)=>set({page: n}),
     id: "",

@@ -18,6 +18,7 @@ export function NotesWidget(){
 
     const render = useCallback(()=>{
         const target = notes?.filter((n)=>(n.parentID == null && !n.isTrashed));
+        if(target==null) return <></>
         const elements: JSX.Element[] = [];
         if(target.length === 0) return elements;
         for(let i = 0; i < target.length; i++){

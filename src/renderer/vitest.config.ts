@@ -11,5 +11,6 @@ export default defineProject({
         alias:{
             '@renderer': path.resolve("src")
         }
-    }
+    },
+    //root: path.resolve("src")
 });

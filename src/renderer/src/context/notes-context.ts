@@ -30,7 +30,7 @@ export const debouncedSave = debounce((data: Partial<Note>)=>{
     if(data.id != null && data.id !== "") updateNote(data);
 }, 200);
 
-export const useNotesStore = create<NotesStore & NoteActions>((set, get)=>({
+export const useNotesStore = create<NotesStore & NoteActions>()((set, get)=>({
     notes: [],
     setNotes: (val)=>set(()=>({notes: val})),
 
