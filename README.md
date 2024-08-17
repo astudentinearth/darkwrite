@@ -12,10 +12,13 @@
 Darkwrite is a simple and easy way to organize your notes and todos.
 
 ## Development Status
-This program is under heavy development and everything may change. It's not in a usable state yet. Star this repository so you will know when a release is out.
+Darkwrite is currently under active development and not even alpha-ready. It's not in a usable state yet. Star this repository so you will know when a release is out.  
+Older release tags are outdated and are nothing like what is currently being developed.
 
 # Building
-See [BUILDING.md](docs/BUILDING.md)
+Build system might not work as intended right now.  
+See [BUILDING.md](docs/BUILDING.md) for more information.  
+See [DEVELOPMENT.md](docs/DEVELOPMENT.md) to see how you can run Darkwrite right now to test it for yourself.
 
 # License
 Licensed under GNU Affero General Public License, version 3 or any later version at your option.
