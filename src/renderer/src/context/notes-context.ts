@@ -1,5 +1,5 @@
 import { Note } from "@common/note"
-import { createNote, getNotes, saveAll, updateNote } from "@renderer/lib/api/note"
+import { createNote, deleteNote, getNotes, saveAll, updateNote } from "@renderer/lib/api/note"
 import { produce } from "immer"
 import {create} from "zustand"
 import {debounce} from "lodash"
@@ -19,7 +19,8 @@ type NoteActions = {
     getOne: (id: string)=>(Note | undefined),
     debouncedUpdate: (data: Partial<Note>)=>void,
     updateMany: (data: Partial<Note>[])=>Promise<void>,
-    updateAll: (notes: Note[])=>Promise<void>
+    updateAll: (notes: Note[])=>Promise<void>,
+    delete: (id: string)=>Promise<void>
     /*
     findSubnotes: (id: string)=>Note[],
     
@@ -40,21 +41,23 @@ export const useNotesStore = create<NotesStore & NoteActions>()((set, get)=>({
     },
 
     async updateIndexes() {
-        const arr = [...get().notes];
-        for(let i=0; i< arr.length; i++){
-            arr[i].index = i;
-        }
-        set({notes: arr});
-        await saveAll(arr);
+        const updated = produce(get().notes, draft=>{
+            for(let i=0; i< draft.length; i++){
+                draft[i].index = i;
+            }
+        })
+        set({notes: updated});
+        await saveAll(updated);
     },
 
     async moveToTrash(id: string) {
-        const arr = [...get().notes];
-        const i = arr.findIndex((x)=>x.id===id);
+        const i = get().notes.findIndex((x)=>x.id===id);
         if(i==-1) return;
-        arr[i].isTrashed = true;
-        set({notes: arr});
-        await updateNote(arr[i]);
+        const updated = produce(get().notes, draft => {
+            draft[i].isTrashed = true;
+        })
+        set({notes: updated});
+        await updateNote(updated[i]);
     },
 
     async move(src, dest) {
@@ -91,6 +94,17 @@ export const useNotesStore = create<NotesStore & NoteActions>()((set, get)=>({
         })
         set({notes: updated});
         await saveAll(updated);
+    },
+
+    async delete(id: string){
+        const updated = produce(get().notes, draft => {
+            const i = draft.findIndex((n)=>n.id===id);
+            if(i==-1) return;
+            draft.splice(i, 1);
+        });
+        if(updated.length === get().notes.length) return; // we didnt delete ??
+        set({notes: updated});
+        deleteNote(id);
     },
 
     async restoreFromTrash(id) {
@@ -132,10 +146,11 @@ export function getFavorites(){
 export async function createNewNote(parentID?: string){
     const note = await createNote("Untitled", parentID); // new note returned from backend
     if(note == null) return;
-    const arr = [...useNotesStore.getState().notes];
-    note.index = arr.length; // assign an index immediately
-    arr.push(note);
-    useNotesStore.setState({notes: arr}); // push it without a full reload
+    const updated = produce(useNotesStore.getState().notes, draft => {
+        note.index = draft.length; // assign an index immediately
+        draft.push(note);
+    })
+    useNotesStore.setState({notes: updated}); // push it without a full reload
     await updateNote(note); // save the new index
     return note; // return it so we can naviagate if desired
 }

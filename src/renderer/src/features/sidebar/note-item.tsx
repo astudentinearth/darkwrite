@@ -34,19 +34,14 @@ export function NoteItem({note, noDrop, noDrag}: {note: Note, noDrop?: boolean, 
     const [open, setOpen] = useState(false);
     const [dragOver, setDragOver] = useState(false);
 
-    
-    
-    
-
-
     useEffect(()=>{
         const sub = findSubnotes(note.id);
         setSubnotes(sub);
     }, [notes, note.id])
 
     const render = useCallback(()=>{
-        const target = [...subnotes];
-        target.filter((n)=>!n.isTrashed);
+        let target = [...subnotes];
+        target = target.filter((n)=>!n.isTrashed);
         const elements: JSX.Element[] = [];
         if(target.length === 0) return <span className="text-sm text-foreground/50 px-2">No pages</span>;
         for(let i = 0; i < target.length; i++){

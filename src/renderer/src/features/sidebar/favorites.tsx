@@ -15,7 +15,7 @@ export function FavortiesWidget(){
     const [target, setTarget] = useState<Note[]>([]);
 
     useEffect(()=>{
-        const favorites = notes.filter((n)=>n.isFavorite);
+        const favorites = notes.filter((n)=>n.isFavorite && !n.isTrashed);
         if(favorites==null) return;
         for(let i = 0; i < favorites.length; i++){
             if(favorites[i].favoriteIndex == null ) { favorites[i].favoriteIndex == favorites.length }

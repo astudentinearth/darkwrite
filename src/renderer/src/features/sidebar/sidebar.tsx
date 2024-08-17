@@ -7,6 +7,7 @@ import { showAppMenu } from "@renderer/lib/app-menu";
 import CreatePageButton from "./create-page-button";
 import { ScrollArea } from "@renderer/components/ui/scroll-area";
 import { FavortiesWidget } from "./favorites";
+import { TrashWidget } from "./trash";
 
 
 export type SidebarProps = React.HTMLAttributes<HTMLDivElement> & {
@@ -24,21 +25,22 @@ export function Sidebar(props: SidebarProps){
             </Button>
             <div className="flex-grow titlebar spacer"></div>
             <Button data-testid="button-edit-widgets" size={"icon32"} variant={"ghost"} className="flex-shrink-0" title="Edit sidebar" disabled>
-                <LayoutDashboard width={20} height={20}></LayoutDashboard>
+                <LayoutDashboard width={20} height={20}/>
             </Button>
             <Button data-testid="button-search" size={"icon32"} variant={"ghost"} className="flex-shrink-0" title="Search" disabled>
-                <Search width={20} height={20}></Search>
+                <Search width={20} height={20}/>
             </Button>
             <Button data-testid="button-collapse-sidebar" size={"icon32"} variant={"ghost"} className="flex-shrink-0" onClick={collapseCallback} title="Hide sidebar">
-                <PanelRightOpen width={20} height={20}></PanelRightOpen>
+                <PanelRightOpen width={20} height={20}/>
             </Button>
         </div>
         <ScrollArea className="h-full px-2 py-0">
             <div className="flex gap-2 flex-col mb-2">
-                <NavigationWidget></NavigationWidget>
-                <CreatePageButton></CreatePageButton>
-                <FavortiesWidget></FavortiesWidget>
-                <NotesWidget></NotesWidget>
+                <NavigationWidget/>
+                <CreatePageButton/>
+                <FavortiesWidget/>
+                <NotesWidget/>
+                <TrashWidget/>
             </div>
         </ScrollArea>
     </div>

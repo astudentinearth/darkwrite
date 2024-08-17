@@ -80,7 +80,8 @@ export async function deleteNote(id: string){
     try {
         const filename = join(notesDir, `${id}.json`);
         await fse.remove(filename);
-        await AppDataSource.createQueryBuilder().delete().from(NoteEntity).where("id = :id", {id}).execute();
+        await AppDataSource.createQueryBuilder().delete().from(NoteEntity).where("id = :id", {id}).execute(); // delete the note
+        await AppDataSource.createQueryBuilder().delete().from(NoteEntity).where("parentID = :id", {id}).execute(); // delete its subnotes
     } catch (error) {
         console.log((error instanceof Error) ? error.message : "Unknowm error in main/api/note/getNoteContets");
     }
