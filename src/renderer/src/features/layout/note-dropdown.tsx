@@ -1,14 +1,13 @@
 
+import { Note } from "@common/note";
 import { Button } from "@renderer/components/ui/button";
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuItem, DropdownMenuContent } from "@renderer/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@renderer/components/ui/dropdown-menu";
 import { useNotesStore } from "@renderer/context/notes-context";
+import { useNavigateToNote } from "@renderer/hooks/use-navigate-to-note";
+import { Emoji, EmojiStyle } from "emoji-picker-react";
 import { ChevronDown } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useSearchParams, useLocation, useNavigate } from "react-router-dom";
-import { Emoji } from "emoji-picker-react";
-import { Note } from "@common/note";
-import { EmojiStyle } from "emoji-picker-react";
-import { useNavigateToNote } from "@renderer/hooks/use-navigate-to-note";
+import { useLocation, useSearchParams } from "react-router-dom";
 
 export function NoteDropdown(){
     const [search] = useSearchParams();

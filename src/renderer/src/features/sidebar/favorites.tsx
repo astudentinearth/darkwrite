@@ -1,12 +1,12 @@
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@renderer/components/ui/collapsible";
-import { cn } from "@renderer/lib/utils";
-import { ChevronDown, ChevronRight } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
-import { getFavorites, useNotesStore } from "@renderer/context/notes-context";
-import { FavoriteItem } from "./favorite-item";
-import { DragDropContext, Droppable, DropResult } from "@hello-pangea/dnd";
 import { Note } from "@common/note";
+import { DragDropContext, Droppable, DropResult } from "@hello-pangea/dnd";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@renderer/components/ui/collapsible";
+import { useNotesStore } from "@renderer/context/notes-context";
+import { cn } from "@renderer/lib/utils";
 import { produce } from "immer";
+import { ChevronDown, ChevronRight } from "lucide-react";
+import { useEffect, useState } from "react";
+import { FavoriteItem } from "./favorite-item";
 
 export function FavortiesWidget(){
     const notes = useNotesStore((state)=>state.notes);

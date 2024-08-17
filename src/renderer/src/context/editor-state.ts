@@ -1,5 +1,4 @@
 import { Note } from "@common/note"
-import { updateNote } from "@renderer/lib/api/note"
 import { create } from "zustand"
 import { useNotesStore } from "./notes-context"
 

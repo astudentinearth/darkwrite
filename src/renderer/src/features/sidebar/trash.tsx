@@ -1,6 +1,5 @@
 import { Button } from "@renderer/components/ui/button"
 import {Popover, PopoverTrigger, PopoverContent} from "@renderer/components/ui/popover"
-import { useLocalStore } from "@renderer/context/local-state"
 import { useNotesStore } from "@renderer/context/notes-context"
 import { useNavigateToNote } from "@renderer/hooks/use-navigate-to-note"
 import { cn } from "@renderer/lib/utils"
