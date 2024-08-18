@@ -6,6 +6,7 @@ import { ListEditor } from "./list-editor";
 import { TextEditor } from "./text-editor";
 import { Note } from "@common/note";
 import { useNotesStore } from "@renderer/context/notes-context";
+import { ActionMenu } from "./action-menu";
 
 export function EditorRoot(){
     const page = useEditorState((state)=>state.page);
@@ -25,6 +26,7 @@ export function EditorRoot(){
     },[params, setPage, setID, getOne, notes])
 
     return <div className="h-full overflow-auto flex flex-col items-center px-12">
+        <ActionMenu></ActionMenu>
         <EditorCover></EditorCover>
         {page.id !== "" ?
             (
