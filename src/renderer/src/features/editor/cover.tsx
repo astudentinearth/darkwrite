@@ -1,11 +1,11 @@
 import { Button } from "@renderer/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@renderer/components/ui/dropdown-menu";
 import Picker from "@emoji-mart/react";
-import EmojiPicker, {Emoji, EmojiStyle, Theme} from "emoji-picker-react";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useNotesStore } from "@renderer/context/notes-context";
 import { Note } from "@common/note";
 import { useEditorState } from "@renderer/context/editor-state";
+import { fromUnicode } from "@renderer/lib/utils";
 
 export function EditorCover(){
     const id = useEditorState((state)=>state.id);
@@ -38,17 +38,16 @@ export function EditorCover(){
     return <div className="mt-20 max-w-[960px] flex-shrink-0 w-full flex flex-col"> {/* header */}
             <DropdownMenu open={emojiOpen} onOpenChange={(o)=>{setEmojiOpen(o)}} modal={false}>
                 <DropdownMenuTrigger asChild>
-                    <Button variant={"ghost"} className="text-5xl h-16 w-16 p-0 [&>span]:leading-[48px] [&>span]:translate-x-[-20%] [&>span]:translate-y-[-5%] flex items-center justify-center text-center">
-                        <Emoji emojiStyle={EmojiStyle.NATIVE} size={48} unified={targetNote?.icon ?? ""}></Emoji>
+                    <Button variant={"ghost"} className="text-5xl align-middle h-16 w-16 p-0 [&>span]:leading-[48px] flex items-center justify-center text-center">
+                        {fromUnicode(targetNote?.icon ?? "")}
                     </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="p-0 rounded-xl">
-                    <EmojiPicker  height={360} theme={Theme.DARK} previewConfig={({showPreview: false})} emojiStyle={EmojiStyle.NATIVE} onEmojiClick={(emoji)=>{
+                <DropdownMenuContent sticky="always" className="p-0 rounded-xl h-96">
+                    <Picker previewPosition="none"  onEmojiSelect={(e)=>{
                         setEmojiOpen(false);
-                        console.log(emoji);
-                        debouncedUpdate({id, icon: emoji.unified});
-                    }}>
-                    </EmojiPicker>
+                        console.log(e);
+                        debouncedUpdate({id, icon: e.unified});
+                    }}/>
                 </DropdownMenuContent>
             </DropdownMenu>
             

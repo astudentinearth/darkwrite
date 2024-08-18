@@ -3,15 +3,12 @@ import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@renderer/c
 import { Button } from "@renderer/components/ui/button";
 import { useEditorState } from "@renderer/context/editor-state";
 import { createNewNote, findSubnotes, useNotesStore } from "@renderer/context/notes-context";
-
-import { cn } from "@renderer/lib/utils";
+import { cn, fromUnicode } from "@renderer/lib/utils";
 import { ArrowRightFromLine, ChevronDown, ChevronRight, Copy, FilePlus2, Forward, Plus, Star, Trash } from "lucide-react";
 import { useState, useEffect, useCallback, DragEvent } from "react";
 import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
-import { emojify } from "node-emoji";
 import { NoteDropZone } from "./note-drop-zone";
 import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuSeparator, ContextMenuTrigger } from "@renderer/components/ui/context-menu";
-import { Emoji, EmojiStyle } from "emoji-picker-react";
 import { useNavigateToNote } from "@renderer/hooks/use-navigate-to-note";
 
 export function NoteItem({note, noDrop, noDrag}: {note: Note, noDrop?: boolean, noDrag?:boolean}){
@@ -109,7 +106,7 @@ export function NoteItem({note, noDrop, noDrag}: {note: Note, noDrop?: boolean, 
                         {open ? <ChevronDown size={14}></ChevronDown> : <ChevronRight size={14}></ChevronRight>}
                     </div>
                 </CollapsibleTrigger>
-                <div className="flex w-6 h-6 items-center justify-center [&>span]:block [&>span]:leading-[18px] translate-x-[-15%]"><Emoji size={18} emojiStyle={EmojiStyle.NATIVE} unified={note.icon}></Emoji></div>
+                <div className="flex w-6 h-6 items-center justify-center leading-[18px] text-[18px] align-middle translate-y-[-5%]">{fromUnicode(note.icon)}</div>
                 <span className={cn("text-ellipsis whitespace-nowrap block overflow-hidden text-sm self-center pl-1")}>{note.title}</span>
                 <Button size="icon24" className="justify-self-end btn-add" variant={"ghost"} onClick={(e)=>{
                     e.stopPropagation();
