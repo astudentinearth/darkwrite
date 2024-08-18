@@ -2,8 +2,7 @@ import { Button } from "@renderer/components/ui/button"
 import {Popover, PopoverTrigger, PopoverContent} from "@renderer/components/ui/popover"
 import { useNotesStore } from "@renderer/context/notes-context"
 import { useNavigateToNote } from "@renderer/hooks/use-navigate-to-note"
-import { cn } from "@renderer/lib/utils"
-import { Emoji, EmojiStyle } from "emoji-picker-react"
+import { cn, fromUnicode } from "@renderer/lib/utils"
 import { Trash, Undo } from "lucide-react"
 export function TrashWidget(){
     const notes = useNotesStore((store)=>store.notes);
@@ -24,7 +23,7 @@ export function TrashWidget(){
             {trashed.map((note)=><div key={note.id}>
                 <div onClick={()=>{nav(note.id)}} 
                 className={cn("rounded-[8px] note-item hover:bg-secondary/50 hover:text-foreground font-medium active:bg-secondary/25 transition-colors grid grid-cols-[24px_1fr_24px_24px] select-none p-1 h-8 overflow-hidden")}>
-                    <div className="flex w-6 h-6 items-center justify-center [&>span]:block [&>span]:leading-[18px] translate-x-[-15%]"><Emoji size={18} emojiStyle={EmojiStyle.NATIVE} unified={note.icon}></Emoji></div>
+                    <div className="flex w-6 h-6 items-center justify-center text-[18px] translate-y-[-5%]">{fromUnicode(note.icon)}</div>
                     <span className={cn("text-ellipsis whitespace-nowrap block overflow-hidden text-sm self-center pl-1")}>{note.title}</span>
                     <Button title="Restore" size="icon24" className="justify-self-end btn-add text-foreground/75 hover:text-foreground/100" variant={"ghost"} onClick={(e)=>{
                         e.stopPropagation();
