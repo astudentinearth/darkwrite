@@ -10,8 +10,8 @@
     "test": "vitest",
     "preinstall": "npx only-allow pnpm",
     "postinstall": "electron-builder install-app-deps",
-    "build:unpack": "npm run build && electron-builder --dir",
-    "build:win": "npm run build && electron-builder --win",
+    "build:unpack": "pnpm run build && electron-builder --dir",
+    "build:win": "pnpm run build && electron-builder --win",
     "build:mac": "electron-vite build && electron-builder --mac",
     "build:linux": "electron-vite build && electron-builder --linux",
     "rebuild": "electron-rebuild -f -w better-sqlite3"
@@ -81,6 +81,7 @@
     "jsdom": "^24.1.0",
     "memfs": "^4.9.3",
     "postcss": "^8.4.38",
+    "prebuild-install": "^7.1.2",
     "tailwindcss": "^3.4.4",
     "typescript": "^5.2.2",
     "vite": "^5.3.1",
