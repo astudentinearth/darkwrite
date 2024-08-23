@@ -17,6 +17,7 @@
       ],
       "@common/*": ["src/common/*"]
     },
-    "types": ["vitest/globals"]
+    "types": ["vitest/globals"],
+    "moduleResolution": "bundler"
   }
 }
