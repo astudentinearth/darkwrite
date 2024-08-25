@@ -1,73 +1,101 @@
 @tailwind base;
-  @tailwind components;
-  @tailwind utilities;
+@tailwind components;
+@tailwind utilities;
 
-  @layer base {
-    :root {
-      --background: 0 0% 7%;
-      --foreground: 0 0% 100%;
+@layer base {
+  :root {
+    --background: 0 0% 7%;
+    --foreground: 0 0% 100%;
 
-      --view-1: 0 0% 10%;
-      --view-2: 0 0% 15%;
+    --view-1: 0 0% 10%;
+    --view-2: 0 0% 15%;
 
-      --card: 0 0% 13%;
-      --card-foreground: 0 0% 94%;
+    --card: 0 0% 13%;
+    --card-foreground: 0 0% 94%;
 
-      --popover: 0 0% 9%;
-      --popover-foreground: 0 0% 94%;
+    --popover: 0 0% 9%;
+    --popover-foreground: 0 0% 94%;
 
-      --primary: 242 42% 31%;
-      --primary-foreground: 0 0% 100%;
-      --primary-text: 242 58% 62%;
+    --primary: 242 42% 31%;
+    --primary-foreground: 0 0% 100%;
+    --primary-text: 242 58% 62%;
 
-      --secondary: 0 0% 20%;
-      --secondary-foreground: 0 0% 100%;
+    --secondary: 0 0% 20%;
+    --secondary-foreground: 0 0% 100%;
 
-      --muted: 0 0% 17%;
-      --muted-foreground: 0 0% 89%;
+    --muted: 0 0% 17%;
+    --muted-foreground: 0 0% 89%;
 
-      --accent: 217.2 32.6% 17.5%;
-      --accent-foreground: 210 40% 98%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
 
-      --destructive: 0 51% 55%;
-      --destructive-foreground: 210 40% 98%;
+    --destructive: 0 51% 55%;
+    --destructive-foreground: 210 40% 98%;
 
-      --disabled: 0 0% 22%;
+    --disabled: 0 0% 22%;
 
-      --border: 0 0% 26%;
-      --input: 217.2 32.6% 17.5%;
-      --ring: 212.7 26.8% 83.9%;
+    --border: 0 0% 26%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
 
-      --radius: 0.5rem;
-    }
+    --radius: 0.5rem;
+  }
+}
+
+@layer base {
+  :root {
+    --novel-highlight-default: #ffffff;
+    --novel-highlight-purple: #f6f3f8;
+    --novel-highlight-red: #fdebeb;
+    --novel-highlight-yellow: #fbf4a2;
+    --novel-highlight-blue: #c1ecf9;
+    --novel-highlight-green: #acf79f;
+    --novel-highlight-orange: #faebdd;
+    --novel-highlight-pink: #faf1f5;
+    --novel-highlight-gray: #f1f1ef;
+
   }
 
-  @layer base {
-    * {
-      box-sizing: border-box;
-      @apply border-border;
-    }
-    body {
-      @apply bg-background text-foreground w-full h-full m-0;
-    }
-    #root{
-      @apply w-full h-full m-0 p-0;
-    }
-    .titlebar{
-      -webkit-app-region: drag;
-      -webkit-user-select: none;
-      user-select: none;
-    }
-    .titlebar *{
-      -webkit-app-region: no-drag;
-      -webkit-user-select: auto;
-      user-select: auto;
-    }
-    .titlebar .spacer{
-      -webkit-app-region: drag !important;
-    }
-    
+  .dark {
+    --novel-highlight-default: #000000;
+    --novel-highlight-purple: #3f2c4b;
+    --novel-highlight-red: #5c1a1a;
+    --novel-highlight-yellow: #5c4b1a;
+    --novel-highlight-blue: #1a3d5c;
+    --novel-highlight-green: #1a5c20;
+    --novel-highlight-orange: #5c3a1a;
+    --novel-highlight-pink: #5c1a3a;
+    --novel-highlight-gray: #3a3a3a;
+
   }
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground w-full h-full m-0;
+  }
+  #root{
+    @apply w-full h-full m-0 p-0;
+  }
+  .titlebar{
+    -webkit-app-region: drag;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  .titlebar *{
+    -webkit-app-region: no-drag;
+    -webkit-user-select: auto;
+    user-select: auto;
+  }
+  .titlebar .spacer{
+    -webkit-app-region: drag !important;
+  }
+  
+}
 
 html, body, #root, #root>div{
   height: 100%;

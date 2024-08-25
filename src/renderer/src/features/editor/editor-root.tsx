@@ -1,5 +1,5 @@
 import { useEditorState } from "@renderer/context/editor-state";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { EditorCover } from "./cover";
 import { ListEditor } from "./list-editor";
@@ -7,6 +7,7 @@ import { TextEditor } from "./text-editor";
 import { Note } from "@common/note";
 import { useNotesStore } from "@renderer/context/notes-context";
 import { ActionMenu } from "./action-menu";
+import { JSONContent } from "novel";
 
 export function EditorRoot(){
     const page = useEditorState((state)=>state.page);
@@ -16,6 +17,7 @@ export function EditorRoot(){
     const id = useEditorState((state)=>state.id);
     const getOne = useNotesStore((state)=>state.getOne)
     const [params] = useSearchParams();
+    const [value, setValue] = useState<JSONContent>({type: "doc", content: []});
     useEffect(()=>{
         const id = params.get("id");
         if(!id) {setPage({} as Note); setID(""); return}
@@ -30,7 +32,7 @@ export function EditorRoot(){
         <EditorCover></EditorCover>
         {page.id !== "" ?
             (
-                page.todoListID == null ? <TextEditor></TextEditor> : <ListEditor></ListEditor>
+                page.todoListID == null ? <TextEditor initialValue={value} onChange={setValue}></TextEditor> : <ListEditor></ListEditor>
             ) :
             <span>Page not found</span>
         }
