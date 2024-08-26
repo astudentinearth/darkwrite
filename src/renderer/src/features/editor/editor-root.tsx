@@ -18,7 +18,7 @@ export function EditorRoot(){
     const id = useEditorState((state)=>state.id);
     const getOne = useNotesStore((state)=>state.getOne)
     const [params] = useSearchParams();
-    const [value, setValue] = useState<JSONContent>({type: "doc", content: []});
+    const [value, setValue] = useState<JSONContent>({});
     useEffect(()=>{
         const id = params.get("id");
         if(!id) {setPage({} as Note); setID(""); return}

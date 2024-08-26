@@ -15,7 +15,7 @@ export type BubbleButtonProps = {
 export function BubbleButton(props: BubbleButtonProps){
     const {editor} = props;
     return <EditorBubbleItem onSelect={(editor)=>props.command(editor)}>
-        <Button variant="ghost" size={"icon32"}>
+        <Button variant="ghost" size={"bubble"} className="rounded-xl">
             <props.icon size={20} className={cn(props.isActive(editor) && "text-primary-text")}/>
         </Button>
     </EditorBubbleItem>

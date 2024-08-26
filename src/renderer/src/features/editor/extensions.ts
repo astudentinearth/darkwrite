@@ -8,13 +8,19 @@ import {
 	Placeholder,
 	AIHighlight,
 	GlobalDragHandle,
-	TiptapUnderline
+	TiptapUnderline,
+	TextStyle,
+	Color,
+	HighlightExtension
 } from "novel/extensions";
 import { cx } from "class-variance-authority";
 import AutoJoiner from "tiptap-extension-auto-joiner"
+import { cn } from "@renderer/lib/utils";
 
 const aiHighlight = AIHighlight;
-const placeholder = Placeholder;
+const placeholder = Placeholder.configure({
+	
+});
 const tiptapLink = TiptapLink.configure({
 	HTMLAttributes: {
 		class: cx(
@@ -70,8 +76,8 @@ const starterKit = StarterKit.configure({
 	},
 	codeBlock: {
 		HTMLAttributes: {
-			class: cx(
-				"rounded-md bg-muted text-muted-foreground border p-5 font-mono font-medium",
+			class: cn(
+				"rounded-xl bg-secondary/50 text-muted-foreground border-none p-4 font-mono font-medium",
 			),
 		},
 	},
@@ -102,5 +108,8 @@ export const defaultExtensions = [
 	aiHighlight,
 	GlobalDragHandle,
 	AutoJoiner,
-	underline
+	underline,
+	TextStyle,
+	Color,
+	HighlightExtension
 ];

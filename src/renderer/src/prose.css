@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 .ProseMirror {
-  @apply p-0;
+  @apply px-0 py-2;
 }
 
 .ProseMirror .is-editor-empty:first-child::before {
@@ -209,4 +209,21 @@ span[style] > strong {
 
 mark[style] > strong {
   color: inherit;
+}
+
+#slash-command::-webkit-scrollbar {
+  width: 0.3em;
+}
+
+#slash-command::-webkit-scrollbar-track{
+  overflow:hidden;
+}
+
+#slash-command::-webkit-scrollbar-thumb{
+  background-color: hsl(var(--secondary));
+  border-radius: 0.3em;
+}
+
+#slash-command{
+  clip-path: inset(0 round 12px);
 }
