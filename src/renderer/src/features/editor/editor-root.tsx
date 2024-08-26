@@ -8,6 +8,7 @@ import { Note } from "@common/note";
 import { useNotesStore } from "@renderer/context/notes-context";
 import { ActionMenu } from "./action-menu";
 import { JSONContent } from "novel";
+import { ScrollArea } from "@renderer/components/ui/scroll-area";
 
 export function EditorRoot(){
     const page = useEditorState((state)=>state.page);
@@ -27,7 +28,7 @@ export function EditorRoot(){
         setID(id);
     },[params, setPage, setID, getOne, notes])
 
-    return <div className="h-full overflow-auto flex flex-col items-center px-12">
+    return <ScrollArea className="h-full overflow-auto flex flex-col items-center px-12">
         <ActionMenu></ActionMenu>
         <EditorCover></EditorCover>
         {page.id !== "" ?
@@ -36,5 +37,5 @@ export function EditorRoot(){
             ) :
             <span>Page not found</span>
         }
-    </div>
+    </ScrollArea>
 }
