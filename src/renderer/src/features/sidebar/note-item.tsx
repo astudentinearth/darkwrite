@@ -120,7 +120,7 @@ export function NoteItem({note, noDrop, noDrag}: {note: Note, noDrop?: boolean, 
                 </CollapsibleContent>
             </Collapsible>
         </ContextMenuTrigger>
-        <ContextMenuContent className="w-64 rounded-lg">
+        <ContextMenuContent className="w-64 rounded-lg border-default">
             <ContextMenuItem onClick={()=>{update({...note, favoriteIndex: 0, isFavorite: !note.isFavorite})}}><Star className={cn(note.isFavorite ? "text-yellow-300 fill-yellow-300" : "opacity-75")} size={20}></Star>&nbsp; {note.isFavorite ? "Remove from favorites" : "Add to favorites"}</ContextMenuItem>
             <ContextMenuSeparator></ContextMenuSeparator>
             <ContextMenuItem onClick={newSubnote}><FilePlus2  className="opacity-75" size={20}></FilePlus2> &nbsp; New subpage</ContextMenuItem>

@@ -40,6 +40,10 @@
 
     --radius: 0.5rem;
   }
+
+  :root .dark {
+    --border: 0 0% 26%;
+  }
 }
 
 @layer base {
@@ -94,7 +98,9 @@
   .titlebar .spacer{
     -webkit-app-region: drag !important;
   }
-  
+  .border-default{
+    border: 1px solid hsl(var(--border));
+  }
 }
 
 html, body, #root, #root>div{
