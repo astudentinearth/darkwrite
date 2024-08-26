@@ -7,10 +7,11 @@ import {
     StarterKit,
     Placeholder,
     AIHighlight,
+    GlobalDragHandle,
   } from "novel/extensions";
-  
   import { cx } from "class-variance-authority";
-  
+  import AutoJoiner from "tiptap-extension-auto-joiner"
+
   const aiHighlight = AIHighlight;
   const placeholder = Placeholder;
   const tiptapLink = TiptapLink.configure({
@@ -87,6 +88,7 @@ import {
     gapcursor: false,
   });
   
+
   export const defaultExtensions = [
     starterKit,
     placeholder,
@@ -96,5 +98,7 @@ import {
     taskItem,
     horizontalRule,
     aiHighlight,
+    GlobalDragHandle,
+    AutoJoiner
   ];
   

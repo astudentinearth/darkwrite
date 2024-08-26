@@ -23,7 +23,7 @@ export const TextEditor = ({ initialValue, onChange }: EditorProp) => {
   return (
     <EditorRoot>
       <EditorContent
-        className="border p-4 rounded-xl w-full"
+        className="p-0 rounded-xl w-full dark min-w-96 bg-secondary/10"
         {...(initialValue && { initialContent: initialValue })}
         extensions={extensions}
         editorProps={{
