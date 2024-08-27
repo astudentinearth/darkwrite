@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 .ProseMirror {
-  @apply px-0 py-2;
+  @apply px-1 pt-2 pb-16 min-h-96;
 }
 
 .ProseMirror .is-editor-empty:first-child::before {
@@ -11,6 +11,7 @@
   color: hsl(var(--muted-foreground));
   pointer-events: none;
   height: 0;
+  opacity: 0.5;
 }
 .ProseMirror .is-empty::before {
   content: attr(data-placeholder);
@@ -18,6 +19,7 @@
   color: hsl(var(--muted-foreground));
   pointer-events: none;
   height: 0;
+  opacity: 0.5;
 }
 
 /* Custom image styles */
@@ -226,4 +228,23 @@ mark[style] > strong {
 
 #slash-command{
   clip-path: inset(0 round 12px);
+}
+
+@keyframes slide-up {
+  0% { 
+    transform: translateY(10%);
+    opacity: 0; 
+  }
+  100% {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+}
+
+.tippy-box[data-animation='slide'][data-state='visible']{
+  opacity: 0;
+  animation-name: slide-up;
+  animation-duration: 0.2s;
+  animation-iteration-count: 1;
+  opacity: 1;
 }

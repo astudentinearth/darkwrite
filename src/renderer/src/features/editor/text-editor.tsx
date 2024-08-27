@@ -23,8 +23,8 @@ interface EditorProp {
 export const TextEditor = ({ initialValue, onChange }: EditorProp) => {
   return (
     <EditorRoot>
-      <EditorContent 
-        className="p-0 rounded-xl w-full dark min-w-96 bg-secondary/10"
+      <EditorContent
+        className="p-0 rounded-xl w-full dark transition-transform"
         {...(initialValue && { initialContent: initialValue })}
         extensions={extensions}
         editorProps={{
@@ -69,7 +69,8 @@ export const TextEditor = ({ initialValue, onChange }: EditorProp) => {
         <EditorBubble
           tippyOptions={{
             placement: "top",
-            animation: "fade"
+            animation: "slide"
+            
           }}
           className="flex w-fit max-w-[90vw] overflow-hidden rounded-xl border border-muted bg-background shadow-xl slide-in-from-top-1 transition-opacity"
         >
