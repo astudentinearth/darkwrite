@@ -6,6 +6,7 @@ import {
     Heading3,
     List,
     ListOrdered,
+    SquareMinus,
     Text,
     TextQuote,
   } from "lucide-react";
@@ -117,6 +118,15 @@ import {
       icon: <Code size={18} />,
       command: ({ editor, range }) =>
         editor.chain().focus().deleteRange(range).toggleCodeBlock().run(),
+    },
+    {
+      title: "Divider",
+      description: "Add a horizontal line to separate sections.",
+      searchTerms: ["divider", "hr", "separator", "horizontal rule"],
+      icon: <SquareMinus size={18}/>,
+      command({editor, range}) {
+            editor.chain().focus().deleteRange(range).setHorizontalRule().run();
+      },
     }
   ]);
   
