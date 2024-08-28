@@ -248,3 +248,22 @@ mark[style] > strong {
   animation-iteration-count: 1;
   opacity: 1;
 }
+
+.ProseMirror h1{
+  @apply font-bold text-3xl m-0 mt-4;
+}
+
+.ProseMirror h2{
+  @apply font-bold text-2xl m-0 mt-4;
+}
+
+.ProseMirror h3{
+  @apply font-bold text-lg m-0 mt-4;
+}
+.ProseMirror  h4{
+  @apply font-semibold text-lg m-0 mt-4;
+}
+
+.ProseMirror hr{
+  @apply mb-2 opacity-30;
+}
