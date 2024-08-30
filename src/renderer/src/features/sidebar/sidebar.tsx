@@ -8,6 +8,8 @@ import CreatePageButton from "./create-page-button";
 import { ScrollArea } from "@renderer/components/ui/scroll-area";
 import { FavortiesWidget } from "./favorites";
 import { TrashWidget } from "./trash";
+import { SearchDialog } from "../search";
+import { useState } from "react";
 
 
 export type SidebarProps = React.HTMLAttributes<HTMLDivElement> & {
@@ -18,6 +20,7 @@ export type SidebarProps = React.HTMLAttributes<HTMLDivElement> & {
 
 export function Sidebar(props: SidebarProps){
     const {width,  collapseCallback} = props;
+    const [searchOpen, setSearchOpen] = useState(false);
     return <div data-testid="container-sidebar" className={cn('bg-background h-full flex flex-col', props.className)} style={{width: `${width}px`}}>
         <div className='titlebar w-full h-12 bg-background flex-shrink-0 flex [&>button]:flex-shrink-0 p-2 items-center gap-1'>
             <Button onClick={()=>{showAppMenu()}} data-testid="button-darkwrite" size={"icon32"} variant={"ghost"} className="flex-shrink-0" title="Menu">
@@ -27,7 +30,7 @@ export function Sidebar(props: SidebarProps){
             <Button data-testid="button-edit-widgets" size={"icon32"} variant={"ghost"} className="flex-shrink-0" title="Edit sidebar" disabled>
                 <LayoutDashboard width={20} height={20}/>
             </Button>
-            <Button data-testid="button-search" size={"icon32"} variant={"ghost"} className="flex-shrink-0" title="Search" disabled>
+            <Button data-testid="button-search" size={"icon32"} variant={"ghost"} className="flex-shrink-0" title="Search" onClick={()=>setSearchOpen(true)}>
                 <Search width={20} height={20}/>
             </Button>
             <Button data-testid="button-collapse-sidebar" size={"icon32"} variant={"ghost"} className="flex-shrink-0" onClick={collapseCallback} title="Hide sidebar">
@@ -43,5 +46,6 @@ export function Sidebar(props: SidebarProps){
                 <TrashWidget/>
             </div>
         </ScrollArea>
+        <SearchDialog open={searchOpen} setOpen={setSearchOpen}/>
     </div>
 }
