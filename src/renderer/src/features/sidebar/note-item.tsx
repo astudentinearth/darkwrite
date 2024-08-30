@@ -59,7 +59,7 @@ export function NoteItem({note, noDrop, noDrag}: {note: Note, noDrop?: boolean, 
 
     const handleDragStart = (event: DragEvent<HTMLElement>)=>{
         event.stopPropagation();
-        event.dataTransfer.setData("text/plain", note.id)
+        event.dataTransfer.setData("note_id", note.id)
         event.dataTransfer.effectAllowed="move";
     }
 
@@ -67,7 +67,7 @@ export function NoteItem({note, noDrop, noDrag}: {note: Note, noDrop?: boolean, 
         event.preventDefault();
         event.stopPropagation();
         console.log("Dropping to item")
-        const data = event.dataTransfer.getData("text/plain");
+        const data = event.dataTransfer.getData("note_id");
         if(data === note.id){setDragOver(false); return;}
         else {
 
@@ -79,7 +79,7 @@ export function NoteItem({note, noDrop, noDrag}: {note: Note, noDrop?: boolean, 
     const handleDragOver = (event: DragEvent<HTMLElement>)=>{
         event.preventDefault();
         event.stopPropagation();
-        const data = event.dataTransfer.getData("text/plain");
+        const data = event.dataTransfer.getData("note_id");
         setDragOver(note.id!==data);
     }
 

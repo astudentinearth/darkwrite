@@ -9,7 +9,7 @@ export function NoteDropZone({parentID, belowID, last}: {parentID?: string | nul
     const handleDrop = async (event: DragEvent<HTMLElement>)=>{
         event.preventDefault();
         event.stopPropagation();
-        const data = event.dataTransfer.getData("text/plain");
+        const data = event.dataTransfer.getData("note_id");
         setDragOver(false);
         // we will mutate the list on the client side first
         const updated = produce(notes, arr=>{

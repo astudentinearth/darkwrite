@@ -4,6 +4,7 @@ import {
     Heading1,
     Heading2,
     Heading3,
+    Link,
     List,
     ListOrdered,
     SquareMinus,
@@ -127,7 +128,16 @@ import {
       command({editor, range}) {
             editor.chain().focus().deleteRange(range).setHorizontalRule().run();
       },
-    }
+    },
+    {
+      title: "Link to page",
+      description: "",
+      searchTerms: ["link"],
+      icon: <Link size={18}/>,
+      command({editor, range}){
+        editor.chain().focus().deleteRange(range).insertContent({type: "linkToPage", attrs: {id: ""}}).run()
+      }
+    } 
   ]);
   
   export const slashCommand = Command.configure({

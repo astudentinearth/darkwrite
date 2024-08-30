@@ -31,7 +31,7 @@ export function NotesWidget(){
 
     const handleDrop = (event: DragEvent<HTMLElement>)=>{
         event.preventDefault();
-        const data = event.dataTransfer.getData("text/plain");
+        const data = event.dataTransfer.getData("note_id");
         console.log("Dropping to top")
         move(data, null);
         setDragOver(false);

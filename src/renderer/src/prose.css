@@ -282,3 +282,11 @@ mark[style] > strong {
 .ProseMirror hr{
   @apply mb-2 opacity-30;
 }
+
+.ProseMirror p{
+  @apply my-1;
+}
+
+.ProseMirror .react-renderer{
+  background: transparent !important;
+}

@@ -30,6 +30,10 @@ export const TextEditor = ({ initialValue, onChange }: EditorProp) => {
           attributes: {
             class: cn(`prose prose-lg dark:prose-invert prose-headings:font-title font-default focus:outline-none max-w-full`),
           },
+          handleDrop: (_view, event)=> {
+            if(event.dataTransfer?.types.includes("note_id")) console.log("Linking to note")
+            
+          }
         }}
         onUpdate={({ editor }) => {onChange(editor.getJSON())}}
         slotAfter={<ImageResizer />}>

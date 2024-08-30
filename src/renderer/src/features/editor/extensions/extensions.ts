@@ -16,6 +16,7 @@ import {
 import { cx } from "class-variance-authority";
 import AutoJoiner from "tiptap-extension-auto-joiner"
 import { cn } from "@renderer/lib/utils";
+import { LinkToPage } from "./link-to-page";
 
 const aiHighlight = AIHighlight;
 const placeholder = Placeholder.configure({
@@ -111,5 +112,6 @@ export const defaultExtensions = [
 	underline,
 	TextStyle,
 	Color,
-	HighlightExtension
+	HighlightExtension,
+	LinkToPage
 ];
