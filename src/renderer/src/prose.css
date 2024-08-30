@@ -241,6 +241,19 @@ mark[style] > strong {
   border-radius: 0.3em;
 }
 
+.scrollbar::-webkit-scrollbar {
+  width: 0.3em;
+}
+
+.scrollbar::-webkit-scrollbar-track{
+  overflow:hidden;
+}
+
+.scrollbar::-webkit-scrollbar-thumb{
+  background-color: hsl(var(--secondary));
+  border-radius: 0.3em;
+}
+
 #slash-command{
   clip-path: inset(0 round 12px);
 }
