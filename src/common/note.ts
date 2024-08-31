@@ -12,3 +12,43 @@ export interface Note{
     index?: number
     favoriteIndex?: number
 }
+
+/**
+ * Recursively finds all subnotes in a note
+ * @param id UUID of the starting note
+ * @param notes set of notes to search from
+ */
+export function resolveDescendants(id: string, notes: Note[]){
+    const result: Note[] = []
+    function dfs (id: string) {
+        const children: Note[] = notes.filter((n)=>n.parentID===id);
+        for(const c of children){
+            result.push(c);
+            dfs(c.id)
+        }
+    }
+    dfs(id);
+    return result;
+}
+
+/**
+ * Recursively finds the highest level parent of a given note
+ * @param id UUID of the starting note
+ * @param notes set of notes to search from
+ */
+export function resolveParents(id: string, notes: Note[]){
+    const noteIndex = notes.findIndex((n)=>n.id===id);
+    if(noteIndex==-1) return [];
+    const note = notes[noteIndex];
+    if(note.parentID == null) return [];
+    const nodes:Note[] = [];
+    for(let id: (string | null | undefined) = note.parentID; id != null;){ // start from the first parent
+        const parent = notes.find((n)=>n.id===id); // find the parent
+        if(parent){ 
+            nodes.push(parent); // add it to nodes
+            id = parent.parentID; // attempt resolving the next parent
+        }
+        else break
+    }
+    return nodes;
+}

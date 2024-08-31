@@ -50,6 +50,7 @@ export const useNotesStore = create<NotesStore & NoteActions>()((set, get)=>({
         await saveAll(updated);
     },
 
+    //FIXME: Resolve entire tree
     async moveToTrash(id: string) {
         const i = get().notes.findIndex((x)=>x.id===id);
         if(i==-1) return;
@@ -96,6 +97,7 @@ export const useNotesStore = create<NotesStore & NoteActions>()((set, get)=>({
         await saveAll(updated);
     },
 
+    //FIXME: Resolve entire tree here!
     async delete(id: string){
         const updated = produce(get().notes, draft => {
             const i = draft.findIndex((n)=>n.id===id);
@@ -107,6 +109,7 @@ export const useNotesStore = create<NotesStore & NoteActions>()((set, get)=>({
         deleteNote(id);
     },
 
+    //FIXME: Resolve entire tree here!
     async restoreFromTrash(id) {
         const index = get().notes.findIndex(n=>n.id===id);
         if(index==-1) return;

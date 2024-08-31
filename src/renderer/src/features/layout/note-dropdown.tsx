@@ -1,5 +1,5 @@
 
-import { Note } from "@common/note";
+import { Note, resolveParents } from "@common/note";
 import { Button } from "@renderer/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@renderer/components/ui/dropdown-menu";
 import { useNotesStore } from "@renderer/context/notes-context";
@@ -22,15 +22,7 @@ export function NoteDropdown(){
         const path = location.pathname;
         const resolveUpperTree = (note: Note)=>{
             if(note.parentID == null) setParentNodes([]);
-            const nodes:Note[] = [];
-            for(let id = note.parentID; id != null;){ // start from the first parent
-                const parent = notes.find((n)=>n.id===id); // find the parent
-                if(parent){ 
-                    nodes.push(parent); // add it to nodes
-                    id = parent.parentID; // attempt resolving the next parent
-                }
-                else break
-            }
+            const nodes:Note[] = resolveParents(note.id, notes);
             setParentNodes(nodes);
         }
         if(id==null && path!=="/page"){
