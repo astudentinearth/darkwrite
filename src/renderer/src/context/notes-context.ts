@@ -1,4 +1,4 @@
-import { Note } from "@common/note"
+import { Note, resolveDescendants } from "@common/note"
 import { createNote, deleteNote, getNotes, saveAll, updateNote } from "@renderer/lib/api/note"
 import { produce } from "immer"
 import {create} from "zustand"
@@ -50,15 +50,20 @@ export const useNotesStore = create<NotesStore & NoteActions>()((set, get)=>({
         await saveAll(updated);
     },
 
-    //FIXME: Resolve entire tree
     async moveToTrash(id: string) {
         const i = get().notes.findIndex((x)=>x.id===id);
         if(i==-1) return;
+        let descendants: Note[] = []
         const updated = produce(get().notes, draft => {
+            descendants = resolveDescendants(draft[i].id, draft);
+            for(const d of descendants){
+                d.isTrashed = true;
+            }
             draft[i].isTrashed = true;
         })
         set({notes: updated});
         await updateNote(updated[i]);
+        await get().updateMany(descendants);
     },
 
     async move(src, dest) {
@@ -97,7 +102,6 @@ export const useNotesStore = create<NotesStore & NoteActions>()((set, get)=>({
         await saveAll(updated);
     },
 
-    //FIXME: Resolve entire tree here!
     async delete(id: string){
         const updated = produce(get().notes, draft => {
             const i = draft.findIndex((n)=>n.id===id);
@@ -109,11 +113,13 @@ export const useNotesStore = create<NotesStore & NoteActions>()((set, get)=>({
         deleteNote(id);
     },
 
-    //FIXME: Resolve entire tree here!
     async restoreFromTrash(id) {
         const index = get().notes.findIndex(n=>n.id===id);
         if(index==-1) return;
         const updated = produce(get().notes, draft =>{
+            const parentIndex = draft.findIndex(n=>n.id===draft[index].parentID);
+            if(parentIndex == -1) draft[index].parentID = null;
+            if(draft[parentIndex].isTrashed == true) draft[index].parentID = null;
             draft[index].isTrashed = false;
         })
         set({notes: updated});
