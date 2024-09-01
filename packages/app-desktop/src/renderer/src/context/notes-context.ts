@@ -1,4 +1,4 @@
-import { Note, resolveDescendants } from "@common/note"
+import { Note, resolveDescendants } from "@darkwrite/common"
 import { createNote, deleteNote, getNotes, saveAll, updateNote } from "@renderer/lib/api/note"
 import { produce } from "immer"
 import {create} from "zustand"

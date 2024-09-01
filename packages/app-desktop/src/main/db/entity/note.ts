@@ -1,4 +1,4 @@
-import { Note } from "@common/note";
+import { Note } from "@darkwrite/common";
 import {Entity, Column, PrimaryColumn} from "typeorm";
 
 @Entity("notes")

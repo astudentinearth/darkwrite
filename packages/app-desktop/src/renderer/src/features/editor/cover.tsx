@@ -3,7 +3,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@rendere
 import Picker from "@emoji-mart/react";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useNotesStore } from "@renderer/context/notes-context";
-import { Note } from "@common/note";
+import { Note } from "@darkwrite/common";
 import { useEditorState } from "@renderer/context/editor-state";
 import { fromUnicode } from "@renderer/lib/utils";
 

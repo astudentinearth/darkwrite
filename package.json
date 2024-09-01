@@ -1,0 +1,10 @@
+{
+  "name": "darkwrite",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "test:all": "pnpm -r test",
+    "dev": "pnpm --filter app-desktop dev",
+    "predev": "pnpm --filter @darkwrite/common build"
+  } 
+}

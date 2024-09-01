@@ -1,4 +1,4 @@
-import { DEFAULT_USER_SETTINGS, UserSettings } from "@common/settings"
+import { DEFAULT_USER_SETTINGS, UserSettings } from "@darkwrite/common"
 import { create } from "zustand"
 import { produce } from "immer"
 

@@ -1,4 +1,4 @@
-import { Note } from "@common/note";
+import { Note } from "@darkwrite/common";
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@renderer/components/ui/collapsible";
 import { Button } from "@renderer/components/ui/button";
 import { useEditorState } from "@renderer/context/editor-state";

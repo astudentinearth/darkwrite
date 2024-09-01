@@ -1,5 +1,5 @@
-import { Note } from '@common/note'
-import { UserSettings } from '@common/settings'
+import { Note } from '@darkwrite/common'
+import { UserSettings } from '@darkwrite/common'
 import { ElectronAPI } from '@electron-toolkit/preload'
 
 declare global {

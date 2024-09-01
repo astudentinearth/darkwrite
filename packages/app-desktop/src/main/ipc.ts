@@ -1,5 +1,5 @@
-import { Note } from "@common/note";
-import { UserSettings } from "@common/settings";
+import { Note } from "@darkwrite/common";
+import { UserSettings } from "@darkwrite/common";
 import { ipcMain } from "electron";
 import { createNote, setNoteContents, getNoteContents, deleteNote, moveNote, updateNote, getAllNotes, setTrashStatus, getNote, saveNotes } from "./api/note";
 import { readUserPrefs, writeUserPrefs } from "./api/settings";

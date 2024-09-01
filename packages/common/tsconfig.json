@@ -2,6 +2,13 @@
     "include": ["./src/**/*"],
     "exclude": [],
     "compilerOptions": {
-        "types": ["vitest/globals"]
+        "types": ["vitest/globals"],
+        "esModuleInterop": true,
+        "target": "ESNext",
+        "module": "ESNext",
+        "rootDir": "./src",
+        "outDir": "./dist",
+        "skipLibCheck": true,
+        "declaration": true
     }
 }

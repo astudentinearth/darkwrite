@@ -1,4 +1,4 @@
-import { Note } from "@common/note"
+import { Note } from "@darkwrite/common"
 import { create } from "zustand"
 import { useNotesStore } from "./notes-context"
 

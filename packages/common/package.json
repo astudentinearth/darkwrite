@@ -1,12 +1,16 @@
 {
   "name": "@darkwrite/common",
   "version": "0.0.0",
-  "main": "src/index.ts",
+  "types": "./dist/index.d.ts",
+  "main": "./dist/index.js",
   "scripts": {
-    "test":  "vitest"
+    "test": "vitest",
+    "build": "tsup src/index.ts --dts --format esm,cjs"
   },
   "devDependencies": {
+    "tsup": "^8.2.4",
     "typescript": "^5.2.2",
     "vitest": "^1.6.0"
-  }
+  },
+  "type": "module"
 }

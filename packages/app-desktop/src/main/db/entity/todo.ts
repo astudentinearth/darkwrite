@@ -1,4 +1,4 @@
-import { TodoItemBase, TodoListBase } from "@common/todo";
+import { TodoItemBase, TodoListBase } from "@darkwrite/common";
 import {Entity, Column, PrimaryColumn} from "typeorm"
 
 @Entity("todos")

@@ -1,7 +1,7 @@
 import { FileHandle, open, writeFile } from "fs/promises";
 import { app } from "electron";
 import { join } from "path";
-import { DEFAULT_USER_SETTINGS, UserSettings, buildUserSettings } from "@common/settings";
+import { DEFAULT_USER_SETTINGS, UserSettings, buildUserSettings } from "@darkwrite/common";
 import { isNodeError, isValidJSON } from "../util";
 import log from "electron-log/main.js"
 

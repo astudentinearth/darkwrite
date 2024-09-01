@@ -1,4 +1,4 @@
-import { Note } from "@common/note";
+import { Note } from "@darkwrite/common";
 import { AppDataSource } from "../db";
 import { NoteEntity } from "../db/entity/note";
 import { randomUUID } from "crypto";

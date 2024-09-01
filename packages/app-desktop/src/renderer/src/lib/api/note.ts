@@ -1,4 +1,4 @@
-import { Note } from "@common/note";
+import { Note } from "@darkwrite/common";
 
 const API = window.api.note; // electron API
 

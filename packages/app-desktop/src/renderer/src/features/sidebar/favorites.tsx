@@ -1,4 +1,4 @@
-import { Note } from "@common/note";
+import { Note } from "@darkwrite/common";
 import { DragDropContext, Droppable, DropResult } from "@hello-pangea/dnd";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@renderer/components/ui/collapsible";
 import { useNotesStore } from "@renderer/context/notes-context";

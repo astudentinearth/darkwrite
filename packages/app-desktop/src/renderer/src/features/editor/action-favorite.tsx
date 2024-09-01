@@ -1,4 +1,4 @@
-import { Note } from "@common/note";
+import { Note } from "@darkwrite/common";
 import { Button } from "@renderer/components/ui/button";
 import { useEditorState } from "@renderer/context/editor-state";
 import { useNotesStore } from "@renderer/context/notes-context";

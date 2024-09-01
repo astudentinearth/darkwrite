@@ -1,5 +1,5 @@
 
-import { Note, resolveParents } from "@common/note";
+import { Note, resolveParents } from "@darkwrite/common";
 import { Button } from "@renderer/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@renderer/components/ui/dropdown-menu";
 import { useNotesStore } from "@renderer/context/notes-context";

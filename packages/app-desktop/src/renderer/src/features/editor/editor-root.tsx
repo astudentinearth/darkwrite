@@ -4,7 +4,7 @@ import { useSearchParams } from "react-router-dom";
 import { EditorCover } from "./cover";
 import { ListEditor } from "./list-editor";
 import { TextEditor } from "./text-editor";
-import { Note } from "@common/note";
+import { Note } from "@darkwrite/common";
 import { useNotesStore } from "@renderer/context/notes-context";
 import { ActionMenu } from "./action-menu";
 import { JSONContent } from "novel";

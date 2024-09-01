@@ -1,15 +1,15 @@
 {
   "extends": "@electron-toolkit/tsconfig/tsconfig.node.json",
-  "include": ["electron.vite.config.*", "src/main/**/*", "src/preload/**/*", "src/common/**/*"],
+  "include": ["electron.vite.config.*", "src/main/**/*", "src/preload/**/*"],
   "compilerOptions": {
     "composite": true,
     "types": ["electron-vite/node", "vitest/globals"],
-    "paths": {
-      "@common/*": ["./src/common/*"]
-    },
     "target": "ESNext",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "strictPropertyInitialization": false
+  },
+  "ts-node": {
+    "esm": true
   }
 }
