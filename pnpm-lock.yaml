@@ -262,6 +262,15 @@ importers:
         specifier: ^1.6.0
         version: 1.6.0(@types/node@20.16.2)(jsdom@24.1.0)
 
+  packages/common:
+    devDependencies:
+      typescript:
+        specifier: ^5.2.2
+        version: 5.5.3
+      vitest:
+        specifier: ^1.6.0
+        version: 1.6.0(@types/node@20.16.2)(jsdom@24.1.0)
+
 packages:
 
   7zip-bin@5.2.0:
