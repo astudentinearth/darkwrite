@@ -12,7 +12,7 @@ import { MouseEvent, useState } from "react";
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const LinkComponent = ({node, updateAttributes}: any)=>{
     const id = node.attrs.noteID;
-    const notes = useNotesStore((state)=>state.notes);
+    const notes = useNotesStore((state)=>state.notes.filter((n)=>!n.isTrashed));
     const noteIndex = notes.findIndex((n)=>n.id===id);
     const navToNote = useNavigateToNote();
     const [open, setOpen] = useState(false);
