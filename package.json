@@ -4,7 +4,9 @@
   "description": "",
   "scripts": {
     "test:all": "pnpm -r test",
-    "dev": "pnpm --filter app-desktop dev",
-    "predev": "pnpm --filter @darkwrite/common build"
-  } 
+    "dev": "concurrently \" pnpm --filter common run watch \"  \" pnpm --filter app-desktop dev  \""
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
 }

@@ -5,7 +5,8 @@
   "main": "./dist/index.js",
   "scripts": {
     "test": "vitest",
-    "build": "tsup src/index.ts --dts --format esm,cjs"
+    "build": "tsup src/index.ts --dts --format esm,cjs",
+    "watch": "tsup src/index.ts --dts --format esm,cjs --watch"
   },
   "devDependencies": {
     "tsup": "^8.2.4",

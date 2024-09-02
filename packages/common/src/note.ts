@@ -13,6 +13,13 @@ export interface Note{
     favoriteIndex?: number
 }
 
+export interface NoteCustomizations{
+    font?: "sans" | "serif" | "mono" | "custom"
+    customFont?: string,
+    largeText?: boolean
+}
+
+
 /**
  * Recursively finds all subnotes in a note
  * @param id UUID of the starting note

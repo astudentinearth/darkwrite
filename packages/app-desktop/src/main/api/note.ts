@@ -60,7 +60,7 @@ export async function getNoteContents(id: string){
     try {
         const filename = join(notesDir, `${id}.json`);
         const data = await fse.readFile(filename);
-        return data;
+        return data.toString("utf8");
     } catch (error) {
         if(isNodeError(error) && error.code === "ENOENT"){
             await AppDataSource.createQueryBuilder().delete().from(NoteEntity).where("id = :id", {id}).execute();
