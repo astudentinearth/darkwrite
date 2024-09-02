@@ -10,6 +10,7 @@ import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
 import { NoteDropZone } from "./note-drop-zone";
 import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuSeparator, ContextMenuTrigger } from "@renderer/components/ui/context-menu";
 import { useNavigateToNote } from "@renderer/hooks/use-navigate-to-note";
+import { NoteSelectCommandDialog } from "@renderer/components/note-select-command";
 
 export function NoteItem({note, noDrop, noDrag}: {note: Note, noDrop?: boolean, noDrag?:boolean}){
     // global state
@@ -30,6 +31,8 @@ export function NoteItem({note, noDrop, noDrag}: {note: Note, noDrop?: boolean, 
     const [active, setActive] = useState(false);
     const [open, setOpen] = useState(false);
     const [dragOver, setDragOver] = useState(false);
+    const [moveDialogOpen, setMoveDialogOpen] = useState(false);
+
 
     useEffect(()=>{
         const sub = findSubnotes(note.id);
@@ -95,6 +98,7 @@ export function NoteItem({note, noDrop, noDrag}: {note: Note, noDrop?: boolean, 
     const handleDragEnd = ()=>{setDragOver(false)};
 
     return <ContextMenu>
+        <NoteSelectCommandDialog open={moveDialogOpen} setOpen={setMoveDialogOpen} onSelect={(n)=>{move(note.id, n.id);}}/>
         <ContextMenuTrigger>
             <Collapsible open={open} onOpenChange={setOpen}>
             <div draggable onDragStart={noDrag ? ()=>{} : handleDragStart} onDrop={noDrop ? ()=>{} :  handleDrop} onDragEnd={noDrag ? ()=>{} : handleDragEnd} onDragLeave={noDrag ? ()=>{} : handleDragLeave} onDragOver={noDrag ? ()=>{} : handleDragOver} onClick={()=>{forceSave();navigate({pathname: "/page", search: `?id=${note.id}`})}} 
@@ -124,7 +128,7 @@ export function NoteItem({note, noDrop, noDrag}: {note: Note, noDrop?: boolean, 
             <ContextMenuItem onClick={()=>{update({...note, favoriteIndex: 0, isFavorite: !note.isFavorite})}}><Star className={cn(note.isFavorite ? "text-yellow-300 fill-yellow-300" : "opacity-75")} size={20}></Star>&nbsp; {note.isFavorite ? "Remove from favorites" : "Add to favorites"}</ContextMenuItem>
             <ContextMenuSeparator></ContextMenuSeparator>
             <ContextMenuItem onClick={newSubnote}><FilePlus2  className="opacity-75" size={20}></FilePlus2> &nbsp; New subpage</ContextMenuItem>
-            <ContextMenuItem disabled><Forward className="opacity-75" size={20}></Forward>&nbsp; Move to</ContextMenuItem>
+            <ContextMenuItem onClick={()=>setMoveDialogOpen(true)}><Forward className="opacity-75" size={20}></Forward>&nbsp; Move to</ContextMenuItem>
             <ContextMenuItem disabled><Copy className="opacity-75" size={20}></Copy>&nbsp; Duplicate</ContextMenuItem>
             <ContextMenuItem disabled><ArrowRightFromLine className="opacity-75" size={20}></ArrowRightFromLine>&nbsp; Export</ContextMenuItem>
             <ContextMenuSeparator></ContextMenuSeparator>
