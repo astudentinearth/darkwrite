@@ -5,7 +5,9 @@
   "scripts": {
     "test:all": "pnpm -r test",
     "dev": "concurrently \" pnpm --filter common run watch \"  \" pnpm --filter app-desktop dev  \"",
-    "build:desktop": "pnpm --filter common build && pnpm --filter app-desktop build"
+    "build:win": "pnpm --filter common build && pnpm --filter app-desktop build:win",
+    "build:linux": "pnpm --filter common build && pnpm --filter app-desktop build:linux",
+    "build:mac": "pnpm --filter common build && pnpm --filter app-desktop build:mac"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"
