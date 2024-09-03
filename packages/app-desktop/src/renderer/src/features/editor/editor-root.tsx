@@ -21,6 +21,7 @@ export function EditorRoot(){
     const value = useEditorState((s)=>s.content);
     const setValue = useEditorState((s)=>s.setContent);
     const setCustomizations = useEditorState((s)=>s.setCustomzations);
+    const forceSave = useEditorState((state)=>state.forceSave);
     useEffect(()=>{
         const id = params.get("id");
         if(!id) {setPage({} as Note); setID(""); return}
@@ -43,6 +44,14 @@ export function EditorRoot(){
         }
         load();
     },[params, setPage, setID, getOne, notes])
+
+    useEffect(()=>{
+        const saveBeforeQuit = ()=>{
+            forceSave();
+        }
+        window.addEventListener("beforeunload", saveBeforeQuit);
+        return ()=>window.removeEventListener("beforeunload", saveBeforeQuit);
+    }, [])
 
     return <ScrollArea className="h-full overflow-auto flex flex-col items-center px-12">
         <ActionMenu></ActionMenu>
