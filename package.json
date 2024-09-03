@@ -1,10 +1,11 @@
 {
   "name": "darkwrite",
-  "version": "1.0.0",
+  "version": "0.1.0-alpha.1",
   "description": "",
   "scripts": {
     "test:all": "pnpm -r test",
-    "dev": "concurrently \" pnpm --filter common run watch \"  \" pnpm --filter app-desktop dev  \""
+    "dev": "concurrently \" pnpm --filter common run watch \"  \" pnpm --filter app-desktop dev  \"",
+    "build:desktop": "pnpm --filter common build && pnpm --filter app-desktop build"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"

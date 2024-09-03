@@ -1,6 +1,6 @@
 {
   "name": "@darkwrite/common",
-  "version": "0.0.0",
+  "version": "0.1.0-alpha.1",
   "types": "./dist/index.d.ts",
   "main": "./dist/index.js",
   "scripts": {

@@ -2,13 +2,16 @@
 {
   "$schema": "https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json",
   "appId": "io.github.astudentinearth.darkwrite",
-  "asar": false,
+  "asar": true,
   "productName": "darkwrite",
   "directories": {
     "output": "release/${version}"
   },
   "files": [  
     "out"
+  ],
+  "extraFiles":[
+    "THIRDPARTY.txt"
   ],
   "mac": {
     "target": [
