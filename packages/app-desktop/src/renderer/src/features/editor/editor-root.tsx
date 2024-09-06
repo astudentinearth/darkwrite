@@ -6,7 +6,7 @@ import { ListEditor } from "./list-editor";
 import { TextEditor } from "./text-editor";
 import { Note } from "@darkwrite/common";
 import { useNotesStore } from "@renderer/context/notes-context";
-import { ActionMenu } from "./action-menu";
+import { ActionBar } from "./action-bar";
 import { ScrollArea } from "@renderer/components/ui/scroll-area";
 import { getContents } from "@renderer/lib/api/note";
 
@@ -54,7 +54,7 @@ export function EditorRoot(){
     }, [])
 
     return <ScrollArea className="h-full overflow-auto flex flex-col items-center px-12">
-        <ActionMenu></ActionMenu>
+        <ActionBar></ActionBar>
         <EditorCover></EditorCover>
         {page.id !== "" ?
             (

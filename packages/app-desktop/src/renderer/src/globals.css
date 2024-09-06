@@ -101,6 +101,9 @@
   .border-default{
     border: 1px solid hsl(var(--border));
   }
+  .dw-border{
+    @apply border-border;
+  }
 }
 
 html, body, #root, #root>div{
