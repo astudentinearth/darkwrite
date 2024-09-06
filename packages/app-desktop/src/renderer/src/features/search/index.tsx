@@ -21,12 +21,12 @@ export function SearchDialog(props: {open: boolean, setOpen: Dispatch<SetStateAc
         return () => document.removeEventListener("keydown", down)
       }, [])
 
-    return <CommandDialog open={open} onOpenChange={setOpen}>
+    return <CommandDialog open={open} onOpenChange={setOpen} className="!rounded-xl">
         <CommandInput value={search} onValueChange={setSearch} placeholder="Search your notes"/>
         <CommandList className="scrollbar p-1 pb-1">
             <CommandEmpty>No results</CommandEmpty>
             {notes.filter((n)=>n.title.toLocaleLowerCase().includes(search.toLocaleLowerCase())).map((n)=>
-                <CommandItem onSelect={()=>{nav(n.id); setOpen(false)}} key={n.id} value={`${n.id}$${n.title}`} className="flex gap-2">{fromUnicode(n.icon)}{n.title}</CommandItem>)}
+                <CommandItem onSelect={()=>{nav(n.id); setOpen(false)}} key={n.id} value={`${n.id}$${n.title}`} className="flex gap-2 transition-colors rounded-lg">{fromUnicode(n.icon)}{n.title}</CommandItem>)}
         </CommandList>
     </CommandDialog>
 }

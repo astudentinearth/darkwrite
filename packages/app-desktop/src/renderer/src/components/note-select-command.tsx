@@ -32,12 +32,12 @@ export function NoteSelectCommand({className, onSelect} : NoteSelectCommandProps
 export function NoteSelectCommandDialog({onSelect, open, setOpen}: NoteSelectCommandDialogProps){
     const [search, setSearch] = useState("");
     const notes = useNotesStore((state)=>state.notes.filter((n)=>!n.isTrashed));
-    return <CommandDialog open={open} onOpenChange={setOpen}>
+    return <CommandDialog open={open} onOpenChange={setOpen} className="!rounded-xl">
         <CommandInput value={search} onValueChange={setSearch} placeholder="Choose a note"/>
         <CommandList className="scrollbar p-1 ">
             <CommandEmpty>No results</CommandEmpty>
             {notes.filter((n)=>n.title.toLocaleLowerCase().includes(search.toLocaleLowerCase())).map((n)=>
-            <CommandItem onSelect={()=>{onSelect(n)}} key={n.id} value={`${n.id}$${n.title}`} className="flex gap-2">{fromUnicode(n.icon)}{n.title}</CommandItem>)}
+            <CommandItem onSelect={()=>{onSelect(n)}} key={n.id} value={`${n.id}$${n.title}`} className="flex gap-2 rounded-lg transition-colors">{fromUnicode(n.icon)}{n.title}</CommandItem>)}
         </CommandList>
     </CommandDialog>
 }
