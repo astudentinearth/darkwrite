@@ -37,9 +37,8 @@ export function FavoriteItem({note, index}: {note: Note, index: number}){
                 }  
             </Draggable>
         </ContextMenuTrigger>
-        <ContextMenuContent className="w-64 rounded-lg">
+        <ContextMenuContent>
             <ContextMenuItem onClick={()=>{update({id: note.id, isFavorite: !note.isFavorite, favoriteIndex: 0})}}><Star className={cn(note.isFavorite ? "text-yellow-300 fill-yellow-300" : "opacity-75")} size={20}></Star>&nbsp; {note.isFavorite ? "Remove from favorites" : "Add to favorites"}</ContextMenuItem>
-            <ContextMenuSeparator></ContextMenuSeparator>
             <ContextMenuItem disabled><ArrowRightFromLine className="opacity-75" size={20}></ArrowRightFromLine>&nbsp; Export</ContextMenuItem>
             <ContextMenuItem onClick={()=>{trash(note.id)}} className="text-destructive focus:bg-destructive/50 focus:text-destructive-foreground"><Trash className="opacity-75" size={20}></Trash>&nbsp; Move to trash</ContextMenuItem>
             <ContextMenuSeparator></ContextMenuSeparator>
