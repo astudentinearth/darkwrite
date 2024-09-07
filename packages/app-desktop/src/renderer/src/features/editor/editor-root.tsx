@@ -1,5 +1,5 @@
 import { useEditorState } from "@renderer/context/editor-state";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useSearchParams } from "react-router-dom";
 import { EditorCover } from "./cover";
 import { ListEditor } from "./list-editor";
@@ -9,6 +9,8 @@ import { useNotesStore } from "@renderer/context/notes-context";
 import { ActionBar } from "./action-bar";
 import { ScrollArea } from "@renderer/components/ui/scroll-area";
 import { getContents } from "@renderer/lib/api/note";
+import { cn } from "@renderer/lib/utils";
+import { useLocalStore } from "@renderer/context/local-state";
 
 export function EditorRoot(){
     const page = useEditorState((state)=>state.page);
@@ -22,6 +24,11 @@ export function EditorRoot(){
     const setValue = useEditorState((s)=>s.setContent);
     const setCustomizations = useEditorState((s)=>s.setCustomzations);
     const forceSave = useEditorState((state)=>state.forceSave);
+
+    const sidebarCollapsed = useLocalStore((s)=>s.isSidebarCollapsed);
+
+    const containerRef = useRef<HTMLDivElement>(null);
+
     useEffect(()=>{
         const id = params.get("id");
         if(!id) {setPage({} as Note); setID(""); return}
@@ -53,14 +60,18 @@ export function EditorRoot(){
         return ()=>window.removeEventListener("beforeunload", saveBeforeQuit);
     }, [])
 
-    return <ScrollArea className="h-full overflow-auto flex flex-col items-center px-12">
+    return <ScrollArea className="h-full w-full overflow-y-auto overflow-x-auto">
         <ActionBar></ActionBar>
-        <EditorCover></EditorCover>
-        {page.id !== "" ?
-            (
-                page.todoListID == null ? <TextEditor initialValue={value} onChange={setValue}></TextEditor> : <ListEditor></ListEditor>
-            ) :
-            <span>Page not found</span>
-        }
+        <div className="w-full flex justify-center">
+            <div ref={containerRef} className={cn("w-full", sidebarCollapsed && "max-w-[90vw]", !sidebarCollapsed && "max-w-[40vw] sm:max-w-[50vw] md:max-w-[60vw]")}>
+                <EditorCover></EditorCover>
+                {page.id !== "" ?
+                        (
+                            page.todoListID == null ? <TextEditor initialValue={value} onChange={setValue}></TextEditor> : <ListEditor></ListEditor>
+                        ) :
+                        <span>Page not found</span>
+                }
+            </div>
+        </div>
     </ScrollArea>
 }

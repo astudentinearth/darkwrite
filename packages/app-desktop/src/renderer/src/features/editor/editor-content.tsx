@@ -16,7 +16,7 @@ const extensions = [...defaultExtensions, slashCommand];
 
 export function EditorContentWrapper({ initialValue, onChange }: EditorProp){
     return <EditorContent
-    className="p-0 rounded-xl w-full dark transition-transform"
+    className="p-0 rounded-xl w-full flex-grow dark break-words transition-transform"
     {...(initialValue && { initialContent: initialValue })}
     extensions={extensions}
     editorProps={{

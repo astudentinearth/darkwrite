@@ -35,7 +35,7 @@ export function EditorCover(){
         const title = e.target.value;
         debouncedUpdate({id, title});
     }
-    return <div className="mt-20 max-w-[960px] flex-shrink-0 w-full flex flex-col"> {/* header */}
+    return <div className="mt-20 flex-shrink-0 flex flex-col"> {/* header */}
             <DropdownMenu open={emojiOpen} onOpenChange={(o)=>{setEmojiOpen(o)}} modal={false}>
                 <DropdownMenuTrigger asChild>
                     <Button variant={"ghost"} className="text-5xl align-middle h-16 w-16 p-0 [&>span]:leading-[48px] flex items-center justify-center text-center">

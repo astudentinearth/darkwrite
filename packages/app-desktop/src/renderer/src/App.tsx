@@ -16,7 +16,7 @@ function App() {
   }, []);
 
   return (
-    <div className='w-full h-full'>
+    <div className='w-full h-full overflow-x-hidden'>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Layout/>}>

@@ -3,7 +3,7 @@ import {persist} from "zustand/middleware"
 
 // this store is to persist unimportant stuff in localstorage
 
-const [MIN_WIDTH, DEFAULT_WIDTH, MAX_WIDTH] = [180, 240, 400]
+const [MIN_WIDTH, MAX_WIDTH] = [180, 300]
 const calculateWidth = (previous:number, change: number) => (previous + change > MAX_WIDTH || previous + change < MIN_WIDTH) ? (previous + change > MAX_WIDTH ? MAX_WIDTH : MIN_WIDTH) : previous + change;
 
 type localStore = {
