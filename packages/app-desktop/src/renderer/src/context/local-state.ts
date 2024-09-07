@@ -10,13 +10,15 @@ type localStore = {
     isSidebarCollapsed: boolean,
     sidebarWidth: number,
     route: string,
+    useSpellcheck: boolean
 }
 
 type localStoreAction = {
     setSidebarCollapsed: (collapsed: boolean) => void,
     setSidebarWidth: (width: number) => void,
     setRoute: (r: string) => void,
-    setCalculatedWidth: (change: number) => void
+    setCalculatedWidth: (change: number) => void,
+    setSpellcheck: (val: boolean) => void
 }
 
 export const useLocalStore = create<localStore & localStoreAction>()(
@@ -25,10 +27,12 @@ export const useLocalStore = create<localStore & localStoreAction>()(
             isSidebarCollapsed: false,
             sidebarWidth: 240,
             route: "/",
+            useSpellcheck: true,
             setSidebarCollapsed: (collapsed: boolean) => set({isSidebarCollapsed: collapsed}),
             setSidebarWidth: (width: number) => set({sidebarWidth: width}),
             setRoute: (r: string) => set({route: r}),
-            setCalculatedWidth: (change: number) => set((state)=>({sidebarWidth: calculateWidth(state.sidebarWidth, change)}))
+            setCalculatedWidth: (change: number) => set((state)=>({sidebarWidth: calculateWidth(state.sidebarWidth, change)})),
+            setSpellcheck: (useSpellcheck) => set({useSpellcheck})
         }),
         {
             name: "local-state"

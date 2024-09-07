@@ -17,6 +17,7 @@ export function EditorRoot(){
     const setPage = useEditorState((state)=>state.setPage)
     const setID = useEditorState((state)=>state.setID);
     const notes = useNotesStore((state)=>state.notes);
+    const spellcheck = useLocalStore((s)=>s.useSpellcheck);
     //const id = useEditorState((state)=>state.id);
     const getOne = useNotesStore((state)=>state.getOne)
     const [params] = useSearchParams();
@@ -63,7 +64,7 @@ export function EditorRoot(){
     return <ScrollArea className="h-full w-full overflow-y-auto overflow-x-auto">
         <ActionBar></ActionBar>
         <div className="w-full flex justify-center">
-            <div ref={containerRef} className={cn("w-full", sidebarCollapsed && "max-w-[90vw]", !sidebarCollapsed && "max-w-[40vw] sm:max-w-[50vw] md:max-w-[60vw]")}>
+            <div spellCheck={spellcheck} ref={containerRef} className={cn("w-full", sidebarCollapsed && "max-w-[90vw]", !sidebarCollapsed && "max-w-[40vw] sm:max-w-[50vw] md:max-w-[60vw]")}>
                 <EditorCover></EditorCover>
                 {page.id !== "" ?
                         (
