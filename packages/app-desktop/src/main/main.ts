@@ -1,5 +1,5 @@
 import "reflect-metadata"
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, shell } from 'electron'
 import { createRequire } from 'node:module'
 import { join } from 'node:path'
 import {is} from '@electron-toolkit/utils'
@@ -37,12 +37,16 @@ function createWindow() {
     win?.webContents.send('main-process-message', (new Date).toLocaleString())
   })
 
+  win.webContents.setWindowOpenHandler(({url})=>{
+    shell.openExternal(url);
+    return {'action': "deny"}
+  })
+
   if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
     win.loadURL(process.env['ELECTRON_RENDERER_URL'])
   } else {
     win.loadFile(join(__dirname, '../renderer/index.html'))
   }
-
   initAppMenu();
 }
 
