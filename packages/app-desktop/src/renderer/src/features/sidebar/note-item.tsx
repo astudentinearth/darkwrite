@@ -2,7 +2,7 @@ import { Note } from "@darkwrite/common";
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@renderer/components/ui/collapsible";
 import { Button } from "@renderer/components/ui/button";
 import { useEditorState } from "@renderer/context/editor-state";
-import { createNewNote, findSubnotes, useNotesStore } from "@renderer/context/notes-context";
+import { createNewNote, duplicateNote, findSubnotes, useNotesStore } from "@renderer/context/notes-context";
 import { cn, fromUnicode } from "@renderer/lib/utils";
 import { ArrowRightFromLine, ChevronDown, ChevronRight, Copy, FilePlus2, Forward, Plus, Star, Trash } from "lucide-react";
 import { useState, useEffect, useCallback, DragEvent } from "react";
@@ -129,7 +129,7 @@ export function NoteItem({note, noDrop, noDrag}: {note: Note, noDrop?: boolean, 
             <ContextMenuItem onClick={()=>{update({...note, favoriteIndex: 0, isFavorite: !note.isFavorite})}}><Star className={cn(note.isFavorite ? "text-yellow-300 fill-yellow-300" : "opacity-75")} size={20}></Star>&nbsp; {note.isFavorite ? "Remove from favorites" : "Add to favorites"}</ContextMenuItem>
             <ContextMenuItem onClick={newSubnote}><FilePlus2  className="opacity-75" size={20}></FilePlus2> &nbsp; New subpage</ContextMenuItem>
             <ContextMenuItem onClick={()=>setMoveDialogOpen(true)}><Forward className="opacity-75" size={20}></Forward>&nbsp; Move to</ContextMenuItem>
-            <ContextMenuItem disabled><Copy className="opacity-75" size={20}></Copy>&nbsp; Duplicate</ContextMenuItem>
+            <ContextMenuItem onClick={()=>{duplicateNote(note.id)}}><Copy className="opacity-75" size={20}></Copy>&nbsp; Duplicate</ContextMenuItem>
             <ContextMenuItem onClick={()=>{exportHTML(note.id)}}><ArrowRightFromLine className="opacity-75" size={20}></ArrowRightFromLine>&nbsp; Export</ContextMenuItem>
             <ContextMenuItem onClick={()=>{trash(note.id)}} className="text-destructive focus:bg-destructive/20 focus:text-destructive-foreground"><Trash className="opacity-75" size={20}></Trash>&nbsp; Move to trash</ContextMenuItem>
             <ContextMenuSeparator></ContextMenuSeparator>

@@ -1,5 +1,5 @@
 import { Note, resolveDescendants } from "@darkwrite/common"
-import { createNote, deleteNote, getNotes, saveAll, updateNote } from "@renderer/lib/api/note"
+import { createNote, deleteNote, getContents, getNotes, saveAll, updateContents, updateNote } from "@renderer/lib/api/note"
 import { produce } from "immer"
 import {create} from "zustand"
 import {debounce} from "lodash"
@@ -20,7 +20,7 @@ type NoteActions = {
     debouncedUpdate: (data: Partial<Note>)=>void,
     updateMany: (data: Partial<Note>[])=>Promise<void>,
     updateAll: (notes: Note[])=>Promise<void>,
-    delete: (id: string)=>Promise<void>
+    delete: (id: string)=>Promise<void>,
     /*
     findSubnotes: (id: string)=>Note[],
     
@@ -146,6 +146,7 @@ export const useNotesStore = create<NotesStore & NoteActions>()((set, get)=>({
         set({notes});
         await saveAll(notes);
     },
+    
 }))
 
 export function getFavorites(){
@@ -169,3 +170,19 @@ export function findSubnotes(parentID: string){
     return subnotes;
 }
 
+export async function duplicateNote(id: string){
+    const initialState = useNotesStore.getState().notes;
+    const originalIndex = initialState.findIndex((n)=>n.id===id);
+    if(originalIndex == -1) return;
+    const original = initialState[originalIndex];
+    const duplicate = await createNote(original.title, original.parentID ?? undefined);
+    if(!duplicate) return;
+    const contents = await getContents(original.id);
+    await updateContents(duplicate.id, contents); // copy contents
+    const updated = produce(initialState, draft => {
+        duplicate.icon = original.icon;
+        duplicate.index = draft.length;
+        draft.push(duplicate);
+    })
+    useNotesStore.setState({notes: updated});
+}

@@ -7,6 +7,7 @@ import { useState } from "react";
 import { CustimzationSheet } from "./customization-sheet";
 import { useEditorState } from "@renderer/context/editor-state";
 import { exportHTML } from "@renderer/lib/api/note";
+import { duplicateNote } from "@renderer/context/notes-context";
 
 export function EditorMenu(){
     const [customizationsOpen, setCustomizationsOpen] = useState(false);
@@ -33,7 +34,7 @@ export function EditorMenu(){
             <DropdownMenuItem className="gap-2 rounded-lg" onSelect={()=>setCustomizationsOpen(true)}><Brush size={18}/>Customize</DropdownMenuItem>
             <DropdownMenuItem onSelect={()=>{exportHTML(activeNote)}} className="gap-2 rounded-lg"><Download size={18}/>Export</DropdownMenuItem>
             <DropdownMenuItem disabled className="gap-2 rounded-lg"><Upload size={18}/>Import</DropdownMenuItem>
-            <DropdownMenuItem disabled className="gap-2 rounded-lg"><Copy size={18}/>Duplicate</DropdownMenuItem>
+            <DropdownMenuItem onClick={()=>{duplicateNote(activeNote)}} className="gap-2 rounded-lg"><Copy size={18}/>Duplicate</DropdownMenuItem>
         </DropdownMenuContent>
     </DropdownMenu>
 }
