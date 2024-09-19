@@ -25,8 +25,8 @@ function createWindow() {
     webPreferences: {
         preload: join(__dirname, '../preload/index.cjs'),
     },
-    titleBarStyle: process.platform === "win32" ? "hidden" : "default", //TODO: Implement experimental support for macOS later
-    titleBarOverlay: process.platform === "win32" ? {
+    titleBarStyle: (process.platform === "win32" || process.platform === "linux") ? "hidden" : "default", //TODO: Implement experimental support for macOS later
+    titleBarOverlay: (process.platform === "win32" || process.platform === "linux") ? {
       color: "#131313",
       symbolColor: "#ffffff",
       height: 48
