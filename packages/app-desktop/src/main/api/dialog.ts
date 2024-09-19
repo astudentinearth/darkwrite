@@ -1,4 +1,4 @@
-import { dialog } from "electron"
+import { dialog, OpenDialogOptions } from "electron";
 
 export type SaveFileDialogOptions = {
     title?: string,
@@ -21,3 +21,11 @@ export async function saveFile(opts: SaveFileDialogOptions){
     return {canceled, path:filePath} as SaveFileDialogReturnType;
 }
 
+/**
+ * Shows a native open file dialog
+ * @param opts dialog options
+ */
+export async function openFile(opts: OpenDialogOptions){
+    const result = await dialog.showOpenDialog(opts);
+    return result;
+}

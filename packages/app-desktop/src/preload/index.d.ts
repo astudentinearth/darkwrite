@@ -19,6 +19,7 @@ declare global {
         getNote: (id:string)=>Promise<Note | null>,
         saveAll: (notes: Note[])=>Promise<void>,
         export: (title: string, content: string, exportType: NoteExportType)=>Promise<void>
+        importHTML: ()=>Promise<string>
       },
       settings: {
         load: ()=>Promise<UserSettings | null>,

@@ -4,12 +4,14 @@ import { useNotesStore } from "./notes-context"
 import { type JSONContent } from "novel"
 import { updateContents } from "@renderer/lib/api/note"
 import { debounce } from "lodash"
+import { Editor } from "@tiptap/core"
 
 type editorState = {
     page: Note,
     id: string,
     content: JSONContent
-    customizations: NoteCustomizations
+    customizations: NoteCustomizations,
+    editorInstance: Editor | null
 }
 
 type editorStateAction = {
@@ -17,7 +19,8 @@ type editorStateAction = {
     forceSave: ()=>void,
     setID: (id:string)=>void,
     setContent: (content: JSONContent)=>void,
-    setCustomzations: (data: NoteCustomizations)=>void
+    setCustomzations: (data: NoteCustomizations)=>void,
+    setEditorInstance: (editor: Editor | null)=>void
 }
 
 const debouncedSave = debounce((id :string, data: {content: JSONContent, customizations: NoteCustomizations})=>{
@@ -53,5 +56,9 @@ export const useEditorState = create<editorState & editorStateAction>()((set, ge
     setCustomzations(customizations) {
         set({customizations})
         debouncedSave(get().id, {content: get().content, customizations: customizations});
+    },
+    editorInstance: null,
+    setEditorInstance(editor) {
+        set({editorInstance: editor})
     },
 }))

@@ -1,7 +1,7 @@
 import { Note, NoteExportType, UserSettings } from "@darkwrite/common";
 import { ipcMain } from "electron";
-import { writeFile } from "fs/promises";
-import { saveFile } from "./api/dialog";
+import { readFile, writeFile } from "fs/promises";
+import { openFile, saveFile } from "./api/dialog";
 import { createNote, deleteNote, getAllNotes, getNote, getNoteContents, moveNote, saveNotes, setNoteContents, setTrashStatus, updateNote } from "./api/note";
 import { readUserPrefs, writeUserPrefs } from "./api/settings";
 
@@ -63,4 +63,22 @@ ipcMain.handle("export-note", async (_event, title: string, content: string, exp
     const {canceled, path} = await saveFile({ title: "Export note", buttonLabel: "Export", defaultPath: `${title}.${exportType}`});
     if(canceled || !path) return;
     await writeFile(path, content);
+})
+
+ipcMain.handle("import-html", async () => {
+    const result = await openFile({
+        title: "Import HTML",
+        buttonLabel: "Import",
+        filters: [
+            {
+                name: "HTML Document",
+                extensions: ["html", "htm"]
+            }
+        ],
+        properties: ["openFile"]
+    });
+    if(result.filePaths.length === 0) return "";
+    const file = result.filePaths[0];
+    const content = await readFile(file);
+    return content.toString("utf-8");
 })

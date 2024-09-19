@@ -6,6 +6,7 @@ import SlashCommand from "./command-menu"
 import { slashCommand } from "./command-menu/slash-command"
 import { ContentHandler } from "./content-handler"
 import { defaultExtensions } from "./extensions/extensions"
+import InstanceHandler from "./instance-handler"
 
 export interface EditorProp {
     initialValue?: JSONContent;
@@ -33,6 +34,7 @@ export function EditorContentWrapper({ initialValue, onChange }: EditorProp){
     }}
     onUpdate={({ editor }) => {onChange(editor.getJSON())}}
     slotAfter={<ImageResizer />}>
+    <InstanceHandler/>
     <SlashCommand/>
     <Bubble/>
     <ContentHandler/>

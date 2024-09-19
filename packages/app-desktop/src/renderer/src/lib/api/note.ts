@@ -3,6 +3,7 @@ import { attempt } from "lodash";
 import { generateHTML } from "@tiptap/html";
 import { defaultExtensions } from "@renderer/features/editor/extensions/extensions";
 import { useNotesStore } from "@renderer/context/notes-context";
+import { getJSON } from "@renderer/features/editor/html-util";
 
 const API = window.api.note; // electron API
 
@@ -54,7 +55,6 @@ export async function saveAll(notes: Note[]){
 
 export async function exportHTML(id: string){
     const contentStr = await getContents(id);
-    console.log(contentStr);
     const parsed = attempt(()=>JSON.parse(contentStr));
     if(parsed instanceof Error) return;
     if("content" in parsed){
@@ -63,4 +63,10 @@ export async function exportHTML(id: string){
         if(!note) return;
         await API.export(note.title, output, "html");
     }
+}
+
+export async function importHTML(){
+    const html = await API.importHTML();
+    if(html==="") return "";
+    else return html;
 }

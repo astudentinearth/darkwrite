@@ -16,7 +16,8 @@ contextBridge.exposeInMainWorld('api', {
     setTrashStatus: (id: string, state: boolean)=>ipcRenderer.invoke("set-trash-status", id ,state),
     getNote: (id:string)=>ipcRenderer.invoke("get-note", id),
     saveAll: (notes: Note[])=>ipcRenderer.invoke("save-notes", notes),
-    export: (title: string, content: string, exportType: NoteExportType)=>ipcRenderer.invoke("export-note", title, content, exportType)
+    export: (title: string, content: string, exportType: NoteExportType)=>ipcRenderer.invoke("export-note", title, content, exportType),
+    importHTML: ()=>ipcRenderer.invoke("import-html")
   },
   settings: {
     load: ()=>ipcRenderer.invoke("load-user-settings"),
