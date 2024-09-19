@@ -114,6 +114,8 @@ html, body, #root, #root>div{
 .resize-handle{
   pointer-events: none;
   user-select: none;
+  transition-property: filter;
+  transition-duration: 250ms;
 }
 
 .resize-handle::before{
@@ -126,4 +128,12 @@ html, body, #root, #root>div{
   cursor: ew-resize;
   pointer-events: all;
   user-select: none;
+}
+
+.resize-handle:hover{
+  filter: brightness(150%);
+}
+
+.resize-handle:active{
+  filter: brightness(200%);
 }
