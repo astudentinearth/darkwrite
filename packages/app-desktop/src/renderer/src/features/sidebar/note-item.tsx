@@ -11,6 +11,7 @@ import { NoteDropZone } from "./note-drop-zone";
 import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuSeparator, ContextMenuTrigger } from "@renderer/components/ui/context-menu";
 import { useNavigateToNote } from "@renderer/hooks/use-navigate-to-note";
 import { NoteSelectCommandDialog } from "@renderer/components/note-select-command";
+import { exportHTML } from "@renderer/lib/api/note";
 
 export function NoteItem({note, noDrop, noDrag}: {note: Note, noDrop?: boolean, noDrag?:boolean}){
     // global state
@@ -129,7 +130,7 @@ export function NoteItem({note, noDrop, noDrag}: {note: Note, noDrop?: boolean, 
             <ContextMenuItem onClick={newSubnote}><FilePlus2  className="opacity-75" size={20}></FilePlus2> &nbsp; New subpage</ContextMenuItem>
             <ContextMenuItem onClick={()=>setMoveDialogOpen(true)}><Forward className="opacity-75" size={20}></Forward>&nbsp; Move to</ContextMenuItem>
             <ContextMenuItem disabled><Copy className="opacity-75" size={20}></Copy>&nbsp; Duplicate</ContextMenuItem>
-            <ContextMenuItem disabled><ArrowRightFromLine className="opacity-75" size={20}></ArrowRightFromLine>&nbsp; Export</ContextMenuItem>
+            <ContextMenuItem onClick={()=>{exportHTML(note.id)}}><ArrowRightFromLine className="opacity-75" size={20}></ArrowRightFromLine>&nbsp; Export</ContextMenuItem>
             <ContextMenuItem onClick={()=>{trash(note.id)}} className="text-destructive focus:bg-destructive/20 focus:text-destructive-foreground"><Trash className="opacity-75" size={20}></Trash>&nbsp; Move to trash</ContextMenuItem>
             <ContextMenuSeparator></ContextMenuSeparator>
             <span className="text-foreground/50 text-sm p-2">Last edited: {note.modified.toLocaleString()}</span>

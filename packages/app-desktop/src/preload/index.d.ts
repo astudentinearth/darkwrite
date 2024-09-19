@@ -1,4 +1,4 @@
-import { Note } from '@darkwrite/common'
+import { Note, NoteExportType } from '@darkwrite/common'
 import { UserSettings } from '@darkwrite/common'
 import { ElectronAPI } from '@electron-toolkit/preload'
 
@@ -17,7 +17,8 @@ declare global {
         getAll: ()=>Promise<Note[]>,
         setTrashStatus: (id: string, state: boolean)=>Promise<void>,
         getNote: (id:string)=>Promise<Note | null>,
-        saveAll: (notes: Note[])=>Promise<void>
+        saveAll: (notes: Note[])=>Promise<void>,
+        export: (title: string, content: string, exportType: NoteExportType)=>Promise<void>
       },
       settings: {
         load: ()=>Promise<UserSettings | null>,

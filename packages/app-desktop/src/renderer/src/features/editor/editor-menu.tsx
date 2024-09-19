@@ -5,9 +5,12 @@ import { useLocalStore } from "@renderer/context/local-state";
 import { Brush, Copy, Download, Menu, Upload } from "lucide-react";
 import { useState } from "react";
 import { CustimzationSheet } from "./customization-sheet";
+import { useEditorState } from "@renderer/context/editor-state";
+import { exportHTML } from "@renderer/lib/api/note";
 
 export function EditorMenu(){
     const [customizationsOpen, setCustomizationsOpen] = useState(false);
+    const activeNote = useEditorState((s)=>s.id);
     const checker = useLocalStore((s)=>s.useSpellcheck);
     const setCheck = useLocalStore((s)=>s.setSpellcheck);
     return <DropdownMenu>
@@ -28,7 +31,7 @@ export function EditorMenu(){
             </DropdownMenuItem>
             <DropdownMenuSeparator/>
             <DropdownMenuItem className="gap-2 rounded-lg" onSelect={()=>setCustomizationsOpen(true)}><Brush size={18}/>Customize</DropdownMenuItem>
-            <DropdownMenuItem disabled className="gap-2 rounded-lg"><Download size={18}/>Export</DropdownMenuItem>
+            <DropdownMenuItem onSelect={()=>{exportHTML(activeNote)}} className="gap-2 rounded-lg"><Download size={18}/>Export</DropdownMenuItem>
             <DropdownMenuItem disabled className="gap-2 rounded-lg"><Upload size={18}/>Import</DropdownMenuItem>
             <DropdownMenuItem disabled className="gap-2 rounded-lg"><Copy size={18}/>Duplicate</DropdownMenuItem>
         </DropdownMenuContent>

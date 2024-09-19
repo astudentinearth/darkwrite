@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { Note } from '@darkwrite/common'
+import { Note, NoteExportType } from '@darkwrite/common'
 import { UserSettings } from '@darkwrite/common'
 import { contextBridge, ipcRenderer } from 'electron'
 
@@ -15,7 +15,8 @@ contextBridge.exposeInMainWorld('api', {
     getAll: ()=>ipcRenderer.invoke("get-all-notes"),
     setTrashStatus: (id: string, state: boolean)=>ipcRenderer.invoke("set-trash-status", id ,state),
     getNote: (id:string)=>ipcRenderer.invoke("get-note", id),
-    saveAll: (notes: Note[])=>ipcRenderer.invoke("save-notes", notes)
+    saveAll: (notes: Note[])=>ipcRenderer.invoke("save-notes", notes),
+    export: (title: string, content: string, exportType: NoteExportType)=>ipcRenderer.invoke("export-note", title, content, exportType)
   },
   settings: {
     load: ()=>ipcRenderer.invoke("load-user-settings"),

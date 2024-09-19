@@ -1,7 +1,8 @@
-import { Note } from "@darkwrite/common";
-import { UserSettings } from "@darkwrite/common";
+import { Note, NoteExportType, UserSettings } from "@darkwrite/common";
 import { ipcMain } from "electron";
-import { createNote, setNoteContents, getNoteContents, deleteNote, moveNote, updateNote, getAllNotes, setTrashStatus, getNote, saveNotes } from "./api/note";
+import { writeFile } from "fs/promises";
+import { saveFile } from "./api/dialog";
+import { createNote, deleteNote, getAllNotes, getNote, getNoteContents, moveNote, saveNotes, setNoteContents, setTrashStatus, updateNote } from "./api/note";
 import { readUserPrefs, writeUserPrefs } from "./api/settings";
 
 // notes
@@ -54,4 +55,12 @@ ipcMain.handle("get-note", async (_event, id: string)=>{
 
 ipcMain.handle("save-notes", async (_event, notes: Note[])=>{
     await saveNotes(notes);
+})
+
+// dialog
+
+ipcMain.handle("export-note", async (_event, title: string, content: string, exportType: NoteExportType)=>{
+    const {canceled, path} = await saveFile({ title: "Export note", buttonLabel: "Export", defaultPath: `${title}.${exportType}`});
+    if(canceled || !path) return;
+    await writeFile(path, content);
 })

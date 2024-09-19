@@ -3,7 +3,7 @@ import { dialog } from "electron"
 export type SaveFileDialogOptions = {
     title?: string,
     defaultPath?: string,
-    buttonLabel: string,
+    buttonLabel?: string,
 
 }
 
@@ -20,3 +20,4 @@ export async function saveFile(opts: SaveFileDialogOptions){
     const {canceled, filePath} = result;
     return {canceled, path:filePath} as SaveFileDialogReturnType;
 }
+

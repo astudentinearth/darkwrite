@@ -59,3 +59,5 @@ export function resolveParents(id: string, notes: Note[]){
     }
     return nodes;
 }
+
+export type NoteExportType = "html" | "json" | "md";
