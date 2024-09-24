@@ -61,3 +61,10 @@ export function resolveParents(id: string, notes: Note[]){
 }
 
 export type NoteExportType = "html" | "json" | "md";
+
+export const FontStyleClassNames = {
+    "sans": "darkwrite-sans",
+    "serif": "darkwrite-serif",
+    "mono": "darkwrite-mono",
+    "custom": "darkwrite-custom-font"
+}

@@ -1,4 +1,4 @@
-import { Note } from "@darkwrite/common";
+import { FontStyleClassNames, Note } from "@darkwrite/common";
 import { ScrollArea } from "@renderer/components/ui/scroll-area";
 import { useEditorState } from "@renderer/context/editor-state";
 import { useLocalStore } from "@renderer/context/local-state";
@@ -24,6 +24,8 @@ export function EditorRoot(){
     const setValue = useEditorState((s)=>s.setContent);
     const setCustomizations = useEditorState((s)=>s.setCustomzations);
     const forceSave = useEditorState((state)=>state.forceSave);
+    const fontStyle = useEditorState((state)=>state.customizations.font);
+    const customFont = useEditorState((state)=>state.customizations.customFont);
 
     const sidebarCollapsed = useLocalStore((s)=>s.isSidebarCollapsed);
 
@@ -53,6 +55,10 @@ export function EditorRoot(){
     },[params, setPage, setID, getOne, notes])
 
     useEffect(()=>{
+        document.documentElement.style.setProperty("--dw-custom-font-name", customFont ?? "");
+    }, [customFont]);
+
+    useEffect(()=>{
         const saveBeforeQuit = ()=>{
             forceSave();
         }
@@ -62,7 +68,7 @@ export function EditorRoot(){
 
     return <ScrollArea className="h-full w-full overflow-y-auto overflow-x-auto">
         <div className="w-full flex justify-center">
-            <div spellCheck={spellcheck} ref={containerRef} className={cn("w-full", sidebarCollapsed && "max-w-[90vw]", !sidebarCollapsed && "max-w-[40vw] sm:max-w-[50vw] md:max-w-[60vw]")}>
+            <div spellCheck={spellcheck} ref={containerRef} className={cn("w-full", sidebarCollapsed && "max-w-[90vw]", !sidebarCollapsed && "max-w-[40vw] sm:max-w-[50vw] md:max-w-[60vw]", FontStyleClassNames[fontStyle ?? "sans"])}>
                 <EditorCover></EditorCover>
                 {page.id !== "" ?
                         (

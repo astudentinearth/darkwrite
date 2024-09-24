@@ -39,10 +39,31 @@
     --ring: 212.7 26.8% 83.9%;
 
     --radius: 0.5rem;
+
+    /* generic fonts until its loaded from settings */
+    --darkwrite-sans: "Segoe UI", "Noto Sans", "Roboto", sans-serif;
+    --darkwrite-serif: "Times New Roman", "Noto Serif", "Liberation Serif", serif;
+    --darkwrite-mono: "Cascadia Code", "Courier New", "Liberation Mono", monospace;
   }
 
   :root .dark {
     --border: 0 0% 26%;
+  }
+
+  .darkwrite-sans{
+    font-family: "Segoe UI", "Noto Sans", "Roboto", "Cantarell", sans-serif;
+  }
+
+  .darkwrite-serif{
+    font-family: "Times New Roman", "Noto Serif", "Liberation Serif", serif;
+  }
+
+  .darkwrite-mono{
+    font-family: "Cascadia Code", "Courier New", "Liberation Mono", monospace;
+  }
+
+  .darkwrite-custom-font{
+    font-family: var(--dw-custom-font-name);
   }
 }
 
