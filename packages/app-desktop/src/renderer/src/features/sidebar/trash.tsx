@@ -12,7 +12,7 @@ export function TrashWidget(){
     const nav = useNavigateToNote();
     return <Popover>
         <PopoverTrigger asChild>
-            <Button variant={"ghost"} className={cn("justify-start flex-shrink-0 bg-card/75 rounded-[12px] p-2 hover:bg-secondary/50 text-foreground/75 hover:text-foreground active:bg-secondary/25 transition-colors grid grid-cols-[24px_1fr] select-none pl-3 overflow-hidden")}>
+            <Button variant={"ghost"} className={cn("justify-start flex-shrink-0 bg-view-1 rounded-[12px] p-2 hover:bg-secondary/50 text-foreground/75 hover:text-foreground active:bg-secondary/25 transition-colors grid grid-cols-[24px_1fr] select-none pl-3 overflow-hidden")}>
                 <Trash size={16}/>
                 <span className="justify-self-start">Trash</span>
             </Button>

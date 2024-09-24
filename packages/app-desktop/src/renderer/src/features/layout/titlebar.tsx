@@ -3,6 +3,7 @@ import { cn } from "@renderer/lib/utils"
 import { PanelRightClose } from "lucide-react"
 import { RefObject } from "react"
 import { NoteDropdown } from "./note-dropdown"
+import { ActionBar } from "../editor/action-bar"
 
 export type TitlebarProps = React.HTMLAttributes<HTMLDivElement> & {
     refObject: RefObject<HTMLDivElement>,
@@ -19,5 +20,7 @@ export function Titlebar(props: TitlebarProps){
             <PanelRightClose width={20} height={20}></PanelRightClose>
         </Button>
         <NoteDropdown></NoteDropdown>
+        <div className="flex-grow spacer"></div>
+        <ActionBar/>
 </div>
 }

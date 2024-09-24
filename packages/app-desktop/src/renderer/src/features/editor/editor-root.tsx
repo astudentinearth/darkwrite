@@ -1,16 +1,15 @@
+import { Note } from "@darkwrite/common";
+import { ScrollArea } from "@renderer/components/ui/scroll-area";
 import { useEditorState } from "@renderer/context/editor-state";
+import { useLocalStore } from "@renderer/context/local-state";
+import { useNotesStore } from "@renderer/context/notes-context";
+import { getContents } from "@renderer/lib/api/note";
+import { cn } from "@renderer/lib/utils";
 import { useEffect, useRef } from "react";
 import { useSearchParams } from "react-router-dom";
 import { EditorCover } from "./cover";
 import { ListEditor } from "./list-editor";
 import { TextEditor } from "./text-editor";
-import { Note } from "@darkwrite/common";
-import { useNotesStore } from "@renderer/context/notes-context";
-import { ActionBar } from "./action-bar";
-import { ScrollArea } from "@renderer/components/ui/scroll-area";
-import { getContents } from "@renderer/lib/api/note";
-import { cn } from "@renderer/lib/utils";
-import { useLocalStore } from "@renderer/context/local-state";
 
 export function EditorRoot(){
     const page = useEditorState((state)=>state.page);
@@ -62,7 +61,6 @@ export function EditorRoot(){
     }, [])
 
     return <ScrollArea className="h-full w-full overflow-y-auto overflow-x-auto">
-        <ActionBar></ActionBar>
         <div className="w-full flex justify-center">
             <div spellCheck={spellcheck} ref={containerRef} className={cn("w-full", sidebarCollapsed && "max-w-[90vw]", !sidebarCollapsed && "max-w-[40vw] sm:max-w-[50vw] md:max-w-[60vw]")}>
                 <EditorCover></EditorCover>

@@ -27,7 +27,7 @@ export function Sidebar(props: SidebarProps){
                 <img src="icon64.png" className="flex-shrink-0 w-5 h-5"></img>
             </Button>
             <div className="flex-grow titlebar spacer"></div>
-            <Button data-testid="button-edit-widgets" size={"icon32"} variant={"ghost"} className="flex-shrink-0" title="Edit sidebar" disabled>
+            <Button data-testid="button-edit-widgets" size={"icon32"} variant={"ghost"} className="flex-shrink-0 hidden" title="Edit sidebar" disabled>
                 <LayoutDashboard width={20} height={20}/>
             </Button>
             <Button data-testid="button-search" size={"icon32"} variant={"ghost"} className="flex-shrink-0" title="Search" onClick={()=>setSearchOpen(true)}>

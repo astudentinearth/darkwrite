@@ -51,7 +51,7 @@ export function FavortiesWidget(){
         await updateMany(updated);
     }
 
-    return <div className={cn("bg-card/75 rounded-[12px] p-1")}>
+    return <div className={cn("bg-view-1 rounded-[12px] p-1")}>
     <Collapsible open={open} onOpenChange={setOpen}>
         <CollapsibleTrigger asChild>
             <div className="flex items-center select-none text-foreground/50 hover:text-foreground transition-colors text-sm p-1">

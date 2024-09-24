@@ -6,7 +6,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 export function NavigationWidget(){
     const navigate = useNavigate();
     const location = useLocation();
-    return <div className="bg-card/75 rounded-[12px] p-1 flex flex-col gap-0.5">
+    return <div className="bg-view-1 rounded-[12px] p-1 flex flex-col gap-0.5">
         <Button onClick={()=>navigate("/")} variant={"ghost"} 
             className={
                 cn("rounded-[8px] hover:bg-secondary/50 text-foreground/75 hover:text-foreground active:bg-secondary/25 transition-colors grid grid-cols-[24px_1fr] select-none p-1 pl-2 h-8 overflow-hidden", 

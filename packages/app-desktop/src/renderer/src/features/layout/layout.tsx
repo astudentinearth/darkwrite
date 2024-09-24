@@ -68,12 +68,14 @@ export function Layout(){
         headerRef.current.style.width = `${headerWidth}px`;
     }
 
-    return <div className="flex [&>div]:flex-shrink-0 w-full h-full bg-view-1">
+    return <div className="flex [&>div]:flex-shrink-0 w-full h-full bg-background">
         <Sidebar collapseCallback={()=>{setSidebarCollapsed(true)}} collapsed={isSidebarCollapsed} width={width} className={cn(isSidebarCollapsed && "hidden")}></Sidebar>
-        <div data-testid="sidebar-resize-handle" onMouseDown={handleMouseDown} className={cn("w-[1px] bg-border h-full flex cursor-ew-resize resize-handle relative", isSidebarCollapsed && "hidden")}></div>
+        <div data-testid="sidebar-resize-handle" onMouseDown={handleMouseDown} className={cn("w-[1px] h-full flex cursor-ew-resize resize-handle relative", isSidebarCollapsed && "hidden")}></div>
         <div className='h-full flex flex-col flex-grow'>
             <Titlebar refObject={headerRef} expandCallback={()=>{setSidebarCollapsed(false)}} isSidebarCollapsed={isSidebarCollapsed}></Titlebar>
-            <Outlet/>
+            <div className="bg-view-1 rounded-tl-[12px] h-full overflow-auto">
+                <Outlet/>
+            </div>
         </div>
     </div>
 }
