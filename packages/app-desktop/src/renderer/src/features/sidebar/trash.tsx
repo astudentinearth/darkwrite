@@ -17,8 +17,8 @@ export function TrashWidget(){
                 <span className="justify-self-start">Trash</span>
             </Button>
         </PopoverTrigger>
-        <PopoverContent side={"right"} className="p-2" sticky="always">
-            <h1>Trash</h1>
+        <PopoverContent side={"right"} className={cn("p-2 rounded-2xl")} sticky="always">
+            <h1 className="font-semibold text-foreground/80 pl-2">Trash</h1>
             <div>
             {trashed.map((note)=><div key={note.id}>
                 <div onClick={()=>{nav(note.id)}} 
