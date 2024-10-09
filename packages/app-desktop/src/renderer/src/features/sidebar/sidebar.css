@@ -2,10 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
-.btn-add{
-    display: none;
+.btn-add {
+  display: none;
 }
 
-.note-item:hover .btn-add{
-    display: flex;
+.note-item:hover .btn-add {
+  display: flex;
 }

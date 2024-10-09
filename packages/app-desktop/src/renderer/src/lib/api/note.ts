@@ -7,66 +7,65 @@ import { getJSON } from "@renderer/features/editor/html-util";
 
 const API = window.api.note; // electron API
 
-export async function createNote(title:string, parent?: string){
-    return await API.create(title, parent);
+export async function createNote(title: string, parent?: string) {
+  return await API.create(title, parent);
 }
 
-export async function updateContents(id: string, content: string){
-    API.setContents(id, content);
+export async function updateContents(id: string, content: string) {
+  API.setContents(id, content);
 }
 
-export async function getContents(id: string){
-    return await API.getContents(id);
+export async function getContents(id: string) {
+  return await API.getContents(id);
 }
 
-export async function deleteNote(id: string){
-    await API.delete(id);
+export async function deleteNote(id: string) {
+  await API.delete(id);
 }
 
-export async function moveNote(sourceID: string, destinationID: string){
-    await API.move(sourceID, destinationID);
+export async function moveNote(sourceID: string, destinationID: string) {
+  await API.move(sourceID, destinationID);
 }
 
-export async function updateNote(data: Partial<Note>){
-    if(!data.id) return;
-    await API.update(data);
+export async function updateNote(data: Partial<Note>) {
+  if (!data.id) return;
+  await API.update(data);
 }
 
-
-export async function getNotes(){
-    return await API.getAll();
+export async function getNotes() {
+  return await API.getAll();
 }
 
-export async function moveToTrash(id: string){
-    await API.setTrashStatus(id, true);
+export async function moveToTrash(id: string) {
+  await API.setTrashStatus(id, true);
 }
 
-export async function restoreFromTrash(id:string){
-    await API.setTrashStatus(id, false);
+export async function restoreFromTrash(id: string) {
+  await API.setTrashStatus(id, false);
 }
 
-export async function getNote(id:string){
-    return await API.getNote(id);
+export async function getNote(id: string) {
+  return await API.getNote(id);
 }
 
-export async function saveAll(notes: Note[]){
-    await API.saveAll(notes);
+export async function saveAll(notes: Note[]) {
+  await API.saveAll(notes);
 }
 
-export async function exportHTML(id: string){
-    const contentStr = await getContents(id);
-    const parsed = attempt(()=>JSON.parse(contentStr));
-    if(parsed instanceof Error) return;
-    if("content" in parsed){
-        const output = generateHTML(parsed.content, [...defaultExtensions]); 
-        const note = useNotesStore.getState().getOne(id);
-        if(!note) return;
-        await API.export(note.title, output, "html");
-    }
+export async function exportHTML(id: string) {
+  const contentStr = await getContents(id);
+  const parsed = attempt(() => JSON.parse(contentStr));
+  if (parsed instanceof Error) return;
+  if ("content" in parsed) {
+    const output = generateHTML(parsed.content, [...defaultExtensions]);
+    const note = useNotesStore.getState().getOne(id);
+    if (!note) return;
+    await API.export(note.title, output, "html");
+  }
 }
 
-export async function importHTML(){
-    const html = await API.importHTML();
-    if(html==="") return "";
-    else return html;
+export async function importHTML() {
+  const html = await API.importHTML();
+  if (html === "") return "";
+  else return html;
 }

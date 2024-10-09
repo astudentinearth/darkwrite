@@ -11,72 +11,93 @@ import { EditorCover } from "./cover";
 import { ListEditor } from "./list-editor";
 import { TextEditor } from "./text-editor";
 
-export function EditorRoot(){
-    const page = useEditorState((state)=>state.page);
-    const setPage = useEditorState((state)=>state.setPage)
-    const setID = useEditorState((state)=>state.setID);
-    const notes = useNotesStore((state)=>state.notes);
-    const spellcheck = useLocalStore((s)=>s.useSpellcheck);
-    //const id = useEditorState((state)=>state.id);
-    const getOne = useNotesStore((state)=>state.getOne)
-    const [params] = useSearchParams();
-    const value = useEditorState((s)=>s.content);
-    const setValue = useEditorState((s)=>s.setContent);
-    const setCustomizations = useEditorState((s)=>s.setCustomzations);
-    const forceSave = useEditorState((state)=>state.forceSave);
-    const fontStyle = useEditorState((state)=>state.customizations.font);
-    const customFont = useEditorState((state)=>state.customizations.customFont);
+export function EditorRoot() {
+  const page = useEditorState((state) => state.page);
+  const setPage = useEditorState((state) => state.setPage);
+  const setID = useEditorState((state) => state.setID);
+  const notes = useNotesStore((state) => state.notes);
+  const spellcheck = useLocalStore((s) => s.useSpellcheck);
+  //const id = useEditorState((state)=>state.id);
+  const getOne = useNotesStore((state) => state.getOne);
+  const [params] = useSearchParams();
+  const value = useEditorState((s) => s.content);
+  const setValue = useEditorState((s) => s.setContent);
+  const setCustomizations = useEditorState((s) => s.setCustomzations);
+  const forceSave = useEditorState((state) => state.forceSave);
+  const fontStyle = useEditorState((state) => state.customizations.font);
+  const customFont = useEditorState((state) => state.customizations.customFont);
 
-    const sidebarCollapsed = useLocalStore((s)=>s.isSidebarCollapsed);
+  const sidebarCollapsed = useLocalStore((s) => s.isSidebarCollapsed);
 
-    const containerRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
-    useEffect(()=>{
-        const id = params.get("id");
-        if(!id) {setPage({} as Note); setID(""); return}
-        const result = getOne(id);
-        if(!result) return;
-        setPage(result);
-        setID(id);
-        const load = async ()=>{
-            const data_str = await getContents(id);
-            try {
-                const data = JSON.parse(data_str);
-                const content = data["content"] ?? {};
-                const customizations = data["customizations"] ?? {};
-                setValue(content);
-                setCustomizations(customizations);
-            } catch (error) {
-                setValue({});
-                setCustomizations({});
-            }
-        }
-        load();
-    },[params, setPage, setID, getOne, notes])
+  useEffect(() => {
+    const id = params.get("id");
+    if (!id) {
+      setPage({} as Note);
+      setID("");
+      return;
+    }
+    const result = getOne(id);
+    if (!result) return;
+    setPage(result);
+    setID(id);
+    const load = async () => {
+      const data_str = await getContents(id);
+      try {
+        const data = JSON.parse(data_str);
+        const content = data["content"] ?? {};
+        const customizations = data["customizations"] ?? {};
+        setValue(content);
+        setCustomizations(customizations);
+      } catch (error) {
+        setValue({});
+        setCustomizations({});
+      }
+    };
+    load();
+  }, [params, setPage, setID, getOne, notes]);
 
-    useEffect(()=>{
-        document.documentElement.style.setProperty("--dw-custom-font-name", customFont ?? "");
-    }, [customFont]);
+  useEffect(() => {
+    document.documentElement.style.setProperty(
+      "--dw-custom-font-name",
+      customFont ?? "",
+    );
+  }, [customFont]);
 
-    useEffect(()=>{
-        const saveBeforeQuit = ()=>{
-            forceSave();
-        }
-        window.addEventListener("beforeunload", saveBeforeQuit);
-        return ()=>window.removeEventListener("beforeunload", saveBeforeQuit);
-    }, [])
+  useEffect(() => {
+    const saveBeforeQuit = () => {
+      forceSave();
+    };
+    window.addEventListener("beforeunload", saveBeforeQuit);
+    return () => window.removeEventListener("beforeunload", saveBeforeQuit);
+  }, []);
 
-    return <ScrollArea className="h-full w-full overflow-y-auto overflow-x-auto">
-        <div className="w-full flex justify-center">
-            <div spellCheck={spellcheck} ref={containerRef} className={cn("w-full", sidebarCollapsed && "max-w-[90vw]", !sidebarCollapsed && "max-w-[40vw] sm:max-w-[50vw] md:max-w-[60vw]", FontStyleClassNames[fontStyle ?? "sans"])}>
-                <EditorCover></EditorCover>
-                {page.id !== "" ?
-                        (
-                            page.todoListID == null ? <TextEditor initialValue={value} onChange={setValue}></TextEditor> : <ListEditor></ListEditor>
-                        ) :
-                        <span>Page not found</span>
-                }
-            </div>
+  return (
+    <ScrollArea className="h-full w-full overflow-y-auto overflow-x-auto">
+      <div className="w-full flex justify-center">
+        <div
+          spellCheck={spellcheck}
+          ref={containerRef}
+          className={cn(
+            "w-full",
+            sidebarCollapsed && "max-w-[90vw]",
+            !sidebarCollapsed && "max-w-[40vw] sm:max-w-[50vw] md:max-w-[60vw]",
+            FontStyleClassNames[fontStyle ?? "sans"],
+          )}
+        >
+          <EditorCover></EditorCover>
+          {page.id !== "" ? (
+            page.todoListID == null ? (
+              <TextEditor initialValue={value} onChange={setValue}></TextEditor>
+            ) : (
+              <ListEditor></ListEditor>
+            )
+          ) : (
+            <span>Page not found</span>
+          )}
         </div>
+      </div>
     </ScrollArea>
+  );
 }

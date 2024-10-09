@@ -1,6 +1,3 @@
-
-export function ListEditor(){
-    return <div>
-        todo list editor
-    </div>
+export function ListEditor() {
+  return <div>todo list editor</div>;
 }

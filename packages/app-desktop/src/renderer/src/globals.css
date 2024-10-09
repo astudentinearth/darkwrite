@@ -42,27 +42,29 @@
 
     /* generic fonts until its loaded from settings */
     --darkwrite-sans: "Segoe UI", "Noto Sans", "Roboto", sans-serif;
-    --darkwrite-serif: "Times New Roman", "Noto Serif", "Liberation Serif", serif;
-    --darkwrite-mono: "Cascadia Code", "Courier New", "Liberation Mono", monospace;
+    --darkwrite-serif: "Times New Roman", "Noto Serif", "Liberation Serif",
+      serif;
+    --darkwrite-mono: "Cascadia Code", "Courier New", "Liberation Mono",
+      monospace;
   }
 
   :root .dark {
     --border: 0 0% 26%;
   }
 
-  .darkwrite-sans{
+  .darkwrite-sans {
     font-family: "Segoe UI", "Noto Sans", "Roboto", "Cantarell", sans-serif;
   }
 
-  .darkwrite-serif{
+  .darkwrite-serif {
     font-family: "Times New Roman", "Noto Serif", "Liberation Serif", serif;
   }
 
-  .darkwrite-mono{
+  .darkwrite-mono {
     font-family: "Cascadia Code", "Courier New", "Liberation Mono", monospace;
   }
 
-  .darkwrite-custom-font{
+  .darkwrite-custom-font {
     font-family: var(--dw-custom-font-name);
   }
 }
@@ -78,7 +80,6 @@
     --novel-highlight-orange: #faebdd;
     --novel-highlight-pink: #faf1f5;
     --novel-highlight-gray: #f1f1ef;
-
   }
 
   .dark {
@@ -91,7 +92,6 @@
     --novel-highlight-orange: #5c3a1a;
     --novel-highlight-pink: #5c1a3a;
     --novel-highlight-gray: #3a3a3a;
-
   }
 }
 
@@ -103,45 +103,48 @@
   body {
     @apply bg-background text-foreground w-full h-full m-0;
   }
-  #root{
+  #root {
     @apply w-full h-full m-0 p-0;
   }
-  .titlebar{
+  .titlebar {
     -webkit-app-region: drag;
     -webkit-user-select: none;
     user-select: none;
   }
-  .titlebar *{
+  .titlebar * {
     -webkit-app-region: no-drag;
     -webkit-user-select: auto;
     user-select: auto;
   }
-  .titlebar .spacer{
+  .titlebar .spacer {
     -webkit-app-region: drag !important;
   }
-  .border-default{
+  .border-default {
     border: 1px solid hsl(var(--border));
   }
-  .dw-border{
+  .dw-border {
     @apply border-border;
   }
 }
 
-html, body, #root, #root>div{
+html,
+body,
+#root,
+#root > div {
   height: 100%;
   width: 100%;
   overflow-y: hidden;
 }
 
-.resize-handle{
+.resize-handle {
   pointer-events: none;
   user-select: none;
   transition-property: filter;
   transition-duration: 250ms;
 }
 
-.resize-handle::before{
-  content: '';
+.resize-handle::before {
+  content: "";
   height: 100%;
   position: absolute;
   left: -4px;
@@ -152,11 +155,10 @@ html, body, #root, #root>div{
   user-select: none;
 }
 
-.resize-handle:hover{
+.resize-handle:hover {
   filter: brightness(150%);
 }
 
-.resize-handle:active{
+.resize-handle:active {
   filter: brightness(200%);
 }
-

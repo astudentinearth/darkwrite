@@ -91,7 +91,6 @@ ul[data-type="taskList"] li > label input[type="checkbox"] {
   transform: translateY(10%);
   &:hover {
     background-color: hsl(var(--secondary));
-    
   }
 
   &:active {
@@ -109,7 +108,7 @@ ul[data-type="taskList"] li > label input[type="checkbox"] {
     background-size: 100%;
   }
 
-  &:checked{
+  &:checked {
     background-color: hsl(var(--primary));
     border: 1px solid hsl(var(--primary));
   }
@@ -232,11 +231,11 @@ mark[style] > strong {
   width: 0.3em;
 }
 
-#slash-command::-webkit-scrollbar-track{
-  overflow:hidden;
+#slash-command::-webkit-scrollbar-track {
+  overflow: hidden;
 }
 
-#slash-command::-webkit-scrollbar-thumb{
+#slash-command::-webkit-scrollbar-thumb {
   background-color: hsl(var(--secondary));
   border-radius: 0.3em;
 }
@@ -245,23 +244,23 @@ mark[style] > strong {
   width: 0.3em;
 }
 
-.scrollbar::-webkit-scrollbar-track{
-  overflow:hidden;
+.scrollbar::-webkit-scrollbar-track {
+  overflow: hidden;
 }
 
-.scrollbar::-webkit-scrollbar-thumb{
+.scrollbar::-webkit-scrollbar-thumb {
   background-color: hsl(var(--secondary));
   border-radius: 0.3em;
 }
 
-#slash-command{
+#slash-command {
   clip-path: inset(0 round 12px);
 }
 
 @keyframes slide-up {
-  0% { 
+  0% {
     transform: translateY(10%);
-    opacity: 0; 
+    opacity: 0;
   }
   100% {
     transform: translateY(0%);
@@ -269,7 +268,7 @@ mark[style] > strong {
   }
 }
 
-.tippy-box[data-animation='slide'][data-state='visible']{
+.tippy-box[data-animation="slide"][data-state="visible"] {
   opacity: 0;
   animation-name: slide-up;
   animation-duration: 0.2s;
@@ -277,29 +276,29 @@ mark[style] > strong {
   opacity: 1;
 }
 
-.ProseMirror h1{
+.ProseMirror h1 {
   @apply font-bold text-3xl m-0 mt-4;
 }
 
-.ProseMirror h2{
+.ProseMirror h2 {
   @apply font-bold text-2xl m-0 mt-4;
 }
 
-.ProseMirror h3{
+.ProseMirror h3 {
   @apply font-bold text-lg m-0 mt-4;
 }
-.ProseMirror  h4{
+.ProseMirror h4 {
   @apply font-semibold text-lg m-0 mt-4;
 }
 
-.ProseMirror hr{
+.ProseMirror hr {
   @apply mb-2 opacity-30;
 }
 
-.ProseMirror p{
+.ProseMirror p {
   @apply my-1;
 }
 
-.ProseMirror .react-renderer{
+.ProseMirror .react-renderer {
   background: transparent !important;
 }

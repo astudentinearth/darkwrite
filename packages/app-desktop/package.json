@@ -102,6 +102,7 @@
     "memfs": "^4.9.3",
     "postcss": "^8.4.38",
     "prebuild-install": "^7.1.2",
+    "prettier": "3.3.3",
     "tailwindcss": "^3.4.4",
     "ts-node": "^10.9.2",
     "typescript": "^5.2.2",

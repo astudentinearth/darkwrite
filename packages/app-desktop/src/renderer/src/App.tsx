@@ -1,6 +1,6 @@
-import {Layout} from "@renderer/features/layout"
-import { useSettingsStore } from "./context/settings-store"
-import { useEffect } from "react"
+import { Layout } from "@renderer/features/layout";
+import { useSettingsStore } from "./context/settings-store";
+import { useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { HomePage } from "./features/home";
 import { EditorRoot } from "./features/editor";
@@ -8,26 +8,26 @@ import { SettingsPage } from "./features/settings";
 
 function App() {
   const store = useSettingsStore();
-  useEffect(()=>{
-    window.api.settings.load().then((prefs)=>{
-      if(prefs == null) throw new Error("Could not load user settings");
+  useEffect(() => {
+    window.api.settings.load().then((prefs) => {
+      if (prefs == null) throw new Error("Could not load user settings");
       else store.overwrite(prefs);
-    })
+    });
   }, []);
 
   return (
-    <div className='w-full h-full overflow-hidden'>
+    <div className="w-full h-full overflow-hidden">
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Layout/>}>
-            <Route index element={<HomePage/>}></Route>
-            <Route path="page" element={<EditorRoot/>}></Route>
-            <Route path="settings" element={<SettingsPage/>}></Route>
+          <Route path="/" element={<Layout />}>
+            <Route index element={<HomePage />}></Route>
+            <Route path="page" element={<EditorRoot />}></Route>
+            <Route path="settings" element={<SettingsPage />}></Route>
           </Route>
         </Routes>
       </BrowserRouter>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
