@@ -159,3 +159,4 @@ html, body, #root, #root>div{
 .resize-handle:active{
   filter: brightness(200%);
 }
+
