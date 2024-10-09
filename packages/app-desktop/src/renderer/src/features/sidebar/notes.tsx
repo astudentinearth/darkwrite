@@ -43,7 +43,7 @@ export function NotesWidget(){
     }
     const handleDragLeave = ()=>{setDragOver(false)};
     const handleDragEnd = ()=>{setDragOver(false)};
-    return <div className={cn("bg-view-1 rounded-[12px] p-1", dragOver && "bg-card/90")}>
+    return <div className={cn("rounded-[12px]", dragOver && "bg-card/90")}>
         <Collapsible onDrop={handleDrop} onDragEnd={handleDragEnd} onDragLeave={handleDragLeave} onDragOver={handleDragOver} open={open} onOpenChange={setOpen}>
             <CollapsibleTrigger asChild>
                 <div className="flex items-center select-none text-foreground/50 hover:text-foreground transition-colors text-sm p-1">

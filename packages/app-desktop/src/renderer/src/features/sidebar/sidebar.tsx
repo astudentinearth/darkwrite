@@ -30,17 +30,17 @@ export function Sidebar(props: SidebarProps){
             <Button data-testid="button-edit-widgets" size={"icon32"} variant={"ghost"} className="flex-shrink-0 hidden" title="Edit sidebar" disabled>
                 <LayoutDashboard width={20} height={20}/>
             </Button>
-            <Button data-testid="button-search" size={"icon32"} variant={"ghost"} className="flex-shrink-0" title="Search" onClick={()=>setSearchOpen(true)}>
+            <Button data-testid="button-search" size={"icon32"} variant={"ghost"} className="flex-shrink-0 opacity-60 hover:opacity-100 transition-[background,opacity]" title="Search" onClick={()=>setSearchOpen(true)}>
                 <Search width={20} height={20}/>
             </Button>
-            <Button data-testid="button-collapse-sidebar" size={"icon32"} variant={"ghost"} className="flex-shrink-0" onClick={collapseCallback} title="Hide sidebar">
+            <Button data-testid="button-collapse-sidebar" size={"icon32"} variant={"ghost"} className="flex-shrink-0 opacity-60 hover:opacity-100 transition-[background,opacity]" onClick={collapseCallback} title="Hide sidebar">
                 <PanelRightOpen width={20} height={20}/>
             </Button>
         </div>
         <ScrollArea className="h-full px-2 py-0">
             <div className="flex gap-2 flex-col mb-2">
-                <NavigationWidget/>
                 <CreatePageButton/>
+                <NavigationWidget/>
                 <FavortiesWidget/>
                 <NotesWidget/>
                 <TrashWidget/>

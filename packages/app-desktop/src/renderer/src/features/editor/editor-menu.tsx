@@ -15,9 +15,9 @@ export function EditorMenu(){
     const activeNote = useEditorState((s)=>s.id);
     const checker = useLocalStore((s)=>s.useSpellcheck);
     const setCheck = useLocalStore((s)=>s.setSpellcheck);
-    return <DropdownMenu>
+    return <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
-            <Button className={"rounded-xl p-0 size-8"} variant={"ghost"}>
+            <Button className={"opacity-60 hover:opacity-100 transition-[background,opacity]"} size={"icon32"} variant={"ghost"}>
                 <Menu size={20}/>
             </Button>
         </DropdownMenuTrigger>

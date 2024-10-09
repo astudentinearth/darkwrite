@@ -16,7 +16,7 @@ export function FavoriteActionButton(){
         setTargetNote(notes.find((n)=>n.id===id))
     }, [notes, id])
 
-    return <Button onClick={()=>update({id, isFavorite: !targetNote?.isFavorite})} className={cn("rounded-xl p-0 size-8")} variant={"ghost"}>
+    return <Button onClick={()=>update({id, isFavorite: !targetNote?.isFavorite})} size={"icon32"} className={cn("p-0 opacity-70 hover:opacity-100 transition-[background,opacity]")} variant={"ghost"}>
         <Star size={20} className={cn(targetNote?.isFavorite && "text-yellow-300 fill-yellow-300")}/>
     </Button>
 }

@@ -130,6 +130,7 @@
 html, body, #root, #root>div{
   height: 100%;
   width: 100%;
+  overflow-y: hidden;
 }
 
 .resize-handle{
