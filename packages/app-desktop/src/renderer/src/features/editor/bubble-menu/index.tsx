@@ -1,8 +1,7 @@
 import { EditorBubble } from "novel";
+import { useState } from "react";
 import { FormattingButtons } from "./formatting";
 import { HeadingSelector } from "./heading";
-import { useState } from "react";
-import { Separator } from "@renderer/components/ui/separator";
 
 export default function Bubble() {
   const [headingOpen, setHeadingOpen] = useState(false);

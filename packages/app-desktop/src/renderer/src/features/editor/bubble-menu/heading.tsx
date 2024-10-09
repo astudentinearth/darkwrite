@@ -1,10 +1,9 @@
+import { Button } from "@renderer/components/ui/button";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@renderer/components/ui/popover";
-import { BubbleButton } from "./bubble-button";
-import { useEditor } from "novel";
 import {
   ChevronDown,
   Heading1,
@@ -12,7 +11,7 @@ import {
   Heading3,
   Heading4,
 } from "lucide-react";
-import { Button } from "@renderer/components/ui/button";
+import { useEditor } from "novel";
 import { Dispatch, ReactNode, SetStateAction } from "react";
 
 export function HeadingSelector(props: {

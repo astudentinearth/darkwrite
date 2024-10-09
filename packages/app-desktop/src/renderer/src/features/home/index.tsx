@@ -1,4 +1,3 @@
-import { Note } from "@darkwrite/common";
 import { Button } from "@renderer/components/ui/button";
 import { useLocalStore } from "@renderer/context/local-state";
 import { createNewNote, useNotesStore } from "@renderer/context/notes-context";

@@ -1,14 +1,14 @@
-import "reflect-metadata";
+import { is } from "@electron-toolkit/utils";
 import { app, BrowserWindow, shell } from "electron";
+import log from "electron-log/main.js";
 import { createRequire } from "node:module";
 import { join } from "node:path";
-import { is } from "@electron-toolkit/utils";
+import "reflect-metadata";
 import icon from "../../resources/icon256.png?asset";
 import { readUserPrefs } from "./api/settings";
-import log from "electron-log/main.js";
-import { initAppMenu } from "./menu";
 import { AppDataSource } from "./db";
 import "./ipc";
+import { initAppMenu } from "./menu";
 
 log.initialize();
 const require = createRequire(import.meta.url);

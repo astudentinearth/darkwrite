@@ -1,9 +1,8 @@
 import { Note } from "@darkwrite/common";
-import { attempt } from "lodash";
-import { generateHTML } from "@tiptap/html";
-import { defaultExtensions } from "@renderer/features/editor/extensions/extensions";
 import { useNotesStore } from "@renderer/context/notes-context";
-import { getJSON } from "@renderer/features/editor/html-util";
+import { defaultExtensions } from "@renderer/features/editor/extensions/extensions";
+import { generateHTML } from "@tiptap/html";
+import { attempt } from "lodash";
 
 const API = window.api.note; // electron API
 
