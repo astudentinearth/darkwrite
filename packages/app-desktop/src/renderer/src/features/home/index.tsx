@@ -15,7 +15,7 @@ export function HomePage() {
   const sorted = notes.toSorted(
     (a, b) => b.modified.valueOf() - a.modified.valueOf(),
   );
-  const recents = notes.toSpliced(5);
+  const recents = sorted.toSpliced(5);
 
   const isSidebarCollapsed = useLocalStore((state) => state.isSidebarCollapsed);
 
