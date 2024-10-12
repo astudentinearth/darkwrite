@@ -28,8 +28,8 @@ const debouncedSave = debounce(
     id: string,
     data: { content: JSONContent; customizations: NoteCustomizations },
   ) => {
-    const note = useNotesStore.getState().getOne(id);
-    useNotesStore.getState().update({ ...note, modified: new Date() });
+    //const note = useNotesStore.getState().getOne(id);
+    //useNotesStore.getState().update({ ...note, modified: new Date() });
     updateContents(id, JSON.stringify(data));
   },
   200,
