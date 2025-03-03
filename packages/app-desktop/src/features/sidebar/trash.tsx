@@ -1,30 +1,46 @@
-import { Button,
+import {
+  Button,
   Popover,
   PopoverContent,
   PopoverTrigger,
-  Input
- } from "@darkwrite/ui";
+  Input,
+} from "@darkwrite/ui";
 import { ScrollArea } from "@renderer/components/ui/scroll-area";
 import { useNotesQuery, useUpdateNoteMutation } from "@renderer/hooks/query";
 import { useDeleteNoteMutation } from "@renderer/hooks/query/use-delete-note-mutation";
 import { useNavigateToNote } from "@renderer/hooks/use-navigate-to-note";
 import { cn, getNoteIcon } from "@renderer/lib/utils";
 import { Trash, Undo } from "lucide-react";
-import { useState } from "react";
+import { DragEvent, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 export function TrashWidget() {
   const notes = useNotesQuery().data;
   const update = useUpdateNoteMutation().mutate;
+
   const restore = (id: string) => update({ id, isTrashed: false });
+  const trash = (id: string) => update({ id, isTrashed: true });
+
   const del = useDeleteNoteMutation().mutate;
   const [query, setQuery] = useState<string>("");
   let trashed = notes?.filter((n) => n.isTrashed);
-  if(query && trashed){
-    trashed = trashed.filter((n)=>n.title.includes(query));
+  if (query && trashed) {
+    trashed = trashed.filter((n) => n.title.includes(query));
   }
   const nav = useNavigateToNote();
   const { t } = useTranslation();
+
+  const [dragOver, setDragOver] = useState(false);
+
+  const handleDrop = (event: DragEvent<HTMLElement>) => {
+    console.log("Dropping into trash");
+    event.stopPropagation();
+    event.preventDefault();
+    const _id = event.dataTransfer.getData("note_id");
+    console.log(_id);
+    trash(_id);
+    setDragOver(false);
+  };
 
   return (
     <Popover>
@@ -33,7 +49,18 @@ export function TrashWidget() {
           variant={"ghost"}
           className={cn(
             "rounded-[8px] gap-0 hover:bg-secondary/50 text-foreground/60 hover:text-foreground active:bg-secondary/25 transition-colors grid grid-cols-[24px_1fr] select-none p-1 pl-2 h-8 overflow-hidden",
+            dragOver && "bg-primary/20",
           )}
+          //onDragEnter={() => setDragOver(true)}
+          onDragLeave={() => setDragOver(false)}
+          onDragOver={(e) => {
+            if(e.dataTransfer.getData("note_id")) {
+              e.preventDefault();
+              setDragOver(true);
+            }
+          }}
+          onDrop={handleDrop}
+          onDragEnd={() => setDragOver(false)}
         >
           <Trash size={16} />
           <span className="justify-self-start">
@@ -47,7 +74,12 @@ export function TrashWidget() {
         sticky="always"
       >
         <div className="w-full p-2">
-          <Input value={query} onChange={(e)=>setQuery(e.target.value)} className="rounded-lg bg-view-2 text-sm p-2 h-fit" placeholder="Search in trash"/>
+          <Input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            className="rounded-lg bg-view-2 text-sm p-2 h-fit"
+            placeholder="Search in trash"
+          />
         </div>
         <ScrollArea className="overflow-y-auto p-2 grow">
           <div className="">

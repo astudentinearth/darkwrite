@@ -7,6 +7,7 @@
 - Added back and forward buttons
 - Added wide pages
 - Heading 4 is now in slash command menu (it wasn't there even though it existed)
+- You can now drag notes into the trash
 
 ## ✨ Improvements and fixes
 
