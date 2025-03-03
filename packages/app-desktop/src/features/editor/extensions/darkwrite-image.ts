@@ -85,7 +85,7 @@ export const DarkwriteImage = TiptapImage.extend({
           },
           handleDrop(view, event) {
             console.log(event.target);
-            if (event.target && "nodeType" in event.target) return;
+            //if (event.target && "nodeType" in event.target) return;
             if (!event.dataTransfer || event.dataTransfer.files.length < 1)
               return;
             for (const file of event.dataTransfer.files) {

@@ -17,6 +17,7 @@
 - Fix incorrect UI font issue in some elements when using system default
 - Translated more UI elements, notably the slash command menu
   - All command descriptions have been rewritten for both English and Turkish.
+- Fixed image drop not working
 
 ## 🛠️ Technical changes
 
