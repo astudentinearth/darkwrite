@@ -54,10 +54,8 @@ export function TrashWidget() {
           //onDragEnter={() => setDragOver(true)}
           onDragLeave={() => setDragOver(false)}
           onDragOver={(e) => {
-            if(e.dataTransfer.getData("note_id")) {
-              e.preventDefault();
-              setDragOver(true);
-            }
+            e.preventDefault();
+            setDragOver(true);
           }}
           onDrop={handleDrop}
           onDragEnd={() => setDragOver(false)}
