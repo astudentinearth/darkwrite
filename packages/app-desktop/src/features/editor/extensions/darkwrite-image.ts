@@ -85,11 +85,13 @@ export const DarkwriteImage = TiptapImage.extend({
           },
           handleDrop(view, event) {
             console.log(event.target);
-            //if (event.target && "nodeType" in event.target) return;
+            console.log(event.dataTransfer)
             if (!event.dataTransfer || event.dataTransfer.files.length < 1)
               return;
             for (const file of event.dataTransfer.files) {
               if (!isImageFile(file)) continue;
+              event.preventDefault();
+              //if (event.target && "nodeType" in event.target) return;
               const coordinates = view.posAtCoords({
                 left: event.clientX,
                 top: event.clientY,

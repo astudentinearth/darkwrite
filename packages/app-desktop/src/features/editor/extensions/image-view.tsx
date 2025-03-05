@@ -26,7 +26,7 @@ export const DarkwriteImageView = (props: DarkwriteImageViewProps) => {
         {(embedId == null || source === "") ? (
           <span className="opacity-50">Loading image...</span>
         ) : (
-          <img data-drag-handle="" src={source} />
+          <img draggable={false} data-drag-handle="" src={source} />
         )}
       </div>
     </NodeViewWrapper>
