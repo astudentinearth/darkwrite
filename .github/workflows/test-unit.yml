@@ -21,7 +21,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
     name: unit tests and type checking
-    continue-on-error: true
     steps:
       - name: Install node
         uses: actions/setup-node@v4
@@ -45,12 +44,14 @@ jobs:
 
       - name: Lint
         run: yarn lint
-        continue-on-error: true
+        if: always()
 
       - name: Check types
         run: yarn typecheck
+        if: always()
 
       - name: Run tests
         run: yarn test
+        if: always()
 
 
