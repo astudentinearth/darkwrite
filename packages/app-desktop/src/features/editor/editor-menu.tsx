@@ -76,7 +76,7 @@ export function EditorMenu() {
               {t("export")}
             </DropdownMenuSubTrigger>
             <DropdownMenuSubContent className="bg-card">
-              <DropdownMenuItem onSelect={() => {
+              <DropdownMenuItem disabled className="hidden" onSelect={() => {
               if (!activeNote.data) return;
               _export(activeNote.data, "json");
             }}><FileText size={18}/>{t("jsonExport")}</DropdownMenuItem>
