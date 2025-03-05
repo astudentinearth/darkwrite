@@ -1,8 +1,7 @@
-# next
+# 0.5.0-alpha.1
 
 ## 🌟 Features
 
-- Darkwrite now runs on your web browser (with the exception of a few features)
 - Added trash search
 - Added back and forward buttons
 - Added wide pages
