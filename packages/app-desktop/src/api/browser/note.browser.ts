@@ -32,10 +32,13 @@ export class BrowserNoteAPI implements INoteAPI {
     const duplicate = await this._db.duplicateNote(id);
     return duplicate;
   }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async exportHTML(note: Note, content: string) {
     //TODO
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async exportJSON(doc: StandaloneDarkwriteDocument){
     //TODO
   }

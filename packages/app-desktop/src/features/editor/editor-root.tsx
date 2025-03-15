@@ -3,38 +3,34 @@ import {
   setEditorCustomizations,
   useEditorState,
 } from "@renderer/context/editor-state";
+import { useLocalStore } from "@renderer/context/local-state";
 import { useUpdateNoteMutation } from "@renderer/hooks/query";
 import {
-  debouncedSave,
-  useNoteContentsMutation,
+  debouncedSave
 } from "@renderer/hooks/query/use-note-contents-mutation";
 import { useCenteredLayout } from "@renderer/hooks/use-centered-layout";
 import { useNoteEditor } from "@renderer/hooks/use-note-editor";
 import { cn } from "@renderer/lib/utils";
 import { JSONContent } from "novel";
 import React, { useEffect, useRef } from "react";
-import { useDebounce } from "use-debounce";
 import { EditorCover } from "./cover";
-import { TextEditor } from "./text-editor";
 import { CoverImage } from "./cover-image";
-import { WordCounter } from "./word-count";
-import { useLocalStore } from "@renderer/context/local-state";
+import "./css/command.css";
+import "./css/drag-handle.css";
 import "./css/editor.css";
 import "./css/image.css";
-import "./css/drag-handle.css";
-import "./css/command.css";
 import "./css/lists.css";
 import "./css/text.css";
+import { TextEditor } from "./text-editor";
+import { WordCounter } from "./word-count";
 
 export function EditorRoot() {
   const { note, isFetching, isError, content, customizations, spellcheck } =
     useNoteEditor();
   const update = useUpdateNoteMutation().mutate;
-  const updateContent = useNoteContentsMutation(note?.id ?? "").mutate;
   const value = useEditorState((s) => s.content);
   const setValue = useEditorState((s) => s.setContent);
   const _customizations = useEditorState((s) => s.customizations);
-  const [debouncedValue] = useDebounce(value, 200);
   const rootContainerRef = useRef<HTMLDivElement>(null);
   const editorWidth = useCenteredLayout(_customizations.widePage ? 0 : 984);
   const wordCountEnabled = useLocalStore((s) => s.alwaysShowWordCount);

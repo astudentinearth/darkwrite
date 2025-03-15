@@ -36,9 +36,7 @@ export interface IEmbedAPI {
   resolveSourceURL: (id: string) => Promise<string>
 }
 
-export interface IThemeAPI {
 
-}
 
 export interface IBackupAPI {
   backupData: () => Promise<void>
