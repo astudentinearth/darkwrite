@@ -25,7 +25,7 @@ export function TrashWidget() {
   const [query, setQuery] = useState<string>("");
   let trashed = notes?.filter((n) => n.isTrashed);
   if (query && trashed) {
-    trashed = trashed.filter((n) => n.title.includes(query));
+    trashed = trashed.filter((n) => n.title.toLocaleLowerCase().includes(query.toLocaleLowerCase()));
   }
   const nav = useNavigateToNote();
   const { t } = useTranslation();
