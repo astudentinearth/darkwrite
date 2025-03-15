@@ -1,3 +1,4 @@
+import { useLocalStore } from "@renderer/context/local-state";
 import {
   ChangeEvent,
   ClipboardEvent,
@@ -28,6 +29,8 @@ export interface DynamicTextareaProps
  */
 export default function DynamicTextarea(props: DynamicTextareaProps) {
   const ref = useRef<HTMLTextAreaElement>(null);
+  const sidebarWidth = useLocalStore(s => s.sidebarWidth);
+  const sidebarState = useLocalStore(s => s.isSidebarCollapsed);
 
   useEffect(() => {
     adjustHeight();
@@ -42,12 +45,16 @@ export default function DynamicTextarea(props: DynamicTextareaProps) {
 
   useEffect(() => {
     adjustHeight();
-  }, [props.value]);
+  }, [props.value, sidebarWidth, sidebarState]);
+
 
   const adjustHeight = () => {
+    console.log("fixing height")
     if (!ref.current) return;
     ref.current.style.height = "auto";
     ref.current.style.height = `${ref.current.scrollHeight + 2}px`;
+    console.log("fixed height")
+
   };
 
   const handleChange = () => {
@@ -73,12 +80,16 @@ export default function DynamicTextarea(props: DynamicTextareaProps) {
     handleChange();
   };
 
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { preventNewline, newLineCallback, ...attributes } = props;
+
   return (
     <textarea
       ref={ref}
       rows={1}
       cols={1}
-      {...props}
+      {...attributes}
       onChange={handleChange}
       onPaste={handlePaste}
     ></textarea>
