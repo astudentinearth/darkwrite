@@ -99,10 +99,9 @@ export function EditorCover(props: {
       onMouseOver={() => setMouseOver(true)}
       onMouseOut={() => setMouseOver(false)}
       className={cn(
-        "shrink-0 flex flex-col w-full p-4 pb-2 px-20 gap-2",
+        "shrink-0 flex flex-col w-full p-4 pb-2 px-20 gap-2 max-w-(--editor-max-width)",
         !note.isTrashed && note.icon !== "" && props.hasCover && "mt-[-50px]",
         !note.isTrashed && note.icon !== "" && !props.hasCover && "pt-16",
-        !props.wide && "max-w-[984px]"
       )}
     >
       {note.isTrashed && (
