@@ -14,6 +14,7 @@ import {
 import { BackupAPI, HTMLExporterAPI } from "@main/api/backup.electron";
 import { EmbedAPI } from "@main/api/embed.electron";
 import { showAppMenu } from "@main/menu";
+import { Updater } from "../api/update.electron";
 
 export const DarkwriteElectronAPI = {
   note: {
@@ -85,6 +86,7 @@ export const DarkwriteElectronAPI = {
     save: new IPCHandler(false, SettingsAPI.writeUserPrefs),
     /** @returns client specific information such as app and nodejs version.  */
     getClientInfo: new IPCHandler(false, SettingsAPI.getAppInfo),
+    checkUpdate: new IPCHandler(false, Updater.checkUpdate)
   },
   theme: {
     /** Prompts the user to choose a theme file and imports it if the theme is valid. */

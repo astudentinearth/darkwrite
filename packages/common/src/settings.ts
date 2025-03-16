@@ -100,3 +100,8 @@ export interface DarkwriteDesktopClientInfo {
   nodeVersion: string;
   electronVersion: string;
 }
+
+export interface UpdateServerResponse {
+  latest: string,
+  release_page: string
+}
