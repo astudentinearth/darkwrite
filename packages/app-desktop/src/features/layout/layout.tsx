@@ -44,6 +44,7 @@ export function Layout() {
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseup", handleMouseUp);
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // This effect must manage the event listener, or the event won't know about the sidebar. DO NOT REMOVE

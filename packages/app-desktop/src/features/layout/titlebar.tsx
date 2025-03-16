@@ -8,7 +8,7 @@ import { NoteDropdown } from "./note-dropdown";
 import { HistoryNavigation } from "./navigation";
 
 export type TitlebarProps = React.HTMLAttributes<HTMLDivElement> & {
-  refObject: RefObject<HTMLDivElement>;
+  refObject: RefObject<HTMLDivElement | null>;
   expandCallback: () => void;
   isSidebarCollapsed: boolean;
 };
