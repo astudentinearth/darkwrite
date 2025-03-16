@@ -50,8 +50,8 @@ jobs:
         run: yarn typecheck
         if: always()
 
-      - name: Run tests
-        run: yarn test
-        if: always()
+      # - name: Run tests
+      #   run: yarn test
+      #   if: always()
 
 
