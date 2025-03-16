@@ -14,10 +14,10 @@ export async function Nav() {
           />
         </Link>
         <Link
-          href={"https://github.com/astudentinearth/darkwrite"}
+          href={"/docs/install"}
           className="h-10 flex shrink-0 justify-center items-center p-3 select-none hover:bg-white/10 transition-colors rounded-[6px]"
         >
-          Source code
+          User guide
         </Link>
         <Link
           href={"https://github.com/astudentinearth/darkwrite/releases"}
