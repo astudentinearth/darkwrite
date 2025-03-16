@@ -14,7 +14,8 @@ export default function Bubble() {
         placement: "top",
         animation: "slide",
       }}
-      className="flex w-fit h-fit max-w-[90vw] overflow-hidden gap-1 rounded-xl border border-border bg-view-2 shadow-xl p-1 slide-in-from-top-1 transition-opacity"
+      className="flex w-fit h-fit max-w-[90vw] overflow-hidden gap-1 rounded-xl border border-border 
+      bg-view-2 shadow-xl p-1 slide-in-from-top-1 transition-opacity"
     >
       <FormattingButtons />
       <div className="w-[1px] bg-border"></div>

@@ -1,3 +1,7 @@
+# next
+## ✨ Improvements and fixes
+- Hitting enter after editing a link's URL now saves the link
+
 # 0.5.0-alpha.1
 
 ## 🌟 Features
