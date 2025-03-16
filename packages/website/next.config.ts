@@ -5,14 +5,15 @@ const nextConfig: NextConfig = {
   /* config options here */
   output: "standalone",
   pageExtensions: ["md", "mdx", "ts", "tsx"],
-  transpilePackages: ["next-mdx-remote"],
+  //transpilePackages: ["next-mdx-remote"],
 };
 
 const withMDX = createMDX({
-  options: {
-    //@ts-expect-error documentation says so
+  //FIXME: This breaks ESM loader on Windows!
+  /*options: {
+    //ts-expect-error documentation says so
     rehypePlugins: [["rehype-slug", {}]],
-  },
+  },*/
 });
 
 export default withMDX(nextConfig);
