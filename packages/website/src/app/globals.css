@@ -50,6 +50,9 @@
   --radius-lg: var(--radius);
   --radius-md: calc(var(--radius) - 2px);
   --radius-sm: calc(var(--radius) - 4px);
+
+  --breakpoint-xs: 30rem;
+
 }
 
 /*
