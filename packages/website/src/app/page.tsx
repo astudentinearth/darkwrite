@@ -7,12 +7,15 @@ import Link from "next/link";
 export default function Home() {
   return (
     <div className="bg-background">
-      <Image
+      <div className="absolute w-3/4 sm:w-1/2 h-72 rounded-full opacity-30 bg-primary left-1/2 -translate-y-1/2 -translate-x-1/2 blur-[120px]">
+        
+      </div>
+      {/* <Image
         src="glow.svg"
         className="absolute -translate-y-1/4 z-10 pointer-events-none"
         fill
         alt="glow"
-      ></Image>
+      ></Image> */}
       <Nav />
       <main className="flex flex-col justify-center gap-8 md:gap-16 row-start-2 items-center">
         <div className="w-full flex flex-col items-center mt-40">
@@ -108,8 +111,8 @@ export default function Home() {
             <h1 className="section-heading text-center">
               Open and <span className="text-theme-2">private.</span>
             </h1>
-            <div className="w-full grid md:grid-cols-3 [&_h2]:text-2xl [&_h2]:font-bold gap-4 [&>div>h2]:mb-4 [&>div]:border [&>div]:bg-alternate [&>div]:p-8 [&>div]:rounded-4xl [&>div]:drop-shadow-md [&>div]:hover:border-primary/50 [&>div]:hover:bg-primary/5 [&>div]:transition-colors [&>div]:duration-75">
-              <div>
+            <div className="w-full grid md:grid-cols-3 [&_h2]:text-2xl [&_h2]:font-bold gap-4 [&>div>h2]:mb-4 [&>div]:border [&>div]:bg-alternate [&>div]:p-8 [&>div]:rounded-4xl [&>div]:drop-shadow-md  [&>div]:transition-colors">
+              <div className="glow-hover z-10">
                 <WifiOff className="mb-2" />
                 <h2> No server.</h2>
                 <span className="text-lg">
@@ -117,7 +120,7 @@ export default function Home() {
                   your workspace as HTML at any point.
                 </span>
               </div>
-              <div>
+              <div className="glow-hover z-10">
                 <Lock className="mb-2" />
                 <h2>No data collected.</h2>
                 <span className="text-lg">
@@ -125,7 +128,7 @@ export default function Home() {
                   don&apos;t track what you do and we don&apos;t sell your data.
                 </span>
               </div>
-              <div>
+              <div className="glow-hover z-10">
                 <Heart className="mb-2" />
                 <h2>Open source.</h2>
                 <span className="text-lg">

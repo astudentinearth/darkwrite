@@ -107,7 +107,7 @@
     --chart-5: hsl(340 75% 55%);
     --bg-nav : hsl(213 78% 9%);
     --bg-alternate: hsl(210 5% 8%);
-    --theme-1: hsl(214 1005 60%);
+    --theme-1: hsl(214 100% 60%);
     --theme-2: hsl(190 39% 59%);
     --theme-3: hsl(17 64% 88%);
     --theme-4: hsl(317 39% 75%); 
@@ -139,3 +139,12 @@
   @apply text-lg lg:text-2xl mt-3;
 }
 
+.glow-hover {
+  filter: drop-shadow(0px 2px 12px hsl(0 0% 0% / 0.2));
+  transition-property: filter;
+  transition-duration: 20ms;
+}
+
+.glow-hover:hover{
+  filter: drop-shadow(0px 0px 12px hsl(214 100% 60% / 0.3))
+}

@@ -7,7 +7,7 @@ export default function ResourcesPopover() {
     <div className="group hidden xs:flex">
       <div className="h-10 shrink-0 flex justify-center items-center p-3 select-none hover:bg-white/10 transition-colors rounded-[6px]">
         Resources
-        <div className={"absolute hidden xs:group-hover:block xs:group-focus:block xs:group-active:block top-13 transparent"}>
+        <div className={"absolute opacity-0 transition-opacity pointer-events-none xs:group-hover:pointer-events-auto xs:group-hover:opacity-100 xs:group-hover:block xs:group-focus:block xs:group-active:block top-13 transparent"}>
         <div className="h-4"></div>
         <div className="bg-nav border drop-sh p-2 border-[#c1c1c1]/25 rounded-[18px]">
           <Link
