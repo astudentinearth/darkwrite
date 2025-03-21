@@ -3,7 +3,7 @@ import Image from "next/image";
 import ResourcesPopover from "./resources-popover";
 import MenuPopover from "./menu";
 
-export async function Nav() {
+export async function Nav(props: {releasePage?: string}) {
   return (
     <div className="fixed w-full flex justify-center px-3 top-3 z-50">
       <nav className="bg-nav/80 backdrop-blur-md justify-start xs:justify-center min-w-0 grow xs:w-fit xs:max-w-max p-3 border border-[#c1c1c1]/25 rounded-[18px] flex gap-2">
@@ -17,7 +17,7 @@ export async function Nav() {
         </Link>
         <ResourcesPopover/>
         <Link
-          href={"https://github.com/astudentinearth/darkwrite/releases"}
+          href={props.releasePage ?? "https://github.com/astudentinearth/darkwrite/releases"}
           className="bg-primary shrink-0 h-10 p-3 hidden xs:flex items-center justify-center rounded-[6px] hover:brightness-125 transition-[filter] ml-2"
         >
           Download
