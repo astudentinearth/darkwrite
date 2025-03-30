@@ -57,6 +57,7 @@ export interface UserSettings {
     /** The page ID to open when the app starts, if `behavior` is `SPECIFIC_PAGE`. */
     pageId: string;
   };
+  updateCheckEnabled: boolean;
   /** This version number should be incremented only when there is a need for migration. Introduction of new keys does not require a version bump. */
   version: string;
 }
@@ -84,13 +85,15 @@ export const DEFAULT_USER_SETTINGS: UserSettings = {
     behavior: "HOME_PAGE",
     pageId: "",
   },
+  updateCheckEnabled: false,
   version: "1",
 };
 
 /** Helper function to add missing defaults when reading from the user's settings.json file.
  * This ensures new keys are created when upgrading to a new version. */
 export function buildUserSettings(data: Partial<UserSettings> = {}) {
-  return _.merge(DEFAULT_USER_SETTINGS, data) as UserSettings;
+  const copy = _.merge({}, DEFAULT_USER_SETTINGS);
+  return _.merge(copy, data) as UserSettings;
 }
 
 export interface DarkwriteDesktopClientInfo {
