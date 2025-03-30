@@ -7,6 +7,7 @@
     "coverage": "yarn workspaces foreach -A run coverage",
     "dev": "concurrently \"yarn workspace @darkwrite/app-desktop dev\"   \"yarn workspace @darkwrite/common dev\"",
     "build:desktop": "yarn workspace @darkwrite/app-desktop build",
+    "build:website":"yarn workspace website build",
     "lint": "eslint -c eslint.config.mjs .",
     "format": "prettier . --write"
   },

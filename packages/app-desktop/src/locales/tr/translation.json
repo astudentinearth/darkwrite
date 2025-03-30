@@ -90,7 +90,9 @@
     },
     "about": {
       "sourceCode": "Kaynak kodu",
-      "reportBugs": "Hata bildir"
+      "reportBugs": "Hata bildir",
+      "checkUpdates": "Güncelleştirmeleri denetle",
+      "checkUpdatesPending": "Güncelleştirmeler denetleniyor..."
     }
   },
   "editor": {
@@ -170,5 +172,11 @@
     "placeholder": "Notlarınızı arayın",
     "chooserPlaceholder": "Bir not seçin",
     "noResult": "Sonuç bulunamadı"
+  },
+  "toast": {
+    "update":{
+      "description": "Yeni sürüm mevcut: {{version}}",
+      "releasePageButton": "Göster"
+    }
   }
 }

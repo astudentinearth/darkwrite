@@ -9,6 +9,7 @@ import { HomePage } from "./features/home";
 import { SettingsPage } from "./features/settings";
 import { useNoteFromURL } from "./hooks/use-note-from-url";
 import { SettingsAPI } from "./api";
+import { Toaster } from "sonner";
 
 const EditorRootWrapper = () => {
   const note = useNoteFromURL();
@@ -20,14 +21,17 @@ function App() {
   const [queryClient] = useState(() => new QueryClient());
 
   useEffect(() => {
-    SettingsAPI().load().then((prefs) => {
-      if (prefs == null) throw new Error("Could not load user settings");
-      else initializeUserSettings(prefs);
-    });
+    SettingsAPI()
+      .load()
+      .then((prefs) => {
+        if (prefs == null) throw new Error("Could not load user settings");
+        else initializeUserSettings(prefs);
+      });
   }, []);
 
   return (
     <div className="w-full h-full overflow-hidden">
+      <Toaster duration={5000}/>
       <QueryClientProvider client={queryClient}>
         <HashRouter>
           <Routes>

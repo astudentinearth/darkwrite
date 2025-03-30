@@ -90,7 +90,9 @@
     },
     "about": {
       "sourceCode": "Source code",
-      "reportBugs": "Report bugs"
+      "reportBugs": "Report bugs",
+      "checkUpdates": "Check for updates",
+      "checkUpdatesPending": "Checking for updates..."
     }
   },
   "editor": {
@@ -170,5 +172,11 @@
     "placeholder": "Search your notes",
     "chooserPlaceholder": "Choose a note",
     "noResult": "No results"
+  },
+  "toast": {
+    "update":{
+      "description": "Update available: {{version}}",
+      "releasePageButton": "Show release"
+    }
   }
 }

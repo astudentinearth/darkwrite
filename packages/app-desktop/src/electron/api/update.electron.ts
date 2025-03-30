@@ -7,7 +7,8 @@ interface UpdateStatus extends UpdateServerResponse {
 }
 
 async function checkUpdate(
-  url: string = "https://darkwrite.app/api/latest-release",
+  // FIXME: Use the correct URL
+  url: string = "http://localhost:3000/api/latest-release",
 ) {
   const res = await (await fetch(url)).json();
   if (!("latest" in res || "release_page" in res)) return undefined;

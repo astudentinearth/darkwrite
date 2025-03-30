@@ -5,7 +5,6 @@ import { Titlebar } from "./titlebar";
 import { useLocalStore } from "@renderer/context/local-state";
 import { Outlet } from "react-router-dom";
 import { useShortcuts } from "@renderer/hooks/use-shortcuts";
-import { Toaster } from "@darkwrite/ui";
 
 //import { useStartup } from "@renderer/hooks/use-startup";
 
@@ -86,7 +85,6 @@ export function Layout() {
 
   return (
     <div className="flex [&>div]:shrink-0 w-full h-full bg-background overflow-hidden">
-      <Toaster/>
       <Sidebar
         collapseCallback={() => {
           setSidebarCollapsed(true);
