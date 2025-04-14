@@ -26,10 +26,8 @@ export function ThemeHandler() {
     setGlobalStyle("--darkwrite-sans", fonts.sans);
     setGlobalStyle("--darkwrite-mono", fonts.code);
     setGlobalStyle("--darkwrite-serif", fonts.serif);
-    console.log(useSystemAccentColor);
     if (useSystemAccentColor) {
       api.getSystemAccentColor().then((color) => {
-        console.log(color);
         const accent = hexToHslVariable(color);
         setGlobalStyle("--primary", `hsl(${accent})`);
         setGlobalStyle("--accent", `hsl(${accent})`);

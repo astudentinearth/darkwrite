@@ -54,7 +54,6 @@ export class BrowserDBContext {
     const tx = (await this._db).transaction("note", "readwrite");
     const store = tx.objectStore("note");
     notes.forEach(async (n) => {
-      console.log(n);
       await store.put(n);
     });
     await tx.done;

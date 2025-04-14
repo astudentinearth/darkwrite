@@ -93,6 +93,9 @@
       "reportBugs": "Report bugs",
       "checkUpdates": "Check for updates",
       "checkUpdatesPending": "Checking for updates..."
+    },
+    "privacy": {
+      "autoUpdateCheckLabel": "Check for updates on startup"
     }
   },
   "editor": {
@@ -176,7 +179,8 @@
   "toast": {
     "update":{
       "description": "Update available: {{version}}",
-      "releasePageButton": "Show release"
+      "releasePageButton": "Show release",
+      "upToDate": "Darkwrite is up to date."
     }
   }
 }

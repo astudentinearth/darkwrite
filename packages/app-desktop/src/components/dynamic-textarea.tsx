@@ -49,12 +49,9 @@ export default function DynamicTextarea(props: DynamicTextareaProps) {
 
 
   const adjustHeight = () => {
-    console.log("fixing height")
     if (!ref.current) return;
     ref.current.style.height = "auto";
     ref.current.style.height = `${ref.current.scrollHeight + 2}px`;
-    console.log("fixed height")
-
   };
 
   const handleChange = () => {

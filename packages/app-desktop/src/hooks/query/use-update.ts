@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useToast } from "../use-toast";
 
 export const useUpdate = () => {
-  const [notified, setNotified] = useState(false);
+  const [notified, setNotified] = useState(true);
   const toaster = useToast();
   const updateQuery = useQuery({
     queryKey: ["update"],
@@ -17,15 +17,19 @@ export const useUpdate = () => {
   });
 
   useEffect(() => {
-    if(notified) return;
+    if(updateQuery.isFetching) return;
+    if (notified) return;
     if (!updateQuery.data) return;
-    if (!updateQuery.data.updateAvailable) return;
+    if (!updateQuery.data.updateAvailable) {
+      toaster.showNoUpdateNotification();
+      return;
+    }
     toaster.showUpdateNotification(
       updateQuery.data.latest,
       updateQuery.data.release_page,
     );
     setNotified(true);
-  }, [updateQuery.data, toaster, notified]);
+  }, [updateQuery.data, notified, updateQuery.isFetching]);
 
   return updateQuery;
 };

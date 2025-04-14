@@ -93,6 +93,9 @@
       "reportBugs": "Hata bildir",
       "checkUpdates": "Güncelleştirmeleri denetle",
       "checkUpdatesPending": "Güncelleştirmeler denetleniyor..."
+    },
+    "privacy": {
+      "autoUpdateCheckLabel": "Başlangıçta güncelleştirmeleri denetle"
     }
   },
   "editor": {
@@ -176,7 +179,8 @@
   "toast": {
     "update":{
       "description": "Yeni sürüm mevcut: {{version}}",
-      "releasePageButton": "Göster"
+      "releasePageButton": "Göster",
+      "upToDate": "Sürüm güncel."
     }
   }
 }

@@ -6,6 +6,7 @@ import { WorkspaceSettings } from "./workspace";
 import { AboutCard } from "./about";
 import { useCenteredLayout } from "@renderer/hooks/use-centered-layout";
 import { CSSProperties } from "react";
+import UpdateToggle from "./update";
 
 export function SettingsPage() {
   const initialized = useSettingsStore((s) => s.initialized);
@@ -17,6 +18,7 @@ export function SettingsPage() {
     >
       {initialized && (
         <>
+          <UpdateToggle/>
           <WorkspaceSettings />
           <ThemeSettings />
           <FontSettings />

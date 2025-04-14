@@ -10,6 +10,7 @@ import { SettingsPage } from "./features/settings";
 import { useNoteFromURL } from "./hooks/use-note-from-url";
 import { SettingsAPI } from "./api";
 import { Toaster } from "sonner";
+import UpdateChecker from "./components/update-checker";
 
 const EditorRootWrapper = () => {
   const note = useNoteFromURL();
@@ -31,7 +32,6 @@ function App() {
 
   return (
     <div className="w-full h-full overflow-hidden">
-      <Toaster duration={5000}/>
       <QueryClientProvider client={queryClient}>
         <HashRouter>
           <Routes>
@@ -47,6 +47,8 @@ function App() {
           </Routes>
         </HashRouter>
         <ThemeHandler />
+        <UpdateChecker/>
+        <Toaster duration={5000} />
         {/* <ReactQueryDevtools initialIsOpen={false} /> */}
       </QueryClientProvider>
     </div>
