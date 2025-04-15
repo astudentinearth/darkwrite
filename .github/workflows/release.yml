@@ -31,8 +31,7 @@ jobs:
 
       - name: Install Python dependencies (macOS)
         run: |
-          python3 -m ensurepip
-          python3 -m pip install --upgrade pip setuptools
+          brew install python-setuptools
         if: runner.os == 'macOS'
 
       - name: Build
