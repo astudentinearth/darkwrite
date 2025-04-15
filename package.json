@@ -1,13 +1,13 @@
 {
   "name": "darkwrite",
-  "version": "0.5.0-alpha.1",
+  "version": "0.5.1-alpha.1",
   "scripts": {
     "test": "yarn workspaces foreach -A run test",
     "typecheck": "yarn workspaces foreach -A run typecheck",
     "coverage": "yarn workspaces foreach -A run coverage",
     "dev": "concurrently \"yarn workspace @darkwrite/app-desktop dev\"   \"yarn workspace @darkwrite/common dev\"",
     "build:desktop": "yarn workspace @darkwrite/app-desktop build",
-    "build:website":"yarn workspace website build",
+    "build:website": "yarn workspace website build",
     "lint": "eslint -c eslint.config.mjs .",
     "format": "prettier . --write"
   },

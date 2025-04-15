@@ -1,6 +1,12 @@
-# next
+# 0.5.1-alpha.1
+
+## 🌟 Features
+- Added update checks on startup. **To protect your privacy, it is disabled by default, but you can enable it in settings.**
+- - It makes a request to the GitHub API to get the latest release. Although we already developed a server to check for updates, we decided to use the GitHub API for now. 
+
 ## ✨ Improvements and fixes
 - Hitting enter after editing a link's URL now saves the link
+- Fixed editor contents going off screen as window got narrower
 
 # 0.5.0-alpha.1
 

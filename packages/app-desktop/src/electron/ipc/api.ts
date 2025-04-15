@@ -141,7 +141,6 @@ const register = (
         return (<IPCMainListenerWithoutEvent>listener)(...args);
       });
     }
-    console.log("Registered ", channel);
   } catch {
     console.log("Failed to register ", channel);
   }
@@ -168,7 +167,6 @@ export const buildPreloadObject = (
   for (const keyPath of handlerKeys) {
     deepAssign(obj, keyPath, true);
   }
-  console.log("Built preload object: ", obj);
   return obj;
 };
 

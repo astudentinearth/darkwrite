@@ -44,7 +44,6 @@ async function checkUpdate(
 ) {
   // const res = await (await fetch(url)).json();
   const res = await checkUpdateFromGithub();
-  console.log(res);
   if (!res || !("latest" in res || "release_page" in res)) return undefined;
   const info = <UpdateServerResponse>res;
    return {
