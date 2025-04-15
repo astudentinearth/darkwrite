@@ -29,6 +29,12 @@ jobs:
       - name: Linter check
         run: yarn lint
 
+      - name: Install Python dependencies (macOS)
+        run: |
+          python3 -m ensurepip
+          python3 -m pip install --upgrade pip setuptools
+        if: runner.os == 'macOS'
+
       - name: Build
         run: yarn build:desktop
       - name: Release
