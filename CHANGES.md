@@ -1,3 +1,7 @@
+# 0.5.1-alpha.2
+## ✨ Improvements and fixes
+- Fixed a bug which showed the "Darkwrite is up to date" toast on every automatic update check. This toast now appears only when you check for updates explicitly.
+
 # 0.5.1-alpha.1
 
 ## 🌟 Features

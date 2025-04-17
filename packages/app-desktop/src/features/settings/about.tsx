@@ -5,13 +5,18 @@ import { Bug, Code, RotateCw } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import UpdateDialog from "./update-prompt";
+import { useToast } from "@renderer/hooks/use-toast";
 
 export function AboutCard() {
   const data = useClientInfo();
   const updateQuery = useUpdate();
   const [updateDialogOpen, setUpdateDialogOpen] = useState(false);
+  const toaster = useToast();
   const { t } = useTranslation(undefined, { keyPrefix: "settings.about" });
-  const checkUpdate = ()=>updateQuery.refetch();
+  const checkUpdate = ()=>updateQuery.refetch().then(result=>{
+    if(!result.data) return;
+    if(!result.data.updateAvailable) toaster.showNoUpdateNotification();
+  });
   return (
     <div className="p-4 rounded-2xl bg-view-2 flex flex-col gap-4 border border-border/50">
       <div className="grid grid-cols-[64px_1fr] grid-rows-[auto] gap-4">
