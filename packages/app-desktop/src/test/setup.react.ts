@@ -1,31 +1,14 @@
-import "@testing-library/jest-dom/vitest";
-import { cleanup } from "@testing-library/react";
 import { afterEach } from "vitest";
+import { cleanup } from "@testing-library/react";
+import "@testing-library/jest-dom";
 import * as apis from "@renderer/api";
 import { MockEmbedAPI, MockNoteAPI, MockSettingsAPI } from "./mock-api";
 import indexeddb from "fake-indexeddb"
 
+
 globalThis.indexedDB = indexeddb;
 
 vi.mock("zustand");
-
-vi.mock("node:fs");
-vi.mock("node:fs/promises");
-
-vi.mock("@electron-toolkit/utils", () => ({
-  is: {
-    dev: true,
-  },
-}));
-
-vi.mock("electron", () => ({
-  app: {
-    getPath: (pathType: string) => {
-      return `/${pathType}/`;
-    },
-  },
-}));
-
 vi.mock("@renderer/lib/api/note", () => ({
   createNote: vi.fn(),
   updateContents: vi.fn(),
@@ -63,6 +46,7 @@ vi.mock("@renderer/lib/api/embed.ts", () => ({}));
 vi.spyOn(apis, "NoteAPI").mockReturnValue(MockNoteAPI);
 vi.spyOn(apis, "SettingsAPI").mockReturnValue(MockSettingsAPI);
 vi.spyOn(apis, "EmbedAPI").mockReturnValue(MockEmbedAPI);
+
 vi.mock("@renderer/api/browser/db-actions.browser.ts", ()=>({
   BrowserDBContext: vi.fn(),
 }))
@@ -70,5 +54,3 @@ vi.mock("@renderer/api/browser/db-actions.browser.ts", ()=>({
 afterEach(() => {
   cleanup();
 });
-
-

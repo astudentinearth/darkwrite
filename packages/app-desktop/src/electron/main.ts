@@ -78,4 +78,5 @@ app.whenReady().then(() => {
         });
     }*/
   AppDataSource.initialize().then(createWindow);
+  console.log(process.cwd())
 });

@@ -15,11 +15,11 @@
   },
   "devDependencies": {
     "@types/showdown": "^2.0.6",
-    "@vitest/coverage-v8": "^3.0.5",
+    "@vitest/coverage-v8": "^3.1.2",
     "prettier": "^3.4.1",
     "tsup": "^8.2.4",
     "typescript": "^5.2.2",
-    "vitest": "^3.0.5"
+    "vitest": "^3.1.2"
   },
   "type": "module",
   "dependencies": {

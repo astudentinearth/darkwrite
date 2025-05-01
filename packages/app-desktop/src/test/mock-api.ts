@@ -15,7 +15,8 @@ export const MockNoteAPI = {
   saveAll: async ()=>{},
   trash: async ()=>{},
   update: async ()=>{},
-  updateContents: async ()=>{}
+  updateContents: async ()=>{},
+  exportJSON: async ()=>{}
 } satisfies INoteAPI;
 
 // Mocked API that satisfies IEmbedAPI
