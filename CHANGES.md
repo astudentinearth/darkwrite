@@ -2,6 +2,10 @@
 ## ✨ Improvements and fixes
 - Fixed a bug which showed the "Darkwrite is up to date" toast on every automatic update check. This toast now appears only when you check for updates explicitly.
 
+## 🛠️ Technical changes
+- Upgraded `react-router-dom` and `vite` to address dependabot alerts
+- Upgraded `@radix-ui/react-dropdown-menu` to fix broken unit tests
+
 # 0.5.1-alpha.1
 
 ## 🌟 Features

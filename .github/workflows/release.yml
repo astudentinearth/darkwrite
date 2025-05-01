@@ -34,6 +34,11 @@ jobs:
           brew install python-setuptools
         if: runner.os == 'macOS'
 
+      - name: Install Python dependencies (Windows)
+        run: |
+          pip install setuptools
+        if: runner.os == 'Windows'
+
       - name: Build
         run: yarn build:desktop
       - name: Release

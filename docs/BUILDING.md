@@ -18,7 +18,12 @@
 - node-gyp
 - Node 20
 - Windows 10 or later (no testing was done for older versions)
+- Python
 - a good internet connection to download dependencies
+
+> [!WARNING]
+> If you are using Python 3.12+, you need to install the `setuptools` package. You can do this by running `pip install setuptools` in your terminal.
+> on macOS, you can use `brew install python-setuptools` to install it.
 
 ## Building
 
