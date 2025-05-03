@@ -71,7 +71,7 @@ export const DEFAULT_USER_SETTINGS: UserSettings = {
     enableCustomWindowFrameOnDarwin: false,
     useSystemAccentColor: false,
   },
-  // terrible selection - to be changed
+  // FIXME: terrible selection - to be changed
   fonts: {
     sans: "Arial, sans-serif",
     serif: "Times New Roman, serif",

@@ -1,6 +1,17 @@
+import { DarkwriteEditorContext, IDarkwriteEditorContext } from "./context";
+import { EditorRoot } from "./editor-root";
+import "../globals.css";
 
-export default function DarkwriteEditor() {
+export type DarkwriteEditorProps = IDarkwriteEditorContext;
+
+export default function DarkwriteEditor(props: DarkwriteEditorProps) {
+  const contextValue: IDarkwriteEditorContext = {
+    content: props.content,
+    onContentChange: props.onContentChange
+  }
   return (
-    <div>Hello world!</div>
+    <DarkwriteEditorContext.Provider value={contextValue}>
+      <EditorRoot/>
+    </DarkwriteEditorContext.Provider>
   )
 }
