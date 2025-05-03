@@ -1483,11 +1483,13 @@ __metadata:
     "@tailwindcss/typography": "npm:^0.5.16"
     "@tailwindcss/vite": "npm:^4.1.5"
     "@tiptap/core": "npm:^2.11.9"
+    "@tiptap/extension-bubble-menu": "npm:^2.11.9"
     "@tiptap/extension-horizontal-rule": "npm:^2.11.9"
     "@tiptap/extension-link": "npm:^2.11.9"
     "@tiptap/extension-placeholder": "npm:^2.11.9"
     "@tiptap/extension-task-item": "npm:^2.11.9"
     "@tiptap/extension-task-list": "npm:^2.11.9"
+    "@tiptap/extension-underline": "npm:^2.11.9"
     "@tiptap/html": "npm:^2.11.9"
     "@tiptap/pm": "npm:^2.11.9"
     "@tiptap/react": "npm:^2.11.9"
@@ -6825,6 +6827,15 @@ __metadata:
   peerDependencies:
     "@tiptap/core": ^2.7.0
   checksum: 10c0/cf72391e0e207cb2385aeb3ff2067b45c6eb3f0de7fa9631bf8924b50a3b5af9fa53415dc022c72e5be3c2bf45a5c61e52e3259404077659d76312faf9990e07
+  languageName: node
+  linkType: hard
+
+"@tiptap/extension-underline@npm:^2.11.9":
+  version: 2.11.9
+  resolution: "@tiptap/extension-underline@npm:2.11.9"
+  peerDependencies:
+    "@tiptap/core": ^2.7.0
+  checksum: 10c0/2eeb43c9d7d2d7daa154ed457c54b5b6276e971a3b1d4807d93a4ebe491338307eceda7fa4e54ba35f0bae24531acf5738e6c99d73203c36ebe971c99c8b6018
   languageName: node
   linkType: hard
 

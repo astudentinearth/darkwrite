@@ -8,6 +8,7 @@ import { Placeholder } from "@tiptap/extension-placeholder";
 import HorizontalRule from "@tiptap/extension-horizontal-rule";
 import { Link } from "@tiptap/extension-link";
 import { LinkToPage } from "./link-to-page";
+import {Underline} from "@tiptap/extension-underline"
 
 export const starterKit = StarterKit.configure({
   bulletList: {
@@ -79,6 +80,8 @@ const link = Link.configure({
   },
 });
 
+const underline = Underline.configure();
+
 export const DefaultEditorExtensions = [
   starterKit,
   taskItem,
@@ -88,5 +91,6 @@ export const DefaultEditorExtensions = [
   placeholder,
   horizontalRule,
   link,
-  LinkToPage
+  LinkToPage,
+  underline
 ];

@@ -2,6 +2,7 @@ import { use, useEffect } from "react";
 import { DarkwriteEditorContext } from "./context";
 import { EditorProvider, useCurrentEditor } from "@tiptap/react";
 import { DefaultEditorExtensions } from "./extensions/default";
+import Bubble from "./extensions/bubble-menu";
 
 function InstanceHandler() {
   const context = use(DarkwriteEditorContext);
@@ -29,6 +30,7 @@ export function EditorRoot() {
     }}
     extensions={DefaultEditorExtensions}
   >
+    <Bubble/>
     <InstanceHandler/>
   </EditorProvider>;
 }
