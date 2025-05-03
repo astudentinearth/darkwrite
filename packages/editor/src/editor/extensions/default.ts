@@ -57,7 +57,7 @@ export const taskList = TaskList.configure({
 
 export const taskItem = TaskItem.configure({
   HTMLAttributes: {
-    class: cn("flex gap-2 items-start my-4"),
+    class: cn("flex gap-2 items-start my-4 leading-0"),
   },
   nested: true,
 });

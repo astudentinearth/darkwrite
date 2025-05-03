@@ -1,4 +1,11 @@
+@import "tailwindcss";
+@reference "./globals.css";
 
 html, body, #root {
   height: 100vh;
+}
+
+:root {
+  --dw-editor-foreground: var(--foreground);
+  --dw-editor-background: transparent;
 }
