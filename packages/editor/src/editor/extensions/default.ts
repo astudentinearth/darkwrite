@@ -7,6 +7,7 @@ import GlobalDragHandle from "tiptap-extension-global-drag-handle";
 import { Placeholder } from "@tiptap/extension-placeholder";
 import HorizontalRule from "@tiptap/extension-horizontal-rule";
 import { Link } from "@tiptap/extension-link";
+import { LinkToPage } from "./link-to-page";
 
 export const starterKit = StarterKit.configure({
   bulletList: {
@@ -57,7 +58,7 @@ export const taskList = TaskList.configure({
 
 export const taskItem = TaskItem.configure({
   HTMLAttributes: {
-    class: cn("flex gap-2 items-start my-4 leading-0"),
+    class: cn("flex gap-2 items-start my-4"),
   },
   nested: true,
 });
@@ -87,4 +88,5 @@ export const DefaultEditorExtensions = [
   placeholder,
   horizontalRule,
   link,
+  LinkToPage
 ];

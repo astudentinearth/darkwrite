@@ -5,13 +5,17 @@
   "type": "module",
   "main": "./dist/ui.js",
   "types": "./dist/index.d.ts",
+  "files": [
+    "dist/styles.css"
+  ],
   "scripts": {
     "lint": "eslint .",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "build": "npm-run-all --serial build:tsc build:vite",
+    "build": "npm-run-all --serial build:tsc build:vite build:css",
     "build:vite": "vite build",
     "build:tsc": "tsc -b ./tsconfig.lib.json",
+    "build:css": "tailwindcss -i ./lib/globals.css -o ./dist/styles.css",
     "dev": "vite build --watch",
     "typecheck": "tsc --noEmit --project tsconfig.lib.json"
   },
@@ -49,6 +53,7 @@
     "@storybook/react": "^8.5.5",
     "@storybook/react-vite": "^8.5.5",
     "@storybook/test": "^8.5.5",
+    "@tailwindcss/cli": "^4.1.5",
     "@tailwindcss/postcss": "4.0.0",
     "@tailwindcss/vite": "^4.0.4",
     "@types/node": "^22.10.2",

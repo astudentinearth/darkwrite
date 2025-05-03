@@ -9,12 +9,8 @@ import "./css/text.css";
 export type DarkwriteEditorProps = IDarkwriteEditorContext;
 
 export default function DarkwriteEditor(props: DarkwriteEditorProps) {
-  const contextValue: IDarkwriteEditorContext = {
-    content: props.content,
-    onContentChange: props.onContentChange,
-  };
   return (
-    <DarkwriteEditorContext.Provider value={contextValue}>
+    <DarkwriteEditorContext.Provider value={props}>
       <EditorRoot />
     </DarkwriteEditorContext.Provider>
   );
