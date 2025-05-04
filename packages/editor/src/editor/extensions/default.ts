@@ -9,6 +9,8 @@ import HorizontalRule from "@tiptap/extension-horizontal-rule";
 import { Link } from "@tiptap/extension-link";
 import { LinkToPage } from "./link-to-page";
 import {Underline} from "@tiptap/extension-underline"
+import slashCommandExtension from "./slash-command/slash-command-extension";
+import { SlashCommandRenderer } from "./slash-command/slash-command-renderer";
 
 export const starterKit = StarterKit.configure({
   bulletList: {
@@ -82,6 +84,10 @@ const link = Link.configure({
 
 const underline = Underline.configure();
 
+const command = slashCommandExtension.configure({
+  suggestion: SlashCommandRenderer
+})
+
 export const DefaultEditorExtensions = [
   starterKit,
   taskItem,
@@ -92,5 +98,6 @@ export const DefaultEditorExtensions = [
   horizontalRule,
   link,
   LinkToPage,
-  underline
+  underline,
+  command
 ];

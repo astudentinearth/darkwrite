@@ -1494,6 +1494,7 @@ __metadata:
     "@tiptap/pm": "npm:^2.11.9"
     "@tiptap/react": "npm:^2.11.9"
     "@tiptap/starter-kit": "npm:^2.11.9"
+    "@tiptap/suggestion": "npm:^2.11.9"
     "@types/react": "npm:^19.0.8"
     "@types/react-dom": "npm:^19.0.3"
     "@vitejs/plugin-react": "npm:^4.4.1"
@@ -1512,6 +1513,7 @@ __metadata:
     tailwind-merge: "npm:^3.2.0"
     tailwindcss: "npm:^4.1.5"
     tailwindcss-animate: "npm:^1.0.7"
+    tippy.js: "npm:^6.3.7"
     tiptap-extension-auto-joiner: "npm:^0.1.3"
     tiptap-extension-global-drag-handle: "npm:^0.1.18"
     typescript: "npm:~5.7.2"
@@ -7025,6 +7027,16 @@ __metadata:
     "@tiptap/core": ^2.7.0
     "@tiptap/pm": ^2.7.0
   checksum: 10c0/5fa63a3115171f3430b590060e83c57db04d331f8eb7dbbc151102486ebfb325be1fcafdf5d2c618bc771e5f718d97f9733b16f9f1a4906fdf0f69a0512e1a0d
+  languageName: node
+  linkType: hard
+
+"@tiptap/suggestion@npm:^2.11.9":
+  version: 2.11.9
+  resolution: "@tiptap/suggestion@npm:2.11.9"
+  peerDependencies:
+    "@tiptap/core": ^2.7.0
+    "@tiptap/pm": ^2.7.0
+  checksum: 10c0/db41e256afdbce81acc52bdd4f20a5d802616b3b166a1de15771d8d29877310be29c2d7d2f0a1616f18e637b53b99b7de341157d2035f78d82272349a950bacb
   languageName: node
   linkType: hard
 
