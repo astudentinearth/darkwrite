@@ -33,7 +33,7 @@
     }
   },
   "home": {
-    "welcome": "Hoşgeldiniz",
+    "welcome": "Hoş geldiniz",
     "recents": "Yakınlarda açılanlar",
     "noPages": "Henüz bir not oluşturmadınız.",
     "createPage": "Yeni not oluştur"
