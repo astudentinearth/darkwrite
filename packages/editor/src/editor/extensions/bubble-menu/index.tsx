@@ -14,10 +14,11 @@ export default function Bubble() {
       tippyOptions={{
         placement: "top",
         animation: "slide",
+        moveTransition: "transform 0.1s ease-out"
       }}
       editor={editor}
       className="flex w-fit h-fit max-w-[90vw] overflow-hidden gap-1 rounded-xl border border-border 
-      bg-view-2 shadow-xl p-1 slide-in-from-top-1 transition-opacity"
+      bg-view-2 shadow-xl p-1 slide-in-from-top-1 transition-[opacity,transform,translate,scale,rotate]"
     >
       <FormattingButtons />
       <div className="w-[1px] bg-border"></div>
