@@ -12,29 +12,44 @@
   color: var(--dw-editor-foreground);
 }
 
-.ProseMirror .is-editor-empty:first-child::before {
+ .ProseMirror p.is-editor-empty:first-child::before {
   content: attr(data-placeholder);
   float: left;
   color: var(--dw-editor-foreground);
   pointer-events: none;
   height: 0;
   opacity: 0.5;
-}
+} 
 
-.ProseMirror .is-empty::before {
+.ProseMirror p.is-empty::before {
   content: attr(data-placeholder);
   float: left;
   color: var(--dw-editor-foreground);
   pointer-events: none;
   height: 0;
   opacity: 0.5;
-}
+} 
 
 .tippy-box {
   max-width: 400px !important;
   &[data-animation="slide"][data-state="visible"] {
     opacity: 0;
     animation-name: slide-up;
+    animation-duration: 0.2s;
+    animation-iteration-count: 1;
+    opacity: 1;
+  }
+  &[data-animation="cmd-slide-down"][data-state="visible"] {
+    opacity: 0;
+    animation-name: cmd-slide-down;
+    animation-duration: 0.2s;
+    animation-iteration-count: 1;
+    opacity: 1;
+  }
+
+  &[data-animation="cmd-slide-down"][data-state="visible"][data-placement="top-start"] {
+    opacity: 0;
+    animation-name: cmd-slide-up;
     animation-duration: 0.2s;
     animation-iteration-count: 1;
     opacity: 1;
@@ -49,9 +64,43 @@
   border-radius: 8px;
 }
 
+@keyframes slide-down {
+  0% {
+    transform: translateY(-10%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+}
+
+
+
 @keyframes slide-up {
   0% {
     transform: translateY(10%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+}
+@keyframes cmd-slide-up {
+  0% {
+    transform: translateY(8px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+}
+
+@keyframes cmd-slide-down {
+  0% {
+    transform: translateY(-8px);
     opacity: 0;
   }
   100% {

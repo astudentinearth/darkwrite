@@ -1,18 +1,9 @@
-import { SlashCommandItem } from "@/types";
 import { ReactRenderer } from "@tiptap/react";
 import { SuggestionOptions, SuggestionProps } from "@tiptap/suggestion";
 import tippy from "tippy.js";
-import SlashCommandView from "./slash-command-view";
+import { SlashCommandView } from "./slash-command-view";
 
 export const SlashCommandRenderer = {
-  items: ()=>[{
-    id: "builtin.test1",
-    command: ()=>console.log("builtin.test1"),
-    icon: "",
-    title: "Test 1",
-    description: "Test 1"
-  } satisfies SlashCommandItem],
-
   render: ()=>{
     let popup: ReturnType<typeof tippy>;
     let component: ReactRenderer<unknown, object>;
@@ -34,7 +25,8 @@ export const SlashCommandRenderer = {
           showOnCreate: true,
           interactive: true,
           trigger: "manual",
-          placement: "bottom-start"
+          placement: "bottom-start",
+          animation: "cmd-slide-down"
         });
       },
 
@@ -54,8 +46,11 @@ export const SlashCommandRenderer = {
           return true;
         }
 
-        //@ts-expect-error following the examples
-        return component.ref?.onKeyDown(props);
+        if(component.ref){ 
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          return (component.ref as any).onKeyDown(props);
+        }  // It refused to get that keydown, so we are sending a function inside the ref instead. Gonna fix when it breaks     
+        return false
       },
 
       onExit: ()=>{

@@ -1,16 +1,14 @@
 import { cn } from "@/utils";
-import { StarterKit } from "@tiptap/starter-kit";
-import { TaskList } from "@tiptap/extension-task-list";
-import { TaskItem } from "@tiptap/extension-task-item";
-import AutoJoiner from "tiptap-extension-auto-joiner";
-import GlobalDragHandle from "tiptap-extension-global-drag-handle";
-import { Placeholder } from "@tiptap/extension-placeholder";
 import HorizontalRule from "@tiptap/extension-horizontal-rule";
 import { Link } from "@tiptap/extension-link";
+import { Placeholder } from "@tiptap/extension-placeholder";
+import { TaskItem } from "@tiptap/extension-task-item";
+import { TaskList } from "@tiptap/extension-task-list";
+import { Underline } from "@tiptap/extension-underline";
+import { StarterKit } from "@tiptap/starter-kit";
+import AutoJoiner from "tiptap-extension-auto-joiner";
+import GlobalDragHandle from "tiptap-extension-global-drag-handle";
 import { LinkToPage } from "./link-to-page";
-import {Underline} from "@tiptap/extension-underline"
-import slashCommandExtension from "./slash-command/slash-command-extension";
-import { SlashCommandRenderer } from "./slash-command/slash-command-renderer";
 
 export const starterKit = StarterKit.configure({
   bulletList: {
@@ -66,7 +64,11 @@ export const taskItem = TaskItem.configure({
   nested: true,
 });
 
-export const placeholder = Placeholder.configure({});
+export const placeholder = Placeholder.configure({
+  includeChildren: true,
+  placeholder: "Press '/' for commands",
+  showOnlyCurrent: true
+});
 
 const horizontalRule = HorizontalRule.configure({
   HTMLAttributes: {
@@ -84,9 +86,7 @@ const link = Link.configure({
 
 const underline = Underline.configure();
 
-const command = slashCommandExtension.configure({
-  suggestion: SlashCommandRenderer
-})
+
 
 export const DefaultEditorExtensions = [
   starterKit,
@@ -99,5 +99,4 @@ export const DefaultEditorExtensions = [
   link,
   LinkToPage,
   underline,
-  command
 ];

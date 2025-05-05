@@ -3,6 +3,8 @@ import { DarkwriteEditorContext } from "./context";
 import { EditorProvider, useCurrentEditor } from "@tiptap/react";
 import { DefaultEditorExtensions } from "./extensions/default";
 import Bubble from "./extensions/bubble-menu";
+import { SlashCommandRenderer } from "./extensions/slash-command/slash-command-renderer";
+import slashCommandExtension from "./extensions/slash-command/slash-command-extension";
 
 function InstanceHandler() {
   const context = use(DarkwriteEditorContext);
@@ -17,6 +19,12 @@ function InstanceHandler() {
 
 export function EditorRoot() {
   const context = use(DarkwriteEditorContext);
+  const command = slashCommandExtension.configure({
+    suggestion: {
+      ...SlashCommandRenderer,
+      items: ()=>context.commandItems
+    },
+  })
   return <EditorProvider
     content={context.content}
     onUpdate={({ editor }) => {
@@ -28,7 +36,7 @@ export function EditorRoot() {
         class: `prose prose-lg dark:prose-invert prose-headings:font-title font-default focus:outline-hidden max-w-full text-(--dw-editor-foreground)`
       }
     }}
-    extensions={DefaultEditorExtensions}
+    extensions={[...DefaultEditorExtensions, command]}
   >
     <Bubble/>
     <InstanceHandler/>
