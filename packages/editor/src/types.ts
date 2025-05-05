@@ -6,5 +6,6 @@ export interface SlashCommandItem {
   icon: ReactNode;
   title: string;
   description?: string;
+  keywords?: string[];
   command: (args: { editor: Editor; range: Range; }) => void;
 }

@@ -33,10 +33,11 @@ function SlashCommandItem({
 }) {
   return (
     <CommandItem
+      keywords={item.keywords}
       onSelect={() => {
         if (range && editor) item.command({ editor, range });
       }}
-      value={item.title}
+      value={`${item.title}`}
       className={cn(
         "hover:bg-secondary/80 rounded-[8px] flex items-center p-1",
       )}
@@ -95,16 +96,18 @@ export const SlashCommandView = forwardRef(function (
           console.log(val);
           setValue(val);
         }}
+        filter={(val, search, keywords) => {
+          const extended = val + " " + keywords?.join(" ");
+          if(extended.includes(search)) return 1;
+          return 0;
+        }}
       >
-        <CommandInput className="hidden!" value={props.query} />
+        <CommandInput className="hidden!" value={props.query.toLocaleLowerCase()}  />
         <CommandEmpty className="px-2 text-muted-foreground/80 text-center py-2">
           No results
         </CommandEmpty>
         <CommandList ref={listRef} className="bg-transparent pb-1">
           {props.items
-            .filter((i) =>
-              i.title.toLowerCase().includes(props.query.toLocaleLowerCase()),
-            )
             .map((i) => (
               <SlashCommandItem
                 key={i.id}
