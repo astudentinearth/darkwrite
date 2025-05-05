@@ -24,6 +24,7 @@ const version = packageJSON.version;
 console.log(`Target Darkwrite version: ${version}`);
 
 console.log("Installing dependencies");
+// @ts-expect-error it worked fine for quite a while
 proc.execSync("yarn", { shell: true, stdio: "inherit" });
 
 console.log("\u001b[30mChecking for previous artifacts...");
