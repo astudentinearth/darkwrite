@@ -1,9 +1,7 @@
-import { cn } from "@/utils";
-import { Button, Select, SelectContent, SelectItem, SelectTrigger } from "@darkwrite/ui";
-import { NodeViewProps, NodeViewRendererProps } from "@tiptap/core";
-import { NodeViewContent, NodeViewWrapper } from "@tiptap/react";
 import lowlight from "@/editor/lowlight";
-import _ from "lodash";
+import { Button, Select, SelectContent, SelectItem, SelectTrigger } from "@darkwrite/ui";
+import { NodeViewProps } from "@tiptap/core";
+import { NodeViewContent, NodeViewWrapper } from "@tiptap/react";
 import { Copy } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
@@ -11,7 +9,6 @@ export default function CodeBlockNodeView(props: NodeViewProps) {
   const language = props.node.attrs.language || "plaintext";
   const languages = lowlight.listLanguages();
   const copy = ()=>{
-    console.log("copied", props.node.textContent)
     navigator.clipboard.writeText(props.node.textContent || "");
   }
   const { t } = useTranslation(undefined, {keyPrefix: "editor.contextmenu"})
