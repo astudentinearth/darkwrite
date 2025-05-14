@@ -34,7 +34,7 @@ export default function CodeBlockNodeView(props: NodeViewProps) {
             <Copy size={16}/> {t("copy")}
           </Button>
         </div>
-        <pre className={`language-${language}`}>
+        <pre spellCheck={false} className={`language-${language}`}>
           <NodeViewContent as="code" />
         </pre>
       </div>
