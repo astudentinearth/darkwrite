@@ -11,11 +11,11 @@ import {
   ListOrdered,
   SquareMinus,
   Text,
-  TextQuote,
+  TextQuote
 } from "lucide-react";
 import { Command, createSuggestionItems, renderItems } from "novel/extensions";
-import { createImageNode } from "../extensions/image-upload";
 import { useTranslation } from "react-i18next";
+import { createImageNode } from "../extensions/image-upload";
 
 export const useSlashCommand = ()=>{
   const {t} = useTranslation(undefined, {keyPrefix: "editor.slashCommand"});
@@ -134,7 +134,7 @@ export const useSlashCommand = ()=>{
     {
       title: t("code"),
       description: t("codeDescription"),
-      searchTerms: ["codeblock"],
+      searchTerms: ["code", "snippet", "block"],
       icon: <Code size={18} />,
       command: ({ editor, range }) =>
         editor.chain().focus().deleteRange(range).toggleCodeBlock().run(),

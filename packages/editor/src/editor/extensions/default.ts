@@ -9,6 +9,8 @@ import { StarterKit } from "@tiptap/starter-kit";
 import AutoJoiner from "tiptap-extension-auto-joiner";
 import GlobalDragHandle from "tiptap-extension-global-drag-handle";
 import { LinkToPage } from "./link-to-page";
+import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
+import lowlight from "../lowlight";
 
 export const starterKit = StarterKit.configure({
   bulletList: {
@@ -86,7 +88,40 @@ const link = Link.configure({
 
 const underline = Underline.configure();
 
-
+export const codeBlock = (indentSize: number)=>CodeBlockLowlight.extend({
+  addKeyboardShortcuts() {
+    return {
+      Tab: () => {
+        if (this.editor.isActive("codeBlock")) {
+          return this.editor.commands.insertContent(
+            new Array<string>(
+              indentSize,
+            )
+              .fill(" ")
+              .join(""),
+          );
+        } else return false;
+      },
+      ArrowDown: () => {
+        if (
+          this.editor.state.selection.$head.parentOffset ===
+          this.editor.state.selection.$head.parent.content.size
+        ) {
+          return this.editor.commands.exitCode();
+        } else return false;
+      },
+      "Mod-ArrowDown": () => this.editor.commands.exitCode(),
+    };
+  },
+}).configure({
+  HTMLAttributes: {
+    class: cn(
+      "rounded-xl bg-secondary/50 border-none p-4 darkwrite-mono font-medium",
+    ),
+  },
+  exitOnTripleEnter: true,
+  lowlight
+});
 
 export const DefaultEditorExtensions = [
   starterKit,

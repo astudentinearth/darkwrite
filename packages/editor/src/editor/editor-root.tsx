@@ -5,6 +5,7 @@ import { DefaultEditorExtensions } from "./extensions/default";
 import Bubble from "./extensions/bubble-menu";
 import { SlashCommandRenderer } from "./extensions/slash-command/slash-command-renderer";
 import slashCommandExtension from "./extensions/slash-command/slash-command-extension";
+import { codeBlock } from "./extensions/code-block";
 
 function InstanceHandler() {
   const context = use(DarkwriteEditorContext);
@@ -25,6 +26,7 @@ export function EditorRoot() {
       items: ()=>context.commandItems
     },
   })
+  const codeblock = codeBlock(context.codeBlockIndentSize);
   return <EditorProvider
     content={context.content}
     onUpdate={({ editor }) => {
@@ -36,7 +38,7 @@ export function EditorRoot() {
         class: `prose prose-lg dark:prose-invert prose-headings:font-title font-default focus:outline-hidden max-w-full text-(--dw-editor-foreground)`
       }
     }}
-    extensions={[...DefaultEditorExtensions, command]}
+    extensions={[...DefaultEditorExtensions, command, codeblock]}
   >
     <Bubble/>
     <InstanceHandler/>

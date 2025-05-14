@@ -1484,6 +1484,7 @@ __metadata:
     "@tailwindcss/vite": "npm:^4.1.5"
     "@tiptap/core": "npm:^2.11.9"
     "@tiptap/extension-bubble-menu": "npm:^2.11.9"
+    "@tiptap/extension-code-block-lowlight": "npm:^2.12.0"
     "@tiptap/extension-horizontal-rule": "npm:^2.11.9"
     "@tiptap/extension-link": "npm:^2.11.9"
     "@tiptap/extension-placeholder": "npm:^2.11.9"
@@ -1504,6 +1505,7 @@ __metadata:
     eslint-plugin-react-hooks: "npm:^5.0.0"
     eslint-plugin-react-refresh: "npm:^0.4.18"
     globals: "npm:^15.14.0"
+    lowlight: "npm:^3.3.0"
     lucide-react: "npm:^0.507.0"
     prosemirror-state: "npm:^1.4.3"
     prosemirror-view: "npm:^1.39.2"
@@ -6365,6 +6367,19 @@ __metadata:
     "@tiptap/core": ^2.7.0
     "@tiptap/pm": ^2.7.0
   checksum: 10c0/571f20763e65a31768d65e39ee8bd5f7e9ef8fd8394dcc842f3dc585511980afab9cbca3fae237d2172961f9dd20cf4f98b108543869594d019d7daf3df3fb6d
+  languageName: node
+  linkType: hard
+
+"@tiptap/extension-code-block-lowlight@npm:^2.12.0":
+  version: 2.12.0
+  resolution: "@tiptap/extension-code-block-lowlight@npm:2.12.0"
+  peerDependencies:
+    "@tiptap/core": ^2.7.0
+    "@tiptap/extension-code-block": ^2.7.0
+    "@tiptap/pm": ^2.7.0
+    highlight.js: ^11
+    lowlight: ^2 || ^3
+  checksum: 10c0/9e017f1b67dce8d8a4d53b595a20ec0cdcf691df42c452e62cc48984311f18d11213c4903d62c519ce53e0a9f6573449fd5b4e81462e4befa6d51e58259ed965
   languageName: node
   linkType: hard
 
@@ -12133,6 +12148,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"highlight.js@npm:~11.11.0":
+  version: 11.11.1
+  resolution: "highlight.js@npm:11.11.1"
+  checksum: 10c0/40f53ac19dac079891fcefd5bd8a21cf2e8931fd47da5bd1dca73b7e4375c1defed0636fc39120c639b9c44119b7d110f7f0c15aa899557a5a1c8910f3c0144c
+  languageName: node
+  linkType: hard
+
 "hosted-git-info@npm:^2.1.4":
   version: 2.8.9
   resolution: "hosted-git-info@npm:2.8.9"
@@ -13753,6 +13775,17 @@ __metadata:
   version: 2.0.0
   resolution: "lowercase-keys@npm:2.0.0"
   checksum: 10c0/f82a2b3568910509da4b7906362efa40f5b54ea14c2584778ddb313226f9cbf21020a5db35f9b9a0e95847a9b781d548601f31793d736b22a2b8ae8eb9ab1082
+  languageName: node
+  linkType: hard
+
+"lowlight@npm:^3.3.0":
+  version: 3.3.0
+  resolution: "lowlight@npm:3.3.0"
+  dependencies:
+    "@types/hast": "npm:^3.0.0"
+    devlop: "npm:^1.0.0"
+    highlight.js: "npm:~11.11.0"
+  checksum: 10c0/9b796fa8443b0334ebf18bc57387c9ee31432d8c263cf2089d23e1087c653d708447284e0647bf993cb2cdc810e0b268a28f51ea27b4a624893b97bdd3f025f4
   languageName: node
   linkType: hard
 
