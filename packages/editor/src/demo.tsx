@@ -24,7 +24,7 @@ export default function DemoApp() {
             onNavigateToNote={(id) => console.log(`navigating to ${id}`)}
           />
         </div>
-        <div className="shrink-0 w-1/2 border-l border-l-border p-2">
+        <div className="shrink-0 w-1/2 border-l border-l-border p-2 overflow-y-auto">
           {JSON.stringify(content)}
         </div>
       </div>

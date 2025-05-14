@@ -23,7 +23,7 @@ export default function CodeBlockNodeView(props: NodeViewProps) {
             <SelectTrigger className="w-fit border-none opacity-60 group-hover:opacity-100 shrink-0 hover:bg-secondary h-fit transition-[background,opacity] text-xs aria-expanded:bg-secondary/80">
               {language}
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent hideArrows>
               {languages.map(lang => <SelectItem key={lang} value={lang}>
                 {lang}
               </SelectItem>)}

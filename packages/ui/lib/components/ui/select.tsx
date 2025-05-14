@@ -48,8 +48,9 @@ function SelectContent({
   className,
   children,
   position = "popper",
+  hideArrows = false,
   ...props
-}: React.ComponentProps<typeof SelectPrimitive.Content>) {
+}: React.ComponentProps<typeof SelectPrimitive.Content> & {hideArrows?: boolean}) {
   return (
     <SelectPrimitive.Portal>
       <SelectPrimitive.Content
@@ -63,7 +64,7 @@ function SelectContent({
         position={position}
         {...props}
       >
-        <SelectScrollUpButton />
+        {!hideArrows && <SelectScrollUpButton />}
         <SelectPrimitive.Viewport
           className={cn(
             "p-1",
@@ -73,7 +74,7 @@ function SelectContent({
         >
           {children}
         </SelectPrimitive.Viewport>
-        <SelectScrollDownButton />
+        {!hideArrows && <SelectScrollDownButton />}
       </SelectPrimitive.Content>
     </SelectPrimitive.Portal>
   )
