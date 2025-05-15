@@ -44,7 +44,7 @@ function SlashCommandItem({
     >
       <div
         className={cn(
-          "bg-view-2 w-9 h-9 rounded-md border flex justify-center items-center",
+          "bg-view-2 w-9 h-9 rounded-md border flex justify-center items-center shrink-0",
         )}
       >
         {item.icon}
@@ -85,11 +85,11 @@ export const SlashCommandView = forwardRef(function (
   return (
     <div
       ref={containerRef}
-      className="w-64 max-h-[40vh] bg-popover border rounded-xl drop-shadow-xl pt-1 px-1"
+      className="max-h-[40vh] max-w-[600px] bg-popover border rounded-xl drop-shadow-xl pt-1 px-1 flex flex-col command-view"
     >
       <Command
         className={
-          "bg-transparent [&>div[data-slot=command-input-wrapper]]:hidden"
+          "bg-transparent [&>div[data-slot=command-input-wrapper]]:hidden grow"
         }
         value={value}
         onValueChange={(val) => {
@@ -106,7 +106,7 @@ export const SlashCommandView = forwardRef(function (
         <CommandEmpty className="px-2 text-muted-foreground/80 text-center py-2">
           No results
         </CommandEmpty>
-        <CommandList ref={listRef} className="bg-transparent pb-1">
+        <CommandList ref={listRef} className="bg-transparent pb-1 command-view-container">
           {props.items
             .map((i) => (
               <SlashCommandItem

@@ -108,3 +108,27 @@
     opacity: 1;
   }
 }
+
+
+.command-view-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.command-view-container::-webkit-scrollbar-track {
+  overflow: hidden;
+}
+
+.command-view-container::-webkit-scrollbar-thumb {
+  @apply bg-secondary/75;
+  border-radius: 0.3em;
+}
+
+.command-view-container::-webkit-scrollbar-thumb:hover {
+  @apply bg-secondary;
+}
+
+.command-view {
+  div[data-slot=command-input-wrapper] {
+    display: none;
+  }
+}

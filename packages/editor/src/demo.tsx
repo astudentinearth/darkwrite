@@ -10,6 +10,7 @@ import EditorUtil from "./editor/editor-util";
 import { MockEmbedContext } from "./mock-embed-context";
 import { ImageExtensionConfig } from "./editor/extensions/image/image-config";
 import { nanoid } from "nanoid";
+import i18next from "i18next";
 
 export default function DemoApp() {
   const [content, setContent] = useState<EditorContent>({
@@ -69,6 +70,7 @@ export default function DemoApp() {
               onInstanceChange={setInstance}
               imageUploadConfig={config}
               embedSourceResolver={embedResolver}
+              i18n={i18next}
             />
           </div>
           <div className="shrink-0 w-1/2 border-l border-l-border [&>button]:mr-2 p-2 overflow-y-auto json-view">

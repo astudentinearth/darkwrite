@@ -11,6 +11,7 @@ import { useNoteFromURL } from "./hooks/use-note-from-url";
 import { SettingsAPI } from "./api";
 import { Toaster } from "sonner";
 import UpdateChecker from "./components/update-checker";
+import "@darkwrite/ui/dist/styles.css"
 
 const EditorRootWrapper = () => {
   const note = useNoteFromURL();

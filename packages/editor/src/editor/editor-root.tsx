@@ -5,7 +5,7 @@ import { DefaultEditorExtensions } from "./extensions/default";
 import Bubble from "./extensions/bubble-menu";
 import { SlashCommandRenderer } from "./extensions/slash-command/slash-command-renderer";
 import slashCommandExtension from "./extensions/slash-command/slash-command-extension";
-import { codeBlock } from "./extensions/code-block";
+import { CodeBlockExtension } from "./extensions/code-block";
 import { ImageExtension } from "./extensions/image/image-extension";
 
 function InstanceHandler() {
@@ -26,7 +26,7 @@ export function EditorRoot() {
       items: ()=>context.commandItems
     },
   })
-  const codeblock = codeBlock(context.codeBlockIndentSize);
+  const codeblock = CodeBlockExtension(context.codeBlockIndentSize);
   const imagePlugin = ImageExtension(context.imageUploadConfig);
   return <EditorProvider
     content={context.content}

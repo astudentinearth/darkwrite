@@ -9,3 +9,5 @@ export interface SlashCommandItem {
   keywords?: string[];
   command: (args: { editor: Editor; range: Range; }) => void;
 }
+
+export type { Editor, Range }

@@ -2,7 +2,7 @@ import { Editor, Extension, Range } from "@tiptap/core";
 import Suggestion from "@tiptap/suggestion"
 
 
-export default Extension.create({
+export const SlashCommandExtension = Extension.create({
   name: "slash-command",
 
   addOptions() {
@@ -25,3 +25,5 @@ export default Extension.create({
     ]
   },
 })
+
+export default SlashCommandExtension;

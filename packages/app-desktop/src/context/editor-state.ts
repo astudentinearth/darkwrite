@@ -1,6 +1,5 @@
 import { NoteCustomizations } from "@darkwrite/common";
-import { Editor } from "@tiptap/core";
-import { type JSONContent } from "novel";
+import { Editor, EditorContent as JSONContent } from "@darkwrite/editor";
 import { create } from "zustand";
 
 type editorState = {
