@@ -1486,6 +1486,7 @@ __metadata:
     "@tiptap/extension-bubble-menu": "npm:^2.11.9"
     "@tiptap/extension-code-block-lowlight": "npm:^2.12.0"
     "@tiptap/extension-horizontal-rule": "npm:^2.11.9"
+    "@tiptap/extension-image": "npm:^2.12.0"
     "@tiptap/extension-link": "npm:^2.11.9"
     "@tiptap/extension-placeholder": "npm:^2.11.9"
     "@tiptap/extension-task-item": "npm:^2.11.9"
@@ -1507,6 +1508,7 @@ __metadata:
     globals: "npm:^15.14.0"
     lowlight: "npm:^3.3.0"
     lucide-react: "npm:^0.507.0"
+    nanoid: "npm:^5.1.5"
     prosemirror-state: "npm:^1.4.3"
     prosemirror-view: "npm:^1.39.2"
     react: "npm:^19.0.0"
@@ -6617,6 +6619,15 @@ __metadata:
   peerDependencies:
     "@tiptap/core": ^2.7.0
   checksum: 10c0/cb6dcc99b798dbe6af06315302ff377072f3bd5b10bef9d8ea621b2aa7893b07debb87ec8556efc8eee78511912c03cca289afdcc215d1b8724b2293448b0325
+  languageName: node
+  linkType: hard
+
+"@tiptap/extension-image@npm:^2.12.0":
+  version: 2.12.0
+  resolution: "@tiptap/extension-image@npm:2.12.0"
+  peerDependencies:
+    "@tiptap/core": ^2.7.0
+  checksum: 10c0/b72f94053075dbd3c083f9a80c2af80ab5a1ab3d875ae4b11f68bd9884b45df6f250ac0b3472d8bb980672abed525d4017f6b3fac38fa512a696e7aba2583ac3
   languageName: node
   linkType: hard
 
@@ -15163,6 +15174,15 @@ __metadata:
   bin:
     nanoid: bin/nanoid.js
   checksum: 10c0/a2d9710525d4998a8a1610bbe6eb9a92c254ebab7c567c1ab429046fe7eed9c4df3508b59fb44c58ffdc98edb28dd6f953715c14b64ea0a3a2ce37420cdfeefd
+  languageName: node
+  linkType: hard
+
+"nanoid@npm:^5.1.5":
+  version: 5.1.5
+  resolution: "nanoid@npm:5.1.5"
+  bin:
+    nanoid: bin/nanoid.js
+  checksum: 10c0/e6004f1ad6c7123eeb037062c4441d44982037dc043aabb162457ef6986e99964ba98c63c975f96c547403beb0bf95bc537bd7bf9a09baf381656acdc2975c3c
   languageName: node
   linkType: hard
 

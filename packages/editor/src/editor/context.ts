@@ -2,6 +2,7 @@ import { EditorContent, SlashCommandItem } from "@/types"
 import { Editor } from "@tiptap/core";
 import { createContext } from "react";
 import { Note } from "@darkwrite/common";
+import { ImageExtensionConfig } from "./extensions/image/image-config";
 
 export interface IDarkwriteEditorContext {
   content: EditorContent;
@@ -12,11 +13,15 @@ export interface IDarkwriteEditorContext {
   onNavigateToNote?: (noteId: string) => void;
   commandItems: SlashCommandItem[];
   codeBlockIndentSize: number;
+  embedSourceResolver: (id: string) => Promise<string>;
+  imageUploadConfig: ImageExtensionConfig;
 }
 
 export const DarkwriteEditorContext = createContext<IDarkwriteEditorContext>({
   content: {},
   onContentChange: ()=>{},
   commandItems: [],
-  codeBlockIndentSize: 4
+  codeBlockIndentSize: 4,
+  embedSourceResolver: () => new Promise(()=>""),
+  imageUploadConfig: {} as ImageExtensionConfig
 });

@@ -6,12 +6,12 @@ import Bubble from "./extensions/bubble-menu";
 import { SlashCommandRenderer } from "./extensions/slash-command/slash-command-renderer";
 import slashCommandExtension from "./extensions/slash-command/slash-command-extension";
 import { codeBlock } from "./extensions/code-block";
+import { ImageExtension } from "./extensions/image/image-extension";
 
 function InstanceHandler() {
   const context = use(DarkwriteEditorContext);
   const editor = useCurrentEditor();
   useEffect(()=>{
-    console.log("Updating editor instance")
     if(!editor.editor) return;
     context.onInstanceChange?.call(undefined, editor.editor);
   }, [editor, context.onInstanceChange]);
@@ -27,6 +27,7 @@ export function EditorRoot() {
     },
   })
   const codeblock = codeBlock(context.codeBlockIndentSize);
+  const imagePlugin = ImageExtension(context.imageUploadConfig);
   return <EditorProvider
     content={context.content}
     onUpdate={({ editor }) => {
@@ -38,7 +39,7 @@ export function EditorRoot() {
         class: `prose prose-lg dark:prose-invert prose-headings:font-title font-default focus:outline-hidden max-w-full text-(--dw-editor-foreground)`
       }
     }}
-    extensions={[...DefaultEditorExtensions, command, codeblock]}
+    extensions={[...DefaultEditorExtensions, command, codeblock, imagePlugin]}
   >
     <Bubble/>
     <InstanceHandler/>
