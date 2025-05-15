@@ -9,3 +9,7 @@ html, body, #root {
   --dw-editor-foreground: var(--foreground);
   --dw-editor-background: transparent;
 }
+
+.json-view {
+  font-family: "FantasqueSansM Nerd Font Mono", "SpaceMono Nerd Font", "Cascadia Mono", monospace;
+}

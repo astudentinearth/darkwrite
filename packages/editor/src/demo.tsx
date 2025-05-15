@@ -4,12 +4,17 @@ import DarkwriteEditor from "./editor";
 import { useSlashCommand } from "./editor/extensions/slash-command/builtin-command-items";
 import { mockNotes } from "./editor/mocks";
 import { EditorContent } from "./types";
+import { Editor } from "@tiptap/core";
+import { Button } from "@darkwrite/ui";
+import EditorUtil from "./editor/editor-util";
 
 export default function DemoApp() {
   const [content, setContent] = useState<EditorContent>({
     type: "doc",
     content: [],
   });
+  const [instance, setInstance] = useState<Editor | null>(null);
+  const util = instance ? new EditorUtil(instance) : null;
   const { items } = useSlashCommand();
   return (
     <div className="w-full h-full absolute top-0 left-0 flex justify-center items-center bg-background p-4 drop-shadow-2xl">
@@ -22,9 +27,15 @@ export default function DemoApp() {
             commandItems={items}
             codeBlockIndentSize={2}
             onNavigateToNote={(id) => console.log(`navigating to ${id}`)}
+            onInstanceChange={setInstance}
           />
         </div>
-        <div className="shrink-0 w-1/2 border-l border-l-border p-2 overflow-y-auto">
+        <div className="shrink-0 w-1/2 border-l border-l-border [&>button]:mr-2 p-2 overflow-y-auto json-view">
+          <Button variant={"outline"} onClick={()=>console.log(util?.getHeadings())}>log headings</Button>
+          <Button variant={"outline"} onClick={()=>console.log(util?.getTodos())}>log todos</Button>
+          <Button variant={"outline"} onClick={()=>console.log(util?.insertParagraphBelow())}>insert below</Button>
+          <Button variant={"outline"} onClick={()=>console.log(util?.insertParagraphAbove())}>insert above</Button>
+          <br/>
           {JSON.stringify(content)}
         </div>
       </div>
