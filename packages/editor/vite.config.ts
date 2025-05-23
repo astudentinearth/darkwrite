@@ -15,7 +15,8 @@ export default defineConfig({
       entry: path.resolve(__dirname, "src/index.ts"),
       formats: ["es"],
       cssFileName: "editor"
-    }
+    },
+    emptyOutDir: false
   },
   resolve: {
     alias: {

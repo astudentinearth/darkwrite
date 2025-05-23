@@ -11,6 +11,7 @@ import GlobalDragHandle from "tiptap-extension-global-drag-handle";
 import { LinkToPage } from "./link-to-page";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import lowlight from "../lowlight";
+import { KeymapFixer } from "./keymap-patcher";
 
 export const starterKit = StarterKit.configure({
   bulletList: {
@@ -134,4 +135,5 @@ export const DefaultEditorExtensions = [
   link,
   LinkToPage,
   underline,
+  KeymapFixer
 ];
