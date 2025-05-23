@@ -1,9 +1,25 @@
 import { SlashCommandItem } from "@/types";
+import {
+  CheckSquare,
+  Code,
+  Heading1,
+  Heading2,
+  Heading3,
+  Heading4,
+  Image,
+  Link,
+  List,
+  ListOrdered,
+  SquareMinus,
+  Text,
+  TextQuote,
+} from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { Text, CheckSquare, Heading1, Heading2, Heading3, Link, SquareMinus, Code, TextQuote, ListOrdered, List, Heading4 } from "lucide-react"
+import { ImageExtensionConfig } from "../image/image-config";
+import { createImageNode } from "../image/image-upload-transaction";
 
-export const useSlashCommand = ()=>{
-  const {t} = useTranslation(undefined, {keyPrefix: "editor.slashCommand"});
+export const useSlashCommand = (imageUploadConfig: ImageExtensionConfig) => {
+  const { t } = useTranslation(undefined, { keyPrefix: "editor.slashCommand" });
   const items: SlashCommandItem[] = [
     {
       id: "builtin.text",
@@ -159,27 +175,27 @@ export const useSlashCommand = ()=>{
           .run();
       },
     },
-    // {
-    //   id: "builtin.image",
-    //   title: t("image"),
-    //   description: t("imageDescription"),
-    //   searchTerms: ["image", "img", "picture", "photo"],
-    //   icon: <Image size={18} />,
-    //   command({ editor, range }) {
-    //     editor.chain().focus().deleteRange(range).run();
-    //     const inp = document.createElement("input");
-    //     inp.type = "file";
-    //     inp.accept = "image/*";
-    //     inp.onchange = () => {
-    //       if (!inp.files?.length) return;
-    //       const file = inp.files[0];
-    //       const pos = editor.view.state.selection.from;
-    //       createImageNode(file, editor.view, pos);
-    //     };
-    //     inp.click();
-    //   },
-    // },
+    {
+      id: "builtin.image",
+      title: t("image"),
+      description: t("imageDescription"),
+      keywords: ["image", "img", "picture", "photo"],
+      icon: <Image size={18} />,
+      command({ editor, range }) {
+        editor.chain().focus().deleteRange(range).run();
+        const inp = document.createElement("input");
+        inp.type = "file";
+        inp.accept = "image/*";
+        inp.onchange = () => {
+          if (!inp.files?.length) return;
+          const file = inp.files[0];
+          const pos = editor.view.state.selection.from;
+          createImageNode(file, editor.view, pos, imageUploadConfig);
+        };
+        inp.click();
+      },
+    },
   ];
 
   return { items };
-}
+};

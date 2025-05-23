@@ -1,4 +1,4 @@
-import { useSlashCommand } from "@darkwrite/editor";
+import { ImageExtensionConfig, useSlashCommand } from "@darkwrite/editor";
 import { EmbedAPI } from "@renderer/api";
 import {
   setEditorContent,
@@ -43,10 +43,15 @@ export function EditorRoot() {
   const indentSize = useSettingsStore(
     (s) => s.settings.editor.codeBlockIndentSize,
   );
-  const { items } = useSlashCommand();
+  const imageConfig: ImageExtensionConfig = {
+    saveArrayBuffer: async (buf, filetype) =>
+      (await EmbedAPI().createFromArrayBuffer(buf, filetype)).id,
+    uploadFile: async (file) => (await EmbedAPI().create(file)).id,
+  };
+  const { items } = useSlashCommand(imageConfig);
   const setEditor = useEditorState((s) => s.setEditorInstance);
   const nav = useNavigateToNote();
-  const { i18n }= useTranslation();
+  const { i18n } = useTranslation();
   useEffect(() => {
     if (content && customizations) {
       setEditorContent(content);
@@ -135,25 +140,27 @@ export function EditorRoot() {
       )}
       {content != null && !isError && !isFetching && note && (
         <>
-          <div className={cn("w-full max-w-(--editor-max-width)", "p-0 px-16", "grow")}>
+          <div
+            className={cn(
+              "w-full max-w-(--editor-max-width)",
+              "p-0 px-16",
+              "grow",
+            )}
+          >
             <DarkwriteEditorView
-            codeBlockIndentSize={indentSize}
-            commandItems={items}
-            content={content}
-            onContentChange={handleContentChange}
-            key={`editor-${note.id}`}
-            onInstanceChange={(e) => setEditor(e)}
-            notes={notes ?? undefined}
-            embedSourceResolver={EmbedAPI().resolveSourceURL}
-            
-            imageUploadConfig={{
-              saveArrayBuffer: async (buf, filetype) =>
-                (await EmbedAPI().createFromArrayBuffer(buf, filetype)).id,
-              uploadFile: async (file) => (await EmbedAPI().create(file)).id,
-            }}
-            onNavigateToNote={nav}
-            i18n={i18n as any}
-          />
+              codeBlockIndentSize={indentSize}
+              commandItems={items}
+              content={content}
+              onContentChange={handleContentChange}
+              key={`editor-${note.id}`}
+              onInstanceChange={(e) => setEditor(e)}
+              notes={notes ?? undefined}
+              embedSourceResolver={EmbedAPI().resolveSourceURL}
+              imageUploadConfig={imageConfig}
+              onNavigateToNote={nav}
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              i18n={i18n as any}
+            />
           </div>
           {/* <TextEditor
             key={`editor-${note.id}`}
