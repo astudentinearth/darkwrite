@@ -8,23 +8,23 @@ function createImageNode(
   pos: number,
   config: ImageExtensionConfig,
 ) {
-  const id = `image-${nanoid(8)}`;
+  const pendingId = `image-${nanoid(8)}`;
   const { state, dispatch } = view;
   const node = state.schema.nodes.dwimage.create({
-    pendingId: id,
+    pendingId: pendingId,
     src: "",
   });
 
   const tx = state.tr.insert(pos, node);
   dispatch(tx);
 
-  config.uploadFile(file).then((id) => {
+  config.uploadFile(file).then((embedId) => {
     const tr = view.state.tr;
-    if (!id) return;
+    if (!pendingId) return;
     tr.doc.descendants((node, pos) => {
-      if (node.type.name === "dwimage" && node.attrs.pendingId === id) {
-        tr.setNodeAttribute(pos, "src", `embed://${id}`);
-        tr.setNodeAttribute(pos, "embedId", id);
+      if (node.type.name === "dwimage" && node.attrs.pendingId === pendingId) {
+        tr.setNodeAttribute(pos, "src", `embed://${embedId}`);
+        tr.setNodeAttribute(pos, "embedId", embedId);
         tr.setNodeAttribute(pos, "pendingId", "");
       }
     });
