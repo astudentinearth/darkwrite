@@ -20,6 +20,7 @@ export const DarkwriteImageView = (props: DarkwriteImageViewProps) => {
     <NodeViewWrapper className="dwimage">
       <div
         data-drag-handle=""
+        contentEditable={false}
         className="flex justify-center dwimage-container"
       >
         {(embedId == null || source === "") ? (

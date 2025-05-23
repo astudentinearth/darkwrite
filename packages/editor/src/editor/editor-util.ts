@@ -1,5 +1,6 @@
 import { Editor } from "@tiptap/core";
 import { UtilityNodes } from "./node-types";
+import { useCurrentEditor } from "@tiptap/react";
 
 export default class EditorUtil {
   constructor(private editor: Editor) {}
@@ -43,6 +44,15 @@ export default class EditorUtil {
       .run();
   }
 
+  public insertParagraphAtEnd(){
+    const pos = this.editor.state.doc.content.size;
+    this.editor
+      .chain()
+      .focus()
+      .insertContentAt(pos, UtilityNodes.EmptyParagraph)
+      .run();
+  }
+
   public getHeadings() {
     const headings = this.editor.$nodes("heading");
     return (
@@ -65,6 +75,11 @@ export default class EditorUtil {
     }) satisfies Todo) || [];
   }
 
+  public getEndPos() {
+    const pos = this.editor.state.doc.content.size;
+    return pos;
+  }
+
   public canUndo() {
     return this.editor.can().undo;
   }
@@ -81,4 +96,10 @@ export default class EditorUtil {
     this.editor.chain().focus().redo().run();
   }
 
+}
+
+export const useEditorUtil = () => {
+  const {editor} = useCurrentEditor();
+  if(!editor) return null;
+  return new EditorUtil(editor);
 }

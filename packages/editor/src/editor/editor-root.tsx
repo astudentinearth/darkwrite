@@ -7,6 +7,7 @@ import { SlashCommandRenderer } from "./extensions/slash-command/slash-command-r
 import slashCommandExtension from "./extensions/slash-command/slash-command-extension";
 import { CodeBlockExtension } from "./extensions/code-block";
 import { ImageExtension } from "./extensions/image/image-extension";
+import { Padder } from "./extensions/padder";
 
 function InstanceHandler() {
   const context = use(DarkwriteEditorContext);
@@ -34,6 +35,7 @@ export function EditorRoot() {
       const updatedContent = editor.getJSON()
       context.onContentChange(updatedContent);
     }}
+    slotAfter={<Padder/>}
     editorProps={{
       attributes: {
         class: `prose prose-lg dark:prose-invert prose-headings:font-title font-default focus:outline-hidden max-w-full text-(--dw-editor-foreground)`
