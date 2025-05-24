@@ -1,3 +1,13 @@
+# 0.5.2-alpha.1
+## 🌟 Features
+- Upgraded code blocks with syntax highlighting.
+- Clicking on the empty space below the editor contents now moves the cursor to the end.
+
+## ✨ Improvements and fixes
+- We have rebuilt the editor from the ground up and extracted it into a new package.
+You should not notice much difference at first sight other than the new slash menu animation,
+however this changes a lot under the hood stuff and will speed up development in the long run.
+
 # 0.5.1-alpha.2
 ## ✨ Improvements and fixes
 - Fixed a bug which showed the "Darkwrite is up to date" toast on every automatic update check. This toast now appears only when you check for updates explicitly.
