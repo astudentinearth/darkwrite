@@ -17,9 +17,10 @@
   "scripts": {
     "dev": "vite",
     "build": "node ./darkwrite-builder.js",
-    "build:pre": "npm-run-all --serial licenses build:common build:ui build:vite",
+    "build:pre": "npm-run-all --serial licenses build:common build:ui build:editor build:vite",
     "build:common": "yarn workspace @darkwrite/common build",
     "build:ui": "yarn workspace @darkwrite/ui build",
+    "build:editor": "yarn workspace @darkwrite/editor build",
     "build:vite": "vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "format": "prettier . --write",
