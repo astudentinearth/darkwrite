@@ -9,6 +9,8 @@ export const SlashCommandExtension = Extension.create({
     return {
       suggestion: {
         char: "/",
+        // i dont know the correct type, but it works
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         command: ({ editor, range, props }: {editor: Editor, range: Range, props: any}) => {
           props.command({editor, range})
         }
