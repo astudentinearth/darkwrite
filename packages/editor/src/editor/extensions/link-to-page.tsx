@@ -17,6 +17,7 @@ import { Plugin } from "prosemirror-state";
 import { MouseEvent, use, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { DarkwriteEditorContext } from "../context";
+import { getNoteIcon } from "@/utils";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const LinkComponent = ({ node, updateAttributes }: any) => {
@@ -51,8 +52,7 @@ const LinkComponent = ({ node, updateAttributes }: any) => {
             {!note ? (
               <File size={18} className="opacity-75" />
             ) : (
-              //getNoteIcon(note.icon)
-              ""
+              getNoteIcon(note.icon)
             )}
             {!note ? (
               t("editor.blocks.linkToPage.placeholder")
@@ -90,7 +90,7 @@ const LinkComponent = ({ node, updateAttributes }: any) => {
                     value={`${n.id}$${n.title}`}
                     className="flex gap-2"
                   >
-                    {/*getNoteIcon(n.icon)*/}
+                    {getNoteIcon(n.icon)}
                     {n.title}
                   </CommandItem>
                 ))}

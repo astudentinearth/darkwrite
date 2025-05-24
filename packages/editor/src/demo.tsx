@@ -20,7 +20,7 @@ export default function DemoApp() {
   const [instance, setInstance] = useState<Editor | null>(null);
   const [embeds, setEmbeds] = useState<{ [key: string]: string }>({});
   const util = instance ? new EditorUtil(instance) : null;
-  const { items } = useSlashCommand();
+
 
   const config: ImageExtensionConfig = {
     uploadFile: async (file) => {
@@ -54,7 +54,7 @@ export default function DemoApp() {
   };
 
   const embedResolver = async (id: string) => embeds[id];
-
+  const { items } = useSlashCommand(config);
   return (
     <MockEmbedContext.Provider value={{ embeds }}>
       <div className="w-full h-full absolute top-0 left-0 flex justify-center items-center bg-background p-4 drop-shadow-2xl">
