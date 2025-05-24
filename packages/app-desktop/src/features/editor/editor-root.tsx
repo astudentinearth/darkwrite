@@ -48,10 +48,11 @@ export function EditorRoot() {
       (await EmbedAPI().createFromArrayBuffer(buf, filetype)).id,
     uploadFile: async (file) => (await EmbedAPI().create(file)).id,
   };
-  const { items } = useSlashCommand(imageConfig);
   const setEditor = useEditorState((s) => s.setEditorInstance);
   const nav = useNavigateToNote();
   const { i18n } = useTranslation();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { items } = useSlashCommand(imageConfig, i18n as any);
   useEffect(() => {
     if (content && customizations) {
       setEditorContent(content);

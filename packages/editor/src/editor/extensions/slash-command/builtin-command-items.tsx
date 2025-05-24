@@ -17,9 +17,10 @@ import {
 import { useTranslation } from "react-i18next";
 import { ImageExtensionConfig } from "../image/image-config";
 import { createImageNode } from "../image/image-upload-transaction";
+import { i18n } from "i18next";
 
-export const useSlashCommand = (imageUploadConfig: ImageExtensionConfig) => {
-  const { t } = useTranslation(undefined, { keyPrefix: "editor.slashCommand" });
+export const useSlashCommand = (imageUploadConfig: ImageExtensionConfig, i18n?: i18n) => {
+  const { t } = useTranslation(undefined, { keyPrefix: "editor.slashCommand", i18n });
   const items: SlashCommandItem[] = [
     {
       id: "builtin.text",

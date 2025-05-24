@@ -1,4 +1,4 @@
-# 0.5.2-alpha.1
+# 0.5.2-alpha.2
 ## 🌟 Features
 - Upgraded code blocks with syntax highlighting.
 - Clicking on the empty space below the editor contents now moves the cursor to the end.
