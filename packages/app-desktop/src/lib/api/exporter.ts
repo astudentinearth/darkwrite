@@ -1,6 +1,5 @@
 import { NoteAPI } from "@renderer/api";
-import { defaultExtensions } from "@renderer/features/editor/extensions/extensions";
-import { generateHTML } from "@tiptap/html";
+import { generateHTML } from "@darkwrite/editor";
 import { attempt } from "lodash";
 
 export class ExporterModel {
@@ -29,7 +28,7 @@ export class ExporterModel {
           json.contents.content = [];
           json.contents.type = "doc";
         }
-        const html = generateHTML(json.contents, [...defaultExtensions]);
+        const html = generateHTML(json.contents);
         await API.push(`${note.title}-${note.id}.html`, html);
       }
     }

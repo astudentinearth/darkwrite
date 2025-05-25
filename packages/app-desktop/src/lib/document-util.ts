@@ -1,5 +1,5 @@
 
-import { type JSONContent } from "novel";
+import { type EditorContent as JSONContent } from "@darkwrite/editor";
 import { NoteCustomizations, type Note } from "@darkwrite/common";
 
 export interface DarkwriteDocument {

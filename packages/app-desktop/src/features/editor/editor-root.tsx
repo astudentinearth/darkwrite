@@ -1,4 +1,4 @@
-import { useSlashCommand } from "@darkwrite/editor";
+import { useSlashCommand, EditorContent } from "@darkwrite/editor";
 import "@darkwrite/editor/dist/editor.css";
 import "@darkwrite/editor/dist/styles.css";
 import { EmbedAPI } from "@renderer/api";
@@ -14,7 +14,6 @@ import { useEditorStateManager } from "@renderer/hooks/use-editor-state-manager"
 import { useNavigateToNote } from "@renderer/hooks/use-navigate-to-note";
 import { useNoteEditor } from "@renderer/hooks/use-note-editor";
 import { cn } from "@renderer/lib/utils";
-import { JSONContent } from "novel";
 import React, { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import DarkwriteEditorView from "../editorv2/editor";
@@ -72,7 +71,7 @@ export function EditorRoot() {
       </div>
     );
 
-  const handleContentChange = (content: JSONContent) => {
+  const handleContentChange = (content: EditorContent) => {
     //console.log("Updating content");
 
     setValue(content);

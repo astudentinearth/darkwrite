@@ -2,7 +2,7 @@ import { NoteCustomizations } from "@darkwrite/common";
 import { NoteAPI } from "@renderer/api";
 import { useMutation } from "@tanstack/react-query";
 import _ from "lodash";
-import { JSONContent } from "novel";
+import { EditorContent } from "@darkwrite/editor";
 import { useUpdateNoteMutation } from "./use-update-note-mutation";
 
 export const debouncedSave = _.debounce(
@@ -16,7 +16,7 @@ export const debouncedSave = _.debounce(
 
 export type NoteContentsMutationData = {
   noteData: {
-    contents: JSONContent,
+    contents: EditorContent,
     customizations: NoteCustomizations
   },
   noDebounce?: boolean
