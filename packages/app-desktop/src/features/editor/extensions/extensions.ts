@@ -13,6 +13,7 @@ import { TextExtensions } from "./text";
 import { DarkwriteImage } from "./darkwrite-image";
 import { KeymapFixer } from "./keymap-fixer";
 
+
 const placeholder = Placeholder.configure({});
 
 const taskList = TaskList.configure({
@@ -27,6 +28,7 @@ const taskItem = TaskItem.configure({
   nested: true,
 });
 
+/** @deprecated - use darkwrite/editor instead. */
 export const defaultExtensions = [
   placeholder,
   DarkwriteImage,

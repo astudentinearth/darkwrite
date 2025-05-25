@@ -7,7 +7,7 @@ import { createImageNode, isImageFile } from "./image-upload";
 import { ReactNodeViewRenderer } from "@tiptap/react";
 import { DarkwriteImageView } from "./image-view";
 
-
+/** @deprecated - use darkwrite/editor instead. */
 export const DarkwriteImage = TiptapImage.extend({
   name: "dwimage",
   addAttributes() {

@@ -1,6 +1,7 @@
 import { EmbedAPI } from "@renderer/api";
 import { type EditorView } from "prosemirror-view";
 
+/** @deprecated - use indexeddb embed api instead. */
 const uploadEmbed = async (file: File) => {
   const api = EmbedAPI();
   const embed = await api.create(file);
@@ -13,6 +14,7 @@ export const isImageFile = (file: File) => {
   return false;
 };
 
+/** @deprecated - use darkwrite/editor instead. */
 export const createImageNode = (file: File, view: EditorView, pos: number) => {
   // create placeholder node
   const id = `image-${Date.now()}`;

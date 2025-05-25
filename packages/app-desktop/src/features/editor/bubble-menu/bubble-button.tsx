@@ -4,6 +4,7 @@ import { Editor } from "@tiptap/core";
 import { LucideIcon } from "lucide-react";
 import { EditorBubbleItem, useEditor } from "novel";
 
+/** @deprecated - use darkwrite/editor instead. */
 export type BubbleButtonProps = {
   icon: LucideIcon;
   name: string;
@@ -12,6 +13,7 @@ export type BubbleButtonProps = {
   editor: ReturnType<typeof useEditor>;
 };
 
+/** @deprecated - use darkwrite/editor instead. */
 export function BubbleButton(props: BubbleButtonProps) {
   const { editor } = props;
   return (

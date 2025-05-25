@@ -18,6 +18,7 @@ import { Plugin } from "prosemirror-state";
 import { MouseEvent, useState } from "react";
 import { useTranslation } from "react-i18next";
 
+/** @deprecated - use darkwrite/editor instead. */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const LinkComponent = ({ node, updateAttributes }: any) => {
   const id = node.attrs.noteID;

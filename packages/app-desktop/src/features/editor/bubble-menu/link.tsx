@@ -11,6 +11,7 @@ import { Check, Link, Trash } from "lucide-react";
 import { KeyboardEvent, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
+/** @deprecated - use darkwrite/editor instead. */
 export function BubbleLink() {
   const { editor } = useCurrentEditor();
   const [open, setOpen] = useState(false);

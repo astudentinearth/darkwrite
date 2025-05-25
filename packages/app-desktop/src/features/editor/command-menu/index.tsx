@@ -6,6 +6,7 @@ import {
 } from "novel";
 import { useSlashCommand } from "./slash-command";
 
+/** @deprecated - use darkwrite/editor instead. */
 export default function SlashCommand() {
   const {suggestionItems} = useSlashCommand();
   return (

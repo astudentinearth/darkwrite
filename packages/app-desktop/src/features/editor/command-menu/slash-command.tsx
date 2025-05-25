@@ -13,10 +13,12 @@ import {
   Text,
   TextQuote
 } from "lucide-react";
+/** @deprecated - use darkwrite/editor instead. */
 import { Command, createSuggestionItems, renderItems } from "novel/extensions";
 import { useTranslation } from "react-i18next";
 import { createImageNode } from "../extensions/image-upload";
 
+/** @deprecated - use darkwrite/editor instead. */
 export const useSlashCommand = ()=>{
   const {t} = useTranslation(undefined, {keyPrefix: "editor.slashCommand"});
   const suggestionItems = createSuggestionItems([

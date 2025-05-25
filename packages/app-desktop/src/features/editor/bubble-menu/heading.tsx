@@ -16,6 +16,7 @@ import { useEditor } from "novel";
 import { Dispatch, ReactNode, SetStateAction } from "react";
 import { useTranslation } from "react-i18next";
 
+/** @deprecated - use darkwrite/editor instead. */
 export function HeadingSelector(props: {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;

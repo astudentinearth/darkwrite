@@ -100,6 +100,7 @@ const tiptapLink = TiptapLink.configure({
   },
 });
 
+/** @deprecated - use darkwrite/editor instead. */
 export const TextExtensions = [
   horizontalRule,
   starterKit,

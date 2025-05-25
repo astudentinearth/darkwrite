@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { BubbleButton } from "./bubble-button";
 
+/** @deprecated - use darkwrite/editor instead. */
 export function FormattingButtons() {
   const { editor } = useEditor();
   if (!editor) return null;

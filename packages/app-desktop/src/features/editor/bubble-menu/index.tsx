@@ -4,6 +4,8 @@ import { FormattingButtons } from "./formatting";
 import { HeadingSelector } from "./heading";
 import { BubbleLink } from "./link";
 import { ListSelector } from "./list";
+
+/** @deprecated - use darkwrite/editor instead. */
 export default function Bubble() {
   const [headingOpen, setHeadingOpen] = useState(false);
   const [listOpen, setListOpen] = useState(false);

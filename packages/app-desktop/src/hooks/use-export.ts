@@ -4,6 +4,7 @@ import { defaultExtensions } from "@renderer/features/editor/extensions/extensio
 import { generateHTML } from "@tiptap/html";
 import { attempt } from "lodash";
 
+/** @deprecated replacement needed! */
 export const useExport = () => {
   return async (note: Note, type: NoteExportType = "html") => {
     const result = await NoteAPI().getContents(note.id);

@@ -13,6 +13,7 @@ import {
 } from "@darkwrite/ui";
 import { EditorContextMenuContent } from "./context-menu";
 
+/** @deprecated - use darkwrite/editor instead. */
 interface TextEditorProps {
   initialValue?: JSONContent;
   onChange?: (content: JSONContent) => void;
@@ -20,7 +21,7 @@ interface TextEditorProps {
 }
 
 
-
+/** @deprecated - use darkwrite/editor instead. */
 export const TextEditor = ({ initialValue, onChange }: TextEditorProps) => {
   const {slashCommand} = useSlashCommand();
   const extensions = [...defaultExtensions, slashCommand];

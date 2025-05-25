@@ -10,13 +10,14 @@ import { defaultExtensions } from "./extensions/extensions";
 import InstanceHandler from "./instance-handler";
 import { useCreateNoteMutation } from "@renderer/hooks/query";
 
+/** @deprecated - use darkwrite/editor instead. */
 export interface EditorProp {
   initialValue?: JSONContent;
   onChange: (value: JSONContent) => void;
 }
 
 
-
+/** @deprecated - use darkwrite/editor instead. */
 export function EditorContentWrapper({ initialValue, onChange }: EditorProp) {
   const fontStyle = useEditorState((state) => state.customizations.font);
   const { mutate: createNew } = useCreateNoteMutation();
