@@ -80,3 +80,10 @@ export function findSubnotes(parentId: string, notes: Note[]) {
 
 export const countWords = (text: string): number =>
   text.match(/\b\w+\b/g)?.length ?? 0;
+
+export const serializeNote = <T>(contents: T, customizations: NoteCustomizations) => {
+  return JSON.stringify({
+    contents,
+    customizations
+  })
+}

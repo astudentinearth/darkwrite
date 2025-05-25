@@ -7,7 +7,7 @@ import { useUpdateNoteMutation } from "./use-update-note-mutation";
 
 export const debouncedSave = _.debounce(
   async (id: string, content: string, callback?: () => void) => {
-    //console.log("Saving note to disk...", id,content);
+    console.log("Saving note to disk...", id,content);
     await NoteAPI().updateContents(id, content);
     callback?.call(null);
   },
