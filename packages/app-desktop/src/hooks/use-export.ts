@@ -1,10 +1,12 @@
 import { Note, NoteExportType } from "@darkwrite/common";
 import { NoteAPI } from "@renderer/api";
-import { defaultExtensions } from "@renderer/features/editor/extensions/extensions";
-import { generateHTML } from "@tiptap/html";
+import { generateHTML } from "@darkwrite/editor";
 import { attempt } from "lodash";
 
-/** @deprecated replacement needed! */
+/**
+ * Hook to export a note in either JSON or HTML format.
+ * @returns A function that takes a note and an optional export type.
+ */
 export const useExport = () => {
   return async (note: Note, type: NoteExportType = "html") => {
     const result = await NoteAPI().getContents(note.id);
@@ -18,14 +20,10 @@ export const useExport = () => {
       return;
     }
     if ("contents" in json && json.contents != null && typeof json.contents === "object") {
-      if (!("content" in json.contents && "type" in json.contents)) {
-        json.contents.content = [];
-        json.contents.type = "doc";
-      }
       if (type === "json") {
         NoteAPI().exportJSON({ meta: note, content: json.contents, customizations: json.customizations ?? {}})
       } else {
-        const html = generateHTML(json.contents, [...defaultExtensions]);
+        const html = generateHTML(json.contents);
         NoteAPI().exportHTML(note, html);
       }
     }

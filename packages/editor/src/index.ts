@@ -8,3 +8,4 @@ export * from "./editor/index";
 export * from "./editor/lowlight";
 export * from "./editor/node-types";
 export * from "./editor/extensions"
+export * from "./editor/html-export";
