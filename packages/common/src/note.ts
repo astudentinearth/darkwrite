@@ -1,3 +1,6 @@
+/**
+ * @deprecated use models/note instead.
+ */
 export interface Note {
   id: string;
   title: string;

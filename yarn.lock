@@ -1464,6 +1464,7 @@ __metadata:
     "@types/showdown": "npm:^2.0.6"
     "@vitest/coverage-v8": "npm:^3.1.2"
     lodash: "npm:^4.17.21"
+    nanoid: "npm:^5.1.5"
     prettier: "npm:^3.4.1"
     showdown: "npm:^2.1.0"
     tsup: "npm:^8.2.4"

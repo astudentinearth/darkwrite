@@ -25,6 +25,7 @@
   "dependencies": {
     "@types/lodash": "^4.17.7",
     "lodash": "^4.17.21",
+    "nanoid": "^5.1.5",
     "showdown": "^2.1.0"
   }
 }
