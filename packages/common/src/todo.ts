@@ -1,3 +1,4 @@
+/** @deprecated has never been used and will be removed. */
 export interface TodoItemBase {
   id: string;
   content: string;
@@ -5,6 +6,7 @@ export interface TodoItemBase {
   listID: string;
 }
 
+/** @deprecated has never been used and will be removed. */
 export interface TodoListBase {
   id: string;
   name: string;

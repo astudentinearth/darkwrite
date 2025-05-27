@@ -2,6 +2,7 @@ import _ from "lodash";
 
 export type StartupBehavior = "HOME_PAGE" | "LAST_SESSION" | "SPECIFIC_PAGE";
 
+/** @deprecated use new models instead */
 export interface UserSettings {
   /** Determines the user's locale.
    * @deprecated Language is now persisted in `localStorage`. This key has no effect.
@@ -62,6 +63,7 @@ export interface UserSettings {
   version: string;
 }
 
+/** @deprecated use new models instead */
 export const DEFAULT_USER_SETTINGS: UserSettings = {
   lang: "en",
   appearance: {
