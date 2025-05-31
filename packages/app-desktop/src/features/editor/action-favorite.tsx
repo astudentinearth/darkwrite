@@ -16,7 +16,7 @@ export function FavoriteActionButton() {
       onClick={() => update({ id, isFavorite: !targetNote?.isFavorite })}
     >
       <Star
-        size={20}
+        size={18}
         className={cn(targetNote?.isFavorite && "text-star fill-star")}
       />
     </HeaderbarButton>

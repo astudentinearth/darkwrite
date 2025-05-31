@@ -26,7 +26,7 @@ export function CustimzationSheet(props: {
         <HeaderbarButton
           className={cn(props.open && "bg-secondary/80 opacity-100")}
         >
-          <Brush size={20} />
+          <Brush size={18} />
         </HeaderbarButton>
       </PopoverTrigger>
       <PopoverContent className="flex flex-col gap-1 w-fit p-1 rounded-xl bg-popover/90 backdrop-blur-lg">

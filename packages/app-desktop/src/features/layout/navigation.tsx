@@ -1,5 +1,5 @@
 import { HeaderbarButton } from "@renderer/components/ui/headerbar-button";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
@@ -15,10 +15,10 @@ export function HistoryNavigation(){
 
   return <>
     <HeaderbarButton disabled={!canGoBack} className="disabled:opacity-20" title="Back" onClick={() => window.history.back()}>
-      <ChevronLeft size={20}/>
+      <ArrowLeft size={18}/>
     </HeaderbarButton>
-    {canGoForward && <HeaderbarButton title="Forward" onClick={() => window.history.forward()}>
-      <ChevronRight size={20}/>
-    </HeaderbarButton>}
+    <HeaderbarButton disabled={!canGoForward} title="Forward" onClick={() => window.history.forward()}>
+      <ArrowRight size={18}/>
+    </HeaderbarButton>
   </>
 }

@@ -56,7 +56,7 @@ export function EditorMenu() {
           <HeaderbarButton
             className={cn(open && "bg-secondary/80 opacity-100")}
           >
-            <Menu size={20} />
+            <Menu size={18} />
           </HeaderbarButton>
         </DropdownMenuTrigger>
 

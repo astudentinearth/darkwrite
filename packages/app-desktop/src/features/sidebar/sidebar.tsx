@@ -45,21 +45,21 @@ export function Sidebar(props: SidebarProps) {
           title="Edit sidebar"
           disabled
         >
-          <LayoutDashboard width={20} height={20} />
+          <LayoutDashboard width={18} height={18} />
         </Button>
         <HeaderbarButton
           data-testid="button-search"
           title="Search"
           onClick={() => setSearchOpen(true)}
         >
-          <Search width={20} height={20} />
+          <Search width={18} height={18} />
         </HeaderbarButton>
         <HeaderbarButton
           data-testid="button-collapse-sidebar"
           onClick={collapseCallback}
           title="Hide sidebar"
         >
-          <PanelRightOpen width={20} height={20} />
+          <PanelRightOpen width={18} height={18} />
         </HeaderbarButton>
       </div>
       <ScrollArea className="h-full px-2 py-0">
