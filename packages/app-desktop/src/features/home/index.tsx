@@ -1,7 +1,7 @@
 import { Note } from "@darkwrite/common";
 import { Button } from "@darkwrite/ui";
 import { useCreateNoteMutation } from "@renderer/hooks/query/use-create-note-mutation";
-import { useCenteredLayout } from "@renderer/hooks/use-centered-layout";
+import { useCenteredLayout } from "@renderer/hooks/layout/use-centered-layout";
 import { useNavigateToNote } from "@renderer/hooks/use-navigate-to-note";
 import { useRecentNotes } from "@renderer/hooks/use-recents";
 import { cn, getNoteIcon } from "@renderer/lib/utils";

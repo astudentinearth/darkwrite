@@ -1,5 +1,5 @@
 import { useLocalStore } from "@renderer/context/local-state";
-import { useCenteredLayout } from "./use-centered-layout";
+import { useCenteredLayout } from "./layout/use-centered-layout";
 import { useSettingsStore } from "@renderer/context/settings-store";
 import { ImageExtensionConfig } from "@darkwrite/editor";
 import { EmbedAPI } from "@renderer/api";

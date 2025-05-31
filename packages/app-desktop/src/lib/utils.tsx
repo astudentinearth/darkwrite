@@ -33,7 +33,16 @@ export function hexToHslVariable(hexstr: string) {
   return `${hsl[0]} ${hsl[1]}% ${hsl[2]}%`;
 }
 
-export function generateId(){
-  if(self.crypto != null && typeof self.crypto.randomUUID === "function") return self.crypto.randomUUID();
+export function generateId() {
+  if (self.crypto != null && typeof self.crypto.randomUUID === "function")
+    return self.crypto.randomUUID();
   else return nanoid();
+}
+
+export function isClamped<T extends number | bigint>(
+  val: T,
+  min: T,
+  max: T,
+): boolean {
+  return val > min && val < max;
 }
