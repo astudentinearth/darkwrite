@@ -46,7 +46,8 @@ export function Layout() {
         ></Titlebar>
         <div
           className={cn(
-            "bg-view-1 h-full overflow-x-hidden main-view  border-border/25 ml-1.5 mb-1.5 mr-1.5 rounded-lg rounded-br-sm border"
+            "bg-view-1 h-full overflow-x-hidden main-view  border-border/25 ml-0 mb-1.5 mr-1.5 rounded-lg rounded-br-sm border",
+            isSidebarCollapsed && "ml-1.5"
           )}
         >
           <Outlet />

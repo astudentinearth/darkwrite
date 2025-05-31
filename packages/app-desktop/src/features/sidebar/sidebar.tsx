@@ -62,7 +62,7 @@ export function Sidebar(props: SidebarProps) {
           <PanelRightOpen width={18} height={18} />
         </HeaderbarButton>
       </div>
-      <ScrollArea className="h-full px-2 py-0">
+      <ScrollArea className="h-full px-3 py-0">
         <div className="flex gap-2 flex-col mb-2">
           <CreatePageButton />
           <NavigationWidget />
