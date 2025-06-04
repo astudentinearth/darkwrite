@@ -1,119 +1,161 @@
 import { FlexibleSpacer } from "@renderer/components/spacer";
-import { Button, Input, Label } from "@darkwrite/ui";
+import { Button, Label } from "@darkwrite/ui";
 import {
   produceUserSettings,
   useSettingsStore,
 } from "@renderer/context/settings-store";
-import { ChangeEvent, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@renderer/components/ui/select";
+
+declare global {
+  interface Window {
+    fontAPI: {
+      getSystemFonts: () => Promise<string[]>;
+    };
+  }
+}
 
 export default function FontSettings() {
   const { t } = useTranslation(undefined, { keyPrefix: "settings.fonts" });
   const fonts = useSettingsStore((s) => s.settings.fonts);
-  const uiRef = useRef<HTMLInputElement>(null);
-  const sansRef = useRef<HTMLInputElement>(null);
-  const serifRef = useRef<HTMLInputElement>(null);
-  const codeRef = useRef<HTMLInputElement>(null);
+  const [systemFonts, setSystemFonts] = useState<string[]>([]);
+  const [uiFont, setUiFont] = useState<string>(fonts.ui);
+  const [sansFont, setSansFont] = useState<string>(fonts.sans);
+  const [serifFont, setSerifFont] = useState<string>(fonts.serif);
+  const [codeFont, setCodeFont] = useState<string>(fonts.code);
+
+  useEffect(() => {
+    const loadFonts = async () => {
+      try {
+        const fonts = await window.fontAPI.getSystemFonts();
+        setSystemFonts(fonts);
+      } catch (error) {
+        // Silent fail - the UI will still work with empty system fonts list
+        console.error('Failed to load system fonts:', error);
+      }
+    };
+    loadFonts();
+  }, []);
+
   const submit = () => {
     produceUserSettings((draft) => {
-      if (
-        !uiRef.current ||
-        !sansRef.current ||
-        !serifRef.current ||
-        !codeRef.current
-      )
-        return;
-
-      draft.fonts.ui = uiRef.current.value;
-      draft.fonts.sans = sansRef.current.value;
-      draft.fonts.serif = serifRef.current.value;
-      draft.fonts.code = codeRef.current.value;
+      draft.fonts.ui = uiFont;
+      draft.fonts.sans = sansFont;
+      draft.fonts.serif = serifFont;
+      draft.fonts.code = codeFont;
     });
-  };
-
-  const handlePreview = (
-    e: ChangeEvent<HTMLInputElement>,
-    fallback: string,
-  ) => {
-    e.target.style.setProperty("font-family", `${e.target.value}, ${fallback}`);
   };
 
   return (
     <div
       className="p-4 bg-view-2 rounded-2xl flex flex-col gap-4 border border-border/50"
       onKeyDown={(e) => {
-        if (e.key == "Enter") submit();
+        if (e.key === "Enter") submit();
       }}
     >
       <h1 className="text-lg font-semibold text-foreground">{t("title")}</h1>
       <div className="flex flex-row gap-2 justify-items-center">
         <Label
-          htmlFor="ui-font-input"
+          htmlFor="ui-font-select"
           className="shrink-0 align-middle flex items-center"
         >
           {t("uiText")}
         </Label>
         <FlexibleSpacer />
-        <Input
-          id="ui-font-input"
-          className="max-w-80"
-          defaultValue={fonts.ui}
-          ref={uiRef}
-          placeholder={t("systemDefault")}
-          onChange={(e) => handlePreview(e, fonts.ui)}
-          style={{ fontFamily: fonts.ui }}
-        />
+        <Select
+          value={uiFont}
+          onValueChange={setUiFont}
+        >
+          <SelectTrigger className="w-80" id="ui-font-select">
+            <SelectValue placeholder={t("systemDefault")} />
+          </SelectTrigger>
+          <SelectContent>
+            {systemFonts.map((font) => (
+              <SelectItem key={font} value={font}>
+                <span style={{ fontFamily: font }}>{font}</span>
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
       <div className="flex flex-row gap-2">
         <Label
-          htmlFor="sans-font-input"
+          htmlFor="sans-font-select"
           className="shrink-0 flex items-center"
         >
           {t("sansText")}
         </Label>
         <FlexibleSpacer />
-        <Input
-          id="sans-font-input"
-          className="max-w-80"
-          defaultValue={fonts.sans}
-          ref={sansRef}
-          onChange={(e) => handlePreview(e, fonts.sans)}
-          style={{ fontFamily: fonts.sans }}
-        />
+        <Select
+          value={sansFont}
+          onValueChange={setSansFont}
+        >
+          <SelectTrigger className="w-80" id="sans-font-select">
+            <SelectValue placeholder={t("systemDefault")} />
+          </SelectTrigger>
+          <SelectContent>
+            {systemFonts.map((font) => (
+              <SelectItem key={font} value={font}>
+                <span style={{ fontFamily: font }}>{font}</span>
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
       <div className="flex flex-row gap-2">
         <Label
-          htmlFor="serif-font-input"
+          htmlFor="serif-font-select"
           className="shrink-0 flex items-center"
         >
           {t("serifText")}
         </Label>
         <FlexibleSpacer />
-        <Input
-          id="serif-font-input"
-          className="max-w-80"
-          defaultValue={fonts.serif}
-          ref={serifRef}
-          onChange={(e) => handlePreview(e, fonts.serif)}
-          style={{ fontFamily: fonts.serif }}
-        />
+        <Select
+          value={serifFont}
+          onValueChange={setSerifFont}
+        >
+          <SelectTrigger className="w-80" id="serif-font-select">
+            <SelectValue placeholder={t("systemDefault")} />
+          </SelectTrigger>
+          <SelectContent>
+            {systemFonts.map((font) => (
+              <SelectItem key={font} value={font}>
+                <span style={{ fontFamily: font }}>{font}</span>
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
       <div className="flex flex-row gap-2">
         <Label
-          htmlFor="mono-font-input"
+          htmlFor="mono-font-select"
           className="shrink-0 flex items-center"
         >
           {t("monoText")}
         </Label>
         <FlexibleSpacer />
-        <Input
-          id="mono-font-input"
-          className="max-w-80"
-          defaultValue={fonts.code}
-          ref={codeRef}
-          onChange={(e) => handlePreview(e, fonts.code)}
-          style={{ fontFamily: fonts.code }}
-        />
+        <Select
+          value={codeFont}
+          onValueChange={setCodeFont}
+        >
+          <SelectTrigger className="w-80" id="mono-font-select">
+            <SelectValue placeholder={t("systemDefault")} />
+          </SelectTrigger>
+          <SelectContent>
+            {systemFonts.map((font) => (
+              <SelectItem key={font} value={font}>
+                <span style={{ fontFamily: font }}>{font}</span>
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
       <div className="flex flex-row gap-2">
         <FlexibleSpacer />
