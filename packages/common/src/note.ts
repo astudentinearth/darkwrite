@@ -14,7 +14,9 @@ export interface Note {
   index?: number;
   favoriteIndex?: number;
 }
-
+/**
+ * @deprecated use models/note instead.
+ */
 export interface NoteCustomizations {
   font?: "sans" | "serif" | "mono" | "custom";
   customFont?: string;
@@ -24,7 +26,9 @@ export interface NoteCustomizations {
   coverEmbedId?: string;
   widePage?: boolean;
 }
-
+/**
+ * @deprecated use models/note instead.
+ */
 export type NotePartial = Partial<Note> & { id: string };
 
 /**
