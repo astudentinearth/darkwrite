@@ -1,15 +1,25 @@
 {
   "name": "@darkwrite/common",
   "version": "0.0.0",
-  "types": "./dist/index.d.ts",
-  "main": "./dist/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "types": "./dist/index.d.ts"
+    },
+    "./models": {
+      "import": "./dist/models/index.js",
+      "require": "./dist/models/index.cjs",
+      "types": "./dist/models/index.d.ts"
+    }
+  },
   "private": true,
   "scripts": {
     "test": "vitest run",
     "test:watch": "vitest watch",
     "coverage": "vitest run --coverage",
-    "build": "tsup src/index.ts --dts --format esm,cjs",
-    "dev": "tsup src/index.ts --dts --format esm,cjs --watch",
+    "build": "tsup",
+    "dev": "tsup --watch",
     "format": "prettier . --write",
     "typecheck": "tsc --noEmit --project tsconfig.json"
   },
