@@ -3,14 +3,14 @@
   "version": "0.0.0",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
-      "require": "./dist/index.cjs",
-      "types": "./dist/index.d.ts"
+      "require": "./dist/index.cjs"
     },
     "./models": {
+      "types": "./dist/models/index.d.ts",
       "import": "./dist/models/index.js",
-      "require": "./dist/models/index.cjs",
-      "types": "./dist/models/index.d.ts"
+      "require": "./dist/models/index.cjs"
     }
   },
   "private": true,
