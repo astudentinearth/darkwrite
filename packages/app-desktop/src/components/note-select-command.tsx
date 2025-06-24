@@ -1,4 +1,4 @@
-import { Note } from "@darkwrite/common";
+import { Note } from "@darkwrite/common/models";
 import {
   CommandDialog,
   CommandEmpty,

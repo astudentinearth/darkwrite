@@ -29,7 +29,7 @@ export function NoteDropZone({
       const belowIndex = arr.findIndex((n) => n.id === belowID); // find note below this drop zone
       const noteIndex = arr.findIndex((n) => n.id === data); // find original
       const note = arr[noteIndex];
-      note.parentID = parentID;
+      note.parentId = parentID ?? undefined;
       // move notes around
       if (last) {
         arr.splice(noteIndex, 1); // remove original

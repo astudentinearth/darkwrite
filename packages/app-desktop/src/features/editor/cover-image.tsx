@@ -1,4 +1,4 @@
-import { Note } from "@darkwrite/common";
+import { NoteDTO } from "@darkwrite/common";
 import { Button } from "@darkwrite/ui";
 import {
   setEditorCustomizations,
@@ -10,7 +10,7 @@ import { cn } from "@renderer/lib/utils";
 import { ImageOff } from "lucide-react";
 import { useState } from "react";
 
-export function CoverImage({ embedId }: { note: Note; embedId?: string }) {
+export function CoverImage({ embedId }: { note: NoteDTO; embedId?: string }) {
   const [mouseOver, setMouseOver] = useState(false);
   const customizations = useEditorState((s) => s.customizations);
   const imageSource = useEmbedSource(embedId ?? "");

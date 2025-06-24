@@ -105,7 +105,7 @@ export function EditorRoot() {
           <EditorCover
             key={`cover-${note.id}`}
             note={note}
-            update={update}
+            update={(dto)=>update({id: note.id, dto})}
             hasCover={!!_customizations.coverEmbedId}
             wide={_customizations.widePage}
           />

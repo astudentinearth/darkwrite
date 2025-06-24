@@ -18,14 +18,16 @@ export function TrashWidget() {
   const notes = useNotesQuery().data;
   const update = useUpdateNoteMutation().mutate;
 
-  const restore = (id: string) => update({ id, isTrashed: false });
-  const trash = (id: string) => update({ id, isTrashed: true });
+  const restore = (id: string) => update({ id, dto: { isTrashed: false } });
+  const trash = (id: string) => update({ id, dto: { isTrashed: true } });
 
   const del = useDeleteNoteMutation().mutate;
   const [query, setQuery] = useState<string>("");
   let trashed = notes?.filter((n) => n.isTrashed);
   if (query && trashed) {
-    trashed = trashed.filter((n) => n.title.toLocaleLowerCase().includes(query.toLocaleLowerCase()));
+    trashed = trashed.filter((n) =>
+      n.title.toLocaleLowerCase().includes(query.toLocaleLowerCase()),
+    );
   }
   const nav = useNavigateToNote();
   const { t } = useTranslation();

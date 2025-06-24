@@ -34,7 +34,7 @@ export const useNoteContentsMutation = (id: string) => {
       const str = JSON.stringify(opts.noteData);
       if (!opts.noDebounce)
         debouncedSave(id, str, () => {
-          update({ id, modified: new Date() });
+          update({ id, dto: {} });
         });
       else await NoteAPI().updateContents(id, str);
     },

@@ -1,8 +1,8 @@
-import { Note, NotePartial } from "@darkwrite/common";
+import { NoteDTO, UpdateNoteDTO } from "@darkwrite/common";
+import { Button } from "@darkwrite/ui";
 import DynamicTextarea from "@renderer/components/dynamic-textarea";
 import { EmojiPicker } from "@renderer/components/emoji-picker";
 import { FlexibleSpacer } from "@renderer/components/spacer";
-import { Button } from "@darkwrite/ui";
 import {
   setEditorCustomizations,
   useEditorState,
@@ -15,8 +15,8 @@ import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
 import { useDebounce } from "use-debounce";
 
 export function EditorCover(props: {
-  note: Note;
-  update: (data: NotePartial) => void;
+  note: NoteDTO;
+  update: (data: UpdateNoteDTO) => void;
   hasCover?: boolean;
   wide?: boolean;
 }) {
@@ -47,12 +47,12 @@ export function EditorCover(props: {
     if (!id || !debouncedValue || !inputValue) return;
     if (debouncedValue === inputValue && note.title !== debouncedValue) {
       lastMutationRef.current = debouncedValue;
-      update({ id, title: debouncedValue });
+      update({title: debouncedValue});
     }
   }, [debouncedValue, inputValue, id, update, queryClient, note.title]);
 
   const handleEmojiChange = (unified: string) => {
-    update({ id, icon: unified });
+    update({ icon: unified });
   };
 
   const handleNewLine = () => {
@@ -87,11 +87,11 @@ export function EditorCover(props: {
   };
 
   const addIcon = () => {
-    update({ id, icon: "1f4c4" });
+    update({ icon: "1f4c4" });
   };
 
   const removeIcon = () => {
-    update({ id, icon: "" });
+    update({ icon: "" });
   };
 
   return (
@@ -117,7 +117,7 @@ export function EditorCover(props: {
                 variant={"outline"}
                 className="rounded-xl bg-view-2 w-fit justify-self-end"
                 onClick={() => {
-                  update({ id, isTrashed: false });
+                  update({ isTrashed: false });
                 }}
               >
                 Restore

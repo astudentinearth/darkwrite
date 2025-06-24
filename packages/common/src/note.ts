@@ -1,3 +1,4 @@
+import { NoteDTO } from "./dto";
 import * as models from "./models";
 
 /**
@@ -56,18 +57,18 @@ export function resolveDescendants(id: string, notes: Note[]) {
  * @param id UUID of the starting note
  * @param notes set of notes to search from
  */
-export function resolveParents(id: string, notes: Note[]) {
+export function resolveParents<T extends NoteDTO[] | models.Note[]>(id: string, notes: T): T {
   const noteIndex = notes.findIndex((n) => n.id === id);
-  if (noteIndex == -1) return [];
+  if (noteIndex == -1) return [] as T;
   const note = notes[noteIndex];
-  if (note.parentID == null) return [];
-  const nodes: Note[] = [];
-  for (let id: string | null | undefined = note.parentID; id != null; ) {
+  if (note.parentId == null) return [] as T;
+  const nodes: T = [] as T;
+  for (let id: string | null | undefined = note.parentId; id != null; ) {
     // start from the first parent
     const parent = notes.find((n) => n.id === id); // find the parent
     if (parent) {
       nodes.push(parent); // add it to nodes
-      id = parent.parentID; // attempt resolving the next parent
+      id = parent.parentId; // attempt resolving the next parent
     } else break;
   }
   return nodes;

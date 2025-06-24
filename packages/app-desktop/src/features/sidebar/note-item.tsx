@@ -1,11 +1,14 @@
 import { findSubnotes } from "@darkwrite/common";
 import { Note } from "@darkwrite/common/models";
 import { NoteSelectCommandDialog } from "@renderer/components/note-select-command";
-import { Button,   ContextMenu,
+import {
+  Button,
+  ContextMenu,
   ContextMenuContent,
   ContextMenuItem,
   ContextMenuSeparator,
-  ContextMenuTrigger, } from "@darkwrite/ui";
+  ContextMenuTrigger,
+} from "@darkwrite/ui";
 import {
   Collapsible,
   CollapsibleContent,
@@ -52,7 +55,7 @@ export function NoteItem({
   const createNote = useCreateNoteMutation().mutateAsync;
   const update = useUpdateNoteMutation().mutate;
   const trash = (id: string) => {
-    update({ id, isTrashed: true });
+    update({ id, dto: { isTrashed: true } });
   };
   const duplicate = useDuplicateNoteMutation().mutate;
   const move = useMoveNoteMutation().mutate;
@@ -226,9 +229,8 @@ export function NoteItem({
         <ContextMenuItem
           onClick={() => {
             update({
-              ...note,
-              favoriteIndex: 0,
-              isFavorite: !note.isFavorite,
+              id: note.id,
+              dto: { isFavorite: !note.isFavorite },
             });
           }}
         >
@@ -273,7 +275,11 @@ export function NoteItem({
           }}
           className="focus:text-destructive focus:*:text-destructive group"
         >
-          <Trash className="opacity-75 group-focus:text-destructive" size={20}></Trash>&nbsp; Move to trash
+          <Trash
+            className="opacity-75 group-focus:text-destructive"
+            size={20}
+          ></Trash>
+          &nbsp; Move to trash
         </ContextMenuItem>
         <ContextMenuSeparator></ContextMenuSeparator>
         <div className="text-foreground/50 text-sm p-1.5">

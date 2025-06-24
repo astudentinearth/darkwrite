@@ -78,11 +78,13 @@ export function EditorMenu() {
             <DropdownMenuSubContent className="bg-card">
               <DropdownMenuItem disabled className="hidden" onSelect={() => {
               if (!activeNote.data) return;
-              _export(activeNote.data, "json");
+              //TODO MIGRATE API
+              //_export(activeNote.data, "json");
             }}><FileText size={18}/>{t("jsonExport")}</DropdownMenuItem>
               <DropdownMenuItem onSelect={() => {
               if (!activeNote.data) return;
-              _export(activeNote.data);
+              //TODO MIGRATE API
+              //_export(activeNote.data);
             }}><FileCode size={18}/>{t("htmlExport")}</DropdownMenuItem>
             <span className="p-2 text-card-foreground/80 text-xs">{t("imageWarning")}</span>
             </DropdownMenuSubContent>

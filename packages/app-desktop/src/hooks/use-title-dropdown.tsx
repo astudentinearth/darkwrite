@@ -1,4 +1,4 @@
-import { Note, resolveParents } from "@darkwrite/common";
+import { NoteDTO, resolveParents } from "@darkwrite/common";
 import { getNoteIcon } from "@renderer/lib/utils";
 import { ChevronDown, Home, Settings } from "lucide-react";
 import { ReactNode, useEffect, useState } from "react";
@@ -7,7 +7,7 @@ import { useNotesQuery } from "./query";
 import { useNoteFromURL } from "./use-note-from-url";
 
 export function getTitle(
-  notes: Note[] | undefined,
+  notes: NoteDTO[] | undefined,
   isLoading: boolean,
   path: string,
   pageId: string | undefined,
@@ -52,10 +52,10 @@ export function getTitle(
   }
 }
 
-export function resolveUpperTree(notes: Note[], id: string): Note[] {
+export function resolveUpperTree(notes: NoteDTO[], id: string): NoteDTO[] {
   const note = notes.find((n) => n.id === id);
-  if (!note || !note.parentID) return [];
-  const nodes: Note[] = resolveParents(id, notes);
+  if (!note || !note.parentId) return [];
+  const nodes: NoteDTO[] = resolveParents(id, notes);
   return nodes;
 }
 
@@ -65,7 +65,7 @@ export const useTitleDropdown = () => {
   const { data: notesQuery, isLoading } = useNotesQuery();
   const notes = notesQuery;
 
-  const [parentNodes, setParentNodes] = useState<Note[]>([]);
+  const [parentNodes, setParentNodes] = useState<NoteDTO[]>([]);
   const [title, setTitle] = useState<ReactNode>("Darkwrite");
 
   useEffect(() => {
