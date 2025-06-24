@@ -1,4 +1,4 @@
-import { NoteAPI } from "@renderer/api";
+import { APIClient } from "@renderer/apiv2/client";
 import { useQuery } from "@tanstack/react-query";
 
 export const useNotesQuery = () => {
@@ -6,9 +6,8 @@ export const useNotesQuery = () => {
     queryKey: ["notes"],
     queryFn: async () => {
       console.log("Fetching notes");
-      const data = await NoteAPI().getNotes();
-      
-      return data;
+      const data = await APIClient.instance.note.getAllNotes();
+      return data.notes;
     },
     staleTime: 1000 * 60 * 5, // 5 minutes,
     refetchOnWindowFocus: false,

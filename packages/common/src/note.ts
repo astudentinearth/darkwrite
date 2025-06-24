@@ -1,3 +1,5 @@
+import * as models from "./models";
+
 /**
  * @deprecated use models/note instead.
  */
@@ -80,15 +82,15 @@ export const FontStyleClassNames = {
   custom: "darkwrite-custom-font",
 };
 
-export function findSubnotes(parentId: string, notes: Note[]) {
-  const subnotes = notes.filter((n) => n.parentID === parentId);
+export function findSubnotes(parentId: string, notes: models.Note[]) {
+  const subnotes = notes.filter((n) => n.parentId === parentId);
   return subnotes;
 }
 
 export const countWords = (text: string): number =>
   text.match(/\b\w+\b/g)?.length ?? 0;
 
-export const serializeNote = <T>(contents: T, customizations: NoteCustomizations) => {
+export const serializeNote = <T>(contents: T, customizations: models.NoteCustomization) => {
   return JSON.stringify({
     contents,
     customizations

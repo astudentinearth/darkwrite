@@ -3,7 +3,7 @@ import { NoteService } from "@renderer/service/note.service";
 import { INoteAPI } from "../api-client";
 
 export class LocalNoteAPI implements INoteAPI {
-  constructor(private noteService: NoteService) {}
+  constructor(private noteService: NoteService = new NoteService()) {}
 
   create(dto: CreateNoteDTO): Promise<NoteResponseDTO | null> {
     return this.noteService.createNote(dto);
@@ -19,5 +19,9 @@ export class LocalNoteAPI implements INoteAPI {
 
   getNote(id: string): Promise<NoteResponseDTO | null> {
     return this.noteService.getNote(id);
+  }
+
+  getAllNotes() {
+    return this.noteService.getAllNotes();
   }
 }

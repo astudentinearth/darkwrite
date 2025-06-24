@@ -1,7 +1,7 @@
 
 export interface CreateNoteDTO {
   title: string;
-  parentID?: string; 
+  parentId?: string; 
   icon?: string; 
   databaseId?: string;
   workspaceId: string;
@@ -9,7 +9,7 @@ export interface CreateNoteDTO {
 
 export interface UpdateNoteDTO {
   title?: string;
-  parentID?: string; 
+  parentId?: string; 
   icon?: string; 
   databaseId?: string;
   workspaceId?: string;

@@ -1,12 +1,12 @@
-import { CreateNoteDTO, NoteResponseDTO, UpdateNoteDTO } from "@darkwrite/common";
+import { CreateNoteDTO, NoteResponseDTO, NotesResponseDTO, UpdateNoteDTO } from "@darkwrite/common";
 import { Note } from "@darkwrite/common/models";
 import { DocumentRepository, NoteRepository } from "@renderer/db";
 import { generateId } from "@renderer/lib/utils";
 
 export class NoteService {
   constructor(
-    private noteRepository: NoteRepository, 
-    private documentRepository: DocumentRepository
+    private noteRepository: NoteRepository = new NoteRepository(), 
+    private documentRepository: DocumentRepository = new DocumentRepository()
   ) {}
   async createNote(dto: CreateNoteDTO): Promise<NoteResponseDTO | null> {
     const id = generateId();
@@ -42,6 +42,11 @@ export class NoteService {
   async getNote(id: string): Promise<NoteResponseDTO | null> {
     const note = await this.noteRepository.findById(id);
     return note ? {note} : null;
+  }
+
+  async getAllNotes(): Promise<NotesResponseDTO> {
+    const notes = await this.noteRepository.findAll();
+    return {notes};
   }
 
 }

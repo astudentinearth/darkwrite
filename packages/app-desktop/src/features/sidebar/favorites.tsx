@@ -1,4 +1,4 @@
-import { Note } from "@darkwrite/common";
+import { Note } from "@darkwrite/common/models";
 import { DragDropContext, Droppable, DropResult } from "@hello-pangea/dnd";
 import {
   Collapsible,
@@ -30,12 +30,7 @@ export function FavortiesWidget() {
   const getFavorites = (arr: Note[]) => {
     const favorites = arr.filter((n) => n.isFavorite && !n.isTrashed);
     if (favorites == null) return [];
-    for (let i = 0; i < favorites.length; i++) {
-      if (favorites[i].favoriteIndex == null) {
-        favorites[i].favoriteIndex = favorites.length;
-      }
-    }
-    favorites.sort((a, b) => (a.favoriteIndex ?? 0) - (b.favoriteIndex ?? 0));
+    favorites.sort((a, b) => a.favoriteOrderHint.localeCompare(b.favoriteOrderHint));
     return favorites;
   };
 
@@ -48,7 +43,7 @@ export function FavortiesWidget() {
   const render = useCallback(() => {
     const elements: React.JSX.Element[] = [];
     const arr = [...target];
-    arr.sort((a, b) => (a.favoriteIndex ?? 0) - (b.favoriteIndex ?? 0));
+    arr.sort((a, b) => a.favoriteOrderHint.localeCompare(b.favoriteOrderHint));
     if (arr.length === 0) return elements;
     for (let i = 0; i < arr.length; i++) {
       elements.push(
@@ -70,9 +65,10 @@ export function FavortiesWidget() {
       const [removed] = draft.splice(source.index, 1);
       draft.splice(destination.index, 0, removed);
       for (let i = 0; i < draft.length; i++) {
-        draft[i].favoriteIndex = i;
+        //TODO IMPLEMENT LEXORANK
+        //draft[i].favoriteIndex = i;
       }
-      draft.sort((a, b) => (a.favoriteIndex ?? 0) - (b.favoriteIndex ?? 0));
+      //draft.sort((a, b) => (a.favoriteIndex ?? 0) - (b.favoriteIndex ?? 0));
     });
     const newState = getFavorites(updated);
     setTarget(newState);

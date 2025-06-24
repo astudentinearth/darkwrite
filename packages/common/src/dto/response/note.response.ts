@@ -20,7 +20,7 @@ export interface NoteDTO {
 }
 
 export interface NotesResponseDTO {
-  notes: NoteResponseDTO[];
+  notes: NoteDTO[];
 }
 
 export interface NoteResponseDTO {

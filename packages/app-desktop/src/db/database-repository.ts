@@ -7,7 +7,7 @@ export class DatabaseRepository {
   public async save(database: Database) {
     const tx = (await this._db).transaction("database", "readwrite");
     const store = tx.objectStore("database");
-    await store.put(database, database.id);
+    await store.put(database);
     await tx.done;
   }
 

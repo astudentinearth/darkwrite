@@ -17,7 +17,8 @@ export class NoteRepository {
   public async save(note: Note) {
     const tx = (await this._db).transaction("note", "readwrite");
     const store = tx.objectStore("note");
-    await store.put(note, note.id);
+    console.log(note);
+    await store.put(note);
     await tx.done;
   }
 

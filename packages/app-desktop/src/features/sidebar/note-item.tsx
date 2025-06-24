@@ -1,4 +1,5 @@
-import { findSubnotes, Note } from "@darkwrite/common";
+import { findSubnotes } from "@darkwrite/common";
+import { Note } from "@darkwrite/common/models";
 import { NoteSelectCommandDialog } from "@renderer/components/note-select-command";
 import { Button,   ContextMenu,
   ContextMenuContent,
@@ -256,7 +257,8 @@ export function NoteItem({
         </ContextMenuItem>
         <ContextMenuItem
           onClick={() => {
-            _export(note);
+            //TODO
+            //_export(note);
           }}
         >
           <ArrowRightFromLine
@@ -276,7 +278,7 @@ export function NoteItem({
         <ContextMenuSeparator></ContextMenuSeparator>
         <div className="text-foreground/50 text-sm p-1.5">
           {t("sidebar.notes.contextmenu.lastModified")}{" "}
-          {note.modified.toLocaleString()}
+          {note.modifiedAt.toLocaleString()}
         </div>
       </ContextMenuContent>
     </ContextMenu>

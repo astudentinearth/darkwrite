@@ -7,7 +7,7 @@ export class WorkspaceRepository{
   public async save(workspace: Workspace) {
     const tx = (await this._db).transaction("workspace", "readwrite");
     const store = tx.objectStore("workspace");
-    await store.put(workspace, workspace.id);
+    await store.put(workspace);
     await tx.done;
   }
 

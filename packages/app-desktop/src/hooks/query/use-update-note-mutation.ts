@@ -1,17 +1,16 @@
-import { Note, NotePartial } from "@darkwrite/common";
+import { UpdateNoteDTO } from "@darkwrite/common";
+import { Note } from "@darkwrite/common/models";
 import { NoteAPI } from "@renderer/api";
+import { APIClient } from "@renderer/apiv2/client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export const useUpdateNoteMutation = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (updatedNote: NotePartial) => {
-      const updated = {
-        ...updatedNote,
-        modified: updatedNote.modified ?? new Date(),
-      };
-      NoteAPI().update({ ...updated });
-      return updated;
+    mutationFn: async (opts: {id: string , dto: UpdateNoteDTO}) => {
+      const data = await APIClient.instance.note.update(opts.id , opts.dto);
+      if(!data) throw new Error();
+      return data.note;
     },
 
     onSuccess: (_data, variables) => {

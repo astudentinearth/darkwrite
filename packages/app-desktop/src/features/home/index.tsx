@@ -1,4 +1,4 @@
-import { Note } from "@darkwrite/common";
+import { Note } from "@darkwrite/common/models";
 import { Button } from "@darkwrite/ui";
 import { useCreateNoteMutation } from "@renderer/hooks/query/use-create-note-mutation";
 import { useCenteredLayout } from "@renderer/hooks/layout/use-centered-layout";
@@ -65,7 +65,7 @@ export function HomePage() {
                   {note.title}
                 </span>
                 <span className="text-foreground/50">
-                  {note.modified.toLocaleString(
+                  {note.modifiedAt.toLocaleString(
                     i18n.resolvedLanguage != null
                       ? [i18n.resolvedLanguage]
                       : undefined,

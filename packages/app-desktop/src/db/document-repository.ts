@@ -4,7 +4,9 @@ export class DocumentRepository{
   constructor(private _db: DarkwriteDBType = DarkwriteDB) {}
   
   public async saveById(id: string, value: string) {
-    (await this._db).put("note-content", value, id);
+    const tx = (await this._db).transaction("note-content", "readwrite");
+    const store = tx.objectStore("note-content");
+    await store.put(value, id);
   }
 
   public async findById(id: string) {

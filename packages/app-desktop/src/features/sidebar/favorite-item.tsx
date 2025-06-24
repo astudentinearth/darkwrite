@@ -1,4 +1,4 @@
-import { Note } from "@darkwrite/common";
+import { Note } from "@darkwrite/common/models";
 import { Draggable } from "@hello-pangea/dnd";
 import {
   ContextMenu,
@@ -82,7 +82,8 @@ export function FavoriteItem({ note, index }: { note: Note; index: number }) {
         </ContextMenuItem>
         <ContextMenuItem
           onClick={() => {
-            _export(note);
+            //TODO FIX FOR MIGRATION
+            //_export(note);
           }}
         >
           <ArrowRightFromLine
@@ -101,7 +102,7 @@ export function FavoriteItem({ note, index }: { note: Note; index: number }) {
         </ContextMenuItem>
         <ContextMenuSeparator></ContextMenuSeparator>
         <span className="text-foreground/50 text-sm p-2">
-          Last edited: {note.modified.toLocaleString()}
+          Last edited: {note.modifiedAt.toLocaleString()}
         </span>
       </ContextMenuContent>
     </ContextMenu>

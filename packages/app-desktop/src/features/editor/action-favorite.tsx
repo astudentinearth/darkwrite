@@ -13,7 +13,7 @@ export function FavoriteActionButton() {
   if (!id) return <></>;
   return (
     <HeaderbarButton
-      onClick={() => update({ id, isFavorite: !targetNote?.isFavorite })}
+      onClick={() => update({ id, dto: {isFavorite: !targetNote?.isFavorite} })}
     >
       <Star
         size={18}
