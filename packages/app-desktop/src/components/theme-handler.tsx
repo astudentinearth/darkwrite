@@ -19,7 +19,6 @@ export function ThemeHandler() {
     (s) => s.settings.appearance.useSystemAccentColor,
   );
   useEffect(() => {
-    //console.log("Applying themes");
     const api = new ThemesModel();
     setGlobalStyle("font-family", fonts.ui);
     setGlobalStyle("--font-ui", fonts.ui || "system-ui");
@@ -68,7 +67,6 @@ export function ThemeHandler() {
         parseFloat(fgHSLStr[2]),
       ];
       const fgHEX = hsl.hex(fgHSL);
-      //console.log(fgHEX);
       window.api.theme.setTitlebarSymbolColor(`#${fgHEX}`, theme.mode);
     }
   }, [fonts, theme, accentColor, useSystemAccentColor]);

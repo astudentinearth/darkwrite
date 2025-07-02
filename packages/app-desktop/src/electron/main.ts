@@ -14,6 +14,7 @@ import { readUserPrefs } from "./api/settings.electron";
 import { Paths } from "./lib/paths";
 import { constructWindow } from "./window";
 import { InitializeElectronAPI } from "./ipc/api";
+import { setupFontService } from "./main/font-service";
 
 log.initialize();
 /*const require = createRequire(import.meta.url);*/
@@ -71,12 +72,12 @@ app.on("activate", () => {
   }
 });
 
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
   /*if (is.dev) {
         installExtension([REACT_DEVELOPER_TOOLS]).then((name) => {
-            console.log(`Added extension => ${name}`);
-        });
-    }*/
-  AppDataSource.initialize().then(createWindow);
-  console.log(process.cwd())
+            console.log(`Added extension => ${name}`);\n        });\n    }*/
+  setupFontService();
+  await AppDataSource.initialize();
+  createWindow();
+  console.log(process.cwd());
 });

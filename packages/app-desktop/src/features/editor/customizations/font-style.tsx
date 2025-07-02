@@ -1,4 +1,4 @@
-import { Button, Input } from "@darkwrite/ui";
+import { Button } from "@darkwrite/ui";
 import {
   setEditorCustomizations,
   useEditorState,
@@ -6,6 +6,22 @@ import {
 import { cn } from "@renderer/lib/utils";
 import _ from "lodash";
 import { useTranslation } from "react-i18next";
+import { useEffect, useState } from "react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@renderer/components/ui/select";
+
+declare global {
+  interface Window {
+    fontAPI: {
+      getSystemFonts: () => Promise<string[]>;
+    };
+  }
+}
 
 const setCustomFont = _.debounce((fontName: string) => {
   const style = useEditorState.getState().customizations;
@@ -16,11 +32,22 @@ export default function FontStyleView() {
   const style = useEditorState((state) => state.customizations);
   const setStyle = setEditorCustomizations;
   const customFont = useEditorState((state) => state.customizations.customFont);
+  const [systemFonts, setSystemFonts] = useState<string[]>([]);
   const { t } = useTranslation(undefined, {
     keyPrefix: "editor.customizations",
   });
-  // const setCustomFont = (fontName: string) =>
-  //     setStyle({ ...style, customFont: fontName });
+
+  useEffect(() => {
+    const loadFonts = async () => {
+      try {
+        const fonts = await window.fontAPI.getSystemFonts();
+        setSystemFonts(fonts);
+      } catch (error) {
+        console.error('Error loading system fonts:', error);
+      }
+    };
+    loadFonts();
+  }, []);
 
   return (
     <div className="rounded-lg p-1">
@@ -82,15 +109,21 @@ export default function FontStyleView() {
             style.font !== "custom" && "hidden",
           )}
         >
-          <Input
-            defaultValue={customFont}
-            onChange={(e) => {
-              setCustomFont(e.target.value);
-            }}
-            className="bg-view-2"
-            id="customFont"
-            placeholder={t("customFontNamePlaceholer")}
-          />
+          <Select
+            value={customFont}
+            onValueChange={setCustomFont}
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Select a font..." />
+            </SelectTrigger>
+            <SelectContent>
+              {systemFonts.map((font) => (
+                <SelectItem key={font} value={font}>
+                  <span style={{ fontFamily: font }}>{font}</span>
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
       </div>
     </div>

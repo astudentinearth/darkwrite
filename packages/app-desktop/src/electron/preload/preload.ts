@@ -1,5 +1,6 @@
 import { deepAssign, recursiveKeys } from "@darkwrite/common";
 import { contextBridge, ipcRenderer, webUtils } from "electron";
+import { FontAPI } from "./font-bridge";
 // import { DarkwriteElectronAPI } from "../ipc/api";
 // import { DarkwriteAPI, IPCHandler } from "../ipc/handler";
 
@@ -42,6 +43,14 @@ export const initalizeAPI = async () => {
   initialized = true;
 };
 
+// Expose the font API
+const fontAPI: FontAPI = {
+  getSystemFonts: async () => {
+    return await ipcRenderer.invoke('get-system-fonts');
+  }
+};
+
 contextBridge.exposeInMainWorld("webUtils", webUtils);
 contextBridge.exposeInMainWorld("initPreload", initalizeAPI);
 contextBridge.exposeInMainWorld("isElectron", true);
+contextBridge.exposeInMainWorld("fontAPI", fontAPI);
