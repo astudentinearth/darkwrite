@@ -15,7 +15,7 @@
 
 # 📓*Take notes the way you want.*
 
-✒️ Darkwrite lets you take notes without getting on your way.
+✒️ Darkwrite lets you take notes without getting in your way.
 
 **Head over to the [releases page](https://github.com/astudentinearth/darkwrite/releases) to get started.**
 
