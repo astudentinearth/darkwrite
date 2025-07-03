@@ -4,10 +4,12 @@ import { FormattingButtons } from "./formatting";
 import { HeadingSelector } from "./heading";
 import { BubbleLink } from "./link";
 import { ListSelector } from "./list";
+import { TextColorSelector } from "./color";
 
 export default function Bubble() {
   const [headingOpen, setHeadingOpen] = useState(false);
   const [listOpen, setListOpen] = useState(false);
+  const [colorOpen, setColorOpen] = useState(false);
   const { editor } = useCurrentEditor();
   return (
     <BubbleMenu
@@ -26,6 +28,8 @@ export default function Bubble() {
       <div className="w-[1px] bg-border"></div>
       <HeadingSelector open={headingOpen} setOpen={setHeadingOpen} />
       <ListSelector open={listOpen} setOpen={setListOpen} />
+      <div className="w-[1px] bg-border"></div>
+      <TextColorSelector open={colorOpen} setOpen={setColorOpen}/>
     </BubbleMenu>
   );
 }

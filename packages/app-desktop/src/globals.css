@@ -48,6 +48,26 @@
   --darkwrite-serif: "Times New Roman", "Noto Serif", "Liberation Serif", serif;
   --darkwrite-mono: "Cascadia Code", "Courier New", "Liberation Mono", monospace;
   --font-ui: "";
+
+    --editor-text-red: hsl(0 100% 58%);
+  --editor-text-orange: hsl(23 100% 58%);
+  --editor-text-yellow: hsl(56 100% 58%);
+  --editor-text-green: hsl(125 100% 58%);
+  --editor-text-cyan: hsl(172 100% 55%);
+  --editor-text-blue: hsl(196 100% 55%);
+  --editor-text-indigo: hsl(239 100% 55%);
+  --editor-text-purple: hsl(278 100% 55%);
+  --editor-text-pink: hsl(321 100% 55%);
+
+  --editor-highlight-red: hsl(0 100% 58% / 0.5);
+  --editor-highlight-orange: hsl(23 100% 58% / 0.5);
+  --editor-highlight-yellow: hsl(56 100% 58% / 0.5);
+  --editor-highlight-green: hsl(125 100% 58% / 0.5);
+  --editor-highlight-cyan: hsl(172 100% 55% / 0.5);
+  --editor-highlight-blue: hsl(196 100% 55% / 0.5);
+  --editor-highlight-indigo: hsl(239 100% 55% / 0.5);
+  --editor-highlight-purple: hsl(278 100% 55% / 0.5);
+  --editor-highlight-pink: hsl(321 100% 55% / 0.5);
 }
 
 @theme inline {
