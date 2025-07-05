@@ -1486,6 +1486,7 @@ __metadata:
     "@tiptap/extension-bubble-menu": "npm:^2.11.9"
     "@tiptap/extension-code-block-lowlight": "npm:^2.12.0"
     "@tiptap/extension-color": "npm:^2.24.1"
+    "@tiptap/extension-highlight": "npm:^2.24.2"
     "@tiptap/extension-horizontal-rule": "npm:^2.11.9"
     "@tiptap/extension-image": "npm:^2.12.0"
     "@tiptap/extension-link": "npm:^2.11.9"
@@ -6472,6 +6473,15 @@ __metadata:
   peerDependencies:
     "@tiptap/core": ^2.7.0
   checksum: 10c0/a0bad322565be1744bf48d86ddaeeb0ae9dd175ab0ef8908e28cf1dc274c60da094948db43be22bdf54817bb0dd9c412714ceabf274128912219c16d4396078f
+  languageName: node
+  linkType: hard
+
+"@tiptap/extension-highlight@npm:^2.24.2":
+  version: 2.24.2
+  resolution: "@tiptap/extension-highlight@npm:2.24.2"
+  peerDependencies:
+    "@tiptap/core": ^2.7.0
+  checksum: 10c0/3834049c0caa443e548084fd85069113ad7e5ad0037bb4937773b30a2c138698a7334f4a64acd4c0e372c974d4b7101e611aff3a2a9ceb3ab732647dfe7375b5
   languageName: node
   linkType: hard
 

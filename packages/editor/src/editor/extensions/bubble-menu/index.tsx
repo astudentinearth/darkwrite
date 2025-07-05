@@ -5,11 +5,13 @@ import { HeadingSelector } from "./heading";
 import { BubbleLink } from "./link";
 import { ListSelector } from "./list";
 import { TextColorSelector } from "./color";
+import { HighlightColorSelector } from "./highlight";
 
 export default function Bubble() {
   const [headingOpen, setHeadingOpen] = useState(false);
   const [listOpen, setListOpen] = useState(false);
   const [colorOpen, setColorOpen] = useState(false);
+  const [highlightOpen, setHighlightOpen] = useState(false);
   const { editor } = useCurrentEditor();
   return (
     <BubbleMenu
@@ -30,6 +32,7 @@ export default function Bubble() {
       <ListSelector open={listOpen} setOpen={setListOpen} />
       <div className="w-[1px] bg-border"></div>
       <TextColorSelector open={colorOpen} setOpen={setColorOpen}/>
+      <HighlightColorSelector open={highlightOpen} setOpen={setHighlightOpen}/>
     </BubbleMenu>
   );
 }

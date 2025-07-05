@@ -14,6 +14,7 @@ import lowlight from "../lowlight";
 import { KeymapFixer } from "./keymap-patcher";
 import TextStyle from "@tiptap/extension-text-style";
 import Color from "@tiptap/extension-color";
+import Highlight from "@tiptap/extension-highlight";
 
 export const starterKit = StarterKit.configure({
   bulletList: {
@@ -128,6 +129,7 @@ export const codeBlock = (indentSize: number)=>CodeBlockLowlight.extend({
 
 const textStyle = TextStyle.configure();
 const color = Color.configure();
+const hightlight = Highlight.configure({multicolor: true});
 
 export const DefaultEditorExtensions = [
   starterKit,
@@ -142,5 +144,6 @@ export const DefaultEditorExtensions = [
   underline,
   KeymapFixer,
   textStyle,
-  color
+  color,
+  hightlight
 ];
