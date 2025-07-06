@@ -20,6 +20,9 @@ export default function Bubble() {
         animation: "slide",
         moveTransition: "transform 0.1s ease-out"
       }}
+      shouldShow={({editor}) => {
+        return !editor.isEmpty && editor.state.selection?.empty === false && !(colorOpen || highlightOpen || listOpen || headingOpen);
+      }}
       editor={editor}
       className="flex w-fit h-fit max-w-[90vw] overflow-hidden gap-1 rounded-xl border border-border 
       bg-view-2 shadow-xl p-1 slide-in-from-top-1 transition-[opacity,transform,translate,scale,rotate]"

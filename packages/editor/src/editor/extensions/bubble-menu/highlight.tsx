@@ -1,16 +1,9 @@
 import { cn } from "@/utils";
 import { cssHightlightColorVariables } from "@darkwrite/common";
-import {
-  Button,
-  Popover,
-  PopoverContent,
-  PopoverTrigger
-} from "@darkwrite/ui";
+import { Button, Popover, PopoverContent, PopoverTrigger, ColorPicker } from "@darkwrite/ui";
 import { useCurrentEditor } from "@tiptap/react";
 import { ChevronDown, Eraser, Highlighter } from "lucide-react";
-import { Dispatch, SetStateAction } from "react";
-
-
+import { Dispatch, SetStateAction, useState } from "react";
 
 export function HighlightColorSelector(props: {
   open: boolean;
@@ -18,7 +11,11 @@ export function HighlightColorSelector(props: {
 }) {
   const colorVars = cssHightlightColorVariables;
   const { editor } = useCurrentEditor();
-  return (
+  const activeHighlightColor =
+    editor?.getAttributes("highlight")?.color || "";
+  const [customColorValue, setCustomColorValue] = useState<string>(activeHighlightColor);
+
+    return (
     <Popover>
       <PopoverTrigger asChild>
         <Button
@@ -34,25 +31,36 @@ export function HighlightColorSelector(props: {
       </PopoverTrigger>
       <PopoverContent className="grid grid-cols-[2rem_2rem_2rem_2rem] grid-rows-3 gap-1 p-1 w-fit rounded-xl bg-view-2 text-foreground data-[state=closed]:animate-none!">
         {colorVars.map((color) => (
-
           <Button
             style={{ backgroundColor: `var(${color})` }}
             variant={"ghost"}
+            key={color}
             className="w-8 h-8 hover:outline-2 hover:outline-primary"
             onClick={() =>
-              editor?.chain().focus().setHighlight({color: `var(${color})`}).run()
+              editor
+                ?.chain()
+                .focus()
+                .setHighlight({ color: `var(${color})` })
+                .run()
             }
           />
         ))}
         <Button
           variant={"outline"}
           className="w-8 h-8 hover:outline-2 hover:outline-primary p-0 justify-center items-center text-center"
-          onClick={() =>
-            editor?.chain().focus().unsetHighlight().run()
-          }
+          onClick={() => editor?.chain().focus().unsetHighlight().run()}
         >
-          <Eraser size={18} className="text-center flex justify-center items-center"/>
+          <Eraser
+            size={18}
+            className="text-center flex justify-center items-center"
+          />
         </Button>
+        <ColorPicker defaultValue={activeHighlightColor} value={customColorValue} className="data-[state=closed]:animate-none! bg-secondary! hover:outline-2 hover:outline-primary" onChange={val => {
+          console.log(val)
+          if(val.length===7) val+= "4D"
+          setCustomColorValue(val);
+          editor?.chain().setHighlight({color: val}).run();
+        }}/>
       </PopoverContent>
     </Popover>
   );

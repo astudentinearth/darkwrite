@@ -10,3 +10,4 @@ export * from "./components/ui/select";
 export * from "./components/ui/context-menu";
 export * from "./components/ui/label";
 export * from "./components/ui/command"
+export * from "./components/ui/color-picker"

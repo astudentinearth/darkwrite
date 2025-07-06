@@ -2,15 +2,14 @@ import { cn } from "@/utils";
 import { cssTextColorVariables } from "@darkwrite/common";
 import {
   Button,
+  ColorPicker,
   Popover,
   PopoverContent,
-  PopoverTrigger
+  PopoverTrigger,
 } from "@darkwrite/ui";
 import { useCurrentEditor } from "@tiptap/react";
 import { Baseline, ChevronDown, Eraser } from "lucide-react";
-import { Dispatch, SetStateAction } from "react";
-
-
+import { Dispatch, SetStateAction, useState } from "react";
 
 export function TextColorSelector(props: {
   open: boolean;
@@ -18,6 +17,9 @@ export function TextColorSelector(props: {
 }) {
   const colorVars = cssTextColorVariables;
   const { editor } = useCurrentEditor();
+  const activeTextColor = editor?.getAttributes("textStyle")?.color || "";
+  const [customColorValue, setCustomColorValue] =
+    useState<string>(activeTextColor);
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -46,12 +48,23 @@ export function TextColorSelector(props: {
         <Button
           variant={"outline"}
           className="w-8 h-8 hover:outline-2 hover:outline-primary p-0 justify-center items-center text-center"
-          onClick={() =>
-            editor?.chain().focus().unsetColor().run()
-          }
+          onClick={() => editor?.chain().focus().unsetColor().run()}
         >
-          <Eraser size={18} className="text-center flex justify-center items-center"/>
+          <Eraser
+            size={18}
+            className="text-center flex justify-center items-center"
+          />
         </Button>
+        <ColorPicker
+          defaultValue={activeTextColor}
+          value={customColorValue}
+          className="data-[state=closed]:animate-none! bg-secondary! hover:outline-2 hover:outline-primary"
+          onChange={(val) => {
+            console.log(val);
+            setCustomColorValue(val);
+            editor?.chain().setColor(val).run();
+          }}
+        />
       </PopoverContent>
     </Popover>
   );
