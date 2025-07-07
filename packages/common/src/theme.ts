@@ -20,6 +20,7 @@ export type Theme = {
   border: string;
   focusRing: string;
   star: string;
+  cssVars: {[key: string]: string};
 };
 
 
@@ -30,3 +31,27 @@ export function isTheme(maybeTheme: unknown): maybeTheme is Theme {
     return false;
   return true;
 }
+
+export const cssTextColorVariables = [
+  "--editor-text-red",
+  "--editor-text-orange",
+  "--editor-text-yellow",
+  "--editor-text-green",
+  "--editor-text-cyan",
+  "--editor-text-blue",
+  "--editor-text-indigo",
+  "--editor-text-purple",
+  "--editor-text-pink",
+];
+
+export const cssHightlightColorVariables = [
+  "--editor-hightlight-red",
+  "--editor-hightlight-orange",
+  "--editor-hightlight-yellow",
+  "--editor-hightlight-green",
+  "--editor-hightlight-cyan",
+  "--editor-hightlight-blue",
+  "--editor-hightlight-indigo",
+  "--editor-hightlight-purple",
+  "--editor-hightlight-pink",
+];

@@ -7,7 +7,7 @@
   "description": "The eye candy note-taking app for all desktops.",
   "productName": "Darkwrite",
   "private": true,
-  "version": "0.5.2-alpha.2",
+  "version": "0.5.3-alpha.2",
   "type": "module",
   "license": "AGPL-3.0-or-later",
   "main": "dist-electron/main.js",

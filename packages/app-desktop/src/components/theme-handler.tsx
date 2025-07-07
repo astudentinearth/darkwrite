@@ -59,6 +59,9 @@ export function ThemeHandler() {
     setGlobalStyle("--border", theme.border);
     setGlobalStyle("--ring", theme.focusRing);
     setGlobalStyle("--star", theme.star);
+    for(const key in theme.cssVars) {
+      if(theme.cssVars[key]) setGlobalStyle(key, theme.cssVars[key]);
+    }
     if (window.api != null && window.api.theme.setTitlebarSymbolColor != null) {
       const fgHSLStr = theme.foreground.replace("%", "").split(" ");
       if (fgHSLStr.length !== 3) return;
