@@ -14,6 +14,9 @@ export interface IndexedDBSchema extends DBSchema {
   note: {
     key: string;
     value: Note;
+    indexes: {
+      workspaceId: string;
+    }
   };
   embed: {
     key: string;

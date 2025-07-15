@@ -100,13 +100,13 @@ export function EditorRoot() {
           <CoverImage
             key={`coverimg-${note.id}`}
             note={note}
-            embedId={_customizations?.coverEmbedId}
+            embedId={_customizations?.coverImageSource}
           />
           <EditorCover
             key={`cover-${note.id}`}
             note={note}
             update={(dto)=>update({id: note.id, dto})}
-            hasCover={!!_customizations.coverEmbedId}
+            hasCover={!!_customizations.coverImageSource}
             wide={_customizations.widePage}
           />
         </>

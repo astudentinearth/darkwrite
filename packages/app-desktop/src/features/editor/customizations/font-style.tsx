@@ -1,3 +1,4 @@
+import { FontStyle } from "@darkwrite/common/models";
 import { Button, Input } from "@darkwrite/ui";
 import {
   setEditorCustomizations,
@@ -27,7 +28,7 @@ export default function FontStyleView() {
       <div className="grid grid-cols-[80px_80px_80px_80px] [&>button]:rounded-xl [&>button]:w-full [&>button]:h-[80px]">
         <Button
           variant={"ghost"}
-          onClick={() => setStyle({ ...style, font: "sans" })}
+          onClick={() => setStyle({ ...style, font: FontStyle.SANS })}
           className={cn(
             (style.font === "sans" || style.font == null) &&
               "text-primary hover:text-primary/80",
@@ -40,7 +41,7 @@ export default function FontStyleView() {
         </Button>
         <Button
           variant={"ghost"}
-          onClick={() => setStyle({ ...style, font: "serif" })}
+          onClick={() => setStyle({ ...style, font: FontStyle.SERIF })}
           className={cn(
             style.font === "serif" && "text-primary hover:text-primary/80",
           )}
@@ -52,7 +53,7 @@ export default function FontStyleView() {
         </Button>
         <Button
           variant={"ghost"}
-          onClick={() => setStyle({ ...style, font: "mono" })}
+          onClick={() => setStyle({ ...style, font: FontStyle.MONO })}
           className={cn(
             style.font === "mono" && "text-primary hover:text-primary/80",
           )}
@@ -64,7 +65,7 @@ export default function FontStyleView() {
         </Button>
         <Button
           variant={"ghost"}
-          onClick={() => setStyle({ ...style, font: "custom" })}
+          onClick={() => setStyle({ ...style, font: FontStyle.CUSTOM })}
           className={cn(
             style.font === "custom" && "text-primary hover:text-primary/80",
           )}

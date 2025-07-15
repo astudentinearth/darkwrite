@@ -1,12 +1,10 @@
 import { Nav } from "@/components/nav";
 import Section from "@/components/section";
-import { getLatestRelease } from "@/lib/github-api";
 import { ArrowRight, Code2, Heart, Lock, WifiOff } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
 export default async function Home() {
-  const release = await getLatestRelease();
   return (
     <div className="bg-background">
       <div className="absolute w-3/4 sm:w-1/2 h-72 rounded-full opacity-30 bg-primary left-1/2 -translate-y-1/2 -translate-x-1/2 blur-[120px]">
@@ -18,7 +16,7 @@ export default async function Home() {
         fill
         alt="glow"
       ></Image> */}
-      <Nav releasePage={release.release_page}/>
+      <Nav/>
       <main className="flex flex-col justify-center gap-8 md:gap-16 row-start-2 items-center">
         <div className="w-full flex flex-col items-center mt-40">
           <h1 className="text-center text-5xl sm:text-7xl font-bold mx-4">
@@ -42,16 +40,13 @@ export default async function Home() {
             </span>
           </span>
           <Link
-            href={release.release_page ?? "https://github.com/astudentinearth/darkwrite/releases"}
+            href={"https://github.com/astudentinearth/darkwrite/releases"}
             className="bg-primary h-10 p-7 mt-8 flex items-center w-fit gap-2 justify-center rounded-xl hover:brightness-125 transition-[filter]"
           >
             Download for free <ArrowRight size={18} />
           </Link>
           <span className="mt-2 opacity-70">
             Available on Windows, Linux and macOS
-          </span>
-          <span className="opacity-70">
-            Latest release: {release.name}
           </span>
           <Image
             className="object-contain static"

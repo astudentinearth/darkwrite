@@ -4,9 +4,9 @@ import { DarkwriteDB, DarkwriteDBType } from "./instance";
 export class NoteRepository {
   constructor(private _db: DarkwriteDBType = DarkwriteDB) {}
 
-  public async findAll() {
-    const notes = await (await this._db).getAll("note");
-    return notes;
+  public async findAll(workspaceId: string) {
+      const notes = await (await this._db).getAllFromIndex("note", "workspaceId", workspaceId);
+      return notes;
   }
 
   public async findById(id: string) {

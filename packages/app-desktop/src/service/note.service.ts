@@ -16,6 +16,7 @@ export class NoteService {
       modifiedAt: new Date(),
       orderHint: "",
       favoriteOrderHint: "",
+      icon: "",
       ...dto
     }
     await this.noteRepository.save(note);
@@ -44,8 +45,8 @@ export class NoteService {
     return note ? {note} : null;
   }
 
-  async getAllNotes(): Promise<NotesResponseDTO> {
-    const notes = await this.noteRepository.findAll();
+  async getAllNotes(workspaceId: string): Promise<NotesResponseDTO> {
+    const notes = await this.noteRepository.findAll(workspaceId);
     return {notes};
   }
 

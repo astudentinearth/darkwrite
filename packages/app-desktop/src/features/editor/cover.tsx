@@ -78,7 +78,7 @@ export function EditorCover(props: {
       console.table(embed);
       setEditorCustomizations({
         ...customizations,
-        coverEmbedId: embed.id,
+        coverImageSource: embed.id,
       });
     } catch (error) {
       console.error(error);

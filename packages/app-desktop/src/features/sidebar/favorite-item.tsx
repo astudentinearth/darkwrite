@@ -19,7 +19,7 @@ export function FavoriteItem({ note, index }: { note: Note; index: number }) {
   const [active, setActive] = useState(false);
   const navToNote = useNavigateToNote();
   const update = useUpdateNoteMutation().mutate;
-  const trash = (id: string) => update({ id, isTrashed: true });
+  const trash = (id: string) => update({ id, dto: { isTrashed: true } });
   const activeNoteId = useNoteFromURL();
   const _export = useExport();
   useEffect(() => {
@@ -66,8 +66,10 @@ export function FavoriteItem({ note, index }: { note: Note; index: number }) {
           onClick={() => {
             update({
               id: note.id,
-              isFavorite: !note.isFavorite,
-              favoriteIndex: 0,
+              dto: {
+                isFavorite: !note.isFavorite,
+                //favoriteIndex: 0,
+              },
             });
           }}
         >
@@ -98,7 +100,11 @@ export function FavoriteItem({ note, index }: { note: Note; index: number }) {
           }}
           className="focus:text-destructive focus:*:text-destructive group"
         >
-          <Trash className="opacity-75 group-focus:text-destructive" size={20}></Trash>&nbsp; Move to trash
+          <Trash
+            className="opacity-75 group-focus:text-destructive"
+            size={20}
+          ></Trash>
+          &nbsp; Move to trash
         </ContextMenuItem>
         <ContextMenuSeparator></ContextMenuSeparator>
         <span className="text-foreground/50 text-sm p-2">

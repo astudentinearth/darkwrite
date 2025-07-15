@@ -19,7 +19,7 @@ export function CoverImage({ embedId }: { note: NoteDTO; embedId?: string }) {
       const embed = await uploadImage();
       setEditorCustomizations({
         ...customizations,
-        coverEmbedId: embed.id,
+        coverImageSource: embed.id,
       });
     } catch {
       /**empty */
@@ -28,7 +28,7 @@ export function CoverImage({ embedId }: { note: NoteDTO; embedId?: string }) {
   const removeCover = () => {
     setEditorCustomizations({
       ...customizations,
-      coverEmbedId: undefined,
+      coverImageSource: undefined,
     });
   };
   return (

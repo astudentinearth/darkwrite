@@ -21,7 +21,7 @@ export class LocalNoteAPI implements INoteAPI {
     return this.noteService.getNote(id);
   }
 
-  getAllNotes() {
-    return this.noteService.getAllNotes();
+  getAllNotes(workspaceId: string = "") {
+    return this.noteService.getAllNotes(workspaceId);
   }
 }

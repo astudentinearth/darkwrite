@@ -1,7 +1,7 @@
-import { NoteCustomizations } from "@darkwrite/common";
+import { NoteCustomization } from "@darkwrite/common/models";
 import { NoteAPI } from "@renderer/api";
 import { useQuery } from "@tanstack/react-query";
-import { EditorContent } from "@darkwrite/editor";
+import { type EditorContent } from "@darkwrite/editor";
 export const useNoteContentsQuery = (id: string) => {
   return useQuery({
     queryKey: ["note-content", id],
@@ -10,14 +10,14 @@ export const useNoteContentsQuery = (id: string) => {
       if (!response) {
         return {
           content: {} as EditorContent,
-          customizations: {} as NoteCustomizations,
+          customizations: {} as NoteCustomization,
         };
       }
       //console.log("Read file: ", response.value);
       const json = JSON.parse(response);
       const content = (json["contents"] ?? {}) as EditorContent;
       const customizations = (json["customizations"] ??
-        {}) as NoteCustomizations;
+        {}) as NoteCustomization;
       //console.log(content);
       return { content, customizations };
     },

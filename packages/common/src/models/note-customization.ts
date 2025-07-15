@@ -12,7 +12,7 @@ export interface NoteCustomization {
   customFont?: string;
   largeText?: boolean;
   backgroundColor?: string;
-  textColor: string;
+  textColor?: string;
   /** This can be an embed ID (format //TODO),  
    * a base64 encoded image (discouraged) or any image that is accessible via a URL. 
    * Replaces the `coverEmbedId` field from the previous iteration.
