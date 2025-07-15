@@ -1,25 +1,34 @@
-import { Note } from "@darkwrite/common";
+import { NoteDTO } from "@darkwrite/common";
 
-export const mockNotes: Note[] = [
+export const mockNotes: NoteDTO[] = [
   {
     id: "a",
-    created: new Date(),
+    createdAt: new Date(),
     icon: "",
-    modified: new Date(),
-    title: "Hello world!"
+    modifiedAt: new Date(),
+    title: "Hello world!",
+    orderHint: "",
+    favoriteOrderHint: "",
+    workspaceId: ""
   },
   {
     id: "b",
-    created: new Date(),
+    createdAt: new Date(),
     icon: "",
-    modified: new Date(),
-    title: "Hello world! 2"
+    modifiedAt: new Date(),
+    title: "Hello world! 2",
+    orderHint: "",
+    favoriteOrderHint: "",
+    workspaceId: ""
   },
   {
     id: "c",
-    created: new Date(),
+    createdAt: new Date(),
     icon: "",
-    modified: new Date(),
-    title: "Hello world! 3"
+    modifiedAt: new Date(),
+    title: "Hello world! 3",
+    orderHint: "",
+    favoriteOrderHint: "",
+    workspaceId: ""
   },
 ]

@@ -1,13 +1,13 @@
 import { EditorContent, SlashCommandItem } from "@/types"
 import { Editor } from "@tiptap/core";
 import { createContext } from "react";
-import { Note } from "@darkwrite/common";
+import { NoteDTO } from "@darkwrite/common";
 import { ImageExtensionConfig } from "./extensions/image/image-config";
 import i18n from "i18next"
 
 export interface IDarkwriteEditorContext {
   content: EditorContent;
-  notes?: Note[];
+  notes?: NoteDTO[];
   onContentChange: (newContent: EditorContent) => void;
   /** A function to be called when the editor instance changes. Use this to life the editor instance higher in the tree. */
   onInstanceChange?: (editor: Editor) => void;
