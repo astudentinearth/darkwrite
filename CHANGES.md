@@ -1,3 +1,12 @@
+# 0.5.3-alpha.2
+## 🌟 Features
+- Add support for text colors and highlighting (#3, #5)
+  - There are 9 colors available by default, and these follow your theme
+  - It's also possible to choose a custom color using the eyedropper button
+
+## ✨ Improvements and fixes
+- Removed old editor code, which reduced the app size by ~1MB
+
 # 0.5.2-alpha.2
 ## 🌟 Features
 - Upgraded code blocks with syntax highlighting.
