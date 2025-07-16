@@ -1,62 +1,29 @@
+import { UpdateNoteDTO } from "@darkwrite/common";
 import {
-  useNotesQuery,
-  useUpdateMultipleNotesMutation,
+  useUpdateNoteMutation
 } from "@renderer/hooks/query";
 import { cn } from "@renderer/lib/utils";
-import { produce } from "immer";
 import { DragEvent, useState } from "react";
 export function NoteDropZone({
-  parentID,
-  belowID,
-  last,
+  orderHint
 }: {
-  parentID?: string | null;
-  belowID?: string;
-  last?: boolean;
+  orderHint: string;
 }) {
   const [dragOver, setDragOver] = useState(false);
-  const saveAllMutation = useUpdateMultipleNotesMutation();
-  const notesQuery = useNotesQuery();
-  const notes = notesQuery.data;
+  const updateMutation = useUpdateNoteMutation();
   const handleDrop = async (event: DragEvent<HTMLElement>) => {
-    if (!notes) return;
     event.preventDefault();
     event.stopPropagation();
-    const data = event.dataTransfer.getData("note_id");
+    const id = event.dataTransfer.getData("note_id");
+    if(!id) return;
     setDragOver(false);
-    // we will mutate the list on the client side first
-    const updated = produce(notes, (arr) => {
-      const belowIndex = arr.findIndex((n) => n.id === belowID); // find note below this drop zone
-      const noteIndex = arr.findIndex((n) => n.id === data); // find original
-      const note = arr[noteIndex];
-      note.parentId = parentID ?? undefined;
-      // move notes around
-      if (last) {
-        arr.splice(noteIndex, 1); // remove original
-        arr.push(note); // send to the end
-      } else {
-        if (belowIndex > noteIndex) {
-          // account for the removed item
-          arr.splice(belowIndex - 1, 0, arr.splice(noteIndex, 1)[0]); // move original just before below
-        } else {
-          arr.splice(belowIndex, 0, arr.splice(noteIndex, 1)[0]); // move original just before below
-        }
-      }
-      // reindex
-      for (let i = 0; i < arr.length; i++) {
-        console.log("Indexed", arr[i].title, "as", i);
-        arr[i].index = i;
-      }
-    });
-    saveAllMutation.mutate(updated); // update
+    const dto: UpdateNoteDTO = { orderHint }
+    await updateMutation.mutateAsync({id, dto});
   };
 
   const handleDragOver = (event: DragEvent<HTMLElement>) => {
-    if (!notes) return;
     event.preventDefault();
     event.stopPropagation();
-    //const below = notes.find((n) => n.id === belowID);
-    //console.log(below?.title);
     setDragOver(true);
   };
 

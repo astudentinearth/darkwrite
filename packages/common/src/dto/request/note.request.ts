@@ -16,4 +16,6 @@ export interface UpdateNoteDTO {
   propertyValues?: Record<string, string>;
   isFavorite?: boolean;
   isTrashed?: boolean;
+  orderHint?: string;
+  favoriteOrderHint?: string;
 }

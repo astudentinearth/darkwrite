@@ -89,6 +89,7 @@
     "i18next-resources-to-backend": "^1.2.1",
     "idb": "^8.0.2",
     "immer": "^10.1.1",
+    "lexorank": "^1.0.5",
     "lodash": "^4.17.21",
     "lucide-react": "^0.475.0",
     "nanoid": "^5.0.9",

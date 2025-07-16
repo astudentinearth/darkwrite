@@ -1414,6 +1414,7 @@ __metadata:
     idb: "npm:^8.0.2"
     immer: "npm:^10.1.1"
     jsdom: "npm:^24.1.0"
+    lexorank: "npm:^1.0.5"
     lodash: "npm:^4.17.21"
     lucide-react: "npm:^0.475.0"
     memfs: "npm:^4.9.3"
@@ -13275,6 +13276,13 @@ __metadata:
     prelude-ls: "npm:^1.2.1"
     type-check: "npm:~0.4.0"
   checksum: 10c0/effb03cad7c89dfa5bd4f6989364bfc79994c2042ec5966cb9b95990e2edee5cd8969ddf42616a0373ac49fac1403437deaf6e9050fbbaa3546093a59b9ac94e
+  languageName: node
+  linkType: hard
+
+"lexorank@npm:^1.0.5":
+  version: 1.0.5
+  resolution: "lexorank@npm:1.0.5"
+  checksum: 10c0/76b4f4d9a837850a2f3e6d3c32dfd8700aa3bad9fb94921adf6ea0d8241c07ba89f62f106eaf54af0fac85c0f8653ef07da1489dd81556d2edd4f5e5fb4045cf
   languageName: node
   linkType: hard
 
