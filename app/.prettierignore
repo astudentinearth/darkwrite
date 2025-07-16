@@ -1,0 +1,9 @@
+# Ignore artifacts:
+build
+coverage
+out
+release
+node_modules
+resources
+dist
+dist-electron
