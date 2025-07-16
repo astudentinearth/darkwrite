@@ -1,14 +1,14 @@
 import { NoteDTO, UpdateNoteDTO } from "@darkwrite/common";
 import { Button } from "@darkwrite/ui";
-import DynamicTextarea from "@renderer/components/dynamic-textarea";
-import { EmojiPicker } from "@renderer/components/emoji-picker";
-import { FlexibleSpacer } from "@renderer/components/spacer";
+import DynamicTextarea from "@/components/dynamic-textarea";
+import { EmojiPicker } from "@/components/emoji-picker";
+import { FlexibleSpacer } from "@/components/spacer";
 import {
   setEditorCustomizations,
   useEditorState,
-} from "@renderer/context/editor-state";
-import { uploadImage } from "@renderer/lib/upload";
-import { cn, fromUnicode } from "@renderer/lib/utils";
+} from "@/context/editor-state";
+import { uploadImage } from "@/lib/upload";
+import { cn, fromUnicode } from "@/lib/utils";
 import { useQueryClient } from "@tanstack/react-query";
 import { Frown, ImagePlus, SmilePlus, TriangleAlert } from "lucide-react";
 import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from "react";

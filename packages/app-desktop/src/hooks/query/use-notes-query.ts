@@ -1,4 +1,4 @@
-import { APIClient } from "@renderer/apiv2/client";
+import { APIClient } from "@/apiv2/client";
 import { useQuery } from "@tanstack/react-query";
 
 export const useNotesQuery = () => {

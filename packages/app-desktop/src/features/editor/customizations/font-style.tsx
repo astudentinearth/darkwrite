@@ -3,8 +3,8 @@ import { Button, Input } from "@darkwrite/ui";
 import {
   setEditorCustomizations,
   useEditorState,
-} from "@renderer/context/editor-state";
-import { cn } from "@renderer/lib/utils";
+} from "@/context/editor-state";
+import { cn } from "@/lib/utils";
 import _ from "lodash";
 import { useTranslation } from "react-i18next";
 

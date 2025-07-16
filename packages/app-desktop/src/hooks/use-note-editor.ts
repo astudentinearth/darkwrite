@@ -1,4 +1,4 @@
-import { useLocalStore } from "@renderer/context/local-state";
+import { useLocalStore } from "@/context/local-state";
 import { useNoteByIdQuery } from "./query";
 import { useNoteContentsQuery } from "./query/use-note-contents-query";
 import { useNoteFromURL } from "./use-note-from-url";

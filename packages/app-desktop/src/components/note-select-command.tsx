@@ -6,8 +6,8 @@ import {
   CommandItem,
   CommandList,
 } from "@darkwrite/ui";
-import { useNotesQuery } from "@renderer/hooks/query";
-import { cn, getNoteIcon } from "@renderer/lib/utils";
+import { useNotesQuery } from "@/hooks/query";
+import { cn, getNoteIcon } from "@/lib/utils";
 import { Command } from "lucide-react";
 import { useState } from "react";
 

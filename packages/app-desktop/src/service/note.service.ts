@@ -1,7 +1,7 @@
 import { CreateNoteDTO, NoteResponseDTO, NotesResponseDTO, UpdateNoteDTO } from "@darkwrite/common";
 import { Note } from "@darkwrite/common/models";
-import { DocumentRepository, NoteRepository } from "@renderer/db";
-import { generateId } from "@renderer/lib/utils";
+import { DocumentRepository, NoteRepository } from "@/db";
+import { generateId } from "@/lib/utils";
 import { LexoRank } from "lexorank";
 
 export class NoteService {

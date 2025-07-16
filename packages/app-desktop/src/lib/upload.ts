@@ -1,5 +1,5 @@
 import { ResolvedEmbed } from "@darkwrite/common";
-import { EmbedAPI } from "@renderer/api";
+import { EmbedAPI } from "@/api";
 
 export function uploadImage(): Promise<ResolvedEmbed> {
   return new Promise<ResolvedEmbed>((resolve, reject) => {

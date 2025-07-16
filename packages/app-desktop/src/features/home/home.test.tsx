@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { HomePage } from ".";
-import * as navigate from "@renderer/hooks/use-navigate-to-note";
-import * as recents from "@renderer/hooks/use-recents";
+import * as navigate from "@/hooks/use-navigate-to-note";
+import * as recents from "@/hooks/use-recents";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 

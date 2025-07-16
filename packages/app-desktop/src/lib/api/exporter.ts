@@ -1,4 +1,4 @@
-import { NoteAPI } from "@renderer/api";
+import { NoteAPI } from "@/api";
 import { generateHTML } from "@darkwrite/editor";
 import { attempt } from "lodash";
 

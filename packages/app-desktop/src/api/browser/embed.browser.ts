@@ -1,7 +1,7 @@
 import { Embed } from "@darkwrite/common";
 import { IEmbedAPI } from "../types";
 import { IBrowserDBContext, BrowserDBContext } from "./db-actions.browser";
-import { generateId } from "@renderer/lib/utils";
+import { generateId } from "@/lib/utils";
 
 export class BrowserEmbedAPI implements IEmbedAPI {
   constructor(private _db: IBrowserDBContext = new BrowserDBContext()) {}

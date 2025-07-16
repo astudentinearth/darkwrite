@@ -1,4 +1,4 @@
-import { useLocalStore } from "@renderer/context/local-state";
+import { useLocalStore } from "@/context/local-state";
 import {
   ChangeEvent,
   ClipboardEvent,

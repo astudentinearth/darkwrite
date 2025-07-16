@@ -1,4 +1,4 @@
-import { NoteAPI } from "@renderer/api";
+import { NoteAPI } from "@/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export const useMoveNoteMutation = () => {

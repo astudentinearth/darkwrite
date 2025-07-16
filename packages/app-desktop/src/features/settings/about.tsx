@@ -1,11 +1,11 @@
 import { Button } from "@darkwrite/ui";
-import { useClientInfo } from "@renderer/hooks/query";
-import { useUpdate } from "@renderer/hooks/query/use-update";
+import { useClientInfo } from "@/hooks/query";
+import { useUpdate } from "@/hooks/query/use-update";
 import { Bug, Code, RotateCw } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import UpdateDialog from "./update-prompt";
-import { useToast } from "@renderer/hooks/use-toast";
+import { useToast } from "@/hooks/use-toast";
 
 export function AboutCard() {
   const data = useClientInfo();

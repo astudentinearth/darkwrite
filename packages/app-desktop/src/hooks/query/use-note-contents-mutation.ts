@@ -1,5 +1,5 @@
 import { NoteCustomizations } from "@darkwrite/common";
-import { NoteAPI } from "@renderer/api";
+import { NoteAPI } from "@/api";
 import { useMutation } from "@tanstack/react-query";
 import _ from "lodash";
 import { EditorContent } from "@darkwrite/editor";

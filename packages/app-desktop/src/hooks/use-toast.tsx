@@ -1,4 +1,4 @@
-import { UpdateToast, UpToDateToast } from "@renderer/components/toast/update-toast";
+import { UpdateToast, UpToDateToast } from "@/components/toast/update-toast";
 import { toast } from "sonner";
 
 export const useToast = () => {

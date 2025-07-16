@@ -4,7 +4,7 @@ import {
   SelectItem,
   SelectTrigger,
 } from "@darkwrite/ui";
-import { Language, LanguageNameMap } from "@renderer/types/lang";
+import { Language, LanguageNameMap } from "@/types/lang";
 
 export default function LanguageSelect({
   lang,

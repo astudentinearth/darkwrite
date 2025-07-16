@@ -1,11 +1,11 @@
 import { Button, Label } from "@darkwrite/ui";
-import { ColorPicker } from "@renderer/components/color-picker";
-import { FlexibleSpacer } from "@renderer/components/spacer";
+import { ColorPicker } from "@/components/color-picker";
+import { FlexibleSpacer } from "@/components/spacer";
 import {
   produceUserSettings,
   useSettingsStore,
-} from "@renderer/context/settings-store";
-import { useImportThemeMutation } from "@renderer/hooks/query";
+} from "@/context/settings-store";
+import { useImportThemeMutation } from "@/hooks/query";
 import { FolderClosed } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { ThemeMenu } from "./theme-menu";

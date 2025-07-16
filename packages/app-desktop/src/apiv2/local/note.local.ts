@@ -1,5 +1,5 @@
 import { CreateNoteDTO, NoteResponseDTO, UpdateNoteDTO } from "@darkwrite/common";
-import { NoteService } from "@renderer/service/note.service";
+import { NoteService } from "@/service/note.service";
 import { INoteAPI } from "../api-client";
 
 export class LocalNoteAPI implements INoteAPI {

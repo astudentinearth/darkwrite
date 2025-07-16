@@ -5,7 +5,7 @@ import {
   NotePartial,
   UserSettings
 } from "@darkwrite/common";
-import { StandaloneDarkwriteDocument } from "@renderer/lib/document-util";
+import { StandaloneDarkwriteDocument } from "@/lib/document-util";
 
 export interface INoteAPI {
   create: (title: string, parent?: string) => Promise<Note | null>;

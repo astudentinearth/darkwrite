@@ -1,6 +1,6 @@
 import { Button } from "@darkwrite/ui";
-import { useCreateNoteMutation } from "@renderer/hooks/query/use-create-note-mutation";
-import { cn } from "@renderer/lib/utils";
+import { useCreateNoteMutation } from "@/hooks/query/use-create-note-mutation";
+import { cn } from "@/lib/utils";
 import { SquarePen } from "lucide-react";
 import { useTranslation } from "react-i18next";
 

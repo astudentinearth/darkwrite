@@ -1,5 +1,5 @@
-import { useLocalStore } from "@renderer/context/local-state";
-import { useSettingsStore } from "@renderer/context/settings-store";
+import { useLocalStore } from "@/context/local-state";
+import { useSettingsStore } from "@/context/settings-store";
 import _ from "lodash";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";

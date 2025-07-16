@@ -1,5 +1,5 @@
-import * as navExports from "@renderer/hooks/use-navigate-to-note";
-import * as titleExports from "@renderer/hooks/use-title-dropdown";
+import * as navExports from "@/hooks/use-navigate-to-note";
+import * as titleExports from "@/hooks/use-title-dropdown";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { NoteDropdown } from "./note-dropdown";

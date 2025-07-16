@@ -1,10 +1,10 @@
-import { useSettingsStore } from "@renderer/context/settings-store";
-import { useTheme } from "@renderer/hooks/query";
+import { useSettingsStore } from "@/context/settings-store";
+import { useTheme } from "@/hooks/query";
 import { DarkwriteDefault } from "@darkwrite/common";
-import { hexToHslVariable, setGlobalStyle } from "@renderer/lib/utils";
+import { hexToHslVariable, setGlobalStyle } from "@/lib/utils";
 import { useEffect } from "react";
 import { hsl } from "color-convert";
-import { ThemesModel } from "@renderer/lib/api/theme";
+import { ThemesModel } from "@/lib/api/theme";
 
 export function ThemeHandler() {
   const fonts = useSettingsStore((s) => s.settings.fonts);

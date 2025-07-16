@@ -1,8 +1,8 @@
 import { Note, NotePartial } from "@darkwrite/common";
 import { INoteAPI } from "../types";
-import { generateId } from "@renderer/lib/utils";
+import { generateId } from "@/lib/utils";
 import { BrowserDBContext, IBrowserDBContext } from "./db-actions.browser";
-import { StandaloneDarkwriteDocument } from "@renderer/lib/document-util";
+import { StandaloneDarkwriteDocument } from "@/lib/document-util";
 
 export class BrowserNoteAPI implements INoteAPI {
   constructor(private _db: IBrowserDBContext = new BrowserDBContext()) {}

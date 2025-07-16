@@ -5,9 +5,9 @@ import {
   DropdownMenuTrigger,
   Button
 } from "@darkwrite/ui";
-import { useNavigateToNote } from "@renderer/hooks/use-navigate-to-note";
-import { useTitleDropdown } from "@renderer/hooks/use-title-dropdown";
-import { getNoteIcon } from "@renderer/lib/utils";
+import { useNavigateToNote } from "@/hooks/use-navigate-to-note";
+import { useTitleDropdown } from "@/hooks/use-title-dropdown";
+import { getNoteIcon } from "@/lib/utils";
 
 export function NoteDropdown() {
   const navToNote = useNavigateToNote();

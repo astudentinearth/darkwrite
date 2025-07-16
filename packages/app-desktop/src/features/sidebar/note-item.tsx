@@ -1,6 +1,6 @@
 import { findSubnotes } from "@darkwrite/common";
 import { Note } from "@darkwrite/common/models";
-import { NoteSelectCommandDialog } from "@renderer/components/note-select-command";
+import { NoteSelectCommandDialog } from "@/components/note-select-command";
 import {
   Button,
   ContextMenu,
@@ -13,15 +13,15 @@ import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "@renderer/components/ui/collapsible";
-import { useNotesQuery, useUpdateNoteMutation } from "@renderer/hooks/query";
-import { useCreateNoteMutation } from "@renderer/hooks/query/use-create-note-mutation";
-import { useDuplicateNoteMutation } from "@renderer/hooks/query/use-duplicate-note-mutation";
-import { useMoveNoteMutation } from "@renderer/hooks/query/use-move-note";
-import { useExport } from "@renderer/hooks/use-export";
-import { useNavigateToNote } from "@renderer/hooks/use-navigate-to-note";
-import { useNoteFromURL } from "@renderer/hooks/use-note-from-url";
-import { cn, getNoteIcon } from "@renderer/lib/utils";
+} from "@/components/ui/collapsible";
+import { useNotesQuery, useUpdateNoteMutation } from "@/hooks/query";
+import { useCreateNoteMutation } from "@/hooks/query/use-create-note-mutation";
+import { useDuplicateNoteMutation } from "@/hooks/query/use-duplicate-note-mutation";
+import { useMoveNoteMutation } from "@/hooks/query/use-move-note";
+import { useExport } from "@/hooks/use-export";
+import { useNavigateToNote } from "@/hooks/use-navigate-to-note";
+import { useNoteFromURL } from "@/hooks/use-note-from-url";
+import { cn, getNoteIcon } from "@/lib/utils";
 import {
   ArrowRightFromLine,
   ChevronDown,

@@ -1,8 +1,8 @@
-import { useLocalStore } from "@renderer/context/local-state";
+import { useLocalStore } from "@/context/local-state";
 import { useCenteredLayout } from "./layout/use-centered-layout";
-import { useSettingsStore } from "@renderer/context/settings-store";
+import { useSettingsStore } from "@/context/settings-store";
 import { ImageExtensionConfig } from "@darkwrite/editor";
-import { EmbedAPI } from "@renderer/api";
+import { EmbedAPI } from "@/api";
 
 export const useEditorOptions = (widePage: boolean = false) => {
   const editorWidth = useCenteredLayout(widePage ? 0 : 984);

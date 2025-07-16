@@ -1,4 +1,4 @@
-import { useStartup } from "@renderer/hooks/use-startup";
+import { useStartup } from "@/hooks/use-startup";
 
 export const StartupHandler = () => {
   useStartup();

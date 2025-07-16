@@ -1,5 +1,5 @@
 import { Label, Switch } from '@darkwrite/ui'
-import { produceUserSettings, useSettingsStore } from '@renderer/context/settings-store'
+import { produceUserSettings, useSettingsStore } from '@/context/settings-store'
 import React from 'react'
 import { useTranslation } from 'react-i18next';
 

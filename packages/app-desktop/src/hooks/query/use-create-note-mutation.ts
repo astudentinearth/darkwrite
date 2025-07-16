@@ -1,4 +1,4 @@
-import { APIClient } from "@renderer/apiv2/client";
+import { APIClient } from "@/apiv2/client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useNavigateToNote } from "../use-navigate-to-note";

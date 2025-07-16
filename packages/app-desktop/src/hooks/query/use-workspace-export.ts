@@ -1,4 +1,4 @@
-import { ExporterModel } from "@renderer/lib/api/exporter";
+import { ExporterModel } from "@/lib/api/exporter";
 import { useMutation } from "@tanstack/react-query";
 
 export const useWorkspaceExport = () => {

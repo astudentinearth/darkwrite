@@ -1,4 +1,4 @@
-import { BackupModel } from "@renderer/lib/api/backup";
+import { BackupModel } from "@/lib/api/backup";
 import { useMutation } from "@tanstack/react-query";
 
 export const useBackup = () => {

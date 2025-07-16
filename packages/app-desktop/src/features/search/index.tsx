@@ -5,9 +5,9 @@ import {
   CommandItem,
   CommandList,
 } from "@darkwrite/ui";
-import { useNotesQuery } from "@renderer/hooks/query";
-import { useNavigateToNote } from "@renderer/hooks/use-navigate-to-note";
-import { getNoteIcon } from "@renderer/lib/utils";
+import { useNotesQuery } from "@/hooks/query";
+import { useNavigateToNote } from "@/hooks/use-navigate-to-note";
+import { getNoteIcon } from "@/lib/utils";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 

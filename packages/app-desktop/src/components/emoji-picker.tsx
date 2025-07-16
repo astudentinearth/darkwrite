@@ -6,9 +6,9 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import { CSSProperties, useState } from "react";
-import { cn } from "@renderer/lib/utils";
+import { cn } from "@/lib/utils";
 import "./emoji-picker.css";
-import { useSettingsStore } from "@renderer/context/settings-store";
+import { useSettingsStore } from "@/context/settings-store";
 import { hex } from "color-convert";
 
 export function EmojiPicker(props: {

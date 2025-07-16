@@ -1,5 +1,5 @@
 import { NoteDTO, resolveParents } from "@darkwrite/common";
-import { getNoteIcon } from "@renderer/lib/utils";
+import { getNoteIcon } from "@/lib/utils";
 import { ChevronDown, Home, Settings } from "lucide-react";
 import { ReactNode, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";

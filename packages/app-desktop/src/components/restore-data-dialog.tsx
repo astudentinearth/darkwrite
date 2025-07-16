@@ -10,10 +10,10 @@ import {
   AlertDialogTrigger,
   Button
 } from "@darkwrite/ui";
-import { cn } from "@renderer/lib/utils";
+import { cn } from "@/lib/utils";
 import { ArchiveRestore, FileArchive } from "lucide-react";
-import { useRestore } from "@renderer/hooks/query";
-import { BackupModel } from "@renderer/lib/api/backup";
+import { useRestore } from "@/hooks/query";
+import { BackupModel } from "@/lib/api/backup";
 import { useTranslation } from "react-i18next";
 
 export function RestoreDataDialog() {

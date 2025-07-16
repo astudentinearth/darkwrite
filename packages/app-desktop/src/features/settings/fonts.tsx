@@ -1,9 +1,9 @@
-import { FlexibleSpacer } from "@renderer/components/spacer";
+import { FlexibleSpacer } from "@/components/spacer";
 import { Button, Input, Label } from "@darkwrite/ui";
 import {
   produceUserSettings,
   useSettingsStore,
-} from "@renderer/context/settings-store";
+} from "@/context/settings-store";
 import { ChangeEvent, useRef } from "react";
 import { useTranslation } from "react-i18next";
 

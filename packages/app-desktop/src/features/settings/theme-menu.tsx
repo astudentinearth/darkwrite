@@ -7,9 +7,9 @@ import {
 import {
   updateUserSettings,
   useSettingsStore,
-} from "@renderer/context/settings-store";
-import { useTheme } from "@renderer/hooks/query";
-import { cn } from "@renderer/lib/utils";
+} from "@/context/settings-store";
+import { useTheme } from "@/hooks/query";
+import { cn } from "@/lib/utils";
 import { produce } from "immer";
 
 export function ThemeMenu() {

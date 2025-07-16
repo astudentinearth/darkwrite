@@ -1,4 +1,4 @@
-import { EmbedAPI } from "@renderer/api";
+import { EmbedAPI } from "@/api";
 import { useEffect, useState } from "react"
 
 export const useEmbedSource = (embedId: string) => {

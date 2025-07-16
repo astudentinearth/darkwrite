@@ -1,17 +1,17 @@
-import { RestoreDataDialog } from "@renderer/components/restore-data-dialog";
+import { RestoreDataDialog } from "@/components/restore-data-dialog";
 import { Button, Switch, Input, Label } from "@darkwrite/ui";
-import { useLocalStore } from "@renderer/context/local-state";
+import { useLocalStore } from "@/context/local-state";
 import {
   produceUserSettings,
   useSettingsStore,
-} from "@renderer/context/settings-store";
-import { useBackup, useWorkspaceExport } from "@renderer/hooks/query";
-import { Language } from "@renderer/types/lang";
+} from "@/context/settings-store";
+import { useBackup, useWorkspaceExport } from "@/hooks/query";
+import { Language } from "@/types/lang";
 import { Archive, FolderDown, Languages } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import LanguageSelect from "./language-select";
 //import { StartupBehvaiourSelect } from "./startup-behaviour-select";
-// import { updateUserSettings, useSettingsStore } from "@renderer/context/settings-store";
+// import { updateUserSettings, useSettingsStore } from "@/context/settings-store";
 // import { produce } from "immer";
 // import { StartupBehavior } from "@darkwrite/common";
 

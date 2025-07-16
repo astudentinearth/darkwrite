@@ -1,6 +1,6 @@
 import { Embed, Note, NotePartial } from "@darkwrite/common";
 import { BrowserDB, DarkwriteBrowserDB } from "./db.browser";
-import { generateId } from "@renderer/lib/utils";
+import { generateId } from "@/lib/utils";
 
 /** @deprecated use repos instead */
 export class BrowserDBContext {

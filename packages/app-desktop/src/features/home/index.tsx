@@ -1,10 +1,10 @@
 import { Note } from "@darkwrite/common/models";
 import { Button } from "@darkwrite/ui";
-import { useCreateNoteMutation } from "@renderer/hooks/query/use-create-note-mutation";
-import { useCenteredLayout } from "@renderer/hooks/layout/use-centered-layout";
-import { useNavigateToNote } from "@renderer/hooks/use-navigate-to-note";
-import { useRecentNotes } from "@renderer/hooks/use-recents";
-import { cn, getNoteIcon } from "@renderer/lib/utils";
+import { useCreateNoteMutation } from "@/hooks/query/use-create-note-mutation";
+import { useCenteredLayout } from "@/hooks/layout/use-centered-layout";
+import { useNavigateToNote } from "@/hooks/use-navigate-to-note";
+import { useRecentNotes } from "@/hooks/use-recents";
+import { cn, getNoteIcon } from "@/lib/utils";
 import { SquarePen } from "lucide-react";
 import { useTranslation } from "react-i18next";
 

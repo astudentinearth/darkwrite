@@ -1,11 +1,11 @@
 import { Popover, PopoverContent, PopoverTrigger, Switch } from "@darkwrite/ui";
-import { HeaderbarButton } from "@renderer/components/ui/headerbar-button";
+import { HeaderbarButton } from "@/components/ui/headerbar-button";
 import {
   setEditorCustomizations,
   useEditorState,
-} from "@renderer/context/editor-state";
-import { useNoteFromURL } from "@renderer/hooks/use-note-from-url";
-import { cn } from "@renderer/lib/utils";
+} from "@/context/editor-state";
+import { useNoteFromURL } from "@/hooks/use-note-from-url";
+import { cn } from "@/lib/utils";
 import { Brush } from "lucide-react";
 import ColorsView from "./colors";
 import FontStyleView from "./font-style";

@@ -1,16 +1,16 @@
 import { Button } from "@darkwrite/ui";
-import { cn } from "@renderer/lib/utils";
+import { cn } from "@/lib/utils";
 import { LayoutDashboard, PanelRightOpen, Search } from "lucide-react";
 import { NotesWidget } from "./notes";
 import { NavigationWidget } from "./navigation";
-import { showAppMenu } from "@renderer/lib/app-menu";
+import { showAppMenu } from "@/lib/app-menu";
 import CreatePageButton from "./create-page-button";
-import { ScrollArea } from "@renderer/components/ui/scroll-area";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { FavortiesWidget } from "./favorites";
 import { TrashWidget } from "./trash";
 import { SearchDialog } from "../search";
 import { useState } from "react";
-import { HeaderbarButton } from "@renderer/components/ui/headerbar-button";
+import { HeaderbarButton } from "@/components/ui/headerbar-button";
 
 export type SidebarProps = React.HTMLAttributes<HTMLDivElement> & {
   collapsed?: boolean;

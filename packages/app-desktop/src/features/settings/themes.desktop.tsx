@@ -1,11 +1,11 @@
 import { Label, Switch } from "@darkwrite/ui";
-import { FlexibleSpacer } from "@renderer/components/spacer";
+import { FlexibleSpacer } from "@/components/spacer";
 import {
   updateUserSettings,
   produceUserSettings,
   useSettingsStore,
-} from "@renderer/context/settings-store";
-import { useClientInfo } from "@renderer/hooks/query";
+} from "@/context/settings-store";
+import { useClientInfo } from "@/hooks/query";
 import { produce } from "immer";
 import { useTranslation } from "react-i18next";
 

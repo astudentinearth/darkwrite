@@ -1,6 +1,6 @@
-import { useLocalStore } from '@renderer/context/local-state';
-import { useSettingsStore } from '@renderer/context/settings-store'
-import { useUpdate } from '@renderer/hooks/query/use-update';
+import { useLocalStore } from '@/context/local-state';
+import { useSettingsStore } from '@/context/settings-store'
+import { useUpdate } from '@/hooks/query/use-update';
 import React, { useEffect } from 'react'
 
 export default function UpdateChecker() {

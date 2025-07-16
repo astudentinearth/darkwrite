@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import { Platform, PlatformOption } from "@renderer/types/platform";
+import { Platform, PlatformOption } from "@/types/platform";
 
 export interface PlatformSpecificComponentProps {
   children?: ReactNode | ReactNode[],

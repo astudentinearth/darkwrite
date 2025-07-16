@@ -3,10 +3,10 @@ import { Button } from "@darkwrite/ui";
 import {
   setEditorCustomizations,
   useEditorState,
-} from "@renderer/context/editor-state";
-import { useEmbedSource } from "@renderer/hooks/use-embed-source";
-import { uploadImage } from "@renderer/lib/upload";
-import { cn } from "@renderer/lib/utils";
+} from "@/context/editor-state";
+import { useEmbedSource } from "@/hooks/use-embed-source";
+import { uploadImage } from "@/lib/upload";
+import { cn } from "@/lib/utils";
 import { ImageOff } from "lucide-react";
 import { useState } from "react";
 

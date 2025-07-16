@@ -1,5 +1,5 @@
 import { DEFAULT_USER_SETTINGS, UserSettings } from "@darkwrite/common";
-import { SettingsAPI } from "@renderer/api";
+import { SettingsAPI } from "@/api";
 import { produce, WritableDraft } from "immer";
 import { debounce } from "lodash";
 import { create } from "zustand";

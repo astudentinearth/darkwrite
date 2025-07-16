@@ -1,6 +1,6 @@
 import { Note, NotePartial } from "@darkwrite/common";
 import { INoteAPI } from "../types";
-import { DocumentUtil } from "@renderer/lib/document-util";
+import { DocumentUtil } from "@/lib/document-util";
 
 export const DesktopNoteAPI: INoteAPI = {
   async create(title: string, parent?: string) {

@@ -4,17 +4,17 @@ import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "@renderer/components/ui/collapsible";
+} from "@/components/ui/collapsible";
 import {
   useNotesQuery,
   useUpdateMultipleNotesMutation,
-} from "@renderer/hooks/query";
-import { cn } from "@renderer/lib/utils";
+} from "@/hooks/query";
+import { cn } from "@/lib/utils";
 import { produce } from "immer";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { FavoriteItem } from "./favorite-item";
-import { useLocalStore } from "@renderer/context/local-state";
+import { useLocalStore } from "@/context/local-state";
 import { useTranslation } from "react-i18next";
 import React from "react";
 

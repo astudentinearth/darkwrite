@@ -1,5 +1,5 @@
 import { Button } from "@darkwrite/ui";
-import { cn } from "@renderer/lib/utils";
+import { cn } from "@/lib/utils";
 import { House, Settings } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router-dom";

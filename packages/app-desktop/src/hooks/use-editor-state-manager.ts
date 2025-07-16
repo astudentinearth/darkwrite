@@ -1,4 +1,4 @@
-import { useEditorState } from "@renderer/context/editor-state";
+import { useEditorState } from "@/context/editor-state";
 
 export const useEditorStateManager = () => {
   const value = useEditorState((s) => s.content);

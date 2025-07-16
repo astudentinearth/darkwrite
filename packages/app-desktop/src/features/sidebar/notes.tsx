@@ -2,15 +2,15 @@ import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "@renderer/components/ui/collapsible";
-import { useNotesQuery } from "@renderer/hooks/query";
-import { useMoveNoteMutation } from "@renderer/hooks/query/use-move-note";
-import { cn } from "@renderer/lib/utils";
+} from "@/components/ui/collapsible";
+import { useNotesQuery } from "@/hooks/query";
+import { useMoveNoteMutation } from "@/hooks/query/use-move-note";
+import { cn } from "@/lib/utils";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { DragEvent, useCallback, useState } from "react";
 import { NoteDropZone } from "./note-drop-zone";
 import { NoteItem } from "./note-item";
-import { useLocalStore } from "@renderer/context/local-state";
+import { useLocalStore } from "@/context/local-state";
 import { useTranslation } from "react-i18next";
 import { LexoRank } from "lexorank";
 

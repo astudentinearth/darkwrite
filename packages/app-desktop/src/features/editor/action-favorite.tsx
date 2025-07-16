@@ -1,7 +1,7 @@
-import { HeaderbarButton } from "@renderer/components/ui/headerbar-button";
-import { useNotesQuery, useUpdateNoteMutation } from "@renderer/hooks/query";
-import { useNoteFromURL } from "@renderer/hooks/use-note-from-url";
-import { cn } from "@renderer/lib/utils";
+import { HeaderbarButton } from "@/components/ui/headerbar-button";
+import { useNotesQuery, useUpdateNoteMutation } from "@/hooks/query";
+import { useNoteFromURL } from "@/hooks/use-note-from-url";
+import { cn } from "@/lib/utils";
 import { Star } from "lucide-react";
 
 export function FavoriteActionButton() {

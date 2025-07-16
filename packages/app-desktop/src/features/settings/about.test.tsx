@@ -1,6 +1,6 @@
 import { DarkwriteDesktopClientInfo } from "@darkwrite/common";
 import { render, screen } from "@testing-library/react";
-import * as exports from "@renderer/hooks/query/use-client-info";
+import * as exports from "@/hooks/query/use-client-info";
 
 const mockClientInfo: DarkwriteDesktopClientInfo = {
   electronVersion: "32",

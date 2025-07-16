@@ -1,4 +1,4 @@
-import { useEditorState } from "@renderer/context/editor-state";
+import { useEditorState } from "@/context/editor-state";
 import { RefObject, useEffect } from "react";
 
 export const useEditorCustomizations = (

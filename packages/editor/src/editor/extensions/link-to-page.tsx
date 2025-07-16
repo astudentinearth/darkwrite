@@ -9,7 +9,7 @@ import {
   CommandList,
 } from "@darkwrite/ui";
 //FIXME: This will be moved to @darkwrite/ui
-//import { getNoteIcon } from "@renderer/lib/utils";
+//import { getNoteIcon } from "@/lib/utils";
 import { mergeAttributes, Node } from "@tiptap/core";
 import { NodeViewWrapper, ReactNodeViewRenderer } from "@tiptap/react";
 import { File } from "lucide-react";

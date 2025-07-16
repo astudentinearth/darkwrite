@@ -7,11 +7,11 @@ import {
   ContextMenuSeparator,
   ContextMenuTrigger,
 } from "@darkwrite/ui";
-import { useUpdateNoteMutation } from "@renderer/hooks/query";
-import { useExport } from "@renderer/hooks/use-export";
-import { useNavigateToNote } from "@renderer/hooks/use-navigate-to-note";
-import { useNoteFromURL } from "@renderer/hooks/use-note-from-url";
-import { cn, getNoteIcon } from "@renderer/lib/utils";
+import { useUpdateNoteMutation } from "@/hooks/query";
+import { useExport } from "@/hooks/use-export";
+import { useNavigateToNote } from "@/hooks/use-navigate-to-note";
+import { useNoteFromURL } from "@/hooks/use-note-from-url";
+import { cn, getNoteIcon } from "@/lib/utils";
 import { ArrowRightFromLine, Star, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
 

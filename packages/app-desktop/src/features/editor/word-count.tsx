@@ -1,5 +1,5 @@
 import { countWords } from "@darkwrite/common";
-import { useEditorState } from "@renderer/context/editor-state";
+import { useEditorState } from "@/context/editor-state";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 

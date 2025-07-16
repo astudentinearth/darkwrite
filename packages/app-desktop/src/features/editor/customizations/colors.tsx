@@ -1,9 +1,9 @@
-import { ColorPicker } from "@renderer/components/color-picker";
+import { ColorPicker } from "@/components/color-picker";
 import { Button } from "@darkwrite/ui";
 import {
   setEditorCustomizations,
   useEditorState,
-} from "@renderer/context/editor-state";
+} from "@/context/editor-state";
 import _ from "lodash";
 import { RotateCcw } from "lucide-react";
 import { useTranslation } from "react-i18next";

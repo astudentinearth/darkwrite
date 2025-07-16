@@ -1,5 +1,5 @@
 import { NoteCustomization } from "@darkwrite/common/models";
-import { NoteAPI } from "@renderer/api";
+import { NoteAPI } from "@/api";
 import { useQuery } from "@tanstack/react-query";
 import { type EditorContent } from "@darkwrite/editor";
 export const useNoteContentsQuery = (id: string) => {

@@ -1,10 +1,10 @@
-import { useSettingsStore } from "@renderer/context/settings-store";
+import { useSettingsStore } from "@/context/settings-store";
 import ExperimentalFeatures from "./experimental";
 import FontSettings from "./fonts";
 import { ThemeSettings } from "./themes";
 import { WorkspaceSettings } from "./workspace";
 import { AboutCard } from "./about";
-import { useCenteredLayout } from "@renderer/hooks/layout/use-centered-layout";
+import { useCenteredLayout } from "@/hooks/layout/use-centered-layout";
 import { CSSProperties } from "react";
 import UpdateToggle from "./update";
 

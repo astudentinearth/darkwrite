@@ -5,11 +5,11 @@ import {
   PopoverTrigger,
   Input,
 } from "@darkwrite/ui";
-import { ScrollArea } from "@renderer/components/ui/scroll-area";
-import { useNotesQuery, useUpdateNoteMutation } from "@renderer/hooks/query";
-import { useDeleteNoteMutation } from "@renderer/hooks/query/use-delete-note-mutation";
-import { useNavigateToNote } from "@renderer/hooks/use-navigate-to-note";
-import { cn, getNoteIcon } from "@renderer/lib/utils";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { useNotesQuery, useUpdateNoteMutation } from "@/hooks/query";
+import { useDeleteNoteMutation } from "@/hooks/query/use-delete-note-mutation";
+import { useNavigateToNote } from "@/hooks/use-navigate-to-note";
+import { cn, getNoteIcon } from "@/lib/utils";
 import { Trash, Undo } from "lucide-react";
 import { DragEvent, useState } from "react";
 import { useTranslation } from "react-i18next";

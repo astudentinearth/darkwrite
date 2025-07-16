@@ -1,26 +1,26 @@
 import { useSlashCommand, EditorContent } from "@darkwrite/editor";
 import "@darkwrite/editor/dist/editor.css";
 import "@darkwrite/editor/dist/styles.css";
-import { EmbedAPI } from "@renderer/api";
+import { EmbedAPI } from "@/api";
 import {
   setEditorContent,
   setEditorCustomizations,
   useEditorState,
-} from "@renderer/context/editor-state";
-import { useNotesQuery, useUpdateNoteMutation } from "@renderer/hooks/query";
-import { debouncedSave } from "@renderer/hooks/query/use-note-contents-mutation";
-import { useEditorOptions } from "@renderer/hooks/use-editor-options";
-import { useEditorStateManager } from "@renderer/hooks/use-editor-state-manager";
-import { useNavigateToNote } from "@renderer/hooks/use-navigate-to-note";
-import { useNoteEditor } from "@renderer/hooks/use-note-editor";
-import { cn } from "@renderer/lib/utils";
+} from "@/context/editor-state";
+import { useNotesQuery, useUpdateNoteMutation } from "@/hooks/query";
+import { debouncedSave } from "@/hooks/query/use-note-contents-mutation";
+import { useEditorOptions } from "@/hooks/use-editor-options";
+import { useEditorStateManager } from "@/hooks/use-editor-state-manager";
+import { useNavigateToNote } from "@/hooks/use-navigate-to-note";
+import { useNoteEditor } from "@/hooks/use-note-editor";
+import { cn } from "@/lib/utils";
 import React, { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import DarkwriteEditorView from "../editorv2/editor";
 import { EditorCover } from "./cover";
 import { CoverImage } from "./cover-image";
 import { WordCounter } from "./word-count";
-import { useEditorCustomizations } from "@renderer/hooks/use-editor-customizations";
+import { useEditorCustomizations } from "@/hooks/use-editor-customizations";
 import { serializeNote } from "@darkwrite/common";
 
 export function EditorRoot() {

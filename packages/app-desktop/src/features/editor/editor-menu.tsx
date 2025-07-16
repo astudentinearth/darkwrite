@@ -10,15 +10,15 @@ import {
   DropdownMenuSwitchItem,
   DropdownMenuTrigger,
 } from "@darkwrite/ui";
-import { NoteAPI } from "@renderer/api";
-import { HeaderbarButton } from "@renderer/components/ui/headerbar-button";
-import { useEditorState } from "@renderer/context/editor-state";
-import { useLocalStore } from "@renderer/context/local-state";
-import { useNoteByIdQuery } from "@renderer/hooks/query";
-import { useDuplicateNoteMutation } from "@renderer/hooks/query/use-duplicate-note-mutation";
-import { useExport } from "@renderer/hooks/use-export";
-import { useNoteFromURL } from "@renderer/hooks/use-note-from-url";
-import { cn } from "@renderer/lib/utils";
+import { NoteAPI } from "@/api";
+import { HeaderbarButton } from "@/components/ui/headerbar-button";
+import { useEditorState } from "@/context/editor-state";
+import { useLocalStore } from "@/context/local-state";
+import { useNoteByIdQuery } from "@/hooks/query";
+import { useDuplicateNoteMutation } from "@/hooks/query/use-duplicate-note-mutation";
+import { useExport } from "@/hooks/use-export";
+import { useNoteFromURL } from "@/hooks/use-note-from-url";
+import { cn } from "@/lib/utils";
 import { Copy, Download, FileCode, FileText, Menu, Redo, Undo, Upload } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";

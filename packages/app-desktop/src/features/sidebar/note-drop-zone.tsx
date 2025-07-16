@@ -1,8 +1,8 @@
 import { UpdateNoteDTO } from "@darkwrite/common";
 import {
   useUpdateNoteMutation
-} from "@renderer/hooks/query";
-import { cn } from "@renderer/lib/utils";
+} from "@/hooks/query";
+import { cn } from "@/lib/utils";
 import { DragEvent, useState } from "react";
 
 /** @deprecated spaghetti ahead */

@@ -1,7 +1,7 @@
 import { UpdateNoteDTO } from "@darkwrite/common";
 import { Note } from "@darkwrite/common/models";
-import { NoteAPI } from "@renderer/api";
-import { APIClient } from "@renderer/apiv2/client";
+import { NoteAPI } from "@/api";
+import { APIClient } from "@/apiv2/client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export const useUpdateNoteMutation = () => {
