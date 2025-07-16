@@ -4,7 +4,7 @@ import log from "electron-log/main.js";
 import path, { join } from "node:path";
 import "reflect-metadata";
 import { initAppMenu } from "./menu";
-import { SettingsModel } from "@/lib/models";
+import { SettingsModel } from "@/lib/settings";
 import { fileURLToPath } from "node:url";
 import { Paths } from "./lib/paths";
 import { constructWindow } from "./window";

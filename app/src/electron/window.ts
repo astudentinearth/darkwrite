@@ -1,4 +1,4 @@
-import type { DarkwriteUserSettings } from "@/lib/models";
+import type { DarkwriteUserSettings } from "@/lib/settings";
 import { is } from "@electron-toolkit/utils";
 import { type BrowserWindowConstructorOptions } from "electron";
 import { join, dirname } from "node:path";
