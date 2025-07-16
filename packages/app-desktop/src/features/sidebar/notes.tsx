@@ -14,6 +14,7 @@ import { useLocalStore } from "@renderer/context/local-state";
 import { useTranslation } from "react-i18next";
 import { LexoRank } from "lexorank";
 
+/** @deprecated what is going on */
 export function NotesWidget() {
   const notesQuery = useNotesQuery();
   const moveMutation = useMoveNoteMutation();
@@ -32,17 +33,18 @@ export function NotesWidget() {
     if (target == null || target.length === 0) return <></>;
     const elements: React.JSX.Element[] = [];
     if (target.length === 0) return elements;
+    const first = target[0];
+    const firstRank = first.orderHint ? LexoRank.parse(first.orderHint).genPrev().toString() : LexoRank.middle().genPrev().toString();
+    elements.push(<NoteDropZone key={"drop-$first"} orderHint={firstRank}></NoteDropZone>);
     for (let i = 0; i < target.length; i++) {
       const noteRank =
         target[i].orderHint || LexoRank.middle().genNext().toString();
-      const dropRank = LexoRank.parse(noteRank).genPrev().toString();
-      elements.push(<NoteDropZone orderHint={dropRank} key={i}></NoteDropZone>);
-
-      elements.push(<NoteItem note={target[i]} key={target[i].id}></NoteItem>);
+      const dropRank = LexoRank.parse(noteRank).genNext().toString();
+      console.log("drop", i, dropRank);
+      elements.push(<NoteItem note={target[i]} key={`note-${target[i].id}`}></NoteItem>);
+      elements.push(<NoteDropZone orderHint={dropRank} key={`drop-below-${target[i].id}`}></NoteDropZone>);
     }
-    const last = target[target.length - 1];
-    const lastRank = last.orderHint ? LexoRank.parse(last.orderHint).genNext().toString() : LexoRank.middle().genNext().toString();
-    elements.push(<NoteDropZone key={"$last"} orderHint={lastRank}></NoteDropZone>);
+
     return elements;
   }, [notes]);
 

@@ -4,6 +4,8 @@ import {
 } from "@renderer/hooks/query";
 import { cn } from "@renderer/lib/utils";
 import { DragEvent, useState } from "react";
+
+/** @deprecated spaghetti ahead */
 export function NoteDropZone({
   orderHint
 }: {
@@ -36,13 +38,13 @@ export function NoteDropZone({
   return (
     <div
       className={cn(
-        "h-[3px] w-full bg-transparent transition-colors rounded-md",
+        "h-fit w-full bg-transparent transition-colors rounded-md",
         dragOver && "bg-primary",
       )}
       onDragOver={handleDragOver}
       onDragEnd={handleDragEnd}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
-    ></div>
+    >{orderHint}</div>
   );
 }

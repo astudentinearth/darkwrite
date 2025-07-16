@@ -14,6 +14,7 @@ import { Frown, ImagePlus, SmilePlus, TriangleAlert } from "lucide-react";
 import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
 import { useDebounce } from "use-debounce";
 
+/** @deprecated 8 month old garbage + broken. */
 export function EditorCover(props: {
   note: NoteDTO;
   update: (data: UpdateNoteDTO) => void;
@@ -26,14 +27,14 @@ export function EditorCover(props: {
   const [inputValue, setInputValue] = useState(note.title);
   const [debouncedValue] = useDebounce(inputValue, 200);
   const queryClient = useQueryClient();
-  const lastMutationRef = useRef<string>("");
+  const lastMutationRef = useRef<string>(""); // refs for what???
   const lastInputRef = useRef<string>("");
   const editor = useEditorState((s) => s.editorInstance);
   const customizations = useEditorState((s) => s.customizations);
   const [mouseOver, setMouseOver] = useState(false);
 
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    lastInputRef.current = e.target.value.replace(/\r?\n|\r/g, " ");
+    lastInputRef.current = e.target.value.replace(/\r?\n|\r/g, " "); // WHAT DOES THAT EVEN DO
     setInputValue(e.target.value);
   };
 

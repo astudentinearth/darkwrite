@@ -38,6 +38,7 @@ import { useTranslation } from "react-i18next";
 import { NoteDropZone } from "./note-drop-zone";
 import React from "react";
 
+/** @deprecated WHAT EVEN IS THIS */
 export function NoteItem({
   note,
   noDrop,
@@ -207,7 +208,7 @@ export function NoteItem({
                 "text-ellipsis whitespace-nowrap block overflow-hidden text-sm self-center pl-1",
               )}
             >
-              {note.title}
+              {note.orderHint}
             </span>
             <Button
               className="justify-self-end btn-add size-6 p-0 hidden group-hover:flex"

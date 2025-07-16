@@ -2,6 +2,7 @@ import { CreateNoteDTO, NoteResponseDTO, NotesResponseDTO, UpdateNoteDTO } from 
 import { Note } from "@darkwrite/common/models";
 import { DocumentRepository, NoteRepository } from "@renderer/db";
 import { generateId } from "@renderer/lib/utils";
+import { LexoRank } from "lexorank";
 
 export class NoteService {
   constructor(
@@ -14,8 +15,8 @@ export class NoteService {
       id,
       createdAt: new Date(),
       modifiedAt: new Date(),
-      orderHint: "",
-      favoriteOrderHint: "",
+      orderHint: LexoRank.middle().genNext().toString(),
+      favoriteOrderHint: LexoRank.middle().genNext().toString(),
       icon: "",
       ...dto
     }
