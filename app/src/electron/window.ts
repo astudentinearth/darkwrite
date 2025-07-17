@@ -3,44 +3,44 @@ import { is } from "@electron-toolkit/utils";
 import { type BrowserWindowConstructorOptions } from "electron";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import metadata from "./metadata.json";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-export function constructWindow(
-  prefs: DarkwriteUserSettings,
-): BrowserWindowConstructorOptions {
-  let titleBarStyle: "default" | "hidden" = "default";
+function getTitlebarStyle(prefs: DarkwriteUserSettings) {
   if (
-    (["win32", "linux"].includes(process.platform)) &&
+    metadata.windowDefaults.wcoEnabledPlatforms.includes(process.platform) &&
     !prefs.appearance.useSystemWindowFrame
   ) {
-    titleBarStyle = "hidden";
+    return "hidden";
   }
   if (
     prefs.appearance.experimental.darwinCustomTitlebarEnabled &&
     process.platform === "darwin" &&
     !prefs.appearance.useSystemWindowFrame
-  )
-    titleBarStyle = "hidden";
+  ) return "hidden";
+  return "default";
+}
+
+export function constructWindow(
+  prefs: DarkwriteUserSettings,
+): BrowserWindowConstructorOptions {
+  const titleBarStyle: "default" | "hidden" = getTitlebarStyle(prefs);
   return {
     webPreferences: {
-      preload: join(__dirname, "preload.mjs"),
-      devTools: true
+      preload: join(__dirname, metadata.preloadScriptPath),
+      devTools: true,
     },
-    icon: is.dev ? join(__dirname, "../resources/icon_dev.png") : undefined,
+    icon: is.dev ? join(__dirname, metadata.icons.development) : undefined,
     titleBarStyle,
     titleBarOverlay:
       titleBarStyle == "hidden"
-        ? {
-            color: "#13131300",
-            symbolColor: "#ffffff",
-            height: 48,
-          }
+        ? metadata.windowDefaults.titleBarOverlay
         : false,
     autoHideMenuBar: true,
     // TODO: Persist window size
-    width: 1000,
-    height: 700,
+    width: metadata.windowDefaults.width,
+    height: metadata.windowDefaults.height,
   };
 }

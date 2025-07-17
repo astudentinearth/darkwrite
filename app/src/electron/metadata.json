@@ -1,0 +1,40 @@
+{
+  "preloadScriptPath": "preload.mjs",
+  "webcontentsUrl": "../dist/index.html",
+  "icons": {
+    "development": "../resources/icon_dev.png"
+  },
+  "windowDefaults": {
+    "width": 1000,
+    "height": 700,
+    "titleBarOverlay": {
+      "color": "#13131300",
+      "symbolColor": "#ffffff",
+      "height": 48
+    },
+    "wcoEnabledPlatforms": ["win32", "linux"]
+  },
+  "pathConfig": {
+    "dir": {
+      "data": {
+        "development": "darkwrite-data-nightly/",
+        "production": "darkwrite-data/"
+      },
+      "backup": "darkwrite-data-old/",
+      "documentStore": "notes/",
+      "cache": {
+        "exporter": "dw-html-export/",
+        "backup": "dw-backup/",
+        "restore": "dw-restore/"
+      },
+      "theme": "themes/",
+      "blob": "embeds/",
+      "session": {
+        "development": "session-dev/",
+        "production": "session/"
+      }
+    },
+    "settingsFile": "settings.json",
+    "dbFile": "darkwrite.db"
+  }
+}

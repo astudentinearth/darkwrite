@@ -19,6 +19,11 @@ const plugins: PluginOption[] = [
       entry: path.resolve("src/electron/main.ts"),
       vite: {
         resolve,
+        build: {
+          rollupOptions: {
+            external: ["typeorm"]
+          }
+        }
       },
     },
     preload: {
