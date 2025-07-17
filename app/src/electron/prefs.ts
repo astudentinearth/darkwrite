@@ -1,4 +1,4 @@
-import { DarkwriteUserSettings, SettingsModel } from "@/lib/settings";
+import { DarkwriteUserSettings, SettingsModel } from "@common/settings";
 
 export class ElectronPrefsModel {
   private static _prefs: DarkwriteUserSettings;

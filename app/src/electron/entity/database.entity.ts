@@ -1,5 +1,5 @@
 import { Column, Entity, PrimaryColumn } from "typeorm";
-import { PropertyField } from "@/lib/field";
+import { PropertyField } from "@common/field";
 import { JSONTransformer } from "../lib/json-transformer";
 
 @Entity("database")

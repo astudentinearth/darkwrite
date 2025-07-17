@@ -8,6 +8,7 @@ const resolve = {
   alias: {
     "@main": path.resolve("src/electron/"),
     "@": path.resolve("src/"),
+    "@common": path.resolve("src/common")
   },
 };
 

@@ -3,7 +3,8 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
-      "@main/*": ["src/electron/*"]
+      "@main/*": ["src/electron/*"],
+      "@common/*": ["src/common/*"]
     },
     "types": ["vitest/globals", "node"],
     "lib": ["DOM", "DOM.Iterable", "ESNext"],

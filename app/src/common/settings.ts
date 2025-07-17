@@ -40,7 +40,7 @@ export type DarkwriteUserSettings = {
   appearance: ThemeSettings,
   editor: EditorSettings,
   client: ClientSettings,
-  version: 1
+  version: 2
 }
 
 export class SettingsModel {
@@ -50,7 +50,7 @@ export class SettingsModel {
       appearance: DEFAULT_THEME_SETTINGS,
       client: DEFAULT_CLIENT_SETTINGS,
       editor: DEFAULT_EDITOR_SETTINGS,
-      version: 1
+      version: 2
     });
   }
 
