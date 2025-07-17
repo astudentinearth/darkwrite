@@ -12,7 +12,7 @@ export function constructWindow(
 ): BrowserWindowConstructorOptions {
   let titleBarStyle: "default" | "hidden" = "default";
   if (
-    (process.platform === "win32" || process.platform === "linux") &&
+    (["win32", "linux"].includes(process.platform)) &&
     !prefs.appearance.useSystemWindowFrame
   ) {
     titleBarStyle = "hidden";
@@ -26,6 +26,7 @@ export function constructWindow(
   return {
     webPreferences: {
       preload: join(__dirname, "preload.mjs"),
+      devTools: true
     },
     icon: is.dev ? join(__dirname, "../resources/icon_dev.png") : undefined,
     titleBarStyle,

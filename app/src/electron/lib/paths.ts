@@ -25,7 +25,7 @@ export const DATA_SNAPSHOT_DIR = join(DATA_ROOT, "darkwrite-data-old");
 /** The directory in which note contents are stored. */
 export const NOTE_CONTENTS_DIR = join(DATA_DIR, "notes/");
 /** Path to the SQLite database which holds the note entries. */
-export const DB_PATH = join(DATA_DIR, "data.db");
+export const DB_PATH = join(DATA_DIR, "darkwrite.db");
 /** Path to Darkwrite's settings.json file. */
 export const SETTINGS_PATH = join(DATA_DIR, "settings.json");
 /** Builds the path for a given note's JSON document

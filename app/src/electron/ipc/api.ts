@@ -123,7 +123,7 @@ export const DarkwriteElectronAPI = {
   //   push: new IPCHandler(false, HTMLExporterAPI.pushToExporterCache),
   //   finish: new IPCHandler(false, HTMLExporterAPI.finishExport),
   // },
-  // showAppMenu: new IPCHandler(false, showAppMenu),
+  showAppMenu: new IPCHandler(false, showAppMenu),
 } satisfies DarkwriteAPI;
 export type DarkwritePreloadAPI = InferPreloadAPI<typeof DarkwriteElectronAPI>;
 

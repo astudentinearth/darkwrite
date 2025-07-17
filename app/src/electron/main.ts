@@ -19,6 +19,7 @@ app.setPath("sessionData", Paths.SESSION_DATA_DIR);
 
 console.log("Start electron app");
 
+
 let win: BrowserWindow | null;
 
 const DEV_SERVER_URL =
@@ -39,7 +40,8 @@ async function createWindow() {
   });
 
   if (is.dev && DEV_SERVER_URL) {
-    win.loadURL(DEV_SERVER_URL);
+    await win.loadURL(DEV_SERVER_URL);
+    win.webContents.openDevTools({mode: "detach"});
   } else {
     win.loadFile(join(__dirname, "../dist/index.html"));
   }

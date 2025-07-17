@@ -1,6 +1,7 @@
 import { Entity, PrimaryColumn, Column, ManyToOne } from "typeorm";
 import { Database } from "./database.entity";
 import { Workspace } from "./workspace.entity";
+import { NoteDTO } from "@/lib/dto";
 
 @Entity("note")
 export class Note {
@@ -12,12 +13,12 @@ export class Note {
   userId?: string;
 
   /** The ID of the database this note is tied to. `undefined` means it is not part of a database. Replaces the unused `todoListID` from the previous iteration. */
-  @ManyToOne(() => Database)
+  @ManyToOne(() => Database, {eager: true})
   database?: Database;
 
   /** The ID of the workspace this note belongs to. Databases can be partitioned by this field if deemed necessary.
    * During migrations from v0.1-0.5x alphas, a default workspace should be created and the ID of that worksapce should be integrated. */
-  @ManyToOne(() => Workspace)
+  @ManyToOne(() => Workspace, {eager: true})
   workspace: Workspace;
 
   /** The ID of the note which is one level higher in the tree than this note. Renames the `parentID` field from the previous iteration for consistency. */
@@ -71,4 +72,24 @@ export class Note {
    */
   @Column("varchar")
   orderHint: string;
+
+  mapToDTO() {
+    return {
+      id: this.id,
+      title: this.title,
+      createdAt: this.createdAt,
+      favoriteOrderHint: this.favoriteOrderHint,
+      modifiedAt: this.modifiedAt,
+      orderHint: this.orderHint,
+      workspaceId: this.workspace.id,
+      databaseId: this.database?.id,
+      icon: this.icon,
+      isFavorite: this.isFavorite,
+      isTrashed: this.isTrashed,
+      parentId: this.parentId,
+      propertyValues: this.propertyValues,
+      trashedAt: this.trashedAt,
+      userId: this.userId
+    } satisfies NoteDTO;
+  }
 }

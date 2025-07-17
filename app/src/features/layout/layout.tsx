@@ -19,12 +19,12 @@ export function Layout() {
   return (
     <div className="flex [&>div]:shrink-0 w-full h-full bg-background overflow-hidden">
       <Sidebar
-        /*collapseCallback={() => {
+        collapseCallback={() => {
           setSidebarCollapsed(true);
         }}
         collapsed={isSidebarCollapsed}
         width={width}
-        className={cn(isSidebarCollapsed && "hidden")}*/
+        className={cn(isSidebarCollapsed && "hidden")}
       ></Sidebar>
       <div
         data-testid="sidebar-resize-handle"

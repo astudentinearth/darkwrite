@@ -16,6 +16,7 @@ const template: Array<MenuItemConstructorOptions> = [
       },
       { role: "toggleDevTools" },
       { role: "reload" },
+      {role: "forceReload"},
       {
         label: "Open data directory",
         id: "opendatadirectory",
