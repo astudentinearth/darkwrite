@@ -4,7 +4,7 @@ import { JSONTransformer } from "../lib/json-transformer";
 
 @Entity("workspace")
 export class Workspace {
-  @PrimaryColumn("varchar")
+  @PrimaryColumn({type: "varchar", generated: "uuid"})
   id: string;
 
   @Column({ type: "varchar", nullable: true })

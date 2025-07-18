@@ -5,6 +5,8 @@ export interface CreateNoteDTO {
   icon?: string; 
   databaseId?: string;
   workspaceId: string;
+  orderHint: string;
+  favoriteOrderHint: string;
 }
 
 export interface UpdateNoteDTO {

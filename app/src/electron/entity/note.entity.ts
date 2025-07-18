@@ -5,7 +5,7 @@ import { NoteDTO } from "@/common/dto";
 
 @Entity("note")
 export class Note {
-  @PrimaryColumn("varchar")
+  @PrimaryColumn({type: "varchar", generated: "uuid"})
   id: string;
 
   @Column({ type: "varchar", nullable: true })

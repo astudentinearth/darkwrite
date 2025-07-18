@@ -2,7 +2,7 @@ import { Repository } from "typeorm";
 import { AppDataSource } from "../db";
 import { Workspace } from "../entity";
 
-export class NoteRepository {
+export class WorkspaceRepository {
   private _repo: Repository<Workspace>;
   constructor(private _datasource = AppDataSource) {
     this._repo = _datasource.getRepository(Workspace);

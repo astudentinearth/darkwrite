@@ -3,7 +3,7 @@ import { Workspace } from "./workspace.entity";
 
 @Entity("embed")
 export class Embed {
-  @PrimaryColumn("varchar")
+  @PrimaryColumn({type: "varchar", generated: "uuid"})
   id: string;
 
   /** The uploader of this embed. Ignored/`undefined` in offline workspaces. */

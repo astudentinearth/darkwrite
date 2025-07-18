@@ -1,0 +1,25 @@
+import { CreateWorkspaceDTO } from "@/common/dto/request/workspace.request";
+import { Workspace } from "../entity";
+import { WorkspaceRepository } from "../repository/workspace.repository";
+import { getDefaultWorkspaceConfiguration } from "@/lib/workspace-config";
+
+
+export class WorkspaceService {
+  constructor(private workspaceRepository: WorkspaceRepository = new WorkspaceRepository()) {}
+
+  async createWorkspace(dto: CreateWorkspaceDTO): Promise<Workspace> {
+    const {config, name, icon_url} = dto;
+    const workspace = new Workspace();
+    workspace.config = config;
+    workspace.name = name;
+    workspace.icon_url = icon_url;
+    return this.workspaceRepository.save(workspace);
+  }
+
+  async initializeDefaultWorkspace() {
+    const workspaces = await this.workspaceRepository.findAll();
+    if(workspaces.length > 0) return true;
+    else return this.createWorkspace({name: "My Workspace", config: getDefaultWorkspaceConfiguration()});
+  }
+
+}

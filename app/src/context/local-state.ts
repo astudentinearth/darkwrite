@@ -20,6 +20,7 @@ type localStore = {
   favoritesCollapsed: boolean;
   alwaysShowWordCount: boolean;
   lastUpdateCheck: string;
+  workspaceId: string;
 };
 
 type localStoreAction = {
@@ -32,6 +33,7 @@ type localStoreAction = {
   setFavoritesCollapsed: (val: boolean) => void;
   setAlwaysShowWordCount: (val: boolean) => void;
   setLastUpdateCheckTimestamp: (val: Date) => void;
+  setWorkspaceId: (val: string) => void;
 };
 
 export const useLocalStore = create<localStore & localStoreAction>()(
@@ -45,6 +47,7 @@ export const useLocalStore = create<localStore & localStoreAction>()(
       favoritesCollapsed: false,
       alwaysShowWordCount: false,
       lastUpdateCheck: "1970-01-01T00:00:00.000Z",
+      workspaceId: "",
       setFavoritesCollapsed: (val) => set({ favoritesCollapsed: val }),
       setAllNotesCollapsed: (val) => set({ allNotesCollapsed: val }),
       setSidebarCollapsed: (collapsed: boolean) =>
@@ -57,7 +60,8 @@ export const useLocalStore = create<localStore & localStoreAction>()(
         })),
       setSpellcheck: (useSpellcheck) => set({ useSpellcheck }),
       setAlwaysShowWordCount: (val) => set({ alwaysShowWordCount: val }),
-      setLastUpdateCheckTimestamp: (val) => set({lastUpdateCheck: val.toISOString()})
+      setLastUpdateCheckTimestamp: (val) => set({lastUpdateCheck: val.toISOString()}),
+      setWorkspaceId: (val) => set({workspaceId: val})
     }),
     {
       name: "local-state",

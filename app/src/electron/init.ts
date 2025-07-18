@@ -10,6 +10,7 @@ import { webcontentsUrl } from "./metadata.json";
 import { initAppMenu } from "./menu";
 import { AppDataSource } from "./db";
 import { fileURLToPath } from "url";
+import { WorkspaceService } from "./service/workspace.service";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -37,16 +38,6 @@ async function createWindow() {
   initAppMenu();
 }
 
-export async function init() {
-  const prefs = await ElectronPrefsModel.initialize();
-  await Paths.initialize();
-  log.initialize();
-  // We change the session data directory to avoid polluting user data any further
-  app.setPath("sessionData", Paths.SESSION_DATA_DIR);
-  setupWindowEvents();
-  await AppDataSource.initialize();
-  createWindow();
-}
 
 function setupWindowEvents() {
   app.on("window-all-closed", () => {
@@ -59,4 +50,16 @@ function setupWindowEvents() {
   app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
   });
+}
+
+export async function init() {
+  const prefs = await ElectronPrefsModel.initialize();
+  await Paths.initialize();
+  log.initialize();
+  // We change the session data directory to avoid polluting user data any further
+  app.setPath("sessionData", Paths.SESSION_DATA_DIR);
+  setupWindowEvents();
+  await AppDataSource.initialize();
+  await new WorkspaceService().initializeDefaultWorkspace();
+  createWindow();
 }
