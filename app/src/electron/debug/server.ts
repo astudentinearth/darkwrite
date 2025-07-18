@@ -1,8 +1,10 @@
 import http from "node:http";
-import { app, ipcMain } from "electron";
+import { app, BrowserWindow, ipcMain } from "electron";
 import { recursiveKeys } from "@/common/object";
 import { buildPreloadObject, DarkwriteElectronAPI } from "../ipc/api";
 import { is } from "@electron-toolkit/utils";
+
+// we could utilize this server to test APIs without a frontend
 
 let server: http.Server;
 
@@ -13,6 +15,13 @@ function getRuntimeInfo() {
   const isDev = is.dev;
   const { commandLine, isPackaged } = app;
   const metrics = app.getAppMetrics();
+  const windows = BrowserWindow.getAllWindows().map(w => ({
+    id: w.id,
+    pageTitle: w.getTitle(),
+    title: w.title,
+    url: w.webContents.getURL(),
+    userAgent: w.webContents.userAgent
+  }));
   return {
     ipcChannels,
     electronVersion,
@@ -20,7 +29,8 @@ function getRuntimeInfo() {
     commandLine,
     isPackaged,
     isDev,
-    metrics
+    metrics,
+    windows
   };
 }
 
