@@ -2,7 +2,7 @@ import * as NoteAPI from "@main/api/note.electron";
 import * as SettingsAPI from "@main/api/settings.electron";
 import { ImportAPI as FileImportAPI } from "@main/api/import.electron";
 import { ThemeAPI } from "@main/api/theme.electron";
-import { deepAssign, find, recursiveKeys } from "@/lib/object";
+import { deepAssign, find, recursiveKeys } from "@common/object";
 import { ipcMain } from "electron";
 import {
   IPCMainListenerUnion,

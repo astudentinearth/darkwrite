@@ -13,6 +13,7 @@ export class WorkspaceService {
     workspace.config = config;
     workspace.name = name;
     workspace.icon_url = icon_url;
+    workspace.created_at = new Date();
     return this.workspaceRepository.save(workspace);
   }
 

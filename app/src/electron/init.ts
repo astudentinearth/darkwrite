@@ -11,6 +11,7 @@ import { initAppMenu } from "./menu";
 import { AppDataSource } from "./db";
 import { fileURLToPath } from "url";
 import { WorkspaceService } from "./service/workspace.service";
+import { initDevtools } from "./debug/server";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -62,4 +63,5 @@ export async function init() {
   await AppDataSource.initialize();
   await new WorkspaceService().initializeDefaultWorkspace();
   createWindow();
+  if(is.dev) initDevtools(1200);
 }
