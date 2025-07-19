@@ -1,15 +1,12 @@
-import http from "node:http";
-import { app, BrowserWindow, ipcMain } from "electron";
-import { recursiveKeys } from "@/common/object";
-import { buildPreloadObject, DarkwriteElectronAPI } from "../ipc/api";
 import { is } from "@electron-toolkit/utils";
+import { app, BrowserWindow } from "electron";
+import http from "node:http";
 
 // we could utilize this server to test APIs without a frontend
 
 let server: http.Server;
 
 function getRuntimeInfo() {
-  const ipcChannels = recursiveKeys(buildPreloadObject());
   const electronVersion = process.versions.electron;
   const nodeVersion = process.versions.node;
   const isDev = is.dev;
@@ -23,16 +20,16 @@ function getRuntimeInfo() {
     userAgent: w.webContents.userAgent
   }));
   return {
-    ipcChannels,
     electronVersion,
     nodeVersion,
     commandLine,
     isPackaged,
     isDev,
     metrics,
-    windows
+    windows,
   };
 }
+
 
 function devtoolsHandler(req: http.IncomingMessage, res: http.ServerResponse<http.IncomingMessage>) {
   switch (req.url) {

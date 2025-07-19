@@ -23,4 +23,12 @@ export class WorkspaceService {
     else return this.createWorkspace({name: "My Workspace", config: getDefaultWorkspaceConfiguration()});
   }
 
+  async findWorkspaceOrThrow(id: string) : Promise<Workspace> {
+    const result = await this.workspaceRepository.findById(id);
+    if(result == null){ 
+      throw new Error(`Workspace ${id} does not exist.`);
+    }
+    return result;
+  }
+
 }
