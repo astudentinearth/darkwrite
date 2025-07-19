@@ -4,10 +4,9 @@ on:
     branches:
       - dev
     paths:
-      - "packages/*/src/**/*"
-      - "yarn.lock"
-      - "package.json"
-      - "packages/*/package.json"
+      - "app/src/**/*"
+      - "app/pnpm-lock.yaml"
+      - "app/package.json"
       - "!*.md"
       - "!./**/*.md"
       - ".github/workflows/test-unit.yml"
@@ -20,12 +19,16 @@ env:
 jobs:
   test:
     runs-on: ubuntu-latest
-    name: unit tests and type checking
+    name: unit/integration tests and type checking
+    defaults:
+      run:
+        working-directory: app
+
     steps:
       - name: Install node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
 
       - name: Checkout
         uses: actions/checkout@v4
@@ -34,27 +37,21 @@ jobs:
         run: corepack enable
 
       - name: Install dependencies
-        run: yarn
+        run: pnpm install
 
-      - name: Build @darkwrite/common
-        run: yarn workspace "@darkwrite/common" build
-
-      - name: Build @darkwrite/ui
-        run: yarn workspace "@darkwrite/ui" build
-
-      - name: Build @darkwrite/editor
-        run: yarn workspace "@darkwrite/editor" build
+      - name: Ensure better-sqlite3 is built
+        run: pnpm rebuild better-sqlite3
 
       - name: Lint
-        run: yarn lint
+        run: pnpm lint
         if: always()
 
       - name: Check types
-        run: yarn typecheck
+        run: pnpm typecheck
         if: always()
 
-      # - name: Run tests
-      #   run: yarn test
-      #   if: always()
+      - name: Run tests
+        run: pnpm test
+        if: always()
 
 
