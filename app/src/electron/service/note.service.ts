@@ -3,18 +3,16 @@ import { Database, Note, Workspace } from "../entity";
 import { DatabaseRepository } from "../repository/database.repository";
 import { NoteRepository } from "../repository/note.repository";
 import { WorkspaceRepository } from "../repository/workspace.repository";
-import { WorkspaceService } from "./workspace.service";
 import { DatabaseService } from "./database.service";
-import { NoteEntity } from "../db/entity/note";
-import { ServiceContainer } from "../service-container";
+import { WorkspaceService } from "./workspace.service";
 
 export class NoteService {
   constructor(
     private noteRepository: NoteRepository = new NoteRepository(),
     private databaseRepository: DatabaseRepository = new DatabaseRepository(),
     private workspaceRepository: WorkspaceRepository = new WorkspaceRepository(),
-    private workspaceService: WorkspaceService = ServiceContainer.workspaceService,
-    private databaseService: DatabaseService = ServiceContainer.databaseService
+    private workspaceService: WorkspaceService = new WorkspaceService(),
+    private databaseService: DatabaseService = new DatabaseService()
   ) {}
 
   async create(dto: CreateNoteDTO) {
@@ -52,6 +50,10 @@ export class NoteService {
 
   async update(id: string, dto: UpdateNoteDTO) {
     const {workspaceId, databaseId, ...rest} = dto;
+    //@ts-expect-error delete to prevent accidental assignment
+    delete rest.workspace;
+    //@ts-expect-error delete to prevent accidental assignment
+    delete rest.database;
     let workspace: Workspace | undefined = undefined;
     let database: Database | undefined = undefined;
     if(workspaceId) workspace = await this.workspaceService.findWorkspaceOrThrow(workspaceId);
@@ -69,6 +71,10 @@ export class NoteService {
 
   async deleteById(id: string) {
     await this.noteRepository.deleteById(id);
+  }
+
+  async getById(id: string) {
+    return await this.noteRepository.findById(id);
   }
 
 }

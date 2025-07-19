@@ -40,7 +40,7 @@ export class Note {
   @Column("text")
   title: string;
 
-  @Column("text")
+  @Column({type: "text", nullable: true})
   icon?: string;
 
   /** Renames the `created` field from the previous iteration. Migrate accordingly. */

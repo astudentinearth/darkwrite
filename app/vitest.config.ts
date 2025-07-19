@@ -56,5 +56,8 @@ const appConfig: TestProjectConfiguration = {
 export default defineConfig({
   test: {
     workspace: [electronConfig, appConfig],
+    env: {
+      "NODE_ENV": "test"
+    }
   },
 });
