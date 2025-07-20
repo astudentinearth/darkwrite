@@ -8,6 +8,7 @@ export const DEFAULT_THEME_SETTINGS = {
   darkColorScheme: "darkwrite-default" as string,
   accentColor: "#302e70" as string,
   useSystemWindowFrame: false as boolean,
+  useSystemAccentColor: false as boolean,
   fonts: {
     sans: "Inter, Helvetica, Arial, sans-serif" as string,
     serif: "Times New Roman, serif" as string,
