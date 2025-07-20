@@ -45,6 +45,10 @@ export class SettingsMigrator {
     2: ()=>this.settingsObj as DarkwriteUserSettings
   }
 
+  needsMigration() {
+    return this.version < 2;
+  }
+
   migrate() {
     if(this.version == -1) throw new Error(`Cannot determine settings file version.`);
     this.migratorMap[this.version].call(this);
