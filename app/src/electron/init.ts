@@ -1,6 +1,6 @@
 import log from "electron-log/main.js";
 import { Paths } from "./lib/paths";
-import { app, BrowserWindow, shell } from "electron";
+import { app, BrowserWindow, protocol, shell } from "electron";
 import { ElectronPrefsModel } from "./prefs";
 import { InitializeElectronAPI } from "./ipc/api";
 import { constructWindow } from "./window";
@@ -12,6 +12,7 @@ import { AppDataSource } from "./db";
 import { fileURLToPath } from "url";
 import { WorkspaceService } from "./service/workspace.service";
 import { initDevtools } from "./debug/server";
+import { embedProtocolHandler } from "./ipc/embed-protocol-handler";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -62,6 +63,7 @@ export async function init() {
   setupWindowEvents();
   await AppDataSource.initialize();
   await new WorkspaceService().initializeDefaultWorkspace();
+  protocol.handle("embed", embedProtocolHandler);
   createWindow();
   if(is.dev) initDevtools(1200);
 }
