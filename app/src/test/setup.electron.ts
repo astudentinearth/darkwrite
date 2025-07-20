@@ -1,3 +1,5 @@
+import { rmSync } from "fs";
+
 vi.mock("node:fs");
 vi.mock("node:fs/promises");
 
@@ -14,3 +16,5 @@ vi.mock("electron", () => ({
     },
   },
 }));
+
+rmSync("_test.db");

@@ -8,6 +8,7 @@ import { DatabaseService } from "./database.service";
 import { DocumentService } from "./document.service";
 import { NoteService } from "./note.service";
 import { WorkspaceService } from "./workspace.service";
+import { getDefaultWorkspaceConfiguration } from "@/lib/workspace-config";
 
 let workspaceId: string = "";
 
@@ -23,10 +24,8 @@ const noteService = new NoteService(
 );
 
 beforeAll(async () => {
-  await rmIfExists("_test.db");
-  await AppDataSource.initialize();
-  const workspace = await new WorkspaceService().initializeDefaultWorkspace();
-  if (typeof workspace === "boolean") throw new Error("sad");
+  if(!AppDataSource.isInitialized) await AppDataSource.initialize();
+  const workspace = await new WorkspaceService().createWorkspace({name: "test workspace", config: getDefaultWorkspaceConfiguration()});
   workspaceId = workspace.id;
 });
 
@@ -68,6 +67,3 @@ it("should update notes", async () => {
   expect(result.database?.id).toBeUndefined();
 });
 
-afterAll(async () => {
-  await AppDataSource.destroy();
-});

@@ -31,4 +31,8 @@ export class WorkspaceService {
     return result;
   }
 
+  async getWorkspaces(): Promise<Workspace[]> {
+    return await this.workspaceRepository.findAll();
+  }
+
 }
