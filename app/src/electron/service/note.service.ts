@@ -5,6 +5,7 @@ import { NoteRepository } from "../repository/note.repository";
 import { WorkspaceRepository } from "../repository/workspace.repository";
 import { DatabaseService } from "./database.service";
 import { WorkspaceService } from "./workspace.service";
+import { DocumentService } from "./document.service";
 
 export class NoteService {
   constructor(
@@ -12,7 +13,8 @@ export class NoteService {
     private databaseRepository: DatabaseRepository = new DatabaseRepository(),
     private workspaceRepository: WorkspaceRepository = new WorkspaceRepository(),
     private workspaceService: WorkspaceService = new WorkspaceService(),
-    private databaseService: DatabaseService = new DatabaseService()
+    private databaseService: DatabaseService = new DatabaseService(),
+    private documentService: DocumentService = new DocumentService()
   ) {}
 
   async create(dto: CreateNoteDTO) {
@@ -40,8 +42,10 @@ export class NoteService {
     note.parentId = parentId;
     note.isFavorite = false;
     note.isTrashed = false;
-    
-    return await this.noteRepository.save(note);
+
+    const saved = await this.noteRepository.save(note);
+    await this.documentService.setNoteContent(saved.id, "{}");
+    return saved;
   }
 
   async getAllByWorkspaceId(workspaceId: string) {

@@ -1,9 +1,26 @@
+import { MockDocumentStore } from "@/test/mocks/document-store.mock";
 import { AppDataSource } from "../db";
 import { rmIfExists } from "../lib/fs";
+import { DatabaseRepository } from "../repository/database.repository";
+import { NoteRepository } from "../repository/note.repository";
+import { WorkspaceRepository } from "../repository/workspace.repository";
+import { DatabaseService } from "./database.service";
+import { DocumentService } from "./document.service";
 import { NoteService } from "./note.service";
 import { WorkspaceService } from "./workspace.service";
 
 let workspaceId: string = "";
+
+const mockDocumentStore = new MockDocumentStore();
+
+const noteService = new NoteService(
+  new NoteRepository(),
+  new DatabaseRepository(),
+  new WorkspaceRepository(),
+  new WorkspaceService(),
+  new DatabaseService(),
+  new DocumentService(mockDocumentStore)
+);
 
 beforeAll(async () => {
   await rmIfExists("_test.db");
@@ -14,7 +31,6 @@ beforeAll(async () => {
 });
 
 it("should create notes", async () => {
-  const noteService = new NoteService();
   const result = await noteService.create({
     title: "new note",
     orderHint: "",
@@ -22,10 +38,10 @@ it("should create notes", async () => {
     workspaceId,
   });
   expect(result.title).toBe("new note");
+  expect(mockDocumentStore.exists(result.id));
 });
 
 it("should find a note by id", async () => {
-  const noteService = new NoteService();
   const note = await noteService.create({
     title: "new note",
     orderHint: "",
@@ -38,7 +54,6 @@ it("should find a note by id", async () => {
 });
 
 it("should update notes", async () => {
-  const noteService = new NoteService();
   const note = await noteService.create({
     title: "new note",
     orderHint: "",
@@ -54,5 +69,5 @@ it("should update notes", async () => {
 });
 
 afterAll(async () => {
-  rmIfExists("_test.db");
+  await AppDataSource.destroy();
 });
