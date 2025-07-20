@@ -32,4 +32,8 @@ export class EmbedRepository {
     return this._repo.delete({id: embed.id});
   }
 
+  async findAllByFileSize(fileSize: number) {
+    return this._repo.find({where: {fileSize}});
+  }
+
 }

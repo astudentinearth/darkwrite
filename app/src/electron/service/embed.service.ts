@@ -17,6 +17,16 @@ export class EmbedService {
     return readFile(filePath);
   }
 
+  async findFirstDuplicate(fileSize: number, contents: Buffer) {
+    const candidates = await this.embedRepository.findAllByFileSize(fileSize);
+    if(candidates.length === 0) return null;
+    for(const embed of candidates) {
+      const buf = await this.blobStore.get(embed.id);
+      if(Buffer.compare(buf, contents) === 0) return embed; 
+    }
+    return null;
+  }
+
   async initializeEmbedWithFileData(filePath: string): Promise<Embed> {
     const file = await getFileInfo(filePath);
     let embed = new Embed();
@@ -25,7 +35,6 @@ export class EmbedService {
     embed.fileSize = file.size;
     embed.fileType = file.extension;
 
-    embed = await this.embedRepository.save(embed);
     return embed;
   }
 
@@ -37,8 +46,12 @@ export class EmbedService {
     embed.uploadedAt = new Date();
     embed.workspace = workspace;
 
+    const buffer = await this.read(filePath);
+    const existingEmbed = await this.findFirstDuplicate(embed.fileSize, buffer);
+    if(existingEmbed) return existingEmbed;
+
     embed = await this.embedRepository.save(embed);
-    await this.blobStore.put(embed.id, await this.read(filePath));
+    await this.blobStore.put(embed.id, buffer);
     return embed;
   }
 
@@ -57,8 +70,13 @@ export class EmbedService {
     embed.uploadedAt = new Date();
     embed.displayName = Date.now().toString();
 
+    const buf = Buffer.from(new Uint8Array(buffer));
+
+    const existingEmbed = await this.findFirstDuplicate(embed.fileSize, buf);
+    if(existingEmbed) return existingEmbed;
+
     embed = await this.embedRepository.save(embed);
-    await this.blobStore.put(embed.id, Buffer.from(new Uint8Array(buffer)));
+    await this.blobStore.put(embed.id, buf);
     return embed;
   }
 
