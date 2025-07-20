@@ -49,6 +49,8 @@ it("should update notes", async () => {
   const result = await noteService.update(note.id, note);
   expect(result.isFavorite).toBe(true);
   expect(result.id).toBe(note.id);
+  expect(result.workspace.id).toBe(workspaceId);
+  expect(result.database?.id).toBeUndefined();
 });
 
 afterAll(async () => {
