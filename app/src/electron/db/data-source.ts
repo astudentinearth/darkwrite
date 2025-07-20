@@ -6,7 +6,7 @@ const dbPath = DB_PATH;
 
 export const AppDataSource = new DataSource({
   type: "better-sqlite3",
-  database: process.env["NODE_ENV"] === "test" ? "_test.db" : dbPath,
+  database: process.env["NODE_ENV"] === "test" ? ":memory:" : dbPath,
   entities,
   synchronize: true, // FIXME: REMOVE BEFORE RELEASE
 });
