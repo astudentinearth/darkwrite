@@ -1,29 +1,38 @@
-import { writeFile, readFile } from "fs/promises"
 import { exists } from "fs-extra";
-import { getNotePath } from "./paths";
+import { readFile, writeFile } from "fs/promises";
+import path from "node:path";
 
 export interface IDocumentStore {
-  create: (noteId: string) => Promise<void>;
-  write: (noteId: string, content: string) => Promise<void>;
-  read: (noteId: string) => Promise<string>;
-  exists: (noteId: string) => Promise<boolean>;
+  create: (id: string) => Promise<void>;
+  write: (id: string, content: string) => Promise<void>;
+  read: (id: string) => Promise<string>;
+  exists: (id: string) => Promise<boolean>;
 }
 
+/** Make a directory act as a JSON document store.
+ *  All documents will follow <id>.json file name convention.
+ */
 export class DocumentFileStore implements IDocumentStore {
-  constructor() {}
-  async create(noteId: string) {
-    await writeFile(getNotePath(noteId), "{}");
+  /** @param directory Directory to store documents in */
+  constructor(private directory: string) {}
+
+  private getPath(id: string) {
+    return path.join(this.directory, `${id}.json`);
   }
 
-  async write(noteId: string, content: string) {
-    await writeFile(getNotePath(noteId), content);
+  async create(id: string) {
+    await writeFile(this.getPath(id), "{}");
   }
 
-  async read(noteId: string) {
-    return await readFile(getNotePath(noteId), "utf-8");
+  async write(id: string, content: string) {
+    await writeFile(this.getPath(id), content);
   }
 
-  async exists(noteId: string) {
-    return await exists(getNotePath(noteId));
+  async read(id: string) {
+    return await readFile(this.getPath(id), "utf-8");
+  }
+
+  async exists(id: string) {
+    return await exists(this.getPath(id));
   }
 }
