@@ -5,3 +5,9 @@ export interface CreateWorkspaceDTO {
   icon_url?: string;
   config: WorkspaceConfig;
 }
+
+export interface UpdateWorkspaceDTO {
+  name?: string;
+  icon_url?: string;
+  config?: WorkspaceConfig;
+}
