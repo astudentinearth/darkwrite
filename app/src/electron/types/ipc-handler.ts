@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { type IpcMainInvokeEvent } from "electron";
-import { Promisfy, type OmitFirstParameter } from "@darkwrite/common";
+import { Promisfy, type OmitFirstParameter } from "@common/ts-util"
 
 export type IPCMainListener = (
   event: IpcMainInvokeEvent,

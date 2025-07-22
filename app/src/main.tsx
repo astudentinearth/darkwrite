@@ -5,6 +5,7 @@ import "./i18n";
 import "./globals.css";
 import data from "@emoji-mart/data";
 import { init } from "emoji-mart";
+import { APIClientMode, DarkwriteAPIClient } from "./api/api-client";
 
 const renderApp = () => {
   init({ data });
@@ -16,6 +17,7 @@ const renderApp = () => {
 const waitAPI = async () => {
   if(window.isElectron){
     await window.initPreload();
+    DarkwriteAPIClient.initialize(APIClientMode.LOCAL);
   }
   renderApp();
 };
