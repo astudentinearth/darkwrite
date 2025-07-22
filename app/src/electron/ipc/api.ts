@@ -1,25 +1,41 @@
-import * as NoteAPI from "@main/api/note.electron";
-import * as SettingsAPI from "@main/api/settings.electron";
-import { ImportAPI as FileImportAPI } from "@main/api/import.electron";
-import { ThemeAPI } from "@main/api/theme.electron";
 import { deepAssign, find, recursiveKeys } from "@common/object";
-import { ipcMain } from "electron";
+import { showAppMenu } from "@main/menu";
 import {
-  IPCMainListenerUnion,
-  IPCMainListenerWithoutEvent,
   DarkwriteAPI,
   InferPreloadAPI,
   IPCHandler,
+  IPCMainListenerUnion,
+  IPCMainListenerWithoutEvent,
 } from "@main/types";
-import { BackupAPI, HTMLExporterAPI } from "@main/api/backup.electron";
-import { EmbedAPI } from "@main/api/embed.electron";
-import { showAppMenu } from "@main/menu";
-import { Updater } from "../api/update.electron";
-import { ServiceContainer } from "../service-container";
+import { ipcMain } from "electron";
+import { ElectronNoteAPI } from "./note.handler";
+import { ElectronEmbedAPI } from "./embed.handler";
+import { ElectronWorkspaceAPI } from "./workspace.handler";
+import { ElectronSettingsAPI } from "./settings.handler";
+
 
 export const DarkwriteElectronAPI = {
   note: {
-    create: new IPCHandler(false, ServiceContainer.noteService.create)
+    create: new IPCHandler(false, ElectronNoteAPI.create),
+    delete: new IPCHandler(false, ElectronNoteAPI.delete),
+    getAllByWorkspaceId: new IPCHandler(false, ElectronNoteAPI.getAllByWorkspaceId),
+    getById: new IPCHandler(false, ElectronNoteAPI.getById),
+    update: new IPCHandler(false, ElectronNoteAPI.update)
+  },
+  embed: {
+    createFromLocalFile: new IPCHandler(false, ElectronEmbedAPI.createFromLocalFile),
+    createFromArrayBuffer: new IPCHandler(false, ElectronEmbedAPI.createFromArrayBuffer),
+    getById: new IPCHandler(false, ElectronEmbedAPI.getById)
+  },
+  workspace: {
+    create: new IPCHandler(false, ElectronWorkspaceAPI.create),
+    update: new IPCHandler(false, ElectronWorkspaceAPI.update),
+    getAll: new IPCHandler(false, ElectronWorkspaceAPI.getAll),
+    delete: new IPCHandler(false, ElectronWorkspaceAPI.delete),
+  },
+  settings: {
+    getUserSettings: new IPCHandler(false, ElectronSettingsAPI.getUserSettings),
+    saveUserSettings: new IPCHandler(false, ElectronSettingsAPI.saveUserSettings)
   },
   showAppMenu: new IPCHandler(false, showAppMenu),
 } satisfies DarkwriteAPI;

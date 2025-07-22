@@ -7,6 +7,8 @@ export class EmbedEntity implements Embed {
   id: string;
   @Column("varchar")
   displayName: string;
+  @Column("text")
+  fileName: string;
   @Column("int")
   fileSize: number;
   @Column("varchar")

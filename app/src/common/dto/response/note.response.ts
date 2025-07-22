@@ -24,5 +24,5 @@ export interface NotesResponseDTO {
 }
 
 export interface NoteResponseDTO {
-  note: NoteDTO;
+  note: NoteDTO | null;
 }

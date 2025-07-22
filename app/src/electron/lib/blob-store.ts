@@ -5,31 +5,31 @@ import { Paths } from "./paths";
 import { rmIfExists } from "./fs";
 import { pathToFileURL } from "url";
 
-export interface IBlobStore {
-  put: (id: string, buf: Buffer) => Promise<void>;
-  get: (id: string) => Promise<Buffer>;
-  getUrl: (id: string) => Promise<URL>;
-  delete: (id: string) => Promise<void>;
+export interface IEmbedStore {
+  put: (fileName: string, buf: Buffer) => Promise<void>;
+  get: (fileName: string) => Promise<Buffer>;
+  getUrl: (fileName: string) => Promise<URL>;
+  delete: (fileName: string) => Promise<void>;
 }
 
-export class BlobFileStore implements IBlobStore {
-  private getBlobPath(id: string) {
-    return join(Paths.EMBED_DIR, id);
+export class EmbedFileStore implements IEmbedStore {
+  private getBlobPath(fileName: string) {
+    return join(Paths.EMBED_DIR, fileName);
   }
 
-  async put(id: string, buf: Buffer) {
-    await fse.writeFile(this.getBlobPath(id), buf);
+  async put(fileName: string, buf: Buffer) {
+    await fse.writeFile(this.getBlobPath(fileName), buf);
   }
 
-  async get(id: string) {
-    return await fse.readFile(this.getBlobPath(id));
+  async get(fileName: string) {
+    return await fse.readFile(this.getBlobPath(fileName));
   }
 
-  async delete(id: string) {
-    await rmIfExists(this.getBlobPath(id));
+  async delete(fileName: string) {
+    await rmIfExists(this.getBlobPath(fileName));
   }
 
-  async getUrl(id: string) {
-    return pathToFileURL(this.getBlobPath(id));
+  async getUrl(fileName: string) {
+    return pathToFileURL(this.getBlobPath(fileName));
   }
 }

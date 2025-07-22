@@ -1,9 +1,10 @@
 import { Column, Entity, ManyToOne, PrimaryColumn } from "typeorm";
 import { Workspace } from "./workspace.entity";
+import { EmbedDTO } from "@/common/dto/response/embed.response";
 
 @Entity("embed")
 export class Embed {
-  @PrimaryColumn({type: "varchar", generated: "uuid"})
+  @PrimaryColumn({type: "varchar"})
   id: string;
 
   /** The uploader of this embed. Ignored/`undefined` in offline workspaces. */
@@ -21,6 +22,8 @@ export class Embed {
   @Column({ type: "text", nullable: true })
   displayName?: string;
 
+  @Column({type: "text", nullable: false})
+  fileName: string;
 
   /** Replaces `createdAt` from the previous iteration.  */
   @Column("datetime")
@@ -31,4 +34,18 @@ export class Embed {
    */
   @ManyToOne(() => Workspace)
   workspace: Workspace;
+
+  /** @param url Embeds can only be sent after their URL is resolved. */
+  mapToDTO(url: string): EmbedDTO {
+    const {id, displayName, fileSize, fileType, workspace, uploadedAt} = this;
+    return {
+      id,
+      displayName,
+      fileSize,
+      fileType,
+      uploadedAt,
+      url,
+      workspaceId: workspace.id
+    };
+  }
 }
