@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Optional } from "@/common/ts-util";
 import _ from "lodash";
 

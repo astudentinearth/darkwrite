@@ -1,7 +1,7 @@
-import { UpdateServerResponse } from "@darkwrite/common";
 import { app } from "electron";
 import semver from "semver";
 import log from "electron-log";
+import { UpdateServerResponse } from "@/common/client";
 
 interface UpdateStatus extends UpdateServerResponse {
   updateAvailable: boolean;
