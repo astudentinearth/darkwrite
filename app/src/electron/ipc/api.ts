@@ -12,6 +12,7 @@ import { ElectronNoteAPI } from "./note.handler";
 import { ElectronEmbedAPI } from "./embed.handler";
 import { ElectronWorkspaceAPI } from "./workspace.handler";
 import { ElectronSettingsAPI } from "./settings.handler";
+import { ElectronThemeAPI } from "./theme.handler";
 
 
 export const DarkwriteElectronAPI = {
@@ -36,6 +37,9 @@ export const DarkwriteElectronAPI = {
   settings: {
     getUserSettings: new IPCHandler(false, ElectronSettingsAPI.getUserSettings),
     saveUserSettings: new IPCHandler(false, ElectronSettingsAPI.saveUserSettings)
+  },
+  theme: {
+    getThemes: new IPCHandler(false, ElectronThemeAPI.getThemes)
   },
   showAppMenu: new IPCHandler(false, showAppMenu),
 } satisfies DarkwriteAPI;
