@@ -1,12 +1,14 @@
 import { exists } from "fs-extra";
 import { readFile, writeFile } from "fs/promises";
 import path from "node:path";
+import * as fslib from "@main/lib/fs";
 
 export interface IDocumentStore {
   create: (id: string) => Promise<void>;
   write: (id: string, content: string) => Promise<void>;
   read: (id: string) => Promise<string>;
   exists: (id: string) => Promise<boolean>;
+  ls: () => Promise<string[]>;
 }
 
 /** Make a directory act as a JSON document store.
@@ -34,5 +36,9 @@ export class DocumentFileStore implements IDocumentStore {
 
   async exists(id: string) {
     return await exists(this.getPath(id));
+  }
+
+  async ls() {
+    return fslib.ls(this.directory);
   }
 }

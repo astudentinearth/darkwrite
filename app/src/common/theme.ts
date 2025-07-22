@@ -105,16 +105,17 @@ export function isTheme(maybeTheme: unknown): maybeTheme is Theme {
   if (!("id" in maybeTheme && "name" in maybeTheme)) return false;
   if (typeof maybeTheme.id !== "string" || typeof maybeTheme.name !== "string")
     return false;
-  if(!("colors" in maybeTheme)) return false;
-  if(maybeTheme.colors == null || typeof maybeTheme.colors !== "object" ) return false;
+  if (!("colors" in maybeTheme)) return false;
+  if (maybeTheme.colors == null || typeof maybeTheme.colors !== "object")
+    return false;
 
   const colors = maybeTheme.colors as Record<string, string>;
 
   // check invalid key definitions
-  for(const key in colors) {
-    if(!allowedKeys.includes(key)) return false;
+  for (const key in colors) {
+    if (!allowedKeys.includes(key)) return false;
     const value = colors[key as keyof typeof maybeTheme.colors];
-    if(!isValidCssColor(value)) return false;
+    if (!isValidCssColor(value)) return false;
   }
   return true;
 }
@@ -126,3 +127,7 @@ export const cssTextColorVariables = allowedKeys.filter((key) =>
 export const cssHightlightColorVariables = allowedKeys.filter((key) =>
   key.startsWith("--editor-highlight-"),
 );
+
+export function stripAlpha(rgbaHexColor: string) {
+  return rgbaHexColor.substring(0, 6);
+}

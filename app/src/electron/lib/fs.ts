@@ -17,3 +17,7 @@ export async function getFileInfo(filePath: string) {
   const extension = path.extname(filePath);
   return { basename, size, extension };
 }
+
+export async function ls(dir: string) {
+  return await fse.readdir(dir);
+}

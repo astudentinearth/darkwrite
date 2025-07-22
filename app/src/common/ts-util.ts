@@ -38,4 +38,6 @@ export type ExcludeFunctions<Obj extends {[key: string]: any}> = {
   [Key in keyof Obj]: Obj[Key] extends Function ? never : Key
 }
 
-export type KeysExceptFunctions<T> = ExcludeFunctions<T>[keyof T];
+export type KeysExceptFunctions<T extends {[key: string]: any}> = ExcludeFunctions<T>[keyof T];
+
+export type Optional<T, E extends Error = Error> = { result: T, error?: undefined } | { error: E }
