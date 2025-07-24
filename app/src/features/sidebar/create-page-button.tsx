@@ -1,4 +1,3 @@
-import { CreateNoteDTO } from "@/common/dto";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useCreateNoteMutation } from "@/query/use-create-note";

@@ -1,12 +1,17 @@
 import { HeaderbarButton } from "@/components/headerbar-button";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { showAppMenu } from "@/api/appmenu"
+import { showAppMenu } from "@/api/appmenu";
 import { cn } from "@/lib/utils";
 import { LayoutDashboard, Search, PanelRightOpen } from "lucide-react";
 import React, { useState } from "react";
 import { WorkspaceSwitcher } from "./workspace-switcher";
 import { CreatePageButton } from "./create-page-button";
+import { SidebarNavigation } from "./navigation";
+import { Favorties } from "./favorites";
+import { NoteList } from "./note-list";
+import { ArchiveButton } from "./archive-button";
+import { TrashWidget } from "./trash";
 
 export type SidebarProps = React.HTMLAttributes<HTMLDivElement> & {
   collapsed?: boolean;
@@ -16,7 +21,7 @@ export type SidebarProps = React.HTMLAttributes<HTMLDivElement> & {
 
 export function Sidebar(props: SidebarProps) {
   const { width, collapseCallback } = props;
-    const [searchOpen, setSearchOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   return (
     <div
       data-testid="container-sidebar"
@@ -58,17 +63,19 @@ export function Sidebar(props: SidebarProps) {
           <PanelRightOpen width={18} height={18} />
         </HeaderbarButton>
       </div>
-      <ScrollArea className="h-full px-3 py-0">
+      <ScrollArea className="h-full pl-3 pr-2 py-0">
         <div className="flex gap-2 flex-col mb-2">
           <div className="grid grid-cols-[auto_32px] gap-2">
-            <WorkspaceSwitcher/>
-            <CreatePageButton/>
+            <WorkspaceSwitcher />
+            <CreatePageButton />
           </div>
-          {/* <CreatePageButton />
-          <NavigationWidget />
-          <FavortiesWidget />
-          <NotesWidget />
-          <TrashWidget /> */}
+          <SidebarNavigation />
+          <Favorties />
+          <NoteList />
+          <div className="flex flex-col gap-0.5">
+            <ArchiveButton />
+            <TrashWidget />
+          </div>
         </div>
       </ScrollArea>
     </div>
