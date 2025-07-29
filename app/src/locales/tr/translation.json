@@ -9,6 +9,13 @@
       "search": "Ara",
       "menu": "Menü"
     },
+    "workspace": {
+      "offline": "Cihazınızda",
+      "cloud": "Bulutta",
+      "newWorkspace": "Çalışma alanı oluştur",
+      "offlineHeading": "Cihazınızdaki çalışma alanları",
+      "cloudHeading": "Buluttaki çalışma alanları"
+    },
     "title": {
       "favorites": "Favoriler",
       "allNotes": "Tüm notlar"
@@ -108,7 +115,7 @@
       "undo": "Geri al",
       "redo": "Yinele",
       "imageWarning": "Resimleri şu anlık dahil edemiyoruz.",
-      "jsonExport":"Darkwrite belgesi (JSON)",
+      "jsonExport": "Darkwrite belgesi (JSON)",
       "htmlExport": "HTML (düz)"
     },
     "contextmenu": {
@@ -177,7 +184,7 @@
     "noResult": "Sonuç bulunamadı"
   },
   "toast": {
-    "update":{
+    "update": {
       "description": "Yeni sürüm mevcut: {{version}}",
       "releasePageButton": "Göster",
       "upToDate": "Sürüm güncel."

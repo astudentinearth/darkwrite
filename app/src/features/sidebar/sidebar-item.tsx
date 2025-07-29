@@ -15,7 +15,7 @@ export function SidebarItem({
       variant={"ghost"}
       onClick={props.onClick}
       className={cn(
-        "justify-start p-2 h-fit opacity-90 hover:opacity-100",
+        "justify-start p-2 h-fit opacity-90 hover:opacity-100 duration-0! transition-none",
         className,
       )}
     >

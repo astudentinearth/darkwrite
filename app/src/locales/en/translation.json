@@ -9,6 +9,13 @@
       "search": "Search",
       "menu": "Menu"
     },
+    "workspace": {
+      "offline": "On your device",
+      "cloud": "In the cloud",
+      "newWorkspace": "Create new workspace",
+      "offlineHeading": "Workspaces on your device",
+      "cloudHeading": "Workspaces in the cloud"
+    },
     "title": {
       "favorites": "Favorites",
       "allNotes": "All notes"
@@ -108,7 +115,7 @@
       "undo": "Undo",
       "redo": "Redo",
       "imageWarning": "We cannot include images for now.",
-      "jsonExport":"Darkwrite document (JSON)",
+      "jsonExport": "Darkwrite document (JSON)",
       "htmlExport": "HTML (plain)"
     },
     "contextmenu": {
@@ -119,7 +126,7 @@
     },
     "slashCommand": {
       "text": "Text",
-      "textDescription":"Express it in plain text.",
+      "textDescription": "Express it in plain text.",
       "toDoList": "To-do list",
       "toDoListDescription": "Track tasks with a simple list.",
       "heading1": "Heading 1",
@@ -177,7 +184,7 @@
     "noResult": "No results"
   },
   "toast": {
-    "update":{
+    "update": {
       "description": "Update available: {{version}}",
       "releasePageButton": "Show release",
       "upToDate": "Darkwrite is up to date."
