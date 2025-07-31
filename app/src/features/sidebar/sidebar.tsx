@@ -9,7 +9,7 @@ import { WorkspaceSwitcher } from "./workspace-switcher";
 import { CreatePageButton } from "./create-page-button";
 import { SidebarNavigation } from "./navigation";
 import { Favorties } from "./favorites";
-import { NoteList } from "./note-list";
+import NoteListRoot from "@/features/note/note-list-root";
 import { ArchiveButton } from "./archive-button";
 import { TrashWidget } from "./trash";
 
@@ -63,15 +63,15 @@ export function Sidebar(props: SidebarProps) {
           <PanelRightOpen width={18} height={18} />
         </HeaderbarButton>
       </div>
-      <ScrollArea className="h-full pl-3 pr-2 py-0">
-        <div className="flex gap-2 flex-col mb-2">
+      <ScrollArea className="h-full grow pl-3 pr-2 py-0">
+        <div className="flex gap-2 flex-col mb-16">
           <div className="grid grid-cols-[auto_32px] gap-2">
             <WorkspaceSwitcher />
             <CreatePageButton />
           </div>
           <SidebarNavigation />
           <Favorties />
-          <NoteList />
+          <NoteListRoot />
           <div className="flex flex-col gap-0.5">
             <ArchiveButton />
             <TrashWidget />
