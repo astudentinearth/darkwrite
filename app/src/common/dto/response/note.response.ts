@@ -2,21 +2,21 @@
 export interface NoteDTO {
   id: string;
   title: string;
-  icon?: string;
-  parentId?: string;
+  icon?: string | null;
+  parentId?: string | null;
   createdAt: Date;
   modifiedAt: Date;
-  trashedAt?: Date;
+  trashedAt?: Date | null;
   orderHint: string;
   favoriteOrderHint: string;
-  isFavorite?: boolean;
-  isTrashed?: boolean;
+  isFavorite?: boolean | null;
+  isTrashed?: boolean | null;
 
-  propertyValues?: Record<string, string>;
+  propertyValues?: Record<string, string> | null;
 
-  userId?: string; // Owner of the note
-  databaseId?: string; // ID of the database this note belongs to
-  workspaceId: string; // ID of the workspace this note belongs to
+  userId?: string | null; // Owner of the note
+  databaseId?: string | null; // ID of the database this note belongs to
+  workspaceId: string | null; // ID of the workspace this note belongs to
 }
 
 export interface NotesResponseDTO {

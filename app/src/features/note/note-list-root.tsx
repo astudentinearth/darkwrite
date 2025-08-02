@@ -1,19 +1,18 @@
-import { useNotes } from "@/query/use-notes";
-import NoteItem from "./note-item";
-import NoteList from "./note-list";
-import { useMemo } from "react";
 import { useT } from "@/hooks/useT";
+import { useNotes } from "@/query/use-notes";
 import { LexoRank } from "lexorank";
+import { useMemo } from "react";
+import NoteList from "./note-list";
 
 export default function NoteListRoot() {
   const { notes } = useNotes();
-  const t = useT();
+  const t = useT("sidebar.notes");
   const rootNotes = useMemo(() => notes?.filter((n) => !n.parentId), [notes]);
 
   if (rootNotes == null || rootNotes.length === 0) {
     return (
       <div>
-        <span>{t("notes.noPages")}</span>
+        <span>{t("noPages")}</span>
       </div>
     );
   }
@@ -23,7 +22,7 @@ export default function NoteListRoot() {
 
   return (
     <div>
-      <NoteList notes={rootNotes} leadingOrderHint={leadingHint} finalOrderHint={finalHint}/>
+      <NoteList parentId={null} notes={rootNotes} leadingOrderHint={leadingHint} finalOrderHint={finalHint}/>
     </div>
   );
 }

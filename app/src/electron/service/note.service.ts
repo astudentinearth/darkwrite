@@ -66,6 +66,7 @@ export class NoteService {
     const note = await this.noteRepository.findById(id);
     if(!note) throw new Error(`Note ${id} does not exist.`);
     Object.assign(note, rest);
+    console.log(rest);
     if(workspace) note.workspace = workspace;
     if(database) note.database = database;
     if("databaseId" in dto && dto.databaseId === undefined) note.database = undefined;

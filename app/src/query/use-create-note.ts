@@ -20,10 +20,11 @@ export const useCreateNoteMutation = () => {
     title?: string;
     icon?: string;
     parentId?: string;
+    orderHint?: string;
   }) => {
     let orderHint: string = "";
-    
-    if(notesQuery.notes == null || notesQuery.notes.length == 0) orderHint = LexoRank.middle().genNext().toString();
+    if(opts.orderHint) orderHint = opts.orderHint;
+    else if(notesQuery.notes == null || notesQuery.notes.length == 0) orderHint = LexoRank.middle().genNext().toString();
     else {
       const lastOrderHint = LexoRank.parse(notesQuery.notes[notesQuery.notes.length - 1].orderHint);
       orderHint = lastOrderHint.genNext().toString();

@@ -1,7 +1,7 @@
 import { isTheme, Theme } from "@/common/theme";
 import { DocumentFileStore, IDocumentStore } from "../lib/document-store";
 import { THEME_DIR } from "../lib/paths";
-import { tryParse } from "../lib/json-util";
+import { tryParse } from "@common/json-util"
 
 export class ThemeService {
   constructor(
