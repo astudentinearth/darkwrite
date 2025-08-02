@@ -23,7 +23,7 @@ export function WorkspaceSwitcher() {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <div className="flex items-center gap-1 w-fit overflow-hidden text-ellipsis whitespace-nowrap opacity-80 p-1 hover:bg-secondary/50 hover:opacity-100 rounded-[8px] select-none transition-[background,opacity] duration-75">
+        <div className="flex items-center gap-1 max-w-fit overflow-hidden text-ellipsis whitespace-nowrap opacity-80 p-1 hover:bg-secondary/50 hover:opacity-100 rounded-[8px] select-none transition-[background,opacity] duration-75">
           {workspace && (
             <>
               <WorkspaceLetterIcon workspaceName={workspace.name} />

@@ -7,9 +7,9 @@ import { LexoRank } from "lexorank";
 
 export default function NoteList(props: {leadingOrderHint: string, finalOrderHint: string, notes: NoteDTO[]}) {
   const { notes } = props;
-  const t = useT();
+  const t = useT("sidebar.notes");
   const renderNotes = () => {
-    if(notes.length===0) return <span>{t("notes.noPages")}</span>
+    if(notes.length===0) return <span>{t("noPages")}</span>
     const nodes: ReactNode[] = [];
 
     nodes.push(<NoteDropZone key={"drop-leading"} orderHint={props.leadingOrderHint}/>);
