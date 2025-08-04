@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useState } from "react";
 import { HashRouter, Route, Routes } from "react-router-dom";
 import { Toaster } from "sonner";
+import { EditorViewRouteHandler } from "./features/editor/editor-view";
 
 function App() {
   const [queryClient] = useState(() => new QueryClient());
@@ -16,7 +17,7 @@ function App() {
               <Route
                 path="/page/:pageId"
                 loader={() => null}
-                element={<></>}
+                element={<EditorViewRouteHandler/>}
               ></Route>
               <Route path="settings" element={<></>}></Route>
             </Route>

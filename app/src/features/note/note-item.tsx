@@ -21,6 +21,7 @@ import {
 } from "../dnd/datatransfer";
 import NoteList from "./note-list";
 import { NoteContextMenuContainer } from "./note-context-menu";
+import { useNavigateToNote } from "@/hooks/use-navigate-to-note";
 
 export default function NoteItem({ note }: { note: NoteDTO }) {
   const [open, setOpen] = useState(false);
@@ -29,7 +30,7 @@ export default function NoteItem({ note }: { note: NoteDTO }) {
   const { notes } = useNotes();
   const { create } = useCreateNoteMutation();
   const { update } = useUpdateNote();
-
+  const nav = useNavigateToNote();
   const children =
     useMemo(
       () => notes?.filter((n) => n.parentId === note.id),
@@ -109,6 +110,7 @@ export default function NoteItem({ note }: { note: NoteDTO }) {
             onDrop={handleDrop}
             onDragLeave={handleDragLeave}
             onDragEnd={handleDragEnd}
+            onClick={()=>nav(note.id)}
             className={cn(
               "grid grid-cols-[24px_1fr_24px] gap-1.5 p-1 select-none overflow-hidden group text-ellipsis whitespace-nowrap hover:bg-secondary/20 rounded-[8px]",
               dragOver && "bg-primary/20",
