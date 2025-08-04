@@ -20,9 +20,11 @@ import {
   NoteDragData,
 } from "../dnd/datatransfer";
 import NoteList from "./note-list";
+import { NoteContextMenuContainer } from "./note-context-menu";
 
 export default function NoteItem({ note }: { note: NoteDTO }) {
   const [open, setOpen] = useState(false);
+  const [contextMenuOpen, setContextMenuOpen] = useState(false);
   const [dragOver, setDragOver] = useState(false);
   const { notes } = useNotes();
   const { create } = useCreateNoteMutation();
@@ -98,44 +100,47 @@ export default function NoteItem({ note }: { note: NoteDTO }) {
   return (
     <Collapsible open={open}>
       <CollapsibleTrigger asChild>
-        <div
-          draggable
-          tabIndex={0}
-          onDragStart={handleDragStart}
-          onDragOver={handleDragOver}
-          onDrop={handleDrop}
-          onDragLeave={handleDragLeave}
-          onDragEnd={handleDragEnd}
-          className={cn(
-            "grid grid-cols-[24px_1fr_24px] gap-1.5 p-1 select-none overflow-hidden group text-ellipsis whitespace-nowrap hover:bg-secondary/20 rounded-[8px]",
-            dragOver && "bg-primary/20",
-          )}
-        >
-          <Button
-            variant={"ghost"}
-            onClick={handleCollapsibleTrigger}
-            className="p-0 w-6 h-6 rounded-sm  hover:bg-secondary/40"
+        <NoteContextMenuContainer note={note} onOpenChange={setContextMenuOpen}>
+          <div
+            draggable
+            tabIndex={0}
+            onDragStart={handleDragStart}
+            onDragOver={handleDragOver}
+            onDrop={handleDrop}
+            onDragLeave={handleDragLeave}
+            onDragEnd={handleDragEnd}
+            className={cn(
+              "grid grid-cols-[24px_1fr_24px] gap-1.5 p-1 select-none overflow-hidden group text-ellipsis whitespace-nowrap hover:bg-secondary/20 rounded-[8px]",
+              dragOver && "bg-primary/20",
+              contextMenuOpen && "bg-secondary/20"
+            )}
           >
-            <span className="group-hover:hidden">
-              {getNoteIcon(note.icon ?? undefined)}
-            </span>
-            <ChevronRight
-              size={18}
-              className={cn(
-                "hidden group-hover:block transition-transform duration-100",
-                open && "rotate-90",
-              )}
-            />
-          </Button>
-          {note.title}
-          <Button
-            variant={"ghost"}
-            onClick={handleCreate}
-            className="p-0 w-6 h-6 rounded-sm hover:bg-secondary/40"
-          >
-            <Plus size={18} className={cn("hidden group-hover:block")} />
-          </Button>
-        </div>
+            <Button
+              variant={"ghost"}
+              onClick={handleCollapsibleTrigger}
+              className="p-0 w-6 h-6 rounded-sm  hover:bg-secondary/40"
+            >
+              <span className="group-hover:hidden">
+                {getNoteIcon(note.icon ?? undefined)}
+              </span>
+              <ChevronRight
+                size={18}
+                className={cn(
+                  "hidden group-hover:block transition-transform duration-100",
+                  open && "rotate-90",
+                )}
+              />
+            </Button>
+            {note.title}
+            <Button
+              variant={"ghost"}
+              onClick={handleCreate}
+              className="p-0 w-6 h-6 rounded-sm hover:bg-secondary/40"
+            >
+              <Plus size={18} className={cn("hidden group-hover:block")} />
+            </Button>
+          </div>
+        </NoteContextMenuContainer>
       </CollapsibleTrigger>
       <CollapsibleContent className="pl-3">
         <NoteList
