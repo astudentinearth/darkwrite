@@ -15,6 +15,7 @@ export default function NoteList(props: {leadingOrderHint: string, finalOrderHin
     nodes.push(<NoteDropZone parentId={props.parentId} key={"drop-leading"} orderHint={props.leadingOrderHint}/>);
 
     for(let i = 0; i < notes.length; i++) {
+      if(notes[i].isTrashed) continue;
       const noteItem = <NoteItem key={notes[i].id} note={notes[i]}/>
       nodes.push(noteItem);
 
