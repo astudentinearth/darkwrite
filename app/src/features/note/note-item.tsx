@@ -6,15 +6,20 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { cn, getNoteIcon } from "@/lib/utils";
+import { useCreateNoteMutation } from "@/query/use-create-note";
 import { useNotes } from "@/query/use-notes";
+import { useUpdateNote } from "@/query/use-update-note";
+import { LexoRank } from "lexorank";
 import { ChevronRight, Plus } from "lucide-react";
 import { DragEvent, MouseEvent, useMemo, useState } from "react";
+import {
+  beginDrag,
+  DragType,
+  extractNoteDragData,
+  isDragging,
+  NoteDragData,
+} from "../dnd/datatransfer";
 import NoteList from "./note-list";
-import { LexoRank } from "lexorank";
-import { useCreateNoteMutation } from "@/query/use-create-note";
-import { DragType, NoteDragData } from "../dnd/datatransfer";
-import JSONUtil from "@/common/json-util";
-import { useUpdateNote } from "@/query/use-update-note";
 
 export default function NoteItem({ note }: { note: NoteDTO }) {
   const [open, setOpen] = useState(false);
@@ -61,45 +66,23 @@ export default function NoteItem({ note }: { note: NoteDTO }) {
       type: DragType.NOTE,
       noteId: note.id,
     };
-    event.dataTransfer.setData(
-      "application/darkwrite-drag-internal",
-      JSON.stringify(data),
-    );
-    event.dataTransfer.effectAllowed = "move";
+    beginDrag(data, event, "move");
     console.log(">>drag start:", data);
   };
 
   const handleDragOver = (event: DragEvent<HTMLDivElement>) => {
     event.preventDefault();
     event.stopPropagation();
-    setDragOver(
-      event.dataTransfer.types.includes("application/darkwrite-drag-internal"),
-    );
+    setDragOver(isDragging(event));
   };
 
   const handleDrop = (event: DragEvent<HTMLDivElement>) => {
     console.log("drop");
     event.preventDefault();
-    const dataString = event.dataTransfer.getData(
-      "application/darkwrite-drag-internal",
-    );
-    const dataOptional = JSONUtil.tryParse(dataString);
-    console.log(dataString);
-    if (dataOptional.error) {
-      return setDragOver(false);
-    }
-    const data = dataOptional.result;
-    if (
-      !("type" in data) ||
-      data.type !== DragType.NOTE ||
-      !("noteId" in data) ||
-      (data as NoteDragData).noteId === note.id
-    ) {
-      return setDragOver(false);
-    }
-    const { noteId } = data as NoteDragData;
+    const data = extractNoteDragData(event);
+    if (data == null) return setDragOver(false);
     update({
-      id: noteId,
+      id: data.noteId,
       dto: { parentId: note.id, orderHint: computeFinalHint() },
     });
     setDragOver(false);
@@ -133,7 +116,9 @@ export default function NoteItem({ note }: { note: NoteDTO }) {
             onClick={handleCollapsibleTrigger}
             className="p-0 w-6 h-6 rounded-sm  hover:bg-secondary/40"
           >
-            <span className="group-hover:hidden">{getNoteIcon(note.icon ?? undefined)}</span>
+            <span className="group-hover:hidden">
+              {getNoteIcon(note.icon ?? undefined)}
+            </span>
             <ChevronRight
               size={18}
               className={cn(
