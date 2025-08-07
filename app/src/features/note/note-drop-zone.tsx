@@ -5,6 +5,7 @@ import {
   extractNoteDragData,
   isDragging
 } from "../dnd/datatransfer";
+import { UpdateNoteDTO } from "@/common/dto";
 
 export default function NoteDropZone({
   orderHint,
@@ -12,7 +13,7 @@ export default function NoteDropZone({
   orderingKey = "orderHint"
 }: {
   orderHint: string;
-  parentId: string | null;
+  parentId?: string | null;
   orderingKey?: "orderHint" | "favoriteOrderHint"
 }) {
   const { update } = useUpdateNote();
@@ -30,9 +31,11 @@ export default function NoteDropZone({
     if (data == null) return setDragOver(false);
     if (data.noteId === parentId) return setDragOver(false);
     const { noteId } = data;
+    const dto:UpdateNoteDTO = { parentId: parentId, [orderingKey]: orderHint };
+    if(orderingKey === "favoriteOrderHint") dto.isFavorite = true;
     update({
       id: noteId,
-      dto: { parentId: parentId, [orderingKey]: orderHint },
+      dto,
     });
     setDragOver(false);
   };

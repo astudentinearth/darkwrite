@@ -39,6 +39,7 @@ export function useNoteItemDrag(
     e.preventDefault();
     const data = extractNoteDragData(e);
     if (data == null) return setIsDraggingOver(false);
+    if(data.noteId === note.id) return setIsDraggingOver(false);
     update({
       id: data.noteId,
       dto: { parentId: note.id, orderHint: finalOrderHint },
@@ -51,7 +52,7 @@ export function useNoteItemDrag(
     tabIndex: 0,
     onDragLeave,
     onDragOver,
-    dragEnd: () => setIsDraggingOver(false),
+    onDragEnd: () => setIsDraggingOver(false),
     onDragStart,
     onDrop
   };

@@ -7,6 +7,7 @@ import {
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
 import { useNoteContextMenu } from "@/hooks/use-note-context-menu";
+import { useNotes } from "@/query/use-notes";
 import {
   ArrowRightFromLine,
   Copy,
@@ -32,7 +33,8 @@ export function NoteContextMenuContainer({
   const { t } = useTranslation("translation", {
     keyPrefix: "sidebar.notes.contextmenu",
   });
-  const actions = useNoteContextMenu(note, finalOrderHint);
+  const { nextFavoriteHint } = useNotes();
+  const actions = useNoteContextMenu(note, nextFavoriteHint ?? "", finalOrderHint);
   return (
     <ContextMenu onOpenChange={onOpenChange}>
       <ContextMenuTrigger asChild>{children}</ContextMenuTrigger>

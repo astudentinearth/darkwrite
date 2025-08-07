@@ -1,17 +1,17 @@
+import { showAppMenu } from "@/api/appmenu";
 import { HeaderbarButton } from "@/components/headerbar-button";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { showAppMenu } from "@/api/appmenu";
-import { cn } from "@/lib/utils";
-import { LayoutDashboard, Search, PanelRightOpen } from "lucide-react";
-import React, { useState } from "react";
-import { WorkspaceSwitcher } from "./workspace-switcher";
-import { CreatePageButton } from "./create-page-button";
-import { SidebarNavigation } from "./navigation";
-import { Favorties } from "./favorites";
 import NoteListRoot from "@/features/note/note-list-root";
+import { cn } from "@/lib/utils";
+import { LayoutDashboard, PanelRightOpen, Search } from "lucide-react";
+import React, { useState } from "react";
 import { ArchiveButton } from "./archive-button";
+import { CreatePageButton } from "./create-page-button";
+import FavoritesContainer from "./favorites-container";
+import { SidebarNavigation } from "./navigation";
 import { TrashWidget } from "./trash";
+import { WorkspaceSwitcher } from "./workspace-switcher";
 
 export type SidebarProps = React.HTMLAttributes<HTMLDivElement> & {
   collapsed?: boolean;
@@ -71,7 +71,7 @@ export function Sidebar(props: SidebarProps) {
             <CreatePageButton />
           </div>
           <SidebarNavigation />
-          <Favorties />
+          <FavoritesContainer />
           <NoteListRoot />
           <div className="flex flex-col gap-0.5">
             <ArchiveButton />

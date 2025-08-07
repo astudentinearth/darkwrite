@@ -42,7 +42,7 @@ export default function NoteItem({ note }: { note: NoteDTO }) {
         <NoteContextMenuContainer note={note} onOpenChange={setContextMenuOpen}>
           <NoteHeader
             finalOrderHint={computeFinalHint()}
-            collapisble
+            collapsible
             showCreate
             open={open}
             setOpen={setOpen}
