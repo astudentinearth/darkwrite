@@ -34,9 +34,10 @@ export function Sidebar(props: SidebarProps) {
             showAppMenu();
           }}
           data-testid="button-darkwrite"
+          className="opacity-90"
           title="Menu"
         >
-          <img src="icon64.png" className="shrink-0 w-5 h-5"></img>
+          <img src="darkwrite_icon.png" className="shrink-0 w-5 h-5"></img>
         </HeaderbarButton>
         <div className="grow titlebar spacer"></div>
         <Button

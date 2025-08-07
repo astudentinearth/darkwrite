@@ -2,7 +2,7 @@
   "preloadScriptPath": "preload.mjs",
   "webcontentsUrl": "../dist/index.html",
   "icons": {
-    "development": "../resources/icon_dev.png"
+    "development": "../resources/darkwrite_icon.png"
   },
   "windowDefaults": {
     "width": 1000,
