@@ -9,9 +9,11 @@ import {
 export default function NoteDropZone({
   orderHint,
   parentId,
+  orderingKey = "orderHint"
 }: {
   orderHint: string;
   parentId: string | null;
+  orderingKey?: "orderHint" | "favoriteOrderHint"
 }) {
   const { update } = useUpdateNote();
   const [dragOver, setDragOver] = useState(false);
@@ -28,12 +30,9 @@ export default function NoteDropZone({
     if (data == null) return setDragOver(false);
     if (data.noteId === parentId) return setDragOver(false);
     const { noteId } = data;
-    console.log(
-      `update ${noteId} with parent: ${parentId}, rank: ${orderHint}`,
-    );
     update({
       id: noteId,
-      dto: { parentId: parentId, orderHint: orderHint },
+      dto: { parentId: parentId, [orderingKey]: orderHint },
     });
     setDragOver(false);
   };
