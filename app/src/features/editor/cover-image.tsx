@@ -5,16 +5,18 @@ import { useTranslation } from "react-i18next";
 
 export type CoverImageProps = {
   imageSource?: string;
-  onImageSourceChange: (src: string | undefined) => void;
+  onImageSourceChange: (src: string | undefined | null) => void;
 };
 
 export default function CoverImage(props: CoverImageProps) {
   const { hoverProps, mouseOver } = useMouseOver();
-  const {t} = useTranslation("translation", {keyPrefix: "editor.cover"})
+  const { t } = useTranslation("translation", { keyPrefix: "editor.cover" });
   return (
     <div
       {...hoverProps}
-      className={cn("w-full h-40 shrink-0 flex items-end justify-end p-2 gap-2")}
+      className={cn(
+        "w-full h-40 shrink-0 flex items-end justify-end p-2 gap-2",
+      )}
       style={
         props.imageSource
           ? {
@@ -25,8 +27,25 @@ export default function CoverImage(props: CoverImageProps) {
           : {}
       }
     >
-      <Button variant={"outline"} className={cn(!mouseOver && "hidden")}>{t("changeCover")}</Button>
-      <Button variant={"outline"} className={cn(!mouseOver && "hidden")}>{t("removeCover")}</Button>
+      {props.imageSource && (
+        <>
+          <Button
+            onClick={()=>{
+              props.onImageSourceChange(null);
+            }}
+            variant={"outline"}
+            className={cn("bg-view-1 drop-shadow-sm", !mouseOver && "hidden")}
+          >
+            {t("removeCover")}
+          </Button>
+          <Button
+            variant={"outline"}
+            className={cn("bg-view-1 drop-shadow-sm", !mouseOver && "hidden")}
+          >
+            {t("changeCover")}
+          </Button>
+        </>
+      )}
     </div>
   );
 }
