@@ -9,14 +9,15 @@ export default function FavoriteNoteList() {
   const { notes, nextFavoriteHint } = useNotes();
   const favorites = useMemo(
     () =>
-      notes
-        ?.filter((n) => n.isFavorite && !n.isTrashed)
+      Object.values(notes ?? {})
+        .filter((n) => n.isFavorite && !n.isTrashed)
         .toSorted((a, b) =>
           a.favoriteOrderHint.localeCompare(b.favoriteOrderHint),
         ),
     [notes],
   );
-  if (!favorites || favorites.length < 1 || !nextFavoriteHint) return <div></div>;
+  if (!favorites || favorites.length < 1 || !nextFavoriteHint)
+    return <div></div>;
 
   const leadingHint = LexoRank.parse(favorites[0].favoriteOrderHint)
     .genPrev()

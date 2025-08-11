@@ -18,7 +18,7 @@ export default function NoteItem({ note }: { note: NoteDTO }) {
 
   const children =
     useMemo(
-      () => notes?.filter((n) => n.parentId === note.id),
+      () => Object.values(notes ?? {}).filter((n) => n.parentId === note.id).toSorted((a, b) => a.orderHint.localeCompare(b.orderHint)),
       [notes, note.id],
     ) ?? [];
 

@@ -11,10 +11,8 @@ export const useNotes = () => {
     queryFn: async () => {
       const response =
         await DarkwriteAPIClient.note.getAllByWorkspaceId(workspaceId);
-      const notes = response.notes.toSorted((a, b) =>
-        a.orderHint.localeCompare(b.orderHint),
-      );
-      const favorites = notes
+      const {notes} = response;
+      const favorites = Object.values(notes)
         ?.filter((n) => n.isFavorite && !n.isTrashed)
         .toSorted((a, b) =>
           a.favoriteOrderHint.localeCompare(b.favoriteOrderHint),

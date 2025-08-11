@@ -11,8 +11,8 @@ import { ChevronRight } from "lucide-react";
 export default function NoteListRoot() {
   const { notes } = useNotes();
   const {t} = useTranslation("translation", {keyPrefix: "sidebar"});
-  const rootNotes = useMemo(() => notes?.filter((n) => !n.parentId), [notes]);
   const [open, setOpen] = useState(false);
+  const rootNotes = useMemo(() => Object.values(notes ?? {}).filter((n) => !n.parentId).toSorted((a, b) => a.orderHint.localeCompare(b.orderHint)), [notes]);
   if (rootNotes == null || rootNotes.length === 0) {
     return (
       <div>

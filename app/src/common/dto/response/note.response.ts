@@ -20,7 +20,7 @@ export interface NoteDTO {
 }
 
 export interface NotesResponseDTO {
-  notes: NoteDTO[];
+  notes: Record<string, NoteDTO>;
 }
 
 export interface NoteResponseDTO {

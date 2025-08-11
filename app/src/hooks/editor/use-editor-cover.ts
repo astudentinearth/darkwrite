@@ -1,7 +1,6 @@
 import { DarkwriteAPIClient } from "@/api/api-client";
 import { NoteDTO, NoteResponseDTO } from "@/common/dto";
 import { useLocalStore } from "@/context/local-state";
-import { useNotes } from "@/query/use-notes";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import _ from "lodash";
 
@@ -23,15 +22,10 @@ function useUpdateTitleOptimistic(id: string) {
         return copy;
       });
       qc.setQueryData(
-        //TODO: MAKE THE NOTE API USE MAPS **ASAP** WHAT THE HELL IS THIS
         [workspaceId, "notes"],
-        (current: { notes: NoteDTO[]; nextFavoriteHint: string }) => {
-          const copy = [...current.notes];
-          for(const note of copy) {
-            if(note.id !== id) continue;
-            note.title = title;
-            break;
-          }
+        (current: { notes: Record<string, NoteDTO>; nextFavoriteHint: string }) => {
+          const copy = {...current.notes};
+          copy[id].title = title;
           return {notes: copy, nextFavoriteHint: current.nextFavoriteHint}
         },
       );
