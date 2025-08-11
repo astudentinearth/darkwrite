@@ -12,19 +12,19 @@ export class ElectronEmbedAPI {
   static async createFromLocalFile(filePath: string, workspaceId: string) {
     const embed = await ServiceContainer.embedService.createFromFilePath(filePath, workspaceId);
     const url = await ServiceContainer.embedService.getEmbedUrl(embed.id);
-    return {embed: embed.mapToDTO(url.href)} satisfies EmbedResponseDTO;
+    return {embed: embed.mapToDTO(url)} satisfies EmbedResponseDTO;
   }
 
   static async createFromArrayBuffer(buffer: ArrayBuffer, fileType: string, workspaceId: string) {
     const embed = await ServiceContainer.embedService.createFromArrayBuffer(buffer, fileType, workspaceId);
     const url = await ServiceContainer.embedService.getEmbedUrl(embed.id);
-    return {embed: embed.mapToDTO(url.href)} satisfies EmbedResponseDTO;
+    return {embed: embed.mapToDTO(url)} satisfies EmbedResponseDTO;
   }
 
   static async getById(id: string) {
     const embed = await ServiceContainer.embedService.getEmbedById(id);
     if(!embed) return {embed: null} satisfies EmbedResponseDTO;
     const url = await ServiceContainer.embedService.getEmbedUrl(id);
-    return {embed: embed.mapToDTO(url.href)} satisfies EmbedResponseDTO;
+    return {embed: embed.mapToDTO(url)} satisfies EmbedResponseDTO;
   }
 }

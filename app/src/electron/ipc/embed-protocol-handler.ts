@@ -1,4 +1,4 @@
-import { net, protocol } from "electron";
+import { net } from "electron";
 import { ServiceContainer } from "../service-container";
 
 export async function embedProtocolHandler(req: Request) {

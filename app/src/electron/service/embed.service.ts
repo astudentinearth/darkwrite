@@ -92,6 +92,6 @@ export class EmbedService {
   async getEmbedUrl(id: string) {
     const embed = await this.embedRepository.findById(id);
     if (!embed) throw new Error(`Embed ${id} does not exist.`);
-    else return this.blobStore.getUrl(embed.fileName);
+    else return `embed://${embed.id}`;
   }
 }

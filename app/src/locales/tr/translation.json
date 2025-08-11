@@ -176,6 +176,10 @@
       "linkToPage": {
         "placeholder": "Bir not seçin"
       }
+    },
+    "cover": {
+      "changeCover": "Kapağı değiştirin",
+      "removeCover": "Kapak resmini kaldırın"
     }
   },
   "search": {

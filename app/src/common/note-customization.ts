@@ -20,3 +20,10 @@ export interface NoteCustomization {
   coverImageSource?: string;
   widePage?: boolean;
 }
+
+export function getDefaultNoteCustomization(): NoteCustomization {
+  return {
+    font: FontStyle.SANS,
+    largeText: false
+  }
+}

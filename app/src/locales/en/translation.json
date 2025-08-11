@@ -176,6 +176,10 @@
       "linkToPage": {
         "placeholder": "Select a note"
       }
+    },
+    "cover": {
+      "changeCover": "Change cover",
+      "removeCover": "Remove cover"
     }
   },
   "search": {

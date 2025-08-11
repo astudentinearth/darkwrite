@@ -10,7 +10,7 @@ export const useUpdateNote = () => {
     mutationFn: (opts: {id: string, dto: UpdateNoteDTO}) => DarkwriteAPIClient.note.update(opts.id, opts.dto),
     onSuccess(data, variables) {
       notesQuery.refetch();
-      queryClient.setQueryData(["note", variables.id], data.note);
+      queryClient.setQueryData(["note", variables.id], { note: data.note });
     }
   })
   const { isPending } = mutation;
