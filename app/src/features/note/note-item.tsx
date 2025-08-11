@@ -15,7 +15,6 @@ export default function NoteItem({ note }: { note: NoteDTO }) {
   const [open, setOpen] = useState(false);
   const [contextMenuOpen, setContextMenuOpen] = useState(false);
   const { notes } = useNotes();
-
   const children =
     useMemo(
       () => Object.values(notes ?? {}).filter((n) => n.parentId === note.id).toSorted((a, b) => a.orderHint.localeCompare(b.orderHint)),

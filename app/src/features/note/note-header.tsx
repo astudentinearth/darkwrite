@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { ChevronRight, Plus } from "lucide-react";
 import { MouseEvent } from "react";
 import { useCreateNoteMutation } from "@/query/use-create-note";
+import { useNoteFromURL } from "@/query/use-note-from-url";
 
 export type NoteHeaderProps = {
   collapsible?: boolean;
@@ -29,6 +30,8 @@ export default function NoteHeader({
   ...props
 }: NoteHeaderProps) {
   const nav = useNavigateToNote();
+  const current = useNoteFromURL();
+  const active = current === note.id;
   const { dragProps, isDraggingOver } = useNoteItemDrag(note, finalOrderHint ?? "");
   const {onDrop, ...rest} = dragProps;
   const { create } = useCreateNoteMutation();
@@ -44,10 +47,11 @@ export default function NoteHeader({
       {...props}
       onClick={() => nav(note.id)}
       className={cn(
-        "grid grid-cols-[24px_1fr_24px] gap-1.5 p-1 select-none overflow-hidden group text-ellipsis whitespace-nowrap hover:bg-secondary/20 rounded-[8px]",
+        "grid grid-cols-[24px_1fr_24px] gap-1.5 p-1 select-none overflow-hidden group text-ellipsis whitespace-nowrap hover:bg-secondary/30 rounded-[8px]",
         isDraggingOver && finalOrderHint && "bg-primary/20",
-        contextMenuOpen && "bg-secondary/20",
-        (!showCreate && !collapsible) && "flex"
+        contextMenuOpen && "bg-secondary/30",
+        (!showCreate && !collapsible) && "flex",
+        active && "bg-secondary/20"
       )}
     >
       <Button
