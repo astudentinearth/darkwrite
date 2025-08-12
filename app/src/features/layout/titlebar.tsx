@@ -2,6 +2,7 @@ import { HeaderbarButton } from "@/components/headerbar-button";
 import { cn } from "@/lib/utils";
 import { PanelRightClose } from "lucide-react";
 import { RefObject } from "react";
+import { HistoryNavigation } from "./navigation";
 
 export type TitlebarProps = React.HTMLAttributes<HTMLDivElement> & {
   refObject: RefObject<HTMLDivElement | null>;
@@ -23,6 +24,8 @@ export function Titlebar(props: TitlebarProps) {
       >
         <PanelRightClose width={20} height={20}></PanelRightClose>
       </HeaderbarButton>
+      <HistoryNavigation />
+
     </div>
   );
 }

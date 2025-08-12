@@ -1,4 +1,4 @@
-import { HeaderbarButton } from "@/components/ui/headerbar-button";
+import { HeaderbarButton } from "@/components/headerbar-button";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
