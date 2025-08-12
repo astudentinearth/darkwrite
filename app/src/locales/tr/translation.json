@@ -193,5 +193,8 @@
       "releasePageButton": "Göster",
       "upToDate": "Sürüm güncel."
     }
+  },
+  "titlebar": {
+    "noPagesAbove": "Yukarıda başka not yok."
   }
 }

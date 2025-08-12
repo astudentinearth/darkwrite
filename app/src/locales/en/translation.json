@@ -193,5 +193,8 @@
       "releasePageButton": "Show release",
       "upToDate": "Darkwrite is up to date."
     }
+  },
+  "titlebar": {
+    "noPagesAbove": "No pages above."
   }
 }
