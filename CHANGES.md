@@ -1,3 +1,17 @@
+# next (1.0.0-alpha.1)
+## 🌟 Features
+- Add support for workspaces
+- UI rebuild and refresh
+- Brand new architecture
+- New theming system
+- New settings format
+
+## ✨ Improvements and fixes
+- Add missing translations for various places
+- Improve note ordering performance by dropping index based ordering
+- New icon
+- Make the default theme darker
+
 # 0.5.3-alpha.2
 ## 🌟 Features
 - Add support for text colors and highlighting (#3, #5)
