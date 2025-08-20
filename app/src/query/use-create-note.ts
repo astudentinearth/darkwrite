@@ -23,10 +23,11 @@ export const useCreateNoteMutation = () => {
     orderHint?: string;
   }) => {
     let orderHint: string = "";
+    const notes = Object.values(notesQuery.notes ?? {})
     if(opts.orderHint) orderHint = opts.orderHint;
-    else if(notesQuery.notes == null || notesQuery.notes.length == 0) orderHint = LexoRank.middle().genNext().toString();
+    else if(notesQuery.notes == null || notes.length == 0) orderHint = LexoRank.middle().genNext().toString();
     else {
-      const lastOrderHint = LexoRank.parse(notesQuery.notes[notesQuery.notes.length - 1].orderHint);
+      const lastOrderHint = LexoRank.parse(notes[notes.length - 1].orderHint);
       orderHint = lastOrderHint.genNext().toString();
     }
 

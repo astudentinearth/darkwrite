@@ -12,4 +12,8 @@ export class DocumentService{
     return this.documentStore.write(noteId, content);
   }
 
+  async deleteNoteContent(noteId: string) {
+    this.documentStore.delete(noteId);
+  }
+
 }

@@ -23,7 +23,8 @@
     "trash": {
       "title": "Çöp kutusu",
       "restore": "Geri yükle",
-      "delete": "Kalıcı olarak sil"
+      "delete": "Kalıcı olarak sil",
+      "search": "Çöpte ara"
     },
     "notes": {
       "contextmenu": {

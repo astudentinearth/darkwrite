@@ -51,7 +51,7 @@
   --darkwrite-mono: "Cascadia Code", "Courier New", "Liberation Mono", monospace;
   --font-ui: "";
 
-    --editor-text-red: hsl(0 100% 58%);
+  --editor-text-red: hsl(0 100% 58%);
   --editor-text-orange: hsl(23 100% 58%);
   --editor-text-yellow: hsl(56 100% 58%);
   --editor-text-green: hsl(125 100% 58%);
@@ -297,6 +297,27 @@ body,
 .main-wiew::-webkit-scrollbar-thumb:hover {
   @apply bg-secondary;
 }
+
+@layer utilities {
+  .scroll-view::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .scroll-view::-webkit-scrollbar-track {
+    overflow: hidden;
+  }
+
+  .scroll-view::-webkit-scrollbar-thumb {
+    @apply bg-secondary/75;
+    border-radius: 0.3em;
+  }
+
+  .scroll-view::-webkit-scrollbar-thumb:hover {
+    @apply bg-secondary;
+  }
+}
+
+
 
 .hide-number-arrows {
   -moz-appearance: textfield !important;

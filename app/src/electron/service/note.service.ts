@@ -75,7 +75,8 @@ export class NoteService {
   }
 
   async deleteById(id: string) {
-    await this.noteRepository.deleteById(id);
+    this.noteRepository.deleteById(id);
+    this.documentService.deleteNoteContent(id); 
   }
 
   async getById(id: string) {

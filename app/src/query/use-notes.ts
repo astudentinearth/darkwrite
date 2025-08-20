@@ -11,7 +11,9 @@ export const useNotes = () => {
     queryFn: async () => {
       const response =
         await DarkwriteAPIClient.note.getAllByWorkspaceId(workspaceId);
-      const {notes} = response;
+      const { notes } = response;
+      const noteList = Object.values(notes);
+
       const favorites = Object.values(notes)
         ?.filter((n) => n.isFavorite && !n.isTrashed)
         .toSorted((a, b) =>
@@ -26,10 +28,27 @@ export const useNotes = () => {
         )
           .genNext()
           .toString();
-      return { notes, nextFavoriteHint };
+
+      let finalOrderHint: string = "";
+      if (notes == null || noteList.length == 0)
+        finalOrderHint = LexoRank.middle().genNext().toString();
+      else {
+        const lastOrderHint = LexoRank.parse(
+          noteList[noteList.length - 1].orderHint,
+        );
+        finalOrderHint = lastOrderHint.genNext().toString();
+      }
+
+      return { notes, nextFavoriteHint, finalOrderHint };
     },
   });
 
   const { data, isFetching, refetch } = query;
-  return { notes: data?.notes, nextFavoriteHint: data?.nextFavoriteHint, isFetching, refetch };
+  return {
+    notes: data?.notes,
+    nextFavoriteHint: data?.nextFavoriteHint,
+    isFetching,
+    refetch,
+    finalOrderHint: data?.finalOrderHint
+  };
 };

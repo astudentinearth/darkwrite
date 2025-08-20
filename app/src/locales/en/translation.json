@@ -23,7 +23,8 @@
     "trash": {
       "title": "Trash",
       "restore": "Restore",
-      "delete": "Delete permanently"
+      "delete": "Delete permanently",
+      "search": "Search in trash"
     },
     "notes": {
       "contextmenu": {
