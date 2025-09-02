@@ -1,7 +1,15 @@
 import { LexoRank } from "lexorank";
-import { ANCHOR_ELEMENT_ID, identifyCollisions, IdRankPair } from "./rank";
+import {
+  ANCHOR_ELEMENT_ID,
+  fixCollisionsInGroup,
+  identifyCollisions,
+  IdRankPair,
+} from "./rank";
 
 describe("tests for order hint collision and their correction", () => {
+
+  // identification tests
+
   it("should identify collision groups in a list with 2 elements", () => {
     const pairs: IdRankPair[] = [
       { id: "a", rank: "0|hzzzzb" },
@@ -118,7 +126,7 @@ describe("tests for order hint collision and their correction", () => {
     console.log(group);
   });
 
-it("should identify a start, a middle and an end collision all at once", () => {
+  it("should identify a start, a middle and an end collision all at once", () => {
     const pairs: IdRankPair[] = [
       { id: "a", rank: "0|hzzzzb" },
       { id: "b", rank: "0|hzzzzb" },
@@ -152,7 +160,6 @@ it("should identify a start, a middle and an end collision all at once", () => {
     expect(group2[1].rank).toBe("0|hzzzzc");
     expect(group2[2].rank).toBe("0|hzzzzc");
 
-
     // group 3
     expect(group3.length).toBe(5);
     expect(group3[0].id).toBe("f");
@@ -162,6 +169,40 @@ it("should identify a start, a middle and an end collision all at once", () => {
     expect(group3[3].rank).toBe("0|hzzzzf");
     expect(group3[4].rank).toBe("0|hzzzzf");
 
+    console.log(result);
+  });
+
+  it("should refuse to perform a correction when group size is <3", () => {
+    const list: IdRankPair[] = [];
+    const result = fixCollisionsInGroup(list);
+    expect(result).toHaveLength(0);
+  });
+
+  // correction tests
+
+  it("should fix collisions in a group when a placeholder anchor is present", () => {
+    const list: IdRankPair[] = [
+      { id: ANCHOR_ELEMENT_ID, rank: LexoRank.middle().toString() },
+      { id: "a", rank: "0|hzzzzz:i" },
+      { id: "b", rank: "0|hzzzzz:i" },
+    ];
+    const result = fixCollisionsInGroup(list);
+    expect(result).toHaveLength(2);
+    expect(result[0].rank).toBe("0|hzzzzz:9");
+    expect(result[1].rank).toBe("0|hzzzzz:d");
+    console.log(result);
+  });
+
+  it("should fix collisions in a group", () => {
+    const list: IdRankPair[] = [
+      { id: "a", rank: "0|hzzzzz" },
+      { id: "b", rank: "0|hzzzzz:i" },
+      { id: "c", rank: "0|hzzzzz:i" },
+      { id: "d", rank: "0|hzzzzz:i" },
+    ];
+    const result = fixCollisionsInGroup(list);
+    expect(result).toHaveLength(3);
+    expect(new Set(result.map((e) => e.rank))).toHaveLength(3); // all different ranks
     console.log(result);
   });
 });
