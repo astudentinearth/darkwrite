@@ -13,6 +13,7 @@ import { fileURLToPath } from "url";
 import { WorkspaceService } from "./service/workspace.service";
 import { initDevtools } from "./debug/server";
 import { embedProtocolHandler } from "./ipc/embed-protocol-handler";
+import { HealthService } from "./service/health.service";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -63,6 +64,8 @@ export async function init() {
   setupWindowEvents();
   await AppDataSource.initialize();
   await new WorkspaceService().initializeDefaultWorkspace();
+  //const healthService = new HealthService();
+  //await healthService.fixCollidingOrderKeys();
   protocol.handle("embed", embedProtocolHandler);
   createWindow();
   if(is.dev) initDevtools(1200);

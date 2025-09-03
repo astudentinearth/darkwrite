@@ -217,10 +217,10 @@ describe("tests for order hint collision and their correction", () => {
     const notes = [
       {
         id: "a",
-        orderHint: "a0",
+        orderHint: "a2",
       },
-      { id: "b", orderHint: "a1" },
-      { id: "c", orderHint: "a1" },
+      { id: "b", orderHint: "a0" },
+      { id: "c", orderHint: "a2" },
     ] as NoteDTO[]; // we don't care about other keys
 
     const result = generateRankCollisionChangeset(notes, "orderHint");
