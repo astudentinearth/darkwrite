@@ -6,6 +6,7 @@ import { WorkspaceRepository } from "../repository/workspace.repository";
 import { DatabaseService } from "./database.service";
 import { WorkspaceService } from "./workspace.service";
 import { DocumentService } from "./document.service";
+import { Rank } from "@/common/rank";
 
 export class NoteService {
   constructor(
@@ -49,6 +50,8 @@ export class NoteService {
   }
 
   async getAllByWorkspaceId(workspaceId: string) {
+    console.log("a");
+    console.log(await this.noteRepository.findLastNoteInOrder(workspaceId));
     return this.noteRepository.findAllByWorkspaceId(workspaceId);
   }
 
@@ -62,10 +65,22 @@ export class NoteService {
     let database: Database | undefined = undefined;
     if(workspaceId) workspace = await this.workspaceService.findWorkspaceOrThrow(workspaceId);
     if(databaseId) database = await this.databaseService.findDatabaseOrThrow(databaseId);
-    
+    // reassign order key on restore
     const note = await this.noteRepository.findById(id);
     if(!note) throw new Error(`Note ${id} does not exist.`);
     Object.assign(note, rest);
+    if(dto.isTrashed === true) note.isFavorite = false;
+    if(dto.isTrashed === false) {
+      const lastNote = await this.noteRepository.findLastNoteInOrder(note.workspace.id);
+      const nextRank = lastNote ? new Rank(lastNote.orderHint).next() : Rank.default();
+      note.orderHint = nextRank.get();
+    }
+    if(dto.isFavorite === true && !dto.favoriteOrderHint) {
+      const lastInFavorites = await this.noteRepository.findLastNoteInFavorites(note.workspace.id);
+      const nextRank = lastInFavorites ? new Rank(lastInFavorites.orderHint).next() : Rank.default();
+      console.log("favorite rank will be", nextRank)
+      note.favoriteOrderHint = nextRank.get();
+    }
     console.log(rest);
     if(workspace) note.workspace = workspace;
     if(database) note.database = database;

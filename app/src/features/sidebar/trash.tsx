@@ -26,7 +26,7 @@ function TrashItem(props: { note: NoteDTO }) {
   };
 
   const handleRestore = () => {
-    update({ id: props.note.id, dto: { isTrashed: false, isFavorite: false, orderHint: finalOrderHint } });
+    update({ id: props.note.id, dto: { isTrashed: false, isFavorite: false } });
   };
 
   return (

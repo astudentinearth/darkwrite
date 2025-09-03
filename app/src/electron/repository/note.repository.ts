@@ -17,7 +17,7 @@ export class NoteRepository {
   }
 
   async findById(id: string) {
-    return this._repo.findOne({where: {id}});
+    return this._repo.findOne({ where: { id } });
   }
 
   async findAll() {
@@ -25,19 +25,36 @@ export class NoteRepository {
   }
 
   async findAllByWorkspaceId(workspaceId: string) {
-    return this._repo.findBy({workspace: {id: workspaceId}});
+    return this._repo.findBy({ workspace: { id: workspaceId } });
   }
 
   async findAllByDatabaseId(databaseId: string) {
-    return this._repo.findBy({database: {id: databaseId}});
+    return this._repo.findBy({ database: { id: databaseId } });
   }
 
   async deleteById(id: string) {
-    return this._repo.delete({id});
+    return this._repo.delete({ id });
   }
 
   async delete(note: Note) {
-    return this._repo.delete({id: note.id});
+    return this._repo.delete({ id: note.id });
   }
 
+  async findLastNoteInOrder(workspaceId: string) {
+    const result = await this._repo.findOne({
+      order: {
+        orderHint: "DESC",
+      },
+      where: { workspace: { id: workspaceId } },
+    });
+    return result;
+  }
+
+  async findLastNoteInFavorites(workspaceId: string) {
+    const result = await this._repo.findOne({
+      order: { favoriteOrderHint: "DESC" },
+      where: {workspace: {id: workspaceId}}
+    });
+    return result;
+  }
 }
