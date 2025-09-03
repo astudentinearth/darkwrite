@@ -1,9 +1,9 @@
+import { Rank } from "@/common/rank";
 import { useNotes } from "@/query/use-notes";
-import { LexoRank } from "lexorank";
 import { ReactNode, useMemo } from "react";
+import { NoteContextMenuContainer } from "../note/note-context-menu";
 import NoteDropZone from "../note/note-drop-zone";
 import NoteHeader from "../note/note-header";
-import { NoteContextMenuContainer } from "../note/note-context-menu";
 
 export default function FavoriteNoteList() {
   const { notes, nextFavoriteHint } = useNotes();
@@ -12,15 +12,15 @@ export default function FavoriteNoteList() {
       Object.values(notes ?? {})
         .filter((n) => n.isFavorite && !n.isTrashed)
         .toSorted((a, b) =>
-          a.favoriteOrderHint.localeCompare(b.favoriteOrderHint),
+          Rank.sorter(a.favoriteOrderHint, b.favoriteOrderHint)
         ),
     [notes],
   );
   if (!favorites || favorites.length < 1 || !nextFavoriteHint)
     return <div></div>;
 
-  const leadingHint = LexoRank.parse(favorites[0].favoriteOrderHint)
-    .genPrev()
+  const leadingHint = new Rank(favorites[0].favoriteOrderHint)
+    .prev()
     .toString();
 
   const render = () => {
@@ -52,8 +52,8 @@ export default function FavoriteNoteList() {
         break;
       }
 
-      const currentHint = LexoRank.parse(note.favoriteOrderHint);
-      const nextHint = LexoRank.parse(favorites[i + 1].favoriteOrderHint);
+      const currentHint = new Rank(note.favoriteOrderHint);
+      const nextHint = new Rank(favorites[i + 1].favoriteOrderHint);
       const between = currentHint.between(nextHint);
       const drop = (
         <NoteDropZone

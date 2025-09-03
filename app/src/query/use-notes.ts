@@ -1,7 +1,7 @@
 import { DarkwriteAPIClient } from "@/api/api-client";
+import { Rank } from "@/common/rank";
 import { useLocalStore } from "@/context/local-state";
 import { useQuery } from "@tanstack/react-query";
-import { LexoRank } from "lexorank";
 
 export const useNotes = () => {
   const workspaceId = useLocalStore((s) => s.workspaceId);
@@ -17,26 +17,26 @@ export const useNotes = () => {
       const favorites = Object.values(notes)
         ?.filter((n) => n.isFavorite && !n.isTrashed)
         .toSorted((a, b) =>
-          a.favoriteOrderHint.localeCompare(b.favoriteOrderHint),
+          Rank.sorter(a.favoriteOrderHint, b.favoriteOrderHint)
         );
       let nextFavoriteHint = "";
       if (!favorites || favorites?.length == 0)
-        nextFavoriteHint = LexoRank.middle().toString();
+        nextFavoriteHint = Rank.default().toString();
       else
-        nextFavoriteHint = LexoRank.parse(
+        nextFavoriteHint = new Rank(
           favorites[favorites.length - 1].favoriteOrderHint,
         )
-          .genNext()
+          .next()
           .toString();
 
       let finalOrderHint: string = "";
       if (notes == null || noteList.length == 0)
-        finalOrderHint = LexoRank.middle().genNext().toString();
+        finalOrderHint = Rank.default().next().toString();
       else {
-        const lastOrderHint = LexoRank.parse(
+        const lastOrderHint = new Rank(
           noteList[noteList.length - 1].orderHint,
         );
-        finalOrderHint = lastOrderHint.genNext().toString();
+        finalOrderHint = lastOrderHint.next().toString();
       }
 
       return { notes, nextFavoriteHint, finalOrderHint };

@@ -1,9 +1,9 @@
 import { DarkwriteAPIClient } from "@/api/api-client";
 import { CreateNoteDTO } from "@/common/dto";
+import { Rank } from "@/common/rank";
 import { useLocalStore } from "@/context/local-state";
 import { useMutation } from "@tanstack/react-query";
 import { useNotes } from "./use-notes";
-import { LexoRank } from "lexorank";
 
 export const useCreateNoteMutation = () => {
   const workspaceId = useLocalStore((s) => s.workspaceId);
@@ -25,10 +25,10 @@ export const useCreateNoteMutation = () => {
     let orderHint: string = "";
     const notes = Object.values(notesQuery.notes ?? {})
     if(opts.orderHint) orderHint = opts.orderHint;
-    else if(notesQuery.notes == null || notes.length == 0) orderHint = LexoRank.middle().genNext().toString();
+    else if(notesQuery.notes == null || notes.length == 0) orderHint = Rank.default().next().toString();
     else {
-      const lastOrderHint = LexoRank.parse(notes[notes.length - 1].orderHint);
-      orderHint = lastOrderHint.genNext().toString();
+      const lastOrderHint = new Rank(notes[notes.length - 1].orderHint);
+      orderHint = lastOrderHint.next().toString();
     }
 
     const dto: CreateNoteDTO = {

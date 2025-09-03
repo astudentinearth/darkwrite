@@ -1,11 +1,11 @@
 import { NoteDTO } from "@/common/dto";
+import { Rank } from "@/common/rank";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { useNotes } from "@/query/use-notes";
-import { LexoRank } from "lexorank";
 import { useMemo, useState } from "react";
 import { NoteContextMenuContainer } from "./note-context-menu";
 import NoteHeader from "./note-header";
@@ -17,22 +17,22 @@ export default function NoteItem({ note }: { note: NoteDTO }) {
   const { notes } = useNotes();
   const children =
     useMemo(
-      () => Object.values(notes ?? {}).filter((n) => n.parentId === note.id).toSorted((a, b) => a.orderHint.localeCompare(b.orderHint)),
+      () => Object.values(notes ?? {}).filter((n) => n.parentId === note.id).toSorted((a, b) => Rank.sorter(a.orderHint, b.orderHint)),
       [notes, note.id],
     ) ?? [];
 
   const computeLeadingHint = () => {
-    if (children.length === 0) return LexoRank.middle().toString();
-    const firstChildRank = LexoRank.parse(children[0].orderHint);
-    return firstChildRank.genPrev().toString();
+    if (children.length === 0) return Rank.default().toString();
+    const firstChildRank = new Rank(children[0].orderHint);
+    return firstChildRank.prev().toString();
   };
 
   const computeFinalHint = () => {
-    if (children.length === 0) return LexoRank.middle().toString();
-    const lastChildRank = LexoRank.parse(
+    if (children.length === 0) return Rank.default().toString();
+    const lastChildRank = new Rank(
       children[children.length - 1].orderHint,
     );
-    return lastChildRank.genNext().toString();
+    return lastChildRank.next().toString();
   };
 
   return (

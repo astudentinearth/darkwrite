@@ -55,8 +55,8 @@ function setupWindowEvents() {
 }
 
 export async function init() {
-  const prefs = await ElectronPrefsModel.initialize();
   await Paths.initialize();
+  const prefs = await ElectronPrefsModel.initialize();
   log.initialize();
   // We change the session data directory to avoid polluting user data any further
   app.setPath("sessionData", Paths.SESSION_DATA_DIR);

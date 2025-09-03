@@ -1,18 +1,18 @@
+import { Rank } from "@/common/rank";
 import { Button } from "@/components/ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { cn } from "@/lib/utils";
 import { useNotes } from "@/query/use-notes";
-import { LexoRank } from "lexorank";
+import { ChevronRight } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import NoteList from "./note-list";
-import { cn } from "@/lib/utils";
-import { ChevronRight } from "lucide-react";
 
 export default function NoteListRoot() {
   const { notes } = useNotes();
   const {t} = useTranslation("translation", {keyPrefix: "sidebar"});
   const [open, setOpen] = useState(false);
-  const rootNotes = useMemo(() => Object.values(notes ?? {}).filter((n) => !n.parentId).toSorted((a, b) => a.orderHint.localeCompare(b.orderHint)), [notes]);
+  const rootNotes = useMemo(() => Object.values(notes ?? {}).filter((n) => !n.parentId).toSorted((a, b) => Rank.sorter(a.orderHint, b.orderHint)), [notes]);
   if (rootNotes == null || rootNotes.length === 0) {
     return (
       <div>
@@ -21,11 +21,11 @@ export default function NoteListRoot() {
     );
   }
 
-  const leadingHint = LexoRank.parse(rootNotes[0].orderHint)
-    .genPrev()
+  const leadingHint = new Rank(rootNotes[0].orderHint)
+    .prev()
     .toString();
-  const finalHint = LexoRank.parse(rootNotes[rootNotes.length - 1].orderHint)
-    .genNext()
+  const finalHint = new Rank(rootNotes[rootNotes.length - 1].orderHint)
+    .next()
     .toString();
 
   return (

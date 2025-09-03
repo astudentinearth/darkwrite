@@ -1,9 +1,9 @@
-import { NoteDTO } from "@/common/dto"
+import { NoteDTO } from "@/common/dto";
+import { Rank } from "@/common/rank";
 import { useT } from "@/hooks/useT";
 import { ReactNode } from "react";
 import NoteDropZone from "./note-drop-zone";
 import NoteItem from "./note-item";
-import { LexoRank } from "lexorank";
 
 export default function NoteList(props: {leadingOrderHint: string, finalOrderHint: string, notes: NoteDTO[], parentId: string | null}) {
   const { notes } = props;
@@ -24,8 +24,8 @@ export default function NoteList(props: {leadingOrderHint: string, finalOrderHin
         break;
       }
       
-      const thisOrderHint = LexoRank.parse(notes[i].orderHint);
-      const nextOrderHint = LexoRank.parse(notes[i+1].orderHint);
+      const thisOrderHint = new Rank(notes[i].orderHint);
+      const nextOrderHint = new Rank(notes[i+1].orderHint);
       const dropHint = thisOrderHint.between(nextOrderHint).toString();
       nodes.push(<NoteDropZone parentId={props.parentId} key={`dropzone-${dropHint}`} orderHint={dropHint}/>);
     }
