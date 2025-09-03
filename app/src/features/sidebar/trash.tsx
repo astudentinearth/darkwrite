@@ -11,13 +11,12 @@ import useDeleteNote from "@/query/use-delete-note";
 import { useNotes } from "@/query/use-notes";
 import { useUpdateNote } from "@/query/use-update-note";
 import { Trash, Undo2 } from "lucide-react";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { SidebarItem } from "./sidebar-item";
 
 function TrashItem(props: { note: NoteDTO }) {
   const { update } = useUpdateNote();
-  const { finalOrderHint } = useNotes();
   const deleteMutation = useDeleteNote();
   const { t } = useTranslation();
 
@@ -48,11 +47,12 @@ function TrashItem(props: { note: NoteDTO }) {
 export function TrashWidget() {
   const { t } = useTranslation();
   const { notes } = useNotes();
+  const [query, setQuery] = useState("");
   const trashedNotes = useMemo(
     () => Object.values(notes ?? {}).filter((n) => n.isTrashed),
     [notes],
   );
-
+  const list = query ? trashedNotes.filter(n => n.title.includes(query)) : trashedNotes;
   return (
     <>
       <Popover>
@@ -67,10 +67,10 @@ export function TrashWidget() {
           className="w-80 ml-2 grid grid-rows-[auto_1fr] max-h-[60vh] p-0 mb-2"
         >
           <div className="p-2">
-            <Input placeholder={t("sidebar.trash.search")} />
+            <Input value={query} onChange={e => setQuery(e.target.value)} placeholder={t("sidebar.trash.search")} />
           </div>
           <div className="h-full overflow-y-auto flex flex-col scroll-view px-2 pt-0 pb-2">
-            {trashedNotes.map((n) => (
+            {list.map((n) => (
               <TrashItem note={n} key={n.id} />
             ))}
           </div>
