@@ -13,7 +13,7 @@ export function EditorView({ noteId }: { noteId: string }) {
   const { note } = useNoteById(noteId);
   const cover = useEditorCover(noteId);
   return (
-    <div>
+    <div className="flex justify-center">
       {note && (
         <EditorHeader
           icon={note.icon}

@@ -3,6 +3,7 @@ import { NoteDTO, NoteResponseDTO } from "@/common/dto";
 import { useLocalStore } from "@/context/local-state";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import _ from "lodash";
+import {produce} from "immer";
 
 const persistTitle = _.debounce((id: string, title: string) => {
   DarkwriteAPIClient.note.update(id, { title });
@@ -16,16 +17,17 @@ function useUpdateTitleOptimistic(id: string) {
       persistTitle(id, title);
     },
     onSettled(_data, _error, title) {
-      qc.setQueryData(["note", id], (curent: NoteResponseDTO) => {
-        const copy = { ...curent.note };
+      qc.setQueryData(["note", id], (current: NoteResponseDTO) => {
+        const copy = { ...current.note };
         copy.title = title;
-        return copy;
+        return {note: copy};
       });
       qc.setQueryData(
         [workspaceId, "notes"],
         (current: { notes: Record<string, NoteDTO>; nextFavoriteHint: string }) => {
-          const copy = {...current.notes};
-          copy[id].title = title;
+          const copy = produce(current.notes, draft => {
+            draft[id].title = title;
+          })
           return {notes: copy, nextFavoriteHint: current.nextFavoriteHint}
         },
       );
