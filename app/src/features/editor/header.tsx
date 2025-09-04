@@ -20,7 +20,7 @@ export default function EditorHeader(props: EditorHeaderProps) {
         imageSource={props.coverImageSource}
       />
       <ConstrainedWidth className="flex flex-col px-24">
-        <DynamicTextarea className="text-4xl px-0 font-semibold box-border resize-none outline-hidden" value={props.title} onValueChange={props.onTitleChange}/>
+        <DynamicTextarea className="text-4xl px-0 font-semibold box-border h-auto overflow-hidden resize-none grow outline-hidden block" value={props.title} onValueChange={props.onTitleChange}/>
       </ConstrainedWidth> 
     </div>
   );

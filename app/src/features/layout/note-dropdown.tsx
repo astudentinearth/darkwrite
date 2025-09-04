@@ -25,9 +25,9 @@ export default function NoteDropdown() {
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
-        <TitlebarNavTrigger>
+        <TitlebarNavTrigger className="max-w-64 overflow-hidden">
           <span>{getNoteIcon(currentNote.icon)}</span>
-          <span>{currentNote.title}</span>
+          <span className="overflow-hidden w-full text-ellipsis whitespace-nowrap break-words">{currentNote.title}</span>
         </TitlebarNavTrigger>
       </DropdownMenuTrigger>
       <DropdownMenuContent>

@@ -50,7 +50,7 @@ export default function NoteHeader({
         "grid grid-cols-[24px_1fr_24px] gap-1.5 p-1 select-none overflow-hidden group text-ellipsis whitespace-nowrap hover:bg-secondary/30 rounded-[8px]",
         isDraggingOver && finalOrderHint && "bg-primary/20",
         contextMenuOpen && "bg-secondary/30",
-        (!showCreate && !collapsible) && "flex",
+        (!showCreate && !collapsible) && "grid-cols-[24px_1fr]",
         active && "bg-secondary/20"
       )}
     >
@@ -76,7 +76,7 @@ export default function NoteHeader({
           )}
         />
       </Button>
-      {note.title}
+      <span className="w-full overflow-hidden text-ellipsis break-words whitespace-nowrap">{note.title}</span>
       {showCreate && <Button
         variant={"ghost"}
         onClick={handleCreate}
