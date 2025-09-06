@@ -4,6 +4,7 @@ import { PanelRightClose } from "lucide-react";
 import { RefObject } from "react";
 import { HistoryNavigation } from "./navigation";
 import PageTitle from "./page-title";
+import Toolbar from "./toolbar";
 
 export type TitlebarProps = React.HTMLAttributes<HTMLDivElement> & {
   refObject: RefObject<HTMLDivElement | null>;
@@ -27,6 +28,8 @@ export function Titlebar(props: TitlebarProps) {
       </HeaderbarButton>
       <HistoryNavigation />
       <PageTitle/>
+      <div className="grow"></div>
+      <Toolbar/>
     </div>
   );
 }
