@@ -21,7 +21,9 @@ export const DarkwriteElectronAPI = {
     delete: new IPCHandler(false, ElectronNoteAPI.delete),
     getAllByWorkspaceId: new IPCHandler(false, ElectronNoteAPI.getAllByWorkspaceId),
     getById: new IPCHandler(false, ElectronNoteAPI.getById),
-    update: new IPCHandler(false, ElectronNoteAPI.update)
+    update: new IPCHandler(false, ElectronNoteAPI.update),
+    getDocument: new IPCHandler(false, ElectronNoteAPI.getDocument),
+    setDocument: new IPCHandler(false, ElectronNoteAPI.setDocument)
   },
   embed: {
     createFromLocalFile: new IPCHandler(false, ElectronEmbedAPI.createFromLocalFile),

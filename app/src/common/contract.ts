@@ -2,7 +2,7 @@
 // Electron-side handlers should implement these directly and expose it via the API bridge.
 // Clients talking to a cloud instance shall make the appropriate network requests instead.
 // Cloud-specific code should be kept separate from Electron to ensure browser portability.
-import { CreateNoteDTO, NoteResponseDTO, NotesResponseDTO, UpdateNoteDTO } from "./dto";
+import { CreateNoteDTO, NoteContentResponseDTO, NoteResponseDTO, NotesResponseDTO, UpdateNoteDTO } from "./dto";
 import { CreateEmbedDTO } from "./dto/request/embed.request";
 import { CreateWorkspaceDTO, UpdateWorkspaceDTO } from "./dto/request/workspace.request";
 import { EmbedResponseDTO } from "./dto/response/embed.response";
@@ -16,6 +16,8 @@ export interface INoteAPI {
   delete: (id: string) => Promise<void>;
   getAllByWorkspaceId: (workspaceId: string) => Promise<NotesResponseDTO>;
   getById: (id: string) => Promise<NoteResponseDTO>;
+  getDocument: (id: string) => Promise<NoteContentResponseDTO>;
+  setDocument: (id: string, serializedDocument: string) => Promise<void>;
 }
 
 export interface IWorkspaceAPI {

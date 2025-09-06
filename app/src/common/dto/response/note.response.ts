@@ -1,3 +1,4 @@
+import { NoteContent } from "@/common/note-content";
 
 export interface NoteDTO {
   id: string;
@@ -25,4 +26,8 @@ export interface NotesResponseDTO {
 
 export interface NoteResponseDTO {
   note: NoteDTO | null;
+}
+
+export interface NoteContentResponseDTO {
+  document: NoteContent;
 }

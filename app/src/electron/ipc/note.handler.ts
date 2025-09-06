@@ -1,6 +1,6 @@
 import { INoteAPI } from "@/common/contract";
-import { ServiceContainer } from "../service-container";
 import { NoteDTO } from "@/common/dto";
+import { ServiceContainer } from "../service-container";
 
 export const ElectronNoteAPI: INoteAPI = {
   async create(dto) {
@@ -36,5 +36,14 @@ export const ElectronNoteAPI: INoteAPI = {
     const updated = await ServiceContainer.noteService.update(id, dto);
     const _dto = updated.mapToDTO();
     return { note: _dto };
+  },
+
+  async getDocument(id) {
+    const document = await ServiceContainer.documentService.getNoteContent(id);
+    return { document };
+  },
+
+  async setDocument(id, serializedDocument) {
+      ServiceContainer.documentService.setNoteContent(id, serializedDocument);
   },
 };

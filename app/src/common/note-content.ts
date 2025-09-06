@@ -1,8 +1,10 @@
 import { NoteCustomization } from "./note-customization";
 
+export interface JSONDocument {
+  [key: string]: JSONDocument
+}
+
 export interface NoteContent {
-  noteId: string;
-  /** This should contain a serialized `EditorContent` instance. */
-  content: string;
+  contents: JSONDocument;
   customizations: NoteCustomization;
 }
