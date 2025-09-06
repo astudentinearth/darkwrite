@@ -1,4 +1,4 @@
-import { Repository } from "typeorm";
+import { Not, Repository } from "typeorm";
 import { AppDataSource } from "../db";
 import { Note } from "../entity";
 
@@ -45,7 +45,7 @@ export class NoteRepository {
       order: {
         orderHint: "DESC",
       },
-      where: { workspace: { id: workspaceId } },
+      where: { workspace: { id: workspaceId }, isTrashed: Not(true) },
     });
     return result;
   }
@@ -53,7 +53,7 @@ export class NoteRepository {
   async findLastNoteInFavorites(workspaceId: string) {
     const result = await this._repo.findOne({
       order: { favoriteOrderHint: "DESC" },
-      where: {workspace: {id: workspaceId}}
+      where: {workspace: {id: workspaceId}, isFavorite: true, isTrashed: Not(true)}
     });
     return result;
   }
