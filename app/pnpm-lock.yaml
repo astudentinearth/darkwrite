@@ -104,6 +104,9 @@ importers:
       extract-zip:
         specifier: ^2.0.1
         version: 2.0.1
+      font-list:
+        specifier: ^2.0.0
+        version: 2.0.0
       fractional-indexing:
         specifier: ^3.2.0
         version: 3.2.0
@@ -3738,6 +3741,9 @@ packages:
 
   flatted@3.3.3:
     resolution: {integrity: sha512-GX+ysw4PBCz0PzosHDepZGANEuFCMLrnRTiEy9McGjmkCQYwRq4A/X786G/fjM/+OjsWSU1ZrY5qyARZmO/uwg==}
+
+  font-list@2.0.0:
+    resolution: {integrity: sha512-9QteZJOQpaAHucOiHmmBZCleNWnTBpcE9EDRZ2uDTarySKxgceBNe8GVWynUU2wSzu6hyzXSa3T9+uD5KKV9XA==}
 
   for-each@0.3.5:
     resolution: {integrity: sha512-dKx12eRCVIzqCxFGplyFKJMPvLEWgmNtUrpTiJIR5u97zEhRG8ySrtboPHZXx7daLxQVrl643cTzbab2tkQjxg==}
@@ -10508,6 +10514,8 @@ snapshots:
       keyv: 4.5.4
 
   flatted@3.3.3: {}
+
+  font-list@2.0.0: {}
 
   for-each@0.3.5:
     dependencies:

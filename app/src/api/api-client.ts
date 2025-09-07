@@ -1,4 +1,4 @@
-import { IEmbedAPI, INoteAPI, ISettingsAPI, IThemeAPI, IWorkspaceAPI } from "@/common/contract";
+import { IDesktopAPI, IEmbedAPI, INoteAPI, ISettingsAPI, IThemeAPI, IWorkspaceAPI } from "@/common/contract";
 import { EmbedLocalAdapter } from "./local/embed-local-adapter";
 
 export enum APIClientMode {
@@ -12,6 +12,7 @@ export class DarkwriteAPIClient {
   static workspace: IWorkspaceAPI;
   static settings: ISettingsAPI;
   static theme: IThemeAPI;
+  static desktop: IDesktopAPI;
 
   private static initializeLocalAPIs() {
       this.note = window.api.note;
@@ -19,6 +20,7 @@ export class DarkwriteAPIClient {
       this.settings = window.api.settings;
       this.embed = new EmbedLocalAdapter();
       this.theme = window.api.theme;
+      this.desktop = window.api.desktop;
   }
 
   private static initializeCloudAPIs() {

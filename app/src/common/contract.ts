@@ -8,6 +8,7 @@ import { CreateWorkspaceDTO, UpdateWorkspaceDTO } from "./dto/request/workspace.
 import { EmbedResponseDTO } from "./dto/response/embed.response";
 import { ThemesResponseDTO } from "./dto/response/theme.response";
 import { WorkspaceResponseDTO, WorkspacesResponseDTO } from "./dto/response/workspace.response";
+import { Font } from "./font";
 import { DarkwriteUserSettings } from "./settings";
 
 export interface INoteAPI {
@@ -40,4 +41,8 @@ export interface ISettingsAPI {
 
 export interface IThemeAPI {
   getThemes: ()=>Promise<ThemesResponseDTO>;
+}
+
+export interface IDesktopAPI {
+  getFontList: ()=>Promise<Font[]>;
 }

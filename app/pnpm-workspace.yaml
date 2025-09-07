@@ -4,3 +4,4 @@ onlyBuiltDependencies:
   - better-sqlite3
   - electron
   - esbuild
+  - font-manager

@@ -4,6 +4,8 @@ import _ from "lodash";
 import os from "os";
 import { ThemeMode } from "../types";
 import { OS } from "./os";
+import {getFonts2} from "font-list"
+import { Font } from "@/common/font";
 
 export class DesktopIntegration {
   static operatingSystem: OS;
@@ -26,5 +28,17 @@ export class DesktopIntegration {
     BrowserWindow.getAllWindows().forEach((w) => {
       _.attempt(() => w.setTitleBarOverlay({ symbolColor }));
     });
+  }
+
+  static async getAvailableFonts(): Promise<Font[]> {
+    const fonts = await getFonts2();
+    const list = fonts.map(f => ({family: f.familyName, monospace: f.monospace} satisfies Font));
+    const families = new Set<string>();
+    const filtered = list.filter((obj) => {
+      if(families.has(obj.family)) return false;
+      families.add(obj.family);
+      return true;
+    });
+    return filtered;
   }
 }

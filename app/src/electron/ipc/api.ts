@@ -13,6 +13,7 @@ import { ElectronEmbedAPI } from "./embed.handler";
 import { ElectronWorkspaceAPI } from "./workspace.handler";
 import { ElectronSettingsAPI } from "./settings.handler";
 import { ElectronThemeAPI } from "./theme.handler";
+import { DesktopIntegration } from "../lib/desktop-integration";
 
 
 export const DarkwriteElectronAPI = {
@@ -44,6 +45,9 @@ export const DarkwriteElectronAPI = {
     getThemes: new IPCHandler(false, ElectronThemeAPI.getThemes)
   },
   showAppMenu: new IPCHandler(false, showAppMenu),
+  desktop: {
+    getFontList: new IPCHandler(false, DesktopIntegration.getAvailableFonts)
+  }
 } satisfies DarkwriteAPI;
 export type DarkwritePreloadAPI = InferPreloadAPI<typeof DarkwriteElectronAPI>;
 
