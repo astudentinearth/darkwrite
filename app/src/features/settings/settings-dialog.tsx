@@ -1,7 +1,7 @@
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ReactNode } from "react";
-import { SETTINGS_PAGE, SETTINGS_PAGES, TAB_ICONS } from "./settings-pages";
+import { SETTINGS_PAGE, TAB_TITLES, TAB_ICONS, SETTINGS_PAGES } from "./settings-pages";
 
 export default function SettingsDialog(props: { children: ReactNode }) {
   return (
@@ -20,20 +20,21 @@ export function SettingsTabView(props: { className?: string }) {
   return (
     <Tabs>
       <TabsList className="bg-transparent w-full gap-1">
-        {Object.keys(SETTINGS_PAGES).map((key) => {
+        {Object.keys(TAB_TITLES).map((key) => {
           const TabIcon = TAB_ICONS[key as SETTINGS_PAGE];
           return (
-            <TabsTrigger key={key} value={key} className="flex gap-2 data-[state=active]:bg-secondary/40 hover:bg-secondary/80 rounded-lg py-2 px-4">
+            <TabsTrigger key={key} value={key} className="flex gap-2 data-[state=active]:bg-secondary/40 data-[state=active]:text-primary-text hover:bg-secondary/80 rounded-lg py-2 px-4">
               <TabIcon size={18}/>
-              {SETTINGS_PAGES[key as SETTINGS_PAGE]}
+              {TAB_TITLES[key as SETTINGS_PAGE]}
             </TabsTrigger>
           );
         })}
       </TabsList>
-      {Object.keys(SETTINGS_PAGES).map((key) => {
+      {Object.keys(TAB_TITLES).map((key) => {
+        const Page = SETTINGS_PAGES[key as SETTINGS_PAGE]
         return (
-          <TabsContent key={key} value={key}>
-            {SETTINGS_PAGES[key as SETTINGS_PAGE]}
+          <TabsContent key={key} value={key} className="w-full">
+            <Page/>
           </TabsContent>
         );
       })}

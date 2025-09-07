@@ -1,6 +1,7 @@
 import { Briefcase, FlaskConical, Info, Keyboard, SwatchBook } from "lucide-react";
+import AppearanceSettings from "./appearance-settings";
 
-export const SETTINGS_PAGES = {
+export const TAB_TITLES = {
   "workspace": "Workspace",
   "appearance": "Apperanace",
   "shortcuts": "Shortcuts",
@@ -8,7 +9,7 @@ export const SETTINGS_PAGES = {
   "about": "About"
 }
 
-export type SETTINGS_PAGE = keyof typeof SETTINGS_PAGES;
+export type SETTINGS_PAGE = keyof typeof TAB_TITLES;
 
 export const TAB_ICONS = {
   "workspace": Briefcase,
@@ -17,3 +18,11 @@ export const TAB_ICONS = {
   "experimental": FlaskConical,
   "about": Info
 }
+
+export const SETTINGS_PAGES = {
+  "workspace": "Workspace",
+  "appearance": AppearanceSettings,
+  "shortcuts": "Shortcuts",
+  "experimental": "Experiments",
+  "about": "About"
+} 
