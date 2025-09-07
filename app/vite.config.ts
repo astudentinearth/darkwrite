@@ -8,7 +8,8 @@ const resolve = {
   alias: {
     "@main": path.resolve("src/electron/"),
     "@": path.resolve("src/"),
-    "@common": path.resolve("src/common")
+    "@common": path.resolve("src/common"),
+    "font-list": path.resolve("node_modules/font-list/index.js")
   },
 };
 
@@ -23,8 +24,8 @@ const plugins: PluginOption[] = [
         build: {
           rollupOptions: {
             external: ["typeorm"]
-          }
-        }
+          },
+        },
       },
     },
     preload: {
