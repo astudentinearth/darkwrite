@@ -3,6 +3,7 @@ import { ServiceContainer } from "../service-container";
 
 export const ElectronThemeAPI: IThemeAPI = {
   async getThemes() {
-    return ServiceContainer.themeService.getThemes();
+    const themes = await ServiceContainer.themeService.getThemes();
+    return {themes}
   }
 }

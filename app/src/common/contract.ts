@@ -6,9 +6,9 @@ import { CreateNoteDTO, NoteContentResponseDTO, NoteResponseDTO, NotesResponseDT
 import { CreateEmbedDTO } from "./dto/request/embed.request";
 import { CreateWorkspaceDTO, UpdateWorkspaceDTO } from "./dto/request/workspace.request";
 import { EmbedResponseDTO } from "./dto/response/embed.response";
+import { ThemesResponseDTO } from "./dto/response/theme.response";
 import { WorkspaceResponseDTO, WorkspacesResponseDTO } from "./dto/response/workspace.response";
 import { DarkwriteUserSettings } from "./settings";
-import { Theme } from "./theme";
 
 export interface INoteAPI {
   create: (dto: CreateNoteDTO) => Promise<NoteResponseDTO>;
@@ -39,5 +39,5 @@ export interface ISettingsAPI {
 }
 
 export interface IThemeAPI {
-  getThemes: ()=>Promise<Theme[]>;
+  getThemes: ()=>Promise<ThemesResponseDTO>;
 }
