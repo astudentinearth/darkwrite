@@ -1,3 +1,4 @@
+import { ColorPicker } from "@/components/ui/color-picker";
 import {
   Select,
   SelectContent,
@@ -18,7 +19,7 @@ export function ThemeDropdown(props: {
   const entries = Object.values(themes);
   return (
     <Select value={props.value} onValueChange={props.onValueChange}>
-      <SelectTrigger className={cn(props.className, "max-w-fit")}>
+      <SelectTrigger className={cn(props.className, "max-w-fit bg-view-1/50")}>
         {themes[props.value].name}
       </SelectTrigger>
       <SelectContent>
@@ -34,6 +35,7 @@ export function ThemeChooser() {
   const settings = useSettings().data;
   const lightTheme = settings.appearance.lightColorScheme;
   const darkTheme = settings.appearance.darkColorScheme;
+  const accentColor = settings.appearance.accentColor;
   const mutation = useUpdateSettings();
   const setScheme = (mode: "dark" | "light", id: string) => {
     const updated = produce(settings, (draft) => {
@@ -45,7 +47,7 @@ export function ThemeChooser() {
   };
 
   return (
-    <div className="flex flex-col bg-view-2 rounded-lg p-4 w-160 gap-4">
+    <div className="flex flex-col bg-view-2 rounded-lg p-4 w-160 gap-4 drop-shadow-sm">
       <div className="flex justify-between items-center">
         <span className="font-medium">Light color theme</span>
         <ThemeDropdown
@@ -60,6 +62,11 @@ export function ThemeChooser() {
           value={darkTheme}
           onValueChange={(val) => setScheme("dark", val)}
         />
+      </div>
+      <hr/>
+      <div className="flex justify-between items-center">
+        <span className="font-medium">Accent color</span>
+        <ColorPicker value={accentColor} onChange={mutation.updateAccentColor}/>
       </div>
     </div>
   );

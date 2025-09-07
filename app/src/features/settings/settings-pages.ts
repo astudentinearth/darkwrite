@@ -3,7 +3,7 @@ import AppearanceSettings from "./appearance-settings";
 
 export const TAB_TITLES = {
   "workspace": "Workspace",
-  "appearance": "Apperanace",
+  "appearance": "Appearanace",
   "shortcuts": "Shortcuts",
   "experimental": "Experiments",
   "about": "About"

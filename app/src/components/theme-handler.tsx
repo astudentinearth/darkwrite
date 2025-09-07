@@ -7,6 +7,7 @@ import { useThemes } from "@/query/use-themes";
 export default function ThemeHandler() {
   const themes = useThemes().data;
   const appearanceSettings = useSettings().data.appearance;
+  const accentColor = appearanceSettings.accentColor;
   const systemTheme = useSystemTheme();
   const themeMode = appearanceSettings.themeMode === "system" ? systemTheme : appearanceSettings.themeMode;
   const themeId = themeMode === "dark" ? appearanceSettings.darkColorScheme : appearanceSettings.lightColorScheme;
@@ -16,5 +17,7 @@ export default function ThemeHandler() {
     const [cssVar, value] = entry;
     document.documentElement.style.setProperty(cssVar, value);
   }
+  document.documentElement.style.setProperty("--primary", accentColor);
+  document.documentElement.style.setProperty("--primary-text", accentColor);
   return <></>
 }
