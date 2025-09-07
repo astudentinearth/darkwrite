@@ -8,7 +8,7 @@ export default function SettingsDialog(props: { children: ReactNode }) {
     <Dialog>
       <DialogTrigger asChild>{props.children}</DialogTrigger>
       <DialogContent
-        className="min-w-[80vw] lg:min-w-[60vw] max-w-120! h-[80vh] p-2 pt-1 bg-background outline-none" 
+        className="min-w-[80vw] lg:min-w-[70vw] max-w-120! h-[80vh] p-2 pt-1 bg-background outline-none" 
       >
         <SettingsTabView />
       </DialogContent>
