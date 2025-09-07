@@ -1,19 +1,28 @@
 import { DarkwriteAPIClient } from "@/api/api-client";
 import { NoteContent } from "@/common/note-content";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import _ from "lodash";
 
 const persistContentDebounced = _.debounce((id: string, content: string) => DarkwriteAPIClient.note.setDocument(id, content), 200);
 
 export function useNoteContent(id: string) {
-  const query = useQuery({ queryKey: ["note-content", id] ,
+  const queryClient = useQueryClient();
+  const queryKey = ["note-content", id]
+  const query = useQuery({ queryKey,
     queryFn: async ()=> {
       const response = await DarkwriteAPIClient.note.getDocument(id);
       const { document } = response;
       return document;
-    }
+    },
+    enabled: !!id
   });
-  return query;
+  const overrideCache = (content: NoteContent)=>{
+    queryClient.setQueriesData({
+      queryKey
+
+    }, content);
+  }
+  return {...query, overrideCache};
 }
 
 export type UpdateContentMutationOpts = {

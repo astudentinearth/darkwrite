@@ -7,6 +7,13 @@ export enum FontStyle {
   CUSTOM = "custom"
 }
 
+export const FONT_VARS: Record<FontStyle, string> = {
+  sans: "--darkwrite-sans",
+  serif: "--darkwrite-serif",
+  mono: "--darkwrite-mono",
+  custom: "--darkwrite-sans"
+}
+
 export interface NoteCustomization {
   font?: FontStyle;
   customFont?: string;
