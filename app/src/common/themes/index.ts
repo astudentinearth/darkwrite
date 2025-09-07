@@ -1,3 +1,4 @@
+import { Theme } from "../theme";
 import {
   CatppuccinMocha,
   CatppuccinLatte,
@@ -7,13 +8,19 @@ import {
 import { DarkwriteDim } from "./darkwrite-black";
 import { DarkwriteDefault } from "./darkwrite-default";
 
-export const DEFAULT_THEMES = [
-  DarkwriteDefault,
+export const DEFAULT_THEME_LIST = [
   DarkwriteDim,
-  CatppuccinMocha,
-  CatppuccinMacchiato,
+  DarkwriteDefault,
   CatppuccinFrappe,
+  CatppuccinMacchiato,
   CatppuccinLatte,
+  CatppuccinMocha,
 ];
+export const DEFAULT_THEMES: Record<string, Theme> = DEFAULT_THEME_LIST.reduce<
+  Record<string, Theme>
+>((acc: Record<string, Theme>, value) => {
+  acc[value.id] = value;
+  return acc;
+}, {});
 
 export { DarkwriteDefault } from "./darkwrite-default";

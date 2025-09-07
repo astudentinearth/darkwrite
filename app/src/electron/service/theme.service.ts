@@ -2,6 +2,8 @@ import { isTheme, Theme } from "@/common/theme";
 import { DocumentFileStore, IDocumentStore } from "../lib/document-store";
 import { THEME_DIR } from "../lib/paths";
 import { tryParse } from "@common/json-util";
+import _ from "lodash";
+import { DEFAULT_THEMES } from "@/common/themes";
 
 export class ThemeService {
   constructor(
@@ -34,7 +36,7 @@ export class ThemeService {
 
   async getThemes() {
     const ids = await this.themeStore.ls();
-    const themes: Record<string, Theme> = {}
+    const themes: Record<string, Theme> = _.cloneDeep(DEFAULT_THEMES);
     for (const id of ids) {
       const themeString = await this.themeStore.read(id);
       const theme = this.parseTheme(themeString);

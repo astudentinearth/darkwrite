@@ -6,6 +6,7 @@ import { useRef } from "react";
 import { Outlet } from "react-router-dom";
 import { useResizableSidebar } from "../../hooks/layout/use-resizable-layout";
 import { Titlebar } from "./titlebar";
+import ThemeHandler from "@/components/theme-handler";
 
 //import { useStartup } from "@/hooks/use-startup";
 
@@ -18,6 +19,7 @@ export function Layout() {
   useWindowControlsOverlay(headerRef);
   return (
     <div className="flex [&>div]:shrink-0 w-full h-full bg-background overflow-hidden">
+      <ThemeHandler />
       <Sidebar
         collapseCallback={() => {
           setSidebarCollapsed(true);
