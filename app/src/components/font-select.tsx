@@ -1,10 +1,10 @@
 import useFonts from "@/query/use-fonts";
-import { Select, SelectContent, SelectItem, SelectTrigger } from "./ui/select";
-import { cn } from "@/lib/utils";
-import { useMemo, useRef } from "react";
-import { useVirtualizer } from "@tanstack/react-virtual";
-import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import { useMemo, useState } from "react";
 import { Button } from "./ui/button";
+import { Input } from "./ui/input";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import { ChevronDown } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export default function FontSelect(props: {
   value?: string;
@@ -12,30 +12,45 @@ export default function FontSelect(props: {
   className?: string;
 }) {
   const fonts = useFonts().data;
-  const parentRef = useRef(null);
-  const virtualizer = useVirtualizer({
-    count: fonts.length,
-    getScrollElement: () => parentRef.current,
-    estimateSize: () => 20,
-  });
+  const [query, setQuery] = useState("");
+  const [open, setOpen] = useState(false);
   const items = useMemo(
     () =>
-      fonts.map((f) => <SelectItem value={f.family}>{f.family}</SelectItem>),
-    [fonts],
+      fonts
+        .filter((f) => f.family.toLowerCase().includes(query.toLowerCase()))
+        .map((f) => (
+          <Button
+            variant={"ghost"}
+            key={`item-${f.family}`}
+            onClick={() => {
+              props.onValueChange?.call(undefined, f.family);
+              setOpen(false);
+            }}
+            className="py-2 h-fit px-3 rounded-lg hover:bg-secondary flex items-center justify-start w-full"
+          >
+            {f.family.replace(/"/g, "")}
+          </Button>
+        )),
+    [fonts, props.onValueChange, query],
   );
   return (
-    <div ref={parentRef} className="h-96 overflow-auto scroll-view m-4">
-      <div
-        style={{
-          height: `${virtualizer.getTotalSize()}px`,
-          width: "100%",
-          position: "relative",
-        }}
+    <Popover modal open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <Button variant={"outline"} className={cn("w-fit h-fit", props.className)}>
+          {props.value?.replaceAll('"', "")} <ChevronDown size={16} />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent
+        align="start"
+        className="overflow-hidden p-1 w-80 flex flex-col gap-2"
       >
-        {virtualizer.getVirtualItems().map((item) => (
-          <div key={item.key} className="absolute top-0 left-0 w-full" style={{height: `${item.size}px`, transform: `translateY(${item.start}px)`}}>{fonts[item.index].family}</div>
-        ))}
-      </div>
-    </div>
+        <Input
+          placeholder="Search fonts"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+        />
+        <div className="scroll-view overflow-y-auto h-72 grow select-none"> {items}</div>
+      </PopoverContent>
+    </Popover>
   );
 }

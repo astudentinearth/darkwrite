@@ -19,5 +19,10 @@ export default function ThemeHandler() {
   }
   document.documentElement.style.setProperty("--primary", accentColor);
   document.documentElement.style.setProperty("--primary-text", accentColor);
+  document.documentElement.style.setProperty("--font-ui", appearanceSettings.fonts.ui);
+  document.documentElement.style.setProperty("font-family", appearanceSettings.fonts.ui);
+  document.documentElement.style.setProperty("--darkwrite-mono", appearanceSettings.fonts.code);
+  document.documentElement.style.setProperty("--darkwrite-serif", appearanceSettings.fonts.serif);
+  document.documentElement.style.setProperty("--darkwrite-sans", appearanceSettings.fonts.sans);
   return <></>
 }
