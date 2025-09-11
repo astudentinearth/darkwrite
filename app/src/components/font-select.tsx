@@ -37,7 +37,7 @@ export default function FontSelect(props: {
     <Popover modal open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button variant={"outline"} className={cn("w-fit h-fit", props.className)}>
-          {props.value?.replaceAll('"', "")} <ChevronDown size={16} />
+          {props.value?.replaceAll('"', "") ?? "Choose font"} <ChevronDown size={16} />
         </Button>
       </PopoverTrigger>
       <PopoverContent

@@ -6,10 +6,11 @@ export default function useStylePopover(id: string) {
   const query = useNoteContent(id);
   const mutation = useUpdateNoteContent(id);
 
-  const setFont = (fontStyle: FontStyle) => {
+  const setFont = (fontStyle: FontStyle, customFont?: string) => {
     if (!query.data) return;
     const content = produce(query.data, (draft) => {
       draft.customizations.font = fontStyle;
+      if(customFont) draft.customizations.customFont = customFont;
     });
     mutation.mutate({ content, debounce: false });
     query.overrideCache(content);

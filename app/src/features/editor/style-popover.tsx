@@ -11,6 +11,7 @@ import { useNoteFromURL } from "@/query/use-note-from-url";
 import React, { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import useStylePopover from "./use-style-popover";
+import FontSelect from "@/components/font-select";
 
 export default function StylePopover({ children }: { children: ReactNode }) {
   const id = useNoteFromURL();
@@ -52,7 +53,7 @@ export function StyleUI(props: {
           variant={"ghost"}
           className={cn(
             (font === FontStyle.SANS || !font) &&
-              "text-primary-text hover:text-primary-text",
+            "text-primary-text hover:text-primary-text",
           )}
         >
           <span
@@ -68,7 +69,7 @@ export function StyleUI(props: {
           variant={"ghost"}
           className={cn(
             font === FontStyle.SERIF &&
-              "text-primary-text hover:text-primary-text",
+            "text-primary-text hover:text-primary-text",
           )}
         >
           <span
@@ -84,7 +85,7 @@ export function StyleUI(props: {
           variant={"ghost"}
           className={cn(
             font === FontStyle.MONO &&
-              "text-primary-text hover:text-primary-text",
+            "text-primary-text hover:text-primary-text",
           )}
         >
           <span
@@ -100,13 +101,14 @@ export function StyleUI(props: {
           variant={"ghost"}
           className={cn(
             font === FontStyle.CUSTOM &&
-              "text-primary-text hover:text-primary-text",
+            "text-primary-text hover:text-primary-text",
           )}
         >
           <span className="text-3xl">A?</span>
           <span>{t("customText")}</span>
         </Button>
       </div>
+      {font === FontStyle.CUSTOM && <FontSelect className="w-full" value={customFont} onValueChange={val => setFont(FontStyle.CUSTOM, val)} /> }
     </div>
   );
 }
