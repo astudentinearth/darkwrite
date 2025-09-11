@@ -31,13 +31,18 @@ export type UpdateContentMutationOpts = {
 }
 
 export function useUpdateNoteContent(id: string) {
+  const contentQuery = useNoteContent(id);
   const mutation = useMutation({
     mutationFn: async (opts: UpdateContentMutationOpts) => {
       const {content, debounce} = opts;
       const serializedContent = JSON.stringify(content);
       if(debounce) persistContentDebounced(id, serializedContent);
       else DarkwriteAPIClient.note.setDocument(id, serializedContent);
-    }
+    },
+    onSettled(_data, _error, variables) {
+       const { content } = variables;
+       contentQuery.overrideCache(content); 
+    },
   });
   return mutation;
 }

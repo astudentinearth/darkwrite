@@ -17,23 +17,27 @@ export function EditorView({ noteId }: { noteId: string }) {
   const content = useNoteContent(noteId).data;
   const cover = useEditorCover(noteId);
   const style: CSSProperties = {};
-  if (content)
+  if (content) {
     style.fontFamily =
       content.customizations.font === FontStyle.CUSTOM
         ? (content.customizations.customFont ?? `var(${FONT_VARS.custom})`)
         : content.customizations.font
           ? `var(${FONT_VARS[content.customizations.font]})`
           : `var(${FONT_VARS.sans})`;
+
+    if(content.customizations.backgroundColor) style.background = content.customizations.backgroundColor;
+    if(content.customizations.textColor) style.color = content.customizations.textColor;
+  }
   return (
-    <div className="flex justify-center" style={style}>
+    <div className="flex justify-center h-full" style={style}>
       {note && (
         <EditorHeader
           icon={note.icon}
           title={note.title}
           onTitleChange={cover.updateTitle}
-          onIconChange={() => {}}
+          onIconChange={() => { }}
           coverImageSource=""
-          onCoverSourceChange={() => {}}
+          onCoverSourceChange={() => { }}
         />
       )}
     </div>

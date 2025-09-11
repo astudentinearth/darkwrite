@@ -12,6 +12,8 @@ import React, { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import useStylePopover from "./use-style-popover";
 import FontSelect from "@/components/font-select";
+import { ColorPicker } from "@/components/ui/color-picker";
+import { RotateCcw } from "lucide-react";
 
 export default function StylePopover({ children }: { children: ReactNode }) {
   const id = useNoteFromURL();
@@ -44,9 +46,9 @@ export function StyleUI(props: {
   const { t } = useTranslation("translation", {
     keyPrefix: "editor.customizations",
   });
-  const { setFont } = useStylePopover(props.noteId);
+  const { setFont, setColor } = useStylePopover(props.noteId);
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col gap-2">
       <div className="grid gap-1 grid-cols-[1fr_1fr_1fr_1fr] grid-rows-1  [&>button]:h-fit [&>button]:flex [&>button]:flex-col [&>button]:gap-1 [&>button]:rounded-xl [&>button]:w-20">
         <Button
           onClick={() => setFont(FontStyle.SANS)}
@@ -109,6 +111,21 @@ export function StyleUI(props: {
         </Button>
       </div>
       {font === FontStyle.CUSTOM && <FontSelect className="w-full" value={customFont} onValueChange={val => setFont(FontStyle.CUSTOM, val)} /> }
+      <div className="w-full flex items-center justify-between">
+        <label className="pl-2">Background color:</label>
+        <div className="flex items-center gap-1">
+          <ColorPicker value={backgroundColor} onChange={val => setColor("backgroundColor", val)} />
+          <Button className="w-8 h-8 p-0" onClick={()=>setColor("backgroundColor", undefined)} variant={"outline"}><RotateCcw size={18} /></Button>
+        </div> 
+      </div>
+
+      <div className="w-full flex items-center justify-between">
+        <label className="pl-2">Text color:</label>
+        <div className="flex items-center gap-1">
+          <ColorPicker value={textColor} onChange={val => setColor("textColor", val)} />
+          <Button className="w-8 h-8 p-0" onClick={()=>setColor("textColor", undefined)} variant={"outline"}><RotateCcw size={18} /></Button>
+        </div> 
+      </div>
     </div>
   );
 }

@@ -16,5 +16,13 @@ export default function useStylePopover(id: string) {
     query.overrideCache(content);
   };
 
-  return { setFont };
+  const setColor = (type: "backgroundColor" | "textColor", value: string | undefined) => {
+    if(!query.data) return;
+    const content = produce(query.data, draft => {
+      draft.customizations[type] = value;
+    })
+    mutation.mutate({content, debounce: true})
+  }
+
+  return { setFont, setColor};
 }
