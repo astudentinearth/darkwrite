@@ -10,6 +10,7 @@ export type EditorHeaderProps = {
   onIconChange: (val: string | undefined | null ) => void;
   coverImageSource?: string;
   onCoverSourceChange: (val: string | undefined | null ) => void;
+  wide?: boolean;
 };
 
 export default function EditorHeader(props: EditorHeaderProps) {
@@ -19,7 +20,7 @@ export default function EditorHeader(props: EditorHeaderProps) {
         onImageSourceChange={props.onCoverSourceChange}
         imageSource={props.coverImageSource}
       />
-      <ConstrainedWidth className="flex flex-col gap-2 px-4">
+      <ConstrainedWidth className="flex flex-col gap-2 px-4" fill={props.wide}>
         <DynamicTextarea className="text-4xl font-semibold box-border h-auto overflow-hidden resize-none grow outline-hidden block" value={props.title} onValueChange={props.onTitleChange}/>
         <hr/>
       </ConstrainedWidth> 

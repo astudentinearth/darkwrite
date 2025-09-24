@@ -24,5 +24,13 @@ export default function useStylePopover(id: string) {
     mutation.mutate({content, debounce: true})
   }
 
-  return { setFont, setColor};
+  const setWide = (wide: boolean) => {
+    if(!query.data) return;
+    const content = produce(query.data, draft => {
+      draft.customizations.widePage = wide;
+    });
+    mutation.mutate({content, debounce: false});
+  }
+
+  return { setFont, setColor, setWide };
 }

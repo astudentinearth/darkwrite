@@ -171,7 +171,8 @@
       "customText": "Custom",
       "backgroundColorText": "Background color",
       "foregroundColorText": "Default text color",
-      "customFontNamePlaceholer": "Custom font name"
+      "customFontNamePlaceholer": "Custom font name",
+      "widePage": "Fill width"
     },
     "blocks": {
       "linkToPage": {

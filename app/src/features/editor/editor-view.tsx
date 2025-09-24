@@ -40,7 +40,7 @@ export function EditorView({ noteId }: { noteId: string }) {
     if (content.customizations.textColor) style.color = content.customizations.textColor;
   }
   return (
-    <div className="flex items-center flex-col px-24" style={style}>
+    <div className="flex items-center flex-col px-24 editor-fade-in min-h-full" style={style}>
       {note && (
         <EditorHeader
           icon={note.icon}
@@ -49,9 +49,10 @@ export function EditorView({ noteId }: { noteId: string }) {
           onIconChange={() => { }}
           coverImageSource=""
           onCoverSourceChange={() => { }}
+          wide={content?.customizations.widePage}
         />
       )}
-      <ConstrainedWidth className="overflow-x-hidden">
+      <ConstrainedWidth className="overflow-x-hidden" fill={content?.customizations.widePage}>
         {content &&
           <DarkwriteEditor
             content={content.contents || ""}

@@ -331,3 +331,20 @@ body,
   appearance: none !important;
   margin: 0 !important;
 }
+
+@keyframes editor-fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.editor-fade-in {
+  animation-name: editor-fade-in;
+  animation-duration: 125ms;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+}
+

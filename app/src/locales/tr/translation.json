@@ -171,7 +171,8 @@
       "customText": "Özel",
       "backgroundColorText": "Arka plan rengi",
       "foregroundColorText": "Varsayılan metin rengi",
-      "customFontNamePlaceholer": "Özel yazı tipi"
+      "customFontNamePlaceholer": "Özel yazı tipi",
+      "widePage": "Geniş düzen"
     },
     "blocks": {
       "linkToPage": {
