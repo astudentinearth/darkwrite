@@ -32,7 +32,7 @@ export class Embed {
   /** The workspace this embed originated from. If the workspace is deleted,
    *  we can transfer the embeds to a new workspace or delete them altogether.
    */
-  @ManyToOne(() => Workspace)
+  @ManyToOne(() => Workspace, {eager: true})
   workspace: Workspace;
 
   /** @param url Embeds can only be sent after their URL is resolved. */

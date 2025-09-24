@@ -3,8 +3,9 @@ import { ServiceContainer } from "../service-container";
 
 export async function embedProtocolHandler(req: Request) {
   const id = req.url.slice("embed://".length);
+  console.log("requested embed", id);
   try {
-    const url = await ServiceContainer.embedService.getEmbedUrl(id);
+    const url = await ServiceContainer.embedService.getEmbedFileUrl(id);
     return net.fetch(url.href);
   } catch {
     return Response.json({ error: "Embed not found" }, { status: 404 });

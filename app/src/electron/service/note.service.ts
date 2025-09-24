@@ -55,8 +55,6 @@ export class NoteService {
   }
 
   async getAllByWorkspaceId(workspaceId: string) {
-    console.log("a");
-    console.log(await this.noteRepository.findLastNoteInOrder(workspaceId));
     return this.noteRepository.findAllByWorkspaceId(workspaceId);
   }
 
@@ -83,10 +81,8 @@ export class NoteService {
     if(dto.isFavorite === true && !dto.favoriteOrderHint) {
       const lastInFavorites = await this.noteRepository.findLastNoteInFavorites(note.workspace.id);
       const nextRank = lastInFavorites ? new Rank(lastInFavorites.orderHint).next() : Rank.default();
-      console.log("favorite rank will be", nextRank)
       note.favoriteOrderHint = nextRank.get();
     }
-    console.log(rest);
     if(workspace) note.workspace = workspace;
     if(database) note.database = database;
     if("databaseId" in dto && dto.databaseId === undefined) note.database = undefined;
