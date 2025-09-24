@@ -1,0 +1,59 @@
+@import "tailwindcss";
+@reference "../../../globals.css";
+
+
+/* Custom TODO list checkboxes – shoutout to this awesome tutorial: https://moderncss.dev/pure-css-custom-checkbox-style/ */
+ul[data-type="taskList"] li > label input[type="checkbox"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: transparent;
+  margin: 0;
+  cursor: pointer;
+  width: 1.2em;
+  height: 1.2em;
+  position: relative;
+  top: 8px;
+  border: 1px solid var(--dw-editor-foreground);
+  border-radius: 4px;
+  margin-right: 0.05rem;
+  display: grid;
+  place-content: center;
+
+  &:hover {
+    background-color: var(--secondary);
+  }
+
+  &::before {
+    content: "";
+    width: 1em;
+    height: 1em;
+    transform: scale(0);
+    transform-origin: center;
+    background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmZmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1jaGVjayI+PHBhdGggZD0iTTIwIDYgOSAxN2wtNS01Ii8+PC9zdmc+");
+    background-position: center;
+    background-size: 100%;
+  }
+
+  &:checked {
+    background: var(--primary);
+    border-color: var(--primary);
+  }
+
+  &:checked::before {
+    transform: scale(1);
+  }
+}
+
+ul[data-type="taskList"] {
+  @apply pl-0;
+  & li {
+    @apply my-1;
+  }
+}
+
+ul[data-type="taskList"] li[data-checked="true"] > div > p {
+  color: var(--dw-editor-foreground);
+  opacity: 0.5;
+  text-decoration: line-through;
+  text-decoration-thickness: 2px;
+}

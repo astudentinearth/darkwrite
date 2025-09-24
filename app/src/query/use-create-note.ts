@@ -22,20 +22,11 @@ export const useCreateNoteMutation = () => {
     parentId?: string;
     orderHint?: string;
   }) => {
-    let orderHint: string = "";
-    const notes = Object.values(notesQuery.notes ?? {})
-    if(opts.orderHint) orderHint = opts.orderHint;
-    else if(notesQuery.notes == null || notes.length == 0) orderHint = Rank.default().next().toString();
-    else {
-      const lastOrderHint = new Rank(notes[notes.length - 1].orderHint);
-      orderHint = lastOrderHint.next().toString();
-    }
 
     const dto: CreateNoteDTO = {
       workspaceId,
       title: "Untitled",
       favoriteOrderHint: "",
-      orderHint,
       ...opts,
     };
     mutation.mutateAsync(dto);

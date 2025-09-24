@@ -2,9 +2,16 @@ import useEditorCover from "@/hooks/editor/use-editor-cover";
 import { useNoteById } from "@/query/use-note-by-id";
 import { useNoteFromURL } from "@/query/use-note-from-url";
 import EditorHeader from "./header";
-import { useNoteContent } from "@/query/use-note-content";
+import { useNoteContent, useUpdateNoteContent } from "@/query/use-note-content";
 import { CSSProperties } from "react";
 import { FONT_VARS, FontStyle } from "@/common/note-customization";
+import DarkwriteEditor from ".";
+import { useSlashCommand } from "./extensions";
+import { useEditorOptions } from "@/hooks/editor/use-editor-options";
+import { produce } from "immer";
+import { DarkwriteAPIClient } from "@/api/api-client";
+import { useNotes } from "@/query/use-notes";
+import ConstrainedWidth from "./constrained-width";
 
 export function EditorViewRouteHandler() {
   const noteId = useNoteFromURL();
@@ -14,8 +21,12 @@ export function EditorViewRouteHandler() {
 
 export function EditorView({ noteId }: { noteId: string }) {
   const { note } = useNoteById(noteId);
+  const notes = useNotes().notes;
+  const options = useEditorOptions();
   const content = useNoteContent(noteId).data;
+  const { mutate } = useUpdateNoteContent(noteId);
   const cover = useEditorCover(noteId);
+  const { items } = useSlashCommand(options.imageConfig);
   const style: CSSProperties = {};
   if (content) {
     style.fontFamily =
@@ -25,11 +36,11 @@ export function EditorView({ noteId }: { noteId: string }) {
           ? `var(${FONT_VARS[content.customizations.font]})`
           : `var(${FONT_VARS.sans})`;
 
-    if(content.customizations.backgroundColor) style.background = content.customizations.backgroundColor;
-    if(content.customizations.textColor) style.color = content.customizations.textColor;
+    if (content.customizations.backgroundColor) style.background = content.customizations.backgroundColor;
+    if (content.customizations.textColor) style.color = content.customizations.textColor;
   }
   return (
-    <div className="flex justify-center h-full" style={style}>
+    <div className="flex items-center flex-col px-24" style={style}>
       {note && (
         <EditorHeader
           icon={note.icon}
@@ -40,6 +51,25 @@ export function EditorView({ noteId }: { noteId: string }) {
           onCoverSourceChange={() => { }}
         />
       )}
+      <ConstrainedWidth className="overflow-x-hidden">
+        {content &&
+          <DarkwriteEditor
+            content={content.contents || ""}
+            commandItems={items}
+            onContentChange={(value) => mutate({
+              content: produce(content, draft => {
+                draft.contents = value;
+              }),
+              debounce: true
+            })}
+            imageUploadConfig={options.imageConfig}
+            codeBlockIndentSize={options.indentSize}
+            embedSourceResolver={async (id) => (await DarkwriteAPIClient.embed.getById(id)).embed?.url ?? ""}
+            key={noteId}
+            notes={Object.values(notes ?? {})}
+          />
+        }
+      </ConstrainedWidth>
     </div>
   );
 }

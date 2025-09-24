@@ -3,6 +3,7 @@ import { AppDataSource } from "../db";
 import { Note } from "../entity";
 import { NoteRepository } from "../repository/note.repository";
 import { WorkspaceRepository } from "../repository/workspace.repository";
+import { Rank } from "@/common/rank";
 
 export class HealthService {
   constructor(
@@ -24,22 +25,24 @@ export class HealthService {
       if (rankSet.size !== targets.length) {
         console.log(`Found colliding order keys in ${workspace.id}`);
         console.log(targets);
-        changes.push(
-          ...generateRankCollisionChangeset(
-            targets.map((n) => n.mapToDTO()),
-            "orderHint",
-          ),
-        );
+        let prev: Rank = Rank.default();
+        const _changes = targets.toSorted((a, b) => Rank.sorter(a.orderHint, b.orderHint)).map(n => {
+          const rank = prev.next();
+          prev = rank;
+          return {id: n.id, orderHint: rank.toString() }
+        })
+        changes.push(..._changes);
       }
       const favorites = notes.filter((n) => n.isFavorite && !n.isTrashed);
       if (favoriteRankSet.size !== favorites.length) {
         console.log(`Found colliding favorite order keys in ${workspace.id}`);
-        changes.push(
-          ...generateRankCollisionChangeset(
-            favorites.map((n) => n.mapToDTO()),
-            "favoriteOrderHint",
-          ),
-        );
+        let prev: Rank = Rank.default();
+        const _changes = targets.toSorted((a, b) => Rank.sorter(a.favoriteOrderHint, b.favoriteOrderHint)).map(n => {
+          const rank = prev.next();
+          prev = rank;
+          return {id: n.id, favoriteOrderHint: rank.toString() }
+        })
+        changes.push(..._changes);
       }
     }
     console.log(`Applying ${changes.length} changes to fix colliding order keys...`);

@@ -34,7 +34,12 @@ export class NoteService {
     const note = new Note();
     note.title = title;
     note.workspace = workspace;
-    note.orderHint = orderHint;
+    if(orderHint) note.orderHint = orderHint;
+    else {
+      const lastHint = (await this.noteRepository.findLastNoteInOrder(workspace.id))?.orderHint;
+      if(!lastHint) note.orderHint = Rank.default().toString();
+      else note.orderHint = new Rank(lastHint).next().toString();
+    }
     note.favoriteOrderHint = favoriteOrderHint;
     note.database = database;
     note.createdAt = new Date();

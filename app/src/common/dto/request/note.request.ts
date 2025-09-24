@@ -5,7 +5,7 @@ export interface CreateNoteDTO {
   icon?: string | null; 
   databaseId?: string | null;
   workspaceId: string;
-  orderHint: string;
+  orderHint?: string;
   favoriteOrderHint: string;
 }
 

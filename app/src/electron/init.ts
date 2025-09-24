@@ -64,8 +64,8 @@ export async function init() {
   setupWindowEvents();
   await AppDataSource.initialize();
   await new WorkspaceService().initializeDefaultWorkspace();
-  //const healthService = new HealthService();
-  //await healthService.fixCollidingOrderKeys();
+  const healthService = new HealthService();
+  await healthService.fixCollidingOrderKeys();
   protocol.handle("embed", embedProtocolHandler);
   createWindow();
   if(is.dev) initDevtools(1200);
