@@ -296,7 +296,7 @@ body,
   border-radius: 0.3em;
 }
 
-.main-wiew::-webkit-scrollbar-thumb:hover {
+.main-view::-webkit-scrollbar-thumb:hover {
   @apply bg-secondary;
 }
 
@@ -332,21 +332,5 @@ body,
   -webkit-appearance: none !important;
   appearance: none !important;
   margin: 0 !important;
-}
-
-@keyframes editor-fade-in {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-
-.editor-fade-in {
-  animation-name: editor-fade-in;
-  animation-duration: 125ms;
-  animation-iteration-count: 1;
-  animation-fill-mode: forwards;
 }
 
