@@ -70,6 +70,8 @@
   --editor-highlight-indigo: hsl(239 100% 55% / 0.5);
   --editor-highlight-purple: hsl(278 100% 55% / 0.5);
   --editor-highlight-pink: hsl(321 100% 55% / 0.5);
+
+  --dw-editor-foreground: var(--foreground);
 }
 
 @theme inline {

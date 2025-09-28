@@ -37,7 +37,11 @@ export function EditorView({ noteId }: { noteId: string }) {
           : `var(${FONT_VARS.sans})`;
 
     if (content.customizations.backgroundColor) style.background = content.customizations.backgroundColor;
-    if (content.customizations.textColor) style.color = content.customizations.textColor;
+    if (content.customizations.textColor) {
+      style.color = content.customizations.textColor; 
+      //@ts-expect-error assigning CSS variable to React.CSSProperties
+      style["--dw-editor-foreground"] = content.customizations.textColor;
+    }
   }
   return (
     <div className="flex items-center flex-col px-24 editor-fade-in min-h-full" style={style}>
