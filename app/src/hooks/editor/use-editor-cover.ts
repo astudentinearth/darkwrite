@@ -4,6 +4,9 @@ import { useLocalStore } from "@/context/local-state";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import _ from "lodash";
 import {produce} from "immer";
+import { useUpdateNote } from "@/query/use-update-note";
+import { uploadImage } from "@/lib/upload-image";
+import { useNoteContent, useUpdateNoteContent } from "@/query/use-note-content";
 
 const persistTitle = _.debounce((id: string, title: string) => {
   DarkwriteAPIClient.note.update(id, { title });
@@ -37,8 +40,26 @@ function useUpdateTitleOptimistic(id: string) {
 
 export default function useEditorCover(noteId: string) {
   const titleMutation = useUpdateTitleOptimistic(noteId);
+  const update = useUpdateNote().update;
+  const contents = useNoteContent(noteId);
+  const updateContents = useUpdateNoteContent(noteId);
+
   const updateTitle = (title: string) => {
     titleMutation.mutate(title);
   };
-  return { updateTitle };
+
+  const updateIcon = (icon: string | null | undefined) => {
+    update({id: noteId, dto: {icon}});
+  }
+
+  const addCover = async ()=>{
+    const embed = await uploadImage();
+    if(!contents.data) return;
+    const updated = produce(contents.data, draft => {
+      draft.customizations.coverImageSource = embed.url;
+    });
+    updateContents.mutate({content: updated, debounce: false});
+  }
+
+  return { updateTitle, updateIcon, addCover };
 }

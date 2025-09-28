@@ -44,16 +44,17 @@ export function EditorView({ noteId }: { noteId: string }) {
     }
   }
   return (
-    <div className="flex items-center flex-col px-24 editor-fade-in min-h-full" style={style}>
+    <div className="flex items-center flex-col px-24 editor-fade-in min-h-full relative" style={style}>
       {note && (
         <EditorHeader
           icon={note.icon}
           title={note.title}
           onTitleChange={cover.updateTitle}
-          onIconChange={() => { }}
-          coverImageSource=""
+          onIconChange={cover.updateIcon}
+          coverImageSource={content?.customizations.coverImageSource}
           onCoverSourceChange={() => { }}
           wide={content?.customizations.widePage}
+          onAddCover={cover.addCover}
         />
       )}
       <ConstrainedWidth className="overflow-x-hidden" fill={content?.customizations.widePage}>

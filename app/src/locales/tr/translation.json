@@ -181,7 +181,10 @@
     },
     "cover": {
       "changeCover": "Kapağı değiştirin",
-      "removeCover": "Kapak resmini kaldırın"
+      "removeCover": "Kapak resmini kaldırın",
+      "addIcon": "Simge ekle",
+      "removeIcon": "Simgeyi kaldır",
+      "addCover": "Kapak resmi ekle"
     }
   },
   "search": {

@@ -181,7 +181,10 @@
     },
     "cover": {
       "changeCover": "Change cover",
-      "removeCover": "Remove cover"
+      "removeCover": "Remove cover",
+      "addIcon": "Add icon",
+      "removeIcon": "Remove icon",
+      "addCover": "Add cover"
     }
   },
   "search": {
