@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 export type CoverImageProps = {
   imageSource?: string;
   onImageSourceChange: (src: string | undefined | null) => void;
+  onAddCover: () => void;
 };
 
 export default function CoverImage(props: CoverImageProps) {
@@ -43,6 +44,7 @@ export default function CoverImage(props: CoverImageProps) {
           <Button
             variant={"outline"}
             className={cn("bg-view-1 drop-shadow-sm", !mouseOver && "hidden")}
+            onClick={props.onAddCover}
           >
             {t("changeCover")}
           </Button>

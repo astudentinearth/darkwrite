@@ -53,7 +53,7 @@ export function EditorView({ noteId }: { noteId: string }) {
           onTitleChange={cover.updateTitle}
           onIconChange={cover.updateIcon}
           coverImageSource={content?.customizations.coverImageSource}
-          onCoverSourceChange={() => { }}
+          onCoverSourceChange={cover.onCoverImageSourceChange}
           wide={content?.customizations.widePage}
           onAddCover={cover.addCover}
         />

@@ -61,5 +61,11 @@ export default function useEditorCover(noteId: string) {
     updateContents.mutate({content: updated, debounce: false});
   }
 
-  return { updateTitle, updateIcon, addCover };
+  const onCoverImageSourceChange = async (source: string | null | undefined) => {
+    if(!contents.data) return;
+    const updated = produce(contents.data, draft => { draft.customizations.coverImageSource = source || undefined });
+    updateContents.mutate({content: updated, debounce: false});
+  }
+
+  return { updateTitle, updateIcon, addCover, onCoverImageSourceChange };
 }

@@ -28,6 +28,7 @@ export default function EditorHeader(props: EditorHeaderProps) {
       <CoverImage
         onImageSourceChange={props.onCoverSourceChange}
         imageSource={props.coverImageSource}
+        onAddCover={props.onAddCover}
       />
       <ConstrainedWidth className={cn("flex flex-col gap-2 px-4")} fill={props.wide}>
         <div className="flex gap-2 items-end mb-4">
