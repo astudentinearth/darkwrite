@@ -12,6 +12,7 @@ import { produce } from "immer";
 import { DarkwriteAPIClient } from "@/api/api-client";
 import { useNotes } from "@/query/use-notes";
 import ConstrainedWidth from "./constrained-width";
+import { setActiveEditorInstance } from "@/context/editor-store";
 
 export function EditorViewRouteHandler() {
   const noteId = useNoteFromURL();
@@ -73,6 +74,7 @@ export function EditorView({ noteId }: { noteId: string }) {
             embedSourceResolver={async (id) => (await DarkwriteAPIClient.embed.getById(id)).embed?.url ?? ""}
             key={noteId}
             notes={Object.values(notes ?? {})}
+            onInstanceChange={setActiveEditorInstance}
           />
         }
       </ConstrainedWidth>

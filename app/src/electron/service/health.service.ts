@@ -19,7 +19,6 @@ export class HealthService {
       const notes = await this.noteRepository.findAllByWorkspaceId(
         workspace.id,
       );
-      const favoriteRankSet = new Set(notes.map((n) => n.favoriteOrderHint));
       const targets = notes.filter(n => !n.isTrashed);
       const rankSet = new Set(targets.map((n) => n.orderHint));
       if (rankSet.size !== targets.length) {
@@ -34,6 +33,7 @@ export class HealthService {
         changes.push(..._changes);
       }
       const favorites = notes.filter((n) => n.isFavorite && !n.isTrashed);
+      const favoriteRankSet = new Set(favorites.map((n) => n.favoriteOrderHint));
       if (favoriteRankSet.size !== favorites.length) {
         console.log(`Found colliding favorite order keys in ${workspace.id}`);
         let prev: Rank = Rank.default();

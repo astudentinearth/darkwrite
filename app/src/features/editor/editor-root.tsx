@@ -14,6 +14,7 @@ function InstanceHandler() {
   const editor = useCurrentEditor();
   useEffect(()=>{
     if(!editor.editor) return;
+    console.log(context.onInstanceChange);
     context.onInstanceChange?.call(undefined, editor.editor);
   }, [editor, context.onInstanceChange]);
   return (<></>)
