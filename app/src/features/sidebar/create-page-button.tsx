@@ -10,7 +10,7 @@ export function CreatePageButton(props: { className?: string }) {
     <Button
       onClick={handleClick}
       className={cn(
-        "p-1.5 w-8 h-8 bg-view-2 rounded-[8px] text-white/80 hover:text-white shrink-0",
+        "p-1.5 w-8 h-8 bg-view-2 rounded-[8px] text-white/80 hover:text-white text-foreground shrink-0",
         props.className,
       )}
     >
