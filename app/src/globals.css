@@ -185,8 +185,12 @@
   }
 }
 
-.font-ui {
+.font-ui{
   font-family: var(--font-ui);
+}
+
+em-emoji-picker {
+  --font-family: var(--font-ui);
 }
 
 @layer base {

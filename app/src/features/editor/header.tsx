@@ -31,7 +31,7 @@ export default function EditorHeader(props: EditorHeaderProps) {
         onAddCover={props.onAddCover}
       />
       <ConstrainedWidth className={cn("flex flex-col gap-2 px-4")} fill={props.wide}>
-        <div className="flex gap-2 items-end mb-4">
+        <div className="flex gap-2 items-end mb-4 font-ui">
           {props.icon &&
             <EmojiPicker
               show={fromUnicode(props.icon ?? "")}
@@ -40,7 +40,7 @@ export default function EditorHeader(props: EditorHeaderProps) {
               className={cn("z-50 -translate-x-2", props.coverImageSource && "-mt-8")}
             />
           }
-          <div className={cn("opacity-0 z-20", mouseOver.mouseOver && "opacity-100")}>
+          <div className={cn("opacity-0 z-20 font-ui", mouseOver.mouseOver && "opacity-100")}>
             {!props.icon &&
               <Button
                 onClick={() => props.onIconChange("1f4c4")}

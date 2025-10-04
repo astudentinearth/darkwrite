@@ -17,7 +17,7 @@ export default function CoverImage(props: CoverImageProps) {
     <div
       {...hoverProps}
       className={cn(
-        "w-full h-48 shrink-0 flex items-end justify-end p-2 gap-2 absolute top-0 left-0 right-0",
+        "w-full h-48 shrink-0 flex items-end justify-end p-2 gap-2 absolute top-0 left-0 right-0 font-ui",
         !props.imageSource && "h-24"
       )}
       style={
