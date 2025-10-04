@@ -22,7 +22,7 @@ export class EmbedService {
     const candidates = await this.embedRepository.findAllByFileSize(fileSize);
     if(candidates.length === 0) return null;
     for(const embed of candidates) {
-      const buf = await this.blobStore.get(embed.fileName);
+      const buf = await this.blobStore.get(embed.id);
       if(Buffer.compare(buf, contents) === 0) return embed; 
     }
     return null;
@@ -44,7 +44,7 @@ export class EmbedService {
   async createFromFilePath(filePath: string, workspaceId: string) {
     const workspace = await this.workspaceRepository.findById(workspaceId);
     if (!workspace) throw new Error(`Workspace ${workspaceId} not found.`);
-
+    console.log("reading file", filePath);
     let embed = await this.initializeEmbedWithFileData(filePath);
     embed.id = randomUUID();
     embed.uploadedAt = new Date();

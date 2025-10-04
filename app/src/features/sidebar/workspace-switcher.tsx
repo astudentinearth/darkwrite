@@ -26,7 +26,8 @@ export function WorkspaceSwitcher() {
         <div className="flex items-center gap-1 max-w-fit overflow-hidden text-ellipsis whitespace-nowrap opacity-80 p-1 hover:bg-secondary/50 hover:opacity-100 rounded-[8px] select-none transition-[background,opacity] duration-75">
           {workspace && (
             <>
-              <WorkspaceLetterIcon workspaceName={workspace.name} />
+              {workspace.icon_url ? <img src={workspace.icon_url} className="size-6 object-contain rounded-md" /> :
+              <WorkspaceLetterIcon workspaceName={workspace.name} /> }
               <span className="ml-1 text-ellipsis text-sm overflow-hidden whitespace-nowrap">
                 {workspace.name}
               </span>
