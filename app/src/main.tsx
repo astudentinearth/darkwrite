@@ -11,17 +11,20 @@ import { useLocalStore } from "./context/local-state";
 const renderApp = () => {
   init({ data });
   ReactDOM.createRoot(document.getElementById("root")!).render(
-      <App />
+    <App />
   );
 };
 
 const initialize = async () => {
-  if(window.isElectron){
+  if (window.isElectron) {
     await window.initPreload();
   }
   DarkwriteAPIClient.initialize(APIClientMode.LOCAL);
+  const state = useLocalStore.getState();
   const { workspaces } = await DarkwriteAPIClient.workspace.getAll();
-  useLocalStore.setState(() => ({workspaceId: workspaces.at(0)?.id}));
+  if (!state.workspaceId || workspaces.findIndex(w => w.id === state.workspaceId) === -1) {
+    useLocalStore.setState(() => ({ workspaceId: workspaces.at(0)?.id }));
+  }
   renderApp();
 };
 

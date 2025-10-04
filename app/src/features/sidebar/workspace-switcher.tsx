@@ -10,6 +10,7 @@ import { WorkspaceItem } from "./workspace-item";
 import { Button } from "@/components/ui/button";
 import { useT } from "@/hooks/useT";
 import { useWorkspaceManager } from "@/hooks/use-workspace-manager";
+import WorkspaceIcon from "@/components/workspace-icon";
 
 export function WorkspaceSwitcher() {
   const workspace = useCurrentWorkspace();
@@ -26,8 +27,7 @@ export function WorkspaceSwitcher() {
         <div className="flex items-center gap-1 max-w-fit overflow-hidden text-ellipsis whitespace-nowrap opacity-80 p-1 hover:bg-secondary/50 hover:opacity-100 rounded-[8px] select-none transition-[background,opacity] duration-75">
           {workspace && (
             <>
-              {workspace.icon_url ? <img src={workspace.icon_url} className="size-6 object-contain rounded-md" /> :
-              <WorkspaceLetterIcon workspaceName={workspace.name} /> }
+              <WorkspaceIcon className="size-6 rounded-md" workspace={workspace} />
               <span className="ml-1 text-ellipsis text-sm overflow-hidden whitespace-nowrap">
                 {workspace.name}
               </span>
@@ -41,10 +41,10 @@ export function WorkspaceSwitcher() {
           {workspace && (
             <div className="p-1 flex flex-col gap-2">
               <div className="flex gap-3 items-center">
-                <WorkspaceLetterIcon
-                  className="w-10 h-10 text-xl"
-                  workspaceName={workspace?.name}
-                ></WorkspaceLetterIcon>
+                <WorkspaceIcon
+                  className="w-10 h-10 rounded-md text-xl"
+                  workspace={workspace}
+                ></WorkspaceIcon>
                 <div>
                   <span>{workspace.name}</span>
                   <span className="flex gap-2 items-center text-sm text-popover-foreground/80">
