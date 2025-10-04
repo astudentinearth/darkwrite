@@ -1,4 +1,5 @@
-import { WorkspaceConfig } from "@/lib/workspace-config";
+import { WorkspaceConfig, WorkspaceConfigSchema } from "@/lib/workspace-config";
+import {z} from "zod";
 
 export interface CreateWorkspaceDTO {
   name: string;
@@ -6,8 +7,11 @@ export interface CreateWorkspaceDTO {
   config: WorkspaceConfig;
 }
 
-export interface UpdateWorkspaceDTO {
-  name?: string;
-  icon_url?: string;
-  config?: WorkspaceConfig;
-}
+export const UpdateWorkspaceDTOSchema = z.object({
+  name: z.string().optional(),
+  icon_url: z.string().nullable().optional(),
+  config: WorkspaceConfigSchema.partial().optional()
+});
+
+export type UpdateWorkspaceDTO = z.infer<typeof UpdateWorkspaceDTOSchema>;
+

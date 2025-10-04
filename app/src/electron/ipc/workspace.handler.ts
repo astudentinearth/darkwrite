@@ -1,5 +1,6 @@
 import { IWorkspaceAPI } from "@/common/contract";
 import { ServiceContainer } from "../service-container";
+import { UpdateWorkspaceDTO, UpdateWorkspaceDTOSchema } from "@/common/dto/request/workspace.request";
 
 export const ElectronWorkspaceAPI: IWorkspaceAPI = {
   async create(dto) {
@@ -16,10 +17,9 @@ export const ElectronWorkspaceAPI: IWorkspaceAPI = {
     ).map((w) => w.mapToDTO());
     return { workspaces };
   },
-  async update(id: string) {
-    //TODO: implement
-    const workspace =
-      await ServiceContainer.workspaceService.findWorkspaceOrThrow(id);
+  async update(id: string, dto: UpdateWorkspaceDTO) {
+    const sanitizedDto = UpdateWorkspaceDTOSchema.parse(dto);
+    const workspace = await ServiceContainer.workspaceService.update(id, sanitizedDto);
     return { workspace: workspace.mapToDTO() };
   },
 };

@@ -102,6 +102,7 @@
     "typeorm": "^0.3.20",
     "use-debounce": "^10.0.4",
     "zip-a-folder": "^3.1.8",
+    "zod": "^4.1.11",
     "zustand": "^5.0.3"
   },
   "devDependencies": {

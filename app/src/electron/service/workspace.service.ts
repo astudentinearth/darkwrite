@@ -1,4 +1,4 @@
-import { CreateWorkspaceDTO } from "@/common/dto/request/workspace.request";
+import { CreateWorkspaceDTO, UpdateWorkspaceDTO } from "@/common/dto/request/workspace.request";
 import { Workspace } from "../entity";
 import { WorkspaceRepository } from "../repository/workspace.repository";
 import { getDefaultWorkspaceConfiguration } from "@/lib/workspace-config";
@@ -33,6 +33,13 @@ export class WorkspaceService {
 
   async getWorkspaces(): Promise<Workspace[]> {
     return await this.workspaceRepository.findAll();
+  }
+
+  async update(id: string, dto: UpdateWorkspaceDTO) {
+    const workspace = await this.findWorkspaceOrThrow(id);
+    console.log(dto);
+    Object.assign(workspace, dto);
+    return await this.workspaceRepository.save(workspace);
   }
 
 }
