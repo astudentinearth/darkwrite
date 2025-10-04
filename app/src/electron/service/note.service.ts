@@ -86,7 +86,7 @@ export class NoteService {
     if(workspace) note.workspace = workspace;
     if(database) note.database = database;
     if("databaseId" in dto && dto.databaseId === undefined) note.database = undefined;
-    
+    note.modifiedAt = new Date(); 
     return await this.noteRepository.save(note);
   }
 
@@ -97,6 +97,13 @@ export class NoteService {
 
   async getById(id: string) {
     return await this.noteRepository.findById(id);
+  }
+
+  async setModificationDate(id: string, date: Date) {
+    const note = await this.getById(id);
+    if(!note) return;
+    note.modifiedAt = date;
+    await this.noteRepository.save(note);
   }
 
 }

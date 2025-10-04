@@ -45,5 +45,6 @@ export const ElectronNoteAPI: INoteAPI = {
 
   async setDocument(id, serializedDocument) {
       ServiceContainer.documentService.setNoteContent(id, serializedDocument);
+      ServiceContainer.noteService.setModificationDate(id, new Date());
   },
 };

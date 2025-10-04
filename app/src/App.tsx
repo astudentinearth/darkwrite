@@ -4,6 +4,7 @@ import { useState } from "react";
 import { HashRouter, Route, Routes } from "react-router-dom";
 import { Toaster } from "sonner";
 import { EditorViewRouteHandler } from "./features/editor/editor-view";
+import HomePage from "./features/home/home-page";
 
 function App() {
   const [queryClient] = useState(() => new QueryClient());
@@ -13,7 +14,7 @@ function App() {
         <HashRouter>
           <Routes>
             <Route path="/" element={<Layout />}>
-              <Route index element={<></>}></Route>
+              <Route index element={<HomePage />}></Route>
               <Route
                 path="/page/:pageId"
                 loader={() => null}
