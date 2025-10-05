@@ -13,8 +13,6 @@ export interface DynamicTextareaProps
   > {
   /** The callback to run when value changes. Height will get adjusted **after** this method is called. */
   onValueChange?: (value: string) => void;
-  /** Value of the textarea */
-  value?: string;
   /** Placeholder of the textarea */
   placeholder?: string;
   /** Whether to allow line breaks in the textarea */
@@ -44,7 +42,7 @@ export default function DynamicTextarea(props: DynamicTextareaProps) {
 
   useEffect(() => {
     adjustHeight();
-  }, [props.value, sidebarWidth, sidebarState]);
+  }, [sidebarWidth, sidebarState]);
 
 
   const adjustHeight = () => {

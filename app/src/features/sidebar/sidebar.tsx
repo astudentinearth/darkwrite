@@ -74,7 +74,6 @@ export function Sidebar(props: SidebarProps) {
           <FavoritesContainer />
           <NoteListRoot />
           <div className="flex flex-col gap-0.5">
-            <ArchiveButton />
             <TrashWidget />
           </div>
         </div>

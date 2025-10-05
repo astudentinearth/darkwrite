@@ -54,7 +54,7 @@ export default function EditorHeader(props: EditorHeaderProps) {
           </div>
         </div>
 
-        <DynamicTextarea className="text-4xl z-20 font-semibold box-border h-auto overflow-hidden resize-none grow outline-hidden block" value={props.title} onValueChange={props.onTitleChange} />
+        <DynamicTextarea className="text-4xl z-20 font-semibold box-border h-auto overflow-hidden resize-none grow outline-hidden block" defaultValue={props.title} onValueChange={props.onTitleChange} />
         <hr />
       </ConstrainedWidth>
     </div>
