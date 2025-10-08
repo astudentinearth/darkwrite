@@ -59,7 +59,7 @@ export function NoteContextMenuContainer({
           <Forward className="opacity-75" size={20}></Forward>
           {t("moveTo")}
         </ContextMenuItem>
-        <ContextMenuItem disabled>
+        <ContextMenuItem onSelect={actions.duplicate}>
           <Copy className="opacity-75" size={20}></Copy>
           {t("duplicate")}
         </ContextMenuItem>

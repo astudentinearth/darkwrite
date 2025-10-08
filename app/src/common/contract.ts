@@ -19,6 +19,7 @@ export interface INoteAPI {
   getById: (id: string) => Promise<NoteResponseDTO>;
   getDocument: (id: string) => Promise<NoteContentResponseDTO>;
   setDocument: (id: string, serializedDocument: string) => Promise<void>;
+  duplicate: (id: string) => Promise<NoteResponseDTO>;
 }
 
 export interface IWorkspaceAPI {

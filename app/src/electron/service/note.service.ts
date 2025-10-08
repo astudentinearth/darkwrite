@@ -16,28 +16,28 @@ export class NoteService {
     private workspaceService: WorkspaceService = new WorkspaceService(),
     private databaseService: DatabaseService = new DatabaseService(),
     private documentService: DocumentService = new DocumentService()
-  ) {}
+  ) { }
 
   async create(dto: CreateNoteDTO) {
-    const {title, workspaceId, databaseId, icon, parentId, orderHint, favoriteOrderHint} = dto;
+    const { title, workspaceId, databaseId, icon, parentId, orderHint, favoriteOrderHint } = dto;
 
     const workspace = await this.workspaceRepository.findById(workspaceId);
-    if(!workspace) throw new Error(`Workspace ${workspaceId} not found.`);
+    if (!workspace) throw new Error(`Workspace ${workspaceId} not found.`);
 
     let database: Database | undefined = undefined;
-    if(databaseId) {
+    if (databaseId) {
       const result = await this.databaseRepository.findById(databaseId);
-      if(!result) throw new Error(`Database ${databaseId} not found.`);
+      if (!result) throw new Error(`Database ${databaseId} not found.`);
       else database = result;
     }
 
     const note = new Note();
     note.title = title;
     note.workspace = workspace;
-    if(orderHint) note.orderHint = orderHint;
+    if (orderHint) note.orderHint = orderHint;
     else {
       const lastHint = (await this.noteRepository.findLastNoteInOrder(workspace.id))?.orderHint;
-      if(!lastHint) note.orderHint = Rank.default().toString();
+      if (!lastHint) note.orderHint = Rank.default().toString();
       else note.orderHint = new Rank(lastHint).next().toString();
     }
     note.favoriteOrderHint = favoriteOrderHint;
@@ -59,40 +59,40 @@ export class NoteService {
   }
 
   async update(id: string, dto: UpdateNoteDTO) {
-    const {workspaceId, databaseId, ...rest} = dto;
+    const { workspaceId, databaseId, ...rest } = dto;
     //@ts-expect-error delete to prevent accidental assignment
     delete rest.workspace;
     //@ts-expect-error delete to prevent accidental assignment
     delete rest.database;
     let workspace: Workspace | undefined = undefined;
     let database: Database | undefined = undefined;
-    if(workspaceId) workspace = await this.workspaceService.findWorkspaceOrThrow(workspaceId);
-    if(databaseId) database = await this.databaseService.findDatabaseOrThrow(databaseId);
+    if (workspaceId) workspace = await this.workspaceService.findWorkspaceOrThrow(workspaceId);
+    if (databaseId) database = await this.databaseService.findDatabaseOrThrow(databaseId);
     // reassign order key on restore
     const note = await this.noteRepository.findById(id);
-    if(!note) throw new Error(`Note ${id} does not exist.`);
+    if (!note) throw new Error(`Note ${id} does not exist.`);
     Object.assign(note, rest);
-    if(dto.isTrashed === true) note.isFavorite = false;
-    if(dto.isTrashed === false) {
+    if (dto.isTrashed === true) note.isFavorite = false;
+    if (dto.isTrashed === false) {
       const lastNote = await this.noteRepository.findLastNoteInOrder(note.workspace.id);
       const nextRank = lastNote ? new Rank(lastNote.orderHint).next() : Rank.default();
       note.orderHint = nextRank.get();
     }
-    if(dto.isFavorite === true && !dto.favoriteOrderHint) {
+    if (dto.isFavorite === true && !dto.favoriteOrderHint) {
       const lastInFavorites = await this.noteRepository.findLastNoteInFavorites(note.workspace.id);
       const nextRank = lastInFavorites ? new Rank(lastInFavorites.orderHint).next() : Rank.default();
       note.favoriteOrderHint = nextRank.get();
     }
-    if(workspace) note.workspace = workspace;
-    if(database) note.database = database;
-    if("databaseId" in dto && dto.databaseId === undefined) note.database = undefined;
-    note.modifiedAt = new Date(); 
+    if (workspace) note.workspace = workspace;
+    if (database) note.database = database;
+    if ("databaseId" in dto && dto.databaseId === undefined) note.database = undefined;
+    note.modifiedAt = new Date();
     return await this.noteRepository.save(note);
   }
 
   async deleteById(id: string) {
     this.noteRepository.deleteById(id);
-    this.documentService.deleteNoteContent(id); 
+    this.documentService.deleteNoteContent(id);
   }
 
   async getById(id: string) {
@@ -101,9 +101,38 @@ export class NoteService {
 
   async setModificationDate(id: string, date: Date) {
     const note = await this.getById(id);
-    if(!note) return;
+    if (!note) return;
     note.modifiedAt = date;
     await this.noteRepository.save(note);
+  }
+
+  async duplicate(id: string) {
+    const note = await this.getById(id);
+    if (!note) return null;
+    const newNote: Note = new Note();
+    newNote.icon = note.icon;
+    newNote.title = `${note.title} (1)`;
+    newNote.createdAt = new Date();
+    newNote.modifiedAt = new Date();
+    newNote.database = note.database;
+    newNote.workspace = note.workspace;
+
+
+    const lastHint = (await this.noteRepository.findLastNoteInOrder(note.workspace.id))?.orderHint;
+    if (!lastHint) newNote.orderHint = Rank.default().toString();
+    else newNote.orderHint = new Rank(lastHint).next().toString();
+
+    newNote.propertyValues = note.propertyValues;
+    newNote.parentId = note.parentId;
+    newNote.favoriteOrderHint = "";
+    
+    const saved = await this.noteRepository.save(newNote);
+
+    const doc = await this.documentService.getNoteContent(id);
+    await this.documentService.setNoteContent(saved.id, JSON.stringify(doc));
+
+    return saved;
+
   }
 
 }
