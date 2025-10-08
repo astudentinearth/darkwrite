@@ -1,4 +1,4 @@
-import { app, Menu, MenuItemConstructorOptions, shell } from "electron";
+import { app, BrowserWindow, Menu, MenuItemConstructorOptions, shell } from "electron";
 
 const template: Array<MenuItemConstructorOptions> = [
   {
@@ -26,6 +26,18 @@ const template: Array<MenuItemConstructorOptions> = [
       },
     ],
   },
+  {
+    label: "View",
+    submenu: [
+      {
+        label: "Reset zoom",
+        id: "resetzoom",
+        click(menuItem, browserWindow) {
+          if(browserWindow instanceof BrowserWindow) browserWindow.webContents.setZoomFactor(1.0);
+        }
+      }
+    ]
+  }
 ];
 
 export function initAppMenu() {

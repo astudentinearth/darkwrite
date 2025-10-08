@@ -38,6 +38,7 @@ async function createWindow() {
   } else {
     win.loadFile(join(__dirname, webcontentsUrl));
   }
+//  win.webContents.setZoomFactor(1.0);
   initAppMenu();
 }
 
