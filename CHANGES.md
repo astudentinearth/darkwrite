@@ -1,16 +1,23 @@
 # next (1.0.0-alpha.1)
 ## 🌟 Features
-- Add support for workspaces
+- Introducing workspaces
+  - Stay organized with a space for each of your projects
 - UI rebuild and refresh
 - Brand new architecture
 - New theming system
+  - Choose a color scheme for light and dark mode individually
+  - Darkwrite can now follow your system color scheme
 - New settings format
+- Add ability to zoom in/out through menu
+
 
 ## ✨ Improvements and fixes
 - Add missing translations for various places
 - Improve note ordering performance by dropping index based ordering
 - New icon
 - Make the default theme darker
+- Fixed full width pages
+- You can now choose choose fonts from your system font list without having to type its name
 
 # 0.5.3-alpha.2
 ## 🌟 Features
