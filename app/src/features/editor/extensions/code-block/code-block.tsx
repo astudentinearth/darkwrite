@@ -26,7 +26,7 @@ export const CodeBlockExtension = (indentSize: number) =>
         "Mod-ArrowDown": () => this.editor.commands.exitCode(),
       };
     },
-    addNodeView: () =>  ReactNodeViewRenderer(CodeBlockNodeView),
+    addNodeView: () =>  ReactNodeViewRenderer(CodeBlockNodeView, {contentDOMElementTag: "code"}),
   }).configure({
     HTMLAttributes: {
       class: cn(

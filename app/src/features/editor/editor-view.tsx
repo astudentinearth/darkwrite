@@ -45,7 +45,7 @@ export function EditorView({ noteId }: { noteId: string }) {
     }
   }
   return (
-    <div className="flex items-center flex-col px-24 editor-fade-in min-h-full relative" style={style}>
+    <div data-editor-boundary="true" className="flex items-center flex-col px-24 editor-fade-in min-h-full relative" style={style}>
       {note && (
         <EditorHeader
           icon={note.icon}
@@ -58,7 +58,7 @@ export function EditorView({ noteId }: { noteId: string }) {
           onAddCover={cover.addCover}
         />
       )}
-      <ConstrainedWidth className="overflow-x-hidden" fill={content?.customizations.widePage}>
+      <ConstrainedWidth fill={content?.customizations.widePage}>
         {content &&
           <DarkwriteEditor
             content={content.contents || ""}

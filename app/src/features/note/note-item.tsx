@@ -17,7 +17,7 @@ export default function NoteItem({ note }: { note: NoteDTO }) {
   const { notes } = useNotes();
   const children =
     useMemo(
-      () => Object.values(notes ?? {}).filter((n) => n.parentId === note.id).toSorted((a, b) => Rank.sorter(a.orderHint, b.orderHint)),
+      () => Object.values(notes ?? {}).filter((n) => n.parentId === note.id && !n.isTrashed).toSorted((a, b) => Rank.sorter(a.orderHint, b.orderHint)),
       [notes, note.id],
     ) ?? [];
 

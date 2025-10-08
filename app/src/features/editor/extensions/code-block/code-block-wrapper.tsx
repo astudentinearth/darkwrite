@@ -34,7 +34,7 @@ export default function CodeBlockNodeView(props: NodeViewProps) {
           </Button>
         </div>
         <pre spellCheck={false} className={`language-${language}`}>
-          <NodeViewContent as="code" />
+          <NodeViewContent />
         </pre>
       </div>
     </NodeViewWrapper>

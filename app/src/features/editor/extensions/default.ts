@@ -12,7 +12,7 @@ import { LinkToPage } from "./link-to-page";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import lowlight from "../lowlight";
 import { KeymapFixer } from "./keymap-patcher";
-import TextStyle from "@tiptap/extension-text-style";
+import { TextStyleKit } from "@tiptap/extension-text-style";
 import Color from "@tiptap/extension-color";
 import Highlight from "@tiptap/extension-highlight";
 
@@ -92,7 +92,7 @@ const link = Link.configure({
 
 const underline = Underline.configure();
 
-export const codeBlock = (indentSize: number)=>CodeBlockLowlight.extend({
+export const codeBlock = (indentSize: number) => CodeBlockLowlight.extend({
   addKeyboardShortcuts() {
     return {
       Tab: () => {
@@ -127,9 +127,9 @@ export const codeBlock = (indentSize: number)=>CodeBlockLowlight.extend({
   lowlight
 });
 
-const textStyle = TextStyle.configure();
+const textStyle = TextStyleKit.configure({ color: { types: ["textStyle"] } });
 const color = Color.configure();
-const hightlight = Highlight.configure({multicolor: true});
+const hightlight = Highlight.configure({ multicolor: true });
 
 export const DefaultEditorExtensions = [
   starterKit,

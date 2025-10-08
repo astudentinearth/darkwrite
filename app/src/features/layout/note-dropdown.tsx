@@ -31,7 +31,7 @@ export default function NoteDropdown() {
         </TitlebarNavTrigger>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        {tree.map((n) => (
+        {tree?.map((n) => (
           <Button
             variant={"ghost"}
             key={n.id}

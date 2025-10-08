@@ -12,7 +12,7 @@ export default function NoteListRoot() {
   const { notes } = useNotes();
   const {t} = useTranslation("translation", {keyPrefix: "sidebar"});
   const [open, setOpen] = useState(false);
-  const rootNotes = useMemo(() => Object.values(notes ?? {}).filter((n) => !n.parentId).toSorted((a, b) => Rank.sorter(a.orderHint, b.orderHint)), [notes]);
+  const rootNotes = useMemo(() => Object.values(notes ?? {}).filter((n) => !n.parentId && !n.isTrashed).toSorted((a, b) => Rank.sorter(a.orderHint, b.orderHint)), [notes]);
   if (rootNotes == null || rootNotes.length === 0) {
     return (
       <div>
