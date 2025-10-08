@@ -2,19 +2,23 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useCreateNoteMutation } from "@/query/use-create-note";
 import { SquarePen } from "lucide-react";
+import { SidebarItem } from "./sidebar-item";
+import { useTranslation } from "react-i18next";
 
 export function CreatePageButton(props: { className?: string }) {
-  const { create } = useCreateNoteMutation();
-  const handleClick = () => create({});
+  const { create } = useCreateNoteMutation(true);
+  const handleClick = async () =>  create({});
+  const {t} = useTranslation();
   return (
-    <Button
+    <SidebarItem
       onClick={handleClick}
       className={cn(
-        "p-1.5 w-8 h-8 bg-view-2 rounded-[8px] text-white/80 hover:text-white text-foreground shrink-0",
+        //"p-1.5 w-8 h-8 bg-view-2 rounded-[8px] text-white/80 hover:text-white text-foreground shrink-0",
         props.className,
       )}
     >
       <SquarePen size={18} />
-    </Button>
+      {t("sidebar.button.newPage")}
+    </SidebarItem>
   );
 }

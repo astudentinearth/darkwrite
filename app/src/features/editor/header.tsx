@@ -6,7 +6,7 @@ import { EmojiPicker } from "@/components/emoji-picker";
 import { cn, fromUnicode } from "@/lib/utils";
 import { Button } from "@/components/ui";
 import { useTranslation } from "react-i18next";
-import { Image, Smile } from "lucide-react";
+import { Frown, Image, Smile } from "lucide-react";
 import useMouseOver from "@/hooks/layout/use-mouse-over";
 
 export type EditorHeaderProps = {
@@ -42,9 +42,17 @@ export default function EditorHeader(props: EditorHeaderProps) {
           }
           <div className={cn("opacity-0 z-20 font-ui", mouseOver.mouseOver && "opacity-100")}>
             {!props.icon &&
+              <>
+                <Button
+                  onClick={() => props.onIconChange("1f4c4")}
+                  className="w-fit" variant={"ghost"}><Smile size={18} />{t("editor.cover.addIcon")}</Button>
+
+              </>
+            }
+            {props.icon &&
               <Button
-                onClick={() => props.onIconChange("1f4c4")}
-                className="w-fit" variant={"ghost"}><Smile size={18} />{t("editor.cover.addIcon")}</Button>
+                onClick={() => props.onIconChange(null)}
+                className="w-fit" variant={"ghost"}><Frown size={18} />{t("editor.cover.removeIcon")}</Button>
             }
             {!props.coverImageSource &&
               <Button

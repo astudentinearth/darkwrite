@@ -66,10 +66,8 @@ export function Sidebar(props: SidebarProps) {
       </div>
       <ScrollArea className="h-full grow pl-3 pr-2 py-0">
         <div className="flex gap-2 flex-col mb-16">
-          <div className="grid grid-cols-[1fr_32px] gap-2">
-            <WorkspaceSwitcher />
-            <CreatePageButton />
-          </div>
+          <WorkspaceSwitcher />
+          <CreatePageButton />
           <SidebarNavigation />
           <FavoritesContainer />
           <NoteListRoot />
