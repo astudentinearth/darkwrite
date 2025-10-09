@@ -4,10 +4,10 @@
     "name": "astudentinearth",
     "email": "burak.yn.dev@gmail.com"
   },
-  "description": "The eye candy note-taking app for all desktops.",
+  "description": "A notebook that is truly yours.",
   "productName": "Darkwrite",
   "private": true,
-  "version": "0.5.3-alpha.2",
+  "version": "1.0.0-beta.1",
   "type": "module",
   "license": "AGPL-3.0-or-later",
   "main": "dist-electron/main.js",

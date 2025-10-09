@@ -21,6 +21,7 @@ export default function NoteDropdown() {
   const { notes } = useNotes();
   if (!id || !notes) return <></>;
   const currentNote = notes[id];
+  if(!currentNote) return <></>;
   const tree = resolveUpperTree(id, notes);
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>

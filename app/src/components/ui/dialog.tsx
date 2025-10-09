@@ -125,6 +125,11 @@ function DialogDescription({
   );
 }
 
+interface ControlledDialogProps {
+  open: boolean;
+  onOpenChange: (value: boolean) => void;
+}
+
 export {
   Dialog,
   DialogClose,
@@ -136,4 +141,5 @@ export {
   DialogPortal,
   DialogTitle,
   DialogTrigger,
+  ControlledDialogProps
 };

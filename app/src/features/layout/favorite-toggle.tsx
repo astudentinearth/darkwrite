@@ -11,6 +11,7 @@ export default function FavoriteToggle() {
   const { update } = useUpdateNote();
   if (!notes || !id) return;
   const note = notes[id];
+  if(!note) return;
   const click = () => {
     update({ id, dto: { isFavorite: !note.isFavorite, favoriteOrderHint: nextFavoriteHint} });
   };

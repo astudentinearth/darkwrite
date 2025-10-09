@@ -4,7 +4,7 @@ import WorkspaceSettings from "./workspace-settings";
 
 export const TAB_TITLES = {
   "workspace": "Workspace",
-  "appearance": "Appearanace",
+  "appearance": "Appearance",
   "shortcuts": "Shortcuts",
   "experimental": "Experiments",
   "about": "About"

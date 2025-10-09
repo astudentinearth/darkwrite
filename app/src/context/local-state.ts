@@ -60,11 +60,17 @@ export const useLocalStore = create<localStore & localStoreAction>()(
         })),
       setSpellcheck: (useSpellcheck) => set({ useSpellcheck }),
       setAlwaysShowWordCount: (val) => set({ alwaysShowWordCount: val }),
-      setLastUpdateCheckTimestamp: (val) => set({lastUpdateCheck: val.toISOString()}),
-      setWorkspaceId: (val) => set({workspaceId: val})
+      setLastUpdateCheckTimestamp: (val) =>
+        set({ lastUpdateCheck: val.toISOString() }),
+      setWorkspaceId: (val) => set({ workspaceId: val }),
     }),
     {
       name: "local-state",
     },
   ),
 );
+
+export const setWorkspaceId = (id: string) => {
+  console.trace("setting workspace", id);
+  useLocalStore.setState({ workspaceId: id });
+};

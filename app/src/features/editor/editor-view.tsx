@@ -3,7 +3,7 @@ import { useNoteById } from "@/query/use-note-by-id";
 import { useNoteFromURL } from "@/query/use-note-from-url";
 import EditorHeader from "./header";
 import { useNoteContent, useUpdateNoteContent } from "@/query/use-note-content";
-import { CSSProperties } from "react";
+import { CSSProperties, useEffect } from "react";
 import { FONT_VARS, FontStyle } from "@/common/note-customization";
 import DarkwriteEditor from ".";
 import { useSlashCommand } from "./extensions";
@@ -16,7 +16,9 @@ import { setActiveEditorInstance } from "@/context/editor-store";
 
 export function EditorViewRouteHandler() {
   const noteId = useNoteFromURL();
+  const { note } = useNoteById(noteId ?? "");
   if (!noteId) return "Not found";
+  if (!note) return null;
   return <EditorView key={`editor-root-${noteId}`} noteId={noteId} />;
 }
 
@@ -37,15 +39,20 @@ export function EditorView({ noteId }: { noteId: string }) {
           ? `var(${FONT_VARS[content.customizations.font]})`
           : `var(${FONT_VARS.sans})`;
 
-    if (content.customizations.backgroundColor) style.background = content.customizations.backgroundColor;
+    if (content.customizations.backgroundColor)
+      style.background = content.customizations.backgroundColor;
     if (content.customizations.textColor) {
-      style.color = content.customizations.textColor; 
+      style.color = content.customizations.textColor;
       //@ts-expect-error assigning CSS variable to React.CSSProperties
       style["--dw-editor-foreground"] = content.customizations.textColor;
     }
   }
   return (
-    <div data-editor-boundary="true" className="flex items-center flex-col px-24 editor-fade-in min-h-full relative" style={style}>
+    <div
+      data-editor-boundary="true"
+      className="flex items-center flex-col px-24 editor-fade-in min-h-full relative"
+      style={style}
+    >
       {note && (
         <EditorHeader
           icon={note.icon}
@@ -59,24 +66,28 @@ export function EditorView({ noteId }: { noteId: string }) {
         />
       )}
       <ConstrainedWidth fill={content?.customizations.widePage}>
-        {content &&
+        {content && (
           <DarkwriteEditor
             content={content.contents || ""}
             commandItems={items}
-            onContentChange={(value) => mutate({
-              content: produce(content, draft => {
-                draft.contents = value;
-              }),
-              debounce: true
-            })}
+            onContentChange={(value) =>
+              mutate({
+                content: produce(content, (draft) => {
+                  draft.contents = value;
+                }),
+                debounce: true,
+              })
+            }
             imageUploadConfig={options.imageConfig}
             codeBlockIndentSize={options.indentSize}
-            embedSourceResolver={async (id) => (await DarkwriteAPIClient.embed.getById(id)).embed?.url ?? ""}
+            embedSourceResolver={async (id) =>
+              (await DarkwriteAPIClient.embed.getById(id)).embed?.url ?? ""
+            }
             key={noteId}
             notes={Object.values(notes ?? {})}
             onInstanceChange={setActiveEditorInstance}
           />
-        }
+        )}
       </ConstrainedWidth>
     </div>
   );

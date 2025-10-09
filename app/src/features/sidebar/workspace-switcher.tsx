@@ -11,23 +11,30 @@ import { Button } from "@/components/ui/button";
 import { useT } from "@/hooks/useT";
 import { useWorkspaceManager } from "@/hooks/use-workspace-manager";
 import WorkspaceIcon from "@/components/workspace-icon";
+import NewWorkspaceDialog from "../workspaces/new-workspace-dialog";
+import { useState } from "react";
 
 export function WorkspaceSwitcher() {
   const workspace = useCurrentWorkspace();
   const workspacesQuery = useWorkspacesQuery();
   const workspaces = workspacesQuery.data;
   const manager = useWorkspaceManager();
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [open, setOpen] = useState(false);
   const localWorkspaces = workspaces?.filter(
     (w) => w.config.syncMode === "offline" && w.id !== workspace?.id,
   );
   const t = useT("sidebar.workspace");
   return (
-    <Popover>
+    <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <div className="flex items-center gap-1 max-w-fit overflow-hidden text-ellipsis whitespace-nowrap opacity-80 p-1 hover:bg-secondary/50 hover:opacity-100 rounded-[8px] select-none transition-[background,opacity] duration-75">
           {workspace && (
             <>
-              <WorkspaceIcon className="size-6 rounded-md" workspace={workspace} />
+              <WorkspaceIcon
+                className="size-6 rounded-md"
+                workspace={workspace}
+              />
               <span className="ml-1 text-ellipsis text-sm overflow-hidden whitespace-nowrap">
                 {workspace.name}
               </span>
@@ -72,16 +79,21 @@ export function WorkspaceSwitcher() {
                   <WorkspaceItem
                     workspace={w}
                     active={w.id === workspace?.id}
-                    onClick={()=>manager.switchWorkspace(w.id)}
+                    onClick={() => {
+                      manager.switchWorkspace(w.id);
+                      setOpen(false);
+                    }}
                   />
                 ))}
             </>
           )}
           <hr></hr>
-          <Button variant="ghost">
-            <Plus size={18}></Plus>
-            {t("newWorkspace")}
-          </Button>
+          <NewWorkspaceDialog open={dialogOpen} onOpenChange={setDialogOpen}>
+            <Button variant="ghost">
+              <Plus size={18}></Plus>
+              {t("newWorkspace")}
+            </Button>
+          </NewWorkspaceDialog>
         </div>
       </PopoverContent>
     </Popover>

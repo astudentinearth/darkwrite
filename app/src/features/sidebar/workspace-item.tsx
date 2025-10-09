@@ -1,5 +1,6 @@
 import { WorkspaceDTO } from "@/common/dto/response/workspace.response";
 import { Button } from "@/components/ui/button";
+import WorkspaceIcon from "@/components/workspace-icon";
 import { WorkspaceLetterIcon } from "@/components/workspace-letter-icon";
 import { useT } from "@/hooks/useT";
 import { cn } from "@/lib/utils";
@@ -23,8 +24,8 @@ export function WorkspaceItem({
         className,
       )}
     >
-      <WorkspaceLetterIcon
-        workspaceName={workspace.name}
+      <WorkspaceIcon
+        workspace={workspace}
         className="w-8 h-8 text-lg"
       />
       <div className="flex flex-col text-start">

@@ -1,8 +1,10 @@
-import { useLocalStore } from "@/context/local-state";
+import { setWorkspaceId, useLocalStore } from "@/context/local-state";
+import { useNavigate } from "react-router-dom";
 
 export const useWorkspaceManager = () => {
-  const setWorkspaceId = useLocalStore(s => s.setWorkspaceId);
-  const switchWorkspace = (id: string) => {
+  const nav = useNavigate();
+  const switchWorkspace = (id: string, resetRoute = true) => {
+    if (resetRoute) nav("/");
     setWorkspaceId(id);
   };
   return { switchWorkspace };

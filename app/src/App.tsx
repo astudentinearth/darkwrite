@@ -5,6 +5,7 @@ import { HashRouter, Route, Routes } from "react-router-dom";
 import { Toaster } from "sonner";
 import { EditorViewRouteHandler } from "./features/editor/editor-view";
 import HomePage from "./features/home/home-page";
+import { noteLoader } from "./lib/note-loader";
 
 function App() {
   const [queryClient] = useState(() => new QueryClient());
@@ -17,8 +18,8 @@ function App() {
               <Route index element={<HomePage />}></Route>
               <Route
                 path="/page/:pageId"
-                loader={() => null}
-                element={<EditorViewRouteHandler/>}
+                loader={noteLoader}
+                element={<EditorViewRouteHandler />}
               ></Route>
               <Route path="settings" element={<></>}></Route>
             </Route>
