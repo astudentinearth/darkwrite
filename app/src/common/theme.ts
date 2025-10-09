@@ -35,15 +35,15 @@ const allowedKeys = [
   "--editor-text-indigo",
   "--editor-text-purple",
   "--editor-text-pink",
-  "--editor-hightlight-red",
-  "--editor-hightlight-orange",
-  "--editor-hightlight-yellow",
-  "--editor-hightlight-green",
-  "--editor-hightlight-cyan",
-  "--editor-hightlight-blue",
-  "--editor-hightlight-indigo",
-  "--editor-hightlight-purple",
-  "--editor-hightlight-pink",
+  "--editor-highlight-red",
+  "--editor-highlight-orange",
+  "--editor-highlight-yellow",
+  "--editor-highlight-green",
+  "--editor-highlight-cyan",
+  "--editor-highlight-blue",
+  "--editor-highlight-indigo",
+  "--editor-highlight-purple",
+  "--editor-highlight-pink",
 ];
 
 export type Theme = {
@@ -84,15 +84,15 @@ export type Theme = {
     "--editor-text-indigo"?: string;
     "--editor-text-purple"?: string;
     "--editor-text-pink"?: string;
-    "--editor-hightlight-red"?: string;
-    "--editor-hightlight-orange"?: string;
-    "--editor-hightlight-yellow"?: string;
-    "--editor-hightlight-green"?: string;
-    "--editor-hightlight-cyan"?: string;
-    "--editor-hightlight-blue"?: string;
-    "--editor-hightlight-indigo"?: string;
-    "--editor-hightlight-purple"?: string;
-    "--editor-hightlight-pink"?: string;
+    "--editor-highlight-red"?: string;
+    "--editor-highlight-orange"?: string;
+    "--editor-highlight-yellow"?: string;
+    "--editor-highlight-green"?: string;
+    "--editor-highlight-cyan"?: string;
+    "--editor-highlight-blue"?: string;
+    "--editor-highlight-indigo"?: string;
+    "--editor-highlight-purple"?: string;
+    "--editor-highlight-pink"?: string;
   };
 };
 
@@ -124,7 +124,7 @@ export const cssTextColorVariables = allowedKeys.filter((key) =>
   key.startsWith("--editor-text-"),
 );
 
-export const cssHightlightColorVariables = allowedKeys.filter((key) =>
+export const csshighlightColorVariables = allowedKeys.filter((key) =>
   key.startsWith("--editor-highlight-"),
 );
 
