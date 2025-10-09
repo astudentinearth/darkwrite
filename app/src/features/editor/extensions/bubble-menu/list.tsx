@@ -1,28 +1,26 @@
 import {
+  Button,
   Popover,
   PopoverContent,
   PopoverTrigger,
-  Button
 } from "@/components/ui";
 import { cn } from "@/lib/utils";
-import { ChevronDown, List, ListOrdered, ListTodo } from "lucide-react";
 import { useCurrentEditor } from "@tiptap/react";
-import { Dispatch, ReactNode, SetStateAction } from "react";
+import { ChevronDown, List, ListOrdered, ListTodo } from "lucide-react";
+import { ReactNode, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-export function ListSelector(props: {
-  open: boolean;
-  setOpen: Dispatch<SetStateAction<boolean>>;
-}) {
+export function ListSelector() {
   const { editor } = useCurrentEditor();
-  const {t}  =useTranslation(undefined, {keyPrefix: "editor.bubble"});
+  const { t } = useTranslation(undefined, { keyPrefix: "editor.bubble" });
+  const [open, setOpen] = useState(false);
   const item = (icon: ReactNode, text: string, callback: () => void) => {
     return (
       <Button
         variant={"ghost"}
         className="px-1 pr-2 py-0 justify-start"
         onClick={() => {
-          props.setOpen(false);
+          setOpen(false);
           callback();
         }}
       >
@@ -36,13 +34,13 @@ export function ListSelector(props: {
     );
   };
   return (
-    <Popover open={props.open} onOpenChange={props.setOpen}>
+    <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
           variant="ghost"
           className={cn(
             "rounded-lg w-fit h-9 gap-1 px-2 text-foreground",
-            props.open && "bg-secondary/80",
+            open && "bg-secondary/80",
           )}
         >
           <List />

@@ -12,14 +12,14 @@
   color: var(--dw-editor-foreground);
 }
 
- .ProseMirror p.is-editor-empty:first-child::before {
+.ProseMirror p.is-editor-empty:first-child::before {
   content: attr(data-placeholder);
   float: left;
   color: var(--dw-editor-foreground);
   pointer-events: none;
   height: 0;
   opacity: 0.5;
-} 
+}
 
 .ProseMirror p.is-empty::before {
   content: attr(data-placeholder);
@@ -28,10 +28,9 @@
   pointer-events: none;
   height: 0;
   opacity: 0.5;
-} 
+}
 
-.tippy-box {
-  max-width: 400px !important;
+.bubble-menu {
   &[data-animation="slide"][data-state="visible"] {
     opacity: 0;
     animation-name: slide-up;
@@ -75,8 +74,6 @@
   }
 }
 
-
-
 @keyframes slide-up {
   0% {
     transform: translateY(10%);
@@ -109,7 +106,6 @@
   }
 }
 
-
 .command-view-container::-webkit-scrollbar {
   width: 6px;
 }
@@ -128,7 +124,7 @@
 }
 
 .command-view {
-  div[data-slot=command-input-wrapper] {
+  div[data-slot="command-input-wrapper"] {
     display: none;
   }
 }

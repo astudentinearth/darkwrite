@@ -1,10 +1,11 @@
 import {
+  Button,
   Popover,
   PopoverContent,
   PopoverTrigger,
-  Button
 } from "@/components/ui";
 import { cn } from "@/lib/utils";
+import { useCurrentEditor } from "@tiptap/react";
 import {
   ChevronDown,
   Heading1,
@@ -12,16 +13,13 @@ import {
   Heading3,
   Heading4,
 } from "lucide-react";
-import { useCurrentEditor } from "@tiptap/react";
-import { Dispatch, ReactNode, SetStateAction } from "react";
+import { ReactNode, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-export function HeadingSelector(props: {
-  open: boolean;
-  setOpen: Dispatch<SetStateAction<boolean>>;
-}) {
+export function HeadingSelector() {
   const { editor } = useCurrentEditor();
   const { t } = useTranslation(undefined, { keyPrefix: "editor.bubble" });
+  const [open, setOpen] = useState(false);
   const h1Active = editor?.isActive("heading", { level: 1 });
   const h2Active = editor?.isActive("heading", { level: 2 });
   const h3Active = editor?.isActive("heading", { level: 3 });
@@ -38,7 +36,7 @@ export function HeadingSelector(props: {
         variant={"ghost"}
         className="px-1 pr-2 py-0"
         onClick={() => {
-          props.setOpen(false);
+          setOpen(false);
           callback();
         }}
       >
@@ -53,13 +51,13 @@ export function HeadingSelector(props: {
   };
 
   return (
-    <Popover open={props.open} onOpenChange={props.setOpen}>
+    <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
           variant="ghost"
           className={cn(
             "rounded-lg w-fit gap-1 px-2 text-foreground h-9",
-            props.open && "bg-secondary/80",
+            open && "bg-secondary/80",
           )}
         >
           {icon}

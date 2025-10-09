@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+import { cssTextColorVariables } from "@/common/theme";
 import {
   Button,
   ColorPicker,
@@ -6,28 +6,26 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui";
+import { cn } from "@/lib/utils";
 import { useCurrentEditor } from "@tiptap/react";
 import { Baseline, ChevronDown, Eraser } from "lucide-react";
-import { Dispatch, SetStateAction, useState } from "react";
-import { cssTextColorVariables } from "@/common/theme";
+import { useState } from "react";
 
-export function TextColorSelector(props: {
-  open: boolean;
-  setOpen: Dispatch<SetStateAction<boolean>>;
-}) {
+export function TextColorSelector() {
   const colorVars = cssTextColorVariables;
   const { editor } = useCurrentEditor();
+  const [open, setOpen] = useState(false);
   const activeTextColor = editor?.getAttributes("textStyle")?.color || "";
   const [customColorValue, setCustomColorValue] =
     useState<string>(activeTextColor);
   return (
-    <Popover>
+    <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
           variant="ghost"
           className={cn(
             "rounded-lg w-fit gap-1 px-2 text-foreground h-9",
-            props.open && "bg-secondary/80",
+            open && "bg-secondary/80",
           )}
         >
           <Baseline size={20} />

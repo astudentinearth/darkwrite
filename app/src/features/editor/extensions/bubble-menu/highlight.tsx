@@ -1,34 +1,32 @@
-import { cn } from "@/lib/utils";
+import { csshighlightColorVariables } from "@/common/theme";
 import {
   Button,
+  ColorPicker,
   Popover,
   PopoverContent,
   PopoverTrigger,
-  ColorPicker,
 } from "@/components/ui";
+import { cn } from "@/lib/utils";
 import { useCurrentEditor } from "@tiptap/react";
 import { ChevronDown, Eraser, Highlighter } from "lucide-react";
-import { Dispatch, SetStateAction, useState } from "react";
-import { csshighlightColorVariables } from "@/common/theme";
+import { useState } from "react";
 
-export function HighlightColorSelector(props: {
-  open: boolean;
-  setOpen: Dispatch<SetStateAction<boolean>>;
-}) {
+export function HighlightColorSelector() {
   const colorVars = csshighlightColorVariables;
   const { editor } = useCurrentEditor();
+  const [open, setOpen] = useState(false);
   const activeHighlightColor = editor?.getAttributes("highlight")?.color || "";
   const [customColorValue, setCustomColorValue] =
     useState<string>(activeHighlightColor);
 
   return (
-    <Popover>
+    <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
           variant="ghost"
           className={cn(
             "rounded-lg w-fit gap-1 px-2 text-foreground h-9",
-            props.open && "bg-secondary/80",
+            open && "bg-secondary/80",
           )}
         >
           <Highlighter size={20} />

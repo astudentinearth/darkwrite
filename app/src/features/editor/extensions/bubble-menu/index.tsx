@@ -14,29 +14,49 @@ export default function Bubble() {
   const [colorOpen, setColorOpen] = useState(false);
   const [highlightOpen, setHighlightOpen] = useState(false);
   const { editor } = useCurrentEditor();
-  if (!editor) return <></>
+  if (!editor) return <></>;
   return (
     <BubbleMenu
       shouldShow={({ editor }) => {
-        return !editor.isEmpty && editor.state.selection?.empty === false && !(colorOpen || highlightOpen || listOpen || headingOpen);
+        console.log("asdsaf");
+        return (
+          !editor.isEmpty && editor.state.selection?.empty === false
+          //!(colorOpen || highlightOpen || listOpen || headingOpen)
+        );
       }}
       options={{
-        strategy: "fixed",
-        placement: "top"
+        placement: "top",
+        flip: true,
+        offset: 8,
+        shift: true,
+        onShow() {
+          document
+            .querySelector(".bubble-menu")
+            ?.setAttribute("data-state", "visible");
+        },
+        onHide() {
+          document
+            .querySelector(".bubble-menu")
+            ?.setAttribute("data-state", "hidden");
+        },
       }}
       editor={editor}
-      className="flex w-fit h-fit max-w-[90vw] overflow-hidden gap-1 rounded-xl border border-border 
-      bg-view-2 shadow-xl p-1 slide-in-from-top-1 transition-[opacity,transform,translate,scale,rotate]"
     >
-      <FormattingButtons />
-      <div className="w-[1px] bg-border"></div>
-      <BubbleLink />
-      <div className="w-[1px] bg-border"></div>
-      <HeadingSelector open={headingOpen} setOpen={setHeadingOpen} />
-      <ListSelector open={listOpen} setOpen={setListOpen} />
-      <div className="w-[1px] bg-border"></div>
-      <TextColorSelector open={colorOpen} setOpen={setColorOpen} />
-      <HighlightColorSelector open={highlightOpen} setOpen={setHighlightOpen} />
+      <div
+        data-animation="slide"
+        className="flex w-fit h-fit max-w-[90vw] overflow-hidden gap-1 bubble-menu rounded-xl border border-border
+              bg-view-2 shadow-xl p-1 slide-in-from-top-1 transition-[opacity,transform,translate,scale,rotate]"
+      >
+        <FormattingButtons />
+        <div className="w-[1px] bg-border"></div>
+        <BubbleLink />
+        <div className="w-[1px] bg-border"></div>
+        <HeadingSelector />
+        <ListSelector open={listOpen} setOpen={setListOpen} />
+        <div className="w-[1px] bg-border"></div>
+        <TextColorSelector />
+        <HighlightColorSelector />
+      </div>
     </BubbleMenu>
   );
 }
