@@ -80,12 +80,13 @@ export const SlashCommandView = forwardRef(function (
   };
 
   // this is disgusting
+  // october 9th 2025: i have no idea what this does
   useImperativeHandle(ref, () => ({ ...containerRef.current!, onKeyDown }));
 
   return (
     <div
       ref={containerRef}
-      className="max-h-[40vh] max-w-[600px] bg-popover border rounded-xl drop-shadow-xl pt-1 px-1 flex flex-col command-view"
+      className="max-h-[40vh] max-w-[600px] bg-popover border rounded-xl drop-shadow-xl pt-1 px-1 flex flex-col"
     >
       <Command
         className={
@@ -98,24 +99,29 @@ export const SlashCommandView = forwardRef(function (
         }}
         filter={(val, search, keywords) => {
           const extended = val + " " + keywords?.join(" ");
-          if(extended.includes(search)) return 1;
+          if (extended.includes(search)) return 1;
           return 0;
         }}
       >
-        <CommandInput className="hidden!" value={props.query.toLocaleLowerCase()}  />
+        <CommandInput
+          className="hidden!"
+          value={props.query.toLocaleLowerCase()}
+        />
         <CommandEmpty className="px-2 text-muted-foreground/80 text-center py-2">
           No results
         </CommandEmpty>
-        <CommandList ref={listRef} className="bg-transparent pb-1 command-view-container">
-          {props.items
-            .map((i) => (
-              <SlashCommandItem
-                key={i.id}
-                item={i}
-                range={props.range}
-                editor={editor}
-              />
-            ))}
+        <CommandList
+          ref={listRef}
+          className="bg-transparent pb-1 command-view-container"
+        >
+          {props.items.map((i) => (
+            <SlashCommandItem
+              key={i.id}
+              item={i}
+              range={props.range}
+              editor={editor}
+            />
+          ))}
         </CommandList>
       </Command>
     </div>

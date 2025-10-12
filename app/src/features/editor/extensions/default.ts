@@ -73,7 +73,7 @@ export const taskItem = TaskItem.configure({
 export const placeholder = Placeholder.configure({
   includeChildren: true,
   placeholder: "Press '/' for commands",
-  showOnlyCurrent: true
+  showOnlyCurrent: true,
 });
 
 const horizontalRule = HorizontalRule.configure({
@@ -92,40 +92,37 @@ const link = Link.configure({
 
 const underline = Underline.configure();
 
-export const codeBlock = (indentSize: number) => CodeBlockLowlight.extend({
-  addKeyboardShortcuts() {
-    return {
-      Tab: () => {
-        if (this.editor.isActive("codeBlock")) {
-          return this.editor.commands.insertContent(
-            new Array<string>(
-              indentSize,
-            )
-              .fill(" ")
-              .join(""),
-          );
-        } else return false;
-      },
-      ArrowDown: () => {
-        if (
-          this.editor.state.selection.$head.parentOffset ===
-          this.editor.state.selection.$head.parent.content.size
-        ) {
-          return this.editor.commands.exitCode();
-        } else return false;
-      },
-      "Mod-ArrowDown": () => this.editor.commands.exitCode(),
-    };
-  },
-}).configure({
-  HTMLAttributes: {
-    class: cn(
-      "rounded-xl bg-secondary/50 border-none p-4 darkwrite-mono font-medium",
-    ),
-  },
-  exitOnTripleEnter: true,
-  lowlight
-});
+export const codeBlock = (indentSize: number) =>
+  CodeBlockLowlight.extend({
+    addKeyboardShortcuts() {
+      return {
+        Tab: () => {
+          if (this.editor.isActive("codeBlock")) {
+            return this.editor.commands.insertContent(
+              new Array<string>(indentSize).fill(" ").join(""),
+            );
+          } else return false;
+        },
+        ArrowDown: () => {
+          if (
+            this.editor.state.selection.$head.parentOffset ===
+            this.editor.state.selection.$head.parent.content.size
+          ) {
+            return this.editor.commands.exitCode();
+          } else return false;
+        },
+        "Mod-ArrowDown": () => this.editor.commands.exitCode(),
+      };
+    },
+  }).configure({
+    HTMLAttributes: {
+      class: cn(
+        "rounded-xl bg-secondary/50 border-none p-4 darkwrite-mono font-medium",
+      ),
+    },
+    exitOnTripleEnter: true,
+    lowlight,
+  });
 
 const textStyle = TextStyleKit.configure({ color: { types: ["textStyle"] } });
 const color = Color.configure();
@@ -145,5 +142,5 @@ export const DefaultEditorExtensions = [
   KeymapFixer,
   textStyle,
   color,
-  hightlight
+  hightlight,
 ];

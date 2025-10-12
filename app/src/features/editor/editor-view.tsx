@@ -2,7 +2,11 @@ import useEditorCover from "@/hooks/editor/use-editor-cover";
 import { useNoteById } from "@/query/use-note-by-id";
 import { useNoteFromURL } from "@/query/use-note-from-url";
 import EditorHeader from "./header";
-import { useNoteContent, useUpdateNoteContent } from "@/query/use-note-content";
+import {
+  persistContentDebounced,
+  useNoteContent,
+  useUpdateNoteContent,
+} from "@/query/use-note-content";
 import { CSSProperties, useEffect } from "react";
 import { FONT_VARS, FontStyle } from "@/common/note-customization";
 import DarkwriteEditor from ".";
@@ -70,22 +74,18 @@ export function EditorView({ noteId }: { noteId: string }) {
           <DarkwriteEditor
             content={content.contents || ""}
             commandItems={items}
-            onContentChange={(value) =>
-              mutate({
-                content: produce(content, (draft) => {
-                  draft.contents = value;
-                }),
-                debounce: true,
-              })
-            }
+            onContentChange={(value) => {
+              const updatedContent = produce(content, (draft) => {
+                draft.contents = value;
+              });
+              persistContentDebounced(noteId, JSON.stringify(updatedContent));
+            }}
             imageUploadConfig={options.imageConfig}
-            codeBlockIndentSize={options.indentSize}
+            codeBlockIndentSize={2}
             embedSourceResolver={async (id) =>
               (await DarkwriteAPIClient.embed.getById(id)).embed?.url ?? ""
             }
             key={noteId}
-            notes={Object.values(notes ?? {})}
-            onInstanceChange={setActiveEditorInstance}
           />
         )}
       </ConstrainedWidth>

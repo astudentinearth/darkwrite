@@ -17,12 +17,9 @@ export default function Bubble() {
   if (!editor) return <></>;
   return (
     <BubbleMenu
-      shouldShow={({ editor }) => {
-        console.log("asdsaf");
-        return (
-          !editor.isEmpty && editor.state.selection?.empty === false
-          //!(colorOpen || highlightOpen || listOpen || headingOpen)
-        );
+      pluginKey={"bubbleMenu"}
+      shouldShow={({ editor, state, from, to }) => {
+        return !editor.isEmpty && editor.state.selection?.empty === false;
       }}
       options={{
         placement: "top",
