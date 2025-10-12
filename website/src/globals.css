@@ -1,0 +1,27 @@
+@import "tailwindcss";
+@tailwind utilities;
+
+@theme inline {
+  --color-background: hsl(0 0% 3%);
+  --color-card: hsl(228 14% 7%);
+  --color-secondary: hsl(230 12% 10%);
+  --color-primary: hsl(214 64% 44%);
+  --color-border: hsl(0 0% 26%);
+}
+
+:root {
+  --background: hsl(0 0% 3%);
+  --card: hsl(228 14% 7%);
+  --secondary: hsl(230 12% 10%);
+  --primary: hsl(214 64% 44%);
+  --border: hsl(0 0% 26%);
+}
+
+* {
+  @apply border-border;
+}
+
+body {
+  @apply w-full h-full absolute left-0 top-0 m-0 p-0 bg-background;
+  box-sizing: border-box;
+}
