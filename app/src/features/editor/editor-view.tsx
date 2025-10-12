@@ -1,6 +1,7 @@
 import { DarkwriteAPIClient } from "@/api/api-client";
 import {
   initializeEditor,
+  setActiveEditorInstance,
   setEditorContent,
   useEditorStore,
 } from "@/context/editor-store";
@@ -40,6 +41,7 @@ export function EditorView({ noteId }: { noteId: string }) {
   const contents = useEditorStore((s) => s.content);
   const customizations = useEditorStore((s) => s.customizations);
   const content = { contents, customizations };
+  const initialContent = useEditorStore.getState().content;
 
   const cover = useEditorCover(noteId);
   const { items } = useSlashCommand(options.imageConfig);
@@ -64,7 +66,7 @@ export function EditorView({ noteId }: { noteId: string }) {
       <ConstrainedWidth fill={content?.customizations.widePage}>
         {content && (
           <DarkwriteEditor
-            content={contents}
+            content={initialContent}
             commandItems={items}
             onContentChange={(val) => setEditorContent(val)}
             imageUploadConfig={options.imageConfig}
@@ -74,6 +76,7 @@ export function EditorView({ noteId }: { noteId: string }) {
             }
             notes={Object.values(notes ?? {})}
             key={noteId}
+            onInstanceChange={setActiveEditorInstance}
           />
         )}
       </ConstrainedWidth>

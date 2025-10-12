@@ -70,8 +70,8 @@ export const SlashCommandRenderer = {
 
       onExit: () => {
         console.trace("begin onexit");
-        component.element.remove();
-        component.destroy();
+        component?.element?.remove();
+        component?.destroy();
         console.log("end onexit");
       },
     };

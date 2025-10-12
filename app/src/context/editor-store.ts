@@ -37,7 +37,6 @@ function saveContents(debounce = true) {
     contents: state.content,
     customizations: state.customizations,
   };
-  console.log(doc);
   if (debounce) persistContentDebounced(state.noteId, JSON.stringify(doc));
   else DarkwriteAPIClient.note.setDocument(state.noteId, JSON.stringify(doc));
 }
