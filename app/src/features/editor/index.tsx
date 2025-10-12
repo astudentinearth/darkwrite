@@ -4,15 +4,18 @@ import "./css/handle.css";
 import "./css/editor.css";
 import "./css/lists.css";
 import "./css/text.css";
+import { EditorContent } from "./types";
 
 export type DarkwriteEditorProps = IDarkwriteEditorContext;
 
-export default function DarkwriteEditor(props: DarkwriteEditorProps) {
+export default function DarkwriteEditor(
+  props: DarkwriteEditorProps & { content: EditorContent },
+) {
   return (
     <DarkwriteEditorContext.Provider value={props}>
-        <EditorRoot />
+      <EditorRoot content={props.content} />
     </DarkwriteEditorContext.Provider>
   );
 }
 
-export {DarkwriteEditor}
+export { DarkwriteEditor };

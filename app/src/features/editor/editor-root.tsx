@@ -9,6 +9,7 @@ import { CodeBlockExtension } from "./extensions/code-block";
 import { ImageExtension } from "./extensions/image/image-extension";
 import { Padder } from "./extensions/padder";
 import { BubbleMenu } from "@tiptap/react/menus";
+import { EditorContent } from "./types";
 
 function InstanceHandler() {
   const context = use(DarkwriteEditorContext);
@@ -21,7 +22,7 @@ function InstanceHandler() {
   return <></>;
 }
 
-export function EditorRoot() {
+export function EditorRoot(props: { content: EditorContent }) {
   const context = use(DarkwriteEditorContext);
   const command = slashCommandExtension.configure({
     suggestion: {
@@ -32,7 +33,7 @@ export function EditorRoot() {
   const imagePlugin = ImageExtension(context.imageUploadConfig);
   return (
     <EditorProvider
-      content={context.content}
+      content={props.content}
       onUpdate={({ editor }) => {
         const updatedContent = editor.getJSON();
         context.onContentChange(updatedContent);
