@@ -20,10 +20,10 @@ export class EmbedService {
 
   async findFirstDuplicate(fileSize: number, contents: Buffer) {
     const candidates = await this.embedRepository.findAllByFileSize(fileSize);
-    if(candidates.length === 0) return null;
-    for(const embed of candidates) {
+    if (candidates.length === 0) return null;
+    for (const embed of candidates) {
       const buf = await this.blobStore.get(embed.id);
-      if(Buffer.compare(buf, contents) === 0) return embed; 
+      if (Buffer.compare(buf, contents) === 0) return embed;
     }
     return null;
   }
@@ -52,7 +52,7 @@ export class EmbedService {
 
     const buffer = await this.read(filePath);
     const existingEmbed = await this.findFirstDuplicate(embed.fileSize, buffer);
-    if(existingEmbed) return existingEmbed;
+    if (existingEmbed) return existingEmbed;
 
     embed = await this.embedRepository.save(embed);
     await this.blobStore.put(embed.id, buffer);
@@ -74,11 +74,11 @@ export class EmbedService {
     embed.workspace = workspace;
     embed.uploadedAt = new Date();
     embed.displayName = Date.now().toString();
-    embed.fileName = `${embed.id}.${fileType}`
+    embed.fileName = `${embed.id}.${fileType}`;
     const buf = Buffer.from(new Uint8Array(buffer));
 
     const existingEmbed = await this.findFirstDuplicate(embed.fileSize, buf);
-    if(existingEmbed) return existingEmbed;
+    if (existingEmbed) return existingEmbed;
 
     embed = await this.embedRepository.save(embed);
     await this.blobStore.put(embed.fileName, buf);
@@ -92,7 +92,7 @@ export class EmbedService {
   async getEmbedUrl(id: string) {
     const embed = await this.embedRepository.findById(id);
     if (!embed) throw new Error(`Embed ${id} does not exist.`);
-    else return `embed://${embed.id}` 
+    else return `embed://${embed.id}`;
   }
 
   async getEmbedFileUrl(id: string) {

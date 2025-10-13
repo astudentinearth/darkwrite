@@ -4,7 +4,7 @@ import { EmbedDTO } from "@/common/dto/response/embed.response";
 
 @Entity("embed")
 export class Embed {
-  @PrimaryColumn({type: "varchar"})
+  @PrimaryColumn({ type: "varchar" })
   id: string;
 
   /** The uploader of this embed. Ignored/`undefined` in offline workspaces. */
@@ -22,7 +22,7 @@ export class Embed {
   @Column({ type: "text", nullable: true })
   displayName?: string;
 
-  @Column({type: "text", nullable: false})
+  @Column({ type: "text", nullable: false })
   fileName: string;
 
   /** Replaces `createdAt` from the previous iteration.  */
@@ -32,12 +32,16 @@ export class Embed {
   /** The workspace this embed originated from. If the workspace is deleted,
    *  we can transfer the embeds to a new workspace or delete them altogether.
    */
-  @ManyToOne(() => Workspace, {eager: true})
-  workspace: Workspace;
+  @ManyToOne(() => Workspace, {
+    eager: true,
+    nullable: true,
+    onDelete: "SET NULL",
+  })
+  workspace?: Workspace;
 
   /** @param url Embeds can only be sent after their URL is resolved. */
   mapToDTO(url: string): EmbedDTO {
-    const {id, displayName, fileSize, fileType, workspace, uploadedAt} = this;
+    const { id, displayName, fileSize, fileType, workspace, uploadedAt } = this;
     return {
       id,
       displayName,
@@ -45,7 +49,7 @@ export class Embed {
       fileType,
       uploadedAt,
       url,
-      workspaceId: workspace.id
+      workspaceId: workspace?.id,
     };
   }
 }

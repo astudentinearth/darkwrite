@@ -1,4 +1,3 @@
-
 export interface EmbedDTO {
   id: string;
   ownerId?: string;
@@ -6,7 +5,7 @@ export interface EmbedDTO {
   fileSize: number;
   displayName?: string;
   uploadedAt: Date;
-  workspaceId: string;
+  workspaceId?: string;
   url: string;
 }
 
@@ -17,4 +16,3 @@ export interface EmbedResponseDTO {
 export interface EmbedsResponseDTO {
   embeds: EmbedDTO[];
 }
-
