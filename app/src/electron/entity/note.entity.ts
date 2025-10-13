@@ -5,7 +5,7 @@ import { NoteDTO } from "@/common/dto";
 
 @Entity("note")
 export class Note {
-  @PrimaryColumn({type: "varchar", generated: "uuid"})
+  @PrimaryColumn({ type: "varchar", generated: "uuid" })
   id: string;
 
   @Column({ type: "varchar", nullable: true })
@@ -13,12 +13,12 @@ export class Note {
   userId?: string | null;
 
   /** The ID of the database this note is tied to. `undefined` means it is not part of a database. Replaces the unused `todoListID` from the previous iteration. */
-  @ManyToOne(() => Database, {eager: true})
+  @ManyToOne(() => Database, { eager: true })
   database?: Database | null;
 
   /** The ID of the workspace this note belongs to. Databases can be partitioned by this field if deemed necessary.
    * During migrations from v0.1-0.5x alphas, a default workspace should be created and the ID of that worksapce should be integrated. */
-  @ManyToOne(() => Workspace, {eager: true})
+  @ManyToOne(() => Workspace, { eager: true, onDelete: "CASCADE" })
   workspace: Workspace;
 
   /** The ID of the note which is one level higher in the tree than this note. Renames the `parentID` field from the previous iteration for consistency. */
@@ -40,7 +40,7 @@ export class Note {
   @Column("text")
   title: string;
 
-  @Column({type: "text", nullable: true})
+  @Column({ type: "text", nullable: true })
   icon?: string | null;
 
   /** Renames the `created` field from the previous iteration. Migrate accordingly. */
@@ -89,7 +89,7 @@ export class Note {
       parentId: this.parentId,
       propertyValues: this.propertyValues,
       trashedAt: this.trashedAt,
-      userId: this.userId
+      userId: this.userId,
     } satisfies NoteDTO;
   }
 }
