@@ -13,6 +13,8 @@
 </p>
 </strong>
 
+# [Roadmap discussion thread](https://github.com/astudentinearth/darkwrite/discussions/7)
+
 # 📓*Take notes the way you want.*
 
 ✒️ Darkwrite lets you take notes without getting in your way.
