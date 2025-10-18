@@ -61,6 +61,10 @@ export const DarkwriteElectronAPI = {
   showAppMenu: new IPCHandler(false, showAppMenu),
   desktop: {
     getFontList: new IPCHandler(false, DesktopIntegration.getAvailableFonts),
+    getSystemAccentColor: new IPCHandler(
+      false,
+      DesktopIntegration.getSystemAccentColor,
+    ),
   },
 } satisfies DarkwriteAPI;
 export type DarkwritePreloadAPI = InferPreloadAPI<typeof DarkwriteElectronAPI>;

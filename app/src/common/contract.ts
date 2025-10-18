@@ -68,4 +68,5 @@ export interface IThemeAPI {
 
 export interface IDesktopAPI {
   getFontList: () => Promise<Font[]>;
+  getSystemAccentColor: () => Promise<string>;
 }

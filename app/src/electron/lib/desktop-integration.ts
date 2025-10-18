@@ -4,19 +4,18 @@ import _ from "lodash";
 import os from "os";
 import { ThemeMode } from "../types";
 import { OS } from "./os";
-import {getFonts2} from "font-list"
+import { getFonts2 } from "font-list";
 import { Font } from "@/common/font";
 
 export class DesktopIntegration {
-  static operatingSystem: OS;
-  static {
-    this.operatingSystem = os.platform() as OS;
+  static get operatingSystem() {
+    return os.platform() as OS;
   }
 
   static getSystemAccentColor() {
     // TODO: Linux integration will be provided over D-Bus hopefully,
     // unless Electron implements Linux support themselves.
-    if (this.operatingSystem == OS.LINUX) return "0000ff";
+    if (DesktopIntegration.operatingSystem == OS.LINUX) return "0000ff";
     const color = systemPreferences.getAccentColor();
     return stripAlpha(color);
   }
@@ -32,10 +31,12 @@ export class DesktopIntegration {
 
   static async getAvailableFonts(): Promise<Font[]> {
     const fonts = await getFonts2();
-    const list = fonts.map(f => ({family: f.familyName, monospace: f.monospace} satisfies Font));
+    const list = fonts.map(
+      (f) => ({ family: f.familyName, monospace: f.monospace }) satisfies Font,
+    );
     const families = new Set<string>();
     const filtered = list.filter((obj) => {
-      if(families.has(obj.family)) return false;
+      if (families.has(obj.family)) return false;
       families.add(obj.family);
       return true;
     });
