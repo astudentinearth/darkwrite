@@ -4,6 +4,9 @@ import {
   ContextMenuContent,
   ContextMenuItem,
   ContextMenuSeparator,
+  ContextMenuSub,
+  ContextMenuSubContent,
+  ContextMenuSubTrigger,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
 import { useNoteContextMenu } from "@/hooks/use-note-context-menu";
@@ -11,7 +14,10 @@ import { useNotes } from "@/query/use-notes";
 import {
   ArrowRightFromLine,
   Copy,
+  Download,
+  FileCode,
   FilePlus2,
+  FileText,
   Forward,
   Star,
   Trash,
@@ -23,7 +29,7 @@ export function NoteContextMenuContainer({
   children,
   note,
   onOpenChange,
-  finalOrderHint
+  finalOrderHint,
 }: {
   children: ReactNode;
   note: NoteDTO;
@@ -33,8 +39,13 @@ export function NoteContextMenuContainer({
   const { t } = useTranslation("translation", {
     keyPrefix: "sidebar.notes.contextmenu",
   });
+  const { t: _t } = useTranslation();
   const { nextFavoriteHint } = useNotes();
-  const actions = useNoteContextMenu(note, nextFavoriteHint ?? "", finalOrderHint);
+  const actions = useNoteContextMenu(
+    note,
+    nextFavoriteHint ?? "",
+    finalOrderHint,
+  );
   return (
     <ContextMenu onOpenChange={onOpenChange}>
       <ContextMenuTrigger asChild>{children}</ContextMenuTrigger>
@@ -63,14 +74,21 @@ export function NoteContextMenuContainer({
           <Copy className="opacity-75" size={20}></Copy>
           {t("duplicate")}
         </ContextMenuItem>
-        <ContextMenuItem disabled>
-          <ArrowRightFromLine
-            className="opacity-75"
-            size={20}
-          ></ArrowRightFromLine>
-          {t("export")}
+        <ContextMenuSeparator />
+        <span className="text-sm mx-2 my-2 flex">{t("export")}</span>
+        <ContextMenuItem onSelect={actions.exportHTML}>
+          <FileCode size={18} />
+          {_t("editor.menu.htmlExport")}
         </ContextMenuItem>
-        <ContextMenuItem onSelect={actions.trash} className="group focus:text-destructive">
+        <ContextMenuItem onSelect={actions.exportJSON}>
+          <FileText size={18} />
+          {_t("editor.menu.jsonExport")}
+        </ContextMenuItem>
+        <ContextMenuSeparator />
+        <ContextMenuItem
+          onSelect={actions.trash}
+          className="group focus:text-destructive"
+        >
           <Trash
             className="opacity-75 group-focus:text-destructive"
             size={20}

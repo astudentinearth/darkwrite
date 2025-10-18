@@ -1,27 +1,27 @@
+import { DarkwriteAPIClient } from "@/api/api-client";
+import { FontStyle } from "@/common/note-customization";
 import {
   currentDocumentToSerializable,
   useEditorStore,
 } from "@/context/editor-store";
-import { useNoteById } from "@/query/use-note-by-id";
-import { useNotes } from "@/query/use-notes";
 import { generateHTML } from "@/features/editor/html-export";
-import { DarkwriteAPIClient } from "@/api/api-client";
-import { useSettings } from "@/query/use-settings";
-import { FontStyle } from "@/common/note-customization";
+import { EditorContent } from "@/features/editor/types";
 import { styleWithFont } from "@/lib/exported-note-style";
-import { useThemes } from "@/query/use-themes";
+import { useNoteById } from "@/query/use-note-by-id";
+import { useSettings } from "@/query/use-settings";
 
-export default function useNoteExport() {
-  const noteId = useEditorStore((s) => s.noteId);
-  const { note } = useNoteById(noteId);
+function toHTML(content: EditorContent, css: string) {
+  const body = generateHTML(content);
+  const html = `<!DOCTYPE html><html><body><style>${css}</style><main>${body}</main></body></html>`;
+  return html;
+}
+
+function useFontFromDocument() {
   const settings = useSettings().data;
-
-  const exportHTML = async () => {
-    const doc = currentDocumentToSerializable();
-
+  const getFont = (style: FontStyle = FontStyle.SANS, customFont?: string) => {
     const fonts = settings.appearance.fonts;
     let targetFont = "";
-    switch (doc.customizations.font) {
+    switch (style) {
       case FontStyle.SANS:
         targetFont = fonts.sans;
         break;
@@ -32,15 +32,53 @@ export default function useNoteExport() {
         targetFont = fonts.code;
         break;
       case FontStyle.CUSTOM:
-        targetFont = doc.customizations.customFont || "";
+        targetFont = customFont || "";
         break;
     }
+    return targetFont;
+  };
+  return { getFont };
+}
 
+export function usePersistedNoteExport(noteId: string) {
+  const { getFont } = useFontFromDocument();
+  const { note } = useNoteById(noteId);
+
+  const exportHTML = async () => {
+    const result = await DarkwriteAPIClient.note.getDocument(noteId);
+    const doc = result.document;
+    const targetFont = getFont(
+      doc.customizations.font,
+      doc.customizations.customFont,
+    );
     const css = styleWithFont(targetFont);
+    const html = toHTML(doc.contents, css);
+    await DarkwriteAPIClient.note.export(html, "html", note?.title);
+  };
 
-    const body = generateHTML(doc.contents);
+  const exportJSON = async () => {
+    const result = await DarkwriteAPIClient.note.getDocument(noteId);
+    const doc = result.document;
+    const jsonString = JSON.stringify(doc);
+    await DarkwriteAPIClient.note.export(jsonString, "json", note?.title);
+  };
 
-    const html = `<!DOCTYPE html><html><body><style>${css}</style><main>${body}</main></body></html>`;
+  return { exportHTML, exportJSON };
+}
+
+export default function useNoteExport() {
+  const noteId = useEditorStore((s) => s.noteId);
+  const { note } = useNoteById(noteId);
+  const { getFont } = useFontFromDocument();
+
+  const exportHTML = async () => {
+    const doc = currentDocumentToSerializable();
+    const targetFont = getFont(
+      doc.customizations.font,
+      doc.customizations.customFont,
+    );
+    const css = styleWithFont(targetFont);
+    const html = toHTML(doc.contents, css);
     await DarkwriteAPIClient.note.export(html, "html", note?.title);
   };
 
