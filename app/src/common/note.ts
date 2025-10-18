@@ -22,3 +22,8 @@ export const FileFormatMap: Record<NoteExportFormat, string> = {
   json: "JSON document",
   md: "Markdown document",
 };
+
+export type NoteImportResult = {
+  type: NoteExportFormat;
+  content: string[];
+};

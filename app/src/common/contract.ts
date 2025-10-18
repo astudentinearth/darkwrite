@@ -21,7 +21,7 @@ import {
   WorkspacesResponseDTO,
 } from "./dto/response/workspace.response";
 import { Font } from "./font";
-import { NoteExportFormat } from "./note";
+import { NoteExportFormat, NoteImportResult } from "./note";
 import { DarkwriteUserSettings } from "./settings";
 
 export interface INoteAPI {
@@ -38,6 +38,7 @@ export interface INoteAPI {
     fileType: NoteExportFormat,
     title?: string,
   ) => Promise<void>;
+  import: () => Promise<NoteImportResult>;
 }
 
 export interface IWorkspaceAPI {

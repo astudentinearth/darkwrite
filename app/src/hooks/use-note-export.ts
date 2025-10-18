@@ -40,19 +40,7 @@ export default function useNoteExport() {
 
     const body = generateHTML(doc.contents);
 
-    const html = `
-        <!DOCTYPE html>
-        <html>
-          <body>
-            <style>
-              ${css}
-            </style>
-            <main>
-            ${body}
-            </main>
-          </body>
-        </html>
-      `;
+    const html = `<!DOCTYPE html><html><body><style>${css}</style><main>${body}</main></body></html>`;
     await DarkwriteAPIClient.note.export(html, "html", note?.title);
   };
 

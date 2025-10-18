@@ -3,8 +3,9 @@ import { NoteDTO } from "@/common/dto";
 import { FileFormatMap, NoteExportFormat } from "@/common/note";
 import { dialog } from "electron";
 import { BrowserWindow } from "electron";
-import { writeFile } from "fs-extra";
+import { writeFile, readFile } from "fs-extra";
 import { ServiceContainer } from "../service-container";
+import { extname } from "path";
 
 export const ElectronNoteAPI: INoteAPI = {
   async create(dto) {
@@ -73,5 +74,41 @@ export const ElectronNoteAPI: INoteAPI = {
     if (value.canceled) return;
     const path = value.filePath;
     await writeFile(path, fileContent, "utf8");
+  },
+
+  async import() {
+    const value = await dialog.showOpenDialog(
+      BrowserWindow.getFocusedWindow() ?? BrowserWindow.getAllWindows()[0],
+      {
+        properties: ["openFile", "multiSelections"],
+        filters: [
+          { name: "Markdown files", extensions: ["md", "markdown"] },
+          { name: "HTML files", extensions: ["html", "html"] },
+          { name: "Darkwrite JSON", extensions: ["json"] },
+        ],
+      },
+    );
+    if (value.canceled) return { content: [], type: "json" };
+    const filePaths = value.filePaths;
+    const contents: string[] = [];
+    const ext = extname(filePaths[0]).toLowerCase();
+
+    let type: NoteExportFormat;
+    if (ext === ".md" || ext === ".markdown") {
+      type = "md";
+    } else if (ext === ".html" || ext === ".htm") {
+      type = "html";
+    } else {
+      type = "json";
+    }
+
+    for (const path of filePaths) {
+      const content = await readFile(path, "utf8");
+      contents.push(content);
+    }
+    return {
+      content: contents,
+      type,
+    };
   },
 };
