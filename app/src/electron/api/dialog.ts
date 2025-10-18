@@ -1,17 +1,20 @@
 import { dialog, OpenDialogOptions } from "electron";
 
+/** @deprecated useless abstraction */
 export type SaveFileDialogOptions = {
   title?: string;
   defaultPath?: string;
   buttonLabel?: string;
 };
 
+/** @deprecated useless abstraction */
 export type SaveFileDialogReturnType = {
   canceled: boolean;
   path?: string;
 };
 
 /**
+ * @deprecated useless abstraction
  * Shows a native save file dialog
  */
 export async function saveFile(opts: SaveFileDialogOptions) {
@@ -22,6 +25,7 @@ export async function saveFile(opts: SaveFileDialogOptions) {
 
 /**
  * Shows a native open file dialog
+ * @deprecated useless abstraction
  * @param opts dialog options
  */
 export async function openFile(opts: OpenDialogOptions) {

@@ -53,3 +53,12 @@ export function setEditorCustomizations(
   useEditorStore.setState({ customizations });
   saveContents(debounce);
 }
+
+export function currentDocumentToSerializable() {
+  const state = useEditorStore.getState();
+  const doc: NoteContent = {
+    contents: state.content,
+    customizations: state.customizations,
+  };
+  return doc;
+}

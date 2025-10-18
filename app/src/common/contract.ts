@@ -2,13 +2,26 @@
 // Electron-side handlers should implement these directly and expose it via the API bridge.
 // Clients talking to a cloud instance shall make the appropriate network requests instead.
 // Cloud-specific code should be kept separate from Electron to ensure browser portability.
-import { CreateNoteDTO, NoteContentResponseDTO, NoteResponseDTO, NotesResponseDTO, UpdateNoteDTO } from "./dto";
+import {
+  CreateNoteDTO,
+  NoteContentResponseDTO,
+  NoteResponseDTO,
+  NotesResponseDTO,
+  UpdateNoteDTO,
+} from "./dto";
 import { CreateEmbedDTO } from "./dto/request/embed.request";
-import { CreateWorkspaceDTO, UpdateWorkspaceDTO } from "./dto/request/workspace.request";
+import {
+  CreateWorkspaceDTO,
+  UpdateWorkspaceDTO,
+} from "./dto/request/workspace.request";
 import { EmbedResponseDTO } from "./dto/response/embed.response";
 import { ThemesResponseDTO } from "./dto/response/theme.response";
-import { WorkspaceResponseDTO, WorkspacesResponseDTO } from "./dto/response/workspace.response";
+import {
+  WorkspaceResponseDTO,
+  WorkspacesResponseDTO,
+} from "./dto/response/workspace.response";
 import { Font } from "./font";
+import { NoteExportFormat } from "./note";
 import { DarkwriteUserSettings } from "./settings";
 
 export interface INoteAPI {
@@ -20,11 +33,19 @@ export interface INoteAPI {
   getDocument: (id: string) => Promise<NoteContentResponseDTO>;
   setDocument: (id: string, serializedDocument: string) => Promise<void>;
   duplicate: (id: string) => Promise<NoteResponseDTO>;
+  export: (
+    fileContent: string,
+    fileType: NoteExportFormat,
+    title?: string,
+  ) => Promise<void>;
 }
 
 export interface IWorkspaceAPI {
   create: (dto: CreateWorkspaceDTO) => Promise<WorkspaceResponseDTO>;
-  update: (id: string, dto: UpdateWorkspaceDTO) => Promise<WorkspaceResponseDTO>;
+  update: (
+    id: string,
+    dto: UpdateWorkspaceDTO,
+  ) => Promise<WorkspaceResponseDTO>;
   getAll: () => Promise<WorkspacesResponseDTO>;
   delete: (id: string) => Promise<void>;
 }
@@ -41,9 +62,9 @@ export interface ISettingsAPI {
 }
 
 export interface IThemeAPI {
-  getThemes: ()=>Promise<ThemesResponseDTO>;
+  getThemes: () => Promise<ThemesResponseDTO>;
 }
 
 export interface IDesktopAPI {
-  getFontList: ()=>Promise<Font[]>;
+  getFontList: () => Promise<Font[]>;
 }

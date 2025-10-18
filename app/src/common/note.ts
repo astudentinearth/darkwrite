@@ -1,17 +1,24 @@
 import { NoteDTO } from "./dto";
 
-export function resolveUpperTree(id:string, notes: Record<string, NoteDTO>){
+export function resolveUpperTree(id: string, notes: Record<string, NoteDTO>) {
   const list: NoteDTO[] = [];
   console.log("a");
-  if(!notes[id] || !("parentId" in notes[id])) return [];
-  for(let currentId = notes[id].parentId;;) {
-    if(currentId == null) return list;
-  console.log("b");
+  if (!notes[id] || !("parentId" in notes[id])) return [];
+  for (let currentId = notes[id].parentId; ; ) {
+    if (currentId == null) return list;
+    console.log("b");
     const parent = notes[currentId];
-  console.log("c");
-    if(!parent) break;
+    console.log("c");
+    if (!parent) break;
     list.push(parent);
-  console.log("d");
+    console.log("d");
     currentId = parent.parentId;
   }
 }
+
+export type NoteExportFormat = "md" | "html" | "json";
+export const FileFormatMap: Record<NoteExportFormat, string> = {
+  html: "HTML document",
+  json: "JSON document",
+  md: "Markdown document",
+};

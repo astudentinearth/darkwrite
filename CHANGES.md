@@ -9,6 +9,7 @@
   - Darkwrite can now follow your system color scheme
 - New settings format
 - Add ability to zoom in/out through menu
+- HTML exports are now styled
 
 
 ## ✨ Improvements and fixes

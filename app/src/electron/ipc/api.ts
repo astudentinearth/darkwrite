@@ -15,22 +15,31 @@ import { ElectronSettingsAPI } from "./settings.handler";
 import { ElectronThemeAPI } from "./theme.handler";
 import { DesktopIntegration } from "../lib/desktop-integration";
 
-
 export const DarkwriteElectronAPI = {
   note: {
     create: new IPCHandler(false, ElectronNoteAPI.create),
     delete: new IPCHandler(false, ElectronNoteAPI.delete),
-    getAllByWorkspaceId: new IPCHandler(false, ElectronNoteAPI.getAllByWorkspaceId),
+    getAllByWorkspaceId: new IPCHandler(
+      false,
+      ElectronNoteAPI.getAllByWorkspaceId,
+    ),
     getById: new IPCHandler(false, ElectronNoteAPI.getById),
     update: new IPCHandler(false, ElectronNoteAPI.update),
     getDocument: new IPCHandler(false, ElectronNoteAPI.getDocument),
     setDocument: new IPCHandler(false, ElectronNoteAPI.setDocument),
-    duplicate: new IPCHandler(false, ElectronNoteAPI.duplicate)
+    duplicate: new IPCHandler(false, ElectronNoteAPI.duplicate),
+    export: new IPCHandler(false, ElectronNoteAPI.export),
   },
   embed: {
-    createFromLocalFile: new IPCHandler(false, ElectronEmbedAPI.createFromLocalFile),
-    createFromArrayBuffer: new IPCHandler(false, ElectronEmbedAPI.createFromArrayBuffer),
-    getById: new IPCHandler(false, ElectronEmbedAPI.getById)
+    createFromLocalFile: new IPCHandler(
+      false,
+      ElectronEmbedAPI.createFromLocalFile,
+    ),
+    createFromArrayBuffer: new IPCHandler(
+      false,
+      ElectronEmbedAPI.createFromArrayBuffer,
+    ),
+    getById: new IPCHandler(false, ElectronEmbedAPI.getById),
   },
   workspace: {
     create: new IPCHandler(false, ElectronWorkspaceAPI.create),
@@ -40,15 +49,18 @@ export const DarkwriteElectronAPI = {
   },
   settings: {
     getUserSettings: new IPCHandler(false, ElectronSettingsAPI.getUserSettings),
-    saveUserSettings: new IPCHandler(false, ElectronSettingsAPI.saveUserSettings)
+    saveUserSettings: new IPCHandler(
+      false,
+      ElectronSettingsAPI.saveUserSettings,
+    ),
   },
   theme: {
-    getThemes: new IPCHandler(false, ElectronThemeAPI.getThemes)
+    getThemes: new IPCHandler(false, ElectronThemeAPI.getThemes),
   },
   showAppMenu: new IPCHandler(false, showAppMenu),
   desktop: {
-    getFontList: new IPCHandler(false, DesktopIntegration.getAvailableFonts)
-  }
+    getFontList: new IPCHandler(false, DesktopIntegration.getAvailableFonts),
+  },
 } satisfies DarkwriteAPI;
 export type DarkwritePreloadAPI = InferPreloadAPI<typeof DarkwriteElectronAPI>;
 
@@ -100,4 +112,4 @@ export const InitializeElectronAPI = () => {
     return buildPreloadObject();
   });
   registerAPI("api");
-}
+};
