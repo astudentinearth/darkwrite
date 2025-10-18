@@ -10,7 +10,7 @@
 - New settings format
 - Add ability to zoom in/out through menu
 - HTML exports are now styled
-
+- Added JSON export and import
 
 ## ✨ Improvements and fixes
 - Add missing translations for various places
@@ -19,6 +19,7 @@
 - Make the default theme darker
 - Fixed full width pages
 - You can now choose choose fonts from your system font list without having to type its name
+- Multiple HTML, JSON and Markdown files can now be imported at once
 
 # 0.5.3-alpha.2
 ## 🌟 Features
