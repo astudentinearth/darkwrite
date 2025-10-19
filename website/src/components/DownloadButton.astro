@@ -1,14 +1,17 @@
 ---
+import { Download } from "@lucide/astro";
 import { cn, type ClassProp } from "../lib/utils";
 
 interface Props extends ClassProp {}
 ---
 
-<button
+<a
+  href="/downloads"
   class={cn(
-    "bg-primary hero-download-button text-white cursor-pointer hover:brightness-110 transition-[filter] duration-75 px-8 py-4 drop-shadow-md hover:drop-shadow-lg drop-shadow-primary/20 rounded-2xl",
+    "bg-primary  text-white cursor-pointer hover:brightness-110 flex items-center gap-2 transition-[filter] duration-75 px-8 py-4 drop-shadow-md hover:drop-shadow-lg drop-shadow-primary/20 rounded-2xl",
     Astro.props.class,
   )}
 >
-  Get Darkwrite
-</button>
+  <Download />
+  <span class="hero-download-button">Get Darkwrite</span>
+</a>

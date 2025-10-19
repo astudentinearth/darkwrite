@@ -1,0 +1,21 @@
+---
+import { GIT_REPO_URL } from "../lib/resources";
+import Darkwrite from "./Darkwrite.astro";
+---
+
+<header
+  class="fixed left-0 right-0 h-fit p-4 backdrop-blur-md flex gap-2 items-center text-xl"
+>
+  <a class="flex logo shrink-0" href="/">
+    <Darkwrite class="size-10" />
+  </a>
+  <div></div>
+  <a>User guide</a>
+  <a href={GIT_REPO_URL}>Source code</a>
+  <div class="grow"></div>
+  <a
+    href="/downloads"
+    class="px-5 py-2 flex download-btn rounded-xl bg-primary hover:brightness-120 text-white! z-20"
+    >Get started</a
+  >
+</header>

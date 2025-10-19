@@ -9,5 +9,5 @@ export function getOperatingSystem(): string {
   if (/Linux/.test(ua)) {
     return "Linux";
   }
-  return "Unknown";
+  return "Other";
 }
