@@ -1,0 +1,29 @@
+---
+import DocsLayout from "../../layouts/DocsLayout.astro";
+import { GIT_REPO_URL } from "../../lib/resources";
+---
+
+<DocsLayout>
+  <main class="flex flex-col gap-3">
+    <h1>User guide</h1>
+    <hr />
+    <p>
+      Welcome to Darkwrite&apos;s user documentation. We&apos;ll be adding new
+      pages here as we move forward, until then you can check these out:
+    </p>
+    <ul class="list-disc ml-6">
+      <li>
+        <a href="https://github.com/astudentinearth/darkwrite/discussions/7"
+          >Roadmap discussion on GitHub</a
+        >
+      </li>
+      <li>
+        <a href={GIT_REPO_URL}>Source code</a>
+      </li>
+      <li>
+        <a href={"/downloads"}>Our downloads page for installation help</a>
+      </li>
+    </ul>
+    <img src="/hero.webp" class="border rounded-lg" />
+  </main>
+</DocsLayout>

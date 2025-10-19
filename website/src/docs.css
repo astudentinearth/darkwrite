@@ -1,0 +1,6 @@
+@import "tailwindcss";
+@reference "./globals.css";
+
+h1 {
+  @apply font-bold text-3xl md:text-5xl;
+}

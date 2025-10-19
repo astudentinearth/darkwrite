@@ -1,0 +1,41 @@
+---
+import Header from "../components/Header.astro";
+import "../globals.css";
+import "../docs.css";
+import "@fontsource/karla";
+import "@fontsource/karla/400";
+import "@fontsource/karla/500";
+import "@fontsource/karla/600";
+import "@fontsource/karla/700";
+import "@fontsource/karla/800";
+import DocsSidebar from "../components/DocsSidebar.astro";
+interface Props {
+  title?: string;
+}
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{Astro.props.title ?? "Darkwrite"}</title>
+  </head>
+  <body>
+    <div
+      class="absolute w-3/4 sm:w-1/2 h-72 rounded-full opacity-30 bg-primary -z-10 left-1/2 -translate-y-1/2 -translate-x-1/2 blur-[120px]"
+    >
+    </div>
+    <Header />
+    <div
+      class="w-full mt-20 px-4 md:mt-48 flex-col items-center md:items-start md:flex-row md:flex md:justify-center gap-8"
+    >
+      <DocsSidebar />
+      <div class="max-w-240 text-justify px-4 mt-8 md:mt-0">
+        <slot />
+      </div>
+    </div>
+  </body>
+  <script src="../lib/scroll.ts"></script>
+</html>
