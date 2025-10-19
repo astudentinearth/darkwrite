@@ -15,6 +15,10 @@ interface Props {
     <title>{Astro.props.title ?? "Darkwrite"}</title>
   </head>
   <body>
+    <div
+      class="absolute w-3/4 sm:w-1/2 h-72 rounded-full opacity-30 bg-primary -z-10 left-1/2 -translate-y-1/2 -translate-x-1/2 blur-[120px]"
+    >
+    </div>
     <slot />
   </body>
 </html>

@@ -1,0 +1,7 @@
+---
+import { cn, type ClassProp } from "../lib/utils";
+
+interface Props extends ClassProp {}
+---
+
+<img src="/darkwrite_icon.svg" class={cn("size-16", Astro.props.class)} />

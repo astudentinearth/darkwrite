@@ -28,3 +28,11 @@ body {
   font-family: "Karla", "Inter", sans-serif;
   color: white;
 }
+
+a {
+  @apply text-primary-text hover:underline;
+}
+
+code {
+  @apply bg-white/5 p-3 rounded-lg;
+}

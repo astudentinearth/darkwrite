@@ -1,0 +1,80 @@
+---
+import DefaultLayout from "../layouts/DefaultLayout.astro";
+import { Grid2x2, Code } from "@lucide/astro";
+import Linux from "simple-icons-astro/Linux";
+import Apple from "simple-icons-astro/Apple";
+import {
+  LINUX_LATEST_RELEASE,
+  WINDOWS_LATEST_RELEASE,
+  AUR_PACKAGE_URL,
+  MACOS_LATEST_RELEASE,
+  GIT_REPO_URL,
+  RELEASE_PAGE_URL,
+} from "../lib/resources";
+import Darkwrite from "../components/Darkwrite.astro";
+---
+
+<DefaultLayout>
+  <main class="mt-40 w-full flex flex-col items-center">
+    <div
+      class="max-w-320 w-full px-4 flex flex-col gap-4 [&_h2]:font-semibold [&_h2]:text-3xl [&_h2]:md:text-4xl"
+    >
+      <Darkwrite class="size-28" />
+      <h1 class="text-3xl md:text-5xl font-bold">Download Darkwrite</h1>
+      <div
+        class="grid-cols-1 md:grid-cols-[1fr_1fr] grid gap-2 mt-4 [&>div]:hover:brightness-125"
+      >
+        <div class="p-4 bg-card border rounded-xl flex flex-col gap-3">
+          <h2 class="flex items-center gap-2"><Grid2x2 size={32} />Windows</h2>
+          <a href={WINDOWS_LATEST_RELEASE}
+            >Download the installer (0.5.3-alpha.2)</a
+          >
+          <hr />
+          <p>
+            If you see a Windows Defender/SmartScreen warning when you run the
+            installer, choose <strong>&apos;More info&apos;</strong>, then <strong
+              >&apos;Run Anyway&apos;.</strong
+            > The warning is present because we can&apos;t sign our builds yet.
+          </p>
+        </div>
+        <div class="p-4 bg-card border rounded-xl flex flex-col gap-3">
+          <h2 class="flex items-center gap-2"><Linux /> Linux</h2><a
+            href={LINUX_LATEST_RELEASE}>Download the AppImage (0.5.3-alpha.2)</a
+          >
+          <hr />
+          <h3 class="font-semibold">Arch-based distributions</h3>
+          <p>
+            You can use the unofficial <a href={AUR_PACKAGE_URL}>AUR package.</a
+            >
+          </p>
+          <code>yay -Syu darkwrite-bin</code>
+        </div>
+        <div class="p-4 bg-card border rounded-xl flex flex-col gap-3">
+          <h2 class="flex items-center gap-2"><Apple /> macOS</h2>
+          <p>
+            macOS builds are not notarized, therefore <strong
+              >you need to run a simple command to allow Darkwrite to run on
+              your Mac. (we hope to resolve this issue soon)</strong
+            >
+          </p>
+          <a href={MACOS_LATEST_RELEASE}
+            >Download the installer (0.5.3-alpha.2)</a
+          >
+          Once you have the installer downloaded, open a terminal and paste this
+          command:
+          <code>xattr -cr ~/Downloads/Darkwrite-0.5.3-alpha.2-arm64.dmg</code>
+          After dragging Darkwrite to your Applications folder, paste this command
+          as well:
+          <code>xattr -cr /Applications/Darkwrite.app</code>
+        </div>
+        <div class="p-4 bg-card border rounded-xl flex flex-col gap-3 h-fit">
+          <h2 class="flex items-center gap-2">
+            <Code size={32} class="shrink-0" /> Source code and other releases
+          </h2>
+          <a href={GIT_REPO_URL}>Git repository</a>
+          <a href={RELEASE_PAGE_URL}>All releases on GitHub</a>
+        </div>
+      </div>
+    </div>
+  </main>
+</DefaultLayout>
