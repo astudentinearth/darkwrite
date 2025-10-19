@@ -1,10 +1,26 @@
 ---
 import DefaultLayout from "../layouts/DefaultLayout.astro";
+import Hero from "../sections/Hero.astro";
 ---
 
 <DefaultLayout>
   <div
-    class="absolute w-3/4 sm:w-1/2 h-72 rounded-full opacity-30 bg-primary left-1/2 -translate-y-1/2 -translate-x-1/2 blur-[120px]"
+    class="absolute w-3/4 sm:w-1/2 h-72 rounded-full opacity-30 bg-primary -z-10 left-1/2 -translate-y-1/2 -translate-x-1/2 blur-[120px]"
   >
   </div>
+  <div class="w-full flex flex-col items-center">
+    <Hero />
+  </div>
+
+  <script>
+    import { getOperatingSystem } from "../lib/platform";
+    const os = getOperatingSystem();
+    if (os !== "Other") {
+      const buttons = document.querySelectorAll(".hero-download-button");
+      buttons.forEach((btn) => {
+        if (btn instanceof HTMLElement)
+          btn.innerText = `Get Darkwrite for ${os}`;
+      });
+    }
+  </script>
 </DefaultLayout>

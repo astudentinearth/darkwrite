@@ -1,0 +1,24 @@
+---
+import DownloadButton from "../components/DownloadButton.astro";
+---
+
+<div class="max-w-320 w-full mt-64 flex flex-col items-center gap-2 px-4">
+  <h1 class="text-[64px] font-bold text-center">
+    A notebook that is <span
+      class="bg-clip-text bg-linear-to-r text-transparent from-[#338BFF] to-[#79A3DB]"
+      >truly yours.</span
+    >
+  </h1>
+  <p class="text-center inline-block max-w-180">
+    The personal workspace that respects you. <span class="text-primary-text"
+      >Feature packed, customizable and open source.</span
+    >
+  </p>
+  <DownloadButton class="mt-8" />
+  <div class="w-fit px-4">
+    <img
+      src="/hero.webp"
+      class="border rounded-lg max-w-400 mt-16 drop-shadow-2xl w-full"
+    />
+  </div>
+</div>

@@ -6,6 +6,7 @@
   --color-card: hsl(228 14% 7%);
   --color-secondary: hsl(230 12% 10%);
   --color-primary: hsl(214 64% 44%);
+  --color-primary-text: hsl(214 56% 69%);
   --color-border: hsl(0 0% 26%);
 }
 
@@ -22,6 +23,8 @@
 }
 
 body {
-  @apply w-full h-full absolute left-0 top-0 m-0 p-0 bg-background;
+  @apply w-full h-full absolute left-0 top-0 m-0 p-0 bg-background text-xl md:text-2xl;
   box-sizing: border-box;
+  font-family: "Karla", "Inter", sans-serif;
+  color: white;
 }

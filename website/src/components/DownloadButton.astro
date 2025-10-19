@@ -1,0 +1,14 @@
+---
+import { cn, type ClassProp } from "../lib/utils";
+
+interface Props extends ClassProp {}
+---
+
+<button
+  class={cn(
+    "bg-primary hero-download-button text-white cursor-pointer hover:brightness-110 transition-[filter] duration-75 px-8 py-4 drop-shadow-md hover:drop-shadow-lg drop-shadow-primary/20 rounded-2xl",
+    Astro.props.class,
+  )}
+>
+  Get Darkwrite
+</button>

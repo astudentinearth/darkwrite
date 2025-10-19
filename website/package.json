@@ -9,7 +9,10 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^5.14.4"
+    "@fontsource/karla": "^5.2.8",
+    "astro": "^5.14.4",
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^3.3.1"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.1.14",
