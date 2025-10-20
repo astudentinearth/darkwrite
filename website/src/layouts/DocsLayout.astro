@@ -9,6 +9,7 @@ import "@fontsource/karla/600";
 import "@fontsource/karla/700";
 import "@fontsource/karla/800";
 import DocsSidebar from "../components/DocsSidebar.astro";
+import Footer from "../components/Footer.astro";
 interface Props {
   title?: string;
   noSidebar?: boolean;
@@ -21,7 +22,7 @@ interface Props {
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
-    <title>{Astro.props.title ?? "Darkwrite"}</title>
+    <slot name="head" />
   </head>
   <body>
     <div
@@ -37,6 +38,7 @@ interface Props {
         <slot />
       </div>
     </div>
+    <Footer />
   </body>
   <script src="../lib/scroll.ts"></script>
 </html>

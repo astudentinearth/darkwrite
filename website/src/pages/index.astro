@@ -1,4 +1,5 @@
 ---
+import Meta from "../components/Meta.astro";
 import DefaultLayout from "../layouts/DefaultLayout.astro";
 import BottomCTA from "../sections/BottomCTA.astro";
 import Cards from "../sections/Cards.astro";
@@ -7,6 +8,7 @@ import Sections from "../sections/Sections.astro";
 ---
 
 <DefaultLayout>
+  <Meta title="Darkwrite | A notebook that is truly yours" />
   <div class="w-full flex flex-col items-center">
     <Hero />
     <Sections />

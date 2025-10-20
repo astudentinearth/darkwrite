@@ -1,0 +1,82 @@
+---
+export interface TwitterMeta {
+  card?: "summary" | "summary_large_image";
+  site?: string;
+  creator?: string;
+}
+
+export interface Props {
+  title: string;
+  description?: string;
+  keywords?: string | string[];
+
+  ogImage?: string;
+  type?: string;
+  siteName?: string;
+  url?: string;
+  locale?: string;
+
+  canonical?: string;
+  robots?: string;
+  twitter?: TwitterMeta;
+}
+
+const {
+  title,
+  description,
+  keywords = [
+    "notes app",
+    "notion alternative",
+    "darkwrite",
+    "note app",
+    "note taking app",
+    "markdown app",
+    "markdown note app",
+    "markdown editor",
+    "open source",
+    "productivity",
+    "writing app",
+    "distraction free",
+    "focus mode",
+  ],
+  ogImage = "https://darkwrite.app/og-image.png",
+  type = "website",
+  siteName,
+  url = "https://darkwrite.app",
+  locale = "en_US",
+  canonical,
+  robots = "index,follow",
+  twitter = {},
+} = Astro.props as Props;
+
+const metaKeywords = Array.isArray(keywords) ? keywords.join(", ") : keywords;
+const twitterCard =
+  twitter.card ?? (ogImage ? "summary_large_image" : "summary");
+const canonicalHref = canonical ?? url;
+---
+
+<>
+  <title>{title}</title>
+
+  {description && <meta name="description" content={description} />}
+  {metaKeywords && <meta name="keywords" content={metaKeywords} />}
+  {robots && <meta name="robots" content={robots} />}
+  {canonicalHref && <link rel="canonical" href={canonicalHref} />}
+
+  <meta property="og:type" content={type} />
+  <meta property="og:title" content={title} />
+  {description && <meta property="og:description" content={description} />}
+  {siteName && <meta property="og:site_name" content={siteName} />}
+  {url && <meta property="og:url" content={url} />}
+  {locale && <meta property="og:locale" content={locale} />}
+  {ogImage && <meta property="og:image" content={ogImage} />}
+
+  <meta name="twitter:card" content={twitterCard} />
+  {twitter.site && <meta name="twitter:site" content={twitter.site} />}
+  {twitter.creator && <meta name="twitter:creator" content={twitter.creator} />}
+  <meta name="twitter:title" content={title} />
+  {description && <meta name="twitter:description" content={description} />}
+  {ogImage && <meta name="twitter:image" content={ogImage} />}
+
+  <slot />
+</>

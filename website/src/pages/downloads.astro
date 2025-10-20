@@ -12,9 +12,11 @@ import {
   RELEASE_PAGE_URL,
 } from "../lib/resources";
 import Darkwrite from "../components/Darkwrite.astro";
+import Meta from "../components/Meta.astro";
 ---
 
 <DefaultLayout>
+  <Meta title="Downloads | Darkwrite" />
   <main class="mt-40 pb-12 w-full flex flex-col items-center">
     <div
       class="max-w-320 w-full px-4 flex flex-col gap-4 [&_h2]:font-semibold [&_h2]:text-3xl [&_h2]:md:text-4xl"

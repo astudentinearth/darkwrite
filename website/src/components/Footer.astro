@@ -1,0 +1,21 @@
+---
+import { GIT_REPO_URL } from "../lib/resources";
+import Darkwrite from "./Darkwrite.astro";
+---
+
+<footer
+  class="flex flex-col md:flex-row mt-6 px-4 py-3 bg-card/50 border-t text-lg gap-5 md:items-center"
+>
+  <a href="/">
+    <Darkwrite class="size-12" />
+  </a>
+  <a href="/downloads">Downloads</a>
+  <a href="/docs">User guide</a>
+  <a href={GIT_REPO_URL}>Source code</a>
+  <a href="/privacy">Privacy</a>
+  <div class="hidden md:block grow"></div>
+  <span>
+    built with ☕ by
+    <a href="https://yeniceri.dev">burak</a>
+  </span>
+</footer>
