@@ -1,11 +1,18 @@
 ---
 import DefaultLayout from "../layouts/DefaultLayout.astro";
+import BottomCTA from "../sections/BottomCTA.astro";
+import Cards from "../sections/Cards.astro";
 import Hero from "../sections/Hero.astro";
+import Sections from "../sections/Sections.astro";
 ---
 
 <DefaultLayout>
   <div class="w-full flex flex-col items-center">
     <Hero />
+    <Sections />
+    <Cards />
+    <BottomCTA />
+    <div class="h-12"></div>
   </div>
 
   <script>

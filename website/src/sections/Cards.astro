@@ -1,0 +1,59 @@
+---
+import {
+  BookOpen,
+  FolderSync,
+  GitPullRequest,
+  HatGlasses,
+  Heart,
+} from "@lucide/astro";
+import { GIT_REPO_URL } from "../lib/resources";
+---
+
+<div class="max-w-320 w-full mt-48 flex flex-col items-center gap-24 px-6">
+  <div
+    class="grid-cols-1 grid lg:grid-cols-[1fr_1fr_1fr] gap-4 *:bg-card [&_p]:text-xl *:hover:brightness-120 *:border *:rounded-3xl *:drop-shadow-xl *:flex *:flex-col *:gap-2 *:p-6"
+  >
+    <div>
+      <span class="flex items-center font-medium gap-2"
+        ><FolderSync />Backups made easy.</span
+      >
+      <p class="text-white/80">
+        Backup all of your data to a <strong
+          >single file - with one click.</strong
+        > Restore your backup anytime you wish.
+      </p>
+      <div class="grow"></div>
+      <a
+        href="/docs"
+        class="text-black! gap-2 items-center px-6 py-3 w-fit flex shrink-0 bg-white rounded-2xl text-xl"
+        ><BookOpen /> See the guide</a
+      >
+    </div>
+    <div>
+      <span class="flex items-center font-medium gap-2"
+        ><HatGlasses />Privacy comes first.</span
+      >
+      <p class="text-white/80">
+        Darkwrite <strong>does not spy on you.</strong> It does not track you on
+        the web and it contains <strong>no ads.</strong>
+        <br /><br />
+        Your notes never leave your device - or become training data for AI.
+      </p>
+    </div>
+    <div>
+      <span class="flex items-center font-medium gap-2"
+        ><Heart />Fully open source.</span
+      >
+      <p class="text-white/80">
+        <strong>Transparency is our commitment.</strong> You get to know what runs
+        on your device.
+      </p>
+      <div class="grow"></div>
+      <a
+        href={GIT_REPO_URL}
+        class="text-black! gap-2 items-center px-6 py-3 w-fit flex shrink-0 bg-white rounded-2xl text-xl"
+        ><GitPullRequest /> Get the code</a
+      >
+    </div>
+  </div>
+</div>

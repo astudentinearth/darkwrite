@@ -1,0 +1,14 @@
+---
+import { cn, type ClassProp } from "../lib/utils";
+
+interface Props extends ClassProp {}
+---
+
+<div
+  class={cn(
+    "grid grid-cols-1 gap-12 md:grid-cols-[1fr_1fr] place-items-center",
+    Astro.props.class,
+  )}
+>
+  <slot />
+</div>

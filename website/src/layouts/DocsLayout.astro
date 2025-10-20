@@ -11,6 +11,7 @@ import "@fontsource/karla/800";
 import DocsSidebar from "../components/DocsSidebar.astro";
 interface Props {
   title?: string;
+  noSidebar?: boolean;
 }
 ---
 
@@ -31,7 +32,7 @@ interface Props {
     <div
       class="w-full mt-20 px-4 md:mt-48 flex-col items-center md:items-start md:flex-row md:flex md:justify-center gap-8"
     >
-      <DocsSidebar />
+      {!Astro.props.noSidebar && <DocsSidebar />}
       <div class="max-w-240 text-justify px-4 mt-8 md:mt-0">
         <slot />
       </div>

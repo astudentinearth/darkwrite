@@ -1,0 +1,45 @@
+---
+import Section from "./Section.astro";
+import SectionBody from "./SectionBody.astro";
+import SectionContent from "./SectionContent.astro";
+import SectionHeading from "./SectionHeading.astro";
+---
+
+<div class="max-w-320 w-full mt-48 flex flex-col items-center gap-24 px-6">
+  <Section>
+    <SectionContent>
+      <SectionHeading>Express your thoughts.</SectionHeading>
+      <SectionBody>
+        A powerful editor to satisfy a variety of use cases, from to-do lists to
+        documentation.<br />
+        Stay organized with documents that match your vibe.
+      </SectionBody>
+    </SectionContent>
+    <img src="/section1.webp" />
+  </Section>
+  <Section>
+    <SectionContent class="md:order-1">
+      <SectionHeading>Customization, redefined.</SectionHeading>
+      <SectionBody>
+        Some notes deserve a unique color - and you deserve a workspace that
+        reflects you.
+        <br />
+        Darkwrite is designed to be yours - from the colors to the fonts of your
+        choice.
+      </SectionBody>
+    </SectionContent>
+    <img class="md:-order-1" src="/section2.webp" />
+  </Section>
+  <Section>
+    <SectionContent>
+      <SectionHeading>Works offline.</SectionHeading>
+      <SectionBody>
+        Darkwrite keeps everything on your device - available to you at all
+        times. You own your data.
+        <br />
+        You are never dependent on a network connection or cloud service.
+      </SectionBody>
+    </SectionContent>
+    <img src="/section3.svg" />
+  </Section>
+</div>

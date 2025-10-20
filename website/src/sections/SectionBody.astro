@@ -1,0 +1,7 @@
+---
+import { cn, type ClassProp } from "../lib/utils";
+
+interface Props extends ClassProp {}
+---
+
+<p class={cn("text-2xl", Astro.props.class)}><slot /></p>

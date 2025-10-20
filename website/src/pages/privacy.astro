@@ -1,0 +1,39 @@
+---
+import DocsLayout from "../layouts/DocsLayout.astro";
+import { GIT_REPO_URL } from "../lib/resources";
+---
+
+<DocsLayout noSidebar>
+  <div class="flex flex-col gap-2">
+    <h1>Privacy Policy</h1>
+    <span class="opacity-80">Last updated: October 20th, 2025</span>
+    <hr />
+    <p>
+      This website is hosted on Cloudflare Pages. Consult their <a
+        href="https://www.cloudflare.com/privacypolicy/">Privacy Policy</a
+      > to see how they collect and process your information.
+    </p>
+    <hr />
+    <h2>
+      Darkwrite does not collect, store, transfer or otherwise process your
+      data.
+    </h2>
+    <p>
+      This website has no trackers, no cookies, no nothing. Similarly, the
+      Darkwrite app <strong>does not collect anything about you.</strong> All your
+      data is stored on-device. We are not interested in tracking you online. We
+      just want to deliver you the best experience.
+    </p>
+    <p>
+      The desktop app may make requests to the GitHub API in order to notify you
+      of updates. If you don&apos;t want this for whatever reason, you can
+      disable it in the application settings.
+    </p>
+    <hr />
+    <p>
+      If you have any questions, you can contact us at <a
+        href="mailto:burak.yn.dev@gmail.com">burak.yn.dev@gmail.com</a
+      >, or on <a href={GIT_REPO_URL + "/issues"}>GitHub issues.</a>
+    </p>
+  </div>
+</DocsLayout>

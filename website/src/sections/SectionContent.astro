@@ -1,0 +1,9 @@
+---
+import { cn, type ClassProp } from "../lib/utils";
+
+interface Props extends ClassProp {}
+---
+
+<section class={cn("flex flex-col gap-2", Astro.props.class)}>
+  <slot />
+</section>
