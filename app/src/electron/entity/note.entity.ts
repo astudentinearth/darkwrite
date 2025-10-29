@@ -45,21 +45,21 @@ export class Note {
 
   /** Renames the `created` field from the previous iteration. Migrate accordingly. */
   @Column("datetime")
-  createdAt: Date;
+  createdAt: Date = new Date();
 
   /** Renames the `modified` field from the previous iteration. Migrate accordingly. */
   @Column("datetime")
-  modifiedAt: Date;
+  modifiedAt: Date = new Date();
 
   /** Holds the date this note was last moved into trash. */
   @Column({ type: "datetime", nullable: true })
   trashedAt?: Date;
 
   @Column("boolean", { nullable: true })
-  isFavorite?: boolean;
+  isFavorite?: boolean = false;
 
   @Column("boolean", { nullable: true })
-  isTrashed?: boolean;
+  isTrashed?: boolean = false;
 
   /** base36 order hint to determine order in the favorites section of the sidebar. Replaces the `favoriteIndex` field from the previous iteration.
    *  During migrations from v0.1-0.5x alphas, hints should be calculated depending on existing indices.
@@ -72,6 +72,10 @@ export class Note {
    */
   @Column("varchar")
   orderHint: string;
+
+  modified() {
+    this.modifiedAt = new Date();
+  }
 
   mapToDTO() {
     return {

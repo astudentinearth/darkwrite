@@ -2,6 +2,7 @@ import { Repository } from "typeorm";
 import { AppDataSource } from "../db";
 import { Workspace } from "../entity";
 
+/** @deprecated */
 export class WorkspaceRepository {
   private _repo: Repository<Workspace>;
   constructor(private _datasource = AppDataSource) {
@@ -17,7 +18,7 @@ export class WorkspaceRepository {
   }
 
   async findById(id: string) {
-    return this._repo.findOne({where: {id}});
+    return this._repo.findOne({ where: { id } });
   }
 
   async findAll() {
@@ -25,11 +26,10 @@ export class WorkspaceRepository {
   }
 
   async deleteById(id: string) {
-    return this._repo.delete({id});
+    return this._repo.delete({ id });
   }
 
   async delete(workspace: Workspace) {
-    return this._repo.delete({id: workspace.id});
+    return this._repo.delete({ id: workspace.id });
   }
-
 }

@@ -1,25 +1,25 @@
 import { INoteAPI } from "@/common/contract";
 import { NoteDTO } from "@/common/dto";
 import { FileFormatMap, NoteExportFormat } from "@/common/note";
-import { dialog } from "electron";
-import { BrowserWindow } from "electron";
-import { writeFile, readFile } from "fs-extra";
-import { ServiceContainer } from "../service-container";
+import { BrowserWindow, dialog } from "electron";
+import { readFile, writeFile } from "fs-extra";
 import { extname } from "path";
+import { DocumentService } from "../service/document.service";
+import { NoteQueryService } from "./note-query.service";
+import { NoteService } from "./note.service";
+
+const documentService = new DocumentService();
 
 export const ElectronNoteAPI: INoteAPI = {
   async create(dto) {
-    const note = await ServiceContainer.noteService.create(dto);
+    const note = await NoteService.create(dto);
     return { note: note.mapToDTO() };
   },
 
-  async delete(id) {
-    ServiceContainer.noteService.deleteById(id);
-  },
+  delete: NoteService.deleteById,
 
   async getAllByWorkspaceId(workspaceId) {
-    const notes =
-      await ServiceContainer.noteService.getAllByWorkspaceId(workspaceId);
+    const notes = await NoteQueryService.getAllByWorkspaceId(workspaceId);
     const dtos = notes
       .map((n) => n.mapToDTO())
       .reduce(
@@ -33,28 +33,28 @@ export const ElectronNoteAPI: INoteAPI = {
   },
 
   async getById(id) {
-    const note = await ServiceContainer.noteService.getById(id);
+    const note = await NoteQueryService.getById(id);
     return { note: note ? note.mapToDTO() : null };
   },
 
   async update(id, dto) {
-    const updated = await ServiceContainer.noteService.update(id, dto);
+    const updated = await NoteService.update(id, dto);
     const _dto = updated.mapToDTO();
     return { note: _dto };
   },
 
   async getDocument(id) {
-    const document = await ServiceContainer.documentService.getNoteContent(id);
+    const document = await documentService.getNoteContent(id);
     return { document };
   },
 
   async setDocument(id, serializedDocument) {
-    ServiceContainer.documentService.setNoteContent(id, serializedDocument);
-    ServiceContainer.noteService.setModificationDate(id, new Date());
+    documentService.setNoteContent(id, serializedDocument);
+    NoteService.setModificationDate(id, new Date());
   },
 
   async duplicate(id: string) {
-    const note = await ServiceContainer.noteService.duplicate(id);
+    const note = await NoteService.duplicate(id);
     if (!note) throw new Error("Failed to duplicate note");
     return { note: note.mapToDTO() };
   },

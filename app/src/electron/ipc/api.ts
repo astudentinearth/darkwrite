@@ -8,7 +8,7 @@ import {
   IPCMainListenerWithoutEvent,
 } from "@main/types";
 import { ipcMain } from "electron";
-import { ElectronNoteAPI } from "./note.handler";
+import { ElectronNoteAPI } from "../note/note.handler";
 import { ElectronEmbedAPI } from "./embed.handler";
 import { ElectronWorkspaceAPI } from "./workspace.handler";
 import { ElectronSettingsAPI } from "./settings.handler";

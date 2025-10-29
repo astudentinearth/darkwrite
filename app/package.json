@@ -82,6 +82,7 @@
     "@types/fs-extra": "^11.0.4",
     "@types/lodash": "^4.17.20",
     "better-sqlite3": "^11.10.0",
+    "class-transformer": "^0.5.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "1.0.4",
