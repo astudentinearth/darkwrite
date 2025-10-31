@@ -52,6 +52,9 @@ export const THEME_DIR = join(DATA_DIR, pathConfig.dir.theme);
 /** Directory to store user uploaded files */
 export const EMBED_DIR = join(DATA_DIR, pathConfig.dir.blob);
 
+export const ONBOARD_FLAG_PATH = join(DATA_DIR, ".onboarded");
+export const VERSION_FLAG_PATH = join(DATA_DIR, ".version");
+
 export const SESSION_DATA_DIR = join(
   DATA_ROOT,
   is.dev
@@ -70,7 +73,7 @@ function accessDataDirOrExit(root: string) {
     );
     if (process.env["DARKWRITE_ROOT_OVERRIDE"] != "")
       console.error(
-        `You have set the "DARKWRITE_ROOT_OVERRIDE" environment variable to a directory Darkwrite does not have permissions for. 
+        `You have set the "DARKWRITE_ROOT_OVERRIDE" environment variable to a directory Darkwrite does not have permissions for.
           Please ensure you can write into that directory.`,
       );
     throw err;
@@ -104,4 +107,6 @@ export const Paths = {
   EMBED_DIR,
   initialize,
   SESSION_DATA_DIR,
+  ONBOARD_FLAG_PATH,
+  VERSION_FLAG_PATH,
 };

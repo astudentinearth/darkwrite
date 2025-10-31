@@ -1,18 +1,20 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import App from "./App";
-import "./i18n";
-import "./globals.css";
 import data from "@emoji-mart/data";
 import { init } from "emoji-mart";
+import ReactDOM from "react-dom/client";
 import { APIClientMode, DarkwriteAPIClient } from "./api/api-client";
-import { useLocalStore } from "./context/local-state";
+import App from "./App";
+import "./globals.css";
+import "./i18n";
+import { correctWorkspaceState } from "./init";
+
+const reactRoot = ReactDOM.createRoot(document.getElementById("root")!);
 
 const renderApp = () => {
-  init({ data });
-  ReactDOM.createRoot(document.getElementById("root")!).render(
-    <App />
-  );
+  reactRoot.render(<App />);
+};
+
+const renderOnboarding = () => {
+  reactRoot.render(<div>Onboarding</div>);
 };
 
 const initialize = async () => {
@@ -20,11 +22,14 @@ const initialize = async () => {
     await window.initPreload();
   }
   DarkwriteAPIClient.initialize(APIClientMode.LOCAL);
-  const state = useLocalStore.getState();
-  const { workspaces } = await DarkwriteAPIClient.workspace.getAll();
-  if (!state.workspaceId || workspaces.findIndex(w => w.id === state.workspaceId) === -1) {
-    useLocalStore.setState(() => ({ workspaceId: workspaces.at(0)?.id }));
+  await correctWorkspaceState();
+  init({ data });
+
+  if ((await DarkwriteAPIClient.onboarding.isCompleted()) === false) {
+    renderOnboarding();
+    return;
   }
+
   renderApp();
 };
 

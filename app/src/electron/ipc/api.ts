@@ -14,6 +14,10 @@ import { ElectronWorkspaceAPI } from "./workspace.handler";
 import { ElectronSettingsAPI } from "./settings.handler";
 import { ElectronThemeAPI } from "./theme.handler";
 import { DesktopIntegration } from "../lib/desktop-integration";
+import {
+  hasOnboarded,
+  isAlphaMigrationPerformed,
+} from "../lib/onboarding-state";
 
 export const DarkwriteElectronAPI = {
   note: {
@@ -57,6 +61,10 @@ export const DarkwriteElectronAPI = {
   },
   theme: {
     getThemes: new IPCHandler(false, ElectronThemeAPI.getThemes),
+  },
+  onboarding: {
+    isCompleted: new IPCHandler(false, hasOnboarded),
+    isAlphaMigrationPerformed: new IPCHandler(false, isAlphaMigrationPerformed),
   },
   showAppMenu: new IPCHandler(false, showAppMenu),
   desktop: {
