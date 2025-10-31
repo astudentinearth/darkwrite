@@ -3,16 +3,19 @@ import { cn } from "@/lib/utils";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import * as React from "react";
 
-interface OnboardingButtonProps extends React.ComponentProps<"button"> {}
+interface OnboardingButtonProps extends React.ComponentProps<"button"> {
+  variant?: "secondary" | "default";
+}
 
 export default function OnboardingButton({
   className,
   children,
+  variant,
   ...props
 }: OnboardingButtonProps) {
   return (
     <Button
-      variant={"secondary"}
+      variant={variant ?? "secondary"}
       className={cn(
         "bg-view-2 border rounded-2xl drop-shadow-sm h-fit px-6 py-4 grid grid-cols-[1fr_24px] text-start text-xl",
         className,

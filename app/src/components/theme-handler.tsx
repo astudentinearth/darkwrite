@@ -2,6 +2,7 @@ import { DarkwriteAPIClient } from "@/api/api-client";
 import { DarkwriteDefault } from "@/common/themes";
 import { CatppuccinLatte } from "@/common/themes/catppuccin";
 import useSystemTheme from "@/hooks/use-system-theme";
+import { applyTheme } from "@/lib/theme-util";
 import { useSettings } from "@/query/use-settings";
 import { useThemes } from "@/query/use-themes";
 import { useEffect } from "react";
@@ -35,12 +36,8 @@ export default function ThemeHandler() {
     const theme =
       themes[themeId] ??
       (themeMode === "dark" ? DarkwriteDefault : CatppuccinLatte);
-    const entries = Object.entries(theme.colors);
-    for (const entry of entries) {
-      const [cssVar, value] = entry;
-      document.documentElement.style.setProperty(cssVar, value);
-    }
 
+    applyTheme(theme);
     document.documentElement.style.setProperty(
       "--font-ui",
       appearanceSettings.fonts.ui,

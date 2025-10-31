@@ -7,6 +7,10 @@ export default function WorkspaceNameStep() {
   const name = useOnboardingState((s) => s.workspaceName);
   const setName = useOnboardingState((s) => s.setWorkspaceName);
   const canContinue = name.trim().length > 0;
+  const goToPage = useOnboardingState((s) => s.goToPage);
+  const _continue = () => {
+    goToPage("theme");
+  };
   const { t } = useTranslation();
   return (
     <div className="flex flex-col items-center">
@@ -25,7 +29,7 @@ export default function WorkspaceNameStep() {
           placeholder={t("onboarding.nameWorkspaceHint")}
           className="px-4 h-14 text-xl! bg-view-2 w-70 rounded-2xl"
         />
-        <ForwardButton disabled={!canContinue} />
+        <ForwardButton onClick={_continue} disabled={!canContinue} />
       </div>
     </div>
   );

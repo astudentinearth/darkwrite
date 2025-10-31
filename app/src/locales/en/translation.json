@@ -219,6 +219,7 @@
     "migrationError": "Something went wrong",
     "migrationErrorDesc1": "We weren't able to migrate your notes, but don't panic - your data was left untouched. Sorry for the inconvenience.",
     "migrationErrorDesc2": "You can retry, or access your notes by downgrading to",
-    "latestAlpha": "the latest alpha version"
+    "latestAlpha": "the latest alpha version",
+    "checkForUpdates": "Check for updates on startup"
   }
 }

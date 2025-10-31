@@ -18,7 +18,7 @@
   --popover: hsl(0 0% 9%);
   --popover-foreground: hsl(0 0% 94%);
 
-  --primary: hsl(242 88% 60%);
+  --primary: hsl(214 64% 44%);
   --primary-foreground: hsl(0 0% 100%);
   --primary-text: hsl(242 58% 62%);
 
@@ -339,7 +339,7 @@ body,
 @keyframes slide-up-and-fade-in {
   from {
     opacity: 0;
-    transform: translateY(12px);
+    transform: translateY(16px);
   }
   to {
     opacity: 1;
@@ -348,7 +348,7 @@ body,
 }
 
 @utility slide-up-and-fade-in {
-  animation: slide-up-and-fade-in 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: slide-up-and-fade-in 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   animation-fill-mode: forwards;
   animation-iteration-count: 1;
 }

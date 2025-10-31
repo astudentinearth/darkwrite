@@ -219,6 +219,7 @@
     "migrationError": "Bir şeyler ters gitti",
     "migrationErrorDesc1": "Notlarınızı aktaramadık, ama endişelenmeyin - notlarınızı olduğu gibi bıraktık. Rahatsızlık için özür dileriz.",
     "migrationErrorDesc2": "Aktarımı tekrar deneyebilirsiniz, ya da en son alpha sürümünü indirerek hemen çalışmaya dönebilirsiniz: ",
-    "latestAlpha": "İndirmeye git"
+    "latestAlpha": "İndirmeye git",
+    "checkForUpdates": "Açılışta güncelleştirmeleri kontrol et"
   }
 }

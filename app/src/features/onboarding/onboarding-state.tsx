@@ -1,6 +1,10 @@
 import { create } from "zustand";
 import LanguageSelection from "./language-selection";
 import WorkspaceNameStep from "./workspace-name";
+import { DEFAULT_THEMES } from "@/common/themes";
+import { applyTheme } from "@/lib/theme-util";
+import ThemeSelection from "./theme-selection";
+import OnboardingFinish from "./finish";
 
 export type OnboardingPage =
   | "language"
@@ -19,6 +23,8 @@ export interface IOnboardingState {
   goBack: () => void;
   workspaceName: string;
   setWorkspaceName: (name: string) => void;
+  theme: string;
+  enableUpdateCheck: boolean;
 }
 
 export function getOnboardingPage(key: OnboardingPage) {
@@ -28,6 +34,12 @@ export function getOnboardingPage(key: OnboardingPage) {
 
     case "workspace-name":
       return <WorkspaceNameStep />;
+
+    case "theme":
+      return <ThemeSelection />;
+
+    case "finish":
+      return <OnboardingFinish />;
 
     default:
       return <div></div>;
@@ -47,6 +59,8 @@ export const useOnboardingState = create<IOnboardingState>()((set, get) => ({
       navStack: newStack,
     });
   },
+  enableUpdateCheck: true,
+  theme: "darkwrite-default",
   goBack: () => {
     const newStack = [...get().navStack];
     const previousPage = newStack.pop() || null;
@@ -65,3 +79,9 @@ export const useOnboardingState = create<IOnboardingState>()((set, get) => ({
       workspaceName: name,
     }),
 }));
+
+export function setOnboardingTheme(theme: string) {
+  useOnboardingState.setState({ theme });
+  const _theme = DEFAULT_THEMES[theme];
+  applyTheme(_theme);
+}
