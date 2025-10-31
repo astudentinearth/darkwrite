@@ -6,6 +6,7 @@ import App from "./App";
 import "./globals.css";
 import "./i18n";
 import { correctWorkspaceState } from "./init";
+import Onboarding from "./features/onboarding/onboarding";
 
 const reactRoot = ReactDOM.createRoot(document.getElementById("root")!);
 
@@ -14,7 +15,7 @@ const renderApp = () => {
 };
 
 const renderOnboarding = () => {
-  reactRoot.render(<div>Onboarding</div>);
+  reactRoot.render(<Onboarding />);
 };
 
 const initialize = async () => {

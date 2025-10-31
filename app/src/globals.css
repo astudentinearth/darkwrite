@@ -185,7 +185,7 @@
   }
 }
 
-.font-ui{
+.font-ui {
   font-family: var(--font-ui);
 }
 
@@ -323,8 +323,6 @@ body,
   }
 }
 
-
-
 .hide-number-arrows {
   -moz-appearance: textfield !important;
   -webkit-appearance: none !important;
@@ -338,3 +336,19 @@ body,
   margin: 0 !important;
 }
 
+@keyframes slide-up-and-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@utility slide-up-and-fade-in {
+  animation: slide-up-and-fade-in 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  animation-fill-mode: forwards;
+  animation-iteration-count: 1;
+}
