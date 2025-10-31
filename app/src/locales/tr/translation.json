@@ -201,5 +201,24 @@
   },
   "titlebar": {
     "noPagesAbove": "Yukarıda başka not yok."
+  },
+  "onboarding": {
+    "chooseLanguage": "Başlamak için bir dil seçin.",
+    "welcome": "Darkwrite'a hoş geldiniz",
+    "welcomeDesc": "Hadi ilk çalışma alanınızı oluşturalım.",
+    "nameWorkspaceHint": "Bir isim koyun",
+    "themeTitle": "Hadi size özel yapalım",
+    "themeDesc": "Başlamak için bir tema seçin. Ayarlardan istediğiniz zaman değiştirebilirsiniz.",
+    "finishedHeading": "Artık hazırsınız.",
+    "finishedDesc": "Gerçekten size özel çalışma alanınız sizi bekliyor. Mutlu yazmalar!",
+    "letsBegin": "Hadi başlayalım",
+    "alphaTitle": "Alpha'yı kullandığınız için teşekkürler.",
+    "alphaDesc": "Notlarınızı yeni bir çalışma alanına aktaracağız. Adı ne olsun istersiniz?",
+    "alphaTitle2": "Çok az kaldı",
+    "migrationDesc": "Notlarınızı, ayarlarınızı ve temalarınızı otomatik olarak aktaracağız. İlk kullanıcılarımızdan olduğunuz için teşekkürler.",
+    "migrationError": "Bir şeyler ters gitti",
+    "migrationErrorDesc1": "Notlarınızı aktaramadık, ama endişelenmeyin - notlarınızı olduğu gibi bıraktık. Rahatsızlık için özür dileriz.",
+    "migrationErrorDesc2": "Aktarımı tekrar deneyebilirsiniz, ya da en son alpha sürümünü indirerek hemen çalışmaya dönebilirsiniz: ",
+    "latestAlpha": "İndirmeye git"
   }
 }

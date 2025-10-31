@@ -1,11 +1,14 @@
 import { Languages } from "lucide-react";
 import OnboardingButton from "./onboarding-button";
 import { useOnboardingState } from "./onboarding-state";
+import { useTranslation } from "react-i18next";
 
 export default function LanguageSelection() {
   const setPage = useOnboardingState((s) => s.goToPage);
+  const { i18n, t } = useTranslation();
 
   const _continue = (lang: string) => {
+    i18n.changeLanguage(lang);
     setPage("workspace-name");
   };
 
@@ -15,7 +18,7 @@ export default function LanguageSelection() {
       <div className="h-10" />
       <div className="flex gap-2 items-center">
         <Languages size={24} />
-        Choose a language to get started.
+        {t("onboarding.chooseLanguage")}
       </div>
       <div className="h-8" />
       <OnboardingButton onClick={() => _continue("en")} className="w-45">

@@ -201,5 +201,24 @@
   },
   "titlebar": {
     "noPagesAbove": "No pages above."
+  },
+  "onboarding": {
+    "chooseLanguage": "Choose a language to get started.",
+    "welcome": "Welcome to Darkwrite",
+    "welcomeDesc": "Let's create your first workspace",
+    "nameWorkspaceHint": "Name your workspace",
+    "themeTitle": "Let's make it yours",
+    "themeDesc": "Choose a theme to get started with. You can change it at any time in settings.",
+    "finishedHeading": "You're all set.",
+    "finishedDesc": "Your truly personal workspace is ready. Happy writing!",
+    "letsBegin": "Let's begin",
+    "alphaTitle": "Thanks for using the alpha.",
+    "alphaDesc": "Your notes will be imported to a new workspace. What would you like to call it?",
+    "alphaTitle2": "Before we begin",
+    "migrationDesc": "We will import your existing notes, themes and settings automatically. Thanks for being among our first users.",
+    "migrationError": "Something went wrong",
+    "migrationErrorDesc1": "We weren't able to migrate your notes, but don't panic - your data was left untouched. Sorry for the inconvenience.",
+    "migrationErrorDesc2": "You can retry, or access your notes by downgrading to",
+    "latestAlpha": "the latest alpha version"
   }
 }
