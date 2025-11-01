@@ -97,6 +97,7 @@
       "enableCustomTitlebarOnMac": "Enable custom titlebar on macOS (requires restart)"
     },
     "about": {
+      "title": "About",
       "sourceCode": "Source code",
       "reportBugs": "Report bugs",
       "checkUpdates": "Check for updates",

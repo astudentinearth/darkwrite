@@ -97,6 +97,7 @@
       "enableCustomTitlebarOnMac": "macOS'te özel başlık çubuğu kullan (yeniden başlatma gerektirir)"
     },
     "about": {
+      "title": "Hakkında",
       "sourceCode": "Kaynak kodu",
       "reportBugs": "Hata bildir",
       "checkUpdates": "Güncelleştirmeleri denetle",

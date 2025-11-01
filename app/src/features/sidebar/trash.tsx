@@ -83,6 +83,7 @@ export function TrashWidget() {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder={t("sidebar.trash.search")}
+              className="bg-view-2/75"
             />
           </div>
           <div className="h-full overflow-y-auto flex flex-col scroll-view px-2 pt-0 pb-2 w-full">
