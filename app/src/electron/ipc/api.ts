@@ -19,6 +19,7 @@ import {
   isAlphaMigrationPerformed,
   markOnboardingCompleted,
 } from "../lib/onboarding-state";
+import { BackupAPI, HTMLExporterAPI } from "../api/backup.electron";
 
 export const DarkwriteElectronAPI = {
   note: {
@@ -75,6 +76,14 @@ export const DarkwriteElectronAPI = {
       false,
       DesktopIntegration.getSystemAccentColor,
     ),
+  },
+  backup: {
+    initCache: new IPCHandler(false, HTMLExporterAPI.initializeExporterCache),
+    pushFile: new IPCHandler(false, HTMLExporterAPI.pushToExporterCache),
+    finishExport: new IPCHandler(false, HTMLExporterAPI.finishExport),
+    chooseArchive: new IPCHandler(false, BackupAPI.openArchive),
+    performBackup: new IPCHandler(false, BackupAPI.backup),
+    restoreBackup: new IPCHandler(false, BackupAPI.restore),
   },
 } satisfies DarkwriteAPI;
 export type DarkwritePreloadAPI = InferPreloadAPI<typeof DarkwriteElectronAPI>;

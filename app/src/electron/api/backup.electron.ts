@@ -16,7 +16,6 @@ import {
 } from "../lib/paths";
 import { openFile, saveFile } from "./dialog";
 import { logError } from "../lib/log";
-import { InvalidFileFormatError } from "@darkwrite/common";
 
 /**
  * APIs to perform a complete workspace export.
@@ -96,12 +95,11 @@ export const BackupAPI = {
       await extract(archivePath, { dir: RESTORE_CACHE_DIR });
 
       const isValidBackup =
-        (await fse.exists(join(RESTORE_CACHE_DIR, "data.db"))) &&
+        ((await fse.exists(join(RESTORE_CACHE_DIR, "darkwrite.db"))) ||
+          (await fse.exists(join(RESTORE_CACHE_DIR, "darkwrite.db")))) &&
         (await fse.exists(join(RESTORE_CACHE_DIR, "settings.json")));
       if (!isValidBackup)
-        throw new InvalidFileFormatError(
-          "This does not seem to be a Darkwrite backup archive.",
-        );
+        throw new Error("This does not seem to be a Darkwrite backup archive.");
 
       // before we do anything else, we will rename the old directory so we can rollback if something goes wrong.
       try {

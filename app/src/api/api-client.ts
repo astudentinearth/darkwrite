@@ -21,6 +21,7 @@ export class DarkwriteAPIClient {
   static theme: IThemeAPI;
   static desktop: IDesktopAPI;
   static onboarding: typeof window.api.onboarding;
+  static backup: typeof window.api.backup;
 
   private static initializeLocalAPIs() {
     this.note = window.api.note;
@@ -30,6 +31,7 @@ export class DarkwriteAPIClient {
     this.theme = window.api.theme;
     this.desktop = window.api.desktop;
     this.onboarding = window.api.onboarding;
+    this.backup = window.api.backup;
   }
 
   private static initializeCloudAPIs() {
