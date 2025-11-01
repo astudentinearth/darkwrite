@@ -15,6 +15,7 @@ import { KeymapFixer } from "./keymap-patcher";
 import { TextStyleKit } from "@tiptap/extension-text-style";
 import Color from "@tiptap/extension-color";
 import Highlight from "@tiptap/extension-highlight";
+import { CharacterCount } from "@tiptap/extensions";
 
 export const starterKit = StarterKit.configure({
   bulletList: {
@@ -127,6 +128,7 @@ export const codeBlock = (indentSize: number) =>
 const textStyle = TextStyleKit.configure({ color: { types: ["textStyle"] } });
 const color = Color.configure();
 const hightlight = Highlight.configure({ multicolor: true });
+const characterCount = CharacterCount.configure({});
 
 export const DefaultEditorExtensions = [
   starterKit,
@@ -143,4 +145,5 @@ export const DefaultEditorExtensions = [
   textStyle,
   color,
   hightlight,
+  characterCount,
 ];

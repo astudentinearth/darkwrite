@@ -1,20 +1,11 @@
-import {
-  AlertDialog,
-  AlertDialogContent,
-  AlertDialogTrigger,
-  Button,
-  Dialog,
-  DialogContent,
-  DialogTrigger,
-  Label,
-} from "@/components/ui";
-import { useCurrentWorkspace, useUpdateWorkspace } from "@/query/use-workspace";
-import EditWorkspaceDialog from "./edit-workspace-dialog";
 import { WorkspaceDTO } from "@/common/dto/response/workspace.response";
-import { useState } from "react";
+import { Button, Label } from "@/components/ui";
 import WorkspaceIcon from "@/components/workspace-icon";
+import { useCurrentWorkspace, useUpdateWorkspace } from "@/query/use-workspace";
 import { Cloud, HardDrive, Languages, PenLine } from "lucide-react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import EditWorkspaceDialog from "./edit-workspace-dialog";
 import SettingsCard from "./settings-card";
 
 export default function WorkspaceSettings() {
@@ -59,7 +50,7 @@ export default function WorkspaceSettings() {
           >
             <Button variant={"secondary"} className="w-fit">
               <PenLine size={18} />
-              Edit workspace
+              {t("settings.workspace.editWorkspace")}
             </Button>
           </EditWorkspaceDialog>
         </SettingsCard>

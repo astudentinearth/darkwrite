@@ -4,17 +4,12 @@ import {
   ContextMenuContent,
   ContextMenuItem,
   ContextMenuSeparator,
-  ContextMenuSub,
-  ContextMenuSubContent,
-  ContextMenuSubTrigger,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
 import { useNoteContextMenu } from "@/hooks/use-note-context-menu";
 import { useNotes } from "@/query/use-notes";
 import {
-  ArrowRightFromLine,
   Copy,
-  Download,
   FileCode,
   FilePlus2,
   FileText,

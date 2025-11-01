@@ -122,6 +122,13 @@ export default function EditorUtil(editor: Editor) {
         .run();
     },
 
+    countWords() {
+      return editor.storage.characterCount.words();
+    },
+
+    countCharacters() {
+      return editor.storage.characterCount.characters();
+    },
     insertMarkdown(markdown: string) {
       const html = MarkdownConverter.convertMarkdownToHTML(markdown);
       editor

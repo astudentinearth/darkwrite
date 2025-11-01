@@ -70,6 +70,15 @@
         "openLastPage": "Continue where I left off",
         "openSpecificPage": "Open a specific page"
       },
+      "editWorkspace": "Edit workspace",
+      "editWorkspaceDialog": {
+        "title": "Edit workspace",
+        "changeIcon": "Change icon",
+        "removeIcon": "Remove icon",
+        "workspaceName": "Workspace name",
+        "save": "Save",
+        "cancel": "Cancel"
+      },
       "alwaysShowWordCount": "Always show word count",
       "codeBlockIndentSize": "Indent size in code blocks",
       "codeBlockIndentSizeDescription": "Number of spaces to be inserted when you hit the tab key."
@@ -81,7 +90,12 @@
       "accentColorText": "Accent color",
       "useSystemWindowFrame": "Use system window frame (requires restart)",
       "useSystemAccentColor": "Use system accent color (only Windows or macOS)",
-      "useSystemAccentColorDescription": "This option may not work correctly when using automatic accent color on Windows."
+      "useSystemAccentColorDescription": "This option may not work correctly when using automatic accent color on Windows.",
+      "lightMode": "Light",
+      "systemMode": "System",
+      "darkMode": "Dark",
+      "lightColorScheme": "Light color theme",
+      "darkColorScheme": "Dark color theme"
     },
     "fonts": {
       "title": "Fonts",

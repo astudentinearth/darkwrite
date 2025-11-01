@@ -1,3 +1,4 @@
+import { HeaderbarButton } from "@/components/headerbar-button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,29 +10,32 @@ import {
   DropdownMenuSwitchItem,
   DropdownMenuTrigger,
 } from "@/components/ui";
-import { useEditorCommand } from "./use-editor-command";
-import { HeaderbarButton } from "@/components/headerbar-button";
+import { useLocalStore } from "@/context/local-state";
+import useNoteExport from "@/hooks/use-note-export";
+import useNoteImport from "@/hooks/use-note-import";
+import { useNoteFromURL } from "@/query/use-note-from-url";
+import { useUpdateNote } from "@/query/use-update-note";
 import {
   Download,
   FileCode,
   FileText,
   Menu,
   Redo,
+  Trash,
   Undo,
   Upload,
 } from "lucide-react";
-import { useLocalStore } from "@/context/local-state";
-import { useNoteFromURL } from "@/query/use-note-from-url";
 import { useTranslation } from "react-i18next";
-import useNoteExport from "@/hooks/use-note-export";
-import useNoteImport from "@/hooks/use-note-import";
+import { useEditorCommand } from "./use-editor-command";
 
 export default function EditorMenu() {
   const commands = useEditorCommand();
   const spellcheck = useLocalStore((s) => s.useSpellcheck);
   const exporter = useNoteExport();
   const importer = useNoteImport();
+  const { update } = useUpdateNote();
   const setSpellcheck = useLocalStore((s) => s.setSpellcheck);
+
   const { t } = useTranslation();
   const noteId = useNoteFromURL();
   if (!noteId) return <></>;
@@ -84,6 +88,19 @@ export default function EditorMenu() {
           <Redo size={20} />
           {t("editor.menu.redo")}
         </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem
+          onSelect={() => {
+            update({ id: noteId, dto: { isTrashed: true } });
+          }}
+        >
+          <Trash size={20} />
+          {t("sidebar.notes.contextmenu.trash")}
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <div className="text-muted-foreground text-sm px-3 py-1">
+          {t("editor.menu.wordCount", { count: commands.get()?.countWords() })}
+        </div>
       </DropdownMenuContent>
     </DropdownMenu>
   );

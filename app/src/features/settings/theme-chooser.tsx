@@ -58,7 +58,9 @@ export function ThemeChooser() {
   return (
     <div className="flex flex-col bg-view-2 rounded-lg p-4 w-160 gap-4 drop-shadow-sm">
       <div className="flex justify-between items-center">
-        <span className="font-medium">Light color theme</span>
+        <span className="font-medium">
+          {t("settings.appearance.lightColorScheme")}
+        </span>
         <ThemeDropdown
           value={lightTheme}
           onValueChange={(val) => setScheme("light", val)}
@@ -66,7 +68,9 @@ export function ThemeChooser() {
       </div>
       <hr />
       <div className="flex justify-between items-center">
-        <span className="font-medium">Dark color theme</span>
+        <span className="font-medium">
+          {t("settings.appearance.darkColorScheme")}
+        </span>
         <ThemeDropdown
           value={darkTheme}
           onValueChange={(val) => setScheme("dark", val)}

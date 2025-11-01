@@ -70,6 +70,15 @@
         "openLastPage": "Kaldığım yerden devam et",
         "openSpecificPage": "Belirli bir sayfayı aç"
       },
+      "editWorkspace": "Çalışma alanını düzenle",
+      "editWorkspaceDialog": {
+        "title": "Çalışma alanını düzenle",
+        "changeIcon": "Simge değiştir",
+        "removeIcon": "Simgeyi kaldır",
+        "workspaceName": "Çalışma alanı adı",
+        "save": "Kaydet",
+        "cancel": "Vazgeç"
+      },
       "alwaysShowWordCount": "Kelime sayısını her zaman göster",
       "codeBlockIndentSize": "Kod bloklarındaki girinti genişliği",
       "codeBlockIndentSizeDescription": "Tab tuşuna basıldığında kod bloklarına eklenecek boşluk sayısını belirleyin."
@@ -81,7 +90,12 @@
       "accentColorText": "Tema rengi",
       "useSystemWindowFrame": "Sistemin pencere kenarlıklarını kullan (yeniden başlatma gerekir)",
       "useSystemAccentColor": "Sistemin tema rengini kullan (sadece Windows veya macOS)",
-      "useSystemAccentColorDescription": "Bu seçenek, Windows'ta otomatik vurgu rengi özelliği etkinken doğru çalışmayabilir."
+      "useSystemAccentColorDescription": "Bu seçenek, Windows'ta otomatik vurgu rengi özelliği etkinken doğru çalışmayabilir.",
+      "lightMode": "Açık",
+      "systemMode": "Sistem",
+      "darkMode": "Koyu",
+      "lightColorScheme": "Açık renk teması",
+      "darkColorScheme": "Koyu renk teması"
     },
     "fonts": {
       "title": "Yazı tipleri",
