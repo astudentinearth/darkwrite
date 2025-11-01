@@ -7,6 +7,7 @@ import { Outlet } from "react-router-dom";
 import { useResizableSidebar } from "../../hooks/layout/use-resizable-layout";
 import { Titlebar } from "./titlebar";
 import ThemeHandler from "@/components/theme-handler";
+import { useShortcuts } from "@/hooks/use-shortcuts";
 
 //import { useStartup } from "@/hooks/use-startup";
 
@@ -22,6 +23,7 @@ export function Layout() {
     callback: setWidth,
   });
   useWindowControlsOverlay(headerRef);
+  useShortcuts();
   return (
     <div className="flex [&>div]:shrink-0 w-full h-full bg-background overflow-hidden [--slide-distance:32px]">
       <ThemeHandler />
