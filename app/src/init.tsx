@@ -1,5 +1,10 @@
 import { DarkwriteAPIClient } from "./api/api-client";
+import { DarkwriteUserSettings } from "./common/settings";
 import { useLocalStore } from "./context/local-state";
+
+export class InitialUserSettings {
+  static settings: DarkwriteUserSettings;
+}
 
 export async function correctWorkspaceState() {
   const state = useLocalStore.getState();
@@ -11,4 +16,9 @@ export async function correctWorkspaceState() {
   ) {
     useLocalStore.setState(() => ({ workspaceId: workspaces.at(0)?.id }));
   }
+}
+
+export async function initializeUserPrefs() {
+  const settings = await DarkwriteAPIClient.settings.getUserSettings();
+  InitialUserSettings.settings = settings;
 }

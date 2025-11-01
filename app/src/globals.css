@@ -72,6 +72,8 @@
   --editor-highlight-pink: hsl(321 100% 55% / 0.5);
 
   --dw-editor-foreground: var(--foreground);
+
+  --slide-distance: 32px;
 }
 
 @theme inline {
@@ -194,32 +196,6 @@ em-emoji-picker {
 }
 
 @layer base {
-  :root {
-    --novel-highlight-default: #ffffff;
-    --novel-highlight-purple: #f6f3f8;
-    --novel-highlight-red: #fdebeb;
-    --novel-highlight-yellow: #fbf4a2;
-    --novel-highlight-blue: #c1ecf9;
-    --novel-highlight-green: #acf79f;
-    --novel-highlight-orange: #faebdd;
-    --novel-highlight-pink: #faf1f5;
-    --novel-highlight-gray: #f1f1ef;
-  }
-
-  .dark {
-    --novel-highlight-default: #000000;
-    --novel-highlight-purple: #3f2c4b;
-    --novel-highlight-red: #5c1a1a;
-    --novel-highlight-yellow: #5c4b1a;
-    --novel-highlight-blue: #1a3d5c;
-    --novel-highlight-green: #1a5c20;
-    --novel-highlight-orange: #5c3a1a;
-    --novel-highlight-pink: #5c1a3a;
-    --novel-highlight-gray: #3a3a3a;
-  }
-}
-
-@layer base {
   * {
     box-sizing: border-box;
     @apply border-border;
@@ -237,6 +213,11 @@ em-emoji-picker {
   }
   .titlebar * {
     -webkit-app-region: no-drag;
+    -webkit-user-select: auto;
+    user-select: auto;
+  }
+  .no-window-drag {
+    -webkit-app-region: no-drag !important;
     -webkit-user-select: auto;
     user-select: auto;
   }
@@ -339,7 +320,7 @@ body,
 @keyframes slide-up-and-fade-in {
   from {
     opacity: 0;
-    transform: translateY(16px);
+    transform: translateY(var(--slide-distance));
   }
   to {
     opacity: 1;
@@ -348,7 +329,22 @@ body,
 }
 
 @utility slide-up-and-fade-in {
-  animation: slide-up-and-fade-in 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: slide-up-and-fade-in 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  animation-fill-mode: forwards;
+  animation-iteration-count: 1;
+}
+
+@keyframes app-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@utility app-fade-in {
+  animation: app-fade-in 0.2s cubic-bezier(0.1, 1, 0.5, 1);
   animation-fill-mode: forwards;
   animation-iteration-count: 1;
 }

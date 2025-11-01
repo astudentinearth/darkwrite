@@ -17,6 +17,7 @@ import { DesktopIntegration } from "../lib/desktop-integration";
 import {
   hasOnboarded,
   isAlphaMigrationPerformed,
+  markOnboardingCompleted,
 } from "../lib/onboarding-state";
 
 export const DarkwriteElectronAPI = {
@@ -65,6 +66,7 @@ export const DarkwriteElectronAPI = {
   onboarding: {
     isCompleted: new IPCHandler(false, hasOnboarded),
     isAlphaMigrationPerformed: new IPCHandler(false, isAlphaMigrationPerformed),
+    markFinished: new IPCHandler(false, markOnboardingCompleted),
   },
   showAppMenu: new IPCHandler(false, showAppMenu),
   desktop: {

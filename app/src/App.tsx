@@ -10,7 +10,7 @@ import { noteLoader } from "./lib/note-loader";
 function App() {
   const [queryClient] = useState(() => new QueryClient());
   return (
-    <div className="w-full h-full overflow-hidden">
+    <div className="w-full h-full overflow-hidden app-fade-in">
       <QueryClientProvider client={queryClient}>
         <HashRouter>
           <Routes>

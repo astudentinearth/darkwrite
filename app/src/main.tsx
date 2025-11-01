@@ -1,21 +1,19 @@
 import data from "@emoji-mart/data";
 import { init } from "emoji-mart";
-import ReactDOM from "react-dom/client";
 import { APIClientMode, DarkwriteAPIClient } from "./api/api-client";
 import App from "./App";
+import Onboarding from "./features/onboarding/onboarding";
 import "./globals.css";
 import "./i18n";
-import { correctWorkspaceState } from "./init";
-import Onboarding from "./features/onboarding/onboarding";
-
-const reactRoot = ReactDOM.createRoot(document.getElementById("root")!);
+import { correctWorkspaceState, initializeUserPrefs } from "./init";
+import { ReactRootContainer } from "./react-root-helper";
 
 const renderApp = () => {
-  reactRoot.render(<App />);
+  ReactRootContainer.root.render(<App />);
 };
 
 const renderOnboarding = () => {
-  reactRoot.render(<Onboarding />);
+  ReactRootContainer.root.render(<Onboarding />);
 };
 
 const initialize = async () => {
@@ -25,7 +23,7 @@ const initialize = async () => {
   DarkwriteAPIClient.initialize(APIClientMode.LOCAL);
   await correctWorkspaceState();
   init({ data });
-
+  await initializeUserPrefs();
   if ((await DarkwriteAPIClient.onboarding.isCompleted()) === false) {
     renderOnboarding();
     return;

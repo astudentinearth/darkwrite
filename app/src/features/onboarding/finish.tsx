@@ -1,6 +1,7 @@
 import * as React from "react";
 import { useTranslation } from "react-i18next";
 import OnboardingButton from "./onboarding-button";
+import { finishOnboarding } from "./onboarding-state";
 
 export default function OnboardingFinish() {
   const { t } = useTranslation();
@@ -16,7 +17,11 @@ export default function OnboardingFinish() {
         {t("onboarding.finishedDesc")}
       </div>
       <div className="h-6"></div>
-      <OnboardingButton variant="default" className="bg-primary border-primary">
+      <OnboardingButton
+        onClick={finishOnboarding}
+        variant="default"
+        className="bg-primary border-primary"
+      >
         {t("onboarding.letsBegin")}
       </OnboardingButton>
     </div>

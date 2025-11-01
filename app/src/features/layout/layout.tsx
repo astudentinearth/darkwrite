@@ -13,12 +13,17 @@ import ThemeHandler from "@/components/theme-handler";
 const [MIN_WIDTH, , MAX_WIDTH] = [180, 240, 300];
 
 export function Layout() {
-  const { isSidebarCollapsed, setWidth, width, setSidebarCollapsed } = useSidebar();
+  const { isSidebarCollapsed, setWidth, width, setSidebarCollapsed } =
+    useSidebar();
   const headerRef = useRef<HTMLDivElement>(null); // editor-side header bar
-  const {handleMouseDown} = useResizableSidebar({min: MIN_WIDTH, max: MAX_WIDTH, callback: setWidth});
+  const { handleMouseDown } = useResizableSidebar({
+    min: MIN_WIDTH,
+    max: MAX_WIDTH,
+    callback: setWidth,
+  });
   useWindowControlsOverlay(headerRef);
   return (
-    <div className="flex [&>div]:shrink-0 w-full h-full bg-background overflow-hidden">
+    <div className="flex [&>div]:shrink-0 w-full h-full bg-background overflow-hidden [--slide-distance:32px]">
       <ThemeHandler />
       <Sidebar
         collapseCallback={() => {
@@ -47,7 +52,7 @@ export function Layout() {
         <div
           className={cn(
             "bg-view-1 h-full overflow-x-hidden main-view  border-border/25 ml-0 mb-1.5 mr-1.5 rounded-lg rounded-br-sm border",
-            isSidebarCollapsed && "ml-1.5"
+            isSidebarCollapsed && "ml-1.5",
           )}
         >
           <Outlet />

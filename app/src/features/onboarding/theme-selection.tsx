@@ -36,11 +36,11 @@ export default function ThemeSelection() {
           <SelectTrigger className="rounded-2xl text-xl! h-14 w-75 bg-view-2 pl-5 pr-4">
             {DEFAULT_THEMES[theme].name}
           </SelectTrigger>
-          <SelectContent className="rounded-2xl">
+          <SelectContent className="rounded-2xl z-50 no-window-drag">
             {DEFAULT_THEME_LIST.filter((t) => t.mode === "dark").map(
               (theme) => (
                 <SelectItem
-                  className="rounded-xl py-2 text-xl"
+                  className="rounded-xl py-2 text-xl no-window-drag"
                   value={theme.id}
                 >
                   {theme.name}

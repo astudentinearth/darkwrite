@@ -5,6 +5,10 @@ import { DEFAULT_THEMES } from "@/common/themes";
 import { applyTheme } from "@/lib/theme-util";
 import ThemeSelection from "./theme-selection";
 import OnboardingFinish from "./finish";
+import { DarkwriteAPIClient } from "@/api/api-client";
+import { ReactRootContainer } from "@/react-root-helper";
+import App from "@/App";
+import { InitialUserSettings } from "@/init";
 
 export type OnboardingPage =
   | "language"
@@ -84,4 +88,25 @@ export function setOnboardingTheme(theme: string) {
   useOnboardingState.setState({ theme });
   const _theme = DEFAULT_THEMES[theme];
   applyTheme(_theme);
+}
+
+export async function finishOnboarding() {
+  const prefs = await DarkwriteAPIClient.settings.getUserSettings();
+  const state = useOnboardingState.getState();
+  prefs.appearance.darkColorScheme = state.theme;
+  prefs.client.autoUpdateCheck = state.enableUpdateCheck;
+
+  await DarkwriteAPIClient.settings.saveUserSettings(prefs);
+
+  const { workspaces } = await DarkwriteAPIClient.workspace.getAll();
+  const defaultWorkspace = workspaces[0];
+
+  await DarkwriteAPIClient.workspace.update(defaultWorkspace.id, {
+    name: state.workspaceName,
+  });
+
+  await DarkwriteAPIClient.onboarding.markFinished();
+  InitialUserSettings.settings = prefs;
+
+  ReactRootContainer.root.render(<App />);
 }
