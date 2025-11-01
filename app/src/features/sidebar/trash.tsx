@@ -31,13 +31,23 @@ function TrashItem(props: { note: NoteDTO }) {
   return (
     <div className="grid grid-cols-[24px_1fr_32px_32px] gap-1 items-center px-2 py-1 rounded-lg hover:bg-secondary/20 transition-colors duration-100">
       <span>{getNoteIcon(props.note.icon)}</span>
-      <span className="whitespace-nowrap text-ellipsis ">
+      <span className="whitespace-nowrap text-ellipsis overflow-hidden">
         {props.note.title}
       </span>
-      <Button title={t("sidebar.trash.restore")} onClick={handleRestore} variant={"ghost"} className="w-8 h-8 p-0">
+      <Button
+        title={t("sidebar.trash.restore")}
+        onClick={handleRestore}
+        variant={"ghost"}
+        className="w-8 h-8 p-0"
+      >
         <Undo2 className="size-4" />
       </Button>
-      <Button title={t("sidebar.trash.delete")} onClick={handleDelete} variant={"ghost"} className="w-8 h-8 p-0 text-destructive">
+      <Button
+        title={t("sidebar.trash.delete")}
+        onClick={handleDelete}
+        variant={"ghost"}
+        className="w-8 h-8 p-0 text-destructive"
+      >
         <Trash className="size-4" />
       </Button>
     </div>
@@ -52,7 +62,9 @@ export function TrashWidget() {
     () => Object.values(notes ?? {}).filter((n) => n.isTrashed),
     [notes],
   );
-  const list = query ? trashedNotes.filter(n => n.title.includes(query)) : trashedNotes;
+  const list = query
+    ? trashedNotes.filter((n) => n.title.includes(query))
+    : trashedNotes;
   return (
     <>
       <Popover>
@@ -67,9 +79,13 @@ export function TrashWidget() {
           className="w-80 ml-2 grid grid-rows-[auto_1fr] max-h-[60vh] p-0 mb-2"
         >
           <div className="p-2">
-            <Input value={query} onChange={e => setQuery(e.target.value)} placeholder={t("sidebar.trash.search")} />
+            <Input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder={t("sidebar.trash.search")}
+            />
           </div>
-          <div className="h-full overflow-y-auto flex flex-col scroll-view px-2 pt-0 pb-2">
+          <div className="h-full overflow-y-auto flex flex-col scroll-view px-2 pt-0 pb-2 w-full">
             {list.map((n) => (
               <TrashItem note={n} key={n.id} />
             ))}
