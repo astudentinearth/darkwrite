@@ -4,6 +4,7 @@ import { THEME_DIR } from "../lib/paths";
 import { tryParse } from "@common/json-util";
 import _ from "lodash";
 import { DEFAULT_THEMES } from "@/common/themes";
+import { readFile } from "fs-extra";
 
 export class ThemeService {
   constructor(
@@ -34,13 +35,20 @@ export class ThemeService {
     return jsonObject;
   }
 
+  async importTheme(path: string) {
+    const themeString = await readFile(path, "utf-8");
+    const theme = this.parseTheme(themeString);
+    if (!theme) throw new Error("Invalid theme file.");
+    await this.themeStore.write(theme.id, themeString);
+  }
+
   async getThemes() {
     const ids = await this.themeStore.ls();
     const themes: Record<string, Theme> = _.cloneDeep(DEFAULT_THEMES);
     for (const id of ids) {
       const themeString = await this.themeStore.read(id);
       const theme = this.parseTheme(themeString);
-      if(!theme) continue;
+      if (!theme) continue;
       themes[id] = theme;
     }
 

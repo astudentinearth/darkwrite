@@ -9,7 +9,7 @@ export interface IDocumentStore {
   read: (id: string) => Promise<string>;
   exists: (id: string) => Promise<boolean>;
   ls: () => Promise<string[]>;
-  delete: (id: string)=>Promise<void>;
+  delete: (id: string) => Promise<void>;
 }
 
 /** Make a directory act as a JSON document store.
@@ -40,7 +40,9 @@ export class DocumentFileStore implements IDocumentStore {
   }
 
   async ls() {
-    return fslib.ls(this.directory);
+    const files = await fslib.ls(this.directory);
+    // remove .json
+    return files.map((f) => f.substring(0, f.length - 5));
   }
 
   async delete(id: string) {

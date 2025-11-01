@@ -63,6 +63,7 @@ export const DarkwriteElectronAPI = {
   },
   theme: {
     getThemes: new IPCHandler(false, ElectronThemeAPI.getThemes),
+    importTheme: new IPCHandler(false, ElectronThemeAPI.importTheme),
   },
   onboarding: {
     isCompleted: new IPCHandler(false, hasOnboarded),

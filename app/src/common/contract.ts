@@ -64,6 +64,7 @@ export interface ISettingsAPI {
 
 export interface IThemeAPI {
   getThemes: () => Promise<ThemesResponseDTO>;
+  importTheme: () => Promise<void>;
 }
 
 export interface IDesktopAPI {
