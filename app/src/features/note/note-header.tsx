@@ -19,7 +19,7 @@ export type NoteHeaderProps = {
   finalOrderHint?: string;
 } & React.ComponentProps<"div">;
 
-export default function NoteHeader({
+export default React.memo(function NoteHeader({
   collapsible,
   setOpen,
   note,
@@ -32,9 +32,13 @@ export default function NoteHeader({
   const nav = useNavigateToNote();
   const current = useNoteFromURL();
   const active = current === note.id;
-  const { dragProps, isDraggingOver } = useNoteItemDrag(note, finalOrderHint ?? "");
-  const {onDrop, ...rest} = dragProps;
+  const { dragProps, isDraggingOver } = useNoteItemDrag(
+    note,
+    finalOrderHint ?? "",
+  );
+  const { onDrop, ...rest } = dragProps;
   const { create } = useCreateNoteMutation();
+
   const handleCreate = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     event.stopPropagation();
@@ -43,25 +47,26 @@ export default function NoteHeader({
   return (
     <div
       {...rest}
-      onDrop={finalOrderHint ? onDrop : ()=>{}}
+      onDrop={finalOrderHint ? onDrop : () => {}}
       {...props}
       onClick={() => nav(note.id)}
       className={cn(
         "grid grid-cols-[24px_1fr_24px] gap-1.5 p-1 select-none overflow-hidden group text-ellipsis whitespace-nowrap hover:bg-secondary/30 rounded-[8px]",
         isDraggingOver && finalOrderHint && "bg-primary/20",
         contextMenuOpen && "bg-secondary/30",
-        (!showCreate && !collapsible) && "grid-cols-[24px_1fr]",
-        active && "bg-secondary/20"
+        !showCreate && !collapsible && "grid-cols-[24px_1fr]",
+        active && "bg-secondary/20",
       )}
     >
       <Button
         variant={"ghost"}
         onClick={(event) => {
-          if(collapsible) event.stopPropagation();
-          setOpen?.call(undefined, !open)
+          if (collapsible) event.stopPropagation();
+          setOpen?.call(undefined, !open);
         }}
-        className={cn("p-0 w-6 h-6 rounded-sm hover:bg-secondary/40",
-          !collapsible && "hover:bg-transparent"
+        className={cn(
+          "p-0 w-6 h-6 rounded-sm hover:bg-secondary/40",
+          !collapsible && "hover:bg-transparent",
         )}
       >
         <span className={cn(collapsible && "group-hover:hidden")}>
@@ -72,18 +77,22 @@ export default function NoteHeader({
           className={cn(
             "hidden transition-transform duration-100",
             open && "rotate-90",
-            collapsible && " group-hover:block"
+            collapsible && " group-hover:block",
           )}
         />
       </Button>
-      <span className="w-full overflow-hidden text-ellipsis break-words whitespace-nowrap">{note.title}</span>
-      {showCreate && <Button
-        variant={"ghost"}
-        onClick={handleCreate}
-        className="p-0 w-6 h-6 rounded-sm hover:bg-secondary/40"
-      >
-        <Plus size={18} className={cn("hidden group-hover:block")} />
-      </Button>}
+      <span className="w-full overflow-hidden text-ellipsis break-words whitespace-nowrap">
+        {note.title}
+      </span>
+      {showCreate && (
+        <Button
+          variant={"ghost"}
+          onClick={handleCreate}
+          className="p-0 w-6 h-6 rounded-sm hover:bg-secondary/40"
+        >
+          <Plus size={18} className={cn("hidden group-hover:block")} />
+        </Button>
+      )}
     </div>
   );
-}
+});

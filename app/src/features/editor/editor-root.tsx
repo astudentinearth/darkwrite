@@ -1,14 +1,12 @@
+import { EditorProvider, useCurrentEditor } from "@tiptap/react";
 import { use, useEffect } from "react";
 import { DarkwriteEditorContext } from "./context";
-import { EditorProvider, useCurrentEditor } from "@tiptap/react";
-import { DefaultEditorExtensions } from "./extensions/default";
 import Bubble from "./extensions/bubble-menu";
-import { SlashCommandRenderer } from "./extensions/slash-command/slash-command-renderer";
-import slashCommandExtension from "./extensions/slash-command/slash-command-extension";
 import { CodeBlockExtension } from "./extensions/code-block";
+import { DefaultEditorExtensions } from "./extensions/default";
 import { ImageExtension } from "./extensions/image/image-extension";
 import { Padder } from "./extensions/padder";
-import { BubbleMenu } from "@tiptap/react/menus";
+import slashCommandExtension from "./extensions/slash-command/slash-command-extension";
 import { EditorContent } from "./types";
 
 function InstanceHandler() {
@@ -16,7 +14,6 @@ function InstanceHandler() {
   const editor = useCurrentEditor();
   useEffect(() => {
     if (!editor.editor) return;
-    console.log(context.onInstanceChange);
     context.onInstanceChange?.call(undefined, editor.editor);
   }, [editor, context.onInstanceChange]);
   return <></>;

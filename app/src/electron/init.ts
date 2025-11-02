@@ -1,6 +1,6 @@
 import { SettingsModel } from "@/common/settings";
 import { is } from "@electron-toolkit/utils";
-import { app, BrowserWindow, protocol, shell } from "electron";
+import { app, BrowserWindow, protocol, session, shell } from "electron";
 import log from "electron-log/main.js";
 import path, { join } from "path";
 import { fileURLToPath } from "url";
@@ -16,6 +16,9 @@ import { ElectronPrefsModel } from "./prefs";
 import { HealthService } from "./service/health.service";
 import { WorkspaceService } from "./service/workspace.service";
 import { constructWindow } from "./window";
+import installExtension, {
+  REACT_DEVELOPER_TOOLS,
+} from "electron-devtools-installer";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -58,6 +61,11 @@ function setupWindowEvents() {
 }
 
 export async function init() {
+  if (is.dev) {
+    await installExtension([REACT_DEVELOPER_TOOLS]).then((name) => {
+      console.log(`Added extension => ${name}`);
+    });
+  }
   await Paths.initialize();
   const migrationsPerformed = await isAlphaMigrationPerformed();
   if (!migrationsPerformed && !(await isNewUser())) {
@@ -75,6 +83,7 @@ export async function init() {
   app.setPath("sessionData", Paths.SESSION_DATA_DIR);
   setupWindowEvents();
   protocol.handle("embed", embedProtocolHandler);
+
   createWindow();
   if (is.dev) initDevtools(1200);
 }

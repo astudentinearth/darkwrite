@@ -11,6 +11,7 @@ export const noteLoader = async ({ params }: { params: any }) => {
 
   const workspaceId = useLocalStore.getState().workspaceId;
   if (note.workspaceId && note.workspaceId !== workspaceId) {
+    console.log("CORRECTING WORKSPACE ID");
     setWorkspaceId(note.workspaceId);
   }
 
