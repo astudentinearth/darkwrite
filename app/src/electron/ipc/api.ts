@@ -17,6 +17,7 @@ import { DesktopIntegration } from "../lib/desktop-integration";
 import {
   hasOnboarded,
   isAlphaMigrationPerformed,
+  isNewUser,
   markOnboardingCompleted,
 } from "../lib/onboarding-state";
 import { BackupAPI, HTMLExporterAPI } from "../api/backup.electron";
@@ -71,6 +72,7 @@ export const DarkwriteElectronAPI = {
     isAlphaMigrationPerformed: new IPCHandler(false, isAlphaMigrationPerformed),
     markFinished: new IPCHandler(false, markOnboardingCompleted),
     migrateToV1: new IPCHandler(false, migrateAlphaToV1),
+    isNewUser: new IPCHandler(false, isNewUser),
   },
   showAppMenu: new IPCHandler(false, showAppMenu),
   desktop: {

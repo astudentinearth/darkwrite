@@ -15,6 +15,7 @@ import DarkwriteEditor from ".";
 import ConstrainedWidth from "./constrained-width";
 import { useSlashCommand } from "./extensions";
 import EditorHeader from "./header";
+import { useNavigateToNote } from "@/hooks/use-navigate-to-note";
 
 export function EditorViewRouteHandler() {
   const noteId = useNoteFromURL();
@@ -42,6 +43,7 @@ export function EditorView({ noteId }: { noteId: string }) {
   const customizations = useEditorStore((s) => s.customizations);
   const content = { contents, customizations };
   const initialContent = useEditorStore.getState().content;
+  const navToNote = useNavigateToNote();
 
   const cover = useEditorCover(noteId);
   const { items } = useSlashCommand(options.imageConfig);
@@ -76,6 +78,7 @@ export function EditorView({ noteId }: { noteId: string }) {
             }
             notes={Object.values(notes ?? {})}
             key={noteId}
+            onNavigateToNote={navToNote}
             onInstanceChange={setActiveEditorInstance}
           />
         )}

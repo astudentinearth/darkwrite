@@ -14,9 +14,13 @@ export async function hasMigratedToVersion(version: string) {
   }
 }
 
+export async function isNewUser() {
+  return !(await fse.pathExists(Paths.SETTINGS_PATH));
+}
+
 export async function isAlphaMigrationPerformed() {
-  // darkwrite.db is used as an indicator
-  return fse.pathExists(Paths.DB_PATH);
+  if (!(await fse.pathExists(Paths.inData("data.db")))) return true;
+  else return false;
 }
 
 export async function markOnboardingCompleted() {

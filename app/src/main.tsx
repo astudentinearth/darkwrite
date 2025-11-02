@@ -28,7 +28,9 @@ const initialize = async () => {
   if ((await DarkwriteAPIClient.onboarding.isCompleted()) === false) {
     console.log("Initiate onboarding sequence");
     if (
-      (await DarkwriteAPIClient.onboarding.isAlphaMigrationPerformed()) == false
+      (await DarkwriteAPIClient.onboarding.isAlphaMigrationPerformed()) ==
+        false &&
+      !(await DarkwriteAPIClient.onboarding.isNewUser())
     ) {
       console.log("Initiate migration sequence");
       useOnboardingState.setState({ currentPage: "workspace-name-migrator" });

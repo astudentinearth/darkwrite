@@ -8,9 +8,10 @@ import OnboardingFinish from "./finish";
 import { DarkwriteAPIClient } from "@/api/api-client";
 import { ReactRootContainer } from "@/react-root-helper";
 import App from "@/App";
-import { InitialUserSettings } from "@/init";
+import { correctWorkspaceState, InitialUserSettings } from "@/init";
 import WorkspaceNameMigratorStep from "./workspace-name-migrator";
 import MigrationFinish from "./finish-migrator";
+import MigrationError from "./migration-error";
 
 export type OnboardingPage =
   | "language"
@@ -53,8 +54,8 @@ export function getOnboardingPage(key: OnboardingPage) {
     case "finish-migrator":
       return <MigrationFinish />;
 
-    default:
-      return <div></div>;
+    case "migration-error":
+      return <MigrationError />;
   }
 }
 
@@ -115,10 +116,24 @@ export async function finishOnboarding() {
 
   await DarkwriteAPIClient.onboarding.markFinished();
   InitialUserSettings.settings = prefs;
-
+  correctWorkspaceState();
   ReactRootContainer.root.render(<App />);
 }
 
 export async function migrateAndFinishOnboarding() {
-  await DarkwriteAPIClient.onboarding.migrateToV1();
+  const state = useOnboardingState.getState();
+  try {
+    await DarkwriteAPIClient.onboarding.migrateToV1();
+    const { workspaces } = await DarkwriteAPIClient.workspace.getAll();
+    const defaultWorkspace = workspaces[0];
+    await DarkwriteAPIClient.workspace.update(defaultWorkspace.id, {
+      name: state.workspaceName,
+    });
+    await DarkwriteAPIClient.onboarding.markFinished();
+    correctWorkspaceState();
+    ReactRootContainer.root.render(<App />);
+  } catch (err) {
+    console.error("Migration failed:", err);
+    useOnboardingState.setState({ currentPage: "migration-error" });
+  }
 }

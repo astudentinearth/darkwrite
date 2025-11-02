@@ -1,24 +1,21 @@
-import log from "electron-log/main.js";
-import { Paths } from "./lib/paths";
-import { app, BrowserWindow, protocol, shell } from "electron";
-import { ElectronPrefsModel } from "./prefs";
-import { InitializeElectronAPI } from "./ipc/api";
-import { constructWindow } from "./window";
-import path, { join } from "path";
-import { is } from "@electron-toolkit/utils";
-import { webcontentsUrl } from "./metadata.json";
-import { initAppMenu } from "./menu";
-import { AppDataSource } from "./db";
-import { fileURLToPath } from "url";
-import { WorkspaceService } from "./service/workspace.service";
-import { initDevtools } from "./debug/server";
-import { embedProtocolHandler } from "./ipc/embed-protocol-handler";
-import { HealthService } from "./service/health.service";
-import {
-  hasOnboarded,
-  isAlphaMigrationPerformed,
-} from "./lib/onboarding-state";
 import { SettingsModel } from "@/common/settings";
+import { is } from "@electron-toolkit/utils";
+import { app, BrowserWindow, protocol, shell } from "electron";
+import log from "electron-log/main.js";
+import path, { join } from "path";
+import { fileURLToPath } from "url";
+import { AppDataSource } from "./db";
+import { initDevtools } from "./debug/server";
+import { InitializeElectronAPI } from "./ipc/api";
+import { embedProtocolHandler } from "./ipc/embed-protocol-handler";
+import { isAlphaMigrationPerformed, isNewUser } from "./lib/onboarding-state";
+import { Paths } from "./lib/paths";
+import { initAppMenu } from "./menu";
+import { webcontentsUrl } from "./metadata.json";
+import { ElectronPrefsModel } from "./prefs";
+import { HealthService } from "./service/health.service";
+import { WorkspaceService } from "./service/workspace.service";
+import { constructWindow } from "./window";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -62,9 +59,8 @@ function setupWindowEvents() {
 
 export async function init() {
   await Paths.initialize();
-  const migrationsPerformed =
-    (await isAlphaMigrationPerformed()) && (await hasOnboarded());
-  if (!migrationsPerformed) {
+  const migrationsPerformed = await isAlphaMigrationPerformed();
+  if (!migrationsPerformed && !(await isNewUser())) {
     // settings will be persisted after the onboarding
     ElectronPrefsModel.override(SettingsModel.getDefaults());
   } else {

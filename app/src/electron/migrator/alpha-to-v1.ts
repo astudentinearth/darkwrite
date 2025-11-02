@@ -41,12 +41,16 @@ import fse from "fs-extra";
 import path from "path";
 import { DataSource } from "typeorm";
 import { checkAccess, dirSize, rmIfExists } from "../lib/fs";
-import { hasOnboarded } from "../lib/onboarding-state";
+import { hasOnboarded, markVersionMigrated } from "../lib/onboarding-state";
 import { Paths } from "../lib/paths";
 import { createRequire } from "module";
 import sqlite3 from "better-sqlite3";
 import { SettingsMigrator } from "@/common/settings-migrator";
 import { Theme } from "@/common/theme";
+import { dialog, app } from "electron";
+import { ElectronPrefsModel } from "../prefs";
+import { AppDataSource } from "../db";
+import { NoteContent } from "@/common/note-content";
 
 const log = electronlog.create({ logId: "alpha-migration" });
 const require = createRequire(import.meta.url);
@@ -114,6 +118,15 @@ function transformTheme(oldTheme: Record<string, any>) {
     newTheme.colors[key as keyof Theme["colors"]] = `${oldTheme.cssVars[key]}`;
   }
   return newTheme;
+}
+
+function transformDocument(doc: any) {
+  if (!("customizations" in doc) && !doc.customizations) return doc;
+  if ("coverEmbedId" in doc.customizations) {
+    doc.customizations.coverImageSource = `embed://${doc.customizations.coverEmbedId}`;
+    delete doc.customizations.coverEmbedId;
+  }
+  return doc;
 }
 
 async function preflightCheck() {
@@ -201,6 +214,8 @@ async function reconstructDatabase() {
   const workspace = await initWorkspace(newDb);
 
   await migrateNotesAndEmbeds(oldDb, workspace, newDb);
+  oldDb.close();
+  newDb.destroy();
 }
 
 async function migrateNotesAndEmbeds(
@@ -250,11 +265,34 @@ async function migrateNotesAndEmbeds(
 
   log.info("Saving migrated notes to new database...");
   await newDb.getRepository(entities.Note).save(Object.values(noteMap));
-  log.info("Copying note contents...");
-
+  log.info("Migrating note contents...");
   const newNotesPath = path.join(Paths.MIGRATION_CACHE_DIR, "notes");
   await fse.mkdir(newNotesPath);
-  await fse.copy(Paths.NOTE_CONTENTS_DIR, newNotesPath);
+  const docs = await fse.readdir(Paths.NOTE_CONTENTS_DIR);
+  for (const doc of docs) {
+    const jsonText = await fse.readFile(
+      path.join(Paths.NOTE_CONTENTS_DIR, doc),
+      "utf-8",
+    );
+    let parsed: NoteContent;
+    try {
+      parsed = JSON.parse(jsonText);
+      parsed = transformDocument(parsed);
+    } catch {
+      log.warn(
+        `Failed to parse note content for note ID ${doc} - initializing empty content.`,
+      );
+      parsed = {
+        contents: {},
+        customizations: {},
+      };
+    }
+    await fse.writeFile(
+      path.join(Paths.MIGRATION_CACHE_DIR, "notes", doc),
+      JSON.stringify(parsed, null, 2),
+      "utf-8",
+    );
+  }
 
   log.info(
     `Migrated ${oldNotes.length} notes in ${(Date.now() - noteMigrationStart) / 1000} seconds`,
@@ -343,10 +381,44 @@ async function initWorkspace(newDb: DataSource) {
   return workspace;
 }
 
+async function swap() {
+  const backupPath = path.join(Paths.DATA_ROOT, "darkwrite-data-alpha/");
+  try {
+    log.info("Moving existing data to a fallback location...");
+    await fse.move(Paths.DATA_DIR, backupPath, { overwrite: true });
+    await fse.move(Paths.MIGRATION_CACHE_DIR, Paths.DATA_DIR);
+  } catch (err) {
+    log.error(
+      "Failed to move new data directory into place - attempting rollback.",
+      err,
+    );
+    try {
+      await fse.move(backupPath, Paths.DATA_DIR);
+
+      throw new Error(
+        "Failed to move new data directory into place - rollback performed.",
+      );
+    } catch (_err) {
+      log.error(
+        "FATAL: ROLLBACK FAILED. Data is safe but needs manual recovery.",
+      );
+      dialog.showErrorBox(
+        "Migration failed",
+        "We tried to migrate your data, but we failed to swap your existing data and we weren't able to move your original data back in place. Your data is safe, but needs manual intervention." +
+          "\nYou can resolve the issue yourself by renaming the " +
+          backupPath +
+          'folder back to "darkwrite-data" and downgrading to the latest alpha version. ' +
+          "\nThis case should have never happened, so please raise an issue on GitHub. Do NOT try another migration.",
+      );
+      app.exit(1);
+    }
+  }
+}
+
 export async function migrateAlphaToV1() {
   log.transports.file.resolvePathFn = () => Paths.MIGRATION_LOG_FILE;
   const migrationStart = Date.now();
-  const exit = () => {
+  const logTime = () => {
     log.info(
       `Migration process exited after ${(Date.now() - migrationStart) / 1000} seconds.`,
     );
@@ -355,7 +427,7 @@ export async function migrateAlphaToV1() {
     await preflightCheck();
   } catch (err) {
     console.error("❌ Some checks failed: ", err);
-    exit();
+    logTime();
     throw err;
   }
   log.info("✅ All checks successful. Proceeding with migration...");
@@ -364,6 +436,7 @@ export async function migrateAlphaToV1() {
     await reconstructDatabase();
   } catch (err) {
     log.error("❌ Failed to reconstruct database: ", err);
+    logTime();
     throw err;
   }
   try {
@@ -371,6 +444,11 @@ export async function migrateAlphaToV1() {
   } catch {
     log.error("❌ Failed to migrate themes - proceeding without themes.");
   }
+  await swap();
+  logTime();
 
-  exit();
+  // We are ready to go
+  await markVersionMigrated("v1");
+  await ElectronPrefsModel.initialize();
+  await AppDataSource.initialize();
 }

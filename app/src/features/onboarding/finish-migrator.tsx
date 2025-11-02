@@ -1,14 +1,18 @@
-import * as React from "react";
+import { HeartHandshake } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import OnboardingButton from "./onboarding-button";
-import {
-  finishOnboarding,
-  migrateAndFinishOnboarding,
-} from "./onboarding-state";
-import { HeartHandshake } from "lucide-react";
+import { migrateAndFinishOnboarding } from "./onboarding-state";
+import { useState } from "react";
 
 export default function MigrationFinish() {
   const { t } = useTranslation();
+  const [working, isWorking] = useState(false);
+  const finish = () => {
+    isWorking(true);
+    migrateAndFinishOnboarding().finally(() => {
+      isWorking(false);
+    });
+  };
   return (
     <div className="flex flex-col items-center">
       <HeartHandshake className="size-18" />
@@ -22,9 +26,10 @@ export default function MigrationFinish() {
       </div>
       <div className="h-6"></div>
       <OnboardingButton
-        onClick={migrateAndFinishOnboarding}
+        onClick={finish}
         variant="default"
         className="bg-primary border-primary"
+        disabled={working}
       >
         {t("onboarding.letsBegin")}
       </OnboardingButton>
