@@ -20,6 +20,7 @@ import {
   markOnboardingCompleted,
 } from "../lib/onboarding-state";
 import { BackupAPI, HTMLExporterAPI } from "../api/backup.electron";
+import { migrateAlphaToV1 } from "../migrator/alpha-to-v1";
 
 export const DarkwriteElectronAPI = {
   note: {
@@ -69,6 +70,7 @@ export const DarkwriteElectronAPI = {
     isCompleted: new IPCHandler(false, hasOnboarded),
     isAlphaMigrationPerformed: new IPCHandler(false, isAlphaMigrationPerformed),
     markFinished: new IPCHandler(false, markOnboardingCompleted),
+    migrateToV1: new IPCHandler(false, migrateAlphaToV1),
   },
   showAppMenu: new IPCHandler(false, showAppMenu),
   desktop: {

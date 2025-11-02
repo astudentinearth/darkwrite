@@ -32,7 +32,8 @@
       "session": {
         "development": "session-dev/",
         "production": "session/"
-      }
+      },
+      "migration": "dw-migration/"
     },
     "settingsFile": "settings.json",
     "dbFile": "darkwrite.db"

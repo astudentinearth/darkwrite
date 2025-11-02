@@ -14,6 +14,11 @@ import { WorkspaceService } from "./service/workspace.service";
 import { initDevtools } from "./debug/server";
 import { embedProtocolHandler } from "./ipc/embed-protocol-handler";
 import { HealthService } from "./service/health.service";
+import {
+  hasOnboarded,
+  isAlphaMigrationPerformed,
+} from "./lib/onboarding-state";
+import { SettingsModel } from "@/common/settings";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -38,10 +43,9 @@ async function createWindow() {
   } else {
     win.loadFile(join(__dirname, webcontentsUrl));
   }
-//  win.webContents.setZoomFactor(1.0);
+  //  win.webContents.setZoomFactor(1.0);
   initAppMenu();
 }
-
 
 function setupWindowEvents() {
   app.on("window-all-closed", () => {
@@ -58,16 +62,23 @@ function setupWindowEvents() {
 
 export async function init() {
   await Paths.initialize();
-  const prefs = await ElectronPrefsModel.initialize();
+  const migrationsPerformed =
+    (await isAlphaMigrationPerformed()) && (await hasOnboarded());
+  if (!migrationsPerformed) {
+    // settings will be persisted after the onboarding
+    ElectronPrefsModel.override(SettingsModel.getDefaults());
+  } else {
+    await ElectronPrefsModel.initialize();
+    await AppDataSource.initialize();
+    await new WorkspaceService().initializeDefaultWorkspace();
+    const healthService = new HealthService();
+    await healthService.fixCollidingOrderKeys();
+  }
   log.initialize();
   // We change the session data directory to avoid polluting user data any further
   app.setPath("sessionData", Paths.SESSION_DATA_DIR);
   setupWindowEvents();
-  await AppDataSource.initialize();
-  await new WorkspaceService().initializeDefaultWorkspace();
-  const healthService = new HealthService();
-  await healthService.fixCollidingOrderKeys();
   protocol.handle("embed", embedProtocolHandler);
   createWindow();
-  if(is.dev) initDevtools(1200);
+  if (is.dev) initDevtools(1200);
 }

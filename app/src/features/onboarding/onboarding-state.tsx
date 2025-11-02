@@ -9,6 +9,8 @@ import { DarkwriteAPIClient } from "@/api/api-client";
 import { ReactRootContainer } from "@/react-root-helper";
 import App from "@/App";
 import { InitialUserSettings } from "@/init";
+import WorkspaceNameMigratorStep from "./workspace-name-migrator";
+import MigrationFinish from "./finish-migrator";
 
 export type OnboardingPage =
   | "language"
@@ -44,6 +46,12 @@ export function getOnboardingPage(key: OnboardingPage) {
 
     case "finish":
       return <OnboardingFinish />;
+
+    case "workspace-name-migrator":
+      return <WorkspaceNameMigratorStep />;
+
+    case "finish-migrator":
+      return <MigrationFinish />;
 
     default:
       return <div></div>;
@@ -109,4 +117,8 @@ export async function finishOnboarding() {
   InitialUserSettings.settings = prefs;
 
   ReactRootContainer.root.render(<App />);
+}
+
+export async function migrateAndFinishOnboarding() {
+  await DarkwriteAPIClient.onboarding.migrateToV1();
 }

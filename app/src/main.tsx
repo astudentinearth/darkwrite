@@ -7,8 +7,10 @@ import "./globals.css";
 import "./i18n";
 import { correctWorkspaceState, initializeUserPrefs } from "./init";
 import { ReactRootContainer } from "./react-root-helper";
+import { useOnboardingState } from "./features/onboarding/onboarding-state";
 
-const renderApp = () => {
+const renderApp = async () => {
+  await correctWorkspaceState();
   ReactRootContainer.root.render(<App />);
 };
 
@@ -21,10 +23,17 @@ const initialize = async () => {
     await window.initPreload();
   }
   DarkwriteAPIClient.initialize(APIClientMode.LOCAL);
-  await correctWorkspaceState();
   init({ data });
   await initializeUserPrefs();
   if ((await DarkwriteAPIClient.onboarding.isCompleted()) === false) {
+    console.log("Initiate onboarding sequence");
+    if (
+      (await DarkwriteAPIClient.onboarding.isAlphaMigrationPerformed()) == false
+    ) {
+      console.log("Initiate migration sequence");
+      useOnboardingState.setState({ currentPage: "workspace-name-migrator" });
+    }
+
     renderOnboarding();
     return;
   }

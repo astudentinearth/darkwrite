@@ -15,7 +15,8 @@ export async function hasMigratedToVersion(version: string) {
 }
 
 export async function isAlphaMigrationPerformed() {
-  return fse.pathExists(Paths.SESSION_DATA_DIR);
+  // darkwrite.db is used as an indicator
+  return fse.pathExists(Paths.DB_PATH);
 }
 
 export async function markOnboardingCompleted() {
