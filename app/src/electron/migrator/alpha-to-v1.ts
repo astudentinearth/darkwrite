@@ -44,11 +44,15 @@ import { checkAccess, dirSize, rmIfExists } from "../lib/fs";
 import { hasOnboarded } from "../lib/onboarding-state";
 import { Paths } from "../lib/paths";
 import { createRequire } from "module";
+import sqlite3 from "better-sqlite3";
+import { SettingsMigrator } from "@/common/settings-migrator";
+import { Theme } from "@/common/theme";
 
 const log = electronlog.create({ logId: "alpha-migration" });
 const require = createRequire(import.meta.url);
 
-const Database = require("better-sqlite3");
+// __filename explodes if we don't require
+const Database = require("better-sqlite3") as typeof sqlite3;
 
 interface LegacyNote {
   id: string;
@@ -69,6 +73,47 @@ interface LegacyEmbed {
   fileSize: number;
   filename: string;
   createdAt: number;
+}
+
+const themeKeyMap = {
+  background1: "--background",
+  background2: "--view-1",
+  background3: "--view-2",
+  foreground: "--foreground",
+  cardBackground: "--card",
+  cardForeground: "--card-foreground",
+  popoverBackground: "--popover",
+  popoverForeground: "--popover-foreground",
+  secondaryBackground: "--secondary",
+  secondaryForeground: "--secondary-foreground",
+  mutedBackground: "--muted",
+  mutedForeground: "--muted-foreground",
+  destructiveBackground: "--destructive",
+  destructiveForeground: "--destructive-foreground",
+  disabled: "--disabled",
+  focusRing: "--ring",
+  star: "--star",
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function transformTheme(oldTheme: Record<string, any>) {
+  const newTheme: Theme = {
+    id: oldTheme.id,
+    name: oldTheme.name,
+    mode: oldTheme.mode,
+    colors: {},
+  };
+  for (const key in oldTheme) {
+    if (key in themeKeyMap) {
+      const newKey = themeKeyMap[key as keyof typeof themeKeyMap];
+      if (!newKey) continue;
+      newTheme.colors[newKey as keyof Theme["colors"]] = `${oldTheme[key]}`;
+    }
+  }
+  for (const key in oldTheme.cssVars) {
+    newTheme.colors[key as keyof Theme["colors"]] = `${oldTheme.cssVars[key]}`;
+  }
+  return newTheme;
 }
 
 async function preflightCheck() {
@@ -153,14 +198,16 @@ async function reconstructDatabase() {
   await newDb.initialize();
 
   log.info(`Reconstructing database at ${newDbPath}...`);
-  log.info("Initializing default workspace...");
-  let workspace = new entities.Workspace();
-  workspace.config = getDefaultWorkspaceConfiguration();
-  workspace.name = "Migrated workspace";
-  workspace.created_at = new Date();
-  workspace = await newDb.getRepository(entities.Workspace).save(workspace);
-  log.info(`Default workspace initialized with ID: ${workspace.id}`);
+  const workspace = await initWorkspace(newDb);
 
+  await migrateNotesAndEmbeds(oldDb, workspace, newDb);
+}
+
+async function migrateNotesAndEmbeds(
+  oldDb: sqlite3.Database,
+  workspace: entities.Workspace,
+  newDb: DataSource,
+) {
   log.info("Migrating notes...");
   const noteMigrationStart = Date.now();
   const oldNotes = oldDb
@@ -203,9 +250,97 @@ async function reconstructDatabase() {
 
   log.info("Saving migrated notes to new database...");
   await newDb.getRepository(entities.Note).save(Object.values(noteMap));
+  log.info("Copying note contents...");
+
+  const newNotesPath = path.join(Paths.MIGRATION_CACHE_DIR, "notes");
+  await fse.mkdir(newNotesPath);
+  await fse.copy(Paths.NOTE_CONTENTS_DIR, newNotesPath);
+
   log.info(
     `Migrated ${oldNotes.length} notes in ${(Date.now() - noteMigrationStart) / 1000} seconds`,
   );
+
+  log.info("Migrating embeds...");
+  const embedMigrationStart = Date.now();
+  const newEmbedPath = path.join(Paths.MIGRATION_CACHE_DIR, "embeds");
+  const files = await fse.readdir(Paths.EMBED_DIR);
+  await fse.mkdir(newEmbedPath);
+
+  log.info(`Copying ${files.length} embeds...`);
+  for (const file of files) {
+    const stripped = path.parse(file).name;
+    await fse.copy(
+      path.join(Paths.EMBED_DIR, file),
+      path.join(newEmbedPath, stripped),
+    );
+  }
+
+  const oldEmbeds = oldDb.prepare("SELECT * FROM embed").all() as LegacyEmbed[];
+  const embedEntities: entities.Embed[] = [];
+  for (const oldEmbed of oldEmbeds) {
+    const newEmbed = new entities.Embed();
+    newEmbed.id = oldEmbed.id;
+    newEmbed.displayName = oldEmbed.displayName;
+    newEmbed.fileName = oldEmbed.id;
+    newEmbed.fileSize = oldEmbed.fileSize;
+    newEmbed.fileType = path.extname(oldEmbed.filename).replace(".", "");
+    newEmbed.uploadedAt = new Date(oldEmbed.createdAt);
+    newEmbed.workspace = workspace;
+    embedEntities.push(newEmbed);
+  }
+  log.info("Saving migrated embeds to new database...");
+  await newDb.getRepository(entities.Embed).save(embedEntities);
+  log.info(
+    `Migrated ${oldEmbeds.length} embeds in ${(Date.now() - embedMigrationStart) / 1000} seconds`,
+  );
+
+  log.info("Migrating settings.json");
+  const settings = await fse.readFile(Paths.SETTINGS_PATH, "utf-8");
+  const migrator = new SettingsMigrator(JSON.parse(settings));
+  const migrated = migrator.migrate();
+  await fse.writeFile(
+    path.join(Paths.MIGRATION_CACHE_DIR, "settings.json"),
+    JSON.stringify(migrated, null, 2),
+    "utf-8",
+  );
+  log.info("Settings migrated.");
+}
+
+async function migrateThemes() {
+  const themesPath = path.join(Paths.MIGRATION_CACHE_DIR, "themes");
+  await fse.mkdir(themesPath);
+  const oldThemes = await fse.readdir(Paths.THEME_DIR);
+  log.info(`Migrating ${oldThemes.length} themes...`);
+  for (const themeFile of oldThemes) {
+    const content = await fse.readFile(
+      path.join(Paths.THEME_DIR, themeFile),
+      "utf-8",
+    );
+    try {
+      const parsed = JSON.parse(content);
+      const migrated = transformTheme(parsed);
+      await fse.writeFile(
+        path.join(themesPath, themeFile),
+        JSON.stringify(migrated, null, 2),
+        "utf-8",
+      );
+      log.info(`Migrated theme ${themeFile} successfully.`);
+    } catch (_er) {
+      log.warn("Failed to migrate theme " + themeFile + " - skipping.");
+      continue;
+    }
+  }
+}
+
+async function initWorkspace(newDb: DataSource) {
+  log.info("Initializing default workspace...");
+  let workspace = new entities.Workspace();
+  workspace.config = getDefaultWorkspaceConfiguration();
+  workspace.name = "Migrated workspace";
+  workspace.created_at = new Date();
+  workspace = await newDb.getRepository(entities.Workspace).save(workspace);
+  log.info(`Default workspace initialized with ID: ${workspace.id}`);
+  return workspace;
 }
 
 export async function migrateAlphaToV1() {
@@ -227,9 +362,15 @@ export async function migrateAlphaToV1() {
   await initCache();
   try {
     await reconstructDatabase();
-    exit();
   } catch (err) {
     log.error("❌ Failed to reconstruct database: ", err);
     throw err;
   }
+  try {
+    await migrateThemes();
+  } catch {
+    log.error("❌ Failed to migrate themes - proceeding without themes.");
+  }
+
+  exit();
 }
