@@ -36,7 +36,7 @@ export default function EditorHeader(props: EditorHeaderProps) {
         onAddCover={props.onAddCover}
       />
       <ConstrainedWidth
-        className={cn("flex flex-col gap-2 px-4")}
+        className={cn("flex flex-col gap-2 px-4 pt-2")}
         fill={props.wide}
       >
         <div className="flex gap-2 items-end mb-4 font-ui">
@@ -53,7 +53,7 @@ export default function EditorHeader(props: EditorHeaderProps) {
           )}
           <div
             className={cn(
-              "opacity-0 z-20 font-ui",
+              "opacity-0 z-20 font-ui -translate-x-3",
               mouseOver.mouseOver && "opacity-100",
             )}
           >
