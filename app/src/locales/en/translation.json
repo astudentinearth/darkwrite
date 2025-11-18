@@ -115,7 +115,10 @@
       "sourceCode": "Source code",
       "reportBugs": "Report bugs",
       "checkUpdates": "Check for updates",
-      "checkUpdatesPending": "Checking for updates..."
+      "checkUpdatesPending": "Checking for updates...",
+      "website": "Website",
+      "privacy": "Privacy",
+      "license": "License (AGPL v3)"
     },
     "privacy": {
       "autoUpdateCheckLabel": "Check for updates on startup"

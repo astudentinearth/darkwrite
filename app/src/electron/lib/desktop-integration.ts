@@ -1,11 +1,12 @@
 import { stripAlpha } from "@/common/theme";
-import { BrowserWindow, nativeTheme, systemPreferences } from "electron";
+import { app, BrowserWindow, nativeTheme, systemPreferences } from "electron";
 import _ from "lodash";
 import os from "os";
 import { ThemeMode } from "../types";
 import { OS } from "./os";
 import { getFonts2 } from "font-list";
 import { Font } from "@/common/font";
+import { DarkwriteDesktopClientInfo } from "@/common/client";
 
 export class DesktopIntegration {
   static get operatingSystem() {
@@ -41,5 +42,15 @@ export class DesktopIntegration {
       return true;
     });
     return filtered;
+  }
+
+  static async getClientInfo(): Promise<DarkwriteDesktopClientInfo> {
+    return {
+      electronVersion: process.versions.electron,
+      isPackaged: app.isPackaged,
+      nodeVersion: process.versions.node,
+      os: os.platform(),
+      version: app.getVersion(),
+    };
   }
 }

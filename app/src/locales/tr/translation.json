@@ -115,7 +115,10 @@
       "sourceCode": "Kaynak kodu",
       "reportBugs": "Hata bildir",
       "checkUpdates": "Güncelleştirmeleri denetle",
-      "checkUpdatesPending": "Güncelleştirmeler denetleniyor..."
+      "checkUpdatesPending": "Güncelleştirmeler denetleniyor...",
+      "website": "Web sitesi",
+      "privacy": "Gizlilik",
+      "license": "Lisans (AGPL v3)"
     },
     "privacy": {
       "autoUpdateCheckLabel": "Başlangıçta güncelleştirmeleri denetle"

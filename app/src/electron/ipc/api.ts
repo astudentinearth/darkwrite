@@ -81,6 +81,7 @@ export const DarkwriteElectronAPI = {
       false,
       DesktopIntegration.getSystemAccentColor,
     ),
+    getClientInfo: new IPCHandler(false, DesktopIntegration.getClientInfo),
   },
   backup: {
     initCache: new IPCHandler(false, HTMLExporterAPI.initializeExporterCache),

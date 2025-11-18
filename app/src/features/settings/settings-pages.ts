@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import AppearanceSettings from "./appearance-settings";
 import WorkspaceSettings from "./workspace-settings";
+import About from "./about";
 
 export const TAB_TITLES = {
   workspace: "settings.workspace.title",
@@ -31,5 +32,5 @@ export const SETTINGS_PAGES = {
   appearance: AppearanceSettings,
   // shortcuts: "Shortcuts",
   // experimental: "Experiments",
-  about: "About",
+  about: About,
 };

@@ -2,6 +2,7 @@
 // Electron-side handlers should implement these directly and expose it via the API bridge.
 // Clients talking to a cloud instance shall make the appropriate network requests instead.
 // Cloud-specific code should be kept separate from Electron to ensure browser portability.
+import { DarkwriteDesktopClientInfo } from "./client";
 import {
   CreateNoteDTO,
   NoteContentResponseDTO,
@@ -70,4 +71,5 @@ export interface IThemeAPI {
 export interface IDesktopAPI {
   getFontList: () => Promise<Font[]>;
   getSystemAccentColor: () => Promise<string>;
+  getClientInfo: () => Promise<DarkwriteDesktopClientInfo>;
 }
