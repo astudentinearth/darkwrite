@@ -4,14 +4,14 @@ import { ReactNodeViewRenderer } from "@tiptap/react";
 import lowlight from "../../lowlight";
 import CodeBlockNodeView from "./code-block-wrapper";
 
-export const CodeBlockExtension = (indentSize: number) =>
+export const CodeBlockExtension = (indentSizeCallback: () => number) =>
   CodeBlockLowlight.extend({
     addKeyboardShortcuts() {
       return {
         Tab: () => {
           if (this.editor.isActive("codeBlock")) {
             return this.editor.commands.insertContent(
-              new Array<string>(indentSize).fill(" ").join(""),
+              new Array<string>(indentSizeCallback()).fill(" ").join(""),
             );
           } else return false;
         },
@@ -26,12 +26,13 @@ export const CodeBlockExtension = (indentSize: number) =>
         "Mod-ArrowDown": () => this.editor.commands.exitCode(),
       };
     },
-    addNodeView: () =>  ReactNodeViewRenderer(CodeBlockNodeView, {contentDOMElementTag: "code"}),
+    addNodeView: () =>
+      ReactNodeViewRenderer(CodeBlockNodeView, {
+        contentDOMElementTag: "code",
+      }),
   }).configure({
     HTMLAttributes: {
-      class: cn(
-        "border-none darkwrite-mono font-medium",
-      ),
+      class: cn("border-none darkwrite-mono font-medium"),
     },
     exitOnTripleEnter: true,
     lowlight,

@@ -26,7 +26,7 @@ export function EditorRoot(props: { content: EditorContent }) {
       items: () => context.commandItems,
     },
   });
-  const codeblock = CodeBlockExtension(context.codeBlockIndentSize);
+  const codeblock = CodeBlockExtension(() => context.codeBlockIndentSize);
   const imagePlugin = ImageExtension(context.imageUploadConfig);
   return (
     <EditorProvider

@@ -1,5 +1,5 @@
 import { WorkspaceDTO } from "@/common/dto/response/workspace.response";
-import { Button, Label, Switch } from "@/components/ui";
+import { Button, Input, Label, Switch } from "@/components/ui";
 import WorkspaceIcon from "@/components/workspace-icon";
 import { useCurrentWorkspace, useUpdateWorkspace } from "@/query/use-workspace";
 import {
@@ -44,11 +44,17 @@ export default function WorkspaceSettings() {
     mutate(prefs);
   };
 
+  const setIndentSize = (val: number) => {
+    const prefs = produce(settings, (draft) => {
+      draft.editor.codeIndentSize = val;
+    });
+    mutate(prefs);
+  };
+
   return (
     <div className="w-full flex flex-col items-center pt-3 gap-4">
       {currentWorkspace && (
         <SettingsCard>
-          {" "}
           <div className="flex gap-4">
             <WorkspaceIcon
               className="size-16 rounded-xl text-3xl"
@@ -110,6 +116,29 @@ export default function WorkspaceSettings() {
             id="auto-update-check-switch"
             checked={settings.client.autoUpdateCheck}
             onCheckedChange={handleUpdateCheck}
+          />
+        </div>
+      </SettingsCard>
+      <SettingsCard>
+        <div className="flex justify-between items-center">
+          <div className="flex flex-col gap-1">
+            <Label htmlFor="indent-size-input">
+              {t("settings.workspace.codeBlockIndentSize")}
+            </Label>
+            <p className="text-sm text-foreground/70">
+              {t("settings.workspace.codeBlockIndentSizeDescription")}
+            </p>
+          </div>
+          <Input
+            type="number"
+            className="w-fit max-w-16"
+            onChange={(e) => {
+              const val = parseInt(e.target.value);
+              if (!isNaN(val) && val > 0) {
+                setIndentSize(val);
+              }
+            }}
+            value={settings.editor.codeIndentSize}
           />
         </div>
       </SettingsCard>

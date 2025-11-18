@@ -16,6 +16,7 @@ import ConstrainedWidth from "./constrained-width";
 import { useSlashCommand } from "./extensions";
 import EditorHeader from "./header";
 import { useNavigateToNote } from "@/hooks/use-navigate-to-note";
+import { useSettings } from "@/query/use-settings";
 
 export function EditorViewRouteHandler() {
   const noteId = useNoteFromURL();
@@ -39,6 +40,7 @@ export function EditorView({ noteId }: { noteId: string }) {
   const { note } = useNoteById(noteId);
   const notes = useNotes().notes;
   const options = useEditorOptions();
+  const { data: settings } = useSettings();
   const contents = useEditorStore((s) => s.content);
   const customizations = useEditorStore((s) => s.customizations);
   const content = { contents, customizations };
@@ -50,7 +52,7 @@ export function EditorView({ noteId }: { noteId: string }) {
   return (
     <div
       data-editor-boundary="true"
-      className="flex items-center flex-col px-24 editor-fade-in min-h-full relative"
+      className="flex items-center flex-col px-24 editor-fade-in min-h-full relative gap-2"
       style={options.style}
     >
       {note && (
@@ -72,7 +74,7 @@ export function EditorView({ noteId }: { noteId: string }) {
             commandItems={items}
             onContentChange={(val) => setEditorContent(val)}
             imageUploadConfig={options.imageConfig}
-            codeBlockIndentSize={2}
+            codeBlockIndentSize={settings.editor.codeIndentSize}
             embedSourceResolver={async (id) =>
               (await DarkwriteAPIClient.embed.getById(id)).embed?.url ?? ""
             }
