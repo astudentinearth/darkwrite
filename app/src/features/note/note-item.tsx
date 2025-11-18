@@ -13,7 +13,7 @@ import { useNoteChildren } from "./use-note-children";
 export default function NoteItem({ note }: { note: NoteDTO }) {
   const [open, setOpen] = useState(false);
   const [contextMenuOpen, setContextMenuOpen] = useState(false);
-  const children = useNoteChildren(note.parentId ?? null).data ?? [];
+  const children = useNoteChildren(note.id).data ?? [];
 
   const computeLeadingHint = () => {
     if (children.length === 0) return Rank.default().toString();

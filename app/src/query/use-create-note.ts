@@ -12,7 +12,8 @@ export const useCreateNoteMutation = (navigateAfter = false) => {
 
   const mutation = useMutation({
     mutationFn: DarkwriteAPIClient.note.create,
-    onSuccess(data) {
+    onSuccess(data, variables, result, context) {
+      context.client.invalidateQueries({ queryKey: [workspaceId, "notes"] });
       notesQuery.refetch().then(() => {
         if (navigateAfter && data.note) nav(data.note?.id);
       });

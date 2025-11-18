@@ -10,6 +10,7 @@ export function resolveUpperTree(id: string, notes: Record<string, NoteDTO>) {
     list.push(parent);
     currentId = parent.parentId;
   }
+  return list;
 }
 
 export type NoteExportFormat = "md" | "html" | "json";

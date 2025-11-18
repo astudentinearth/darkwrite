@@ -9,7 +9,7 @@ export const useNoteChildren = (parentId: string | null) => {
   const queryFn = useCallback(() => notesFetcher(workspaceId), [workspaceId]);
   const selectFn = useCallback(
     (notesQuery: NotesQueryData) => {
-      console.log("Reselecting child notes");
+      console.log("Reselecting child notes of", parentId);
       return Object.values(notesQuery.notes)
         .filter((n) => n.parentId == parentId && !n.isTrashed)
         .toSorted((a, b) => Rank.sorter(a.orderHint, b.orderHint));
