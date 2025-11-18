@@ -14,6 +14,7 @@
 - `⎇ +b` now toggles sidebar
 - `⎇ +←` now navigates back
 - `⎇ +→` now navigates forward
+- Code block syntax highlighting now follows theme colors
 
 ## ✨ Improvements and fixes
 - Add missing translations for various places
