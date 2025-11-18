@@ -3,7 +3,7 @@ import { SettingsV1Schema } from "./settings-v1-schema";
 
 export class SettingsMigrator {
   constructor(private settingsObj: unknown) {
-    this.version = this.determineVersion(settingsObj);
+    this.version = this.determineVersion();
   }
   private version: -1 | 1 | 2 = -1;
   determineVersion() {
