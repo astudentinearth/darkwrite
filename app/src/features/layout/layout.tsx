@@ -8,6 +8,7 @@ import { useResizableSidebar } from "../../hooks/layout/use-resizable-layout";
 import { Titlebar } from "./titlebar";
 import ThemeHandler from "@/components/theme-handler";
 import { useShortcuts } from "@/hooks/use-shortcuts";
+import SearchDialog from "../search/search-dialog";
 
 //import { useStartup } from "@/hooks/use-startup";
 
@@ -58,6 +59,7 @@ export function Layout() {
             isSidebarCollapsed && "ml-1.5",
           )}
         >
+          <SearchDialog />
           <Outlet />
         </div>
       </div>

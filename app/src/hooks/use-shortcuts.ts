@@ -1,3 +1,5 @@
+import { toggleSidebar } from "@/context/local-state";
+import { showSearch } from "@/features/search/search-state";
 import { useCreateNoteMutation } from "@/query/use-create-note";
 import { useEffect } from "react";
 
@@ -5,9 +7,19 @@ export const useShortcuts = () => {
   const createNew = useCreateNoteMutation(true);
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
-      if (e.key === "n" && (e.metaKey || e.ctrlKey)) {
+      const cmd = (key: string) => {
+        return e.key === key && (e.metaKey || e.ctrlKey);
+      };
+      const alt = (key: string) => {
+        return e.key === key && e.altKey;
+      };
+      if (cmd("n")) {
         e.preventDefault();
         createNew.create({});
+      } else if (cmd("k")) {
+        showSearch();
+      } else if (alt("b")) {
+        toggleSidebar();
       }
     };
     document.addEventListener("keydown", down);

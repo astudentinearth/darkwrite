@@ -10,6 +10,7 @@ import FavoritesContainer from "./favorites-container";
 import { SidebarNavigation } from "./navigation";
 import { TrashWidget } from "./trash";
 import { WorkspaceSwitcher } from "./workspace-switcher";
+import { showSearch } from "../search/search-state";
 
 export type SidebarProps = React.HTMLAttributes<HTMLDivElement> & {
   collapsed?: boolean;
@@ -19,7 +20,6 @@ export type SidebarProps = React.HTMLAttributes<HTMLDivElement> & {
 
 export function Sidebar(props: SidebarProps) {
   const { width, collapseCallback } = props;
-  //const [searchOpen, setSearchOpen] = useState(false);
   return (
     <div
       data-testid="container-sidebar"
@@ -50,7 +50,7 @@ export function Sidebar(props: SidebarProps) {
         <HeaderbarButton
           data-testid="button-search"
           title="Search"
-          //onClick={() => setSearchOpen(true)}
+          onClick={() => showSearch()}
         >
           <Search width={18} height={18} />
         </HeaderbarButton>

@@ -74,3 +74,9 @@ export const setWorkspaceId = (id: string) => {
   console.trace("setting workspace", id);
   useLocalStore.setState({ workspaceId: id });
 };
+
+export function toggleSidebar() {
+  useLocalStore.setState((state) => ({
+    isSidebarCollapsed: !state.isSidebarCollapsed,
+  }));
+}

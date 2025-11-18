@@ -11,6 +11,7 @@
 - Add ability to zoom in/out through menu
 - HTML exports are now styled
 - Added JSON export and import
+- ⎇ +b now toggles sidebar
 
 ## ✨ Improvements and fixes
 - Add missing translations for various places
