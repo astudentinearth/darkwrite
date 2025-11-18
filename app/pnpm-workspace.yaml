@@ -5,3 +5,12 @@ onlyBuiltDependencies:
   - electron
   - esbuild
   - font-manager
+
+overrides:
+  happy-dom@<20.0.0: '>=20.0.0'
+  happy-dom@<20.0.2: '>=20.0.2'
+  vite@>=7.1.0 <=7.1.10: '>=7.1.11'
+  tar@=7.5.1: '>=7.5.2'
+  js-yaml@>=4.0.0 <4.1.1: '>=4.1.1'
+  glob@>=10.3.7 <10.5.0: '>=10.5.0'
+  glob@>=11.0.0 <11.1.0: '>=11.1.0'
