@@ -20,6 +20,10 @@ export const useShortcuts = () => {
         showSearch();
       } else if (alt("b")) {
         toggleSidebar();
+      } else if (alt("ArrowLeft")) {
+        window.history.back();
+      } else if (alt("ArrowRight")) {
+        window.history.forward();
       }
     };
     document.addEventListener("keydown", down);
