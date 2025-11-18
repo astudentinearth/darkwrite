@@ -9,6 +9,7 @@ import { useState } from "react";
 import NoteHeader from "./note-header";
 import NoteList from "./note-list";
 import { useNoteChildren } from "./use-note-children";
+import { NoteContextMenuContainer } from "./note-context-menu";
 
 export default function NoteItem({ note }: { note: NoteDTO }) {
   const [open, setOpen] = useState(false);
@@ -27,18 +28,26 @@ export default function NoteItem({ note }: { note: NoteDTO }) {
     return lastChildRank.next().toString();
   };
 
+  const finalOrderHint = computeFinalHint();
+
   return (
     <Collapsible open={open}>
       <CollapsibleTrigger asChild>
-        <NoteHeader
-          finalOrderHint={computeFinalHint()}
-          collapsible
-          showCreate
-          open={open}
-          setOpen={setOpen}
+        <NoteContextMenuContainer
           note={note}
-          contextMenuOpen={contextMenuOpen}
-        />
+          onOpenChange={setContextMenuOpen}
+          finalOrderHint={finalOrderHint}
+        >
+          <NoteHeader
+            finalOrderHint={finalOrderHint}
+            collapsible
+            showCreate
+            open={open}
+            setOpen={setOpen}
+            note={note}
+            contextMenuOpen={contextMenuOpen}
+          />
+        </NoteContextMenuContainer>
       </CollapsibleTrigger>
       <CollapsibleContent className="pl-3">
         <NoteList

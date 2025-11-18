@@ -1,13 +1,12 @@
 import DynamicTextarea from "@/components/dynamic-textarea";
-import CoverImage from "./cover-image";
-import ConstrainedWidth from "./constrained-width";
-import { Input } from "@/components/ui/input";
 import { EmojiPicker } from "@/components/emoji-picker";
-import { cn, fromUnicode } from "@/lib/utils";
 import { Button } from "@/components/ui";
-import { useTranslation } from "react-i18next";
-import { Frown, Image, Smile } from "lucide-react";
 import useMouseOver from "@/hooks/layout/use-mouse-over";
+import { cn, fromUnicode } from "@/lib/utils";
+import { Frown, Image, Smile } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import ConstrainedWidth from "./constrained-width";
+import CoverImage from "./cover-image";
 
 export type EditorHeaderProps = {
   title: string;

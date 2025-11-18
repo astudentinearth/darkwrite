@@ -1,4 +1,4 @@
-import { setWorkspaceId, useLocalStore } from "@/context/local-state";
+import { setWorkspaceId } from "@/context/local-state";
 import { useNavigate } from "react-router-dom";
 
 export const useWorkspaceManager = () => {

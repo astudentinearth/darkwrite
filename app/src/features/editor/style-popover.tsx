@@ -1,20 +1,20 @@
 import { FontStyle, NoteCustomization } from "@/common/note-customization";
+import FontSelect from "@/components/font-select";
+import { Switch } from "@/components/ui";
 import { Button } from "@/components/ui/button";
+import { ColorPicker } from "@/components/ui/color-picker";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { useEditorStore } from "@/context/editor-store";
 import { cn } from "@/lib/utils";
 import { useNoteFromURL } from "@/query/use-note-from-url";
-import React, { ReactNode } from "react";
+import { RotateCcw } from "lucide-react";
+import { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import useStylePopover from "./use-style-popover";
-import FontSelect from "@/components/font-select";
-import { ColorPicker } from "@/components/ui/color-picker";
-import { RotateCcw } from "lucide-react";
-import { Switch } from "@/components/ui";
-import { useEditorStore } from "@/context/editor-store";
 
 export default function StylePopover({ children }: { children: ReactNode }) {
   const id = useNoteFromURL();
@@ -34,15 +34,8 @@ export function StyleUI(props: {
   customizations: NoteCustomization;
   noteId: string;
 }) {
-  const {
-    backgroundColor,
-    coverImageSource,
-    customFont,
-    font,
-    largeText,
-    textColor,
-    widePage,
-  } = props.customizations;
+  const { backgroundColor, customFont, font, textColor, widePage } =
+    props.customizations;
   const { t } = useTranslation("translation", {
     keyPrefix: "editor.customizations",
   });

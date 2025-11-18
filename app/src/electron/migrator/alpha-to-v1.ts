@@ -120,6 +120,7 @@ function transformTheme(oldTheme: Record<string, any>) {
   return newTheme;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function transformDocument(doc: any) {
   if (!("customizations" in doc) && !doc.customizations) return doc;
   if ("coverEmbedId" in doc.customizations) {
@@ -363,7 +364,7 @@ async function migrateThemes() {
         "utf-8",
       );
       log.info(`Migrated theme ${themeFile} successfully.`);
-    } catch (_er) {
+    } catch {
       log.warn("Failed to migrate theme " + themeFile + " - skipping.");
       continue;
     }
@@ -402,6 +403,7 @@ async function swap() {
       log.error(
         "FATAL: ROLLBACK FAILED. Data is safe but needs manual recovery.",
       );
+      log.error(_err);
       dialog.showErrorBox(
         "Migration failed",
         "We tried to migrate your data, but we failed to swap your existing data and we weren't able to move your original data back in place. Your data is safe, but needs manual intervention." +

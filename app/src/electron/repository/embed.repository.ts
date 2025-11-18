@@ -1,6 +1,6 @@
 import { Repository } from "typeorm";
 import { AppDataSource } from "../db";
-import { Embed, Note } from "../entity";
+import { Embed } from "../entity";
 
 export class EmbedRepository {
   private _repo: Repository<Embed>;
@@ -17,7 +17,7 @@ export class EmbedRepository {
   }
 
   async findById(id: string) {
-    return this._repo.findOne({where: {id}});
+    return this._repo.findOne({ where: { id } });
   }
 
   async findAll() {
@@ -25,15 +25,14 @@ export class EmbedRepository {
   }
 
   async deleteById(id: string) {
-    return this._repo.delete({id});
+    return this._repo.delete({ id });
   }
 
   async delete(embed: Embed) {
-    return this._repo.delete({id: embed.id});
+    return this._repo.delete({ id: embed.id });
   }
 
   async findAllByFileSize(fileSize: number) {
-    return this._repo.find({where: {fileSize}});
+    return this._repo.find({ where: { fileSize } });
   }
-
 }

@@ -1,9 +1,9 @@
-import type { DarkwriteUserSettings } from "@/lib/settings";
 import { is } from "@electron-toolkit/utils";
 import { type BrowserWindowConstructorOptions } from "electron";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import metadata from "./metadata.json";
+import { DarkwriteUserSettings } from "@/common/settings";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -19,7 +19,8 @@ function getTitlebarStyle(prefs: DarkwriteUserSettings) {
     prefs.appearance.experimental.darwinCustomTitlebarEnabled &&
     process.platform === "darwin" &&
     !prefs.appearance.useSystemWindowFrame
-  ) return "hidden";
+  )
+    return "hidden";
   return "default";
 }
 

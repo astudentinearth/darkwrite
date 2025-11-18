@@ -1,6 +1,5 @@
 import { useCurrentEditor } from "@tiptap/react";
 import { BubbleMenu } from "@tiptap/react/menus";
-import { useState } from "react";
 import { FormattingButtons } from "./formatting";
 import { HeadingSelector } from "./heading";
 import { BubbleLink } from "./link";
@@ -9,16 +8,12 @@ import { TextColorSelector } from "./color";
 import { HighlightColorSelector } from "./highlight";
 
 export default function Bubble() {
-  const [headingOpen, setHeadingOpen] = useState(false);
-  const [listOpen, setListOpen] = useState(false);
-  const [colorOpen, setColorOpen] = useState(false);
-  const [highlightOpen, setHighlightOpen] = useState(false);
   const { editor } = useCurrentEditor();
   if (!editor) return <></>;
   return (
     <BubbleMenu
       pluginKey={"bubbleMenu"}
-      shouldShow={({ editor, state, from, to }) => {
+      shouldShow={({ editor }) => {
         return !editor.isEmpty && editor.state.selection?.empty === false;
       }}
       options={{
@@ -49,7 +44,7 @@ export default function Bubble() {
         <BubbleLink />
         <div className="w-[1px] bg-border"></div>
         <HeadingSelector />
-        <ListSelector open={listOpen} setOpen={setListOpen} />
+        <ListSelector />
         <div className="w-[1px] bg-border"></div>
         <TextColorSelector />
         <HighlightColorSelector />

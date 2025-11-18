@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import * as React from "react";
 
-interface SettingsCardProps extends React.ComponentProps<"div"> {}
+type SettingsCardProps = React.ComponentProps<"div">;
 
 export default function SettingsCard({
   className,

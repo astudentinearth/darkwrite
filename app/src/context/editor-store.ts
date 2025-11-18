@@ -3,7 +3,6 @@ import { NoteContent } from "@/common/note-content";
 import { NoteCustomization } from "@/common/note-customization";
 import { Editor, EditorContent } from "@/features/editor/types";
 import { persistContentDebounced } from "@/query/use-note-content";
-import { produce } from "immer";
 import { create } from "zustand";
 
 export interface EditorStore {

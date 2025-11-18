@@ -1,6 +1,6 @@
 import { SettingsModel } from "@/common/settings";
 import { is } from "@electron-toolkit/utils";
-import { app, BrowserWindow, protocol, session, shell } from "electron";
+import { app, BrowserWindow, protocol, shell } from "electron";
 import log from "electron-log/main.js";
 import path, { join } from "path";
 import { fileURLToPath } from "url";

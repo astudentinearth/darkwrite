@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useCreateNoteMutation } from "@/query/use-create-note";
 import { SquarePen } from "lucide-react";
@@ -7,8 +6,8 @@ import { useTranslation } from "react-i18next";
 
 export function CreatePageButton(props: { className?: string }) {
   const { create } = useCreateNoteMutation(true);
-  const handleClick = async () =>  create({});
-  const {t} = useTranslation();
+  const handleClick = async () => create({});
+  const { t } = useTranslation();
   return (
     <SidebarItem
       onClick={handleClick}

@@ -3,7 +3,6 @@ import { Editor } from "@tiptap/core";
 import { createContext } from "react";
 import { NoteDTO } from "@/common/dto";
 import { ImageExtensionConfig } from "./extensions/image/image-config";
-import i18n from "i18next";
 
 export interface IDarkwriteEditorContext {
   notes?: NoteDTO[];

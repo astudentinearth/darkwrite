@@ -21,7 +21,7 @@ export default function SettingsDialog(props: { children: ReactNode }) {
   );
 }
 
-export function SettingsTabView(props: { className?: string }) {
+export function SettingsTabView() {
   const { t } = useTranslation();
   return (
     <Tabs className="h-full flex flex-col">
@@ -35,6 +35,7 @@ export function SettingsTabView(props: { className?: string }) {
               className="flex gap-2 data-[state=active]:bg-secondary/40 data-[state=active]:text-primary-text hover:bg-secondary/80 rounded-lg py-2 px-4"
             >
               <TabIcon size={18} />
+              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
               {t(TAB_TITLES[key as SETTINGS_PAGE] as any)}
             </TabsTrigger>
           );

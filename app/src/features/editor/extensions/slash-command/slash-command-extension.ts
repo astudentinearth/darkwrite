@@ -18,8 +18,6 @@ export const SlashCommandExtension = Extension.create({
         render: SlashCommandRenderer.render,
         // i dont know the correct type, but it works
         command: ({
-          editor,
-          range,
           props,
         }: {
           editor: Editor;

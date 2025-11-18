@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import React, { ReactNode, MouseEvent } from "react";
+import React, { ReactNode } from "react";
 
 export function SidebarItem({
   className,

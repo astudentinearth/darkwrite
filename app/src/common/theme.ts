@@ -1,4 +1,4 @@
-import colorString, { ColorString } from "color-string";
+import colorString from "color-string";
 
 const allowedKeys = [
   "--background",

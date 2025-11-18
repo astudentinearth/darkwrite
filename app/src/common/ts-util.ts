@@ -33,11 +33,14 @@ export type PromisfyFunction<Func extends (...args: any[]) => any> = (
   ...args: Parameters<Func>
 ) => Promisfy<ReturnType<Func>>;
 
-export type ExcludeFunctions<Obj extends {[key: string]: any}> = {
+export type ExcludeFunctions<Obj extends { [key: string]: any }> = {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
-  [Key in keyof Obj]: Obj[Key] extends Function ? never : Key
-}
+  [Key in keyof Obj]: Obj[Key] extends Function ? never : Key;
+};
 
-export type KeysExceptFunctions<T> = ExcludeFunctions<T>[keyof T];
+export type KeysExceptFunctions<T extends { [key: string]: any }> =
+  ExcludeFunctions<T>[keyof T];
 
-export type Optional<T, E extends Error = Error> = { result: T, error?: undefined } | { error: E }
+export type Optional<T, E extends Error = Error> =
+  | { result: T; error?: undefined }
+  | { error: E };

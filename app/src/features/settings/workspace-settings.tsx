@@ -15,7 +15,6 @@ import { useTranslation } from "react-i18next";
 import EditWorkspaceDialog from "./edit-workspace-dialog";
 import SettingsCard from "./settings-card";
 import { useSettings, useUpdateSettings } from "@/query/use-settings";
-import { set } from "lodash";
 import { produce } from "immer";
 import { useWorkspaceExport } from "@/query/use-workspace-export";
 import useBackup from "@/query/use-backup";

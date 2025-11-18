@@ -5,7 +5,7 @@ import fse from "fs-extra";
 import { join } from "node:path";
 import os from "os";
 import { zip } from "zip-a-folder";
-import { DB } from "../db";
+import { AppDataSource as DB } from "../db";
 import { rmIfExists } from "../lib/fs";
 import {
   BACKUP_CACHE_DIR,
@@ -89,7 +89,7 @@ export const BackupAPI = {
   },
   async restore(archivePath: string) {
     let didRename = false;
-    await DB.disconnect();
+    await DB.destroy();
     try {
       await rmIfExists(RESTORE_CACHE_DIR);
       await extract(archivePath, { dir: RESTORE_CACHE_DIR });
@@ -130,7 +130,7 @@ export const BackupAPI = {
           overwrite: true,
         });
       }
-      await DB.init();
+      await DB.initialize();
       dialog.showMessageBoxSync({
         type: "error",
         message:

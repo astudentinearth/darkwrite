@@ -6,7 +6,7 @@ export class SettingsMigrator {
     this.version = this.determineVersion(settingsObj);
   }
   private version: -1 | 1 | 2 = -1;
-  determineVersion(obj: unknown) {
+  determineVersion() {
     if (
       typeof this.settingsObj !== "object" ||
       this.settingsObj == null ||
@@ -15,19 +15,18 @@ export class SettingsMigrator {
       throw new Error("Invalid settings file.");
     }
 
-
-    if(this.settingsObj.version === "1") return 1;
-    else if(this.settingsObj.version === 2) return 2;
+    if (this.settingsObj.version === "1") return 1;
+    else if (this.settingsObj.version === 2) return 2;
     else return -1;
   }
-
 
   migrateToV2() {
     const v1 = this.settingsObj as SettingsV1Schema;
     const v2 = SettingsModel.getDefaults();
 
     v2.appearance.accentColor = v1.appearance.accentColor;
-    v2.appearance.experimental.darwinCustomTitlebarEnabled = v1.appearance.enableCustomWindowFrameOnDarwin;
+    v2.appearance.experimental.darwinCustomTitlebarEnabled =
+      v1.appearance.enableCustomWindowFrameOnDarwin;
     v2.appearance.fonts = v1.fonts;
     v2.appearance.useSystemWindowFrame = v1.appearance.useSystemWindowFrame;
     v2.appearance.useSystemAccentColor = v1.appearance.useSystemAccentColor;
@@ -35,22 +34,23 @@ export class SettingsMigrator {
     v2.editor.codeIndentSize = v1.editor.codeBlockIndentSize;
     v2.client.autoUpdateCheck = v1.updateCheckEnabled;
     v2.client.language = "en";
-    
+
     this.settingsObj = v2;
     this.version = 2;
   }
 
   private migratorMap = {
     1: this.migrateToV2,
-    2: ()=>this.settingsObj as DarkwriteUserSettings
-  }
+    2: () => this.settingsObj as DarkwriteUserSettings,
+  };
 
   needsMigration() {
     return this.version < 2;
   }
 
   migrate() {
-    if(this.version == -1) throw new Error(`Cannot determine settings file version.`);
+    if (this.version == -1)
+      throw new Error(`Cannot determine settings file version.`);
     this.migratorMap[this.version].call(this);
     return this.settingsObj as DarkwriteUserSettings;
   }

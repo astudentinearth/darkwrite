@@ -12,12 +12,12 @@ function getRuntimeInfo() {
   const isDev = is.dev;
   const { commandLine, isPackaged } = app;
   const metrics = app.getAppMetrics();
-  const windows = BrowserWindow.getAllWindows().map(w => ({
+  const windows = BrowserWindow.getAllWindows().map((w) => ({
     id: w.id,
     pageTitle: w.getTitle(),
     title: w.title,
     url: w.webContents.getURL(),
-    userAgent: w.webContents.userAgent
+    userAgent: w.webContents.userAgent,
   }));
   return {
     electronVersion,
@@ -30,13 +30,16 @@ function getRuntimeInfo() {
   };
 }
 
-
-function devtoolsHandler(req: http.IncomingMessage, res: http.ServerResponse<http.IncomingMessage>) {
+function devtoolsHandler(
+  req: http.IncomingMessage,
+  res: http.ServerResponse<http.IncomingMessage>,
+) {
   switch (req.url) {
     case "/": {
       const info = getRuntimeInfo();
       res.writeHead(200, { "Content-Type": "application/json" });
       res.end(JSON.stringify(info));
+      break;
     }
     default: {
       res.writeHead(404, { "Content-Type": "text/plain" });
@@ -49,8 +52,11 @@ export function initDevtools(port: number) {
   console.log(`[DEV] Starting devtools server...`);
   server = http.createServer((req, res) => {
     console.log(`[DEV] Handling devtools request: ${req.url}`);
-    try {devtoolsHandler(req, res)}
-    catch {/* empty */}
+    try {
+      devtoolsHandler(req, res);
+    } catch {
+      /* empty */
+    }
   });
   server.listen(port, () => {
     console.log(`[DEV] Started devtools at http://localhost:${port}`);

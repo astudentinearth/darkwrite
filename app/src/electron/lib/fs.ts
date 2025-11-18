@@ -26,7 +26,7 @@ export function checkAccess(_path: string) {
   try {
     fse.accessSync(_path, fse.constants.W_OK);
     return true;
-  } catch (_err) {
+  } catch {
     return false;
   }
 }

@@ -3,7 +3,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { WorkspaceLetterIcon } from "@/components/workspace-letter-icon";
 import { useCurrentWorkspace, useWorkspacesQuery } from "@/query/use-workspace";
 import { ChevronDown, Cloud, HardDrive, Plus } from "lucide-react";
 import { WorkspaceItem } from "./workspace-item";

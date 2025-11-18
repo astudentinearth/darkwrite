@@ -1,12 +1,10 @@
 import { showAppMenu } from "@/api/appmenu";
 import { HeaderbarButton } from "@/components/headerbar-button";
 import { Button } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import NoteListRoot from "@/features/note/note-list-root";
 import { cn } from "@/lib/utils";
 import { LayoutDashboard, PanelRightOpen, Search } from "lucide-react";
-import React, { useState } from "react";
-import { ArchiveButton } from "./archive-button";
+import React from "react";
 import { CreatePageButton } from "./create-page-button";
 import FavoritesContainer from "./favorites-container";
 import { SidebarNavigation } from "./navigation";
@@ -21,7 +19,7 @@ export type SidebarProps = React.HTMLAttributes<HTMLDivElement> & {
 
 export function Sidebar(props: SidebarProps) {
   const { width, collapseCallback } = props;
-  const [searchOpen, setSearchOpen] = useState(false);
+  //const [searchOpen, setSearchOpen] = useState(false);
   return (
     <div
       data-testid="container-sidebar"
@@ -52,7 +50,7 @@ export function Sidebar(props: SidebarProps) {
         <HeaderbarButton
           data-testid="button-search"
           title="Search"
-          onClick={() => setSearchOpen(true)}
+          //onClick={() => setSearchOpen(true)}
         >
           <Search width={18} height={18} />
         </HeaderbarButton>
