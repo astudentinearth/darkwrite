@@ -40,7 +40,7 @@ export default function SearchDialog() {
           {n.title}
         </CommandItem>
       ));
-  }, [notes]);
+  }, [nav, notes]);
 
   const listRef = useRef<HTMLDivElement>(null!);
   return (
