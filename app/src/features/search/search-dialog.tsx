@@ -6,18 +6,19 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui";
-import { setSearchOpen, setSearchQuery, useSearchState } from "./search-state";
-import { useTranslation } from "react-i18next";
-import { useNotes } from "@/query/use-notes";
-import { useCallback, useEffect, useMemo, useRef } from "react";
-import NoteHeader from "../note/note-header";
+import { useNavigateToNote } from "@/hooks/use-navigate-to-note";
 import { getNoteIcon } from "@/lib/utils";
+import { useNotes } from "@/query/use-notes";
+import { useCallback, useEffect, useRef } from "react";
+import { useTranslation } from "react-i18next";
+import { setSearchOpen, setSearchQuery, useSearchState } from "./search-state";
 
 export default function SearchDialog() {
   const open = useSearchState((s) => s.open);
   const query = useSearchState((s) => s.query);
   const { t } = useTranslation();
   const { notes } = useNotes();
+  const nav = useNavigateToNote();
   useEffect(() => {
     console.log("notes changed inside search");
   }, [notes]);
@@ -30,6 +31,10 @@ export default function SearchDialog() {
         <CommandItem
           className="px-2 py-4 flex items-center gap-2"
           value={n.id + " " + n.title}
+          onSelect={() => {
+            setSearchOpen(false);
+            nav(n.id);
+          }}
         >
           <span>{getNoteIcon(n.icon)}</span>
           {n.title}
