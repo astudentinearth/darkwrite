@@ -1,6 +1,7 @@
 import { Editor, Extension, Range } from "@tiptap/core";
 import Suggestion, { SuggestionOptions } from "@tiptap/suggestion";
 import { SlashCommandRenderer } from "./slash-command-renderer";
+import { PluginKey } from "@tiptap/pm/state";
 
 export const SlashCommandExtension = Extension.create({
   name: "slash-command",
@@ -9,6 +10,7 @@ export const SlashCommandExtension = Extension.create({
     return {
       suggestion: {
         char: "/",
+        pluginKey: new PluginKey("slashcommand"),
         allow: () => {
           console.trace("ALLOW");
           return true;

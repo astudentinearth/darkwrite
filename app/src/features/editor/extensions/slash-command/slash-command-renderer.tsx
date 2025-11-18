@@ -55,6 +55,7 @@ export const SlashCommandRenderer = {
       onKeyDown: (props) => {
         console.log("begin onkeydown");
         if (props.event.key === "Escape") {
+          console.log("escaping from slash command");
           component.destroy();
           component.element.remove();
           return true;
@@ -62,6 +63,7 @@ export const SlashCommandRenderer = {
 
         if (component.ref) {
           console.log("forwarding keydown");
+          console.log("ref: ", component.ref);
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           return (component.ref as any).onKeyDown(props);
         } // It refused to get that keydown, so we are sending a function inside the ref instead. Gonna fix when it breaks
