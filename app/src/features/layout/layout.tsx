@@ -9,6 +9,7 @@ import { Titlebar } from "./titlebar";
 import ThemeHandler from "@/components/theme-handler";
 import { useShortcuts } from "@/hooks/use-shortcuts";
 import SearchDialog from "../search/search-dialog";
+import { Toaster } from "@/components/ui";
 
 //import { useStartup } from "@/hooks/use-startup";
 
@@ -60,6 +61,7 @@ export function Layout() {
           )}
         >
           <SearchDialog />
+          <Toaster />
           <Outlet />
         </div>
       </div>

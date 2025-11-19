@@ -2,9 +2,9 @@ import { Layout } from "@/features/layout";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useState } from "react";
 import { HashRouter, Route, Routes } from "react-router-dom";
-import { Toaster } from "sonner";
 import { EditorViewRouteHandler } from "./features/editor/editor-view";
 import HomePage from "./features/home/home-page";
+import UpdateChecker from "./features/update/update-checker";
 import { noteLoader } from "./lib/note-loader";
 
 function App() {
@@ -25,7 +25,7 @@ function App() {
             </Route>
           </Routes>
         </HashRouter>
-        <Toaster duration={5000} />
+        <UpdateChecker />
         {/* <ReactQueryDevtools initialIsOpen={false} /> */}
       </QueryClientProvider>
     </div>

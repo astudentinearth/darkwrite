@@ -7,9 +7,9 @@ import _ from "lodash";
 
 const defaultExtensions = [
   ...DefaultEditorExtensions,
-  CodeBlockExtension(4),
+  CodeBlockExtension(() => 4),
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ImageExtension({} as any) // This configuration is irrelevant for HTML export
+  ImageExtension({} as any), // This configuration is irrelevant for HTML export
 ];
 
 export const generateHTML = (content: EditorContent) => {
@@ -17,4 +17,4 @@ export const generateHTML = (content: EditorContent) => {
   copy.type ??= "doc";
   copy.content ??= [];
   return tiptapHTML(copy, defaultExtensions);
-}
+};

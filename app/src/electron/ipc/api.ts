@@ -22,6 +22,7 @@ import {
 } from "../lib/onboarding-state";
 import { BackupAPI, HTMLExporterAPI } from "../api/backup.electron";
 import { migrateAlphaToV1 } from "../migrator/alpha-to-v1";
+import { Updater } from "../lib/update";
 
 export const DarkwriteElectronAPI = {
   note: {
@@ -83,6 +84,7 @@ export const DarkwriteElectronAPI = {
     ),
     getClientInfo: new IPCHandler(false, DesktopIntegration.getClientInfo),
   },
+  checkUpdate: new IPCHandler(false, Updater.checkUpdate),
   backup: {
     initCache: new IPCHandler(false, HTMLExporterAPI.initializeExporterCache),
     pushFile: new IPCHandler(false, HTMLExporterAPI.pushToExporterCache),
