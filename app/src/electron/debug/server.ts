@@ -1,5 +1,6 @@
 import { is } from "@electron-toolkit/utils";
 import { app, BrowserWindow } from "electron";
+import log from "electron-log";
 import http from "node:http";
 
 // we could utilize this server to test APIs without a frontend
@@ -49,9 +50,9 @@ function devtoolsHandler(
 }
 
 export function initDevtools(port: number) {
-  console.log(`[DEV] Starting devtools server...`);
+  log.debug(`[DEV] Starting devtools server...`);
   server = http.createServer((req, res) => {
-    console.log(`[DEV] Handling devtools request: ${req.url}`);
+    log.debug(`[DEV] Handling devtools request: ${req.url}`);
     try {
       devtoolsHandler(req, res);
     } catch {
@@ -59,6 +60,6 @@ export function initDevtools(port: number) {
     }
   });
   server.listen(port, () => {
-    console.log(`[DEV] Started devtools at http://localhost:${port}`);
+    log.debug(`[DEV] Started devtools at http://localhost:${port}`);
   });
 }

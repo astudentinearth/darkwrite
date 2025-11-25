@@ -14,7 +14,6 @@ export default function useNoteImport() {
       case "json": {
         const json = result.content.map((c) => JSON.parse(c).contents);
         for (const item of json) {
-          console.log(item);
           commands.get()?.insertJSON(item);
         }
         break;

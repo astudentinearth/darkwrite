@@ -12,7 +12,6 @@ export const SlashCommandExtension = Extension.create({
         char: "/",
         pluginKey: new PluginKey("slashcommand"),
         allow: () => {
-          console.trace("ALLOW");
           return true;
         },
         render: SlashCommandRenderer.render,

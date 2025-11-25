@@ -1,4 +1,5 @@
 import { isTheme, Theme } from "@/common/theme";
+import log from "electron-log";
 import { DocumentFileStore, IDocumentStore } from "../lib/document-store";
 import { THEME_DIR } from "../lib/paths";
 import { tryParse } from "@common/json-util";
@@ -12,7 +13,7 @@ export class ThemeService {
   ) {}
 
   async logInvalidTheme(id?: string, message?: string) {
-    console.error(`Theme ${id} is invalid.`, message);
+    log.error(`Theme ${id} is invalid.`, message);
   }
 
   parseTheme(themeString: string, id?: string) {

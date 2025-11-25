@@ -38,7 +38,6 @@ export default function EditWorkspaceDialog(props: EditWorkspaceDialogProps) {
       draft.name = name;
       draft.icon_url = imageUrl;
     });
-    console.log("saving workspace", updated);
     props.onSave(updated);
   };
 

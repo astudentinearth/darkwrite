@@ -4,6 +4,7 @@ import { join } from "node:path";
 import fs from "node:fs";
 import fse from "fs-extra";
 import { pathConfig } from "../metadata.json";
+import log from "electron-log";
 
 //TODO: Refactor all IO into separate classes and deprecate this override later.
 //TODO: Make this an actual option
@@ -12,7 +13,7 @@ const DATA_ROOT = process.env["DARKWRITE_ROOT_OVERRIDE"]
   : app.getPath("userData");
 
 if (process.env["DARKWRITE_ROOT_OVERRIDE"]) {
-  console.warn("You have set a profile override with DARKWRITE_ROOT_OVERRIDE.");
+  log.warn("You have set a profile override with DARKWRITE_ROOT_OVERRIDE.");
 }
 
 const inRoot = (_path: string) => join(DATA_ROOT, _path);
@@ -74,15 +75,14 @@ export const SESSION_DATA_DIR = join(
 
 function accessDataDirOrExit(root: string) {
   try {
-    console.log("Checking permissions");
     fs.accessSync(root, fse.constants.W_OK);
   } catch (err) {
     if (err == null) throw new Error("Something went horribly wrong. Goodbye.");
-    console.error(
+    log.error(
       `Darkwrite cannot access ${root} : Make sure the directory exists and you have write permissions for that directory.`,
     );
     if (process.env["DARKWRITE_ROOT_OVERRIDE"] != "")
-      console.error(
+      log.error(
         `You have set the "DARKWRITE_ROOT_OVERRIDE" environment variable to a directory Darkwrite does not have permissions for.
           Please ensure you can write into that directory.`,
       );
@@ -92,7 +92,6 @@ function accessDataDirOrExit(root: string) {
 
 /** Ensures all data directories are ready. */
 const initialize = async () => {
-  console.log("Initializing directories");
   accessDataDirOrExit(DATA_ROOT);
 
   await fse.ensureDir(DATA_ROOT);

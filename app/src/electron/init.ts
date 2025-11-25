@@ -62,9 +62,7 @@ function setupWindowEvents() {
 
 export async function init() {
   if (is.dev) {
-    await installExtension([REACT_DEVELOPER_TOOLS]).then((name) => {
-      console.log(`Added extension => ${name}`);
-    });
+    await installExtension([REACT_DEVELOPER_TOOLS]);
   }
   await Paths.initialize();
   const migrationsPerformed = await isAlphaMigrationPerformed();
@@ -79,6 +77,7 @@ export async function init() {
     await healthService.fixCollidingOrderKeys();
   }
   log.initialize();
+  log.transports.file.level = is.dev ? "debug" : "info";
   // We change the session data directory to avoid polluting user data any further
   app.setPath("sessionData", Paths.SESSION_DATA_DIR);
   setupWindowEvents();

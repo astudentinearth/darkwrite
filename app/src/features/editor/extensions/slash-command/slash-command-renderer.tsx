@@ -32,7 +32,6 @@ export const SlashCommandRenderer = {
 
     return {
       onStart: (props: SuggestionProps) => {
-        console.log("begin onstart");
         component = new ReactRenderer(SlashCommandView, {
           editor: props.editor,
           props,
@@ -43,27 +42,20 @@ export const SlashCommandRenderer = {
         component.element.style.position = "absolute";
         document.body.appendChild(component.element);
         updatePosition(props.editor, component.element);
-        console.log("end onstart");
       },
       onUpdate: (props: SuggestionProps) => {
-        console.log("begin onupdate");
         component.updateProps(props);
         if (!props.clientRect) return;
         updatePosition(props.editor, component.element);
-        console.log("end onupdate");
       },
       onKeyDown: (props) => {
-        console.log("begin onkeydown");
         if (props.event.key === "Escape") {
-          console.log("escaping from slash command");
           component.destroy();
           component.element.remove();
           return true;
         }
 
         if (component.ref) {
-          console.log("forwarding keydown");
-          console.log("ref: ", component.ref);
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           return (component.ref as any).onKeyDown(props);
         } // It refused to get that keydown, so we are sending a function inside the ref instead. Gonna fix when it breaks
@@ -71,10 +63,8 @@ export const SlashCommandRenderer = {
       },
 
       onExit: () => {
-        console.trace("begin onexit");
         component?.element?.remove();
         component?.destroy();
-        console.log("end onexit");
       },
     };
   },

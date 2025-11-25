@@ -94,9 +94,7 @@ export function generateRankCollisionChangeset(
   if (notes.length < 2) return [];
 
   const items = convertToIdRankPair(notes, key);
-  console.log(items);
   const collisionGroups = identifyCollisions(items);
-  console.log("collisions:", collisionGroups);
   const changeSet: IdRankPair[] = [];
   for (const collisionSet of collisionGroups) {
     const fixedSet = fixCollisionsInGroup(collisionSet);

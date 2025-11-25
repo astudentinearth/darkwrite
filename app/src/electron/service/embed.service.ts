@@ -44,7 +44,6 @@ export class EmbedService {
   async createFromFilePath(filePath: string, workspaceId: string) {
     const workspace = await this.workspaceRepository.findById(workspaceId);
     if (!workspace) throw new Error(`Workspace ${workspaceId} not found.`);
-    console.log("reading file", filePath);
     let embed = await this.initializeEmbedWithFileData(filePath);
     embed.id = randomUUID();
     embed.uploadedAt = new Date();

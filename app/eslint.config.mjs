@@ -5,6 +5,7 @@ import tsParser from "@typescript-eslint/parser";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import js from "@eslint/js";
+import { defineConfig } from "eslint/config";
 import { FlatCompat } from "@eslint/eslintrc";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -15,25 +16,7 @@ const compat = new FlatCompat({
   allConfig: js.configs.all,
 });
 
-export default [
-  {
-    ignores: [
-      "**/dist/**",
-      "**/node_modules/**",
-      "**/release/**",
-      "**/out/**",
-      "**/.next/**",
-      "**/coverage/**",
-      "**/dist-electron/**",
-    ],
-  },
-  ...fixupConfigRules(
-    compat.extends(
-      "eslint:recommended",
-      "plugin:@typescript-eslint/recommended",
-      "plugin:react-hooks/recommended",
-    ),
-  ),
+const configuration = defineConfig([
   {
     plugins: {
       "react-refresh": reactRefresh,
@@ -61,9 +44,36 @@ export default [
     },
   },
   {
+    ignores: [
+      "**/dist/**",
+      "**/node_modules/**",
+      "**/release/**",
+      "**/out/**",
+      "**/.next/**",
+      "**/coverage/**",
+      "**/dist-electron/**",
+    ],
+  },
+  ...fixupConfigRules(
+    compat.extends(
+      "eslint:recommended",
+      "plugin:@typescript-eslint/recommended",
+      "plugin:react-hooks/recommended",
+    ),
+  ),
+  {
     files: ["**/*.cjs"],
     rules: {
       "@typescript-eslint/no-require-imports": "off",
     },
   },
-];
+  {
+    files: ["**/*.{ts,tsx}"],
+    ignores: ["**/*.test.{ts,tsx}"],
+    rules: {
+      "no-console": "error",
+    },
+  },
+]);
+
+export default configuration;

@@ -21,8 +21,6 @@ export class HealthService {
       const targets = notes.filter((n) => !n.isTrashed);
       const rankSet = new Set(targets.map((n) => n.orderHint));
       if (rankSet.size !== targets.length) {
-        console.log(`Found colliding order keys in ${workspace.id}`);
-        console.log(targets);
         let prev: Rank = Rank.default();
         const _changes = targets
           .toSorted((a, b) => Rank.sorter(a.orderHint, b.orderHint))
@@ -38,7 +36,6 @@ export class HealthService {
         favorites.map((n) => n.favoriteOrderHint),
       );
       if (favoriteRankSet.size !== favorites.length) {
-        console.log(`Found colliding favorite order keys in ${workspace.id}`);
         let prev: Rank = Rank.default();
         const _changes = targets
           .toSorted((a, b) =>
@@ -52,9 +49,6 @@ export class HealthService {
         changes.push(..._changes);
       }
     }
-    console.log(
-      `Applying ${changes.length} changes to fix colliding order keys...`,
-    );
     await this._db.getRepository(Note).save(changes);
   }
 }

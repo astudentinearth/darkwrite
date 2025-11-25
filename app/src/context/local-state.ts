@@ -71,7 +71,6 @@ export const useLocalStore = create<localStore & localStoreAction>()(
 );
 
 export const setWorkspaceId = (id: string) => {
-  console.trace("setting workspace", id);
   useLocalStore.setState({ workspaceId: id });
 };
 

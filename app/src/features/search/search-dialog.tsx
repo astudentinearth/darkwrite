@@ -9,7 +9,7 @@ import {
 import { useNavigateToNote } from "@/hooks/use-navigate-to-note";
 import { getNoteIcon } from "@/lib/utils";
 import { useNotes } from "@/query/use-notes";
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { setSearchOpen, setSearchQuery, useSearchState } from "./search-state";
 
@@ -19,11 +19,7 @@ export default function SearchDialog() {
   const { t } = useTranslation();
   const { notes } = useNotes();
   const nav = useNavigateToNote();
-  useEffect(() => {
-    console.log("notes changed inside search");
-  }, [notes]);
   const items = useCallback(() => {
-    console.log("memo");
     const noteList = Object.values(notes ?? {});
     return noteList
       .filter((n) => !n.isTrashed)

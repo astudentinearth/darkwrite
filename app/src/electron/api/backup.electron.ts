@@ -36,13 +36,10 @@ export const HTMLExporterAPI = {
   async pushToExporterCache(filename: string, content: string) {
     try {
       if (!(await fse.pathExists(EXPORTER_CACHE_DIR))) {
-        console.log("no cache");
         throw new Error("Export cache was not initialized.");
       }
-      console.log("writing");
       await fse.writeFile(join(EXPORTER_CACHE_DIR, filename), content);
     } catch (error) {
-      console.log("something went wrong");
       logError(error);
     }
   },

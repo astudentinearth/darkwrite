@@ -64,7 +64,6 @@ export function HighlightColorSelector() {
           value={customColorValue}
           className="data-[state=closed]:animate-none! bg-secondary! hover:outline-2 hover:outline-primary"
           onChange={(val) => {
-            console.log(val);
             if (val.length === 7) val += "4D";
             setCustomColorValue(val);
             editor?.chain().setHighlight({ color: val }).run();

@@ -23,11 +23,10 @@ import { getNoteIcon } from "@/lib/utils";
 const LinkComponent = ({ node, updateAttributes }: any) => {
   const id = node.attrs.noteID;
   const context = use(DarkwriteEditorContext);
-  console.log(context)
   const notes = context.notes?.filter((n) => !n.isTrashed);
-  const note = notes?.find(n => n.id === id);
+  const note = notes?.find((n) => n.id === id);
   const navToNote = context.onNavigateToNote;
-  const {t} = useTranslation();
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
 

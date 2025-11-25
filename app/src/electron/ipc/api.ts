@@ -23,6 +23,7 @@ import {
 import { BackupAPI, HTMLExporterAPI } from "../api/backup.electron";
 import { migrateAlphaToV1 } from "../migrator/alpha-to-v1";
 import { Updater } from "../lib/update";
+import log from "electron-log";
 
 export const DarkwriteElectronAPI = {
   note: {
@@ -111,7 +112,7 @@ const register = (
       });
     }
   } catch {
-    console.log("Failed to register ", channel);
+    log.error("Failed to register ", channel);
   }
 };
 

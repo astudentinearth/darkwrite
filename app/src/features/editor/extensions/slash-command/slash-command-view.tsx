@@ -94,7 +94,6 @@ export const SlashCommandView = forwardRef(function (
         }
         value={value}
         onValueChange={(val) => {
-          console.log(val);
           setValue(val);
         }}
         filter={(val, search, keywords) => {

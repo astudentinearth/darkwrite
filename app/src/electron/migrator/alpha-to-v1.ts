@@ -428,7 +428,7 @@ export async function migrateAlphaToV1() {
   try {
     await preflightCheck();
   } catch (err) {
-    console.error("❌ Some checks failed: ", err);
+    log.error("❌ Some checks failed: ", err);
     logTime();
     throw err;
   }

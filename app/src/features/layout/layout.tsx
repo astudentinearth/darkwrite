@@ -24,7 +24,6 @@ export function Layout() {
     max: MAX_WIDTH,
     callback: setWidth,
   });
-  console.log("Layout re-rendered");
   useWindowControlsOverlay(headerRef);
   useShortcuts();
   return (

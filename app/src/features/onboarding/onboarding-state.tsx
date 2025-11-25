@@ -132,8 +132,7 @@ export async function migrateAndFinishOnboarding() {
     await DarkwriteAPIClient.onboarding.markFinished();
     correctWorkspaceState();
     ReactRootContainer.root.render(<App />);
-  } catch (err) {
-    console.error("Migration failed:", err);
+  } catch {
     useOnboardingState.setState({ currentPage: "migration-error" });
   }
 }

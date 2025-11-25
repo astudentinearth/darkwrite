@@ -15,7 +15,6 @@ export default function NoteList(props: {
   const t = useT("sidebar.notes");
 
   const items = useMemo(() => {
-    console.log("!!! RE-RENDERING LIST");
     if (notes.length === 0)
       return <span className="text-foreground/70">{t("noPages")}</span>;
     const nodes: ReactNode[] = [];

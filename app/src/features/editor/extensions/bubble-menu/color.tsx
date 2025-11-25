@@ -58,7 +58,6 @@ export function TextColorSelector() {
           value={customColorValue}
           className="data-[state=closed]:animate-none! bg-secondary! hover:outline-2 hover:outline-primary"
           onChange={(val) => {
-            console.log(val);
             setCustomColorValue(val);
             editor?.chain().setColor(val).run();
           }}

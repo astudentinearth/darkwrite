@@ -13,15 +13,17 @@ export function uploadImage() {
     const handleChange = async () => {
       if (!input.files?.length) return;
       const file = input.files[0];
-      console.log(file);
-      const { embed } = await DarkwriteAPIClient.embed.create({ file, fileType: file.type, workspaceId });
-      if (!embed) { reject(); }
-      else resolve(embed);
-    }
+      const { embed } = await DarkwriteAPIClient.embed.create({
+        file,
+        fileType: file.type,
+        workspaceId,
+      });
+      if (!embed) {
+        reject();
+      } else resolve(embed);
+    };
 
     input.onchange = handleChange;
     input.click();
   });
-
 }
-

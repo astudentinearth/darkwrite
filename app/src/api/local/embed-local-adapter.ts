@@ -5,7 +5,6 @@ export class EmbedLocalAdapter implements IEmbedAPI {
   async create(dto: CreateEmbedDTO) {
     const { file, fileType, workspaceId } = dto;
     const filePath = window.webUtils.getPathForFile(file);
-    console.log(filePath);
 
     if (filePath === "") {
       const buffer = await file.arrayBuffer();
@@ -17,7 +16,10 @@ export class EmbedLocalAdapter implements IEmbedAPI {
       return response;
     }
 
-    const response = await window.api.embed.createFromLocalFile(filePath, workspaceId);
+    const response = await window.api.embed.createFromLocalFile(
+      filePath,
+      workspaceId,
+    );
     return response;
   }
 

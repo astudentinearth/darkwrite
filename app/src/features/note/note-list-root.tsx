@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/collapsible";
 import { cn } from "@/lib/utils";
 import { ChevronRight } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import NoteList from "./note-list";
 import { useNoteChildren } from "./use-note-children";
@@ -17,10 +17,6 @@ export default function NoteListRoot() {
   const [open, setOpen] = useState(false);
   const { data } = useNoteChildren(null);
   const rootNotes = data;
-
-  useEffect(() => {
-    console.log("ROOT NOTES CHANGED");
-  }, [rootNotes]);
 
   if (rootNotes == null || rootNotes.length === 0) {
     return (

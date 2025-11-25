@@ -40,6 +40,7 @@ function useUpdateTitleOptimistic(id: string) {
           return { notes: copy, nextFavoriteHint: current.nextFavoriteHint };
         },
       );
+      qc.invalidateQueries({ queryKey: [workspaceId, "notes", "children"] });
     },
   });
 }
