@@ -11,8 +11,9 @@
   files: ["dist-electron", "dist"],
   extraFiles: [
     "THIRDPARTY.txt",
+    "LICENSE_NOVEL.txt",
     {
-      from: "LICENSE",
+      from: "../LICENSE",
       to: "LICENSE.darkwrite.txt",
     },
   ],
@@ -25,6 +26,7 @@
   mac: {
     target: ["dmg"],
     artifactName: "${productName}-Mac-${version}-Installer.${ext}",
+    identity: "-"
   },
   win: {
     target: [
@@ -42,7 +44,8 @@
     deleteAppDataOnUninstall: false,
   },
   linux: {
-    target: ["AppImage"],
+    target: ["AppImage", "deb", "pacman"],
+    category: "Productivity",
     artifactName: "${productName}-Linux-${version}.${ext}",
   },
 }

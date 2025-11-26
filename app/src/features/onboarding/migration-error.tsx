@@ -18,6 +18,7 @@ export default function MigrationError() {
         {t("onboarding.migrationErrorDesc2")}
         <a
           className="text-primary-text inline-block"
+          target="_blank"
           href="https://github.com/astudentinearth/darkwrite/releases/tag/v0.5.3-alpha.2"
         >
           {t("onboarding.latestAlpha")}
