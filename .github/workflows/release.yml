@@ -49,10 +49,10 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         with:
           files: |
-            packages/app-desktop/release/*/*.exe
-            packages/app-desktop/release/*/*.dmg
-            packages/app-desktop/release/*/*.AppImage
-            packages/app-desktop/release/*/*.deb
-            packages/app-desktop/release/*/*.tar.zst
-            packages/app-desktop/release/*/*.rpm
+            app/release/*/*.exe
+            app/release/*/*.dmg
+            app/release/*/*.AppImage
+            app/release/*/*.deb
+            app/release/*/*.tar.zst
+            app/release/*/*.rpm
           draft: true
