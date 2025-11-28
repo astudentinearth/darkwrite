@@ -49,10 +49,10 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         with:
           files: |
-            packages/app-desktop/release/*/Darkwrite*.exe
-            packages/app-desktop/release/*/Darkwrite*.dmg
-            packages/app-desktop/release/*/Darkwrite*.AppImage
-            packages/app-desktop/release/*/Darkwrite*.deb
-            packages/app-desktop/release/*/Darkwrite*.tar.zst
-            packages/app-desktop/release/*/Darkwrite*.rpm
+            packages/app-desktop/release/*/*.exe
+            packages/app-desktop/release/*/*.dmg
+            packages/app-desktop/release/*/*.AppImage
+            packages/app-desktop/release/*/*.deb
+            packages/app-desktop/release/*/*.tar.zst
+            packages/app-desktop/release/*/*.rpm
           draft: true
