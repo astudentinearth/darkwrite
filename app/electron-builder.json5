@@ -25,7 +25,7 @@
   ],
   mac: {
     target: ["dmg"],
-    artifactName: "${productName}-Mac-${version}-Installer.${ext}",
+    artifactName: "${productName}-Installer.${ext}",
     identity: "-"
   },
   win: {
@@ -35,7 +35,7 @@
         arch: ["x64"],
       },
     ],
-    artifactName: "${productName}-Windows-${version}-Setup.${ext}",
+    artifactName: "${productName}-Installer.${ext}",
   },
   nsis: {
     oneClick: false,
@@ -44,8 +44,8 @@
     deleteAppDataOnUninstall: false,
   },
   linux: {
-    target: ["AppImage", "deb", "pacman"],
+    target: ["AppImage", "deb", "pacman", "rpm"],
     category: "Productivity",
-    artifactName: "${productName}-Linux-${version}.${ext}",
+    artifactName: "${productName}.${ext}",
   },
 }

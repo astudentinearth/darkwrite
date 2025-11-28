@@ -16,6 +16,9 @@ jobs:
       matrix:
         platform: [macos-latest, ubuntu-22.04, windows-latest]
     runs-on: ${{matrix.platform}}
+    defaults:
+      run:
+        working-directory: app
     steps:
       - uses: actions/checkout@v4
       - name: Install node
@@ -24,10 +27,10 @@ jobs:
           node-version: 22
       - run: corepack enable
       - name: Install dependencies
-        run: yarn
+        run: pnpm install
 
       - name: Linter check
-        run: yarn lint
+        run: pnpm lint
 
       - name: Install Python dependencies (macOS)
         run: |
@@ -40,7 +43,7 @@ jobs:
         if: runner.os == 'Windows'
 
       - name: Build
-        run: yarn build:desktop
+        run: pnpm build:desktop
       - name: Release
         uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/tags/')
@@ -49,4 +52,7 @@ jobs:
             packages/app-desktop/release/*/Darkwrite-*.exe
             packages/app-desktop/release/*/Darkwrite-*.dmg
             packages/app-desktop/release/*/Darkwrite-*.AppImage
+            packages/app-desktop/release/*/Darkwrite-*.deb
+            packages/app-desktop/release/*/Darkwrite-*.tar.zst
+            packages/app-desktop/release/*/Darkwrite-*.rpm
           draft: true
