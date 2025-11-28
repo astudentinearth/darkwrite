@@ -11,16 +11,21 @@ import {
   useEditorStore,
 } from "@/context/editor-store";
 
-const persistTitle = _.debounce((id: string, title: string) => {
-  DarkwriteAPIClient.note.update(id, { title });
-}, 200);
+const persistTitle = _.debounce(
+  (id: string, title: string, callback?: () => void) => {
+    DarkwriteAPIClient.note.update(id, { title }).then(callback);
+  },
+  200,
+);
 
 function useUpdateTitleOptimistic(id: string) {
   const qc = useQueryClient();
   const workspaceId = useLocalStore((s) => s.workspaceId);
   return useMutation({
     mutationFn: async (title: string) => {
-      persistTitle(id, title);
+      persistTitle(id, title, () => {
+        qc.invalidateQueries({ queryKey: [workspaceId, "notes", "children"] });
+      });
     },
     onSettled(_data, _error, title) {
       qc.setQueryData(["note", id], (current: NoteResponseDTO) => {
@@ -40,7 +45,6 @@ function useUpdateTitleOptimistic(id: string) {
           return { notes: copy, nextFavoriteHint: current.nextFavoriteHint };
         },
       );
-      qc.invalidateQueries({ queryKey: [workspaceId, "notes", "children"] });
     },
   });
 }
