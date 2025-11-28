@@ -1,10 +1,5 @@
 import { useLocalStore } from "@/context/local-state";
-import {
-  ClipboardEvent,
-  TextareaHTMLAttributes,
-  useEffect,
-  useRef,
-} from "react";
+import { TextareaHTMLAttributes, useEffect, useRef } from "react";
 
 export interface DynamicTextareaProps
   extends Omit<

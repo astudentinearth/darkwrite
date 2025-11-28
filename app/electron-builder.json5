@@ -44,7 +44,7 @@
     deleteAppDataOnUninstall: false,
   },
   linux: {
-    target: ["AppImage", "deb", "pacman", "rpm"],
+    target: ["AppImage", "deb"],
     category: "Productivity",
     artifactName: "${productName}.${ext}",
   },
