@@ -21,7 +21,7 @@ export default function ThemeSelection() {
   };
   return (
     <div className="flex flex-col items-center">
-      <img src="/darkwrite_icon.png" className="w-30 h-30 drop-shadow-xl"></img>
+      <img src="darkwrite_icon.png" className="w-30 h-30 drop-shadow-xl"></img>
       <div className="h-5" />
       <div className="text-center text-[32px} font-semibold">
         {t("onboarding.themeTitle")}
