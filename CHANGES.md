@@ -1,8 +1,10 @@
-# next (1.0.0-alpha.1)
+# 1.0.0-beta.1
 ## 🌟 Features
 - Introducing workspaces
   - Stay organized with a space for each of your projects
+  - Workspaces cannot be deleted for now, this will be introduced in the upcoming patches
 - UI rebuild and refresh
+- .deb package
 - Brand new architecture
 - New theming system
   - Choose a color scheme for light and dark mode individually
@@ -15,6 +17,7 @@
 - `⎇ +←` now navigates back
 - `⎇ +→` now navigates forward
 - Code block syntax highlighting now follows theme colors
+- Onboarding
 
 ## ✨ Improvements and fixes
 - Add missing translations for various places
