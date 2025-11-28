@@ -95,7 +95,10 @@ export default function EditorHeader(props: EditorHeaderProps) {
         <DynamicTextarea
           className="text-4xl font-semibold box-border h-auto overflow-hidden resize-none grow outline-hidden block"
           defaultValue={props.title}
-          onValueChange={props.onTitleChange}
+          preventNewline
+          onValueChange={(val) =>
+            props.onTitleChange(val.replace(/(\r\n|\n|\r)/gm, " "))
+          }
         />
         <hr />
       </ConstrainedWidth>

@@ -3,7 +3,7 @@ import {
   ClipboardEvent,
   TextareaHTMLAttributes,
   useEffect,
-  useRef
+  useRef,
 } from "react";
 
 export interface DynamicTextareaProps
@@ -26,8 +26,8 @@ export interface DynamicTextareaProps
  */
 export default function DynamicTextarea(props: DynamicTextareaProps) {
   const ref = useRef<HTMLTextAreaElement>(null);
-  const sidebarWidth = useLocalStore(s => s.sidebarWidth);
-  const sidebarState = useLocalStore(s => s.isSidebarCollapsed);
+  const sidebarWidth = useLocalStore((s) => s.sidebarWidth);
+  const sidebarState = useLocalStore((s) => s.isSidebarCollapsed);
 
   useEffect(() => {
     adjustHeight();
@@ -44,7 +44,6 @@ export default function DynamicTextarea(props: DynamicTextareaProps) {
     adjustHeight();
   }, [sidebarWidth, sidebarState]);
 
-
   const adjustHeight = () => {
     if (!ref.current) return;
     ref.current.style.height = "auto";
@@ -52,30 +51,17 @@ export default function DynamicTextarea(props: DynamicTextareaProps) {
   };
 
   const handleChange = () => {
-    if(!ref.current) return;
+    if (!ref.current) return;
+    if (preventNewline) {
+      ref.current.value = ref.current.value.replace(/(\r\n|\n|\r)/gm, " ");
+    }
     props.onValueChange?.call(null, ref.current.value);
     adjustHeight();
   };
 
-  const handlePaste = (event: ClipboardEvent<HTMLTextAreaElement>) => {
-    if (!props.preventNewline || !ref.current) return;
-    event.preventDefault();
-    const paste = event.clipboardData.getData("text");
-    const sanitized = paste.replace(/(\r\n|\n|\r)/gm, " ");
-    const start = ref.current.selectionStart;
-    const end = ref.current.selectionEnd;
-    ref.current.value =
-      ref.current.value.slice(0, start) +
-      sanitized +
-      ref.current.value.slice(end);
-    ref.current.selectionStart = ref.current.selectionEnd =
-      start + sanitized.length;
-    handleChange();
-  };
-
-
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { preventNewline, onValueChange, newLineCallback, ...attributes } = props;
+  const { preventNewline, onValueChange, newLineCallback, ...attributes } =
+    props;
 
   return (
     <textarea
@@ -84,7 +70,6 @@ export default function DynamicTextarea(props: DynamicTextareaProps) {
       cols={1}
       {...attributes}
       onChange={handleChange}
-      onPaste={handlePaste}
     ></textarea>
   );
 }
