@@ -43,7 +43,7 @@ jobs:
         if: runner.os == 'Windows'
 
       - name: Build
-        run: pnpm build:desktop
+        run: pnpm build
       - name: Release
         uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/tags/')
