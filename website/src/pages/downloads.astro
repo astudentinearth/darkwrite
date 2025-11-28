@@ -10,6 +10,7 @@ import {
   MACOS_LATEST_RELEASE,
   GIT_REPO_URL,
   RELEASE_PAGE_URL,
+  UBUNTU_LATEST_RELEASE,
 } from "../lib/resources";
 import Darkwrite from "../components/Darkwrite.astro";
 import Meta from "../components/Meta.astro";
@@ -28,9 +29,7 @@ import Meta from "../components/Meta.astro";
       >
         <div class="p-4 bg-card border rounded-xl flex flex-col gap-3">
           <h2 class="flex items-center gap-2"><Grid2x2 size={32} />Windows</h2>
-          <a href={WINDOWS_LATEST_RELEASE}
-            >Download the installer (0.5.3-alpha.2)</a
-          >
+          <a href={WINDOWS_LATEST_RELEASE}>Download the installer</a>
           <hr />
           <p>
             If you see a Windows Defender/SmartScreen warning when you run the
@@ -41,9 +40,11 @@ import Meta from "../components/Meta.astro";
         </div>
         <div class="p-4 bg-card border rounded-xl flex flex-col gap-3">
           <h2 class="flex items-center gap-2"><Linux /> Linux</h2><a
-            href={LINUX_LATEST_RELEASE}>Download the AppImage (0.5.3-alpha.2)</a
+            href={LINUX_LATEST_RELEASE}>Download the AppImage</a
           >
           <hr />
+          <h3 class="font-semibold">Ubuntu</h3>
+          <a href={UBUNTU_LATEST_RELEASE}>Download the .deb package</a>
           <h3 class="font-semibold">Arch-based distributions</h3>
           <p>
             You can use the unofficial <a href={AUR_PACKAGE_URL}>AUR package.</a
@@ -59,12 +60,9 @@ import Meta from "../components/Meta.astro";
               your Mac. (we hope to resolve this issue soon)</strong
             >
           </p>
-          <a href={MACOS_LATEST_RELEASE}
-            >Download the installer (0.5.3-alpha.2)</a
-          >
-          Once you have the installer downloaded, open a terminal and paste this
-          command:
-          <code>xattr -cr ~/Downloads/Darkwrite-0.5.3-alpha.2-arm64.dmg</code>
+          <a href={MACOS_LATEST_RELEASE}>Download the installer (DMG)</a>
+          Once you have the installer downloaded, open a terminal and paste this command:
+          <code>xattr -cr ~/Downloads/Darkwrite-Installer.dmg</code>
           After dragging Darkwrite to your Applications folder, paste this command
           as well:
           <code>xattr -cr /Applications/Darkwrite.app</code>
