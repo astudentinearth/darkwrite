@@ -21,7 +21,7 @@ export default function About() {
   };
   return (
     <div className="w-full h-full flex flex-col justify-center items-center pt-3 gap-1 [&_a]:text-primary-text [&_a]:hover:underline">
-      <img src="/darkwrite_icon.svg" className="size-24 drop-shadow-2xl" />
+      <img src="darkwrite_icon.svg" className="size-24 drop-shadow-2xl" />
       <h1 className="text-3xl font-semibold flex items-end gap-2 mt-4">
         Darkwrite
         <span className="text-2xl text-foreground/70">{data?.version}</span>
