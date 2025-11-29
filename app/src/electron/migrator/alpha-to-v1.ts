@@ -186,12 +186,15 @@ async function reconstructDatabase() {
   });
   await newDb.initialize();
 
-  log.info(`Reconstructing database at ${newDbPath}...`);
-  const workspace = await initWorkspace(newDb);
-
-  await migrateNotesAndEmbeds(oldDb, workspace, newDb);
-  oldDb.close();
-  newDb.destroy();
+  try {
+    log.info(`Reconstructing database at ${newDbPath}...`);
+    const workspace = await initWorkspace(newDb);
+    await migrateNotesAndEmbeds(oldDb, workspace, newDb);
+  } finally {
+    // Ensure locks are disposed
+    oldDb.close();
+    newDb.destroy();
+  }
 }
 
 async function migrateNotesAndEmbeds(
@@ -359,9 +362,11 @@ async function initWorkspace(newDb: DataSource) {
 
 async function swap() {
   const backupPath = path.join(Paths.DATA_ROOT, "darkwrite-data-alpha/");
+  let fallbackCreated = false;
   try {
     log.info("Moving existing data to a fallback location...");
     await fse.move(Paths.DATA_DIR, backupPath, { overwrite: true });
+    fallbackCreated = true;
     await fse.move(Paths.MIGRATION_CACHE_DIR, Paths.DATA_DIR);
   } catch (err) {
     log.error(
@@ -369,6 +374,12 @@ async function swap() {
       err,
     );
     try {
+      if (!fallbackCreated) {
+        log.error(
+          "We could not create the fallback directory either. We don't need to rollback.",
+        );
+        throw err;
+      }
       await fse.move(backupPath, Paths.DATA_DIR);
 
       throw new Error(
