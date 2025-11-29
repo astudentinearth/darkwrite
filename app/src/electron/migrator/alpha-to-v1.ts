@@ -32,25 +32,24 @@
  * Create a .version file in there, with contents set to "1".
  */
 
+import { NoteContent } from "@/common/note-content";
 import { Rank } from "@/common/rank";
-import { getDefaultWorkspaceConfiguration } from "@/lib/workspace-config";
-import * as entities from "@main/entity";
-import checkDiskSpace from "check-disk-space";
-import electronlog from "electron-log";
-import fse from "fs-extra";
-import path from "path";
-import { DataSource } from "typeorm";
-import { checkAccess, dirSize, rmIfExists } from "../lib/fs";
-import { hasOnboarded, markVersionMigrated } from "../lib/onboarding-state";
-import { Paths } from "../lib/paths";
-import { createRequire } from "module";
-import sqlite3 from "better-sqlite3";
 import { SettingsMigrator } from "@/common/settings-migrator";
 import { Theme } from "@/common/theme";
-import { dialog, app } from "electron";
-import { ElectronPrefsModel } from "../prefs";
+import { getDefaultWorkspaceConfiguration } from "@/lib/workspace-config";
+import * as entities from "@main/entity";
+import sqlite3 from "better-sqlite3";
+import { app, dialog } from "electron";
+import electronlog from "electron-log";
+import fse from "fs-extra";
+import { createRequire } from "module";
+import path from "path";
+import { DataSource } from "typeorm";
 import { AppDataSource } from "../db";
-import { NoteContent } from "@/common/note-content";
+import { checkAccess, rmIfExists } from "../lib/fs";
+import { hasOnboarded, markVersionMigrated } from "../lib/onboarding-state";
+import { Paths } from "../lib/paths";
+import { ElectronPrefsModel } from "../prefs";
 
 const log = electronlog.create({ logId: "alpha-migration" });
 const require = createRequire(import.meta.url);
@@ -154,30 +153,6 @@ async function preflightCheck() {
   if (!dbExists || !settingsExists) {
     throw new Error(
       "Essential data files are missing. Migration cannot proceed.",
-    );
-  }
-
-  log.info("Checking data size and available disk space");
-  const dataSize = await dirSize(Paths.DATA_DIR);
-  const freeSpaceInDataVolume = await checkDiskSpace(Paths.DATA_ROOT);
-  const freeSpaceInTempVolume = await checkDiskSpace(Paths.CACHE_DIR);
-
-  log.info(
-    `Data size: ${dataSize} / Free space in data volume: ${freeSpaceInDataVolume.free} / Free space in temp: ${freeSpaceInTempVolume.size}`,
-  );
-
-  if (
-    dataSize * 1.5 > freeSpaceInDataVolume.free ||
-    freeSpaceInDataVolume.free < 2 * 1024 * 1024 * 1024
-  ) {
-    throw new Error(
-      `Not enough disk space in data volume to perform migration. Please free up some space and try again. The involved path is ${Paths.DATA_ROOT}`,
-    );
-  }
-
-  if (dataSize * 1.5 > freeSpaceInTempVolume.free) {
-    throw new Error(
-      `Not enough disk space in temporary volume to perform migration. Please free up some space and try again. The involved path is ${Paths.CACHE_DIR}`,
     );
   }
 }
