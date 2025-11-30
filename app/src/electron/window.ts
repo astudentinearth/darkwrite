@@ -43,5 +43,6 @@ export function constructWindow(
     // TODO: Persist window size
     width: metadata.windowDefaults.width,
     height: metadata.windowDefaults.height,
+    transparent: true,
   };
 }

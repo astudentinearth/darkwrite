@@ -27,7 +27,7 @@ export function Layout() {
   useWindowControlsOverlay(headerRef);
   useShortcuts();
   return (
-    <div className="flex [&>div]:shrink-0 w-full h-full bg-background overflow-hidden [--slide-distance:32px]">
+    <div className="flex [&>div]:shrink-0 w-full h-full bg-transparent overflow-hidden [--slide-distance:32px]">
       <ThemeHandler />
       <Sidebar
         collapseCallback={() => {

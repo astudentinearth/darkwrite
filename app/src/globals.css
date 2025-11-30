@@ -201,7 +201,7 @@ em-emoji-picker {
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground w-full h-full m-0;
+    @apply bg-background/90 text-foreground w-full h-full m-0 border;
   }
   #root {
     @apply w-full h-full m-0 p-0;

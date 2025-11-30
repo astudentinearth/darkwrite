@@ -16,7 +16,7 @@ export function Titlebar(props: TitlebarProps) {
   return (
     <div
       ref={props.refObject}
-      className="titlebar h-12 bg-background shrink-0 flex [&>div]:shrink-0 p-2 justify-start gap-2 items-center"
+      className="titlebar h-12 bg-transparent shrink-0 flex [&>div]:shrink-0 p-2 justify-start gap-2 items-center"
     >
       <HeaderbarButton
         data-testid="button-expand-sidebar"
@@ -27,9 +27,9 @@ export function Titlebar(props: TitlebarProps) {
         <PanelRightClose width={20} height={20}></PanelRightClose>
       </HeaderbarButton>
       <HistoryNavigation />
-      <PageTitle/>
+      <PageTitle />
       <div className="grow"></div>
-      <Toolbar/>
+      <Toolbar />
     </div>
   );
 }

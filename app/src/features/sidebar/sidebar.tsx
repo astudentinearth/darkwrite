@@ -23,10 +23,10 @@ export function Sidebar(props: SidebarProps) {
   return (
     <div
       data-testid="container-sidebar"
-      className={cn("bg-background h-full flex flex-col", props.className)}
+      className={cn("bg-transparent h-full flex flex-col", props.className)}
       style={{ width: `${width}px` }}
     >
-      <div className="titlebar w-full h-12 bg-background shrink-0 flex [&>button]:shrink-0 p-2 items-center gap-1">
+      <div className="titlebar w-full h-12 bg-transparent shrink-0 flex [&>button]:shrink-0 p-2 items-center gap-1">
         <HeaderbarButton
           onClick={() => {
             showAppMenu();
