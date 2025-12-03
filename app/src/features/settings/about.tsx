@@ -1,18 +1,16 @@
 import { DarkwriteAPIClient } from "@/api/api-client";
+import Alert from "@/components/ui/alert";
+import { cn } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import {
   ArrowUpRightFromSquare,
   Code2,
   Lock,
-  RotateCcw,
   RotateCw,
   Scale,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import showUpdateToast from "../notifications/update";
 import { useUpdate } from "../update/use-update";
-import Alert from "@/components/ui/alert";
-import { cn } from "@/lib/utils";
 
 export default function About() {
   const { data } = useQuery({
