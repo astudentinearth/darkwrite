@@ -1,3 +1,14 @@
+# 1.0.1-beta.1
+## ✨ Improvements and fixes
+- Trashed pages can now be viewed/edited before restoring them
+- "Check for updates" option in the about screen now works
+- I had forgotten to bump the version in 1.0.0-beta.2, which showed unnecessary update notifications. This has been fixed in this release
+
+# 1.0.0-beta.2
+## 🚑 Hotfixes
+- Fixed failing migration checks on Windows 11 25H2 due to the removal of WMIC utility.
+- Added additional guards to ensure data is not lost during migrations.
+
 # 1.0.0-beta.1
 ## 🌟 Features
 - Introducing workspaces

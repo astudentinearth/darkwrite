@@ -7,7 +7,7 @@ export const useUpdate = () => {
   const updateQuery = useQuery({
     queryKey: ["update"],
     queryFn: async () => {
-      if (!window.isElectron) return false;
+      if (!window.isElectron) return undefined;
       const result = await window.api.checkUpdate();
       setNotified(false);
       return result;
