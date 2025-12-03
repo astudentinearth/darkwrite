@@ -79,5 +79,15 @@ export default function useEditorCover(noteId: string) {
     setEditorCustomizations(updated);
   };
 
-  return { updateTitle, updateIcon, addCover, onCoverImageSourceChange };
+  const restore = async () => {
+    update({ id: noteId, dto: { isTrashed: false } });
+  };
+
+  return {
+    updateTitle,
+    updateIcon,
+    addCover,
+    onCoverImageSourceChange,
+    restore,
+  };
 }

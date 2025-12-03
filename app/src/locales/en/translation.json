@@ -202,7 +202,8 @@
       "removeCover": "Remove cover",
       "addIcon": "Add icon",
       "removeIcon": "Remove icon",
-      "addCover": "Add cover"
+      "addCover": "Add cover",
+      "trashWarning": "This page is currently in the trash."
     }
   },
   "search": {

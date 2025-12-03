@@ -3,10 +3,11 @@ import { EmojiPicker } from "@/components/emoji-picker";
 import { Button } from "@/components/ui";
 import useMouseOver from "@/hooks/layout/use-mouse-over";
 import { cn, fromUnicode } from "@/lib/utils";
-import { Frown, Image, Smile } from "lucide-react";
+import { Frown, Image, Smile, Undo2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import ConstrainedWidth from "./constrained-width";
 import CoverImage from "./cover-image";
+import Alert from "@/components/ui/alert";
 
 export type EditorHeaderProps = {
   title: string;
@@ -17,6 +18,8 @@ export type EditorHeaderProps = {
   onCoverSourceChange: (val: string | undefined | null) => void;
   onAddCover: () => void;
   wide?: boolean;
+  isTrashed?: boolean | null;
+  onRestore: () => void;
 };
 
 export default function EditorHeader(props: EditorHeaderProps) {
@@ -100,6 +103,20 @@ export default function EditorHeader(props: EditorHeaderProps) {
             props.onTitleChange(val.replace(/(\r\n|\n|\r)/gm, " "))
           }
         />
+
+        {props.isTrashed && (
+          <Alert>
+            {t("editor.cover.trashWarning")}
+            <Button
+              onClick={props.onRestore}
+              variant={"secondary"}
+              className="w-fit"
+            >
+              <Undo2 className="size-4" />
+              {t("sidebar.trash.restore")}
+            </Button>
+          </Alert>
+        )}
         <hr />
       </ConstrainedWidth>
     </div>

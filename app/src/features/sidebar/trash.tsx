@@ -14,11 +14,13 @@ import { Trash, Undo2 } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { SidebarItem } from "./sidebar-item";
+import { useNavigateToNote } from "@/hooks/use-navigate-to-note";
 
 function TrashItem(props: { note: NoteDTO }) {
   const { update } = useUpdateNote();
   const deleteMutation = useDeleteNote();
   const { t } = useTranslation();
+  const nav = useNavigateToNote();
 
   const handleDelete = () => {
     deleteMutation.mutate(props.note.id);
@@ -29,7 +31,11 @@ function TrashItem(props: { note: NoteDTO }) {
   };
 
   return (
-    <div className="grid grid-cols-[24px_1fr_32px_32px] gap-1 items-center px-2 py-1 rounded-lg hover:bg-secondary/20 transition-colors duration-100">
+    <div
+      tabIndex={0}
+      onClick={() => nav(props.note.id)}
+      className="grid grid-cols-[24px_1fr_32px_32px] gap-1 items-center px-2 py-1 rounded-lg hover:bg-secondary/20 transition-colors duration-100"
+    >
       <span>{getNoteIcon(props.note.icon)}</span>
       <span className="whitespace-nowrap text-ellipsis overflow-hidden">
         {props.note.title}

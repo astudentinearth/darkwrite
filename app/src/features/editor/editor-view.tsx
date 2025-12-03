@@ -65,6 +65,8 @@ export function EditorView({ noteId }: { noteId: string }) {
           onCoverSourceChange={cover.onCoverImageSourceChange}
           wide={content?.customizations.widePage}
           onAddCover={cover.addCover}
+          isTrashed={note.isTrashed}
+          onRestore={cover.restore}
         />
       )}
       <ConstrainedWidth fill={content?.customizations.widePage}>
