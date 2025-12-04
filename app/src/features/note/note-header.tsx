@@ -81,7 +81,10 @@ export default React.memo(function NoteHeader({
           )}
         />
       </Button>
-      <span className="w-full overflow-hidden text-ellipsis break-words whitespace-nowrap">
+      <span
+        title={note.title}
+        className="w-full overflow-hidden text-ellipsis break-words whitespace-nowrap"
+      >
         {note.title}
       </span>
       {showCreate && (

@@ -1,3 +1,10 @@
+# 1.0.2-beta.1
+## 🌟 Features
+
+## ✨ Improvements and fixes
+- Added a tooltip on note list items for better accessibility
+
+
 # 1.0.1-beta.1
 ## ✨ Improvements and fixes
 - Trashed pages can now be viewed/edited before restoring them
