@@ -7,6 +7,7 @@ import { extname } from "path";
 import { DocumentService } from "../service/document.service";
 import { NoteQueryService } from "./note-query.service";
 import { NoteService } from "./note.service";
+import printToPdf from "../lib/print-to-pdf";
 
 const documentService = new DocumentService();
 
@@ -74,6 +75,21 @@ export const ElectronNoteAPI: INoteAPI = {
     if (value.canceled) return;
     const path = value.filePath;
     await writeFile(path, fileContent, "utf8");
+  },
+
+  async exportPdf(html, title) {
+    const buffer = await printToPdf(html, title);
+    if (!buffer) return;
+    const value = await dialog.showSaveDialog(
+      BrowserWindow.getFocusedWindow() ?? BrowserWindow.getAllWindows()[0],
+      {
+        defaultPath: `${title ?? "document"}.pdf`,
+        filters: [{ extensions: ["pdf"], name: "PDF Document" }],
+      },
+    );
+    if (value.canceled) return;
+    const path = value.filePath;
+    await writeFile(path, Buffer.from(buffer.buffer));
   },
 
   async import() {

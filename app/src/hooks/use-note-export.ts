@@ -7,12 +7,27 @@ import {
 import { generateHTML } from "@/features/editor/html-export";
 import { EditorContent } from "@/features/editor/types";
 import { styleWithFont } from "@/lib/exported-note-style";
+import { fromUnicode } from "@/lib/utils";
 import { useNoteById } from "@/query/use-note-by-id";
 import { useSettings } from "@/query/use-settings";
+import _ from "lodash";
 
-function toHTML(content: EditorContent, css: string) {
+function toHTML(
+  content: EditorContent,
+  css: string,
+  title?: string,
+  icon?: string | null,
+) {
   const body = generateHTML(content);
-  const html = `<!DOCTYPE html><html><body><style>${css}</style><main>${body}</main></body></html>`;
+  const sanitizedTitle = _.escape(title ?? "");
+  const sanitizedIcon = _.escape(icon ?? "");
+  const html = `<!DOCTYPE html><html><head><title>${sanitizedTitle}</title></head><body><style>${css.replace(/<\/style/gi, "<\\/style")}</style><main>${
+    sanitizedIcon
+      ? `<div style="font-size: 72px;margin-bottom: 24px;">${fromUnicode(sanitizedIcon)}</div>`
+      : ""
+  }${
+    sanitizedTitle ? `<h1>${sanitizedTitle}</h1><hr></hr>` : ""
+  }${body}</main></body></html>`;
   return html;
 }
 
@@ -44,7 +59,7 @@ export function usePersistedNoteExport(noteId: string) {
   const { getFont } = useFontFromDocument();
   const { note } = useNoteById(noteId);
 
-  const exportHTML = async () => {
+  const serializeHtml = async () => {
     const result = await DarkwriteAPIClient.note.getDocument(noteId);
     const doc = result.document;
     const targetFont = getFont(
@@ -52,7 +67,12 @@ export function usePersistedNoteExport(noteId: string) {
       doc.customizations.customFont,
     );
     const css = styleWithFont(targetFont);
-    const html = toHTML(doc.contents, css);
+    const html = toHTML(doc.contents, css, note?.title, note?.icon);
+    return html;
+  };
+
+  const exportHTML = async () => {
+    const html = await serializeHtml();
     await DarkwriteAPIClient.note.export(html, "html", note?.title);
   };
 
@@ -63,7 +83,12 @@ export function usePersistedNoteExport(noteId: string) {
     await DarkwriteAPIClient.note.export(jsonString, "json", note?.title);
   };
 
-  return { exportHTML, exportJSON };
+  const exportPdf = async () => {
+    const html = await serializeHtml();
+    await DarkwriteAPIClient.note.exportPdf(html, note?.title);
+  };
+
+  return { exportHTML, exportJSON, exportPdf };
 }
 
 export default function useNoteExport() {
@@ -78,7 +103,7 @@ export default function useNoteExport() {
       doc.customizations.customFont,
     );
     const css = styleWithFont(targetFont);
-    const html = toHTML(doc.contents, css);
+    const html = toHTML(doc.contents, css, note?.title, note?.icon);
     await DarkwriteAPIClient.note.export(html, "html", note?.title);
   };
 
@@ -88,5 +113,15 @@ export default function useNoteExport() {
     await DarkwriteAPIClient.note.export(jsonString, "json", note?.title);
   };
 
-  return { exportHTML, exportJSON };
+  const exportPdf = async () => {
+    const doc = currentDocumentToSerializable();
+    const targetFont = getFont(
+      doc.customizations.font,
+      doc.customizations.customFont,
+    );
+    const css = styleWithFont(targetFont);
+    const html = toHTML(doc.contents, css, note?.title, note?.icon);
+    await DarkwriteAPIClient.note.exportPdf(html, note?.title);
+  };
+  return { exportHTML, exportJSON, exportPdf };
 }

@@ -69,6 +69,10 @@ export default function EditorMenu() {
               <FileText size={18} />
               {t("editor.menu.jsonExport")}
             </DropdownMenuItem>
+            <DropdownMenuItem onSelect={exporter.exportPdf}>
+              <FileText size={18} />
+              PDF
+            </DropdownMenuItem>
             <DropdownMenuSeparator />
             <span className="opacity-80 text-sm m-3">
               {t("editor.menu.imageWarning")}

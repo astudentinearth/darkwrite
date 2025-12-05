@@ -39,6 +39,7 @@ export const DarkwriteElectronAPI = {
     setDocument: new IPCHandler(false, ElectronNoteAPI.setDocument),
     duplicate: new IPCHandler(false, ElectronNoteAPI.duplicate),
     export: new IPCHandler(false, ElectronNoteAPI.export),
+    exportPdf: new IPCHandler(false, ElectronNoteAPI.exportPdf),
     import: new IPCHandler(false, ElectronNoteAPI.import),
   },
   embed: {

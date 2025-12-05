@@ -39,6 +39,7 @@ export interface INoteAPI {
     fileType: NoteExportFormat,
     title?: string,
   ) => Promise<void>;
+  exportPdf: (html: string, title?: string) => Promise<void>;
   import: () => Promise<NoteImportResult>;
 }
 

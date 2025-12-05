@@ -1,14 +1,7 @@
 import _ from "lodash";
 
-export function styleWithFont(
-  font: string,
-  colorVars: Record<string, string> = {},
-) {
+export function styleWithFont(font: string) {
   const sanitizedFont = font.replace(/"/g, '\\"');
-  const colors = _.cloneDeep(colorVars);
-  Object.keys(colors).forEach((key) => {
-    colors[key] = colors[key].replace(/"/g, '\\"');
-  });
   return `
   :root {
     --editor-text-red: hsl(1 100% 66%);
@@ -75,5 +68,17 @@ export function styleWithFont(
     max-width: 800px;
     margin: auto;
   }
-  `;
+
+  pre, code {
+    font-family: "JetBrains Mono", monospace;
+  }
+
+  @media print {
+    body {
+      background-color: white !important;
+      color: black;
+      margin: 0;
+    }
+  }
+  `.replace(/<\/style/gi, "<\\/style");
 }
