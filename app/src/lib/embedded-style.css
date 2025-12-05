@@ -1,0 +1,155 @@
+h1,
+h2,
+h3,
+h4 {
+  margin: 0 0.75rem 0 0;
+}
+
+h1,
+h2,
+h3 {
+  font-weight: 700;
+}
+
+h1 {
+  font-size: 1.875rem;
+}
+
+h2 {
+  font-size: 1.5rem;
+}
+
+h3 {
+  font-size: 1.125rem;
+}
+
+h4 {
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+hr {
+  margin-bottom: 0.5rem;
+  opacity: 0.3;
+}
+
+body {
+  margin: 4rem;
+  background: var(--background);
+  color: var(--foreground);
+  font-size: 18px;
+}
+
+main {
+  max-width: 800px;
+  margin: auto;
+}
+
+pre,
+code {
+  font-family: "JetBrains Mono", monospace;
+}
+
+ul[data-type="taskList"] li > label input[type="checkbox"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: transparent;
+  margin: 0;
+  cursor: pointer;
+  width: 1.5rem;
+  height: 1.5rem;
+  position: relative;
+  top: 8px;
+  border: 1px solid var(--foreground);
+  border-radius: 4px;
+  margin-right: 0.05rem;
+  display: grid;
+  place-content: center;
+
+  &::before {
+    content: "";
+    width: 1rem;
+    height: 1rem;
+    transform: scale(0);
+    transform-origin: center;
+    /* Checkbox from https://lucide.dev
+    ISC License
+    Copyright (c) for portions of Lucide are held by Cole Bemis 2013-2023 as part of Feather (MIT). All other copyright (c) for Lucide are held by Lucide Contributors 2025.
+    Permission to use, copy, modify, and/or distribute this software for any purpose with or without fee is hereby granted, provided that the above copyright notice and this permission notice appear in all copies.
+    THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+    The MIT License (MIT) (for portions derived from Feather)
+    Copyright (c) 2013-2023 Cole Bemis
+    Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+    The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+    */
+    background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmZmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1jaGVjayI+PHBhdGggZD0iTTIwIDYgOSAxN2wtNS01Ii8+PC9zdmc+");
+    background-position: center;
+    background-size: 100%;
+  }
+
+  &:checked {
+    background: var(--primary);
+    border-color: var(--primary);
+  }
+
+  &:checked::before {
+    transform: scale(1);
+  }
+}
+
+ul[data-type="taskList"] {
+  padding-left: 0;
+  & li {
+    display: flex;
+    gap: 8px;
+    align-items: start;
+    margin-top: 4px;
+    margin-bottom: 4px;
+  }
+}
+
+li[data-type="taskItem"] p {
+  margin: 12px 0 0 0;
+}
+
+ul[data-type="taskList"] li[data-checked="true"] > div > p {
+  color: var(--foreground);
+  opacity: 0.5;
+  text-decoration: line-through;
+  text-decoration-thickness: 2px;
+}
+
+@media print {
+  body {
+    background-color: white !important;
+    --background: white !important;
+    --foreground: black;
+    color: black;
+    margin: 0;
+  }
+}
+
+:root {
+  --editor-text-red: hsl(1 100% 66%);
+  --editor-text-orange: hsl(26 97% 61%);
+  --editor-text-yellow: hsl(54 100% 66%);
+  --editor-text-green: hsl(119 100% 66%);
+  --editor-text-cyan: hsl(166 100% 66%);
+  --editor-text-blue: hsl(202 97% 61%);
+  --editor-text-indigo: hsl(251 100% 60%);
+  --editor-text-purple: hsl(280 100% 60%);
+  --editor-text-pink: hsl(305 100% 60%);
+  --editor-highlight-red: hsl(1 100% 66% / 0.4);
+  --editor-highlight-orange: hsl(26 97% 61% / 0.4);
+  --editor-highlight-yellow: hsl(54 100% 66% / 0.4);
+  --editor-highlight-green: hsl(119 100% 66% / 0.4);
+  --editor-highlight-cyan: hsl(166 100% 66% / 0.4);
+  --editor-highlight-blue: hsl(202 97% 61% / 0.4);
+  --editor-highlight-indigo: hsl(251 100% 60% / 0.4);
+  --editor-highlight-purple: hsl(280 100% 60% / 0.4);
+  --editor-highlight-pink: hsl(305 100% 60% / 0.4);
+  --background: white;
+  --foreground: black;
+  --primary: #2867b8;
+}
