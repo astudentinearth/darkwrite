@@ -1,5 +1,3 @@
-import _ from "lodash";
-
 export function styleWithFont(font: string) {
   const sanitizedFont = font.replace(/"/g, '\\"');
   return `

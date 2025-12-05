@@ -27,6 +27,10 @@ const ImageAttributes: Attributes = {
       };
     },
   },
+  "data-export": {
+    default: null,
+    isRequired: false,
+  },
 };
 
 export default ImageAttributes;

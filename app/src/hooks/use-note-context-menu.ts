@@ -12,7 +12,7 @@ export const useNoteContextMenu = (
   const { update } = useUpdateNote();
   const { create } = useCreateNoteMutation();
   const duplicateMutation = useDuplicateNote();
-  const { exportHTML, exportJSON } = usePersistedNoteExport(note.id);
+  const { exportHTML, exportJSON, exportPdf } = usePersistedNoteExport(note.id);
   const toggleFavorite = () =>
     update({
       id: note.id,
@@ -35,5 +35,6 @@ export const useNoteContextMenu = (
     duplicate,
     exportHTML,
     exportJSON,
+    exportPdf,
   };
 };

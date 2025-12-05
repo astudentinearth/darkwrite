@@ -22,6 +22,9 @@ export const ImageExtension = (config: ImageExtensionConfig) =>
       ];
     },
     renderHTML({ HTMLAttributes }: { HTMLAttributes: Record<string, string> }) {
+      if (HTMLAttributes["data-export"]) {
+        return ["img", mergeAttributes(HTMLAttributes)];
+      }
       return [
         "div",
         mergeAttributes(HTMLAttributes, { "data-type": "darkwrite-image" }),

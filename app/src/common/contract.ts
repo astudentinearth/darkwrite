@@ -57,6 +57,7 @@ export interface IEmbedAPI {
   // HTTP clients should build a multipart request using this DTO for compatibility
   create: (dto: CreateEmbedDTO) => Promise<EmbedResponseDTO>;
   getById: (id: string) => Promise<EmbedResponseDTO>;
+  getEncoded: (ids: string[]) => Promise<Record<string, string>>;
 }
 
 export interface ISettingsAPI {

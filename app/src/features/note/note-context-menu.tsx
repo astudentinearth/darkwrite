@@ -79,6 +79,10 @@ export function NoteContextMenuContainer({
           <FileText size={18} />
           {_t("editor.menu.jsonExport")}
         </ContextMenuItem>
+        <ContextMenuItem onSelect={actions.exportPdf}>
+          <FileText size={18} />
+          PDF
+        </ContextMenuItem>
         <ContextMenuSeparator />
         <ContextMenuItem
           onSelect={actions.trash}

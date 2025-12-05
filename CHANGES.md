@@ -1,8 +1,12 @@
 # 1.0.2-beta.1
 ## 🌟 Features
+- Images are now included in note exports
+- Added PDF export
+- Added icon and title to exported documents
 
 ## ✨ Improvements and fixes
 - Added a tooltip on note list items for better accessibility
+- Improved HTML serialization
 
 
 # 1.0.1-beta.1

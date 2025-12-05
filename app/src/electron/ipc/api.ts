@@ -52,6 +52,7 @@ export const DarkwriteElectronAPI = {
       ElectronEmbedAPI.createFromArrayBuffer,
     ),
     getById: new IPCHandler(false, ElectronEmbedAPI.getById),
+    getEncoded: new IPCHandler(false, ElectronEmbedAPI.getEncoded),
   },
   workspace: {
     create: new IPCHandler(false, ElectronWorkspaceAPI.create),

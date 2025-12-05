@@ -4,7 +4,7 @@ import {
   currentDocumentToSerializable,
   useEditorStore,
 } from "@/context/editor-store";
-import { generateHTML } from "@/features/editor/html-export";
+import { generateHTML, hydrateImages } from "@/features/editor/html-export";
 import { EditorContent } from "@/features/editor/types";
 import { styleWithFont } from "@/lib/exported-note-style";
 import { fromUnicode } from "@/lib/utils";
@@ -12,13 +12,13 @@ import { useNoteById } from "@/query/use-note-by-id";
 import { useSettings } from "@/query/use-settings";
 import _ from "lodash";
 
-function toHTML(
+async function toHTML(
   content: EditorContent,
   css: string,
   title?: string,
   icon?: string | null,
 ) {
-  const body = generateHTML(content);
+  const body = generateHTML(await hydrateImages(content));
   const sanitizedTitle = _.escape(title ?? "");
   const sanitizedIcon = _.escape(icon ?? "");
   const html = `<!DOCTYPE html><html><head><title>${sanitizedTitle}</title></head><body><style>${css.replace(/<\/style/gi, "<\\/style")}</style><main>${
@@ -67,7 +67,7 @@ export function usePersistedNoteExport(noteId: string) {
       doc.customizations.customFont,
     );
     const css = styleWithFont(targetFont);
-    const html = toHTML(doc.contents, css, note?.title, note?.icon);
+    const html = await toHTML(doc.contents, css, note?.title, note?.icon);
     return html;
   };
 
@@ -103,7 +103,7 @@ export default function useNoteExport() {
       doc.customizations.customFont,
     );
     const css = styleWithFont(targetFont);
-    const html = toHTML(doc.contents, css, note?.title, note?.icon);
+    const html = await toHTML(doc.contents, css, note?.title, note?.icon);
     await DarkwriteAPIClient.note.export(html, "html", note?.title);
   };
 
@@ -120,7 +120,7 @@ export default function useNoteExport() {
       doc.customizations.customFont,
     );
     const css = styleWithFont(targetFont);
-    const html = toHTML(doc.contents, css, note?.title, note?.icon);
+    const html = await toHTML(doc.contents, css, note?.title, note?.icon);
     await DarkwriteAPIClient.note.exportPdf(html, note?.title);
   };
   return { exportHTML, exportJSON, exportPdf };
