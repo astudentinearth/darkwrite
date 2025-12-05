@@ -68,4 +68,34 @@ describe("base event bus implementation tests", () => {
     bus.emit("channel2", message2);
     expect(channel2handler).toHaveBeenCalled();
   });
+
+  it("should subscribe many handlers", () => {
+    const handler1 = vi.fn();
+    const handler2 = vi.fn();
+    const bus = new EventBus<{
+      channel1: TestEventData;
+    }>();
+    const unsubscribe = bus.subscribeMany("channel1", handler1, handler2);
+    expect(bus.listeners.get("channel1")?.has(handler1)).toBe(true);
+    expect(bus.listeners.get("channel1")?.has(handler2)).toBe(true);
+    unsubscribe();
+    expect(bus.listeners.get("channel1")?.has(handler1)).toBe(false);
+    expect(bus.listeners.get("channel1")?.has(handler2)).toBe(false);
+  });
+
+  it("should remove all listeners of a channel", () => {
+    const bus = new EventBus<{
+      channel1: TestEventData;
+    }>();
+    bus.subscribeMany(
+      "channel1",
+      () => {},
+      () => {},
+      () => {},
+    );
+    const listenerSet = bus.listeners.get("channel1");
+    expect(listenerSet?.size).toBe(3);
+    bus.removeAllListeners("channel1");
+    expect(bus.listeners.get("channel1")).toBeUndefined();
+  });
 });

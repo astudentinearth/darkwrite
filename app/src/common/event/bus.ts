@@ -87,6 +87,29 @@ export class EventBus<Events extends EventMap> {
     listeners.delete(fn);
   }
 
+  /** Removes all listeners of a channel.
+   * @param channel a valid channel name
+   */
+  public removeAllListeners<K extends keyof Events = keyof Events>(channel: K) {
+    this.listeners.delete(channel);
+  }
+
+  /**
+   * Register multiple handlers to a channel at once.
+   * @param channel a valid channel name
+   * @param handlers
+   * @returns a method to unsubscribe all handlers that were just registered
+   */
+  public subscribeMany<K extends keyof Events = keyof Events>(
+    channel: K,
+    ...handlers: EventBusListener<Events[K]>[]
+  ) {
+    handlers.forEach((handler) => this.subscribe(channel, handler));
+    return () => {
+      handlers.forEach((handler) => this.unsubscribe(channel, handler));
+    };
+  }
+
   /**
    * Synchronously and sequentially emit a message to all listeners.
    * @param channel a valid channel name
