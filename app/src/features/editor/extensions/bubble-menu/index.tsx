@@ -6,6 +6,7 @@ import { BubbleLink } from "./link";
 import { ListSelector } from "./list";
 import { TextColorSelector } from "./color";
 import { HighlightColorSelector } from "./highlight";
+import { CellSelection } from "@tiptap/pm/tables";
 
 export default function Bubble() {
   const { editor } = useCurrentEditor();
@@ -13,7 +14,9 @@ export default function Bubble() {
   return (
     <BubbleMenu
       pluginKey={"bubbleMenu"}
-      shouldShow={({ editor }) => {
+      shouldShow={({ editor, state }) => {
+        if (state.selection instanceof CellSelection) return false;
+        if (editor.isActive("dwimage")) return false;
         return !editor.isEmpty && editor.state.selection?.empty === false;
       }}
       options={{
@@ -37,7 +40,7 @@ export default function Bubble() {
       <div
         data-animation="slide"
         className="flex w-fit h-fit max-w-[90vw] overflow-hidden gap-1 bubble-menu rounded-xl border border-border
-              bg-view-2 shadow-xl p-1 slide-in-from-top-1 transition-[opacity,transform,translate,scale,rotate]"
+              bg-view-2/80 backdrop-blur-lg shadow-xl p-1 slide-in-from-top-1 transition-[opacity,transform,translate,scale,rotate]"
       >
         <FormattingButtons />
         <div className="w-[1px] bg-border"></div>

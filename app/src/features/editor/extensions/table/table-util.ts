@@ -1,4 +1,5 @@
 import { Editor, findParentNode } from "@tiptap/core";
+import { CellSelection } from "@tiptap/pm/tables";
 
 export function getActiveTable(editor: Editor) {
   const { view, state } = editor;
@@ -39,4 +40,23 @@ export function positionTableMenu(menu: HTMLDivElement, x: number, y: number) {
   menu.style.left = `${x}px`;
   menu.style.top = `${y}px`;
   menu.style.position = "fixed";
+}
+
+export function setCellBackground(editor: Editor, color: string | null) {
+  const { state, view } = editor;
+  const { selection } = state;
+  const tr = state.tr;
+
+  if (selection instanceof CellSelection) {
+    selection.forEachCell((node, pos) => {
+      tr.setNodeAttribute(pos, "background", color);
+    });
+  } else {
+    const cell = findParentNode(
+      (n) => n.type.name === "tableHeader" || n.type.name === "tableCell",
+    )(selection);
+    if (cell) tr.setNodeAttribute(cell.pos, "background", color);
+  }
+
+  if (tr.docChanged) view.dispatch(tr);
 }

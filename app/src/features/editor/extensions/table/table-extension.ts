@@ -11,8 +11,23 @@ export const Table = TiptapTable.configure({
   allowTableNodeSelection: true,
 });
 
-export const TableCell = TiptapTableCell.configure({
-  // classnames later
+export const TableCell = TiptapTableCell.extend({
+  addAttributes() {
+    return {
+      ...this.parent?.(),
+      background: {
+        default: null,
+        isRequired: false,
+        parseHTML: (element) => element.getAttribute("data-bg"),
+        renderHTML: (attrs) => {
+          if (!attrs.background) return attrs;
+          return mergeAttributes(attrs, {
+            style: `--td-bg: ${attrs.background};`,
+          });
+        },
+      },
+    };
+  },
 });
 
 export const TableHeader = TiptapTableHeader.extend({

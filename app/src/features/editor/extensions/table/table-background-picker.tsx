@@ -8,14 +8,18 @@ import {
 } from "@/components/ui";
 import { cn } from "@/lib/utils";
 import { useCurrentEditor } from "@tiptap/react";
-import { ChevronDown, Eraser, Highlighter } from "lucide-react";
+import { ChevronDown, Eraser, Palette } from "lucide-react";
 import { useState } from "react";
+import { setCellBackground } from "./table-util";
 
-export function HighlightColorSelector() {
+export function TableBackgroundPicker() {
   const colorVars = csshighlightColorVariables;
   const { editor } = useCurrentEditor();
   const [open, setOpen] = useState(false);
-  const activeHighlightColor = editor?.getAttributes("highlight")?.color || "";
+  const activeHighlightColor =
+    editor?.getAttributes("tableHeader")?.background ||
+    editor?.getAttributes("tableCell").background ||
+    "";
   const [customColorValue, setCustomColorValue] =
     useState<string>(activeHighlightColor);
 
@@ -29,7 +33,7 @@ export function HighlightColorSelector() {
             open && "bg-secondary/80",
           )}
         >
-          <Highlighter size={20} />
+          <Palette size={20} />
           <ChevronDown size={16} />
         </Button>
       </PopoverTrigger>
@@ -40,19 +44,19 @@ export function HighlightColorSelector() {
             variant={"ghost"}
             key={color}
             className="w-8 h-8 hover:outline-2 hover:outline-primary"
-            onClick={() =>
-              editor
-                ?.chain()
-                .focus()
-                .setHighlight({ color: `var(${color})` })
-                .run()
-            }
+            onClick={() => {
+              if (!editor) return;
+              setCellBackground(editor, `var(${color})`);
+            }}
           />
         ))}
         <Button
           variant={"outline"}
           className="w-8 h-8 hover:outline-2 hover:outline-primary p-0 justify-center items-center text-center"
-          onClick={() => editor?.chain().focus().unsetHighlight().run()}
+          onClick={() => {
+            if (!editor) return;
+            setCellBackground(editor, null);
+          }}
         >
           <Eraser
             size={18}
@@ -66,8 +70,9 @@ export function HighlightColorSelector() {
           onChange={(val) => {
             setCustomColorValue(val);
             let payload = val;
-            if (val.length === 7) payload += "4D";
-            editor?.chain().setHighlight({ color: payload }).run();
+            if (payload.length === 7) payload += "4D";
+            if (!editor) return;
+            setCellBackground(editor, payload);
           }}
         />
       </PopoverContent>

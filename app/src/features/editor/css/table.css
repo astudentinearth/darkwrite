@@ -3,16 +3,19 @@
 
 .ProseMirror {
   --th-bg: var(--view-2);
+  --td-bg: transparent;
 
   th {
     background-color: var(--th-bg);
     border: 1px solid var(--border);
     border-radius: 4px 4px 0 0;
+    padding: 8px 6px;
     position: relative;
   }
 
   td {
     border: 1px solid var(--border);
+    background-color: var(--td-bg);
     padding: 8px 6px;
     position: relative;
   }
