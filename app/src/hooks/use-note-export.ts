@@ -4,31 +4,19 @@ import {
   currentDocumentToSerializable,
   useEditorStore,
 } from "@/context/editor-store";
-import { generateHTML, hydrateImages } from "@/features/editor/html-export";
 import { EditorContent } from "@/features/editor/types";
-import { styleWithFont } from "@/lib/exported-note-style";
-import { fromUnicode } from "@/lib/utils";
+import { HtmlDocumentBuilder } from "@/features/export/html-document-builder";
 import { useNoteById } from "@/query/use-note-by-id";
 import { useSettings } from "@/query/use-settings";
-import _ from "lodash";
 
 async function toHTML(
   content: EditorContent,
-  css: string,
+  font: string,
   title?: string,
   icon?: string | null,
 ) {
-  const body = generateHTML(await hydrateImages(content));
-  const sanitizedTitle = _.escape(title ?? "");
-  const sanitizedIcon = _.escape(icon ?? "");
-  const html = `<!DOCTYPE html><html><head><title>${sanitizedTitle}</title></head><body><style>${css.replace(/<\/style/gi, "<\\/style")}</style><main>${
-    sanitizedIcon
-      ? `<div style="font-size: 72px;margin-bottom: 24px;">${fromUnicode(sanitizedIcon)}</div>`
-      : ""
-  }${
-    sanitizedTitle ? `<h1>${sanitizedTitle}</h1><hr></hr>` : ""
-  }${body}</main></body></html>`;
-  return html;
+  const builder = await new HtmlDocumentBuilder(content).embedImages();
+  return builder.font(font).title(title).icon(icon).build();
 }
 
 function useFontFromDocument() {
@@ -66,8 +54,12 @@ export function usePersistedNoteExport(noteId: string) {
       doc.customizations.font,
       doc.customizations.customFont,
     );
-    const css = styleWithFont(targetFont);
-    const html = await toHTML(doc.contents, css, note?.title, note?.icon);
+    const html = await toHTML(
+      doc.contents,
+      targetFont,
+      note?.title,
+      note?.icon,
+    );
     return html;
   };
 
@@ -102,8 +94,12 @@ export default function useNoteExport() {
       doc.customizations.font,
       doc.customizations.customFont,
     );
-    const css = styleWithFont(targetFont);
-    const html = await toHTML(doc.contents, css, note?.title, note?.icon);
+    const html = await toHTML(
+      doc.contents,
+      targetFont,
+      note?.title,
+      note?.icon,
+    );
     await DarkwriteAPIClient.note.export(html, "html", note?.title);
   };
 
@@ -119,8 +115,12 @@ export default function useNoteExport() {
       doc.customizations.font,
       doc.customizations.customFont,
     );
-    const css = styleWithFont(targetFont);
-    const html = await toHTML(doc.contents, css, note?.title, note?.icon);
+    const html = await toHTML(
+      doc.contents,
+      targetFont,
+      note?.title,
+      note?.icon,
+    );
     await DarkwriteAPIClient.note.exportPdf(html, note?.title);
   };
   return { exportHTML, exportJSON, exportPdf };
