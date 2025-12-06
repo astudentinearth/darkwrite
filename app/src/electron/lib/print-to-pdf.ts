@@ -1,5 +1,16 @@
+import { PageMargins } from "@/common/pdf";
 import { BrowserWindow } from "electron";
 import log from "electron-log";
+import { writeFile } from "fs-extra";
+import path from "node:path";
+import { pathToFileURL } from "node:url";
+import { Paths } from "./paths";
+
+async function saveTempFile(html: string) {
+  const filePath = path.join(Paths.CACHE_DIR, "dw-pdf-export.html");
+  await writeFile(filePath, html, "utf-8");
+  return pathToFileURL(filePath).href;
+}
 
 export default async function printToPdf(html: string, title?: string) {
   const win = new BrowserWindow({
@@ -14,15 +25,13 @@ export default async function printToPdf(html: string, title?: string) {
   });
 
   try {
-    const htmlBuffer = Buffer.from(html, "utf-8");
-    await win.loadURL(
-      `data:text/html;charset=utf-8;base64,${htmlBuffer.toString("base64")}`,
-    );
+    const url = await saveTempFile(html);
+    await win.loadURL(url);
     win.setTitle(title ?? "Document");
     const pdfBuffer = await win.webContents.printToPDF({
       printBackground: true,
       pageSize: "A4",
-      margins: { top: 0.8, left: 0.6, right: 0.6, bottom: 0.8 },
+      margins: PageMargins.A4,
     });
     return pdfBuffer;
   } catch (err) {

@@ -120,13 +120,22 @@ ul[data-type="taskList"] li[data-checked="true"] > div > p {
   text-decoration-thickness: 2px;
 }
 
+img {
+  width: 100%;
+  height: auto;
+}
+
 @media print {
   body {
     background-color: white !important;
     --background: white !important;
     --foreground: black;
     color: black;
-    margin: 0;
+    margin: 0 !important;
+  }
+  main {
+    max-width: unset !important;
+    width: 100% !important;
   }
 }
 
