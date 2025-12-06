@@ -11,6 +11,7 @@ import {
   List,
   ListOrdered,
   SquareMinus,
+  Table,
   Text,
   TextQuote,
 } from "lucide-react";
@@ -230,6 +231,21 @@ export const useSlashCommand = (
           createImageNode(file, editor.view, pos, imageUploadConfig);
         };
         inp.click();
+      },
+    },
+    {
+      id: "builtin.table",
+      title: "Table",
+      description: "Insert a good old table",
+      keywords: ["table", "grid", "rows", "columns"],
+      icon: <Table size={18} />,
+      command: ({ editor, range }) => {
+        editor
+          .chain()
+          .focus()
+          .deleteRange(range)
+          .insertTable({ rows: 3, cols: 3 })
+          .run();
       },
     },
   ];

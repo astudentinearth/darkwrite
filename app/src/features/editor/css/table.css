@@ -1,0 +1,50 @@
+@import "tailwindcss";
+@reference "../../../globals.css";
+
+.ProseMirror {
+  --th-bg: var(--view-2);
+
+  th {
+    background-color: var(--th-bg);
+    border: 1px solid var(--border);
+  }
+
+  td {
+    border: 1px solid var(--border);
+  }
+
+  .tableWrapper {
+    width: 100%;
+    overflow-x: auto;
+
+    .is-empty:first-child:before {
+      display: none !important;
+    }
+  }
+  .tableWrapper::-webkit-scrollbar {
+    width: 2px;
+    height: 6px;
+    cursor: default !important;
+  }
+
+  .tableWrapper::-webkit-scrollbar-track {
+    overflow: hidden;
+    cursor: default !important;
+  }
+
+  .tableWrapper::-webkit-scrollbar-thumb {
+    @apply bg-secondary/75;
+    border-radius: 0.3em;
+    cursor: default !important;
+  }
+
+  .tableWrapper::-webkit-scrollbar-thumb:hover {
+    @apply bg-secondary;
+    cursor: default !important;
+  }
+
+  table {
+    margin-top: 1rem;
+    margin-bottom: 0;
+  }
+}

@@ -16,6 +16,8 @@ import { TextStyleKit } from "@tiptap/extension-text-style";
 import Color from "@tiptap/extension-color";
 import Highlight from "@tiptap/extension-highlight";
 import { CharacterCount } from "@tiptap/extensions";
+import TableExtensions from "./table/table-extension";
+import { TableKit } from "@tiptap/extension-table";
 
 export const starterKit = StarterKit.configure({
   bulletList: {
@@ -129,6 +131,7 @@ const textStyle = TextStyleKit.configure({ color: { types: ["textStyle"] } });
 const color = Color.configure();
 const hightlight = Highlight.configure({ multicolor: true });
 const characterCount = CharacterCount.configure({});
+const table = TableKit.configure();
 
 export const DefaultEditorExtensions = [
   starterKit,
@@ -146,4 +149,5 @@ export const DefaultEditorExtensions = [
   color,
   hightlight,
   characterCount,
+  ...TableExtensions,
 ];

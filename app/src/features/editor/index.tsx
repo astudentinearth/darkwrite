@@ -4,6 +4,7 @@ import "./css/handle.css";
 import "./css/editor.css";
 import "./css/lists.css";
 import "./css/text.css";
+import "./css/table.css";
 import { EditorContent } from "./types";
 
 export type DarkwriteEditorProps = IDarkwriteEditorContext;
