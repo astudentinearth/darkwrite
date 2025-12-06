@@ -30,7 +30,8 @@
   opacity: 0.5;
 }
 
-.bubble-menu {
+.bubble-menu,
+.table-menu {
   &[data-animation="slide"][data-state="visible"] {
     opacity: 0;
     animation-name: slide-up;

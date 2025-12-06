@@ -11,7 +11,6 @@ export const ImageExtension = (config: ImageExtensionConfig) =>
   Image.extend({
     name: "dwimage",
     addAttributes() {
-      //@ts-expect-error language server contradicts itself. this.parent exists in autocomplete but not here?
       return { ...this.parent?.(), ...ImageAttributes };
     },
     parseHTML() {

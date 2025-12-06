@@ -7,22 +7,42 @@
   th {
     background-color: var(--th-bg);
     border: 1px solid var(--border);
+    border-radius: 4px 4px 0 0;
+    position: relative;
   }
 
   td {
     border: 1px solid var(--border);
+    padding: 8px 6px;
+    position: relative;
   }
 
   .tableWrapper {
     width: 100%;
     overflow-x: auto;
+    overflow-y: hidden;
+    border: none;
 
-    .is-empty:first-child:before {
+    .is-empty:first-child::before {
       display: none !important;
+    }
+
+    .is-empty::before {
+      display: none !important;
+    }
+
+    .column-resize-handle {
+      cursor: ew-resize !important;
+      bottom: -2px;
+      pointer-events: none;
+      position: absolute;
+      right: -2px;
+      top: 0;
+      width: 4px;
+      @apply bg-primary/30;
     }
   }
   .tableWrapper::-webkit-scrollbar {
-    width: 2px;
     height: 6px;
     cursor: default !important;
   }
@@ -46,5 +66,24 @@
   table {
     margin-top: 1rem;
     margin-bottom: 0;
+    border-collapse: collapse;
+    table-layout: fixed;
+
+    &.resize-cursor {
+      cursor: ew-resize !important;
+      cursor: col-resize !important;
+    }
+
+    .selectedCell::after {
+      content: "";
+      @apply bg-primary/10;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      top: 0;
+      pointer-events: none;
+      position: absolute;
+      z-index: 2;
+    }
   }
 }

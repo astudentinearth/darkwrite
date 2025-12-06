@@ -8,6 +8,7 @@ import { ImageExtension } from "./extensions/image/image-extension";
 import { Padder } from "./extensions/padder";
 import slashCommandExtension from "./extensions/slash-command/slash-command-extension";
 import { EditorContent } from "./types";
+import TableMenu from "./extensions/table/table-menu";
 
 function InstanceHandler() {
   const context = use(DarkwriteEditorContext);
@@ -44,6 +45,7 @@ export function EditorRoot(props: { content: EditorContent }) {
       extensions={[...DefaultEditorExtensions, command, codeblock, imagePlugin]}
     >
       <Bubble />
+      <TableMenu />
       <InstanceHandler />
     </EditorProvider>
   );
