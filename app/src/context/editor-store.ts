@@ -10,12 +10,14 @@ export interface EditorStore {
   content: EditorContent;
   customizations: NoteCustomization;
   noteId: string;
+  width: number;
 }
 
 export const useEditorStore = create<EditorStore>()(() => ({
   content: {},
   customizations: {},
   noteId: "",
+  width: 800,
 }));
 
 export const setActiveEditorInstance = (editor?: Editor) => {

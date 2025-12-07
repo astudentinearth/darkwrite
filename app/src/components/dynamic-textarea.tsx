@@ -1,5 +1,12 @@
+import { useEditorStore } from "@/context/editor-store";
 import { useLocalStore } from "@/context/local-state";
-import { TextareaHTMLAttributes, useEffect, useRef } from "react";
+import { cn } from "@/lib/utils";
+import {
+  TextareaHTMLAttributes,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+} from "react";
 
 export interface DynamicTextareaProps
   extends Omit<
@@ -23,8 +30,8 @@ export default function DynamicTextarea(props: DynamicTextareaProps) {
   const ref = useRef<HTMLTextAreaElement>(null);
   const sidebarWidth = useLocalStore((s) => s.sidebarWidth);
   const sidebarState = useLocalStore((s) => s.isSidebarCollapsed);
-
-  useEffect(() => {
+  const width = useEditorStore((s) => s.width);
+  useLayoutEffect(() => {
     adjustHeight();
     const resize = () => {
       adjustHeight();
@@ -35,9 +42,9 @@ export default function DynamicTextarea(props: DynamicTextareaProps) {
     };
   }, []);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     adjustHeight();
-  }, [sidebarWidth, sidebarState]);
+  }, [sidebarWidth, sidebarState, props.defaultValue, width]);
 
   const adjustHeight = () => {
     if (!ref.current) return;
@@ -54,9 +61,13 @@ export default function DynamicTextarea(props: DynamicTextareaProps) {
     adjustHeight();
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { preventNewline, onValueChange, newLineCallback, ...attributes } =
-    props;
+  const {
+    preventNewline,
+    onValueChange,
+    newLineCallback,
+    className,
+    ...attributes
+  } = props;
 
   return (
     <textarea
@@ -64,6 +75,7 @@ export default function DynamicTextarea(props: DynamicTextareaProps) {
       rows={1}
       cols={1}
       {...attributes}
+      className={cn("", className)}
       onChange={handleChange}
     ></textarea>
   );

@@ -10,6 +10,7 @@
 - Improved HTML serialization
 - Fixed checkbox styling in exports
 - Fixed recursive render crash in highlight color picker
+- Fixed obnoxiously large title boxes in wide pages (was caused by a rendering race condition)
 
 
 # 1.0.1-beta.1
