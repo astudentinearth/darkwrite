@@ -8,6 +8,8 @@ import { useTranslation } from "react-i18next";
 import ConstrainedWidth from "./constrained-width";
 import CoverImage from "./cover-image";
 import Alert from "@/components/ui/alert";
+import { useEditorStore } from "@/context/editor-store";
+import { UtilityNodes } from "./node-types";
 
 export type EditorHeaderProps = {
   title: string;
@@ -99,6 +101,15 @@ export default function EditorHeader(props: EditorHeaderProps) {
           className="text-4xl font-semibold box-border h-auto overflow-hidden resize-none grow outline-hidden block"
           defaultValue={props.title}
           preventNewline
+          onKeyDown={(e) => {
+            if (e.key === "Enter")
+              useEditorStore
+                .getState()
+                .editor?.chain()
+                .insertContentAt(0, UtilityNodes.EmptyParagraph)
+                .focus()
+                .run();
+          }}
           onValueChange={(val) =>
             props.onTitleChange(val.replace(/(\r\n|\n|\r)/gm, " "))
           }

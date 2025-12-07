@@ -51,6 +51,7 @@ export default function TableMenu() {
       pluginKey={"tableMenu"}
       shouldShow={({ editor, state }) => {
         if (!editor.isActive("table")) return false;
+        if (!editor.isFocused) return false;
         if (state.selection.empty || state.selection instanceof CellSelection)
           return true;
         return false;

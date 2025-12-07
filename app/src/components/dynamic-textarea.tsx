@@ -1,12 +1,7 @@
 import { useEditorStore } from "@/context/editor-store";
 import { useLocalStore } from "@/context/local-state";
 import { cn } from "@/lib/utils";
-import {
-  TextareaHTMLAttributes,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-} from "react";
+import { TextareaHTMLAttributes, useLayoutEffect, useRef } from "react";
 
 export interface DynamicTextareaProps
   extends Omit<
@@ -55,19 +50,13 @@ export default function DynamicTextarea(props: DynamicTextareaProps) {
   const handleChange = () => {
     if (!ref.current) return;
     if (preventNewline) {
-      ref.current.value = ref.current.value.replace(/(\r\n|\n|\r)/gm, " ");
+      ref.current.value = ref.current.value.replace(/(\r\n|\n|\r)/gm, "");
     }
     props.onValueChange?.call(null, ref.current.value);
     adjustHeight();
   };
 
-  const {
-    preventNewline,
-    onValueChange,
-    newLineCallback,
-    className,
-    ...attributes
-  } = props;
+  const { preventNewline, className, ...attributes } = props;
 
   return (
     <textarea
