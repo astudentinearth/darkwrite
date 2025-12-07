@@ -43,7 +43,7 @@
     "--editor-highlight-blue": "hsl(202 97% 61% / 0.4)",
     "--editor-highlight-indigo": "hsl(251 100% 60% / 0.4)",
     "--editor-highlight-purple": "hsl(280 100% 60% / 0.4)",
-    "--editor-highlight-pink": "hsl(305 100% 60% / 0.4)",
+    "--editor-highlight-pink": "hsl(305 100% 60% / 0.4)"
   }
 }
 ```
