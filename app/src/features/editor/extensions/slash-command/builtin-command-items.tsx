@@ -235,16 +235,16 @@ export const useSlashCommand = (
     },
     {
       id: "builtin.table",
-      title: "Table",
-      description: "Insert a good old table",
-      keywords: ["table", "grid", "rows", "columns"],
+      title: t("table"),
+      description: t("tableDescription"),
+      keywords: [t("table"), "table", "grid", "rows", "columns"],
       icon: <Table size={18} />,
       command: ({ editor, range }) => {
         editor
           .chain()
           .focus()
           .deleteRange(range)
-          .insertTable({ rows: 3, cols: 3 })
+          .insertTable({ rows: 3, cols: 3, withHeaderRow: false })
           .run();
       },
     },

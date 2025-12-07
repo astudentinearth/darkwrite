@@ -19,10 +19,13 @@ import { CellSelection } from "@tiptap/pm/tables";
 import { TableBackgroundPicker } from "./table-background-picker";
 import DeleteColumn from "@/assets/delete-column.svg?react";
 import DeleteRow from "@/assets/delete-row.svg?react";
+import { useTranslation } from "react-i18next";
 
 export default function TableMenu() {
   const { editor } = useCurrentEditor();
   const menuRef = useRef<HTMLDivElement | null>(null!);
+
+  const { t } = useTranslation("translation", { keyPrefix: "editor.table" });
 
   const adjustTablePos = useCallback(() => {
     if (!editor) return;
@@ -83,6 +86,7 @@ export default function TableMenu() {
           command={(e) => e.chain().focus().addColumnBefore().run()}
           icon={PanelRightOpen}
           name="add-column-before"
+          title={t("addColBefore")}
         ></BubbleButton>
         <BubbleButton
           isActive={() => false}
@@ -90,6 +94,7 @@ export default function TableMenu() {
           command={(e) => e.chain().focus().addColumnAfter().run()}
           icon={PanelRightClose}
           name="add-column-after"
+          title={t("addColAfter")}
         ></BubbleButton>
         <BubbleButton
           isActive={() => false}
@@ -97,6 +102,7 @@ export default function TableMenu() {
           command={(e) => e.chain().focus().deleteColumn().run()}
           icon={DeleteColumn}
           name="delete-column"
+          title={t("deleteCol")}
         ></BubbleButton>
         <div className="w-[1px] bg-border"></div>
         <BubbleButton
@@ -105,6 +111,7 @@ export default function TableMenu() {
           command={(e) => e.chain().focus().addRowBefore().run()}
           icon={PanelTopClose}
           name="add-row-before"
+          title={t("addRowBefore")}
         ></BubbleButton>
         <BubbleButton
           isActive={() => false}
@@ -112,13 +119,15 @@ export default function TableMenu() {
           command={(e) => e.chain().focus().addRowAfter().run()}
           icon={PanelBottomClose}
           name="add-row-after"
+          title={t("addRowAfter")}
         ></BubbleButton>
         <BubbleButton
           isActive={() => false}
           editor={{ editor }}
           command={(e) => e.chain().focus().deleteRow().run()}
           icon={DeleteRow}
-          name="add-row-after"
+          name="delete-row"
+          title={t("deleteRow")}
         ></BubbleButton>
         <div className="w-[1px] bg-border"></div>
         <BubbleButton
@@ -127,6 +136,7 @@ export default function TableMenu() {
           command={(e) => e.chain().focus().toggleHeaderRow().run()}
           icon={Sheet}
           name="toggle-header-row"
+          title={t("headerRow")}
         ></BubbleButton>
         <BubbleButton
           isActive={() => false}
@@ -135,6 +145,7 @@ export default function TableMenu() {
           icon={Sheet}
           name="toggle-header-column"
           className="-rotate-90"
+          title={t("headerCol")}
         ></BubbleButton>
         <div className="w-[1px] bg-border"></div>
         <TableBackgroundPicker />
@@ -145,6 +156,7 @@ export default function TableMenu() {
           command={(e) => e.chain().focus().deleteTable().run()}
           icon={Trash}
           name="delete-table"
+          title={t("delete")}
         ></BubbleButton>
       </div>
     </BubbleMenu>

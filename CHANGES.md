@@ -1,5 +1,6 @@
 # 1.0.2-beta.1
 ## 🌟 Features
+- Added tables: headers, custom background colors and resize included
 - Images are now included in note exports
 - Added PDF export
 - Added icon and title to exported documents
@@ -7,6 +8,8 @@
 ## ✨ Improvements and fixes
 - Added a tooltip on note list items for better accessibility
 - Improved HTML serialization
+- Fixed checkbox styling in exports
+- Fixed recursive render crash in highlight color picker
 
 
 # 1.0.1-beta.1

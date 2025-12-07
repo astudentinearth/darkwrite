@@ -169,7 +169,9 @@
       "codeDescription": "Notuna bir kod kesiti ekle.",
       "dividerDescription": "Notunu yatay bir çizgiyle böl.",
       "linkToPageDescription": "Başka bir sayfaya tıklanabilir bir bağlantı oluştur.",
-      "imageDescription": "Doğrudan bir resim ekle."
+      "imageDescription": "Doğrudan bir resim ekle.",
+      "table": "Tablo",
+      "tableDescription": "Sade bir tablo ekle."
     },
     "bubble": {
       "h1": "Başlık 1",
@@ -181,6 +183,17 @@
       "bulletList": "Madde işaretli liste",
       "numberedList": "Numaralı liste",
       "toDoList": "Yapılacaklar listesi"
+    },
+    "table": {
+      "addColBefore": "Sola sütun ekle",
+      "addColAfter": "Sağa sütun ekle",
+      "deleteCol": "Sütunu sil",
+      "addRowBefore": "Üste satır ekle",
+      "addRowAfter": "Alta satır ekle",
+      "deleteRow": "Satırı sil",
+      "headerRow": "Başlık satırını aç/kapat",
+      "headerCol": "Başlık sütununu aç/kapat",
+      "delete": "Tabloyu sil"
     },
     "customizations": {
       "sansText": "Normal",
