@@ -166,6 +166,7 @@ table {
   margin-bottom: 0;
   border-collapse: collapse;
   table-layout: fixed;
+  font-size: 18px;
 }
 
 :root {

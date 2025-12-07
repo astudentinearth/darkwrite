@@ -71,6 +71,7 @@
     margin-bottom: 0;
     border-collapse: collapse;
     table-layout: fixed;
+    font-size: 18px;
 
     &.resize-cursor {
       cursor: ew-resize !important;
