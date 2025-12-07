@@ -30,7 +30,6 @@
     "licenses": "license-checker-rseidelsohn --plainVertical --out THIRDPARTY.txt --production --excludePrivatePackages",
     "_postinstall": "electron-builder install-app-deps",
     "install_app_deps": "electron-builder install-app-deps",
-    "build:unpack": "yarn build:pre && electron-builder --dir",
     "build:electron:win": "electron-builder --win",
     "build:win": "npm-run-all --serial build:pre build:electron:win",
     "build:mac": "pnpm build:pre && electron-builder --mac",

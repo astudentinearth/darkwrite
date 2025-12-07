@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="res/cover.png"/>
+    <img src="res/cover.jpg"/>
     <img src="https://img.shields.io/github/actions/workflow/status/astudentinearth/darkwrite/test-unit.yml?label=tests&style=for-the-badge"/>
     <img src="https://img.shields.io/github/license/astudentinearth/darkwrite?style=for-the-badge"/>
     <img src="https://img.shields.io/github/stars/astudentinearth/darkwrite?color=yellow&style=for-the-badge"/>
@@ -13,8 +13,6 @@
 </p>
 </strong>
 
-# [Roadmap discussion thread](https://github.com/astudentinearth/darkwrite/discussions/7)
-
 # 📓*Take notes the way you want.*
 
 ✒️ Darkwrite lets you take notes without getting in your way.
@@ -25,7 +23,7 @@
 
 ## 🖊️ Just start typing.
 
-🖋️ Unleash the power of a rich editor which supports formatting, headings, todo lists, numbered lists, links, images and much more.
+🖋️ Unleash the power of a rich editor which supports formatting, headings, todo lists, numbered lists, links, images, tables and much more.
 
 <p align="center">
 <img src="res/Editor.png">
@@ -52,7 +50,7 @@
 📦 You are never locked in. Export all your notes as HTML files, and you can use them anywhere else. Need to backup your data? No problem. Get an archive with just one click and restore them later if you need it.
 
 <p align="center">
-<img src="res/Backup.png">
+<img src="res/section3.png">
 </p>
 
 ## 🖥️ Work offline.
@@ -65,6 +63,11 @@ Everything stays on device. With Darkwrite you never depend on a server. An outa
 - [Development docs](docs/DEVELOPMENT.md)
 
 For everything else, see [the docs folder](docs)
+
+## Contributing
+We are not ready to accept code contributions yet, as the app is still evolving rapidly. However, feature requests, bug reports, or anything else you think could be helpful, are welcome and encouraged❤️
+
+Feel free to raise an issue or discussion if you have any questions.
 
 ## License
 

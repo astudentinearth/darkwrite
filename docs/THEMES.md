@@ -4,27 +4,47 @@
 
 ```json
 {
-  "id": "my-own-theme",
-  "name": "Custom Theme",
-  "foreground": "0 0% 100%",
-  "background1": "120 50% 50%",
-  "background2": "0 0% 4%",
-  "background3": "0 0% 6%",
-  "cardBackground": "0 0% 7%",
-  "cardForeground": "0 0% 94%",
-  "popoverBackground": "0 0% 3%",
-  "popoverForeground": "0 0% 94%",
-  "secondaryBackground": "0 0% 10%",
-  "secondaryForeground": "0 0% 100%",
-  "mutedBackground": "0 0% 10%",
-  "mutedForeground": "0 0% 89%",
-  "destructiveBackground": "0 51% 55%",
-  "destructiveForeground": "210 40% 98%",
-  "disabled": "0 0% 16%",
-  "border": "0 0% 14%",
-  "focusRing": "212.7 26.8% 50%",
-  "star": "50 97% 63%",
-  "mode": "dark"
+  "id": "your-unique-id-here",
+  "name": "My Custom Theme",
+  "mode": "dark",
+  "colors": {
+    "--foreground": "hsl(0 0% 100%)",
+    "--background": "hsl(0 0% 5%)",
+    "--view-1": "hsl(0 0% 6%)",
+    "--view-2": "hsl(0 0% 11%)",
+    "--card": "hsl(0 0% 13%)",
+    "--card-foreground": "hsl(0 0% 94%)",
+    "--popover": "hsl(0 0% 9%)",
+    "--popover-foreground": "hsl(0 0% 94%)",
+    "--secondary": "hsl(0 0% 20%)",
+    "--secondary-foreground": "hsl(0 0% 100%)",
+    "--muted": "hsl(0 0% 17%)",
+    "--muted-foreground": "hsl(0 0% 89%)",
+    "--destructive": "hsl(0 51% 55%)",
+    "--destructive-foreground": "hsl(210 40% 98%)",
+    "--disabled": "hsl(0 0% 22%)",
+    "--border": "hsl(0 0% 14%)",
+    "--ring": "hsl(212.7 26.8% 50%)",
+    "--star": "hsl(50 97% 63%)",
+    "--editor-text-red": "hsl(1 100% 66%)",
+    "--editor-text-orange": "hsl(26 97% 61%)",
+    "--editor-text-yellow": "hsl(54 100% 66%)",
+    "--editor-text-green": "hsl(119 100% 66%)",
+    "--editor-text-cyan": "hsl(166 100% 66%)",
+    "--editor-text-blue": "hsl(202 97% 61%)",
+    "--editor-text-indigo": "hsl(251 100% 60%)",
+    "--editor-text-purple": "hsl(280 100% 60%)",
+    "--editor-text-pink": "hsl(305 100% 60%)",
+    "--editor-highlight-red": "hsl(1 100% 66% / 0.4)",
+    "--editor-highlight-orange": "hsl(26 97% 61% / 0.4)",
+    "--editor-highlight-yellow": "hsl(54 100% 66% / 0.4)",
+    "--editor-highlight-green": "hsl(119 100% 66% / 0.4)",
+    "--editor-highlight-cyan": "hsl(166 100% 66% / 0.4)",
+    "--editor-highlight-blue": "hsl(202 97% 61% / 0.4)",
+    "--editor-highlight-indigo": "hsl(251 100% 60% / 0.4)",
+    "--editor-highlight-purple": "hsl(280 100% 60% / 0.4)",
+    "--editor-highlight-pink": "hsl(305 100% 60% / 0.4)",
+  }
 }
 ```
 
@@ -35,11 +55,11 @@
 ### 4. Tweak the colors to your liking.
 
 > [!NOTE]
-> You must define your colors in HSL format, without using commas. They will be assigned to CSS variables when Darkwrite is running.
+> You can define your colors in any supported CSS color function. HSL is recommended for easier tweaking of colors, but you can also use HEX, RGB, or any other CSS color format. **Color values are validated for security.**
 
 ### 5. Set the `mode` field appropriately.
 
-If your theme is for dark mode, set it to `"dark"`, otherwise set it to `"light"`. This is required for compatibility reasons.
+If your theme is for dark mode, set it to `"dark"`, otherwise set it to `"light"`. This will determine the colors of window decorations etc.
 
 ### 6. Save the file
 
@@ -47,9 +67,7 @@ Save it somewhere easily accessible like your desktop, but make sure the file ex
 
 ### 7. Import your theme
 
-Open Darkwrite, choose **Settings** from the sidebar. Under the **Appearance** category, click on the button with the arrow as shown below:
-
-![](assets/import-theme.png)
+Open Darkwrite, choose **Settings** from the sidebar. Under the **Appearance** category, choose **Import Theme**
 
 Choose the file you saved earlier.
 

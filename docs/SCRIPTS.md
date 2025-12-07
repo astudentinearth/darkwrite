@@ -1,25 +1,40 @@
-# Scripts in workspace root
+# Scripts in `app/`
 
 ## `dev`
 
 Runs the Electron app for development.
 
-> It also runs `tsup` for `@darkwrite/common` package to watch for changes there too.
-
-## `build:desktop`
+## `build`
 
 Creates a production build of Darkwrite.
 
-> It runs [`darkwrite-builder.js`](../packages/app-desktop/darkwrite-builder.js) in the `@darkwrite/app-desktop` package, which automatically detects your operating system and performs the build.
+> It runs [`darkwrite-builder.js`](../packages/app-desktop/darkwrite-builder.js), which automatically detects your operating system and performs the build.
 
-## `build:common`
+## `build:vite`
+Builds both the frontend and main process JavaScript bundles.
 
-Builds the `@darkwrite/common` package.
+## `build:win`, `build:mac`, `build:linux`
+Builds the Electron app for the specified platform.
 
-## `test:all`
+## `test`
 
-Runs unit and component tests in all packages.
+Runs unit and component tests.
 
-## `test:coverage`
+## `coverage`
 
-Runs unit and component tests in all packages with v8 coverage reports.
+Runs unit and component tests with v8 coverage reports.
+
+## `install_app_deps`
+Installs production dependencies for the Electron app, compiling any native modules against the correct Electron version.
+
+## `licenses`
+Compiles a list of 3rd party licenses used in Darkwrite and outputs them to `THIRDPARTY.txt`.
+
+## `rebuild:restore`
+Recompiles any native modules against the system Node version, so you can run tests without Electron. `install_app_deps` should be run again before running `dev`.
+
+## `lint`
+Runs ESLint on the codebase.
+
+## `typecheck`
+Runs TypeScript type checking on the codebase.
