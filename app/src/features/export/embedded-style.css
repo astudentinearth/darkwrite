@@ -139,6 +139,35 @@ img {
   }
 }
 
+th {
+  background-color: var(--th-bg);
+  border: 1px solid var(--border);
+  border-radius: 4px 4px 0 0;
+  padding: 8px 6px;
+  position: relative;
+}
+
+td {
+  border: 1px solid var(--border);
+  background-color: var(--td-bg);
+  padding: 8px 6px;
+  position: relative;
+}
+
+.tableWrapper {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  border: none;
+}
+
+table {
+  margin-top: 1rem;
+  margin-bottom: 0;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
 :root {
   --editor-text-red: hsl(1 100% 66%);
   --editor-text-orange: hsl(26 97% 61%);
@@ -161,4 +190,7 @@ img {
   --background: white;
   --foreground: black;
   --primary: #2867b8;
+  --border: #434343;
+  --th-bg: hsl(0 0 0 / 0.1);
+  --td-bg: transparent;
 }
