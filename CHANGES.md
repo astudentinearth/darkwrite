@@ -11,7 +11,6 @@
 - Fixed checkbox styling in exports
 - Fixed recursive render crash in highlight color picker
 - Fixed obnoxiously large title boxes in wide pages (was caused by a rendering race condition)
-- Hide bubble menus when editor is not focused
 - Hitting Enter on the title box now moves the cursor into the editor
 - Removed excess margins around blockquotes
 
