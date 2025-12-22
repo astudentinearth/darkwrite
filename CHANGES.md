@@ -1,3 +1,8 @@
+# 1.0.2-beta.2
+## ✨ Improvements and fixes
+- Fixed image paste
+- Fixed the spellcheck option not actually toggling spellcheck
+
 # 1.0.2-beta.1
 ## 🌟 Features
 - Added tables: headers, custom background colors and resize included

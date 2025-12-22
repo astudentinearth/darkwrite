@@ -17,6 +17,7 @@ import { useSlashCommand } from "./extensions";
 import EditorHeader from "./header";
 import { useNavigateToNote } from "@/hooks/use-navigate-to-note";
 import { useSettings } from "@/query/use-settings";
+import { useLocalStore } from "@/context/local-state";
 
 export function EditorViewRouteHandler() {
   const noteId = useNoteFromURL();
@@ -46,6 +47,7 @@ export function EditorView({ noteId }: { noteId: string }) {
   const content = { contents, customizations };
   const initialContent = useEditorStore.getState().content;
   const navToNote = useNavigateToNote();
+  const spellcheck = useLocalStore((s) => s.useSpellcheck);
 
   const cover = useEditorCover(noteId);
   const { items } = useSlashCommand(options.imageConfig);
@@ -54,6 +56,7 @@ export function EditorView({ noteId }: { noteId: string }) {
       data-editor-boundary="true"
       className="flex items-center flex-col px-24 editor-fade-in min-h-full relative gap-2"
       style={options.style}
+      spellCheck={spellcheck}
     >
       {note && (
         <EditorHeader
