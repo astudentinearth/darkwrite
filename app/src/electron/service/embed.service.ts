@@ -5,6 +5,7 @@ import { getFileInfo } from "../lib/fs";
 import { EmbedRepository } from "../repository/embed.repository";
 import { WorkspaceRepository } from "../repository/workspace.repository";
 import { readFile } from "fs/promises";
+import log from "electron-log";
 
 export class EmbedService {
   constructor(
@@ -22,8 +23,14 @@ export class EmbedService {
     const candidates = await this.embedRepository.findAllByFileSize(fileSize);
     if (candidates.length === 0) return null;
     for (const embed of candidates) {
-      const buf = await this.blobStore.get(embed.id);
-      if (Buffer.compare(buf, contents) === 0) return embed;
+      try {
+        const buf = await this.blobStore.get(embed.id);
+        if (Buffer.compare(buf, contents) === 0) return embed;
+      } catch {
+        log.warn(
+          `Embed service duplicate check - Could not find the blob for embed:${embed.id}`,
+        );
+      }
     }
     return null;
   }
@@ -73,7 +80,7 @@ export class EmbedService {
     embed.workspace = workspace;
     embed.uploadedAt = new Date();
     embed.displayName = Date.now().toString();
-    embed.fileName = `${embed.id}.${fileType}`;
+    embed.fileName = `${embed.id}`;
     const buf = Buffer.from(new Uint8Array(buffer));
 
     const existingEmbed = await this.findFirstDuplicate(embed.fileSize, buf);
