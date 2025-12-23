@@ -2,7 +2,7 @@ import { DatabaseService } from "./service/database.service";
 import { DocumentService } from "./service/document.service";
 import { EmbedService } from "./service/embed.service";
 import { ThemeService } from "./service/theme.service";
-import { WorkspaceService } from "./service/workspace.service";
+import { WorkspaceService } from "./workspace/workspace.service";
 
 /** @deprecated */
 export class ServiceContainer {

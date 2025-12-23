@@ -23,7 +23,7 @@ import { NoteApiBridge } from "../note/note.handler";
 import { ElectronEmbedAPI } from "./embed.handler";
 import { ElectronSettingsAPI } from "./settings.handler";
 import { ElectronThemeAPI } from "./theme.handler";
-import { ElectronWorkspaceAPI } from "./workspace.handler";
+import { WorkspacesApiBridge } from "../workspace/workspace.handler";
 
 export const DarkwriteElectronAPI = {
   note: NoteApiBridge,
@@ -39,12 +39,7 @@ export const DarkwriteElectronAPI = {
     getById: new IPCHandler(false, ElectronEmbedAPI.getById),
     getEncoded: new IPCHandler(false, ElectronEmbedAPI.getEncoded),
   },
-  workspace: {
-    create: new IPCHandler(false, ElectronWorkspaceAPI.create),
-    update: new IPCHandler(false, ElectronWorkspaceAPI.update),
-    getAll: new IPCHandler(false, ElectronWorkspaceAPI.getAll),
-    delete: new IPCHandler(false, ElectronWorkspaceAPI.delete),
-  },
+  workspace: WorkspacesApiBridge,
   settings: {
     getUserSettings: new IPCHandler(false, ElectronSettingsAPI.getUserSettings),
     saveUserSettings: new IPCHandler(

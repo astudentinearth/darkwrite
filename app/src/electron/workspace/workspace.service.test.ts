@@ -2,19 +2,20 @@ import { getDefaultWorkspaceConfiguration } from "@/lib/workspace-config";
 import { AppDataSource } from "../db";
 import { Workspace } from "../entity";
 import { WorkspaceService } from "./workspace.service";
-import { WorkspaceRepository } from "../repository/workspace.repository";
+import { WorkspaceDAO } from "./workspace.dao";
 
 const workspaceService = new WorkspaceService();
 
-class MockRepo extends WorkspaceRepository {
-  override async findAll() {
+const MockDAO = {
+  ...WorkspaceDAO,
+  async findAll() {
     return [];
-  }
+  },
 
-  override async save() {
+  async save() {
     return new Workspace();
-  }
-}
+  },
+};
 
 beforeAll(async () => {
   if (!AppDataSource.isInitialized) await AppDataSource.initialize();
@@ -43,7 +44,7 @@ it("should get workspaces", async () => {
 });
 
 it("should initialize default workspace", async () => {
-  const mockedService = new WorkspaceService(new MockRepo());
+  const mockedService = new WorkspaceService(MockDAO);
   const result = await mockedService.initializeDefaultWorkspace();
   expect(result).toBeInstanceOf(Workspace);
 });

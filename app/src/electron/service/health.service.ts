@@ -1,14 +1,14 @@
 import { AppDataSource } from "../db";
 import { Note } from "../entity";
-import { NoteRepository } from "../repository/note.repository";
-import { WorkspaceRepository } from "../repository/workspace.repository";
+import { NoteDAO } from "../note/note.dao";
 import { Rank } from "@/common/rank";
+import { WorkspaceDAO } from "../workspace/workspace.dao";
 
 export class HealthService {
   constructor(
     private _db = AppDataSource,
-    private workspaceRepository = new WorkspaceRepository(),
-    private noteRepository = new NoteRepository(),
+    private workspaceRepository = WorkspaceDAO,
+    private noteRepository = NoteDAO,
   ) {}
 
   async fixCollidingOrderKeys() {

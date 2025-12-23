@@ -3,13 +3,11 @@ import {
   UpdateWorkspaceDTO,
 } from "@/common/dto/request/workspace.request";
 import { Workspace } from "../entity";
-import { WorkspaceRepository } from "../repository/workspace.repository";
 import { getDefaultWorkspaceConfiguration } from "@/lib/workspace-config";
+import { WorkspaceDAO } from "./workspace.dao";
 
 export class WorkspaceService {
-  constructor(
-    private workspaceRepository: WorkspaceRepository = new WorkspaceRepository(),
-  ) {}
+  constructor(private workspaceDAO = WorkspaceDAO) {}
 
   async createWorkspace(dto: CreateWorkspaceDTO): Promise<Workspace> {
     const { config, name, icon_url } = dto;
@@ -18,11 +16,11 @@ export class WorkspaceService {
     workspace.name = name;
     workspace.icon_url = icon_url;
     workspace.created_at = new Date();
-    return this.workspaceRepository.save(workspace);
+    return this.workspaceDAO.save(workspace);
   }
 
   async initializeDefaultWorkspace() {
-    const workspaces = await this.workspaceRepository.findAll();
+    const workspaces = await this.workspaceDAO.findAll();
     if (workspaces.length > 0) return true;
     else
       return this.createWorkspace({
@@ -32,7 +30,7 @@ export class WorkspaceService {
   }
 
   async findWorkspaceOrThrow(id: string): Promise<Workspace> {
-    const result = await this.workspaceRepository.findById(id);
+    const result = await this.workspaceDAO.findById(id);
     if (result == null) {
       throw new Error(`Workspace ${id} does not exist.`);
     }
@@ -40,12 +38,12 @@ export class WorkspaceService {
   }
 
   async getWorkspaces(): Promise<Workspace[]> {
-    return await this.workspaceRepository.findAll();
+    return await this.workspaceDAO.findAll();
   }
 
   async update(id: string, dto: UpdateWorkspaceDTO) {
     const workspace = await this.findWorkspaceOrThrow(id);
     Object.assign(workspace, dto);
-    return await this.workspaceRepository.save(workspace);
+    return await this.workspaceDAO.save(workspace);
   }
 }
