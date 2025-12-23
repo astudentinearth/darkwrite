@@ -14,7 +14,7 @@ import { initAppMenu } from "./menu";
 import { webcontentsUrl } from "./metadata.json";
 import { ElectronPrefsModel } from "./prefs";
 import { HealthService } from "./service/health.service";
-import { WorkspaceService } from "./service/workspace.service";
+import { WorkspaceService } from "./workspace/workspace.service";
 import { constructWindow } from "./window";
 import installExtension, {
   REACT_DEVELOPER_TOOLS,

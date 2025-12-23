@@ -1,5 +1,4 @@
 import { IWorkspaceAPI } from "@/common/contract";
-import { ServiceContainer } from "../service-container";
 import {
   UpdateWorkspaceDTO,
   UpdateWorkspaceDTOSchema,
