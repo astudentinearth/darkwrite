@@ -8,11 +8,8 @@ import {
   IPCMainListenerWithoutEvent,
 } from "@main/types";
 import { ipcMain } from "electron";
-import { ElectronNoteAPI } from "../note/note.handler";
-import { ElectronEmbedAPI } from "./embed.handler";
-import { ElectronWorkspaceAPI } from "./workspace.handler";
-import { ElectronSettingsAPI } from "./settings.handler";
-import { ElectronThemeAPI } from "./theme.handler";
+import log from "electron-log";
+import { BackupAPI, HTMLExporterAPI } from "../api/backup.electron";
 import { DesktopIntegration } from "../lib/desktop-integration";
 import {
   hasOnboarded,
@@ -20,28 +17,16 @@ import {
   isNewUser,
   markOnboardingCompleted,
 } from "../lib/onboarding-state";
-import { BackupAPI, HTMLExporterAPI } from "../api/backup.electron";
-import { migrateAlphaToV1 } from "../migrator/alpha-to-v1";
 import { Updater } from "../lib/update";
-import log from "electron-log";
+import { migrateAlphaToV1 } from "../migrator/alpha-to-v1";
+import { NoteApiBridge } from "../note/note.handler";
+import { ElectronEmbedAPI } from "./embed.handler";
+import { ElectronSettingsAPI } from "./settings.handler";
+import { ElectronThemeAPI } from "./theme.handler";
+import { ElectronWorkspaceAPI } from "./workspace.handler";
 
 export const DarkwriteElectronAPI = {
-  note: {
-    create: new IPCHandler(false, ElectronNoteAPI.create),
-    delete: new IPCHandler(false, ElectronNoteAPI.delete),
-    getAllByWorkspaceId: new IPCHandler(
-      false,
-      ElectronNoteAPI.getAllByWorkspaceId,
-    ),
-    getById: new IPCHandler(false, ElectronNoteAPI.getById),
-    update: new IPCHandler(false, ElectronNoteAPI.update),
-    getDocument: new IPCHandler(false, ElectronNoteAPI.getDocument),
-    setDocument: new IPCHandler(false, ElectronNoteAPI.setDocument),
-    duplicate: new IPCHandler(false, ElectronNoteAPI.duplicate),
-    export: new IPCHandler(false, ElectronNoteAPI.export),
-    exportPdf: new IPCHandler(false, ElectronNoteAPI.exportPdf),
-    import: new IPCHandler(false, ElectronNoteAPI.import),
-  },
+  note: NoteApiBridge,
   embed: {
     createFromLocalFile: new IPCHandler(
       false,

@@ -8,6 +8,7 @@ import { DocumentService } from "../service/document.service";
 import { NoteQueryService } from "./note-query.service";
 import { NoteService } from "./note.service";
 import printToPdf from "../lib/print-to-pdf";
+import { IPCHandler } from "../types/ipc-handler";
 
 const documentService = new DocumentService();
 
@@ -127,4 +128,21 @@ export const ElectronNoteAPI: INoteAPI = {
       type,
     };
   },
+};
+
+export const NoteApiBridge = {
+  create: new IPCHandler(false, ElectronNoteAPI.create),
+  delete: new IPCHandler(false, ElectronNoteAPI.delete),
+  getAllByWorkspaceId: new IPCHandler(
+    false,
+    ElectronNoteAPI.getAllByWorkspaceId,
+  ),
+  getById: new IPCHandler(false, ElectronNoteAPI.getById),
+  update: new IPCHandler(false, ElectronNoteAPI.update),
+  getDocument: new IPCHandler(false, ElectronNoteAPI.getDocument),
+  setDocument: new IPCHandler(false, ElectronNoteAPI.setDocument),
+  duplicate: new IPCHandler(false, ElectronNoteAPI.duplicate),
+  export: new IPCHandler(false, ElectronNoteAPI.export),
+  exportPdf: new IPCHandler(false, ElectronNoteAPI.exportPdf),
+  import: new IPCHandler(false, ElectronNoteAPI.import),
 };
