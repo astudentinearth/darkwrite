@@ -29,8 +29,8 @@ export function constructWindow(
     icon: is.dev ? join(__dirname, metadata.icons.development) : undefined,
     titleBarStyle,
     trafficLightPosition: {
-      x: 18,
-      y: 18,
+      x: 15,
+      y: 15,
     },
     ...(process.platform != "darwin"
       ? {

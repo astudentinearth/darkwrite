@@ -5,6 +5,8 @@ import { RefObject } from "react";
 import { HistoryNavigation } from "./navigation";
 import PageTitle from "./page-title";
 import Toolbar from "./toolbar";
+import { getOperatingSystem } from "@/lib/platform";
+import { OS } from "@/common/os";
 
 export type TitlebarProps = React.HTMLAttributes<HTMLDivElement> & {
   refObject: RefObject<HTMLDivElement | null>;
@@ -18,6 +20,9 @@ export function Titlebar(props: TitlebarProps) {
       ref={props.refObject}
       className="titlebar h-12 bg-background shrink-0 flex [&>div]:shrink-0 p-2 justify-start gap-2 items-center"
     >
+      {props.isSidebarCollapsed && getOperatingSystem() === OS.MACOS && (
+        <div className="w-18"></div>
+      )}
       <HeaderbarButton
         data-testid="button-expand-sidebar"
         className={cn(!props.isSidebarCollapsed && "hidden")}
@@ -27,9 +32,9 @@ export function Titlebar(props: TitlebarProps) {
         <PanelRightClose width={20} height={20}></PanelRightClose>
       </HeaderbarButton>
       <HistoryNavigation />
-      <PageTitle/>
+      <PageTitle />
       <div className="grow"></div>
-      <Toolbar/>
+      <Toolbar />
     </div>
   );
 }

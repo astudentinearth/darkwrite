@@ -1,4 +1,10 @@
-import { app, BrowserWindow, Menu, MenuItemConstructorOptions, shell } from "electron";
+import {
+  app,
+  BrowserWindow,
+  Menu,
+  MenuItemConstructorOptions,
+  shell,
+} from "electron";
 
 const template: Array<MenuItemConstructorOptions> = [
   {
@@ -33,16 +39,20 @@ const template: Array<MenuItemConstructorOptions> = [
         label: "Reset zoom",
         id: "resetzoom",
         click(menuItem, browserWindow) {
-          if (browserWindow instanceof BrowserWindow) browserWindow.webContents.setZoomFactor(1.0);
-        }
+          if (browserWindow instanceof BrowserWindow)
+            browserWindow.webContents.setZoomFactor(1.0);
+        },
       },
 
       {
         label: "Zoom in",
         id: "resetzoom",
         click(menuItem, browserWindow) {
-          if (browserWindow instanceof BrowserWindow) browserWindow.webContents.setZoomFactor(browserWindow.webContents.getZoomFactor() + 0.1);
-        }
+          if (browserWindow instanceof BrowserWindow)
+            browserWindow.webContents.setZoomFactor(
+              browserWindow.webContents.getZoomFactor() + 0.1,
+            );
+        },
       },
 
       {
@@ -50,16 +60,21 @@ const template: Array<MenuItemConstructorOptions> = [
         id: "resetzoom",
         click(menuItem, browserWindow) {
           if (browserWindow instanceof BrowserWindow) {
-            const level = browserWindow.webContents.getZoomFactor() - 0.1
-            browserWindow.webContents.setZoomFactor(
-              level < 0 ? 0.1 : level
-            );
+            const level = browserWindow.webContents.getZoomFactor() - 0.1;
+            browserWindow.webContents.setZoomFactor(level < 0 ? 0.1 : level);
           }
-        }
-      }
-    ]
-  }
+        },
+      },
+    ],
+  },
 ];
+
+if (process.platform === "darwin") {
+  template.unshift({
+    role: "appMenu",
+    label: app.name,
+  });
+}
 
 export function initAppMenu() {
   const menu = Menu.buildFromTemplate(template);
