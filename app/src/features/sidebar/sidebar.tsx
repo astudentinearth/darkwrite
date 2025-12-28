@@ -13,6 +13,8 @@ import { WorkspaceSwitcher } from "./workspace-switcher";
 import { showSearch } from "../search/search-state";
 import { getOperatingSystem } from "@/lib/platform";
 import { OS } from "@/common/os";
+import { InitialUserSettings } from "@/init";
+import AppMenu from "./app-menu";
 
 export type SidebarProps = React.HTMLAttributes<HTMLDivElement> & {
   collapsed?: boolean;
@@ -29,18 +31,7 @@ export function Sidebar(props: SidebarProps) {
       style={{ width: `${width}px` }}
     >
       <div className="titlebar w-full h-12 bg-background shrink-0 flex [&>button]:shrink-0 p-2 items-center gap-1">
-        {getOperatingSystem() !== OS.MACOS && (
-          <HeaderbarButton
-            onClick={() => {
-              showAppMenu();
-            }}
-            data-testid="button-darkwrite"
-            className="opacity-90"
-            title="Menu"
-          >
-            <img src="darkwrite_icon.png" className="shrink-0 w-5 h-5"></img>
-          </HeaderbarButton>
-        )}
+        <AppMenu />
         <div className="grow titlebar spacer"></div>
         <Button
           data-testid="button-edit-widgets"
