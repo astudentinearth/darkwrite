@@ -1,3 +1,16 @@
+# 1.0.3-beta.1
+## ✨ Improvements and fixes
+- Fix macOS build crashing on startup
+- Fall back to text inputs for font customization on macOS
+- Fix traffic light position on macOS
+
+## 🛠️ Technical changes
+- Deprecated `appearance.experimental.darwinCustomTitlebarEnabled` settings key
+  - It is now directly tied to `appearance.useSystemWindowFrame`, and the titlebar is now merged by default
+- Removed compile time metadata:
+  - `windowDefaults.wcoEnabledPlatforms` - since macOS is no longer excluded, the key is no longer used
+
+
 # 1.0.2-beta.2
 ## ✨ Improvements and fixes
 - Fixed image paste

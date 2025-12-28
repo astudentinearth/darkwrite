@@ -11,8 +11,7 @@
       "color": "#13131300",
       "symbolColor": "#ffffff",
       "height": 48
-    },
-    "wcoEnabledPlatforms": ["win32", "linux"]
+    }
   },
   "pathConfig": {
     "dir": {

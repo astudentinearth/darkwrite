@@ -9,25 +9,18 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 function getTitlebarStyle(prefs: DarkwriteUserSettings) {
-  if (
-    metadata.windowDefaults.wcoEnabledPlatforms.includes(process.platform) &&
-    !prefs.appearance.useSystemWindowFrame
-  ) {
+  if (prefs.appearance.useSystemWindowFrame) {
+    return "default";
+  } else {
+    if (process.platform === "darwin") return "hiddenInset";
     return "hidden";
   }
-  if (
-    prefs.appearance.experimental.darwinCustomTitlebarEnabled &&
-    process.platform === "darwin" &&
-    !prefs.appearance.useSystemWindowFrame
-  )
-    return "hidden";
-  return "default";
 }
 
 export function constructWindow(
   prefs: DarkwriteUserSettings,
 ): BrowserWindowConstructorOptions {
-  const titleBarStyle: "default" | "hidden" = getTitlebarStyle(prefs);
+  const titleBarStyle = getTitlebarStyle(prefs);
   return {
     webPreferences: {
       preload: join(__dirname, metadata.preloadScriptPath),
@@ -35,10 +28,18 @@ export function constructWindow(
     },
     icon: is.dev ? join(__dirname, metadata.icons.development) : undefined,
     titleBarStyle,
-    titleBarOverlay:
-      titleBarStyle == "hidden"
-        ? metadata.windowDefaults.titleBarOverlay
-        : false,
+    trafficLightPosition: {
+      x: 18,
+      y: 18,
+    },
+    ...(process.platform != "darwin"
+      ? {
+          titleBarOverlay:
+            titleBarStyle == "hidden"
+              ? metadata.windowDefaults.titleBarOverlay
+              : undefined,
+        }
+      : {}),
     autoHideMenuBar: true,
     // TODO: Persist window size
     width: metadata.windowDefaults.width,

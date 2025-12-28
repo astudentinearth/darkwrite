@@ -13,9 +13,10 @@ export const DEFAULT_THEME_SETTINGS = {
     sans: "Inter, Helvetica, Arial, sans-serif" as string,
     serif: "Times New Roman, serif" as string,
     code: "JetBrains Mono, Cascadia Code, Noto Mono, monospace" as string,
-    ui: "SF Pro Display, Inter, Segoe UI, Noto Sans, Cantarell, system-ui" as string,
+    ui: "BlinkMacSystemFont, Helvetica Neue, Karla, Inter, Segoe UI, Noto Sans, Cantarell, system-ui" as string,
   },
   experimental: {
+    /** @deprecated no longer used */
     darwinCustomTitlebarEnabled: false as boolean,
   },
   customCSS: "" as string,
