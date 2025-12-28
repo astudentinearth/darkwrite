@@ -48,7 +48,7 @@ export class ThemeService {
     const themes: Record<string, Theme> = _.cloneDeep(DEFAULT_THEMES);
     for (const id of ids) {
       const themeString = await this.themeStore.read(id);
-      const theme = this.parseTheme(themeString);
+      const theme = this.parseTheme(themeString, id);
       if (!theme) continue;
       themes[id] = theme;
     }

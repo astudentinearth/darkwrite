@@ -1,20 +1,16 @@
-import { showAppMenu } from "@/api/appmenu";
 import { HeaderbarButton } from "@/components/headerbar-button";
 import { Button } from "@/components/ui/button";
 import NoteListRoot from "@/features/note/note-list-root";
 import { cn } from "@/lib/utils";
 import { LayoutDashboard, PanelRightOpen, Search } from "lucide-react";
 import React from "react";
+import { showSearch } from "../search/search-state";
+import AppMenu from "./app-menu";
 import { CreatePageButton } from "./create-page-button";
 import FavoritesContainer from "./favorites-container";
 import { SidebarNavigation } from "./navigation";
 import { TrashWidget } from "./trash";
 import { WorkspaceSwitcher } from "./workspace-switcher";
-import { showSearch } from "../search/search-state";
-import { getOperatingSystem } from "@/lib/platform";
-import { OS } from "@/common/os";
-import { InitialUserSettings } from "@/init";
-import AppMenu from "./app-menu";
 
 export type SidebarProps = React.HTMLAttributes<HTMLDivElement> & {
   collapsed?: boolean;
