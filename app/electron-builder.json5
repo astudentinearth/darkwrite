@@ -9,7 +9,11 @@
     buildResources: "resources",
   },
   files: ["dist-electron", "dist"],
-  extraFiles: [
+  extraResources: [
+    {
+      from: "resources/icon512.png",
+      to: "icon.png",
+    },
     "THIRDPARTY.txt",
     "LICENSE_NOVEL.txt",
     {
@@ -17,16 +21,10 @@
       to: "LICENSE.darkwrite.txt",
     },
   ],
-  extraResources: [
-    {
-      from: "resources/icon512.png",
-      to: "icon.png",
-    },
-  ],
   mac: {
     target: ["dmg"],
     artifactName: "${productName}-Installer.${ext}",
-    identity: "-"
+    icon: "./resources/icon.icon"
   },
   win: {
     target: [
