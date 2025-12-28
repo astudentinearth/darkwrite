@@ -2,5 +2,10 @@ import { app } from "electron";
 import "reflect-metadata";
 import { init } from "./init";
 
+const lock = app.requestSingleInstanceLock();
 
-app.whenReady().then(() => init());
+if (!lock) {
+  app.quit();
+} else {
+  app.whenReady().then(() => init());
+}
