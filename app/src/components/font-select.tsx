@@ -1,10 +1,12 @@
 import useFonts from "@/query/use-fonts";
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { getOperatingSystem } from "@/lib/platform";
+import { OS } from "@/common/os";
 
 export default function FontSelect(props: {
   value?: string;
@@ -14,6 +16,7 @@ export default function FontSelect(props: {
   const fonts = useFonts().data;
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null!);
   const items = useMemo(
     () =>
       fonts
@@ -33,11 +36,31 @@ export default function FontSelect(props: {
         )),
     [fonts, props.onValueChange, query],
   );
-  return (
+
+  const saveOnTextInput = (value: string) => {
+    props.onValueChange?.call(undefined, value);
+  };
+
+  return getOperatingSystem() == OS.MACOS ? (
+    <Input
+      defaultValue={props.value}
+      placeholder="Type a font name"
+      ref={inputRef}
+      className="w-fit h-fit"
+      onKeyDown={(e) => {
+        if (e.key === "Enter") saveOnTextInput(inputRef.current.value);
+      }}
+      onBlur={(e) => saveOnTextInput(e.target.value)}
+    />
+  ) : (
     <Popover modal open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button variant={"outline"} className={cn("w-fit h-fit", props.className)}>
-          {props.value?.replaceAll('"', "") ?? "Choose font"} <ChevronDown size={16} />
+        <Button
+          variant={"outline"}
+          className={cn("w-fit h-fit", props.className)}
+        >
+          {props.value?.replaceAll('"', "") ?? "Choose font"}{" "}
+          <ChevronDown size={16} />
         </Button>
       </PopoverTrigger>
       <PopoverContent
@@ -49,7 +72,10 @@ export default function FontSelect(props: {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
         />
-        <div className="scroll-view overflow-y-auto h-72 grow select-none"> {items}</div>
+        <div className="scroll-view overflow-y-auto h-72 grow select-none">
+          {" "}
+          {items}
+        </div>
       </PopoverContent>
     </Popover>
   );

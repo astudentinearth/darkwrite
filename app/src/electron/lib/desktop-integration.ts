@@ -3,8 +3,7 @@ import { app, BrowserWindow, nativeTheme, systemPreferences } from "electron";
 import _ from "lodash";
 import os from "os";
 import { ThemeMode } from "../types";
-import { OS } from "./os";
-import { getFonts2 } from "font-list";
+import { OS } from "../../common/os";
 import { Font } from "@/common/font";
 import { DarkwriteDesktopClientInfo } from "@/common/client";
 
@@ -31,6 +30,12 @@ export class DesktopIntegration {
   }
 
   static async getAvailableFonts(): Promise<Font[]> {
+    // FIXME: The font-list package implodes on macOS
+    // due to some CJS issue. We'll fall back to text
+    // fields on macOS until we figure out how to call
+    // CoreText directly.
+    if (os.platform() == "darwin") return [];
+    const { getFonts2 } = await import("font-list");
     const fonts = await getFonts2();
     const list = fonts.map(
       (f) => ({ family: f.familyName, monospace: f.monospace }) satisfies Font,
@@ -49,7 +54,7 @@ export class DesktopIntegration {
       electronVersion: process.versions.electron,
       isPackaged: app.isPackaged,
       nodeVersion: process.versions.node,
-      os: os.platform(),
+      os: os.platform() as OS,
       version: app.getVersion(),
     };
   }

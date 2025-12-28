@@ -8,6 +8,7 @@ import "./i18n";
 import { correctWorkspaceState, initializeUserPrefs } from "./init";
 import { ReactRootContainer } from "./react-root-helper";
 import { useOnboardingState } from "./features/onboarding/onboarding-state";
+import { initalizePlatform } from "./lib/platform";
 
 const renderApp = async () => {
   await correctWorkspaceState();
@@ -25,6 +26,7 @@ const initialize = async () => {
   DarkwriteAPIClient.initialize(APIClientMode.LOCAL);
   init({ data });
   await initializeUserPrefs();
+  await initalizePlatform();
   if ((await DarkwriteAPIClient.onboarding.isCompleted()) === false) {
     if (
       (await DarkwriteAPIClient.onboarding.isAlphaMigrationPerformed()) ==
