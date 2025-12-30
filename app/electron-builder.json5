@@ -45,5 +45,6 @@
     target: ["AppImage", "deb"],
     category: "Productivity",
     artifactName: "${productName}.${ext}",
+    icon: "resources/512x512.png"
   },
 }

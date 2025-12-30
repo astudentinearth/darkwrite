@@ -1,0 +1,8 @@
+# affinity lockfiles
+*.af~lock~
+
+# backup files
+*.swp
+*.bak
+*.tmp
+
