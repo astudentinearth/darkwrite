@@ -1,4 +1,4 @@
-import { EditorView } from "prosemirror-view";
+import { EditorView } from "@tiptap/pm/view";
 import { nanoid } from "nanoid";
 import { ImageExtensionConfig } from "./image-config";
 

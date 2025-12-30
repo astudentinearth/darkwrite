@@ -8,6 +8,7 @@ import Toolbar from "./toolbar";
 import { getOperatingSystem } from "@/lib/platform";
 import { OS } from "@/common/os";
 import { InitialUserSettings } from "@/init";
+import TrafficLightsPlaceholder from "./traffic-lights-placeholder";
 
 export type TitlebarProps = React.HTMLAttributes<HTMLDivElement> & {
   refObject: RefObject<HTMLDivElement | null>;
@@ -21,11 +22,7 @@ export function Titlebar(props: TitlebarProps) {
       ref={props.refObject}
       className="titlebar h-12 bg-background shrink-0 flex [&>div]:shrink-0 p-2 justify-start gap-2 items-center"
     >
-      {props.isSidebarCollapsed &&
-        getOperatingSystem() === OS.MACOS &&
-        !InitialUserSettings.settings.appearance.useSystemWindowFrame && (
-          <div className="w-18"></div>
-        )}
+      <TrafficLightsPlaceholder />
       <HeaderbarButton
         data-testid="button-expand-sidebar"
         className={cn(!props.isSidebarCollapsed && "hidden")}

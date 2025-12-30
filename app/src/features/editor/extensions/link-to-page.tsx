@@ -13,7 +13,7 @@ import {
 import { mergeAttributes, Node } from "@tiptap/core";
 import { NodeViewWrapper, ReactNodeViewRenderer } from "@tiptap/react";
 import { File } from "lucide-react";
-import { Plugin } from "prosemirror-state";
+import { Plugin } from "@tiptap/pm/state";
 import { MouseEvent, use, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { DarkwriteEditorContext } from "../context";

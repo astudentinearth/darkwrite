@@ -45,3 +45,10 @@ export const initalizeAPI = async () => {
 contextBridge.exposeInMainWorld("webUtils", webUtils);
 contextBridge.exposeInMainWorld("initPreload", initalizeAPI);
 contextBridge.exposeInMainWorld("isElectron", true);
+
+contextBridge.exposeInMainWorld("events", {
+  onEnterFullScreen: (callback: () => void) =>
+    ipcRenderer.on("enter-full-screen", () => callback()),
+  onExitFullScreen: (callback: () => void) =>
+    ipcRenderer.on("exit-full-screen", () => callback()),
+});

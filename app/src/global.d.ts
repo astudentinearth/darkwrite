@@ -28,6 +28,10 @@ declare global {
     webUtils: WebUtils;
     initPreload: PreloadInitFunction;
     isElectron: true | undefined;
+    events: {
+      onEnterFullScreen: (callback: () => void) => void;
+      onExitFullScreen: (callback: () => void) => void;
+    };
   }
 
   interface Navigator {

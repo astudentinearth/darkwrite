@@ -34,15 +34,25 @@ export function constructWindow(
     },
     ...(process.platform != "darwin"
       ? {
-          titleBarOverlay:
-            titleBarStyle == "hidden"
-              ? metadata.windowDefaults.titleBarOverlay
-              : undefined,
-        }
+        titleBarOverlay:
+          titleBarStyle == "hidden"
+            ? metadata.windowDefaults.titleBarOverlay
+            : undefined,
+      }
       : {}),
     autoHideMenuBar: true,
     // TODO: Persist window size
     width: metadata.windowDefaults.width,
     height: metadata.windowDefaults.height,
   };
+}
+
+export function setupWindowEvents(window: Electron.BrowserWindow) {
+  window.on("enter-full-screen", () => {
+    window.webContents.send("enter-full-screen");
+  });
+
+  window.on("leave-full-screen", () => {
+    window.webContents.send("exit-full-screen");
+  });
 }

@@ -55,3 +55,8 @@ The main process code is located under `src/electron`. It is responsible for man
 The main process code is organized into feature-specific modules under `src/electron/note`, `src/electron/database`, and `src/electron/workspace`. Each module contains the necessary code to handle its respective feature.
 
 IPC communication between the renderer and main process is handled via the `src/electron/ipc` directory, which contains the API bridge and handlers. The types are checked automatically on compile time, and the IPC handlers are exposed automatically from a single router object.
+
+# Translations 
+Translations are managed using i18next. All translation files are located under `src/locales`. Each language has its own JSON file containing the translations for that language.
+
+When adding new translations, ensure that the keys are consistent across all language files. Use descriptive keys that clearly indicate the purpose of the translation.
