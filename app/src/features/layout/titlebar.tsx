@@ -5,9 +5,6 @@ import { RefObject } from "react";
 import { HistoryNavigation } from "./navigation";
 import PageTitle from "./page-title";
 import Toolbar from "./toolbar";
-import { getOperatingSystem } from "@/lib/platform";
-import { OS } from "@/common/os";
-import { InitialUserSettings } from "@/init";
 import TrafficLightsPlaceholder from "./traffic-lights-placeholder";
 
 export type TitlebarProps = React.HTMLAttributes<HTMLDivElement> & {
