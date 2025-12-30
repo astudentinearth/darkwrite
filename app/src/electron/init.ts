@@ -15,7 +15,10 @@ import { webcontentsUrl } from "./metadata.json";
 import { ElectronPrefsModel } from "./prefs";
 import { HealthService } from "./service/health.service";
 import { WorkspaceService } from "./workspace/workspace.service";
-import { constructWindow, setupWindowEvents as setupBrowserWindowEvents } from "./window";
+import {
+  constructWindow,
+  setupWindowEvents as setupBrowserWindowEvents,
+} from "./window";
 
 import installExtension, {
   REACT_DEVELOPER_TOOLS,
@@ -31,7 +34,12 @@ let win: BrowserWindow | null;
 
 async function createWindow() {
   InitializeElectronAPI();
-  win = new BrowserWindow(constructWindow(ElectronPrefsModel.get()));
+  win = new BrowserWindow(
+    constructWindow(
+      ElectronPrefsModel.get(),
+      ElectronPrefsModel.getDefaultWindowBackground(),
+    ),
+  );
 
   setupBrowserWindowEvents(win);
 

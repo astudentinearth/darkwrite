@@ -7,6 +7,7 @@ import {
 } from "electron";
 
 const template: Array<MenuItemConstructorOptions> = [
+  { role: "editMenu" },
   {
     label: "Tools",
     submenu: [
@@ -67,6 +68,7 @@ const template: Array<MenuItemConstructorOptions> = [
       },
     ],
   },
+  { role: "windowMenu" },
 ];
 
 if (process.platform === "darwin") {

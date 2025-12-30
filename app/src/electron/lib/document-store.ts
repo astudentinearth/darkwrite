@@ -41,8 +41,9 @@ export class DocumentFileStore implements IDocumentStore {
 
   async ls() {
     const files = await fslib.ls(this.directory);
-    // remove .json
-    return files.map((f) => f.substring(0, f.length - 5));
+    // only keep .json files and strip the .json extension
+    const jsonFiles = files.filter((f) => f.endsWith(".json"));
+    return jsonFiles.map((f) => f.substring(0, f.length - 5));
   }
 
   async delete(id: string) {

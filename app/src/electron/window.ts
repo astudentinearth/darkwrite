@@ -19,6 +19,7 @@ function getTitlebarStyle(prefs: DarkwriteUserSettings) {
 
 export function constructWindow(
   prefs: DarkwriteUserSettings,
+  backgroundColor: string = "#000",
 ): BrowserWindowConstructorOptions {
   const titleBarStyle = getTitlebarStyle(prefs);
   return {
@@ -44,6 +45,7 @@ export function constructWindow(
     // TODO: Persist window size
     width: metadata.windowDefaults.width,
     height: metadata.windowDefaults.height,
+    backgroundColor,
   };
 }
 

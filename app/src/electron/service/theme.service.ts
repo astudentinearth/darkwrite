@@ -43,6 +43,20 @@ export class ThemeService {
     await this.themeStore.write(theme.id, themeString);
   }
 
+  async getById(id: string) {
+    const defaultTheme = DEFAULT_THEMES[id];
+    if (defaultTheme) return _.cloneDeep(defaultTheme);
+
+    try {
+      const themeString = await this.themeStore.read(id);
+      const theme = this.parseTheme(themeString, id);
+      return theme;
+    } catch (error) {
+      log.error(`Failed to get theme ${id}.`, error);
+      return null;
+    }
+  }
+
   async getThemes() {
     const ids = await this.themeStore.ls();
     const themes: Record<string, Theme> = _.cloneDeep(DEFAULT_THEMES);
