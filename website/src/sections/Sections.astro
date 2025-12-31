@@ -1,11 +1,14 @@
 ---
+import UseCases from "../components/UseCases.astro";
 import Section from "./Section.astro";
 import SectionBody from "./SectionBody.astro";
 import SectionContent from "./SectionContent.astro";
 import SectionHeading from "./SectionHeading.astro";
 ---
 
-<div class="max-w-320 w-full mt-48 flex flex-col items-center gap-24 px-6">
+<div
+  class="max-w-320 w-full mt-24 lg:mt-48 flex flex-col items-center gap-12 lg:gap-24 px-6"
+>
   <Section>
     <SectionContent>
       <SectionHeading>Express your thoughts.</SectionHeading>
@@ -17,6 +20,7 @@ import SectionHeading from "./SectionHeading.astro";
     </SectionContent>
     <img src="/section1.webp" />
   </Section>
+  <UseCases />
   <Section>
     <SectionContent class="md:order-1">
       <SectionHeading>Customization, redefined.</SectionHeading>
@@ -24,8 +28,7 @@ import SectionHeading from "./SectionHeading.astro";
         Some notes deserve a unique color - and you deserve a workspace that
         reflects you.
         <br />
-        Darkwrite is designed to be yours - from the colors to the fonts of your
-        choice.
+        Darkwrite is designed to be yours - from the colors to the fonts of your choice.
       </SectionBody>
     </SectionContent>
     <img class="md:-order-1" src="/section2.webp" />

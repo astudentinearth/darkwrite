@@ -1,0 +1,63 @@
+---
+const useCases = [
+  { url: "/personal.webp", title: "Personal" },
+  { url: "/work.webp", title: "Work" },
+  { url: "/school.webp", title: "School" },
+  { url: "/development.webp", title: "Development" },
+  { url: "/docs.webp", title: "Docs" },
+];
+---
+
+<div class="w-full flex flex-col items-center gap-6">
+  <div class="flex items-center gap-2 w-full flex-wrap justify-center">
+    {
+      useCases.map((useCase, index) => (
+        <button
+          data-state={index === 0 ? "active" : "inactive"}
+          data-url={useCase.url}
+          class="chip usecase"
+        >
+          {useCase.title}
+        </button>
+      ))
+    }
+  </div>
+  <img
+    src="/personal.webp"
+    id="use-case-img"
+    class="border rounded-lg max-w-400 drop-shadow-2xl w-full"
+  />
+</div>
+
+<script>
+  const buttons = document.querySelectorAll(".usecase");
+  const useCaseImg = document.getElementById("use-case-img");
+  let currentIndex = Array.from(buttons).findIndex(
+    (btn) => btn.getAttribute("data-state") === "active",
+  );
+
+  const interval = setInterval(() => {
+    const nextIndex = (currentIndex + 1) % buttons.length;
+    buttons.forEach((b, i) =>
+      b.setAttribute("data-state", i === nextIndex ? "active" : "inactive"),
+    );
+    const url = buttons[nextIndex].getAttribute("data-url");
+    if (useCaseImg && url) {
+      useCaseImg.setAttribute("src", url);
+    }
+    currentIndex = nextIndex;
+  }, 4000);
+
+  buttons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      buttons.forEach((b) => b.setAttribute("data-state", "inactive"));
+      btn.setAttribute("data-state", "active");
+      const url = btn.getAttribute("data-url");
+      if (useCaseImg && url) {
+        useCaseImg.setAttribute("src", url);
+      }
+      currentIndex = Array.from(buttons).indexOf(btn);
+      clearInterval(interval);
+    });
+  });
+</script>
