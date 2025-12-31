@@ -53,7 +53,7 @@ export function Sidebar(props: SidebarProps) {
           <PanelRightOpen width={18} height={18} />
         </HeaderbarButton>
       </div>
-      <div className="h-full w-full grow pl-lg pr-sm py-0 overflow-y-auto scroll-view gutter-stable">
+      <div className="h-full w-full grow pl-large pr-small py-0 overflow-y-auto scroll-view gutter-stable">
         <div className="flex gap-2 flex-col mb-16 max-w-full">
           <WorkspaceSwitcher />
           <CreatePageButton />

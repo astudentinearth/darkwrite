@@ -23,6 +23,7 @@ import {
 import installExtension, {
   REACT_DEVELOPER_TOOLS,
 } from "electron-devtools-installer";
+import { setupCsp } from "./csp";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -47,7 +48,7 @@ async function createWindow() {
     shell.openExternal(url);
     return { action: "deny" };
   });
-
+  //setupCsp();
   if (is.dev && DEV_SERVER_URL) {
     await win.loadURL(DEV_SERVER_URL);
     win.webContents.openDevTools({ mode: "detach" });
