@@ -48,7 +48,7 @@ async function createWindow() {
     shell.openExternal(url);
     return { action: "deny" };
   });
-  //setupCsp();
+  setupCsp();
   if (is.dev && DEV_SERVER_URL) {
     await win.loadURL(DEV_SERVER_URL);
     win.webContents.openDevTools({ mode: "detach" });

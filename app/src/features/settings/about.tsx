@@ -12,6 +12,18 @@ import {
 import { useTranslation } from "react-i18next";
 import { useUpdate } from "../update/use-update";
 
+function AboutButton(props: { children: React.ReactNode; href: string }) {
+  return (
+    <a
+      href={props.href}
+      target="_blank"
+      className="flex gap-2 items-center rounded-lg h-fit px-large text-foreground py-medium bg-view-2 hover:bg-view-2/80 w-full"
+    >
+      {props.children}
+    </a>
+  );
+}
+
 export default function About() {
   const { data } = useQuery({
     queryKey: ["client-info"],
@@ -23,7 +35,7 @@ export default function About() {
     refetch();
   };
   return (
-    <div className="w-full h-full flex flex-col justify-center items-center pt-3 gap-1 [&_a]:text-primary-text [&_a]:hover:underline">
+    <div className="w-full h-full flex flex-col justify-center items-center pt-3 gap-1">
       <img src="darkwrite_icon.svg" className="size-24 drop-shadow-2xl" />
       <h1 className="text-3xl font-semibold flex items-end gap-2 mt-4">
         Darkwrite
@@ -33,49 +45,52 @@ export default function About() {
         {data?.os} | Electron {data?.electronVersion} | Node {data?.nodeVersion}{" "}
         | {data?.isPackaged ? "Packaged" : "Unpackaged"}
       </span>
-      <div className="flex gap-2 flex-col text-center items-center mt-4 [&>a]:flex [&>a]:gap-2 [&>a]:items-center">
+      <div className="gap-2 text-center grid w-120 grid-cols-[1fr_1fr] items-center mt-4">
         {updateData ? (
-          <Alert>
+          <div className="bg-view-2 col-span-2 rounded-lg px-large py-medium flex justify-between items-center">
             {!updateData.updateAvailable ? (
               t("toast.update.upToDate")
             ) : (
               <>
-                <span>
+                <span className="flex">
                   {t("toast.update.description", {
                     version: updateData.latest,
                   })}
                 </span>
-                <a href={updateData.release_page} target="_blank">
+                <a
+                  href={updateData.release_page}
+                  className="text-primary-text hover:underline"
+                >
                   {t("toast.update.releasePageButton")}
                 </a>
               </>
             )}
-          </Alert>
+          </div>
         ) : (
-          <a className="cursor-pointer" onClick={checkUpdate}>
+          <a
+            className="cursor-pointer col-span-2 px-large py-medium bg-view-2 rounded-lg hover:underline flex items-center gap-2 justify-center"
+            onClick={checkUpdate}
+          >
             <RotateCw className={cn(isFetching && "animate-spin")} size={18} />
             {t("settings.about.checkUpdates")}
           </a>
         )}
-        <a target="_blank" href="https://github.com/astudentinearth/darkwrite">
+        <AboutButton href="https://github.com/astudentinearth/darkwrite">
           <Code2 size={18} />
           {t("settings.about.sourceCode")}
-        </a>
-        <a target="_blank" href="https://darkwrite.app">
+        </AboutButton>
+        <AboutButton href="https://darkwrite.app">
           <ArrowUpRightFromSquare size={18} />
           {t("settings.about.website")}
-        </a>
-        <a target="_blank" href="https://darkwrite.app/privacy">
+        </AboutButton>
+        <AboutButton href="https://darkwrite.app/privacy">
           <Lock size={18} />
           {t("settings.about.privacy")}
-        </a>
-        <a
-          target="_blank"
-          href="https://github.com/astudentinearth/darkwrite/blob/dev/LICENSE"
-        >
+        </AboutButton>
+        <AboutButton href="https://github.com/astudentinearth/darkwrite/blob/dev/LICENSE">
           <Scale size={18} />
           {t("settings.about.license")}
-        </a>
+        </AboutButton>
       </div>
     </div>
   );
