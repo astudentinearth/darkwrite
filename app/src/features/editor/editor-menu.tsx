@@ -27,6 +27,7 @@ import {
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useEditorCommand } from "./use-editor-command";
+import { PageSizeChooser } from "../export/page-size-chooser";
 
 export default function EditorMenu() {
   const commands = useEditorCommand();
@@ -69,10 +70,12 @@ export default function EditorMenu() {
               <FileText size={18} />
               {t("editor.menu.jsonExport")}
             </DropdownMenuItem>
+            <DropdownMenuSeparator />
             <DropdownMenuItem onSelect={exporter.exportPdf}>
               <FileText size={18} />
               PDF
             </DropdownMenuItem>
+            <PageSizeChooser className="bg-secondary mt-small" />
           </DropdownMenuSubContent>
         </DropdownMenuSub>
         <DropdownMenuItem onSelect={importer.importNotes}>

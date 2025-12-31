@@ -4,6 +4,7 @@ import {
   currentDocumentToSerializable,
   useEditorStore,
 } from "@/context/editor-store";
+import { useLocalStore } from "@/context/local-state";
 import { EditorContent } from "@/features/editor/types";
 import { HtmlDocumentBuilder } from "@/features/export/html-document-builder";
 import { useNoteById } from "@/query/use-note-by-id";
@@ -77,7 +78,8 @@ export function usePersistedNoteExport(noteId: string) {
 
   const exportPdf = async () => {
     const html = await serializeHtml();
-    await DarkwriteAPIClient.note.exportPdf(html, note?.title);
+    const pageSize = useLocalStore.getState().pdfExportPageSize;
+    await DarkwriteAPIClient.note.exportPdf(html, note?.title, pageSize);
   };
 
   return { exportHTML, exportJSON, exportPdf };
@@ -121,7 +123,8 @@ export default function useNoteExport() {
       note?.title,
       note?.icon,
     );
-    await DarkwriteAPIClient.note.exportPdf(html, note?.title);
+    const pageSize = useLocalStore.getState().pdfExportPageSize;
+    await DarkwriteAPIClient.note.exportPdf(html, note?.title, pageSize);
   };
   return { exportHTML, exportJSON, exportPdf };
 }

@@ -23,6 +23,7 @@ import {
 } from "./dto/response/workspace.response";
 import { Font } from "./font";
 import { NoteExportFormat, NoteImportResult } from "./note";
+import { PageSize } from "./pdf";
 import { DarkwriteUserSettings } from "./settings";
 
 export interface INoteAPI {
@@ -39,7 +40,11 @@ export interface INoteAPI {
     fileType: NoteExportFormat,
     title?: string,
   ) => Promise<void>;
-  exportPdf: (html: string, title?: string) => Promise<void>;
+  exportPdf: (
+    html: string,
+    title?: string,
+    pageSize?: PageSize,
+  ) => Promise<void>;
   import: () => Promise<NoteImportResult>;
 }
 

@@ -78,8 +78,8 @@ export const ElectronNoteAPI: INoteAPI = {
     await writeFile(path, fileContent, "utf8");
   },
 
-  async exportPdf(html, title) {
-    const buffer = await printToPdf(html, title);
+  async exportPdf(html, title, pageSize = "A4") {
+    const buffer = await printToPdf(html, title, pageSize);
     if (!buffer) return;
     const value = await dialog.showSaveDialog(
       BrowserWindow.getFocusedWindow() ?? BrowserWindow.getAllWindows()[0],

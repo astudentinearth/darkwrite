@@ -1,4 +1,4 @@
-import { PageMargins } from "@/common/pdf";
+import { PageMargins, PageSize } from "@/common/pdf";
 import { BrowserWindow } from "electron";
 import log from "electron-log";
 import { writeFile } from "fs-extra";
@@ -12,7 +12,11 @@ async function saveTempFile(html: string) {
   return pathToFileURL(filePath).href;
 }
 
-export default async function printToPdf(html: string, title?: string) {
+export default async function printToPdf(
+  html: string,
+  title?: string,
+  pageSize: PageSize = "A4",
+) {
   const win = new BrowserWindow({
     show: false,
     width: 960,
@@ -30,7 +34,7 @@ export default async function printToPdf(html: string, title?: string) {
     win.setTitle(title ?? "Document");
     const pdfBuffer = await win.webContents.printToPDF({
       printBackground: true,
-      pageSize: "A4",
+      pageSize: pageSize,
       margins: PageMargins.A4,
     });
     return pdfBuffer;

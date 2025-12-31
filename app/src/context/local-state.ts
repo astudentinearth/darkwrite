@@ -1,3 +1,4 @@
+import { PageSize } from "@/common/pdf";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
@@ -21,6 +22,7 @@ type localStore = {
   alwaysShowWordCount: boolean;
   lastUpdateCheck: string;
   workspaceId: string;
+  pdfExportPageSize: PageSize;
 };
 
 type localStoreAction = {
@@ -34,6 +36,7 @@ type localStoreAction = {
   setAlwaysShowWordCount: (val: boolean) => void;
   setLastUpdateCheckTimestamp: (val: Date) => void;
   setWorkspaceId: (val: string) => void;
+  setPdfExportPageSize: (size: PageSize) => void;
 };
 
 export const useLocalStore = create<localStore & localStoreAction>()(
@@ -47,6 +50,7 @@ export const useLocalStore = create<localStore & localStoreAction>()(
       favoritesCollapsed: false,
       alwaysShowWordCount: false,
       lastUpdateCheck: "1970-01-01T00:00:00.000Z",
+      pdfExportPageSize: "A4",
       workspaceId: "",
       setFavoritesCollapsed: (val) => set({ favoritesCollapsed: val }),
       setAllNotesCollapsed: (val) => set({ allNotesCollapsed: val }),
@@ -63,6 +67,7 @@ export const useLocalStore = create<localStore & localStoreAction>()(
       setLastUpdateCheckTimestamp: (val) =>
         set({ lastUpdateCheck: val.toISOString() }),
       setWorkspaceId: (val) => set({ workspaceId: val }),
+      setPdfExportPageSize: (pdfExportPageSize) => set({ pdfExportPageSize }),
     }),
     {
       name: "local-state",

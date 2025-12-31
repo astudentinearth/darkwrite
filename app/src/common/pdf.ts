@@ -19,4 +19,30 @@ export const PageMargins = {
     left: 0.75,
     right: 0.75,
   } satisfies Margins,
+  A3: {
+    top: 1,
+    bottom: 1,
+    left: 1,
+    right: 1,
+  } satisfies Margins,
+  A5: {
+    top: 1,
+    bottom: 1,
+    left: 1,
+    right: 1,
+  } satisfies Margins,
+  Legal: {
+    top: 1,
+    bottom: 1,
+    left: 1,
+    right: 1,
+  } satisfies Margins,
+  Tabloid: {
+    top: 1,
+    bottom: 1,
+    left: 1,
+    right: 1,
+  } satisfies Margins,
 };
+
+export type PageSize = keyof typeof PageMargins;
