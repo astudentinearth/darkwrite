@@ -41,7 +41,7 @@ export function Layout() {
         data-testid="sidebar-resize-handle"
         onMouseDown={handleMouseDown}
         className={cn(
-          "w-[1px] h-full flex cursor-ew-resize resize-handle relative",
+          "w-px h-full flex cursor-ew-resize resize-handle relative",
           isSidebarCollapsed && "hidden",
         )}
       ></div>

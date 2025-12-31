@@ -115,6 +115,12 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-sm: calc(var(--radius) - 4px);
 
+  --spacing-sm: 0.25rem;
+  --spacing-md: 0.5rem;
+  --spacing-lg: 0.75rem;
+  --spacing-xl: 1rem;
+  --spacing-2xl: 1.5rem;
+
   --animate-accordion-down: accordion-down 0.2s ease-out;
   --animate-accordion-up: accordion-up 0.2s ease-out;
 
@@ -332,6 +338,10 @@ body,
   animation: slide-up-and-fade-in 0.5s cubic-bezier(0.16, 1, 0.3, 1);
   animation-fill-mode: forwards;
   animation-iteration-count: 1;
+}
+
+@utility gutter-stable {
+  scrollbar-gutter: stable;
 }
 
 @keyframes app-fade-in {
