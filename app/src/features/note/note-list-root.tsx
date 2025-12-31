@@ -35,7 +35,7 @@ export default function NoteListRoot() {
     <Collapsible open={open} onOpenChange={setOpen}>
       <CollapsibleTrigger asChild>
         <Button
-          className="text-xs p-1 gap-1 h-fit w-full text-foreground/80 hover:text-foreground justify-start"
+          className="text-xs p-1 gap-1 h-fit w-full text-muted-foreground hover:text-foreground justify-start"
           variant={"ghost"}
         >
           <ChevronRight

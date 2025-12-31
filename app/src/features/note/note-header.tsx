@@ -69,7 +69,13 @@ export default React.memo(function NoteHeader({
           !collapsible && "hover:bg-transparent",
         )}
       >
-        <span className={cn(collapsible && "group-hover:hidden")}>
+        <span
+          className={cn(
+            "opacity-80",
+            collapsible && "group-hover:hidden",
+            active && "opacity-100",
+          )}
+        >
           {getNoteIcon(note.icon ?? undefined)}
         </span>
         <ChevronRight
@@ -83,7 +89,10 @@ export default React.memo(function NoteHeader({
       </Button>
       <span
         title={note.title}
-        className="w-full overflow-hidden text-ellipsis break-words whitespace-nowrap"
+        className={cn(
+          "w-full overflow-hidden text-ellipsis wrap-break-word whitespace-nowrap opacity-80 hover:opacity-100",
+          active && "opacity-100",
+        )}
       >
         {note.title}
       </span>

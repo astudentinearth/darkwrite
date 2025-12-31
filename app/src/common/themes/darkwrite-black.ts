@@ -4,7 +4,7 @@ export const DarkwriteDim: Theme = {
   name: "Darkwrite Dim",
   mode: "dark",
   colors: {
-    "--foreground": "hsl(0 0% 100%)",
+    "--foreground": "hsl(0 0% 90%)",
     "--background": "hsl(0 0% 0%)",
     "--view-1": "hsl(0 0% 4%)",
     "--view-2": "hsl(0 0% 6%)",
@@ -15,7 +15,7 @@ export const DarkwriteDim: Theme = {
     "--secondary": "hsl(0 0% 10%)",
     "--secondary-foreground": "hsl(0 0% 100%)",
     "--muted": "hsl(0 0% 10%)",
-    "--muted-foreground": "hsl(0 0% 89%)",
+    "--muted-foreground": "hsl(0 0% 90% / 0.7)",
     "--destructive": "hsl(0 51% 55%)",
     "--destructive-foreground": "hsl(210 40% 98%)",
     "--disabled": "hsl(0 0% 16%)",

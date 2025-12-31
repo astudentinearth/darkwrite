@@ -46,6 +46,7 @@ export default function NoteItem({ note }: { note: NoteDTO }) {
             setOpen={setOpen}
             note={note}
             contextMenuOpen={contextMenuOpen}
+            className="opacity-70 hover:opacity-100"
           />
         </NoteContextMenuContainer>
       </CollapsibleTrigger>

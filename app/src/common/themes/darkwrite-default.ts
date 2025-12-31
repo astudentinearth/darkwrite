@@ -4,7 +4,7 @@ export const DarkwriteDefault: Theme = {
   name: "Darkwrite Default",
   mode: "dark",
   colors: {
-    "--foreground": "hsl(0 0% 100%)",
+    "--foreground": "hsl(0 0% 90%)",
     "--background": "hsl(0 0% 5%)",
     "--view-1": "hsl(0 0% 6%)",
     "--view-2": "hsl(0 0% 11%)",
@@ -15,7 +15,7 @@ export const DarkwriteDefault: Theme = {
     "--secondary": "hsl(0 0% 20%)",
     "--secondary-foreground": "hsl(0 0% 100%)",
     "--muted": "hsl(0 0% 17%)",
-    "--muted-foreground": "hsl(0 0% 89%)",
+    "--muted-foreground": "hsl(0 0% 90% / 0.7)",
     "--destructive": "hsl(0 51% 55%)",
     "--destructive-foreground": "hsl(210 40% 98%)",
     "--disabled": "hsl(0 0% 22%)",
