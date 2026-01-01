@@ -1,15 +1,23 @@
 # 1.0.3-beta.1
+## 🌟 Features
+- Added more page sizes to PDF export (it remembers the latest one)
+- New logo
+- Updated about screen
+
 ## ✨ Improvements and fixes
 - Fix macOS build crashing on startup
 - Fall back to text inputs for font customization on macOS
 - Fix traffic light position on macOS
+- Updated sidebar spacing
+- Update default theme to have softer text color
+- Add edit and window menus
 
 ## 🛠️ Technical changes
 - Deprecated `appearance.experimental.darwinCustomTitlebarEnabled` settings key
   - It is now directly tied to `appearance.useSystemWindowFrame`, and the titlebar is now merged by default
 - Removed compile time metadata:
   - `windowDefaults.wcoEnabledPlatforms` - since macOS is no longer excluded, the key is no longer used
-
+- Icons are now stored in res/icons, and subprojects refer to them with symbolic links to reduce duplication
 
 # 1.0.2-beta.2
 ## ✨ Improvements and fixes
