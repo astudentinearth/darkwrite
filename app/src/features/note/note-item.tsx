@@ -1,34 +1,19 @@
 import { NoteDTO } from "@/common/dto";
-import { Rank } from "@/common/rank";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { useState } from "react";
-import NoteHeader from "./note-header";
-import NoteList from "./note-list";
-import { useNoteChildren } from "./use-note-children";
 import { NoteContextMenuContainer } from "./note-context-menu";
+import NoteHeader from "./note-header";
+import { NoteList2 } from "./note-list-2";
+import { useOrderHints } from "./note-store";
 
 export default function NoteItem({ note }: { note: NoteDTO }) {
   const [open, setOpen] = useState(false);
   const [contextMenuOpen, setContextMenuOpen] = useState(false);
-  const children = useNoteChildren(note.id).data ?? [];
-
-  const computeLeadingHint = () => {
-    if (children.length === 0) return Rank.default().toString();
-    const firstChildRank = new Rank(children[0].orderHint);
-    return firstChildRank.prev().toString();
-  };
-
-  const computeFinalHint = () => {
-    if (children.length === 0) return Rank.default().toString();
-    const lastChildRank = new Rank(children[children.length - 1].orderHint);
-    return lastChildRank.next().toString();
-  };
-
-  const finalOrderHint = computeFinalHint();
+  const { finalHint } = useOrderHints(note.id);
 
   return (
     <Collapsible open={open}>
@@ -36,10 +21,10 @@ export default function NoteItem({ note }: { note: NoteDTO }) {
         <NoteContextMenuContainer
           note={note}
           onOpenChange={setContextMenuOpen}
-          finalOrderHint={finalOrderHint}
+          finalOrderHint={finalHint}
         >
           <NoteHeader
-            finalOrderHint={finalOrderHint}
+            finalOrderHint={finalHint}
             collapsible
             showCreate
             open={open}
@@ -51,12 +36,7 @@ export default function NoteItem({ note }: { note: NoteDTO }) {
         </NoteContextMenuContainer>
       </CollapsibleTrigger>
       <CollapsibleContent className="pl-3">
-        <NoteList
-          parentId={note.id}
-          notes={children}
-          leadingOrderHint={computeLeadingHint()}
-          finalOrderHint={computeFinalHint()}
-        />
+        <NoteList2 parentId={note.id} className="select-none" />
       </CollapsibleContent>
     </Collapsible>
   );

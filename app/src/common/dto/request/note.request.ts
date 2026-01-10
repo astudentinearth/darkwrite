@@ -1,8 +1,7 @@
-
 export interface CreateNoteDTO {
   title: string;
-  parentId?: string | null; 
-  icon?: string | null; 
+  parentId?: string | null;
+  icon?: string | null;
   databaseId?: string | null;
   workspaceId: string;
   orderHint?: string;
@@ -11,10 +10,10 @@ export interface CreateNoteDTO {
 
 export interface UpdateNoteDTO {
   title?: string;
-  parentId?: string | null; 
-  icon?: string | null; 
+  parentId?: string | null;
+  icon?: string | null;
   databaseId?: string | null;
-  workspaceId?: string;
+  workspaceId?: string | null;
   propertyValues?: Record<string, string> | null;
   isFavorite?: boolean;
   isTrashed?: boolean;
