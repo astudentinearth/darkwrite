@@ -26,8 +26,9 @@ export type IndexedPredicate<ValueType = unknown> = Predicate<
   [index: number]
 >;
 
-export type Promisfy<Type> =
-  Type extends Promise<Awaited<Type>> ? Type : Promise<Type>;
+export type Promisfy<Type> = [Type] extends [Promise<Awaited<Type>>]
+  ? Type
+  : Promise<Type>;
 
 export type PromisfyFunction<Func extends (...args: any[]) => any> = (
   ...args: Parameters<Func>

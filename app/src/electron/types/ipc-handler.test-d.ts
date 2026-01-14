@@ -132,3 +132,22 @@ expectTypeOf<PreloadAPI>().toEqualTypeOf<{
   };
   exit: () => Promise<void>;
 }>();
+
+// test union type parameter
+
+//eslint-disable-next-line @typescript-eslint/no-unused-vars
+const handlerWithUnion = new IPCHandler(false, (id: string | null) => {
+  return id;
+});
+
+type UnionHandlerType = typeof handlerWithUnion;
+type UnionListener = UnionHandlerType["listener"];
+type UnionParams = GetMainHandlerParams<UnionListener>;
+type UnionReturn = GetPreloadReturnType<UnionListener>;
+type UnionInferred = InferHandler<UnionHandlerType>;
+
+expectTypeOf<UnionParams>().toEqualTypeOf<[string | null]>();
+expectTypeOf<UnionReturn>().toEqualTypeOf<Promise<string | null>>();
+expectTypeOf<UnionInferred>().toEqualTypeOf<
+  (id: string | null) => Promise<string | null>
+>();

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { type IpcMainInvokeEvent } from "electron";
-import { Promisfy, type OmitFirstParameter } from "@common/ts-util"
+import { Promisfy, type OmitFirstParameter } from "@common/ts-util";
 
 export type IPCMainListener = (
   event: IpcMainInvokeEvent,
@@ -19,7 +19,7 @@ export type IPCListener<WithEvent extends boolean> = WithEvent extends true
 
 export type GetMainHandlerParams<Handler extends IPCMainListenerUnion> =
   Parameters<Handler> extends [infer First, ...args: infer Args]
-    ? First extends Electron.IpcMainInvokeEvent
+    ? [First] extends [Electron.IpcMainInvokeEvent]
       ? Args
       : Parameters<Handler>
     : [];

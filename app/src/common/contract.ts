@@ -31,6 +31,10 @@ export interface INoteAPI {
   update: (id: string, dto: UpdateNoteDTO) => Promise<NoteResponseDTO>;
   delete: (id: string) => Promise<void>;
   getAllByWorkspaceId: (workspaceId: string) => Promise<NotesResponseDTO>;
+  getByParentId: (
+    workspaceId: string,
+    parentId: string | null,
+  ) => Promise<NotesResponseDTO>;
   getById: (id: string) => Promise<NoteResponseDTO>;
   getDocument: (id: string) => Promise<NoteContentResponseDTO>;
   setDocument: (id: string, serializedDocument: string) => Promise<void>;

@@ -49,6 +49,13 @@ src/features/editor contains a rich text editor based on TipTap/ProseMirror.
 ## Component usage
 Always check if a component already exists in `src/components` or `src/features` before creating a new one. If a component is reusable across multiple features, it should be placed in `src/components`. If it is specific to a feature, it should be placed in the respective feature directory.
 
+## API access
+Use the DarkwriteAPIClient class in @/api/api-client.ts when you need to call APIs from the frontend code. **DO NOT USE `window.api` directly.**
+
+## API contract
+The API is strictly typed. The type definitions are available in `@/common/contract.ts`
+If existing APIs cannot solve the problem, DO NOT create a new API without asking the user for specifications.
+
 # Main process architecture
 The main process code is located under `src/electron`. It is responsible for managing the application lifecycle, handling IPC communication, and interacting with the SQLite database via TypeORM.
 
@@ -60,3 +67,27 @@ IPC communication between the renderer and main process is handled via the `src/
 Translations are managed using i18next. All translation files are located under `src/locales`. Each language has its own JSON file containing the translations for that language.
 
 When adding new translations, ensure that the keys are consistent across all language files. Use descriptive keys that clearly indicate the purpose of the translation.
+
+# Dependencies
+If a new dependency is absolutely required to solve a problem, ask the user before proceeding with installation.
+
+# Code style
+- Indent with 2 spaces.
+- Use semicolons at the end of statements.
+- Use double quotes for strings.
+- Use camelCase for variable and function names.
+- Use PascalCase for React component names.
+- Keep lines under 80 characters.
+- Add JSDoc comments for exported symbols and complex code.
+- Do not add JSDoc comments on trivial methods/symbols that don't need explanation.
+
+# Code quality
+- NEVER use casts like `as unknown as Type`
+- If there's a TypeScript error you cannot resolve without casting, abort execution and ask for user confirmation.
+
+# Documentation
+> Always fetch the latest TipTap documentation, as TipTap v3 has introduced major changes.
+- [TipTap's docs](https://tiptap.dev/llms.txt)
+- [shadcn-ui docs](https://ui.shadcn.com/llms.txt)
+- [Vitest docs](https://vitest.dev/llms.txt)
+- [Vite docs](https://vite.dev/llms.txt)

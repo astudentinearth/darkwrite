@@ -1,3 +1,4 @@
+import { IsNull } from "typeorm";
 import { AppDataSource } from "../db";
 import { Note } from "../entity";
 
@@ -19,6 +20,12 @@ export const NoteDAO = {
 
   findAllByDatabaseId: async (databaseId: string) =>
     repo.findBy({ database: { id: databaseId } }),
+
+  findAllByParentId: async (workspaceId: string, parentId: string | null) =>
+    repo.findBy({
+      workspace: { id: workspaceId },
+      parentId: parentId === null ? IsNull() : parentId,
+    }),
 
   deleteById: async (id: string) => repo.delete({ id }),
   delete: async (note: Note) => repo.delete({ id: note.id }),

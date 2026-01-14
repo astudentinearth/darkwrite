@@ -24,3 +24,5 @@ export type NoteImportResult = {
   type: NoteExportFormat;
   content: string[];
 };
+
+export type OrderKey = "orderHint" | "favoriteOrderHint";

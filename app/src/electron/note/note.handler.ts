@@ -34,6 +34,20 @@ export const ElectronNoteAPI: INoteAPI = {
     return { notes: dtos };
   },
 
+  async getByParentId(workspaceId: string, parentId: string | null) {
+    const notes = await NoteQueryService.getByParentId(workspaceId, parentId);
+    const dtos = notes
+      .map((n) => n.mapToDTO())
+      .reduce(
+        (acc, current) => {
+          acc[current.id] = current;
+          return acc;
+        },
+        {} as Record<string, NoteDTO>,
+      );
+    return { notes: dtos };
+  },
+
   async getById(id) {
     const note = await NoteQueryService.getById(id);
     return { note: note ? note.mapToDTO() : null };
@@ -137,6 +151,7 @@ export const NoteApiBridge = {
     false,
     ElectronNoteAPI.getAllByWorkspaceId,
   ),
+  getByParentId: new IPCHandler(false, ElectronNoteAPI.getByParentId),
   getById: new IPCHandler(false, ElectronNoteAPI.getById),
   update: new IPCHandler(false, ElectronNoteAPI.update),
   getDocument: new IPCHandler(false, ElectronNoteAPI.getDocument),
