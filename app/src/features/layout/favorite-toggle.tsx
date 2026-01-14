@@ -7,13 +7,13 @@ import { Star } from "lucide-react";
 
 export default function FavoriteToggle() {
   const id = useNoteFromURL();
-  const { notes , nextFavoriteHint}= useNotes();
+  const { notes, nextFavoriteHint } = useNotes();
   const { update } = useUpdateNote();
   if (!notes || !id) return;
   const note = notes[id];
-  if(!note) return;
+  if (!note) return;
   const click = () => {
-    update({ id, dto: { isFavorite: !note.isFavorite, favoriteOrderHint: nextFavoriteHint} });
+    update({ id, dto: { isFavorite: !note.isFavorite } });
   };
   return (
     <HeaderbarButton onClick={click}>

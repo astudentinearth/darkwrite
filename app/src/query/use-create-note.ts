@@ -20,16 +20,19 @@ export const useCreateNoteMutation = (navigateAfter = false) => {
     },
   });
 
-  const create = (opts: {
-    title?: string;
-    icon?: string;
-    parentId?: string;
-    orderHint?: string;
-  }) => {
+  const create = (
+    opts: {
+      title?: string;
+      icon?: string;
+      parentId?: string | null;
+      orderHint?: string;
+    } = { parentId: null },
+  ) => {
     const dto: CreateNoteDTO = {
       workspaceId,
       title: "Untitled",
       favoriteOrderHint: "",
+      parentId: opts.parentId ?? null,
       ...opts,
     };
     mutation.mutateAsync(dto);

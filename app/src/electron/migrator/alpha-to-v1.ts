@@ -220,7 +220,7 @@ async function migrateNotesAndEmbeds(
     newNote.modifiedAt = new Date(oldNote.modified);
     newNote.isFavorite = oldNote.isFavorite === 1;
     newNote.isTrashed = oldNote.isTrashed === 1;
-    newNote.parentId = oldNote.parentID;
+    newNote.parentId = oldNote.parentID ?? null;
     newNote.workspace = workspace;
     newNote.favoriteOrderHint = "";
 

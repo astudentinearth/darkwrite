@@ -1,6 +1,6 @@
 export interface CreateNoteDTO {
   title: string;
-  parentId?: string | null;
+  parentId: string | null;
   icon?: string | null;
   databaseId?: string | null;
   workspaceId: string;

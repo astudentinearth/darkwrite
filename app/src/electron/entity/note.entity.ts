@@ -23,7 +23,7 @@ export class Note {
 
   /** The ID of the note which is one level higher in the tree than this note. Renames the `parentID` field from the previous iteration for consistency. */
   @Column({ type: "varchar", nullable: true })
-  parentId?: string | null;
+  parentId: string | null;
 
   /** The values for the custom properties this note has, according to the tied database property schema. Each property key is mapped directly to a value. */
   @Column({
