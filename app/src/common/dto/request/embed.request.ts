@@ -1,7 +1,13 @@
+import { z } from "zod";
 
-export interface CreateEmbedDTO {
-  workspaceId: string;
-  fileType: string;
-  file: File;
-}
+const isFile = (val: unknown): val is File => {
+  return typeof File !== "undefined" && val instanceof File;
+};
 
+export const CreateEmbedDTOSchema = z.object({
+  workspaceId: z.string(),
+  fileType: z.string(),
+  file: z.custom<File>(isFile),
+});
+
+export type CreateEmbedDTO = z.infer<typeof CreateEmbedDTOSchema>;
