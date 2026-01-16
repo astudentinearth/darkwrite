@@ -73,7 +73,7 @@ export function EditorView({ noteId }: { noteId: string }) {
         />
       )}
       <ConstrainedWidth fill={content?.customizations.widePage}>
-        {content && (
+        {false && (
           <DarkwriteEditor
             content={initialContent}
             commandItems={items}

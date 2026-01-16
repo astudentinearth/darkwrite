@@ -4,6 +4,7 @@ import { useCurrentWorkspace } from "./use-workspace";
 import { useNoteFromURL } from "./use-note-from-url";
 import { useNavigate } from "react-router-dom";
 
+/** @deprecated */
 export default function useDeleteNote() {
   const qc = useQueryClient();
   const workspace = useCurrentWorkspace();

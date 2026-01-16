@@ -4,12 +4,14 @@ import { Rank } from "@/common/rank";
 import { useLocalStore } from "@/context/local-state";
 import { useQuery } from "@tanstack/react-query";
 
+/** @deprecated */
 export interface NotesQueryData {
   notes: Record<string, NoteDTO>;
   nextFavoriteHint: string;
   finalOrderHint: string;
 }
 
+/** @deprecated */
 export async function notesFetcher(workspaceId: string) {
   const response =
     await DarkwriteAPIClient.note.getAllByWorkspaceId(workspaceId);

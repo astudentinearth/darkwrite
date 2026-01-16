@@ -15,8 +15,8 @@ export interface UpdateNoteDTO {
   databaseId?: string | null;
   workspaceId?: string | null;
   propertyValues?: Record<string, string> | null;
-  isFavorite?: boolean;
-  isTrashed?: boolean;
+  isFavorite?: boolean | null;
+  isTrashed?: boolean | null;
   orderHint?: string;
   favoriteOrderHint?: string;
 }

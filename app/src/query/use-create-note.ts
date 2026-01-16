@@ -5,6 +5,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useNotes } from "./use-notes";
 import { useNavigateToNote } from "@/hooks/use-navigate-to-note";
 
+/** @deprecated */
 export const useCreateNoteMutation = (navigateAfter = false) => {
   const workspaceId = useLocalStore((s) => s.workspaceId);
   const nav = useNavigateToNote();
