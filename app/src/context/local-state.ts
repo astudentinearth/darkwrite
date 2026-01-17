@@ -1,4 +1,6 @@
 import { PageSize } from "@/common/pdf";
+import { appSessionSlice } from "@/features/session/session-slice";
+import { store } from "@/features/store/redux";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
@@ -21,6 +23,7 @@ type localStore = {
   favoritesCollapsed: boolean;
   alwaysShowWordCount: boolean;
   lastUpdateCheck: string;
+  /** @deprecated use redux appSessionSlice instead */
   workspaceId: string;
   pdfExportPageSize: PageSize;
 };
@@ -35,6 +38,7 @@ type localStoreAction = {
   setFavoritesCollapsed: (val: boolean) => void;
   setAlwaysShowWordCount: (val: boolean) => void;
   setLastUpdateCheckTimestamp: (val: Date) => void;
+  /** @deprecated use redux appSessionSlice instead */
   setWorkspaceId: (val: string) => void;
   setPdfExportPageSize: (size: PageSize) => void;
 };
@@ -77,6 +81,7 @@ export const useLocalStore = create<localStore & localStoreAction>()(
 
 export const setWorkspaceId = (id: string) => {
   useLocalStore.setState({ workspaceId: id });
+  store.dispatch(appSessionSlice.actions.switchWorkspace(id));
 };
 
 export function toggleSidebar() {
