@@ -7,7 +7,9 @@ export const CreateWorkspaceDTOSchema = z.object({
   config: WorkspaceConfigSchema,
 });
 
-export type CreateWorkspaceDTO = z.infer<typeof CreateWorkspaceDTOSchema>;
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface CreateWorkspaceDTO
+  extends z.infer<typeof CreateWorkspaceDTOSchema> {}
 
 export const UpdateWorkspaceDTOSchema = z.object({
   name: z.string().optional(),
@@ -15,4 +17,6 @@ export const UpdateWorkspaceDTOSchema = z.object({
   config: WorkspaceConfigSchema.partial().optional(),
 });
 
-export type UpdateWorkspaceDTO = z.infer<typeof UpdateWorkspaceDTOSchema>;
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface UpdateWorkspaceDTO
+  extends z.infer<typeof UpdateWorkspaceDTOSchema> {}

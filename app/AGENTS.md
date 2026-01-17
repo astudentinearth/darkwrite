@@ -46,6 +46,9 @@ Global state is managed with Zustand.
 
 src/features/editor contains a rich text editor based on TipTap/ProseMirror.
 
+> [!IMPORTANT]
+> React Query is being deprecated from our codebase as part of a refactor. We are moving to Redux Toolkit with RTK Query. Do not check queries inside @/query/*. They are no longer relevant.
+
 ## Component usage
 Always check if a component already exists in `src/components` or `src/features` before creating a new one. If a component is reusable across multiple features, it should be placed in `src/components`. If it is specific to a feature, it should be placed in the respective feature directory.
 
@@ -80,6 +83,15 @@ If a new dependency is absolutely required to solve a problem, ask the user befo
 - Keep lines under 80 characters.
 - Add JSDoc comments for exported symbols and complex code.
 - Do not add JSDoc comments on trivial methods/symbols that don't need explanation.
+
+# File naming convention
+- Use kebab-case for file names.
+- TypeScript files should indicate their type in the filename if they fall into one of these categories:
+  - Tests: .test.ts or .test.tsx (or append .test to the filename, like .dao.test.ts)
+  - TypeORM entities: .entity.ts
+  - Main process services: .service.ts
+  - Main process DAOs: .dao.ts (or .repository.ts, however .dao.ts is the new convention)
+  - Main process IPC handlers: .handler.ts
 
 # Code quality
 - NEVER use casts like `as unknown as Type`

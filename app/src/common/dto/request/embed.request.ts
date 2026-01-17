@@ -10,4 +10,5 @@ export const CreateEmbedDTOSchema = z.object({
   file: z.custom<File>(isFile),
 });
 
-export type CreateEmbedDTO = z.infer<typeof CreateEmbedDTOSchema>;
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface CreateEmbedDTO extends z.infer<typeof CreateEmbedDTOSchema> {}

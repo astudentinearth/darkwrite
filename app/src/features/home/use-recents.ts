@@ -5,11 +5,10 @@ import { useMemo } from "react";
 
 export default function useRecents() {
   const notes = useNotes().notes;
-  const recents = useMemo(()=>{
+  const recents: NoteDTO[] = []; /*useMemo(()=>{
     if(!notes) return [] as NoteDTO[];
     const noteList = Object.values(notes).filter(notTrashed).toSorted(byUpdateTime("desc")).slice(0, 5);
-    return noteList; 
-  }, [notes]);
+    return noteList;
+  }, [notes]);*/
   return { recents };
 }
-
