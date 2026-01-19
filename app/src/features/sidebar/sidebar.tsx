@@ -56,13 +56,9 @@ export function Sidebar(props: SidebarProps) {
       <div className="h-full w-full grow pl-large pr-small py-0 overflow-y-auto scroll-view gutter-stable">
         <div className="flex gap-2 flex-col mb-16 max-w-full">
           <WorkspaceSwitcher />
-          <CreatePageButton />
           <SidebarNavigation />
-          <FavoritesContainer />
           <NoteListRoot />
-          <div className="flex flex-col gap-0.5">
-            <TrashWidget />
-          </div>
+          <div className="flex flex-col gap-0.5"></div>
         </div>
       </div>
     </div>

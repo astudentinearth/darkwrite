@@ -46,7 +46,7 @@ export function Layout() {
         )}
       ></div>
       <div className="h-full flex flex-col grow overflow-hidden">
-        {false && (
+        {/* (
           <Titlebar
             refObject={headerRef}
             expandCallback={() => {
@@ -54,7 +54,7 @@ export function Layout() {
             }}
             isSidebarCollapsed={isSidebarCollapsed}
           ></Titlebar>
-        )}
+        )*/}
         <div
           className={cn(
             "bg-view-1 h-full overflow-x-hidden main-view  border-border/25 ml-0 mb-1.5 mr-1.5 rounded-lg rounded-br-sm border",

@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 import { ChevronRight } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import NoteList from "./note-list";
+import NoteList from "./components/note-list";
 import { useNoteChildren } from "./use-note-children";
 
 export default function NoteListRoot() {
@@ -49,12 +49,7 @@ export default function NoteListRoot() {
         </Button>
       </CollapsibleTrigger>
       <CollapsibleContent>
-        <NoteList
-          parentId={null}
-          notes={rootNotes}
-          leadingOrderHint={leadingHint}
-          finalOrderHint={finalHint}
-        />
+        <NoteList parentId={null} />
       </CollapsibleContent>
     </Collapsible>
   );

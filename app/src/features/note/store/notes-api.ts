@@ -1,45 +1,66 @@
 import { DarkwriteAPIClient } from "@/api/api-client";
-import { NoteDTO } from "@/common/dto";
+import { NoteDTO, NotesResponseDTO } from "@/common/dto";
 import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
 import { upsertNotes } from "./note-slice";
+import { appSessionSlice } from "@/features/session/session-slice";
 
 export const NOTES_API_REDUCER_PATH = "notes-api";
 export const NOTES_TAG_TYPE = "Note";
+
 export function noteByWorkspaceIdTag(workspaceId: string) {
   return `WORKSPACE_${workspaceId}`;
 }
+
+export function noteByParentIdTag(
+  workspaceId: string,
+  parentId: string | null,
+) {
+  return `WORKSPACE_${workspaceId}_PARENT_${parentId ?? "ROOT"}`;
+}
+
+const tryFetch = async (promise: Promise<NotesResponseDTO>) => {
+  try {
+    const { notes } = await promise;
+    return {
+      data: Object.values(notes),
+    };
+  } catch (error) {
+    return { error: error as Error };
+  }
+};
 
 export const notesApi = createApi({
   reducerPath: NOTES_API_REDUCER_PATH,
   baseQuery: fakeBaseQuery(),
   tagTypes: [NOTES_TAG_TYPE],
   endpoints: (builder) => ({
-    getNotesByWorkspace: builder.query<NoteDTO[], string>({
-      async queryFn(workspaceId) {
-        try {
-          const { notes } =
-            await DarkwriteAPIClient.note.getAllByWorkspaceId(workspaceId);
-          return {
-            data: Object.values(notes),
-          };
-        } catch (error) {
-          return { error: error as Error };
-        }
-      },
+    getNotesByParentId: builder.query<
+      NoteDTO[],
+      { parentId: string | null; workspaceId: string }
+    >({
+      queryFn: ({ parentId, workspaceId }) =>
+        tryFetch(DarkwriteAPIClient.note.getByParentId(workspaceId, parentId)),
 
-      async onQueryStarted(workspaceId, { dispatch, queryFulfilled }) {
+      async onQueryStarted(_args, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
           dispatch(upsertNotes(data));
-        } catch (err) {
-          console.error("Fetch failed: ", err);
+        } catch {
+          /* empty */
         }
       },
 
-      providesTags: (result, error, workspaceId) =>
+      providesTags: (result, _error, args) =>
         result
-          ? [{ type: NOTES_TAG_TYPE, id: noteByWorkspaceIdTag(workspaceId) }]
+          ? [
+              {
+                type: NOTES_TAG_TYPE,
+                id: noteByParentIdTag(args.workspaceId, args.parentId),
+              },
+            ]
           : [],
     }),
   }),
 });
+
+export const { useGetNotesByParentIdQuery } = notesApi;

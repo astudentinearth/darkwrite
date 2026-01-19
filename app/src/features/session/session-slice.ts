@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { loadSessionState, SessionState } from "./session-persistence";
 
-const SESSION_SLICE_NAME = "session-slice";
+const SESSION_SLICE_NAME = "session";
 
 const initialState: SessionState = loadSessionState() || {
   workspaceId: null,
