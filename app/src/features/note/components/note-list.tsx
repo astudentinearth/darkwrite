@@ -1,34 +1,9 @@
-import { useGetNotesByParentIdQuery } from "../store/notes-api";
-import { useAppSelector } from "@/features/store/hooks";
-import { selectNotesByParentId } from "../store/note-selectors";
 import { cn } from "@/lib/utils";
+import { useNoteListState } from "../hooks/use-note-list-state";
 
 export interface NoteListProps {
   className?: string;
   parentId: string | null;
-}
-
-const EMPTY_ARRAY: string[] = [];
-
-function useNoteListState(parentId: string | null) {
-  const workspaceId = useAppSelector((state) => state.session.workspaceId);
-
-  const { isLoading, isFetching } = useGetNotesByParentIdQuery({
-    parentId,
-    workspaceId: workspaceId ?? "",
-  });
-
-  const noteIds = useAppSelector((state) =>
-    workspaceId
-      ? selectNotesByParentId(state, workspaceId, parentId)
-      : EMPTY_ARRAY,
-  );
-
-  return {
-    noteIds,
-    isLoading,
-    isFetching,
-  };
 }
 
 export default function NoteList(props: NoteListProps) {
