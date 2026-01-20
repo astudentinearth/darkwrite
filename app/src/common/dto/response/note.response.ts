@@ -17,7 +17,7 @@ export interface NoteDTO {
 
   userId?: string | null; // Owner of the note
   databaseId?: string | null; // ID of the database this note belongs to
-  workspaceId: string | null; // ID of the workspace this note belongs to
+  workspaceId: string; // ID of the workspace this note belongs to
 }
 
 export interface NotesResponseDTO {

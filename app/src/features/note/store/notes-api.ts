@@ -3,6 +3,11 @@ import { NoteDTO, NotesResponseDTO } from "@/common/dto";
 import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
 import { upsertNotes } from "./note-slice";
 import { appSessionSlice } from "@/features/session/session-slice";
+import { ParentId } from "@/common/note";
+import { notesAdapter } from "./notes-adapter";
+import { Rank } from "@/common/rank";
+import { selectNoteById, selectNotesByParentId } from "./note-selectors";
+import { RootState } from "@/features/store/redux";
 
 export const NOTES_API_REDUCER_PATH = "notes-api";
 export const NOTES_TAG_TYPE = "Note";
@@ -17,6 +22,22 @@ export function noteByParentIdTag(
 ) {
   return `WORKSPACE_${workspaceId}_PARENT_${parentId ?? "ROOT"}`;
 }
+
+export type MoveNoteBelowArgs = {
+  sourceNoteId: string;
+  aboveNoteId: string;
+};
+
+/**
+ * Moves the note into a tree level without specifying
+ * an order relative to another note. This can also be used to
+ * move notes to start or end within the same tree level.
+ */
+export type MoveNoteIntoArgs = {
+  sourceNoteId: string;
+  destinationNoteId: ParentId;
+  placement: "start" | "end";
+};
 
 const tryFetch = async (promise: Promise<NotesResponseDTO>) => {
   try {
@@ -59,6 +80,40 @@ export const notesApi = createApi({
               },
             ]
           : [],
+    }),
+
+    // needed endpoints
+    // move to top (by parentid)
+    // move below (by parentid)
+
+    /**
+     * Moves the note directly below another note, within the same tree level.
+     * If the source note and the anchor note have different parents,
+     * the parent of the source will be set to the anchor's parent.
+     */
+    moveInto: builder.mutation<NoteDTO, MoveNoteIntoArgs>({
+      async queryFn(
+        { destinationNoteId, placement, sourceNoteId },
+        { getState },
+      ) {
+        const state = getState() as RootState;
+        const sourceNote: NoteDTO | undefined = selectNoteById(
+          state,
+          sourceNoteId,
+        );
+
+        if (!sourceNote) {
+          throw new Error("Source note not found");
+        }
+
+        const workspaceId = sourceNote.workspaceId;
+
+        const siblings = selectNotesByParentId(
+          state,
+          workspaceId,
+          destinationNoteId,
+        );
+      },
     }),
   }),
 });

@@ -26,3 +26,4 @@ export type NoteImportResult = {
 };
 
 export type OrderKey = "orderHint" | "favoriteOrderHint";
+export type ParentId = string | null;

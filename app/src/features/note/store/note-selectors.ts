@@ -19,7 +19,9 @@ export const selectNotesByParentId = createSelector(
     return allNotes
       .filter(
         (note) =>
-          note.workspaceId === workspaceId && note.parentId === parentId,
+          note.workspaceId === workspaceId &&
+          note.parentId === parentId &&
+          !note.isTrashed,
       )
       .toSorted((a, b) => Rank.sorter(a.orderHint, b.orderHint))
       .map((n) => n.id);
