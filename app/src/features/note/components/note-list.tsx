@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
 import { useNoteListState } from "../hooks/use-note-list-state";
+import { NoteListItem } from "./note-list-item";
 
 export interface NoteListProps {
   className?: string;
@@ -10,9 +11,11 @@ export default function NoteList(props: NoteListProps) {
   const state = useNoteListState(props.parentId);
 
   return (
-    <div className={cn("flex flex-col gap-2", props.className)}>
+    <div className={cn("flex flex-col", props.className)}>
       {state.noteIds.map((id) => (
-        <div>{id}</div>
+        <NoteListItem id={id} key={id}>
+          <NoteList parentId={id} />
+        </NoteListItem>
       ))}
     </div>
   );

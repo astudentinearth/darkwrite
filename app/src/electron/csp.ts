@@ -5,16 +5,15 @@ export function getCSP() {
   // unsafe-eval is enabled in development only, otherwise vite will explode!
   if (is.dev) {
     return [
-      "default-src 'self'",
-      "script-src 'self' 'unsafe-eval' 'unsafe-inline' blob:", // Vite needs eval for HMR
-      "style-src 'self' 'unsafe-inline'",
-      "img-src 'self' data: blob: embed: http://localhost:5173",
-      "font-src 'self' data:",
-      "connect-src 'self' ws://localhost:5173 http://localhost:5173", // WebSocket for HMR
+      "default-src 'self' chrome-extension://*",
+      "script-src 'self' 'unsafe-eval' 'unsafe-inline' blob: chrome-extension://*", // Vite needs eval for HMR
+      "style-src 'self' 'unsafe-inline' chrome-extension://*",
+      "img-src 'self' data: blob: embed: http://localhost:5173 chrome-extension://*",
+      "font-src 'self' data: chrome-extension://*",
+      "connect-src 'self' ws://localhost:5173 http://localhost:5173 chrome-extension://*", // WebSocket for HMR
       "object-src 'none'",
       "base-uri 'self'",
       "form-action 'self'",
-      "frame-ancestors 'none'",
     ].join("; ");
   } else {
     return [

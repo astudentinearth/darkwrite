@@ -8,12 +8,12 @@ import {
 } from "@/components/ui";
 import { useNavigateToNote } from "@/hooks/use-navigate-to-note";
 import { getNoteIcon } from "@/lib/utils";
-import { useNotes } from "@/query/use-notes";
 import { useCallback, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { setSearchOpen, setSearchQuery, useSearchState } from "./search-state";
 
 export default function SearchDialog() {
+  return <></>;
   const open = useSearchState((s) => s.open);
   const query = useSearchState((s) => s.query);
   const { t } = useTranslation();

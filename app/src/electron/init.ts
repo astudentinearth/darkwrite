@@ -22,6 +22,7 @@ import {
 
 import installExtension, {
   REACT_DEVELOPER_TOOLS,
+  REDUX_DEVTOOLS,
 } from "electron-devtools-installer";
 import { setupCsp } from "./csp";
 
@@ -82,7 +83,8 @@ function setupWindowEvents() {
 
 export async function init() {
   if (is.dev) {
-    await installExtension([REACT_DEVELOPER_TOOLS]);
+    await installExtension([REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS]);
+    await installExtension([REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS]);
   }
   await Paths.initialize();
   const migrationsPerformed = await isAlphaMigrationPerformed();

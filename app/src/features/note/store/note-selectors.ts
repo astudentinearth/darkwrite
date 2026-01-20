@@ -1,6 +1,7 @@
 import { RootState } from "@/features/store/redux";
 import { notesAdapter } from "./notes-adapter";
 import { createSelector } from "@reduxjs/toolkit";
+import { Rank } from "@/common/rank";
 
 const selectNotesState = (store: RootState) => store["notes-slice"];
 
@@ -10,8 +11,7 @@ export const { selectAll: selectAllNotes, selectById: selectNoteById } =
 export const selectNotesByParentId = createSelector(
   [
     selectAllNotes,
-    (_state: RootState, workspaceId: string, _parentId: string | null) =>
-      workspaceId,
+    (_state: RootState, workspaceId: string) => workspaceId,
     (_state: RootState, _workspaceId: string, parentId: string | null) =>
       parentId,
   ],
@@ -21,6 +21,7 @@ export const selectNotesByParentId = createSelector(
         (note) =>
           note.workspaceId === workspaceId && note.parentId === parentId,
       )
+      .toSorted((a, b) => Rank.sorter(a.orderHint, b.orderHint))
       .map((n) => n.id);
   },
 );

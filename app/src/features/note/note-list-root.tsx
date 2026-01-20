@@ -10,26 +10,10 @@ import { ChevronRight } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import NoteList from "./components/note-list";
-import { useNoteChildren } from "./use-note-children";
 
 export default function NoteListRoot() {
   const { t } = useTranslation("translation", { keyPrefix: "sidebar" });
   const [open, setOpen] = useState(false);
-  const { data } = useNoteChildren(null);
-  const rootNotes = data;
-
-  if (rootNotes == null || rootNotes.length === 0) {
-    return (
-      <div>
-        <span>{t("notes.noPages")}</span>
-      </div>
-    );
-  }
-
-  const leadingHint = new Rank(rootNotes[0].orderHint).prev().toString();
-  const finalHint = new Rank(rootNotes[rootNotes.length - 1].orderHint)
-    .next()
-    .toString();
 
   return (
     <Collapsible open={open} onOpenChange={setOpen}>
