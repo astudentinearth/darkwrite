@@ -15,6 +15,7 @@ export function NoteListItem({
   id: string;
   children: ReactNode[] | ReactNode;
 }) {
+  console.log("render");
   return (
     <>
       <NoteItem id={id}>{children}</NoteItem>
@@ -37,22 +38,24 @@ function NoteItem({
 
   return (
     <Collapsible open={open} onOpenChange={setOpen}>
-      <div className="group flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm hover:bg-accent hover:text-accent-foreground">
+      <div className="group grid grid-cols-[20px_1fr] hover:grid-cols-[20px_1fr_20px] w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm hover:bg-secondary/50">
         <CollapsibleTrigger asChild>
-          <button className="flex items-center gap-1 rounded-sm p-0.5 hover:bg-muted/50">
+          <button className="flex items-center gap-1 rounded-sm justify-center size-5 hover:bg-muted/50">
             <ChevronRight
               className={cn(
-                "size-4 transition-transform duration-200",
+                "size-4 transition-transform duration-100 hidden group-hover:block",
                 open && "rotate-90",
               )}
             />
-            {getNoteIcon(note.icon, "size-4")}
+            <span className="flex group-hover:hidden">
+              {getNoteIcon(note.icon, "size-4")}
+            </span>
           </button>
         </CollapsibleTrigger>
         <span className="flex-1 truncate text-left select-none">
           {note.title || "Untitled"}
         </span>
-        <button className="opacity-0 transition-opacity hover:bg-muted/50 group-hover:opacity-100 rounded-sm p-0.5">
+        <button className="hover:bg-secondary/50 size-5 group-hover:opacity-100 rounded-sm group-hover:flex hidden justify-center items-center">
           <Plus className="size-4" />
         </button>
       </div>
@@ -61,6 +64,6 @@ function NoteItem({
   );
 }
 
-const NoteDropZone = memo(function ({ id }: { id: string }) {
-  return <div className="h-1 bg-primary/20"></div>;
+const NoteDropZone = memo(function ({ id: _id }: { id: string }) {
+  return <div className="h-1 bg-primary/5"></div>;
 });
