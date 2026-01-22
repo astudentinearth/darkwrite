@@ -134,7 +134,7 @@ export const NoteService = {
     destinationNoteId: ParentId,
     placement: "start" | "end" = "end",
   ) {
-    AppDataSource.manager.transaction(async (manager) => {
+    return await AppDataSource.manager.transaction(async (manager) => {
       const noteRepository = NoteDAO.transactional(manager);
 
       const sourceNote = await noteRepository.findByIdOrThrow(sourceNoteId);
