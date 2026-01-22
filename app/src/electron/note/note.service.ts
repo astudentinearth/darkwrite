@@ -1,4 +1,4 @@
-import { CreateNoteDTO, UpdateNoteDTO } from "@/common/dto";
+import { CreateNoteDTO, MoveNoteDTO, UpdateNoteDTO } from "@/common/dto";
 import { DatabaseDAO } from "../database/database.dao";
 import { Database, Note } from "../entity";
 import { DocumentService } from "../service/document.service";
@@ -6,6 +6,10 @@ import { WorkspaceDAO } from "../workspace/workspace.dao";
 import { NoteRankService } from "./note-rank.service";
 import { NoteDAO } from "./note.dao";
 import { Rank } from "@/common/rank";
+import { ParentId } from "@/common/note";
+import { AppDataSource } from "../db";
+
+const noteDAO = new NoteDAO();
 
 export const NoteService = {
   async create(dto: CreateNoteDTO) {
@@ -36,42 +40,33 @@ export const NoteService = {
     note.icon = icon;
     note.parentId = parentId;
 
-    note = await NoteDAO.save(note);
+    note = await noteDAO.save(note);
     await new DocumentService().setNoteContent(note.id, "{}");
     return note;
   },
 
   async update(id: string, dto: UpdateNoteDTO) {
-    const { workspaceId, databaseId, ...rest } = dto;
+    const { databaseId, ...rest } = dto;
 
-    //@ts-expect-error delete to prevent accidental assignment
-    delete rest.workspace;
-
-    //@ts-expect-error delete to prevent accidental assignment
-    delete rest.database;
-
-    const workspace = workspaceId
-      ? await WorkspaceDAO.findByIdOrThrow(workspaceId)
-      : undefined;
     const database = databaseId
       ? await DatabaseDAO.findByIdOrThrow(databaseId)
       : undefined;
 
     // reassign order key on restore
-    const note = await NoteDAO.findByIdOrThrow(id);
+    const note = await noteDAO.findByIdOrThrow(id);
 
     Object.assign(note, rest);
     if (dto.isTrashed === true) note.isFavorite = false;
     if (dto.isTrashed === false) {
-      const lastNote = await NoteDAO.findLastNoteInOrder(note.workspace.id);
+      const lastNote = await noteDAO.findLastNoteInOrder(note.workspace.id);
       const nextRank = lastNote
         ? new Rank(lastNote.orderHint).next()
         : Rank.default();
       note.orderHint = nextRank.get();
     }
 
-    if (dto.isFavorite === true && !dto.favoriteOrderHint) {
-      const lastInFavorites = await NoteDAO.findLastNoteInFavorites(
+    if (dto.isFavorite === true && !note.isFavorite) {
+      const lastInFavorites = await noteDAO.findLastNoteInFavorites(
         note.workspace.id,
       );
       const nextRank = lastInFavorites
@@ -80,18 +75,110 @@ export const NoteService = {
       note.favoriteOrderHint = nextRank.get();
     }
 
-    if (workspace) note.workspace = workspace;
     if (database) note.database = database;
 
     if ("databaseId" in dto && dto.databaseId === undefined)
       note.database = undefined;
 
     note.modified();
-    return await NoteDAO.save(note);
+    return await noteDAO.save(note);
+  },
+
+  async move(dto: MoveNoteDTO) {
+    if (dto.placement === "below") {
+      return await NoteService.moveBelow(dto.sourceId, dto.destinationId);
+    } else {
+      return await NoteService.moveInto(
+        dto.sourceId,
+        dto.destinationId,
+        dto.placement === "inside-start" ? "start" : "end",
+      );
+    }
+  },
+
+  async moveBelow(sourceNoteNoteId: string, aboveNoteId: string) {
+    return await AppDataSource.manager.transaction(async (manager) => {
+      const noteRepository = NoteDAO.transactional(manager);
+
+      const sourceNote = await noteRepository.findByIdOrThrow(sourceNoteNoteId);
+      const aboveNote = await noteRepository.findByIdOrThrow(aboveNoteId);
+
+      const siblings = await noteRepository.findAllByParentIdSortAsc(
+        sourceNote.workspace.id,
+        aboveNote.parentId,
+      );
+      const aboveIndex = siblings.findIndex((n) => n.id === aboveNote.id);
+      const nextNote = siblings[aboveIndex + 1];
+
+      let newOrderHint: string;
+      if (nextNote) {
+        const rank = new Rank(aboveNote.orderHint).between(
+          new Rank(nextNote.orderHint),
+        );
+        newOrderHint = rank.get();
+      } else {
+        const rank = new Rank(aboveNote.orderHint).next();
+        newOrderHint = rank.get();
+      }
+
+      sourceNote.parentId = aboveNote.parentId;
+      sourceNote.orderHint = newOrderHint;
+      sourceNote.modified();
+
+      return await noteRepository.save(sourceNote);
+    });
+  },
+
+  async moveInto(
+    sourceNoteId: string,
+    destinationNoteId: ParentId,
+    placement: "start" | "end" = "end",
+  ) {
+    AppDataSource.manager.transaction(async (manager) => {
+      const noteRepository = NoteDAO.transactional(manager);
+
+      const sourceNote = await noteRepository.findByIdOrThrow(sourceNoteId);
+
+      if (destinationNoteId) {
+        await noteRepository.findByIdOrThrow(destinationNoteId);
+      }
+
+      let newOrderHint: string = "";
+
+      if (placement === "start") {
+        const firstInLayer = await noteRepository.findFirstNoteInLayer(
+          sourceNote.workspace.id,
+          destinationNoteId,
+        );
+        if (firstInLayer) {
+          const rank = new Rank(firstInLayer.orderHint).prev();
+          newOrderHint = rank.get();
+        } else {
+          newOrderHint = Rank.default().get();
+        }
+      } else if (placement === "end") {
+        const lastInLayer = await noteRepository.findLastNoteInLayer(
+          sourceNote.workspace.id,
+          destinationNoteId,
+        );
+        if (lastInLayer) {
+          const rank = new Rank(lastInLayer.orderHint).next();
+          newOrderHint = rank.get();
+        } else {
+          newOrderHint = Rank.default().get();
+        }
+      }
+
+      sourceNote.parentId = destinationNoteId;
+      sourceNote.orderHint = newOrderHint;
+      sourceNote.modified();
+
+      return await noteRepository.save(sourceNote);
+    });
   },
 
   async duplicate(id: string) {
-    const note = await NoteDAO.findByIdOrThrow(id);
+    const note = await noteDAO.findByIdOrThrow(id);
     const newNote: Note = new Note();
     newNote.icon = note.icon;
     newNote.title = `${note.title} (1)`;
@@ -106,7 +193,7 @@ export const NoteService = {
     newNote.parentId = note.parentId;
     newNote.favoriteOrderHint = "";
 
-    const saved = await NoteDAO.save(newNote);
+    const saved = await noteDAO.save(newNote);
 
     const doc = await new DocumentService().getNoteContent(id);
     await new DocumentService().setNoteContent(saved.id, JSON.stringify(doc));
@@ -115,13 +202,13 @@ export const NoteService = {
   },
 
   async deleteById(id: string) {
-    await NoteDAO.deleteById(id);
+    await noteDAO.deleteById(id);
     await new DocumentService().deleteNoteContent(id);
   },
 
   async setModificationDate(id: string, date: Date) {
-    const note = await NoteDAO.findByIdOrThrow(id);
+    const note = await noteDAO.findByIdOrThrow(id);
     note.modifiedAt = date;
-    await NoteDAO.save(note);
+    await noteDAO.save(note);
   },
 };

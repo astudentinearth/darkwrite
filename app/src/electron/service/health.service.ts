@@ -8,7 +8,7 @@ export class HealthService {
   constructor(
     private _db = AppDataSource,
     private workspaceRepository = WorkspaceDAO,
-    private noteRepository = NoteDAO,
+    private noteRepository = new NoteDAO(),
   ) {}
 
   async fixCollidingOrderKeys() {

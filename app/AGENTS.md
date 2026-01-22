@@ -10,6 +10,7 @@ Darkwrite is a note taking application and personal knowledge base, built with t
 - pnpm
 
 # Project structure
+
 ```
 src
 - api -> frontend API client implementation
@@ -40,7 +41,7 @@ Darkwrite follows a feature-based architecture for the frontend code. Each featu
 
 The application is a React Single Page Application (SPA) bundled with Vite.
 
-Routing is done with react-router-dom hash router. 
+Routing is done with react-router-dom hash router.
 
 Global state is managed with Zustand.
 
@@ -66,7 +67,7 @@ The main process code is organized into feature-specific modules under `src/elec
 
 IPC communication between the renderer and main process is handled via the `src/electron/ipc` directory, which contains the API bridge and handlers. The types are checked automatically on compile time, and the IPC handlers are exposed automatically from a single router object.
 
-# Translations 
+# Translations
 Translations are managed using i18next. All translation files are located under `src/locales`. Each language has its own JSON file containing the translations for that language.
 
 When adding new translations, ensure that the keys are consistent across all language files. Use descriptive keys that clearly indicate the purpose of the translation.
@@ -96,6 +97,7 @@ If a new dependency is absolutely required to solve a problem, ask the user befo
 # Code quality
 - NEVER use casts like `as unknown as Type`
 - If there's a TypeScript error you cannot resolve without casting, abort execution and ask for user confirmation.
+- Do not touch type errors unrelated to the refactor you are working on. Do not get out of the scope of your prompt.
 
 # Documentation
 > Always fetch the latest TipTap documentation, as TipTap v3 has introduced major changes.
@@ -103,3 +105,4 @@ If a new dependency is absolutely required to solve a problem, ask the user befo
 - [shadcn-ui docs](https://ui.shadcn.com/llms.txt)
 - [Vitest docs](https://vitest.dev/llms.txt)
 - [Vite docs](https://vite.dev/llms.txt)
+```

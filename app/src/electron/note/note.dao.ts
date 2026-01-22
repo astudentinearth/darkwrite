@@ -1,47 +1,114 @@
-import { IsNull } from "typeorm";
+import { EntityManager, IsNull, Repository } from "typeorm";
 import { AppDataSource } from "../db";
 import { Note } from "../entity";
+import { ParentId } from "@/common/note";
 
-const repo = AppDataSource.getRepository(Note);
+export class NoteDAO {
+  constructor(
+    private repo: Repository<Note> = AppDataSource.getRepository(Note),
+  ) {}
 
-export const NoteDAO = {
-  save: async (note: Note) => repo.save(note),
-  saveAll: async (notes: Note[]) => repo.save(notes),
-  findById: async (id: string) => repo.findOne({ where: { id } }),
-  findByIdOrThrow: async (id: string) => {
-    const note = await repo.findOne({ where: { id } });
+  async save(note: Note) {
+    return this.repo.save(note);
+  }
+
+  static transactional(manager: EntityManager) {
+    return new NoteDAO(manager.getRepository(Note));
+  }
+
+  async saveAll(notes: Note[]) {
+    return this.repo.save(notes);
+  }
+
+  async findById(id: string) {
+    return this.repo.findOne({ where: { id } });
+  }
+
+  async findByIdOrThrow(id: string) {
+    const note = await this.repo.findOne({ where: { id } });
     if (!note) throw new Error(`Note with id ${id} not found.`);
     return note;
-  },
-  findAll: async () => repo.find(),
+  }
 
-  findAllByWorkspaceId: async (workspaceId: string) =>
-    repo.findBy({ workspace: { id: workspaceId } }),
+  async findAll() {
+    return this.repo.find();
+  }
 
-  findAllByDatabaseId: async (databaseId: string) =>
-    repo.findBy({ database: { id: databaseId } }),
+  async findAllByWorkspaceId(workspaceId: string) {
+    return this.repo.findBy({ workspace: { id: workspaceId } });
+  }
 
-  findAllByParentId: async (workspaceId: string, parentId: string | null) =>
-    repo.findBy({
+  async findAllByDatabaseId(databaseId: string) {
+    return this.repo.findBy({ database: { id: databaseId } });
+  }
+
+  async findAllByParentId(workspaceId: string, parentId: string | null) {
+    return this.repo.findBy({
       workspace: { id: workspaceId },
       parentId: parentId === null ? IsNull() : parentId,
-    }),
+    });
+  }
 
-  deleteById: async (id: string) => repo.delete({ id }),
-  delete: async (note: Note) => repo.delete({ id: note.id }),
+  async findAllByParentIdSortAsc(workspaceId: string, parentId: ParentId) {
+    return this.repo.find({
+      where: {
+        workspace: { id: workspaceId },
+        parentId: parentId === null ? IsNull() : parentId,
+      },
+      order: {
+        orderHint: "ASC",
+      },
+    });
+  }
 
-  findLastNoteInOrder: async (workspaceId: string) => {
-    const result = await repo.findOne({
+  async deleteById(id: string) {
+    return this.repo.delete({ id });
+  }
+
+  async delete(note: Note) {
+    return this.repo.delete({ id: note.id });
+  }
+
+  async findLastNoteInOrder(workspaceId: string) {
+    const result = await this.repo.findOne({
       order: {
         orderHint: "DESC",
       },
       where: { workspace: { id: workspaceId }, isTrashed: false },
     });
     return result;
-  },
+  }
 
-  findLastNoteInFavorites: async (workspaceId: string) => {
-    const result = await repo.findOne({
+  async findFirstNoteInLayer(workspaceId: string, parentId: ParentId) {
+    const result = await this.repo.findOne({
+      order: {
+        orderHint: "ASC",
+      },
+      where: {
+        workspace: { id: workspaceId },
+        parentId: parentId === null ? IsNull() : parentId,
+        isTrashed: false,
+      },
+    });
+    return result;
+  }
+
+  async findLastNoteInLayer(workspaceId: string, parentId: ParentId) {
+    const result = await this.repo.findOne({
+      order: {
+        orderHint: "DESC",
+      },
+      where: {
+        workspace: { id: workspaceId },
+        parentId: parentId === null ? IsNull() : parentId,
+        isTrashed: false,
+      },
+    });
+    return result;
+  }
+
+  async findLastNoteInFavorites(workspaceId: string) {
+    const result = await this.repo.findOne({
       order: { favoriteOrderHint: "DESC" },
       where: {
         workspace: { id: workspaceId },
@@ -50,5 +117,5 @@ export const NoteDAO = {
       },
     });
     return result;
-  },
-};
+  }
+}

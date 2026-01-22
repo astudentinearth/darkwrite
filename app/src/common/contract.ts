@@ -5,6 +5,7 @@
 import { DarkwriteDesktopClientInfo } from "./client";
 import {
   CreateNoteDTO,
+  MoveNoteDTO,
   NoteContentResponseDTO,
   NoteResponseDTO,
   NotesResponseDTO,
@@ -29,6 +30,7 @@ import { DarkwriteUserSettings } from "./settings";
 export interface INoteAPI {
   create: (dto: CreateNoteDTO) => Promise<NoteResponseDTO>;
   update: (id: string, dto: UpdateNoteDTO) => Promise<NoteResponseDTO>;
+  move: (dto: MoveNoteDTO) => Promise<NoteResponseDTO>;
   delete: (id: string) => Promise<void>;
   getAllByWorkspaceId: (workspaceId: string) => Promise<NotesResponseDTO>;
   getByParentId: (

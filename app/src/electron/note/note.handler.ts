@@ -1,5 +1,5 @@
 import { INoteAPI } from "@/common/contract";
-import { NoteDTO } from "@/common/dto";
+import { NoteDTO, UpdateNoteDTOSchema } from "@/common/dto";
 import { FileFormatMap, NoteExportFormat } from "@/common/note";
 import { BrowserWindow, dialog } from "electron";
 import { readFile, writeFile } from "fs-extra";
@@ -54,9 +54,18 @@ export const ElectronNoteAPI: INoteAPI = {
   },
 
   async update(id, dto) {
-    const updated = await NoteService.update(id, dto);
+    const updated = await NoteService.update(
+      id,
+      UpdateNoteDTOSchema.parse(dto),
+    );
     const _dto = updated.mapToDTO();
     return { note: _dto };
+  },
+
+  async move(dto) {
+    await NoteService.move(dto);
+    const note = await NoteQueryService.getById(dto.sourceId);
+    return { note: note ? note.mapToDTO() : null };
   },
 
   async getDocument(id) {
