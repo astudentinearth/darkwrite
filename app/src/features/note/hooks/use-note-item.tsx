@@ -59,12 +59,21 @@ export function useNoteItemDrag(id: string) {
     (e: DragEvent) => {
       e.preventDefault();
       e.stopPropagation();
+
       setIsDragging(false);
+
       const data = extractNoteDragData(e);
       if (data == null) return setIsDragging(false);
+
       const notes = selectAllNotesAsMap(store.getState() as RootState);
-      const canMove = !isDescendant(id, data.noteId, notes);
-      if (!canMove) return;
+
+      const isCircularMovement = isDescendant(id, data.noteId, notes);
+      if (isCircularMovement) return;
+
+      const note = selectNoteById(store.getState() as RootState, data.noteId);
+      if (!note) return;
+      if (note.parentId === id) return;
+
       try {
         trigger({
           sourceNoteId: data.noteId,
