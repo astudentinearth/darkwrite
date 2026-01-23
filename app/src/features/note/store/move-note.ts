@@ -47,7 +47,7 @@ const _moveNoteIntoQueryFn = async ({
 export const moveNoteApi = notesApi.injectEndpoints({
   endpoints: (builder) => ({
     moveInto: builder.mutation<NoteDTO, MoveNoteIntoArgs>({
-      query: _moveNoteIntoQueryFn,
+      queryFn: _moveNoteIntoQueryFn,
 
       async onQueryStarted(args, { dispatch, getState, queryFulfilled }) {
         const state = getState() as RootState;

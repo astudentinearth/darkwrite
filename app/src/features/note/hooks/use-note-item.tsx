@@ -6,6 +6,7 @@ import {
   DragType,
   extractNoteDragData,
 } from "@/features/dnd/datatransfer";
+import { useMoveIntoMutation } from "../store/move-note";
 
 /**
  * Hook to get note data **within sidebar views.** Do NOT use this to
@@ -21,6 +22,7 @@ export function useNoteItem(id: string) {
 
 export function useNoteItemDrag(id: string) {
   const [isDragging, setIsDragging] = useState(false);
+  const [trigger] = useMoveIntoMutation();
   type DragEvent = React.DragEvent<HTMLElement>;
   const onDrag = useCallback(
     (event: DragEvent) => {
@@ -54,9 +56,17 @@ export function useNoteItemDrag(id: string) {
       setIsDragging(false);
       const data = extractNoteDragData(e);
       if (data == null) return setIsDragging(false);
-      console.log("Dropped note", data.noteId, "on note", id);
+      try {
+        trigger({
+          sourceNoteId: data.noteId,
+          destinationNoteId: id,
+          placement: "inside-end",
+        });
+      } catch (error) {
+        console.error("Failed to move note:", error);
+      }
     },
-    [id],
+    [id, trigger],
   );
 
   return { onDrag, onDragEnter, onDragLeave, isDragging, onDrop, onDragOver };

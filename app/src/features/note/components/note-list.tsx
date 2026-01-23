@@ -2,6 +2,7 @@ import { cn } from "@/lib/utils";
 import { useNoteListState } from "../hooks/use-note-list-state";
 import { NoteListItem } from "./note-list-item";
 import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 
 export interface NoteListProps {
   className?: string;
@@ -10,6 +11,7 @@ export interface NoteListProps {
 
 export default function NoteList(props: NoteListProps) {
   const state = useNoteListState(props.parentId);
+  const { t } = useTranslation();
 
   const items = useMemo(() => {
     return state.noteIds.map((id) => (
@@ -19,5 +21,9 @@ export default function NoteList(props: NoteListProps) {
     ));
   }, [state.noteIds]);
 
-  return <div className={cn("flex flex-col", props.className)}>{items}</div>;
+  return (
+    <div className={cn("flex flex-col", props.className)}>
+      {items.length > 0 ? items : t("sidebar.notes.noPages")}
+    </div>
+  );
 }

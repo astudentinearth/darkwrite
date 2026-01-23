@@ -1,5 +1,5 @@
 import { NoteDTO } from "@/common/dto";
-import { OrderKey } from "@/common/note";
+import { MovePlacement, OrderKey } from "@/common/note";
 import { Rank } from "@/common/rank";
 
 /**
@@ -12,14 +12,14 @@ import { Rank } from "@/common/rank";
  */
 export function calculateOptimisticRankInLayer(
   siblingIds: string[],
-  placement: "start" | "end",
+  placement: MovePlacement,
   getNoteById: (id: string) => NoteDTO | undefined,
   orderBy: OrderKey = "orderHint",
 ) {
   if (siblingIds.length === 0) return Rank.default().get();
   let newOrderHint: string;
 
-  if (placement === "start") {
+  if (placement === "inside-start") {
     const firstSibling = getNoteById(siblingIds[0]);
     if (!firstSibling) return Rank.default().get();
     const rank = new Rank(firstSibling[orderBy]).prev();
