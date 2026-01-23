@@ -1,7 +1,7 @@
 import { NoteDTO } from "@/common/dto";
 import { NOTES_TAG_TYPE, notesApi } from "./notes-api";
 import { DarkwriteAPIClient } from "@/api/api-client";
-import { ParentId } from "@/common/note";
+import { isDescendant, ParentId } from "@/common/note";
 import { Rank } from "@/common/rank";
 import { selectNoteById, selectNotesByParentId } from "./note-selectors";
 import { updateNote, upsertNotes } from "./note-slice";
@@ -53,6 +53,17 @@ export const moveNoteApi = notesApi.injectEndpoints({
         const state = getState() as RootState;
         const note = selectNoteById(state, args.sourceNoteId);
         if (!note) return;
+
+        if (
+          isDescendant(
+            args.destinationNoteId ?? "",
+            args.sourceNoteId,
+            state["notes-slice"].entities,
+          )
+        ) {
+          // Prevent moving a note into its own descendant
+          return;
+        }
 
         const childNotes = selectNotesByParentId(
           state,

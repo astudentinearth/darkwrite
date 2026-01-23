@@ -1,5 +1,9 @@
 import { useAppSelector } from "@/features/store/hooks";
-import { selectNoteById } from "../store/note-selectors";
+import {
+  selectAllNotes,
+  selectAllNotesAsMap,
+  selectNoteById,
+} from "../store/note-selectors";
 import { useCallback, useState } from "react";
 import {
   beginDrag,
@@ -7,6 +11,8 @@ import {
   extractNoteDragData,
 } from "@/features/dnd/datatransfer";
 import { useMoveIntoMutation } from "../store/move-note";
+import { isDescendant } from "@/common/note";
+import { RootState, store } from "@/features/store/redux";
 
 /**
  * Hook to get note data **within sidebar views.** Do NOT use this to
@@ -56,6 +62,9 @@ export function useNoteItemDrag(id: string) {
       setIsDragging(false);
       const data = extractNoteDragData(e);
       if (data == null) return setIsDragging(false);
+      const notes = selectAllNotesAsMap(store.getState() as RootState);
+      const canMove = !isDescendant(id, data.noteId, notes);
+      if (!canMove) return;
       try {
         trigger({
           sourceNoteId: data.noteId,

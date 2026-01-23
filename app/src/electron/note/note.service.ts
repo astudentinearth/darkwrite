@@ -138,6 +138,13 @@ export const NoteService = {
       const noteRepository = NoteDAO.transactional(manager);
 
       const sourceNote = await noteRepository.findByIdOrThrow(sourceNoteId);
+      const isCircular = await noteRepository.isDescendant(
+        destinationNoteId,
+        sourceNoteId,
+      );
+      if (isCircular) {
+        throw new Error("Cannot move a note into its own descendant.");
+      }
 
       if (destinationNoteId) {
         await noteRepository.findByIdOrThrow(destinationNoteId);

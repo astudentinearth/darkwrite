@@ -22,7 +22,13 @@ export default function NoteList(props: NoteListProps) {
   }, [state.noteIds]);
 
   return (
-    <div className={cn("flex flex-col", props.className)}>
+    <div
+      className={cn(
+        "flex flex-col",
+        props.parentId != null && "border-l border-border/25",
+        props.className,
+      )}
+    >
       {items.length > 0 ? items : t("sidebar.notes.noPages")}
     </div>
   );

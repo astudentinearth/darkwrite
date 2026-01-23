@@ -118,4 +118,21 @@ export class NoteDAO {
     });
     return result;
   }
+
+  async isDescendant(
+    targetId: ParentId,
+    potentialParentId: ParentId,
+  ): Promise<boolean> {
+    if (potentialParentId === null) return false;
+    if (targetId === null) return false;
+    if (targetId === potentialParentId) return true;
+
+    let currentNote = await this.findById(targetId);
+    while (currentNote && currentNote.parentId != null) {
+      if (currentNote.parentId === potentialParentId) return true;
+      currentNote = await this.findById(currentNote.parentId);
+      if (currentNote?.id === targetId) break; // prevent circular reference
+    }
+    return false;
+  }
 }

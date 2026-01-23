@@ -78,5 +78,5 @@ function NoteItem({
 }
 
 const NoteDropZone = memo(function ({ id: _id }: { id: string }) {
-  return <div className="h-1 bg-primary/5"></div>;
+  return <div className="h-1"></div>;
 });

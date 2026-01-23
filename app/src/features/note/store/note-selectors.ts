@@ -5,8 +5,11 @@ import { Rank } from "@/common/rank";
 
 const selectNotesState = (store: RootState) => store["notes-slice"];
 
-export const { selectAll: selectAllNotes, selectById: selectNoteById } =
-  notesAdapter.getSelectors(selectNotesState);
+export const {
+  selectAll: selectAllNotes,
+  selectById: selectNoteById,
+  selectEntities: selectAllNotesAsMap,
+} = notesAdapter.getSelectors(selectNotesState);
 
 export const selectNotesByParentId = createSelector(
   [
