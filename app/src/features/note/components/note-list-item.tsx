@@ -4,7 +4,7 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui";
 import { memo, ReactNode, useState } from "react";
-import { useNoteItem } from "../hooks/use-note-item";
+import { useNoteItem, useNoteItemDrag } from "../hooks/use-note-item";
 import { cn, getNoteIcon } from "@/lib/utils";
 import { ChevronRight, Plus } from "lucide-react";
 
@@ -32,12 +32,26 @@ function NoteItem({
 }) {
   const [open, setOpen] = useState(false);
   const note = useNoteItem(id);
+  const { isDragging, onDrag, onDragEnter, onDragLeave, onDrop, onDragOver } =
+    useNoteItemDrag(id);
 
   if (!note) return null;
 
   return (
     <Collapsible open={open} onOpenChange={setOpen}>
-      <div className="group grid grid-cols-[20px_1fr] hover:grid-cols-[20px_1fr_20px] w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm hover:bg-secondary/50">
+      <div
+        draggable
+        onDragStart={onDrag}
+        onDragEnter={onDragEnter}
+        onDragLeave={onDragLeave}
+        onDragOver={onDragOver}
+        onDrop={onDrop}
+        className={cn(
+          `group grid grid-cols-[20px_1fr] hover:grid-cols-[20px_1fr_20px] w-full
+          items-center gap-2 rounded-md px-2 py-1.5 text-sm hover:bg-secondary/50`,
+          isDragging && "bg-primary/25",
+        )}
+      >
         <CollapsibleTrigger asChild>
           <button className="flex items-center gap-1 rounded-sm justify-center size-5 hover:bg-muted/50">
             <ChevronRight
