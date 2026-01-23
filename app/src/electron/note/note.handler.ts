@@ -166,6 +166,7 @@ export const NoteApiBridge = {
   getDocument: new IPCHandler(false, ElectronNoteAPI.getDocument),
   setDocument: new IPCHandler(false, ElectronNoteAPI.setDocument),
   duplicate: new IPCHandler(false, ElectronNoteAPI.duplicate),
+  move: new IPCHandler(false, ElectronNoteAPI.move),
   export: new IPCHandler(false, ElectronNoteAPI.export),
   exportPdf: new IPCHandler(false, ElectronNoteAPI.exportPdf),
   import: new IPCHandler(false, ElectronNoteAPI.import),

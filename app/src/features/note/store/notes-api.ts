@@ -1,13 +1,12 @@
 import { DarkwriteAPIClient } from "@/api/api-client";
 import { NoteDTO, NotesResponseDTO } from "@/common/dto";
 import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
-import { upsertNotes } from "./note-slice";
-import { appSessionSlice } from "@/features/session/session-slice";
+import { updateNote, upsertNotes } from "./note-slice";
 import { ParentId } from "@/common/note";
-import { notesAdapter } from "./notes-adapter";
 import { Rank } from "@/common/rank";
 import { selectNoteById, selectNotesByParentId } from "./note-selectors";
 import { RootState } from "@/features/store/redux";
+import { ThunkDispatch } from "@reduxjs/toolkit";
 
 export const NOTES_API_REDUCER_PATH = "notes-api";
 export const NOTES_TAG_TYPE = "Note";
@@ -82,37 +81,100 @@ export const notesApi = createApi({
           : [],
     }),
 
-    // needed endpoints
-    // move to top (by parentid)
-    // move below (by parentid)
-
     /**
      * Moves the note directly below another note, within the same tree level.
      * If the source note and the anchor note have different parents,
      * the parent of the source will be set to the anchor's parent.
      */
     moveInto: builder.mutation<NoteDTO, MoveNoteIntoArgs>({
-      async queryFn(
-        { destinationNoteId, placement, sourceNoteId },
-        { getState },
-      ) {
+      async queryFn({ destinationNoteId, placement, sourceNoteId }) {
+        try {
+          const { note } = await DarkwriteAPIClient.note.move({
+            destinationId: destinationNoteId,
+            placement: placement === "start" ? "inside-start" : "inside-end",
+            sourceId: sourceNoteId,
+          });
+          if (!note) {
+            throw new Error("Failed to move note");
+          }
+          return { data: note };
+        } catch (error) {
+          return { error: error as Error };
+        }
+      },
+
+      async onQueryStarted(args, { dispatch, getState, queryFulfilled }) {
         const state = getState() as RootState;
-        const sourceNote: NoteDTO | undefined = selectNoteById(
+        const note = selectNoteById(state, args.sourceNoteId);
+        if (!note) return;
+
+        const childNotes = selectNotesByParentId(
           state,
-          sourceNoteId,
+          note.workspaceId,
+          args.destinationNoteId,
         );
 
-        if (!sourceNote) {
-          throw new Error("Source note not found");
+        const undoPatch: Partial<NoteDTO> = {
+          parentId: note.parentId,
+          orderHint: note.orderHint,
+        };
+
+        if (childNotes.length === 0) {
+          const newOrderHint = Rank.default().get();
+          dispatch(
+            updateNote({
+              id: args.sourceNoteId,
+              changes: {
+                parentId: args.destinationNoteId,
+                orderHint: newOrderHint,
+              },
+            }),
+          );
+        } else {
+          let newOrderHint: string;
+
+          if (args.placement === "start") {
+            const firstChild = selectNoteById(state, childNotes[0]);
+            const rank = new Rank(firstChild.orderHint).prev();
+            newOrderHint = rank.get();
+          } else {
+            const lastChild = selectNoteById(
+              state,
+              childNotes[childNotes.length - 1],
+            );
+            const rank = new Rank(lastChild.orderHint).next();
+            newOrderHint = rank.get();
+          }
+
+          dispatch(
+            updateNote({
+              id: args.sourceNoteId,
+              changes: {
+                parentId: args.destinationNoteId,
+                orderHint: newOrderHint,
+              },
+            }),
+          );
         }
 
-        const workspaceId = sourceNote.workspaceId;
+        try {
+          const { data } = await queryFulfilled;
+          dispatch(upsertNotes([data]));
+        } catch {
+          dispatch(
+            updateNote({
+              id: args.sourceNoteId,
+              changes: undoPatch,
+            }),
+          );
+        }
+      },
 
-        const siblings = selectNotesByParentId(
-          state,
-          workspaceId,
-          destinationNoteId,
-        );
+      invalidatesTags: (_result, error) => {
+        if (error) {
+          return [NOTES_TAG_TYPE];
+        }
+        return [];
       },
     }),
   }),

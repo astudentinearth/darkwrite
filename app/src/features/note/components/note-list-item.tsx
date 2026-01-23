@@ -15,7 +15,6 @@ export function NoteListItem({
   id: string;
   children: ReactNode[] | ReactNode;
 }) {
-  console.log("render");
   return (
     <>
       <NoteItem id={id}>{children}</NoteItem>
