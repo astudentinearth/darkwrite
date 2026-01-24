@@ -10,6 +10,7 @@ import ThemeHandler from "@/components/theme-handler";
 import { useShortcuts } from "@/hooks/use-shortcuts";
 import SearchDialog from "../search/search-dialog";
 import { Toaster } from "@/components/ui";
+import NavigationHelper from "../navigation/navigation-helper";
 
 //import { useStartup } from "@/hooks/use-startup";
 
@@ -29,6 +30,7 @@ export function Layout() {
   return (
     <div className="flex [&>div]:shrink-0 w-full h-full bg-background overflow-hidden [--slide-distance:32px]">
       <ThemeHandler />
+      <NavigationHelper />
       <Sidebar
         collapseCallback={() => {
           setSidebarCollapsed(true);

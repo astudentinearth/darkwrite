@@ -11,8 +11,9 @@ import {
 } from "../hooks/use-note-item";
 import { cn, getNoteIcon } from "@/lib/utils";
 import { ChevronRight, Plus } from "lucide-react";
+import { navigateToNote } from "@/features/navigation/navigator";
 
-export function NoteListItem({
+export const NoteListItem = memo(function ({
   id,
   children,
 }: {
@@ -25,7 +26,7 @@ export function NoteListItem({
       <NoteDropZone aboveOrParentId={id} mode="below" />
     </>
   );
-}
+});
 
 function NoteItem({
   id,
@@ -35,7 +36,8 @@ function NoteItem({
   children: ReactNode[] | ReactNode;
 }) {
   const [open, setOpen] = useState(false);
-  const note = useNoteItem(id);
+  const { note, isActive } = useNoteItem(id);
+  console.log("render");
   const { isDragging, onDrag, onDragEnter, onDragLeave, onDrop, onDragOver } =
     useNoteItemDrag(id);
 
@@ -49,15 +51,22 @@ function NoteItem({
         onDragEnter={onDragEnter}
         onDragLeave={onDragLeave}
         onDragOver={onDragOver}
+        onClick={() => navigateToNote(id)}
         onDrop={onDrop}
         className={cn(
           `group grid grid-cols-[20px_1fr] hover:grid-cols-[20px_1fr_20px] w-full
           items-center gap-2 rounded-lg px-1.5 py-1.5 text-sm hover:bg-secondary/50`,
+          isActive && "bg-secondary/20 font-medium",
           isDragging && "bg-primary/25",
         )}
       >
-        <CollapsibleTrigger asChild>
-          <button className="flex items-center gap-1 rounded-sm justify-center size-5 hover:bg-muted/50">
+        <CollapsibleTrigger asChild className="rounded-sm bg-transparent">
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+            className="flex items-center gap-1 rounded-sm justify-center size-5 hover:bg-muted/50"
+          >
             <ChevronRight
               className={cn(
                 "size-4 transition-transform duration-100 hidden group-hover:block",
@@ -69,14 +78,19 @@ function NoteItem({
             </span>
           </button>
         </CollapsibleTrigger>
-        <span className="flex-1 truncate text-left select-none">
+        <span className="flex-1 truncate text-left select-none opacity-75 group-hover:opacity-100">
           {note.title || "Untitled"}
         </span>
-        <button className="hover:bg-secondary/50 size-5 group-hover:opacity-100 rounded-sm group-hover:flex hidden justify-center items-center">
+        <button
+          className={cn(
+            "hover:bg-secondary/50 size-5 group-hover:opacity-100 rounded-sm group-hover:flex hidden justify-center items-center",
+            isDragging && "hidden",
+          )}
+        >
           <Plus className="size-4" />
         </button>
       </div>
-      <CollapsibleContent className="pl-2">{children}</CollapsibleContent>
+      <CollapsibleContent className="pl-1.5">{children}</CollapsibleContent>
     </Collapsible>
   );
 }

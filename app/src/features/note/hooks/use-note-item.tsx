@@ -1,7 +1,8 @@
 import { beginDrag, DragType } from "@/features/dnd/datatransfer";
 import { useDragState } from "@/features/dnd/use-drag-state";
 import { useAppSelector } from "@/features/store/hooks";
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { matchPath } from "react-router-dom";
 import {
   getMovingNote,
   useMoveBelowMutation,
@@ -12,6 +13,10 @@ import {
   canMoveNoteInto,
 } from "../store/move-note-validator";
 import { selectNoteById } from "../store/note-selectors";
+import {
+  getCurrentRoutePath,
+  NavigationEventBus,
+} from "@/features/navigation/navigator";
 
 /**
  * Hook to get note data **within sidebar views.** Do NOT use this to
@@ -20,9 +25,28 @@ import { selectNoteById } from "../store/note-selectors";
  */
 export function useNoteItem(id: string) {
   const note = useAppSelector((state) => selectNoteById(state, id));
+  const [isActive, setIsActive] = useState(false);
 
-  if (!note) return null;
-  return note;
+  useEffect(() => {
+    // get the path name at the moment of render to determine
+    // initial active state. grab that state from react router
+    // without subscribing to changes.
+    const path = getCurrentRoutePath();
+    const match = matchPath("/page/:pageId", path);
+    if (match?.params.pageId === id) {
+      setIsActive(true);
+    }
+  }, [id]);
+
+  useEffect(() => {
+    const unsubscribe = NavigationEventBus.subscribe("note", ({ data }) => {
+      if (data.noteId === id) setIsActive(true);
+      else if (isActive) setIsActive(false);
+    });
+    return () => unsubscribe();
+  }, [id, isActive]);
+
+  return { note, isActive };
 }
 
 export function useNoteItemDrag(id: string) {

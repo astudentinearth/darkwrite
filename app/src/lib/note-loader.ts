@@ -1,5 +1,6 @@
 import { DarkwriteAPIClient } from "@/api/api-client";
-import { setWorkspaceId, useLocalStore } from "@/context/local-state";
+import { setWorkspaceId } from "@/context/local-state";
+import { store } from "@/features/store/redux";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const noteLoader = async ({ params }: { params: any }) => {
@@ -9,7 +10,7 @@ export const noteLoader = async ({ params }: { params: any }) => {
   const { note } = await DarkwriteAPIClient.note.getById(pageId);
   if (!note) throw new Error("Note not found");
 
-  const workspaceId = useLocalStore.getState().workspaceId;
+  const workspaceId = store.getState().session.workspaceId;
   if (note.workspaceId && note.workspaceId !== workspaceId) {
     setWorkspaceId(note.workspaceId);
   }

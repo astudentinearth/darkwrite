@@ -1,8 +1,8 @@
 import { cn } from "@/lib/utils";
-import { useNoteListState } from "../hooks/use-note-list-state";
-import { NoteDropZone, NoteListItem } from "./note-list-item";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
+import { useNoteListState } from "../hooks/use-note-list-state";
+import { NoteDropZone, NoteListItem } from "./note-list-item";
 
 export interface NoteListProps {
   className?: string;
@@ -16,7 +16,7 @@ export default function NoteList(props: NoteListProps) {
   const items = useMemo(() => {
     return state.noteIds.map((id) => (
       <NoteListItem id={id} key={id}>
-        <NoteList parentId={id} />
+        <NoteList className={cn(id != null && "pl-1")} parentId={id} />
       </NoteListItem>
     ));
   }, [state.noteIds]);
