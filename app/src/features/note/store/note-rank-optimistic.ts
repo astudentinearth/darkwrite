@@ -33,3 +33,42 @@ export function calculateOptimisticRankInLayer(
 
   return newOrderHint;
 }
+
+/**
+ * Calculates an optimistic rank for a note being moved below another note
+ * @param aboveNoteId
+ * @param siblingIds list of sibling note IDs **sorted by the key in `orderBy`**
+ * @param getNoteById a function that returns NoteDTO by ID (usually the redux selector)
+ * @param orderBy overrides the order key to use for rank calculation
+ * @returns
+ */
+export function calculateRelativeOptimisticRank(
+  aboveNoteId: string,
+  siblingIds: string[],
+  getNoteById: (id: string) => NoteDTO | undefined,
+  orderBy: OrderKey = "orderHint",
+) {
+  const aboveNote = getNoteById(aboveNoteId);
+  if (!aboveNote) return Rank.default().get();
+
+  const aboveIndex = siblingIds.findIndex((id) => id === aboveNoteId);
+
+  let newOrderHint: string;
+  if (aboveIndex >= 0 && aboveIndex < siblingIds.length - 1) {
+    const nextNote = getNoteById(siblingIds[aboveIndex + 1]);
+    if (nextNote) {
+      const rank = new Rank(aboveNote[orderBy]).between(
+        new Rank(nextNote[orderBy]),
+      );
+      newOrderHint = rank.get();
+    } else {
+      const rank = new Rank(aboveNote[orderBy]).next();
+      newOrderHint = rank.get();
+    }
+  } else {
+    const rank = new Rank(aboveNote[orderBy]).next();
+    newOrderHint = rank.get();
+  }
+
+  return newOrderHint;
+}

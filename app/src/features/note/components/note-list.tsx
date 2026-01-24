@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import { useNoteListState } from "../hooks/use-note-list-state";
-import { NoteListItem } from "./note-list-item";
+import { NoteDropZone, NoteListItem } from "./note-list-item";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -29,7 +29,16 @@ export default function NoteList(props: NoteListProps) {
         props.className,
       )}
     >
-      {items.length > 0 ? items : t("sidebar.notes.noPages")}
+      {items.length > 0 ? (
+        <>
+          <NoteDropZone aboveOrParentId={props.parentId} mode="into" />
+          {items}
+        </>
+      ) : (
+        <span className="text-xs text-foreground/75 pl-2 py-2">
+          {t("sidebar.notes.noPages")}
+        </span>
+      )}
     </div>
   );
 }

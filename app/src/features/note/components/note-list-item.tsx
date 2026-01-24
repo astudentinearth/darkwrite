@@ -4,7 +4,11 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui";
 import { memo, ReactNode, useState } from "react";
-import { useNoteItem, useNoteItemDrag } from "../hooks/use-note-item";
+import {
+  useNoteDropZone,
+  useNoteItem,
+  useNoteItemDrag,
+} from "../hooks/use-note-item";
 import { cn, getNoteIcon } from "@/lib/utils";
 import { ChevronRight, Plus } from "lucide-react";
 
@@ -18,7 +22,7 @@ export function NoteListItem({
   return (
     <>
       <NoteItem id={id}>{children}</NoteItem>
-      <NoteDropZone id={id} />
+      <NoteDropZone aboveOrParentId={id} mode="below" />
     </>
   );
 }
@@ -48,7 +52,7 @@ function NoteItem({
         onDrop={onDrop}
         className={cn(
           `group grid grid-cols-[20px_1fr] hover:grid-cols-[20px_1fr_20px] w-full
-          items-center gap-2 rounded-md px-2 py-1.5 text-sm hover:bg-secondary/50`,
+          items-center gap-2 rounded-lg px-1.5 py-1.5 text-sm hover:bg-secondary/50`,
           isDragging && "bg-primary/25",
         )}
       >
@@ -77,6 +81,22 @@ function NoteItem({
   );
 }
 
-const NoteDropZone = memo(function ({ id: _id }: { id: string }) {
-  return <div className="h-1"></div>;
+export const NoteDropZone = memo(function ({
+  aboveOrParentId,
+  mode,
+}: {
+  aboveOrParentId: string | null;
+  mode: "below" | "into";
+}) {
+  const { isDragging, onDragEnter, onDragLeave, onDragOver, onDrop } =
+    useNoteDropZone(aboveOrParentId, mode);
+  return (
+    <div
+      onDragEnter={onDragEnter}
+      onDragLeave={onDragLeave}
+      onDragOver={onDragOver}
+      onDrop={onDrop}
+      className={cn("h-1", isDragging && "bg-primary/20")}
+    ></div>
+  );
 });

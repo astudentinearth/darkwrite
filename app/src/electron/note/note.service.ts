@@ -112,10 +112,16 @@ export const NoteService = {
 
       let newOrderHint: string;
       if (nextNote) {
-        const rank = new Rank(aboveNote.orderHint).between(
-          new Rank(nextNote.orderHint),
-        );
-        newOrderHint = rank.get();
+        try {
+          const rank = new Rank(aboveNote.orderHint).between(
+            new Rank(nextNote.orderHint),
+          );
+          newOrderHint = rank.get();
+        } catch {
+          const lastNote = siblings[siblings.length - 1];
+          const rank = new Rank(lastNote.orderHint).next();
+          newOrderHint = rank.get();
+        }
       } else {
         const rank = new Rank(aboveNote.orderHint).next();
         newOrderHint = rank.get();

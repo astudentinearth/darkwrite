@@ -14,17 +14,25 @@ export function resolveUpperTree(id: string, notes: Record<string, NoteDTO>) {
   return list;
 }
 
+/**
+ * Returns true if potentialChildId is a descendant of potentialParentId
+ * @param potentialChildId
+ * @param potentialParentId
+ * @param notes
+ * @returns
+ */
 export function isDescendant(
-  id: string,
+  potentialChildId: ParentId,
   potentialParentId: string,
   notes: Record<string, NoteDTO>,
 ): boolean {
-  if (id === potentialParentId) return true;
-  let currentNote = id;
+  if (potentialChildId == null) return false;
+  if (potentialChildId === potentialParentId) return true;
+  let currentNote = potentialChildId;
   while (notes[currentNote] && notes[currentNote].parentId != null) {
     if (notes[currentNote].parentId === potentialParentId) return true;
     currentNote = notes[currentNote].parentId as string;
-    if (currentNote === id) break; // prevent circular reference
+    if (currentNote === potentialChildId) break; // prevent circular reference
   }
   return false;
 }
