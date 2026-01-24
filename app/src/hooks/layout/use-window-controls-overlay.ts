@@ -1,5 +1,5 @@
 import { RefObject, useEffect } from "react";
-import { useSidebar } from "./use-sidebar";
+import { useSidebar } from "../../features/layout/hooks/use-sidebar";
 import { useTitlebarWidth } from "./use-titlebar-width";
 
 export const useWindowControlsOverlay = (

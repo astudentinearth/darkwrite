@@ -7,6 +7,5 @@ export const useSidebar = () => {
   const setSidebarCollapsed = useLocalStore(
     (state) => state.setSidebarCollapsed,
   );
-  return { width, setWidth, isSidebarCollapsed, setSidebarCollapsed}
-
+  return { width, setWidth, isSidebarCollapsed, setSidebarCollapsed };
 };

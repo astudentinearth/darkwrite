@@ -1,29 +1,27 @@
 import { HeaderbarButton } from "@/components/headerbar-button";
 import { Button } from "@/components/ui/button";
 import NoteListRoot from "@/features/note/note-list-root";
+import { useSidebar } from "@/features/layout/hooks/use-sidebar";
 import { cn } from "@/lib/utils";
 import { LayoutDashboard, PanelRightOpen, Search } from "lucide-react";
 import React from "react";
 import { showSearch } from "../search/search-state";
 import AppMenu from "./app-menu";
-import { CreatePageButton } from "./create-page-button";
-import FavoritesContainer from "./favorites-container";
 import { SidebarNavigation } from "./navigation";
-import { TrashWidget } from "./trash";
 import { WorkspaceSwitcher } from "./workspace-switcher";
 
-export type SidebarProps = React.HTMLAttributes<HTMLDivElement> & {
-  collapsed?: boolean;
-  width: number;
-  collapseCallback: () => void;
-};
+export type SidebarProps = React.HTMLAttributes<HTMLDivElement> & {};
 
 export function Sidebar(props: SidebarProps) {
-  const { width, collapseCallback } = props;
+  const { width, setSidebarCollapsed, isSidebarCollapsed } = useSidebar();
   return (
     <div
       data-testid="container-sidebar"
-      className={cn("bg-background h-full flex flex-col", props.className)}
+      className={cn(
+        "bg-background h-full flex flex-col",
+        isSidebarCollapsed && "hidden",
+        props.className,
+      )}
       style={{ width: `${width}px` }}
     >
       <div className="titlebar w-full h-12 bg-background shrink-0 flex [&>button]:shrink-0 p-2 items-center gap-1">
@@ -47,7 +45,7 @@ export function Sidebar(props: SidebarProps) {
         </HeaderbarButton>
         <HeaderbarButton
           data-testid="button-collapse-sidebar"
-          onClick={collapseCallback}
+          onClick={() => setSidebarCollapsed(true)}
           title="Hide sidebar"
         >
           <PanelRightOpen width={18} height={18} />

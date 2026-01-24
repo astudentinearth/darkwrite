@@ -1,62 +1,29 @@
-import { Sidebar } from "@/features/sidebar";
-import { useSidebar } from "@/hooks/layout/use-sidebar";
-import { useWindowControlsOverlay } from "@/hooks/layout/use-window-controls-overlay";
-import { cn } from "@/lib/utils";
-import { useRef } from "react";
-import { Outlet } from "react-router-dom";
-import { useResizableSidebar } from "../../hooks/layout/use-resizable-layout";
-import { Titlebar } from "./titlebar";
 import ThemeHandler from "@/components/theme-handler";
-import { useShortcuts } from "@/hooks/use-shortcuts";
-import SearchDialog from "../search/search-dialog";
 import { Toaster } from "@/components/ui";
+import { useLocalStore } from "@/context/local-state";
+import { Sidebar } from "@/features/sidebar";
+import { useShortcuts } from "@/hooks/use-shortcuts";
+import { cn } from "@/lib/utils";
+import { Outlet } from "react-router-dom";
 import NavigationHelper from "../navigation/navigation-helper";
+import SearchDialog from "../search/search-dialog";
+import SidebarResizeHandle from "./sidebar-resize-handle";
+import { Titlebar } from "./titlebar";
 
 //import { useStartup } from "@/hooks/use-startup";
 
-const [MIN_WIDTH, , MAX_WIDTH] = [180, 240, 300];
-
 export function Layout() {
-  const { isSidebarCollapsed, setWidth, width, setSidebarCollapsed } =
-    useSidebar();
-  const headerRef = useRef<HTMLDivElement>(null); // editor-side header bar
-  const { handleMouseDown } = useResizableSidebar({
-    min: MIN_WIDTH,
-    max: MAX_WIDTH,
-    callback: setWidth,
-  });
-  useWindowControlsOverlay(headerRef);
+  const isSidebarCollapsed = useLocalStore((s) => s.isSidebarCollapsed);
+
   useShortcuts();
   return (
     <div className="flex [&>div]:shrink-0 w-full h-full bg-background overflow-hidden [--slide-distance:32px]">
       <ThemeHandler />
       <NavigationHelper />
-      <Sidebar
-        collapseCallback={() => {
-          setSidebarCollapsed(true);
-        }}
-        collapsed={isSidebarCollapsed}
-        width={width}
-        className={cn(isSidebarCollapsed && "hidden")}
-      ></Sidebar>
-      <div
-        data-testid="sidebar-resize-handle"
-        onMouseDown={handleMouseDown}
-        className={cn(
-          "w-px h-full flex cursor-ew-resize resize-handle relative",
-          isSidebarCollapsed && "hidden",
-        )}
-      ></div>
+      <Sidebar></Sidebar>
+      <SidebarResizeHandle />
       <div className="h-full flex flex-col grow overflow-hidden">
-        {/* (
-          <Titlebar
-            refObject={headerRef}
-            expandCallback={() => {
-              setSidebarCollapsed(false);
-            }}
-            isSidebarCollapsed={isSidebarCollapsed}
-          ></Titlebar>
-        )*/}
+        <Titlebar></Titlebar>
         <div
           className={cn(
             "bg-view-1 h-full overflow-x-hidden main-view  border-border/25 ml-0 mb-1.5 mr-1.5 rounded-lg rounded-br-sm border",

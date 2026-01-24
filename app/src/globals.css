@@ -251,8 +251,10 @@ body,
 .resize-handle {
   pointer-events: none;
   user-select: none;
-  transition-property: filter;
+  transition-property: background-color;
   transition-duration: 250ms;
+  cursor: ew-resize;
+  @apply bg-primary/0;
 }
 
 .resize-handle::before {
@@ -268,11 +270,7 @@ body,
 }
 
 .resize-handle:hover {
-  filter: brightness(150%);
-}
-
-.resize-handle:active {
-  filter: brightness(200%);
+  @apply bg-primary/20;
 }
 
 .main-view::-webkit-scrollbar {
