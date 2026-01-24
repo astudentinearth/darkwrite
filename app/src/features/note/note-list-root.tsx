@@ -1,4 +1,3 @@
-import { Rank } from "@/common/rank";
 import { Button } from "@/components/ui/button";
 import {
   Collapsible,
