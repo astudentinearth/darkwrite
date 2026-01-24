@@ -1,14 +1,17 @@
-import { isDescendant } from "@/common/note";
-import {
-  beginDrag,
-  DragType,
-  extractNoteDragData,
-} from "@/features/dnd/datatransfer";
+import { beginDrag, DragType } from "@/features/dnd/datatransfer";
+import { useDragState } from "@/features/dnd/use-drag-state";
 import { useAppSelector } from "@/features/store/hooks";
-import { RootState, store } from "@/features/store/redux";
-import { useCallback, useState } from "react";
-import { useMoveBelowMutation, useMoveIntoMutation } from "../store/move-note";
-import { selectAllNotesAsMap, selectNoteById } from "../store/note-selectors";
+import { useCallback } from "react";
+import {
+  getMovingNote,
+  useMoveBelowMutation,
+  useMoveIntoMutation,
+} from "../store/move-note";
+import {
+  canMoveNoteBelow,
+  canMoveNoteInto,
+} from "../store/move-note-validator";
+import { selectNoteById } from "../store/note-selectors";
 
 /**
  * Hook to get note data **within sidebar views.** Do NOT use this to
@@ -23,8 +26,15 @@ export function useNoteItem(id: string) {
 }
 
 export function useNoteItemDrag(id: string) {
-  const [isDragging, setIsDragging] = useState(false);
+  const {
+    isDraggingOver,
+    onDragEnter,
+    onDragLeave,
+    onDragOver,
+    setIsDraggingOver,
+  } = useDragState();
   const [trigger] = useMoveIntoMutation();
+
   type DragEvent = React.DragEvent<HTMLElement>;
   const onDrag = useCallback(
     (event: DragEvent) => {
@@ -33,46 +43,22 @@ export function useNoteItemDrag(id: string) {
     [id],
   );
 
-  const onDragOver = useCallback((e: DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragging(true);
-  }, []);
-
-  const onDragEnter = useCallback((e: DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragging(true);
-  }, []);
-
-  const onDragLeave = useCallback((e: DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragging(false);
-  }, []);
-
   const onDrop = useCallback(
     (e: DragEvent) => {
       e.preventDefault();
       e.stopPropagation();
 
-      setIsDragging(false);
-
-      const data = extractNoteDragData(e);
-      if (data == null) return setIsDragging(false);
-
-      const notes = selectAllNotesAsMap(store.getState() as RootState);
-
-      const isCircularMovement = isDescendant(id, data.noteId, notes);
-      if (isCircularMovement) return;
-
-      const note = selectNoteById(store.getState() as RootState, data.noteId);
+      setIsDraggingOver(false);
+      const note = getMovingNote(e);
       if (!note) return;
+
+      if (!canMoveNoteInto(note.id, id)) return;
+
       if (note.parentId === id) return;
 
       try {
         trigger({
-          sourceNoteId: data.noteId,
+          sourceNoteId: note.id,
           destinationNoteId: id,
           placement: "inside-end",
         });
@@ -80,106 +66,72 @@ export function useNoteItemDrag(id: string) {
         console.error("Failed to move note:", error);
       }
     },
-    [id, trigger],
+    [id, trigger, setIsDraggingOver],
   );
 
-  return { onDrag, onDragEnter, onDragLeave, isDragging, onDrop, onDragOver };
+  return {
+    onDrag,
+    onDragEnter,
+    onDragLeave,
+    isDragging: isDraggingOver,
+    onDrop,
+    onDragOver,
+  };
 }
 
 export function useNoteDropZone(
   aboveOrParentId: string | null,
   mode: "below" | "into" = "below",
 ) {
-  const [isDragging, setIsDragging] = useState(false);
+  const {
+    isDraggingOver,
+    onDragEnter,
+    onDragLeave,
+    onDragOver,
+    setIsDraggingOver,
+  } = useDragState();
 
   const [moveBelow] = useMoveBelowMutation();
   const [moveInto] = useMoveIntoMutation();
 
   type DragEvent = React.DragEvent<HTMLElement>;
-  const onDragOver = useCallback((e: DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragging(true);
-  }, []);
-
-  const onDragEnter = useCallback((e: DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragging(true);
-  }, []);
-
-  const onDragLeave = useCallback((e: DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragging(false);
-  }, []);
 
   const handleDropForBelow = useCallback(
     (e: DragEvent) => {
       e.preventDefault();
       e.stopPropagation();
+      setIsDraggingOver(false);
 
-      const sourceId = extractNoteDragData(e)?.noteId;
-      if (!sourceId) return;
-
-      setIsDragging(false);
       if (!aboveOrParentId) return;
 
-      const movingNote = selectNoteById(
-        store.getState() as RootState,
-        sourceId,
-      );
+      const movingNote = getMovingNote(e);
       if (!movingNote) return;
 
-      const notes = selectAllNotesAsMap(store.getState() as RootState);
-
-      const aboveNote = selectNoteById(
-        store.getState() as RootState,
-        aboveOrParentId,
-      );
-
-      const isCircularMovement = isDescendant(
-        aboveNote.parentId,
-        movingNote.id,
-        notes,
-      );
-
-      if (isCircularMovement) return;
+      if (!canMoveNoteBelow(movingNote.id, aboveOrParentId)) return;
 
       try {
-        moveBelow({ sourceNoteId: movingNote.id, aboveNoteId: aboveNote.id });
+        moveBelow({
+          sourceNoteId: movingNote.id,
+          aboveNoteId: aboveOrParentId,
+        });
       } catch (error) {
         console.error("Failed to move note below:", error);
       }
     },
-    [aboveOrParentId, moveBelow],
+    [aboveOrParentId, moveBelow, setIsDraggingOver],
   );
 
   const handleDropInto = useCallback(
     (e: DragEvent) => {
       e.preventDefault();
       e.stopPropagation();
+      setIsDraggingOver(false);
 
-      const sourceId = extractNoteDragData(e)?.noteId;
-      if (!sourceId) return;
-
-      setIsDragging(false);
-
-      const movingNote = selectNoteById(
-        store.getState() as RootState,
-        sourceId,
-      );
+      const movingNote = getMovingNote(e);
       if (!movingNote) return;
 
-      const notes = selectAllNotesAsMap(store.getState() as RootState);
+      if (!canMoveNoteInto(movingNote.id, aboveOrParentId)) return;
 
-      const isCircularMovement = isDescendant(
-        aboveOrParentId,
-        movingNote.id,
-        notes,
-      );
-      if (isCircularMovement) return;
-      if (movingNote.parentId === aboveOrParentId) return;
       try {
         moveInto({
           sourceNoteId: movingNote.id,
@@ -190,13 +142,13 @@ export function useNoteDropZone(
         console.error("Failed to move note into:", error);
       }
     },
-    [aboveOrParentId, moveInto],
+    [aboveOrParentId, moveInto, setIsDraggingOver],
   );
 
   return {
     onDragEnter,
     onDragLeave,
-    isDragging,
+    isDragging: isDraggingOver,
     onDragOver,
     onDrop: mode === "below" ? handleDropForBelow : handleDropInto,
   };

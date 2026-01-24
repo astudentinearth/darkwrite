@@ -5,11 +5,13 @@ import { isDescendant, ParentId } from "@/common/note";
 import { Rank } from "@/common/rank";
 import { selectNoteById, selectNotesByParentId } from "./note-selectors";
 import { updateNote, upsertNotes } from "./note-slice";
-import { RootState } from "@/features/store/redux";
+import { RootState, store } from "@/features/store/redux";
 import {
   calculateOptimisticRankInLayer,
   calculateRelativeOptimisticRank,
 } from "./note-rank-optimistic";
+import { DragEvent } from "react";
+import { extractNoteDragData } from "@/features/dnd/datatransfer";
 
 export type MoveNoteBelowArgs = {
   sourceNoteId: string;
@@ -26,6 +28,13 @@ export type MoveNoteIntoArgs = {
   destinationNoteId: ParentId;
   placement: "inside-start" | "inside-end";
 };
+
+export function getMovingNote(e: DragEvent<HTMLElement>) {
+  const sourceId = extractNoteDragData(e)?.noteId;
+  if (!sourceId) return;
+  const movingNote = selectNoteById(store.getState() as RootState, sourceId);
+  return movingNote ?? null;
+}
 
 const _moveNoteIntoQueryFn = async ({
   destinationNoteId,
