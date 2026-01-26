@@ -41,8 +41,6 @@
   --border: hsl(0 0% 14%);
   --input: hsl(217.2 32.6% 17.5%);
 
-  --radius: 0.5rem;
-
   --star: hsl(50 97% 63%);
 
   /* generic fonts until its loaded from settings */
@@ -111,9 +109,12 @@
   --color-disabled: var(--disabled);
   --color-star: var(--star);
 
-  --radius-lg: var(--radius);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-sm: calc(var(--radius) - 4px);
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  --radius-full: 9999px;
 
   /* using sm, md, lg here overrides tailwind's scale, so we'll use longer names instead */
   --spacing-small: 0.25rem;

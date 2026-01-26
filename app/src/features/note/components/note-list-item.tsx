@@ -12,6 +12,7 @@ import {
 import { cn, getNoteIcon } from "@/lib/utils";
 import { ChevronRight, Plus } from "lucide-react";
 import { navigateToNote } from "@/features/navigation/navigator";
+import { useLocation } from "react-router-dom";
 
 export const NoteListItem = memo(function ({
   id,
@@ -37,7 +38,6 @@ function NoteItem({
 }) {
   const [open, setOpen] = useState(false);
   const { note, isActive } = useNoteItem(id);
-  console.log("render");
   const { isDragging, onDrag, onDragEnter, onDragLeave, onDrop, onDragOver } =
     useNoteItemDrag(id);
 
@@ -65,7 +65,7 @@ function NoteItem({
             onClick={(e) => {
               e.stopPropagation();
             }}
-            className="flex items-center gap-1 rounded-sm justify-center size-5 hover:bg-muted/50"
+            className="flex items-center gap-1 rounded-[6px] justify-center size-5 hover:bg-muted/50"
           >
             <ChevronRight
               className={cn(
@@ -83,7 +83,7 @@ function NoteItem({
         </span>
         <button
           className={cn(
-            "hover:bg-secondary/50 size-5 group-hover:opacity-100 rounded-sm group-hover:flex hidden justify-center items-center",
+            "hover:bg-secondary/50 size-5 group-hover:opacity-100 rounded-[6px] group-hover:flex hidden justify-center items-center",
             isDragging && "hidden",
           )}
         >
