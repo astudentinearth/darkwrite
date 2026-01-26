@@ -98,6 +98,7 @@ If a new dependency is absolutely required to solve a problem, ask the user befo
 - NEVER use casts like `as unknown as Type`
 - If there's a TypeScript error you cannot resolve without casting, abort execution and ask for user confirmation.
 - Do not touch type errors unrelated to the refactor you are working on. Do not get out of the scope of your prompt.
+- `any` type is forbidden. If you encounter a situation where you think `any` is necessary, abort execution and ask for user confirmation.
 
 # Documentation
 > Always fetch the latest TipTap documentation, as TipTap v3 has introduced major changes.

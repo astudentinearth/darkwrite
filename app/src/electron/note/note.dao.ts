@@ -2,6 +2,7 @@ import { EntityManager, IsNull, Repository } from "typeorm";
 import { AppDataSource } from "../db";
 import { Note } from "../entity";
 import { ParentId } from "@/common/note";
+import { Rank } from "@/common/rank";
 
 export class NoteDAO {
   constructor(
@@ -119,6 +120,12 @@ export class NoteDAO {
     return result;
   }
 
+  /**
+   * Is
+   * @param targetId inside
+   * @param potentialParentId ?
+   * @returns
+   */
   async isDescendant(
     targetId: ParentId,
     potentialParentId: ParentId,
@@ -134,5 +141,20 @@ export class NoteDAO {
       if (currentNote?.id === targetId) break; // prevent circular reference
     }
     return false;
+  }
+
+  async computeOrderKeysForLayer(workspaceId: string, parentId: ParentId) {
+    const firstInLayer = await this.findFirstNoteInLayer(workspaceId, parentId);
+    const lastInLayer = await this.findLastNoteInLayer(workspaceId, parentId);
+
+    const start = firstInLayer
+      ? new Rank(firstInLayer.orderHint).prev().toString()
+      : Rank.default().toString();
+
+    const end = lastInLayer
+      ? new Rank(lastInLayer.orderHint).next().toString()
+      : Rank.default().toString();
+
+    return { start, end };
   }
 }

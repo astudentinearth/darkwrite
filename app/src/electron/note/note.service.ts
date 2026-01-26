@@ -156,31 +156,12 @@ export const NoteService = {
         await noteRepository.findByIdOrThrow(destinationNoteId);
       }
 
-      let newOrderHint: string = "";
-
-      if (placement === "start") {
-        const firstInLayer = await noteRepository.findFirstNoteInLayer(
+      const newOrderHint: string = (
+        await noteRepository.computeOrderKeysForLayer(
           sourceNote.workspace.id,
           destinationNoteId,
-        );
-        if (firstInLayer) {
-          const rank = new Rank(firstInLayer.orderHint).prev();
-          newOrderHint = rank.get();
-        } else {
-          newOrderHint = Rank.default().get();
-        }
-      } else if (placement === "end") {
-        const lastInLayer = await noteRepository.findLastNoteInLayer(
-          sourceNote.workspace.id,
-          destinationNoteId,
-        );
-        if (lastInLayer) {
-          const rank = new Rank(lastInLayer.orderHint).next();
-          newOrderHint = rank.get();
-        } else {
-          newOrderHint = Rank.default().get();
-        }
-      }
+        )
+      )[placement];
 
       sourceNote.parentId = destinationNoteId;
       sourceNote.orderHint = newOrderHint;
