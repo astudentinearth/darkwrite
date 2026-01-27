@@ -23,7 +23,7 @@ import {
   WorkspacesResponseDTO,
 } from "./dto/response/workspace.response";
 import { Font } from "./font";
-import { NoteExportFormat, NoteImportResult } from "./note";
+import { NoteExportFormat, NoteImportResult, ParentId } from "./note";
 import { PageSize } from "./pdf";
 import { DarkwriteUserSettings } from "./settings";
 
@@ -31,12 +31,46 @@ export interface INoteAPI {
   create: (dto: CreateNoteDTO) => Promise<NoteResponseDTO>;
   update: (id: string, dto: UpdateNoteDTO) => Promise<NoteResponseDTO>;
   move: (dto: MoveNoteDTO) => Promise<NoteResponseDTO>;
+
+  /**
+   * **PERMANENTLY** deletes a note. This is **NOT** the same as moving to trash. If you
+   * want to move a note to the trash can, do an update request with `isTrashed`.
+   * @remarks This action is irreversible.
+   * @param id
+   * @returns
+   */
   delete: (id: string) => Promise<void>;
+
+  /**
+   * @deprecated This API is way too broad and should be avoided in favor of more specific queries. This can be removed in future releases.
+   * @param workspaceId
+   * @returns
+   */
   getAllByWorkspaceId: (workspaceId: string) => Promise<NotesResponseDTO>;
+
+  /**
+   * @param workspaceId
+   * @param parentId
+   * @returns notes that belong to the given parent (folder) in the specified workspace and that are NOT trashed.
+   */
   getByParentId: (
     workspaceId: string,
-    parentId: string | null,
+    parentId: ParentId,
   ) => Promise<NotesResponseDTO>;
+
+  /**
+   * @param workspaceId
+   * @param parentId
+   * @returns favorites in the given workspace, provided they are not trashed.
+   */
+  getFavorites: (workspaceId: string) => Promise<NotesResponseDTO>;
+
+  /**
+   * Returns notes that are in the trash for the given workspace.
+   * @param workspaceId
+   */
+  getTrashed: (workspaceId: string) => Promise<NotesResponseDTO>;
+
   getById: (id: string) => Promise<NoteResponseDTO>;
   getDocument: (id: string) => Promise<NoteContentResponseDTO>;
   setDocument: (id: string, serializedDocument: string) => Promise<void>;
