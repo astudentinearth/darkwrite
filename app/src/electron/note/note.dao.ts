@@ -108,6 +108,31 @@ export class NoteDAO {
     return result;
   }
 
+  async findAllFavorites(workspaceId: string) {
+    return this.repo.find({
+      where: {
+        workspace: { id: workspaceId },
+        isFavorite: true,
+        isTrashed: false,
+      },
+      order: {
+        favoriteOrderHint: "ASC",
+      },
+    });
+  }
+
+  async findAllTrashed(workspaceId: string) {
+    return this.repo.find({
+      where: {
+        workspace: { id: workspaceId },
+        isTrashed: true,
+      },
+      order: {
+        trashedAt: "ASC",
+      },
+    });
+  }
+
   async findLastNoteInFavorites(workspaceId: string) {
     const result = await this.repo.findOne({
       order: { favoriteOrderHint: "DESC" },
@@ -153,6 +178,21 @@ export class NoteDAO {
 
     const end = lastInLayer
       ? new Rank(lastInLayer.orderHint).next().toString()
+      : Rank.default().toString();
+
+    return { start, end };
+  }
+
+  async computeOrderKeysForFavorites(workspaceId: string) {
+    const favorites = await this.findAllFavorites(workspaceId);
+    const start = favorites.length
+      ? new Rank(favorites[0].favoriteOrderHint).prev().toString()
+      : Rank.default().toString();
+
+    const end = favorites.length
+      ? new Rank(favorites[favorites.length - 1].favoriteOrderHint)
+          .next()
+          .toString()
       : Rank.default().toString();
 
     return { start, end };

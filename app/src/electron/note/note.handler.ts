@@ -9,6 +9,7 @@ import { NoteQueryService } from "./note-query.service";
 import { NoteService } from "./note.service";
 import printToPdf from "../lib/print-to-pdf";
 import { IPCHandler } from "../types/ipc-handler";
+import { mapNotesToDTO } from "./note-util";
 
 const documentService = new DocumentService();
 
@@ -22,29 +23,25 @@ export const ElectronNoteAPI: INoteAPI = {
 
   async getAllByWorkspaceId(workspaceId) {
     const notes = await NoteQueryService.getAllByWorkspaceId(workspaceId);
-    const dtos = notes
-      .map((n) => n.mapToDTO())
-      .reduce(
-        (acc, current) => {
-          acc[current.id] = current;
-          return acc;
-        },
-        {} as Record<string, NoteDTO>,
-      );
+    const dtos = mapNotesToDTO(notes);
+    return { notes: dtos };
+  },
+
+  async getFavorites(workspaceId: string) {
+    const notes = await NoteQueryService.getFavorites(workspaceId);
+    const dtos = mapNotesToDTO(notes);
+    return { notes: dtos };
+  },
+
+  async getTrashed(workspaceId: string) {
+    const notes = await NoteQueryService.getTrashed(workspaceId);
+    const dtos = mapNotesToDTO(notes);
     return { notes: dtos };
   },
 
   async getByParentId(workspaceId: string, parentId: string | null) {
     const notes = await NoteQueryService.getByParentId(workspaceId, parentId);
-    const dtos = notes
-      .map((n) => n.mapToDTO())
-      .reduce(
-        (acc, current) => {
-          acc[current.id] = current;
-          return acc;
-        },
-        {} as Record<string, NoteDTO>,
-      );
+    const dtos = mapNotesToDTO(notes);
     return { notes: dtos };
   },
 
