@@ -1,11 +1,11 @@
 import { NoteDTO } from "./dto";
 
 export function notTrashed(note: NoteDTO) {
-  return !note.isTrashed
+  return !note.isTrashed;
 }
 
 export function notTrashedAndIsFavorite(note: NoteDTO) {
-  return !note.isTrashed && note.isFavorite
+  return !note.isTrashed && note.isFavorite;
 }
 
 export function withParent(parentId: string | null | undefined) {
@@ -13,6 +13,8 @@ export function withParent(parentId: string | null | undefined) {
 }
 
 export function byUpdateTime(mode: "asc" | "desc") {
-  return (a: NoteDTO, b: NoteDTO) => mode === "asc" ? a.modifiedAt.valueOf() - b.modifiedAt.valueOf() : b.modifiedAt.valueOf() - a.modifiedAt.valueOf();
+  return (a: NoteDTO, b: NoteDTO) =>
+    mode === "asc"
+      ? new Date(a.modifiedAt).valueOf() - new Date(b.modifiedAt).valueOf()
+      : new Date(b.modifiedAt).valueOf() - new Date(a.modifiedAt).valueOf();
 }
-

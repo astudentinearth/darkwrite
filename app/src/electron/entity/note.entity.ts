@@ -81,9 +81,9 @@ export class Note {
     return {
       id: this.id,
       title: this.title,
-      createdAt: this.createdAt,
+      createdAt: this.createdAt.toISOString(),
       favoriteOrderHint: this.favoriteOrderHint,
-      modifiedAt: this.modifiedAt,
+      modifiedAt: this.modifiedAt.toISOString(),
       orderHint: this.orderHint,
       workspaceId: this.workspace.id,
       databaseId: this.database?.id,
@@ -92,7 +92,7 @@ export class Note {
       isTrashed: this.isTrashed,
       parentId: this.parentId,
       propertyValues: this.propertyValues,
-      trashedAt: this.trashedAt,
+      trashedAt: this.trashedAt?.toISOString(),
       userId: this.userId,
     } satisfies NoteDTO;
   }

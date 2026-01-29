@@ -17,6 +17,10 @@ export function noteByParentIdTag(
   return `WORKSPACE_${workspaceId}_PARENT_${parentId ?? "ROOT"}`;
 }
 
+export function recentsByWorkspaceIdTag(workspaceId: string) {
+  return `WORKSPACE_${workspaceId}_RECENTS`;
+}
+
 const tryFetch = async (promise: Promise<NotesResponseDTO>) => {
   try {
     const { notes } = await promise;
@@ -55,6 +59,30 @@ export const notesApi = createApi({
               {
                 type: NOTES_TAG_TYPE,
                 id: noteByParentIdTag(args.workspaceId, args.parentId),
+              },
+            ]
+          : [],
+    }),
+
+    getRecentsByWorkspaceId: builder.query<NoteDTO[], string>({
+      queryFn: (workspaceId) =>
+        tryFetch(DarkwriteAPIClient.note.getRecents(workspaceId)),
+
+      async onQueryStarted(_args, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          dispatch(upsertNotes(data));
+        } catch {
+          /* empty */
+        }
+      },
+
+      providesTags: (result, _error, workspaceId) =>
+        result
+          ? [
+              {
+                type: NOTES_TAG_TYPE,
+                id: recentsByWorkspaceIdTag(workspaceId),
               },
             ]
           : [],

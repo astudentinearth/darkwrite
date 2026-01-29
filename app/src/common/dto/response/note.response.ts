@@ -5,9 +5,9 @@ export interface NoteDTO {
   title: string;
   icon?: string | null;
   parentId: string | null;
-  createdAt: Date;
-  modifiedAt: Date;
-  trashedAt?: Date | null;
+  createdAt: string;
+  modifiedAt: string;
+  trashedAt?: string | null;
   orderHint: string;
   favoriteOrderHint: string;
   isFavorite?: boolean | null;

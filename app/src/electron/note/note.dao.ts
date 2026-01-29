@@ -197,4 +197,26 @@ export class NoteDAO {
 
     return { start, end };
   }
+
+  async searchByTitle(workspaceId: string, query: string) {
+    return this.repo
+      .createQueryBuilder("note")
+      .where("note.workspaceId = :workspaceId", { workspaceId })
+      .andWhere("note.title ILIKE :query", { query: `%${query}%` })
+      .andWhere("note.isTrashed = false")
+      .getMany();
+  }
+
+  async getRecentlyModifiedNotes(workspaceId: string, limit: number) {
+    return this.repo.find({
+      where: {
+        workspace: { id: workspaceId },
+        isTrashed: false,
+      },
+      order: {
+        modifiedAt: "DESC",
+      },
+      take: limit,
+    });
+  }
 }

@@ -8,4 +8,9 @@ export const NoteQueryService = {
   getById: noteDAO.findById.bind(noteDAO),
   getFavorites: noteDAO.findAllFavorites.bind(noteDAO),
   getTrashed: noteDAO.findAllTrashed.bind(noteDAO),
+  search: noteDAO.searchByTitle.bind(noteDAO),
+  getRecents(workspaceId: string) {
+    const recents = noteDAO.getRecentlyModifiedNotes(workspaceId, 5);
+    return recents;
+  },
 };

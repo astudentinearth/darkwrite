@@ -71,6 +71,9 @@ export interface INoteAPI {
    */
   getTrashed: (workspaceId: string) => Promise<NotesResponseDTO>;
 
+  search: (workspaceId: string, query: string) => Promise<NotesResponseDTO>;
+  getRecents: (workspaceId: string) => Promise<NotesResponseDTO>;
+
   getById: (id: string) => Promise<NoteResponseDTO>;
   getDocument: (id: string) => Promise<NoteContentResponseDTO>;
   setDocument: (id: string, serializedDocument: string) => Promise<void>;

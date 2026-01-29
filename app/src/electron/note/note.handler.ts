@@ -39,6 +39,18 @@ export const ElectronNoteAPI: INoteAPI = {
     return { notes: dtos };
   },
 
+  async search(workspaceId: string, query: string) {
+    const notes = await NoteQueryService.search(workspaceId, query);
+    const dtos = mapNotesToDTO(notes);
+    return { notes: dtos };
+  },
+
+  async getRecents(workspaceId: string) {
+    const notes = await NoteQueryService.getRecents(workspaceId);
+    const dtos = mapNotesToDTO(notes);
+    return { notes: dtos };
+  },
+
   async getByParentId(workspaceId: string, parentId: string | null) {
     const notes = await NoteQueryService.getByParentId(workspaceId, parentId);
     const dtos = mapNotesToDTO(notes);

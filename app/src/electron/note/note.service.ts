@@ -86,6 +86,10 @@ export const NoteService = {
 
   async move(dto: MoveNoteDTO) {
     if (dto.placement === "below") {
+      if (!dto.destinationId)
+        throw new Error(
+          "Destination ID cannot be null when placement is 'below'.",
+        );
       return await NoteService.moveBelow(dto.sourceId, dto.destinationId);
     } else {
       return await NoteService.moveInto(
