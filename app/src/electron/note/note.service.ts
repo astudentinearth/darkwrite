@@ -101,11 +101,22 @@ export const NoteService = {
   },
 
   async moveBelow(sourceNoteNoteId: string, aboveNoteId: string) {
+    /*
+      Edge cases:
+      - Moving below a trashed note (not allowed)
+      - Moving to the end of the list (no next note)
+      - Rank collision (re-rank the entire layer) //TODO
+    */
+
     return await AppDataSource.manager.transaction(async (manager) => {
       const noteRepository = NoteDAO.transactional(manager);
 
       const sourceNote = await noteRepository.findByIdOrThrow(sourceNoteNoteId);
       const aboveNote = await noteRepository.findByIdOrThrow(aboveNoteId);
+
+      if (aboveNote.isTrashed || sourceNote.isTrashed) {
+        throw new Error("Cannot move (below) a trashed note.");
+      }
 
       const siblings = await noteRepository.findAllByParentIdSortAsc(
         sourceNote.workspace.id,
@@ -148,6 +159,11 @@ export const NoteService = {
       const noteRepository = NoteDAO.transactional(manager);
 
       const sourceNote = await noteRepository.findByIdOrThrow(sourceNoteId);
+
+      if (sourceNote.isTrashed) {
+        throw new Error("Cannot move a trashed note.");
+      }
+
       const isCircular = await noteRepository.isDescendant(
         destinationNoteId,
         sourceNoteId,
@@ -157,7 +173,10 @@ export const NoteService = {
       }
 
       if (destinationNoteId) {
-        await noteRepository.findByIdOrThrow(destinationNoteId);
+        const dest = await noteRepository.findByIdOrThrow(destinationNoteId);
+        if (dest.isTrashed) {
+          throw new Error("Cannot move a note into a trashed note.");
+        }
       }
 
       const newOrderHint: string = (

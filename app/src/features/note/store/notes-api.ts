@@ -90,4 +90,5 @@ export const notesApi = createApi({
   }),
 });
 
-export const { useGetNotesByParentIdQuery } = notesApi;
+export const { useGetNotesByParentIdQuery, useGetRecentsByWorkspaceIdQuery } =
+  notesApi;

@@ -2,6 +2,7 @@ import { RootState } from "@/features/store/redux";
 import { notesAdapter } from "./notes-adapter";
 import { createSelector } from "@reduxjs/toolkit";
 import { Rank } from "@/common/rank";
+import { byUpdateTime } from "@/common/note-filters";
 
 const selectNotesState = (store: RootState) => store["notes-slice"];
 
@@ -28,5 +29,15 @@ export const selectNotesByParentId = createSelector(
       )
       .toSorted((a, b) => Rank.sorter(a.orderHint, b.orderHint))
       .map((n) => n.id);
+  },
+);
+
+export const selectRecentNotes = createSelector(
+  [selectAllNotes, (_state: RootState, workspaceId: string) => workspaceId],
+  (allNotes, workspaceId) => {
+    return allNotes
+      .filter((n) => n.workspaceId === workspaceId && !n.isTrashed)
+      .toSorted(byUpdateTime("desc"))
+      .slice(0, 5);
   },
 );
