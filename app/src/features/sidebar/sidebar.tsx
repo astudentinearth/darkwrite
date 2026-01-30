@@ -9,6 +9,7 @@ import { showSearch } from "../search/search-state";
 import AppMenu from "./app-menu";
 import { SidebarNavigation } from "./navigation";
 import { WorkspaceSwitcher } from "./workspace-switcher";
+import { CreatePageButton } from "./create-page-button";
 
 export type SidebarProps = React.HTMLAttributes<HTMLDivElement> & {};
 
@@ -54,6 +55,7 @@ export function Sidebar(props: SidebarProps) {
       <div className="h-full w-full grow pl-large pr-small py-0 overflow-y-auto scroll-view gutter-stable">
         <div className="flex gap-2 flex-col mb-16 max-w-full">
           <WorkspaceSwitcher />
+          <CreatePageButton />
           <SidebarNavigation />
           <NoteListRoot />
           <div className="flex flex-col gap-0.5"></div>

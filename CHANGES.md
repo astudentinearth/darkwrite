@@ -5,10 +5,11 @@
 - Fixed a bug that allowed you to create circular references when moving notes
 - Fixed an infinite loop crash when you tried to access a note that was part of a circular reference
 - Fix crash when sidebar tree items had colliding order keys
+- Default note title ("Untitled") is now localized
 
 ## 🛠️ Technical changes (definitely read if you have your own fork)
 - Dropped `@tanstack/react-query` in favor of Redux + RTK Query
-- ⚠️ Breaking change: orderHint and favoriteOrderHint are no longer part of note updates. Moving and/or reordering notes are now backend-authoritative commands.
+- ⚠️ Breaking change: orderHint and favoriteOrderHint are no longer part of note updates or creation. Moving and/or reordering notes are now backend-authoritative commands.
 - IPC bridge now correctly handles union types
 
 # 1.0.3-beta.1

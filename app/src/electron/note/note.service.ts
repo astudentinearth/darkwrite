@@ -13,32 +13,31 @@ const noteDAO = new NoteDAO();
 
 export const NoteService = {
   async create(dto: CreateNoteDTO) {
-    const {
-      title,
-      workspaceId,
-      databaseId,
-      icon,
-      parentId,
-      orderHint,
-      favoriteOrderHint,
-    } = dto;
+    const { title, workspaceId, databaseId, icon, parentId } = dto;
 
     const workspace = await WorkspaceDAO.findByIdOrThrow(workspaceId);
+    if (!workspace) {
+      throw new Error("Workspace not found");
+    }
 
-    let database: Database | undefined = undefined;
-    if (databaseId) database = await DatabaseDAO.findByIdOrThrow(databaseId);
+    const database = databaseId
+      ? await DatabaseDAO.findByIdOrThrow(databaseId)
+      : undefined;
+
+    const orderKeys = await noteDAO.computeOrderKeysForLayer(
+      workspaceId,
+      parentId,
+    );
 
     let note = new Note();
     note.title = title;
     note.workspace = workspace;
-    if (orderHint) note.orderHint = orderHint;
-    else
-      note.orderHint = await NoteRankService.determineCreationRank(workspaceId);
+    note.orderHint = orderKeys.end;
 
-    note.favoriteOrderHint = favoriteOrderHint;
     note.database = database;
     note.icon = icon;
     note.parentId = parentId;
+    note.favoriteOrderHint = "";
 
     note = await noteDAO.save(note);
     await new DocumentService().setNoteContent(note.id, "{}");

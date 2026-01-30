@@ -1,13 +1,22 @@
 import { cn } from "@/lib/utils";
-import { useCreateNoteMutation } from "@/query/use-create-note";
 import { SquarePen } from "lucide-react";
 import { SidebarItem } from "./sidebar-item";
 import { useTranslation } from "react-i18next";
+import { useCreateNoteMutation } from "../note/store/create-note";
+import { useCurrentWorkspaceId } from "../workspaces/hooks/use-workspace";
 
 export function CreatePageButton(props: { className?: string }) {
-  const { create } = useCreateNoteMutation(true);
-  const handleClick = async () => create({});
+  const [create] = useCreateNoteMutation();
+  const workspaceId = useCurrentWorkspaceId();
   const { t } = useTranslation();
+  if (!workspaceId) return null;
+
+  const handleClick = async () =>
+    create({
+      navigateAfter: true,
+      parentId: null,
+      workspaceId,
+    });
   return (
     <SidebarItem
       onClick={handleClick}

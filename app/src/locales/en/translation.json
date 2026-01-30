@@ -40,6 +40,9 @@
       "noPages": "No pages."
     }
   },
+  "defaults": {
+    "pageTitle": "Untitled"
+  },
   "home": {
     "welcome": "Welcome back",
     "recents": "Recent notes",

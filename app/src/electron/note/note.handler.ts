@@ -1,5 +1,9 @@
 import { INoteAPI } from "@/common/contract";
-import { NoteDTO, UpdateNoteDTOSchema } from "@/common/dto";
+import {
+  CreateNoteDTOSchema,
+  NoteDTO,
+  UpdateNoteDTOSchema,
+} from "@/common/dto";
 import { FileFormatMap, NoteExportFormat } from "@/common/note";
 import { BrowserWindow, dialog } from "electron";
 import { readFile, writeFile } from "fs-extra";
@@ -15,7 +19,7 @@ const documentService = new DocumentService();
 
 export const ElectronNoteAPI: INoteAPI = {
   async create(dto) {
-    const note = await NoteService.create(dto);
+    const note = await NoteService.create(CreateNoteDTOSchema.parse(dto));
     return { note: note.mapToDTO() };
   },
 

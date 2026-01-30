@@ -40,6 +40,9 @@
       "noPages": "Başka sayfa yok."
     }
   },
+  "defaults": {
+    "pageTitle": "Başlıksız"
+  },
   "home": {
     "welcome": "Hoş geldiniz",
     "recents": "Yakınlarda açılanlar",
