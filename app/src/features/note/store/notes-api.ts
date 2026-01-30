@@ -10,6 +10,10 @@ export function noteByWorkspaceIdTag(workspaceId: string) {
   return `WORKSPACE_${workspaceId}`;
 }
 
+export function favoriteByWorkspaceIdTag(workspaceId: string) {
+  return `WORKSPACE_${workspaceId}_FAVORITES`;
+}
+
 export function noteByParentIdTag(
   workspaceId: string,
   parentId: string | null,
@@ -64,6 +68,30 @@ export const notesApi = createApi({
           : [],
     }),
 
+    getFavoritesByWorkspaceId: builder.query<NoteDTO[], string>({
+      queryFn: (workspaceId) =>
+        tryFetch(DarkwriteAPIClient.note.getFavorites(workspaceId)),
+
+      async onQueryStarted(_args, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          dispatch(upsertNotes(data));
+        } catch {
+          /* empty */
+        }
+      },
+
+      providesTags: (result, _error, workspaceId) =>
+        result
+          ? [
+              {
+                type: NOTES_TAG_TYPE,
+                id: favoriteByWorkspaceIdTag(workspaceId),
+              },
+            ]
+          : [],
+    }),
+
     getRecentsByWorkspaceId: builder.query<NoteDTO[], string>({
       queryFn: (workspaceId) =>
         tryFetch(DarkwriteAPIClient.note.getRecents(workspaceId)),
@@ -90,5 +118,8 @@ export const notesApi = createApi({
   }),
 });
 
-export const { useGetNotesByParentIdQuery, useGetRecentsByWorkspaceIdQuery } =
-  notesApi;
+export const {
+  useGetNotesByParentIdQuery,
+  useGetRecentsByWorkspaceIdQuery,
+  useGetFavoritesByWorkspaceIdQuery,
+} = notesApi;

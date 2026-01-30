@@ -29,7 +29,7 @@ export const NoteListItem = memo(function ({
   );
 });
 
-function NoteItem({
+export function NoteItem({
   id,
   children,
 }: {

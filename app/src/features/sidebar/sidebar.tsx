@@ -10,6 +10,7 @@ import AppMenu from "./app-menu";
 import { SidebarNavigation } from "./navigation";
 import { WorkspaceSwitcher } from "./workspace-switcher";
 import { CreatePageButton } from "./create-page-button";
+import { FavoritesView } from "../note/components/favorites";
 
 export type SidebarProps = React.HTMLAttributes<HTMLDivElement> & {};
 
@@ -57,6 +58,7 @@ export function Sidebar(props: SidebarProps) {
           <WorkspaceSwitcher />
           <CreatePageButton />
           <SidebarNavigation />
+          <FavoritesView />
           <NoteListRoot />
           <div className="flex flex-col gap-0.5"></div>
         </div>
