@@ -40,6 +40,7 @@ export function getCurrentNoteIdFromPath(): string | null {
 
 export function navigateHome() {
   NavigationEventBus.emit("onRouteChanged", `/`);
+  notifyNoteChange(null);
 }
 
 export function goBack() {

@@ -26,8 +26,8 @@ export function Layout() {
         <Titlebar></Titlebar>
         <div
           className={cn(
-            "bg-view-1 h-full overflow-x-hidden main-view  border-border/25 ml-0 mb-1.5 mr-1.5 rounded-lg rounded-br-sm border",
-            isSidebarCollapsed && "ml-1.5",
+            "bg-view-1 h-full overflow-x-hidden main-view transition-[margin,border] duration-150 border-border/25 ml-0 mb-1.5 mr-1.5 rounded-md rounded-br-sm border",
+            isSidebarCollapsed && "m-0 rounded-none border-transparent",
           )}
         >
           <SearchDialog />
