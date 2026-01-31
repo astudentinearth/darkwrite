@@ -71,6 +71,19 @@ export interface INoteAPI {
    */
   getTrashed: (workspaceId: string) => Promise<NotesResponseDTO>;
 
+  /**
+   * Favorites a note.
+   * @param noteId
+   * @param aboveNoteId undefined for list end, null for list start
+   * @returns
+   */
+  favorite: (
+    noteId: string,
+    aboveNoteId?: string | null,
+  ) => Promise<NoteResponseDTO>;
+
+  unfavorite: (noteId: string) => Promise<NoteResponseDTO>;
+
   search: (workspaceId: string, query: string) => Promise<NotesResponseDTO>;
   getRecents: (workspaceId: string) => Promise<NotesResponseDTO>;
 

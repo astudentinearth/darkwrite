@@ -1,19 +1,15 @@
 import { INoteAPI } from "@/common/contract";
-import {
-  CreateNoteDTOSchema,
-  NoteDTO,
-  UpdateNoteDTOSchema,
-} from "@/common/dto";
+import { CreateNoteDTOSchema, UpdateNoteDTOSchema } from "@/common/dto";
 import { FileFormatMap, NoteExportFormat } from "@/common/note";
 import { BrowserWindow, dialog } from "electron";
 import { readFile, writeFile } from "fs-extra";
 import { extname } from "path";
-import { DocumentService } from "../service/document.service";
-import { NoteQueryService } from "./note-query.service";
-import { NoteService } from "./note.service";
 import printToPdf from "../lib/print-to-pdf";
+import { DocumentService } from "../service/document.service";
 import { IPCHandler } from "../types/ipc-handler";
+import { NoteQueryService } from "./note-query.service";
 import { mapNotesToDTO } from "./note-util";
+import { NoteService } from "./note.service";
 
 const documentService = new DocumentService();
 
@@ -35,6 +31,16 @@ export const ElectronNoteAPI: INoteAPI = {
     const notes = await NoteQueryService.getFavorites(workspaceId);
     const dtos = mapNotesToDTO(notes);
     return { notes: dtos };
+  },
+
+  async favorite(noteId: string, aboveNoteId?: string | null) {
+    const note = (await NoteService.favorite(noteId, aboveNoteId)).mapToDTO();
+    return { note };
+  },
+
+  async unfavorite(noteId: string) {
+    const note = (await NoteService.unfavorite(noteId)).mapToDTO();
+    return { note };
   },
 
   async getTrashed(workspaceId: string) {

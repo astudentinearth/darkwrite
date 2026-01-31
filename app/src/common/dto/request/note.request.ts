@@ -15,8 +15,6 @@ export const UpdateNoteDTOSchema = z.object({
   icon: z.string().nullable().optional(),
   databaseId: z.string().nullable().optional(),
   propertyValues: z.record(z.string(), z.string()).nullable().optional(),
-  isFavorite: z.boolean().nullable().optional(),
-  isTrashed: z.boolean().nullable().optional(),
 });
 
 export type UpdateNoteDTO = z.infer<typeof UpdateNoteDTOSchema>;

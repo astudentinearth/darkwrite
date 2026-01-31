@@ -55,24 +55,6 @@ export const NoteService = {
     const note = await noteDAO.findByIdOrThrow(id);
 
     Object.assign(note, rest);
-    if (dto.isTrashed === true) note.isFavorite = false;
-    if (dto.isTrashed === false) {
-      const lastNote = await noteDAO.findLastNoteInOrder(note.workspace.id);
-      const nextRank = lastNote
-        ? new Rank(lastNote.orderHint).next()
-        : Rank.default();
-      note.orderHint = nextRank.get();
-    }
-
-    if (dto.isFavorite === true && !note.isFavorite) {
-      const lastInFavorites = await noteDAO.findLastNoteInFavorites(
-        note.workspace.id,
-      );
-      const nextRank = lastInFavorites
-        ? new Rank(lastInFavorites.orderHint).next()
-        : Rank.default();
-      note.favoriteOrderHint = nextRank.get();
-    }
 
     if (database) note.database = database;
 
@@ -147,6 +129,45 @@ export const NoteService = {
 
       return await noteRepository.save(sourceNote);
     });
+  },
+
+  async favorite(noteId: string, aboveNoteId?: string | null) {
+    return AppDataSource.transaction(async (manager) => {
+      const dao = NoteDAO.transactional(manager);
+      const note = await dao.findByIdOrThrow(noteId);
+
+      const indices = await dao.computeOrderKeysForFavorites(note.workspace.id);
+
+      let newFavoriteOrderHint: string;
+      if (!aboveNoteId) {
+        newFavoriteOrderHint =
+          aboveNoteId === null ? indices.start : indices.end;
+      } else {
+        const favorites = await dao.findAllFavorites(note.workspace.id);
+        const aboveIndex = favorites.findIndex((n) => n.id === aboveNoteId);
+        if (aboveIndex === -1 || aboveIndex + 1 >= favorites.length) {
+          newFavoriteOrderHint = indices.end;
+        } else {
+          const aboveFavorite = favorites[aboveIndex];
+          const belowFavorite = favorites[aboveIndex + 1];
+          const rank = new Rank(aboveFavorite.favoriteOrderHint).between(
+            new Rank(belowFavorite.favoriteOrderHint),
+          );
+          newFavoriteOrderHint = rank.get();
+        }
+      }
+      note.isFavorite = true;
+      note.favoriteOrderHint = newFavoriteOrderHint;
+
+      return await dao.save(note);
+    });
+  },
+
+  async unfavorite(noteId: string) {
+    const note = await noteDAO.findByIdOrThrow(noteId);
+    note.isFavorite = false;
+    note.favoriteOrderHint = "";
+    return await noteDAO.save(note);
   },
 
   async moveInto(
