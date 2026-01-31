@@ -3,16 +3,15 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui";
+import { navigateToNote } from "@/features/navigation/navigator";
+import { cn, getNoteIcon } from "@/lib/utils";
+import { ChevronRight, Plus } from "lucide-react";
 import { memo, ReactNode, useState } from "react";
 import {
   useNoteDropZone,
   useNoteItem,
   useNoteItemDrag,
 } from "../hooks/use-note-item";
-import { cn, getNoteIcon } from "@/lib/utils";
-import { ChevronRight, Plus } from "lucide-react";
-import { navigateToNote } from "@/features/navigation/navigator";
-import { useLocation } from "react-router-dom";
 
 export const NoteListItem = memo(function ({
   id,

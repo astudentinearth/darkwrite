@@ -3,12 +3,12 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import FavoriteNoteList from "./favorite-note-list";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { ChevronRight } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { FavoritesView } from "../note/components/favorites";
 
 export default function FavoritesContainer() {
   const { t } = useTranslation("translation", { keyPrefix: "sidebar" });
@@ -31,7 +31,7 @@ export default function FavoritesContainer() {
         </Button>
       </CollapsibleTrigger>
       <CollapsibleContent>
-        <FavoriteNoteList />
+        <FavoritesView />
       </CollapsibleContent>
     </Collapsible>
   );

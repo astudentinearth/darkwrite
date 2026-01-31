@@ -179,6 +179,8 @@ export const NoteApiBridge = {
     false,
     ElectronNoteAPI.getAllByWorkspaceId,
   ),
+  favorite: new IPCHandler(false, ElectronNoteAPI.favorite),
+  unfavorite: new IPCHandler(false, ElectronNoteAPI.unfavorite),
   getFavorites: new IPCHandler(false, ElectronNoteAPI.getFavorites),
   getTrashed: new IPCHandler(false, ElectronNoteAPI.getTrashed),
   search: new IPCHandler(false, ElectronNoteAPI.search),

@@ -1,9 +1,9 @@
 import { cn } from "@/lib/utils";
+import { memo, useMemo } from "react";
 import { useFavoriteDropZone } from "../hooks/use-favorite-reorder";
 import { useFavorites } from "../hooks/use-favorites";
 import NoteList from "./note-list";
-import { NoteDropZone, NoteItem } from "./note-list-item";
-import { memo, useMemo } from "react";
+import { NoteItem } from "./note-list-item";
 
 interface FavoriteItemProps {
   noteId: string;
@@ -47,5 +47,10 @@ export function FavoritesView() {
     ));
   }, [noteIds]);
 
-  return <div>{items}</div>;
+  return (
+    <div>
+      <FavoriteDropZone aboveId={null} />
+      {items}
+    </div>
+  );
 }

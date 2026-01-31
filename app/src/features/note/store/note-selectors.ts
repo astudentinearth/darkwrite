@@ -42,7 +42,7 @@ export const selectRecentNotes = createSelector(
   },
 );
 
-export const selectFavorites = createSelector(
+export const selectFavoriteIds = createSelector(
   [selectAllNotes, (_state: RootState, workspaceId: string) => workspaceId],
   (allNotes, workspaceId) => {
     return allNotes
@@ -51,5 +51,18 @@ export const selectFavorites = createSelector(
       )
       .toSorted((a, b) => Rank.sorter(a.favoriteOrderHint, b.favoriteOrderHint))
       .map((n) => n.id);
+  },
+);
+
+export const selectFavorites = createSelector(
+  [selectAllNotes, (_state: RootState, workspaceId: string) => workspaceId],
+  (allNotes, workspaceId) => {
+    return allNotes
+      .filter(
+        (n) => n.workspaceId === workspaceId && n.isFavorite && !n.isTrashed,
+      )
+      .toSorted((a, b) =>
+        Rank.sorter(a.favoriteOrderHint, b.favoriteOrderHint),
+      );
   },
 );

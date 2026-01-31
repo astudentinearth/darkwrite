@@ -71,7 +71,7 @@ const configuration = defineConfig([
     files: ["**/*.{ts,tsx}"],
     ignores: ["**/*.test.{ts,tsx}"],
     rules: {
-      "no-console": "error",
+      "no-console": ["error", { allow: ["error"] }],
     },
   },
 ]);
