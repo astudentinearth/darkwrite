@@ -19,15 +19,16 @@ import {
 } from "lucide-react";
 import { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
+import { ToggleFavoriteContextMenuItem } from "./components/toggle-favorite-item";
+import { ModificationDateLabel } from "./components/modification-date-label";
 
 export function NoteContextMenuContainer({
   children,
-  note,
+  noteId,
   onOpenChange,
-  finalOrderHint,
 }: {
   children: ReactNode;
-  note: NoteDTO;
+  noteId: string;
   onOpenChange?: (val: boolean) => void;
   finalOrderHint?: string;
 }) {
@@ -35,28 +36,12 @@ export function NoteContextMenuContainer({
     keyPrefix: "sidebar.notes.contextmenu",
   });
   const { t: _t } = useTranslation();
-  const { nextFavoriteHint } = useNotes();
-  const actions = useNoteContextMenu(
-    note,
-    nextFavoriteHint ?? "",
-    finalOrderHint,
-  );
+  const actions = useNoteContextMenu(noteId);
   return (
     <ContextMenu onOpenChange={onOpenChange}>
       <ContextMenuTrigger asChild>{children}</ContextMenuTrigger>
       <ContextMenuContent className="min-w-64">
-        {!note.isFavorite && (
-          <ContextMenuItem onSelect={actions.toggleFavorite}>
-            <Star className={"opacity-75"} size={20}></Star>
-            {t("addFavorite")}
-          </ContextMenuItem>
-        )}
-        {note.isFavorite && (
-          <ContextMenuItem onSelect={actions.toggleFavorite}>
-            <Star className={"text-star fill-star"} size={20}></Star>
-            {t("removeFavorite")}
-          </ContextMenuItem>
-        )}
+        <ToggleFavoriteContextMenuItem noteId={noteId} />
         <ContextMenuItem onSelect={actions.newSubpage}>
           <FilePlus2 className="opacity-75" size={20}></FilePlus2>
           {t("newSubpage")}
@@ -95,9 +80,7 @@ export function NoteContextMenuContainer({
           {t("trash")}
         </ContextMenuItem>
         <ContextMenuSeparator />
-        <div className="text-foreground/50 text-sm p-1.5">
-          {t("lastModified")} {note.modifiedAt.toLocaleString()}
-        </div>
+        <ModificationDateLabel noteId={noteId} />
       </ContextMenuContent>
     </ContextMenu>
   );

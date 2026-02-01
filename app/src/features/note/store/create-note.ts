@@ -28,7 +28,7 @@ async function _createNoteQueryFn(args: CreateNoteArgs) {
   }
 }
 
-const createNoteApi = notesApi.injectEndpoints({
+export const createNoteApi = notesApi.injectEndpoints({
   endpoints: (builder) => ({
     createNote: builder.mutation<NoteDTO, CreateNoteArgs>({
       queryFn: _createNoteQueryFn,

@@ -1,35 +1,31 @@
-import { NoteDTO } from "@/common/dto";
-import { useCreateNoteMutation } from "@/query/use-create-note";
-import useDuplicateNote from "@/query/use-duplicate-note";
-import { useUpdateNote } from "@/query/use-update-note";
 import { usePersistedNoteExport } from "./use-note-export";
+import { selectNoteById } from "@/features/note/store/note-selectors";
+import { store } from "@/features/store/redux";
+import { createNoteApi } from "@/features/note/store/create-note";
 
-export const useNoteContextMenu = (
-  note: NoteDTO,
-  nextFavoriteHint: string,
-  orderHint?: string,
-) => {
+export const useNoteContextMenu = (noteId: string) => {
   const { update } = useUpdateNote();
-  const { create } = useCreateNoteMutation();
   const duplicateMutation = useDuplicateNote();
-  const { exportHTML, exportJSON, exportPdf } = usePersistedNoteExport(note.id);
-  const toggleFavorite = () =>
-    update({
-      id: note.id,
-      dto: {
-        isFavorite: !note.isFavorite,
-        favoriteOrderHint: note.isFavorite ? "" : nextFavoriteHint,
-      },
+
+  const { exportHTML, exportJSON, exportPdf } = usePersistedNoteExport(noteId);
+
+  const newSubpage = () => {
+    const note = selectNoteById(store.getState(), noteId);
+    if (!note) return;
+    createNoteApi.endpoints.createNote.initiate({
+      workspaceId: note.workspaceId,
+      navigateAfter: true,
+      parentId: note.parentId,
     });
-  const newSubpage = () =>
-    create({ title: "Untitled", parentId: note.id, orderHint });
+  };
+
   const trash = () => update({ id: note.id, dto: { isTrashed: true } });
+
   const duplicate = () => {
     duplicateMutation.mutate(note.id);
   };
 
   return {
-    toggleFavorite,
     newSubpage,
     trash,
     duplicate,

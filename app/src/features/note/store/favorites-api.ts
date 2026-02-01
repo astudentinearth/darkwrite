@@ -28,6 +28,16 @@ async function _favoriteNoteMutationFn({
   }
 }
 
+async function _unfavoriteNoteMutationFn(noteId: string) {
+  try {
+    const { note } = await DarkwriteAPIClient.note.unfavorite(noteId);
+    if (!note) throw new Error("Note not found");
+    return { data: note };
+  } catch (error) {
+    return { error: error as Error };
+  }
+}
+
 function computeOptimisticFavoriteOrderHint(
   favorites: NoteDTO[],
   aboveNoteId?: string | null,
@@ -86,6 +96,39 @@ export const favoritesApi = notesApi.injectEndpoints({
           dispatch(updateNote({ id: args.noteId, changes: updatedNote }));
         } catch (error) {
           dispatch(updateNote({ id: args.noteId, changes: undoPatch }));
+          console.error(error);
+        }
+      },
+    }),
+
+    unfavorite: builder.mutation<NoteDTO, string>({
+      queryFn: _unfavoriteNoteMutationFn,
+
+      onQueryStarted: async (
+        noteId,
+        { dispatch, getState, queryFulfilled },
+      ) => {
+        const state = getState() as RootState;
+        const note = selectNoteById(state, noteId);
+
+        const changes: Partial<NoteDTO> = {
+          isFavorite: false,
+          favoriteOrderHint: "",
+        };
+
+        const undoPatch: Partial<NoteDTO> = {
+          isFavorite: true,
+          favoriteOrderHint: note.favoriteOrderHint,
+        };
+
+        dispatch(updateNote({ id: noteId, changes }));
+
+        try {
+          const result = await queryFulfilled;
+          const updatedNote = result.data;
+          dispatch(updateNote({ id: noteId, changes: updatedNote }));
+        } catch (error) {
+          dispatch(updateNote({ id: noteId, changes: undoPatch }));
           console.error(error);
         }
       },

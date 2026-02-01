@@ -222,9 +222,9 @@ export const NoteService = {
     newNote.database = note.database;
     newNote.workspace = note.workspace;
 
-    newNote.orderHint = await NoteRankService.determineCreationRank(
-      note.workspace.id,
-    );
+    newNote.orderHint = (
+      await noteDAO.computeOrderKeysForLayer(note.workspace.id, note.parentId)
+    ).end;
 
     newNote.propertyValues = note.propertyValues;
     newNote.parentId = note.parentId;
