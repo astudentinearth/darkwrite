@@ -24,6 +24,10 @@ export interface NotesResponseDTO {
   notes: Record<string, NoteDTO>;
 }
 
+export interface ParentTreeResponseDTO {
+  parents: NoteDTO[];
+}
+
 export interface NoteResponseDTO {
   note: NoteDTO | null;
 }

@@ -7,9 +7,7 @@ import {
 } from "@/context/editor-store";
 import useEditorCover from "@/hooks/editor/use-editor-cover";
 import { useEditorOptions } from "@/hooks/editor/use-editor-options";
-import { useNoteById } from "@/query/use-note-by-id";
 import { useNoteFromURL } from "@/query/use-note-from-url";
-import { useNotes } from "@/query/use-notes";
 import { useEffect, useState } from "react";
 import DarkwriteEditor from ".";
 import ConstrainedWidth from "./constrained-width";
@@ -18,6 +16,7 @@ import EditorHeader from "./header";
 import { useNavigateToNote } from "@/hooks/use-navigate-to-note";
 import { useLocalStore } from "@/context/local-state";
 import { useSettings } from "../settings/store/settings-selectors";
+import { useNoteById } from "../note/hooks/use-note-by-id";
 
 export function EditorViewRouteHandler() {
   const noteId = useNoteFromURL();

@@ -9,6 +9,7 @@ import {
   NoteContentResponseDTO,
   NoteResponseDTO,
   NotesResponseDTO,
+  ParentTreeResponseDTO,
   UpdateNoteDTO,
 } from "./dto";
 import { CreateEmbedDTO } from "./dto/request/embed.request";
@@ -70,6 +71,13 @@ export interface INoteAPI {
    * @param workspaceId
    */
   getTrashed: (workspaceId: string) => Promise<NotesResponseDTO>;
+
+  /**
+   *
+   * @param noteId
+   * @returns the parent tree of the note in sorted order.
+   */
+  getParentTree: (noteId: string) => Promise<ParentTreeResponseDTO>;
 
   /**
    * Favorites a note.

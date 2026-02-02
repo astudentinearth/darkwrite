@@ -66,3 +66,18 @@ export const selectFavorites = createSelector(
       );
   },
 );
+
+export const selectParentIdTree = createSelector(
+  [selectAllNotesAsMap, (_state: RootState, noteId: string) => noteId],
+  (notesMap, noteId) => {
+    const tree: string[] = [];
+    let currentNote = notesMap[noteId];
+
+    while (currentNote && currentNote.parentId) {
+      tree.push(currentNote.parentId);
+      currentNote = notesMap[currentNote.parentId];
+    }
+
+    return tree.reverse();
+  },
+);

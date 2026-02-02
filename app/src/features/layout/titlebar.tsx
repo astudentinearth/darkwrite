@@ -37,6 +37,7 @@ export function Titlebar() {
         <PanelRightClose width={20} height={20}></PanelRightClose>
       </HeaderbarButton>
       <HistoryNavigation />
+      <PageTitle />
       <div className="grow"></div>
       <Toolbar />
     </div>

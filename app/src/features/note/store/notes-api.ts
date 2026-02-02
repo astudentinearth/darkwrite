@@ -25,6 +25,10 @@ export function recentsByWorkspaceIdTag(workspaceId: string) {
   return `WORKSPACE_${workspaceId}_RECENTS`;
 }
 
+export function parentTreeTag(noteId: string) {
+  return `PARENT_TREE_${noteId}`;
+}
+
 export function noteByIdTag(noteId: string) {
   return `NOTE_${noteId}`;
 }
@@ -45,6 +49,15 @@ async function _noteByIdQueryFn(noteId: string) {
     const { note } = await DarkwriteAPIClient.note.getById(noteId);
     if (!note) throw new Error("Note not found");
     return { data: note };
+  } catch (error) {
+    return { error: error as Error };
+  }
+}
+
+async function _getParentTreeQueryFn(noteId: string) {
+  try {
+    const { parents } = await DarkwriteAPIClient.note.getParentTree(noteId);
+    return { data: parents };
   } catch (error) {
     return { error: error as Error };
   }
@@ -77,6 +90,29 @@ export const notesApi = createApi({
               {
                 type: NOTES_TAG_TYPE,
                 id: noteByParentIdTag(args.workspaceId, args.parentId),
+              },
+            ]
+          : [],
+    }),
+
+    getParentTree: builder.query<NoteDTO[], string>({
+      queryFn: _getParentTreeQueryFn,
+
+      async onQueryStarted(_args, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          dispatch(upsertNotes(data));
+        } catch {
+          /* empty */
+        }
+      },
+
+      providesTags: (result, _error, noteId) =>
+        result
+          ? [
+              {
+                type: NOTES_TAG_TYPE,
+                id: parentTreeTag(noteId),
               },
             ]
           : [],

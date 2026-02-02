@@ -219,4 +219,15 @@ export class NoteDAO {
       take: limit,
     });
   }
+
+  async resolveParentTree(noteId: string): Promise<Note[]> {
+    const tree: Note[] = [];
+    let currentNote = await this.findById(noteId);
+    while (currentNote) {
+      tree.push(currentNote);
+      if (!currentNote.parentId) break;
+      currentNote = await this.findById(currentNote.parentId);
+    }
+    return tree.reverse();
+  }
 }

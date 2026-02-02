@@ -13,4 +13,5 @@ export const NoteQueryService = {
     const recents = noteDAO.getRecentlyModifiedNotes(workspaceId, 5);
     return recents;
   },
+  getParentTree: noteDAO.resolveParentTree.bind(noteDAO),
 };

@@ -103,6 +103,13 @@ export const ElectronNoteAPI: INoteAPI = {
     return { note: note.mapToDTO() };
   },
 
+  async getParentTree(id: string) {
+    const tree = await NoteQueryService.getParentTree(id);
+    return {
+      parents: tree.map((note) => note.mapToDTO()),
+    };
+  },
+
   async export(
     fileContent: string,
     fileType: NoteExportFormat,
@@ -182,6 +189,7 @@ export const NoteApiBridge = {
   favorite: new IPCHandler(false, ElectronNoteAPI.favorite),
   unfavorite: new IPCHandler(false, ElectronNoteAPI.unfavorite),
   getFavorites: new IPCHandler(false, ElectronNoteAPI.getFavorites),
+  getParentTree: new IPCHandler(false, ElectronNoteAPI.getParentTree),
   getTrashed: new IPCHandler(false, ElectronNoteAPI.getTrashed),
   search: new IPCHandler(false, ElectronNoteAPI.search),
   getRecents: new IPCHandler(false, ElectronNoteAPI.getRecents),
