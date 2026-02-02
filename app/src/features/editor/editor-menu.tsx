@@ -11,10 +11,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui";
 import { useLocalStore } from "@/context/local-state";
-import useNoteExport from "@/hooks/use-note-export";
+import { NoteExporter } from "../export/note-exporter";
 import useNoteImport from "@/hooks/use-note-import";
 import { useNoteFromURL } from "@/query/use-note-from-url";
-import { useUpdateNote } from "@/query/use-update-note";
 import {
   Download,
   FileCode,
@@ -32,14 +31,14 @@ import { PageSizeChooser } from "../export/page-size-chooser";
 export default function EditorMenu() {
   const commands = useEditorCommand();
   const spellcheck = useLocalStore((s) => s.useSpellcheck);
-  const exporter = useNoteExport();
   const importer = useNoteImport();
-  const { update } = useUpdateNote();
   const setSpellcheck = useLocalStore((s) => s.setSpellcheck);
 
   const { t } = useTranslation();
   const noteId = useNoteFromURL();
   if (!noteId) return <></>;
+
+  const { exportHTML, exportJSON, exportPDF } = NoteExporter;
 
   return (
     <DropdownMenu>
@@ -62,16 +61,16 @@ export default function EditorMenu() {
             {t("editor.menu.export")}
           </DropdownMenuSubTrigger>
           <DropdownMenuSubContent className="bg-view-2">
-            <DropdownMenuItem onSelect={exporter.exportHTML}>
+            <DropdownMenuItem onSelect={() => exportHTML(noteId)}>
               <FileCode size={18} />
               {t("editor.menu.htmlExport")}
             </DropdownMenuItem>
-            <DropdownMenuItem onSelect={exporter.exportJSON}>
+            <DropdownMenuItem onSelect={() => exportJSON(noteId)}>
               <FileText size={18} />
               {t("editor.menu.jsonExport")}
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onSelect={exporter.exportPdf}>
+            <DropdownMenuItem onSelect={() => exportPDF(noteId)}>
               <FileText size={18} />
               PDF
             </DropdownMenuItem>

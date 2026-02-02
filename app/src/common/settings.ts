@@ -1,4 +1,5 @@
 import _ from "lodash";
+import { PageSize } from "./pdf";
 
 export type ThemeMode = "light" | "dark" | "system";
 
@@ -27,6 +28,7 @@ export const DEFAULT_EDITOR_SETTINGS = {
   codeIndentSize: 4 as number,
   wordCountHudEnabled: false as boolean,
   disabledCommandItems: [] as string[],
+  preferredPageSize: "A4" as PageSize,
 };
 
 export const DEFAULT_CLIENT_SETTINGS = {
@@ -57,8 +59,7 @@ export class SettingsModel {
 
   public static mergeWith(settings: Partial<DarkwriteUserSettings>) {
     const defaults = this.getDefaults();
-    const partial = _.cloneDeep(settings);
-    _.merge(partial, defaults);
-    return partial as DarkwriteUserSettings;
+    _.merge(defaults, settings);
+    return defaults as DarkwriteUserSettings;
   }
 }

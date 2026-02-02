@@ -1,3 +1,4 @@
+import { PageMargins, PageSize } from "@/common/pdf";
 import {
   Select,
   SelectContent,
@@ -5,21 +6,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { PageMargins, PageSize } from "@/common/pdf";
-import { useLocalStore } from "@/context/local-state";
 import { cn } from "@/lib/utils";
+import { setPreferredPageSize } from "../settings/store/settings-actions";
+import { useEditorSettings } from "../settings/store/settings-selectors";
 
 interface PageSizeChooserProps {
   className?: string;
 }
 
 export function PageSizeChooser({ className }: PageSizeChooserProps) {
-  const { pdfExportPageSize, setPdfExportPageSize } = useLocalStore();
+  const pdfExportPageSize = useEditorSettings().preferredPageSize;
 
   return (
     <Select
       value={pdfExportPageSize}
-      onValueChange={(value: string) => setPdfExportPageSize(value as PageSize)}
+      onValueChange={(value: string) => setPreferredPageSize(value as PageSize)}
     >
       <SelectTrigger className={cn(className)}>
         <SelectValue />

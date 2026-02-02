@@ -9,15 +9,14 @@ import {
 import { getNoteIcon } from "@/lib/utils";
 import useDeleteNote from "@/query/use-delete-note";
 import { useNotes } from "@/query/use-notes";
-import { useUpdateNote } from "@/query/use-update-note";
 import { Trash, Undo2 } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { SidebarItem } from "./sidebar-item";
 import { useNavigateToNote } from "@/hooks/use-navigate-to-note";
+import { restoreFromTrash } from "../note/store/note-actions";
 
 function TrashItem(props: { note: NoteDTO }) {
-  const { update } = useUpdateNote();
   const deleteMutation = useDeleteNote();
   const { t } = useTranslation();
   const nav = useNavigateToNote();
@@ -27,7 +26,7 @@ function TrashItem(props: { note: NoteDTO }) {
   };
 
   const handleRestore = () => {
-    update({ id: props.note.id, dto: { isTrashed: false, isFavorite: false } });
+    restoreFromTrash(props.note.id);
   };
 
   return (
