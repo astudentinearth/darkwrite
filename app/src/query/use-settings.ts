@@ -11,6 +11,9 @@ const persistDebounced = _.debounce((settings: DarkwriteUserSettings) =>
   DarkwriteAPIClient.settings.saveUserSettings(settings),
 );
 
+/**
+ * @deprecated
+ */
 export function useSettings() {
   const query = useQuery({
     queryKey: SETTINGS_QUERY_KEY,
@@ -22,6 +25,10 @@ export function useSettings() {
   return query;
 }
 
+/**
+ * @deprecated
+ * @returns
+ */
 export function useUpdateSettings() {
   const queryClient = useQueryClient();
   const settings = useSettings().data;

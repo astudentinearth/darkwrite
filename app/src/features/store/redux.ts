@@ -4,12 +4,14 @@ import { sessionListenerMiddleware } from "../session/session-listener";
 import { loadSessionState } from "../session/session-persistence";
 import { notesSlice } from "../note/store/note-slice";
 import { notesApi } from "../note/store/notes-api";
+import { settingsSlice } from "../settings/store/settings-slice";
 
 export const store = configureStore({
   reducer: {
     [appSessionSlice.name]: appSessionSlice.reducer,
     [notesSlice.name]: notesSlice.reducer,
     [notesApi.reducerPath]: notesApi.reducer,
+    [settingsSlice.name]: settingsSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
@@ -19,6 +21,3 @@ export const store = configureStore({
     [appSessionSlice.name]: loadSessionState() || { workspaceId: null },
   },
 });
-
-export type RootState = ReturnType<typeof store.getState>;
-export type AppDispatch = typeof store.dispatch;

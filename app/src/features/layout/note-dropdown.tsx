@@ -16,19 +16,21 @@ import { useTranslation } from "react-i18next";
 export default function NoteDropdown() {
   const [open, setOpen] = useState(false);
   const id = useNoteFromURL();
-  const {t} = useTranslation();
+  const { t } = useTranslation();
   const nav = useNavigateToNote();
   const { notes } = useNotes();
   if (!id || !notes) return <></>;
   const currentNote = notes[id];
-  if(!currentNote) return <></>;
+  if (!currentNote) return <></>;
   const tree = resolveUpperTree(id, notes);
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
         <TitlebarNavTrigger className="max-w-64 overflow-hidden">
           <span>{getNoteIcon(currentNote.icon)}</span>
-          <span className="overflow-hidden w-full text-ellipsis whitespace-nowrap break-words">{currentNote.title}</span>
+          <span className="overflow-hidden w-full text-ellipsis whitespace-nowrap wrap-break-word">
+            {currentNote.title}
+          </span>
         </TitlebarNavTrigger>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
@@ -46,7 +48,11 @@ export default function NoteDropdown() {
             <span>{n.title}</span>
           </Button>
         ))}
-        {tree.length == 0 && <span className="text-foreground/80 block px-4 py-2">{t("titlebar.noPagesAbove")}</span>}
+        {tree.length == 0 && (
+          <span className="text-foreground/80 block px-4 py-2">
+            {t("titlebar.noPagesAbove")}
+          </span>
+        )}
       </DropdownMenuContent>
     </DropdownMenu>
   );

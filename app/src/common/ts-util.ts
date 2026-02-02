@@ -45,3 +45,7 @@ export type KeysExceptFunctions<T extends { [key: string]: any }> =
 export type Optional<T, E extends Error = Error> =
   | { result: T; error?: undefined }
   | { error: E };
+
+export type DeepPartial<T> = {
+  [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P];
+};

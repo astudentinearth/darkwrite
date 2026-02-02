@@ -2,12 +2,8 @@ import { NoteDTO } from "@/common/dto";
 import { notesApi } from "./notes-api";
 import { DarkwriteAPIClient } from "@/api/api-client";
 import { Rank } from "@/common/rank";
-import {
-  selectFavoriteIds,
-  selectFavorites,
-  selectNoteById,
-} from "./note-selectors";
-import { RootState } from "@/features/store/redux";
+import { selectFavorites, selectNoteById } from "./note-selectors";
+import { RootState } from "@/features/store/types";
 import { updateNote } from "./note-slice";
 
 export type FavoriteNoteArgs = { noteId: string; aboveNoteId?: string | null };

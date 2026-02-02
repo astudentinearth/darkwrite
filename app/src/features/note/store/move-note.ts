@@ -1,17 +1,17 @@
-import { NoteDTO } from "@/common/dto";
-import { noteByParentIdTag, NOTES_TAG_TYPE, notesApi } from "./notes-api";
 import { DarkwriteAPIClient } from "@/api/api-client";
+import { NoteDTO } from "@/common/dto";
 import { isDescendant, ParentId } from "@/common/note";
-import { Rank } from "@/common/rank";
-import { selectNoteById, selectNotesByParentId } from "./note-selectors";
-import { updateNote, upsertNotes } from "./note-slice";
-import { RootState, store } from "@/features/store/redux";
+import { extractNoteDragData } from "@/features/dnd/datatransfer";
+import { store } from "@/features/store/redux";
+import { RootState } from "@/features/store/types";
+import { DragEvent } from "react";
 import {
   calculateOptimisticRankInLayer,
   calculateRelativeOptimisticRank,
 } from "./note-rank-optimistic";
-import { DragEvent } from "react";
-import { extractNoteDragData } from "@/features/dnd/datatransfer";
+import { selectNoteById, selectNotesByParentId } from "./note-selectors";
+import { updateNote, upsertNotes } from "./note-slice";
+import { noteByParentIdTag, NOTES_TAG_TYPE, notesApi } from "./notes-api";
 
 export type MoveNoteBelowArgs = {
   sourceNoteId: string;

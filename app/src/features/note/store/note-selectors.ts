@@ -1,4 +1,4 @@
-import { RootState } from "@/features/store/redux";
+import { RootState } from "@/features/store/types";
 import { notesAdapter } from "./notes-adapter";
 import { createSelector } from "@reduxjs/toolkit";
 import { Rank } from "@/common/rank";

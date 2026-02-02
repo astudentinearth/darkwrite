@@ -1,7 +1,8 @@
 import { NoteDTO } from "@/common/dto";
 import { isDescendant, ParentId } from "@/common/note";
 import { selectAllNotesAsMap } from "./note-selectors";
-import { RootState, store } from "@/features/store/redux";
+import { store } from "@/features/store/redux";
+import { RootState } from "@/features/store/types";
 
 export function canMoveNoteInto(
   movingNoteId: string,

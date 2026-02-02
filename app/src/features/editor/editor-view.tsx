@@ -16,8 +16,8 @@ import ConstrainedWidth from "./constrained-width";
 import { useSlashCommand } from "./extensions";
 import EditorHeader from "./header";
 import { useNavigateToNote } from "@/hooks/use-navigate-to-note";
-import { useSettings } from "@/query/use-settings";
 import { useLocalStore } from "@/context/local-state";
+import { useSettings } from "../settings/store/settings-selectors";
 
 export function EditorViewRouteHandler() {
   const noteId = useNoteFromURL();
@@ -41,7 +41,7 @@ export function EditorView({ noteId }: { noteId: string }) {
   const { note } = useNoteById(noteId);
   const notes = useNotes().notes;
   const options = useEditorOptions();
-  const { data: settings } = useSettings();
+  const settings = useSettings();
   const contents = useEditorStore((s) => s.content);
   const customizations = useEditorStore((s) => s.customizations);
   const content = { contents, customizations };

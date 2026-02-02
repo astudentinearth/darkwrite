@@ -1,4 +1,3 @@
-import { NoteDTO } from "@/common/dto";
 import {
   ContextMenu,
   ContextMenuContent,
@@ -7,14 +6,12 @@ import {
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
 import { useNoteContextMenu } from "@/hooks/use-note-context-menu";
-import { useNotes } from "@/query/use-notes";
 import {
   Copy,
   FileCode,
   FilePlus2,
   FileText,
   Forward,
-  Star,
   Trash,
 } from "lucide-react";
 import { ReactNode } from "react";
