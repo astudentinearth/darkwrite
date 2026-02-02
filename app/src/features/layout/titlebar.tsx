@@ -38,6 +38,7 @@ export function Titlebar() {
       </HeaderbarButton>
       <HistoryNavigation />
       <div className="grow"></div>
+      <Toolbar />
     </div>
   );
 }

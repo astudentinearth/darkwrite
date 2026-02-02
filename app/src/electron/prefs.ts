@@ -24,6 +24,10 @@ export class ElectronPrefsModel {
       this._prefs = SettingsModel.getDefaults();
       await this.save();
     }
+
+    // fill missing keys
+    this._prefs = SettingsModel.mergeWith(this._prefs);
+
     await this.reloadTheme();
     return this._prefs;
   }

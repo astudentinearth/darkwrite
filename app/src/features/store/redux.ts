@@ -5,6 +5,7 @@ import { loadSessionState } from "../session/session-persistence";
 import { notesSlice } from "../note/store/note-slice";
 import { notesApi } from "../note/store/notes-api";
 import { settingsSlice } from "../settings/store/settings-slice";
+import { settingsPersistenceMiddleware } from "../settings/store/settings-persistence";
 
 export const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
       .prepend(sessionListenerMiddleware.middleware)
+      .prepend(settingsPersistenceMiddleware.middleware)
       .concat(notesApi.middleware),
   preloadedState: {
     [appSessionSlice.name]: loadSessionState() || { workspaceId: null },
