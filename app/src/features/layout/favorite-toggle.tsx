@@ -1,19 +1,16 @@
 import { HeaderbarButton } from "@/components/headerbar-button";
 import { cn } from "@/lib/utils";
 import { useNoteFromURL } from "@/query/use-note-from-url";
-import { useNotes } from "@/query/use-notes";
-import { useUpdateNote } from "@/query/use-update-note";
 import { Star } from "lucide-react";
+import { useNoteById } from "../note/hooks/use-note-by-id";
+import { favorite, unfavorite } from "../note/store/note-actions";
 
 export default function FavoriteToggle() {
   const id = useNoteFromURL();
-  const { notes, nextFavoriteHint } = useNotes();
-  const { update } = useUpdateNote();
-  if (!notes || !id) return;
-  const note = notes[id];
-  if (!note) return;
+  const { note } = useNoteById(id);
   const click = () => {
-    update({ id, dto: { isFavorite: !note.isFavorite } });
+    if (note.isFavorite) unfavorite(note.id);
+    else favorite({ noteId: note.id });
   };
   return (
     <HeaderbarButton onClick={click}>

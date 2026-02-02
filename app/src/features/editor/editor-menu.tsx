@@ -22,11 +22,14 @@ import {
   Redo,
   Trash,
   Undo,
+  Undo2,
   Upload,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useEditorCommand } from "./use-editor-command";
 import { PageSizeChooser } from "../export/page-size-chooser";
+import { useNoteById } from "../note/hooks/use-note-by-id";
+import { moveToTrash, restoreFromTrash } from "../note/store/note-actions";
 
 export default function EditorMenu() {
   const commands = useEditorCommand();
@@ -36,7 +39,8 @@ export default function EditorMenu() {
 
   const { t } = useTranslation();
   const noteId = useNoteFromURL();
-  if (!noteId) return <></>;
+  const { note } = useNoteById(noteId);
+  if (!noteId || !note) return <></>;
 
   const { exportHTML, exportJSON, exportPDF } = NoteExporter;
 
@@ -93,11 +97,15 @@ export default function EditorMenu() {
         <DropdownMenuSeparator />
         <DropdownMenuItem
           onSelect={() => {
-            update({ id: noteId, dto: { isTrashed: true } });
+            if (note.isTrashed) restoreFromTrash(note.id);
+            else moveToTrash(note.id);
           }}
         >
-          <Trash size={20} />
-          {t("sidebar.notes.contextmenu.trash")}
+          {note.isTrashed ? <Undo2 size={20} /> : <Trash size={20} />}
+
+          {note.isTrashed
+            ? t("sidebar.trash.restore")
+            : t("sidebar.notes.contextmenu.trash")}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <div className="text-muted-foreground text-sm px-3 py-1">

@@ -3,6 +3,7 @@
 Darkwrite is a note taking application and personal knowledge base, built with the following tech stack:
 
 - React 19
+- Redux Toolkit with RTK Query
 - Vite
 - TailwindCSS 4
 - Electron (latest release)
@@ -43,12 +44,14 @@ The application is a React Single Page Application (SPA) bundled with Vite.
 
 Routing is done with react-router-dom hash router.
 
-Global state is managed with Zustand.
+Global state is managed with Redux slices. Do NOT directly subscribe to RTK Query endpoint data. Always use pre-defined selectors and slices, such as `notesSlice` or `settingsSlice`. The store for each feature can be found under `@/features/<feature>/store/<feature>-slice.ts`
+
+**UNDER NO CIRCUMSTANCES** do updates on notes without using the pre-defined actions. Do NOT dispatch into the entity adapter directly unless you are creating a new mutation.
 
 src/features/editor contains a rich text editor based on TipTap/ProseMirror.
 
 > [!IMPORTANT]
-> React Query is being deprecated from our codebase as part of a refactor. We are moving to Redux Toolkit with RTK Query. Do not check queries inside @/query/*. They are no longer relevant.
+> React Query is being deprecated from our codebase as part of a refactor. We are moving to Redux Toolkit with RTK Query. Do not check queries inside @/query/*. Everything inside @/query is deprecated unless otherwise specified.
 
 ## Component usage
 Always check if a component already exists in `src/components` or `src/features` before creating a new one. If a component is reusable across multiple features, it should be placed in `src/components`. If it is specific to a feature, it should be placed in the respective feature directory.

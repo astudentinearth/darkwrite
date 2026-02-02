@@ -25,6 +25,10 @@ export function recentsByWorkspaceIdTag(workspaceId: string) {
   return `WORKSPACE_${workspaceId}_RECENTS`;
 }
 
+export function noteByIdTag(noteId: string) {
+  return `NOTE_${noteId}`;
+}
+
 const tryFetch = async (promise: Promise<NotesResponseDTO>) => {
   try {
     const { notes } = await promise;
@@ -35,6 +39,16 @@ const tryFetch = async (promise: Promise<NotesResponseDTO>) => {
     return { error: error as Error };
   }
 };
+
+async function _noteByIdQueryFn(noteId: string) {
+  try {
+    const { note } = await DarkwriteAPIClient.note.getById(noteId);
+    if (!note) throw new Error("Note not found");
+    return { data: note };
+  } catch (error) {
+    return { error: error as Error };
+  }
+}
 
 export const notesApi = createApi({
   reducerPath: NOTES_API_REDUCER_PATH,
@@ -92,6 +106,28 @@ export const notesApi = createApi({
           : [],
     }),
 
+    getNoteById: builder.query<NoteDTO, string>({
+      queryFn: _noteByIdQueryFn,
+      onQueryStarted: async (noteId: string, { dispatch, queryFulfilled }) => {
+        try {
+          const { data } = await queryFulfilled;
+          dispatch(upsertNotes([data]));
+        } catch {
+          /* empty */
+        }
+      },
+
+      providesTags: (result, error, noteId) =>
+        result
+          ? [
+              {
+                type: NOTES_TAG_TYPE,
+                id: noteByIdTag(noteId),
+              },
+            ]
+          : [],
+    }),
+
     getRecentsByWorkspaceId: builder.query<NoteDTO[], string>({
       queryFn: (workspaceId) =>
         tryFetch(DarkwriteAPIClient.note.getRecents(workspaceId)),
@@ -122,4 +158,5 @@ export const {
   useGetNotesByParentIdQuery,
   useGetRecentsByWorkspaceIdQuery,
   useGetFavoritesByWorkspaceIdQuery,
+  useGetNoteByIdQuery,
 } = notesApi;
