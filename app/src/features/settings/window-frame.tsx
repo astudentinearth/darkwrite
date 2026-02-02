@@ -1,19 +1,15 @@
 import { Label, Switch } from "@/components/ui";
-import { useSettings, useUpdateSettings } from "@/query/use-settings";
-import { produce } from "immer";
 import { useTranslation } from "react-i18next";
+import { useSettings } from "./store/settings-selectors";
+import { updateSettings } from "./store/settings-actions";
 
 export function WindowFrameSettings() {
   const { t } = useTranslation("translation");
 
-  const settings = useSettings().data;
-  const mutation = useUpdateSettings();
+  const settings = useSettings();
 
   const toggleUseSystemWindowFrame = (value: boolean) => {
-    const updated = produce(settings, (draft) => {
-      draft.appearance.useSystemWindowFrame = value;
-    });
-    mutation.mutate(updated);
+    updateSettings({ appearance: { useSystemWindowFrame: value } });
   };
 
   return (

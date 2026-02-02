@@ -14,11 +14,11 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import EditWorkspaceDialog from "./edit-workspace-dialog";
 import SettingsCard from "./settings-card";
-import { useSettings, useUpdateSettings } from "@/query/use-settings";
-import { produce } from "immer";
 import { useWorkspaceExport } from "@/query/use-workspace-export";
 import useBackup from "@/query/use-backup";
 import { RestoreDataDialog } from "./restore-dialog";
+import { useSettings } from "./store/settings-selectors";
+import { updateSettings } from "./store/settings-actions";
 
 export default function WorkspaceSettings() {
   const currentWorkspace = useCurrentWorkspace();
@@ -32,23 +32,16 @@ export default function WorkspaceSettings() {
     update.mutate(w);
     setEditDialogOpen(false);
   };
-  const settings = useSettings().data;
-  const { mutate } = useUpdateSettings();
+  const settings = useSettings();
   const exporter = useWorkspaceExport();
   const backup = useBackup();
 
   const handleUpdateCheck = (val: boolean) => {
-    const prefs = produce(settings, (draft) => {
-      draft.client.autoUpdateCheck = val;
-    });
-    mutate(prefs);
+    updateSettings({ client: { autoUpdateCheck: val } });
   };
 
   const setIndentSize = (val: number) => {
-    const prefs = produce(settings, (draft) => {
-      draft.editor.codeIndentSize = val;
-    });
-    mutate(prefs);
+    updateSettings({ editor: { codeIndentSize: val } });
   };
 
   return (

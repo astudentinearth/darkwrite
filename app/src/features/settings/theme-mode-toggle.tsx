@@ -1,24 +1,20 @@
 import { ThemeMode } from "@/common/settings";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { useSettings, useUpdateSettings } from "@/query/use-settings";
-import { produce } from "immer";
 import { Monitor, Moon, Sun } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { useAppearanceSettings } from "./store/settings-selectors";
+import { updateSettings } from "./store/settings-actions";
 
 export default function ThemeModeToggle() {
-  const settings = useSettings().data;
-  const themeMode = settings.appearance.themeMode;
+  const settings = useAppearanceSettings();
+  const themeMode = settings.themeMode;
   const activeClassname =
     "text-primary-text bg-secondary/40! hover:text-primary-text";
-  const mutation = useUpdateSettings();
   const { t } = useTranslation();
   const setMode = (mode: ThemeMode) => {
     if (mode === themeMode) return;
-    const updated = produce(settings, (draft) => {
-      draft.appearance.themeMode = mode;
-    });
-    mutation.mutate(updated);
+    updateSettings({ appearance: { themeMode: mode } });
   };
   return (
     <div className="flex gap-2 [&>div]:flex [&>div]:flex-row [&>div]:justify-center [&_button]:w-24 [&_button]:h-24 [&_button]:p-4 [&_button]:flex-col [&_button]:bg-transparent">

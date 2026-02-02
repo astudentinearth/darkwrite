@@ -1,18 +1,14 @@
 import FontSelect from "@/components/font-select";
-import { useSettings, useUpdateSettings } from "@/query/use-settings";
-import { produce } from "immer";
 import { useTranslation } from "react-i18next";
+import { useFontSettings } from "./store/settings-selectors";
+import { updateSettings } from "./store/settings-actions";
 
 export default function FontSettings() {
-  const settings = useSettings().data;
-  const mutation = useUpdateSettings();
-  const { code, sans, serif, ui } = settings.appearance.fonts;
+  const settings = useFontSettings();
+  const { code, sans, serif, ui } = settings;
   const { t } = useTranslation("translation", { keyPrefix: "settings.fonts" });
   const setFont = (type: "ui" | "code" | "sans" | "serif", value: string) => {
-    const updated = produce(settings, (draft) => {
-      draft.appearance.fonts[type] = value;
-    });
-    mutation.mutate(updated);
+    updateSettings({ appearance: { fonts: { [type]: value } } });
   };
   return (
     <div className="flex flex-col bg-view-2 rounded-lg p-4 w-160 gap-4 drop-shadow-sm">

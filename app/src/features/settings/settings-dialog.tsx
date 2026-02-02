@@ -14,7 +14,7 @@ export default function SettingsDialog(props: { children: ReactNode }) {
   return (
     <Dialog>
       <DialogTrigger asChild>{props.children}</DialogTrigger>
-      <DialogContent className="min-w-[80vw] lg:min-w-[70vw] max-w-120! h-[80vh] p-2 pt-1 bg-background outline-none flex flex-col">
+      <DialogContent className="min-w-[80vw] lg:min-w-[70vw] max-w-120! h-[80vh] p-2 pt-1 pb-0 bg-background outline-none flex flex-col">
         <SettingsTabView />
       </DialogContent>
     </Dialog>
@@ -47,7 +47,7 @@ export function SettingsTabView() {
           <TabsContent
             key={key}
             value={key}
-            className="w-full h-full overflow-y-auto scroll-view pb-4"
+            className="w-full h-full overflow-y-auto scroll-view pb-8"
           >
             <Page />
           </TabsContent>

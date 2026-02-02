@@ -6,7 +6,7 @@ import _ from "lodash";
 import { DarkwriteUserSettings } from "@/common/settings";
 
 export const settingsPersistenceMiddleware = createListenerMiddleware();
-const DEBOUNCE_DELAY_MS = 1000;
+const DEBOUNCE_DELAY_MS = 300;
 
 const _saveWithDebounce = _.debounce(
   async (settings: DarkwriteUserSettings) => {

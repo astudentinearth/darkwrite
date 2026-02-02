@@ -2,10 +2,10 @@ import { ImageExtensionConfig } from "@/features/editor/extensions/image/image-c
 import { useCenteredLayout } from "../layout/use-centered-layout";
 import { DarkwriteAPIClient } from "@/api/api-client";
 import { useLocalStore } from "@/context/local-state";
-import { useSettings } from "@/query/use-settings";
 import { useEditorStore } from "@/context/editor-store";
 import { CSSProperties } from "react";
 import { FONT_VARS, FontStyle } from "@/common/note-customization";
+import { useEditorSettings } from "@/features/settings/store/settings-selectors";
 
 export function useEditorOptions(widePage: boolean = false) {
   const editorWidth = useCenteredLayout(widePage ? 0 : 984);
@@ -29,7 +29,7 @@ export function useEditorOptions(widePage: boolean = false) {
         })
       ).embed?.id ?? "",
   };
-  const indentSize = useSettings().data.editor.codeIndentSize;
+  const indentSize = useEditorSettings().codeIndentSize;
   const style: CSSProperties = {};
   style.fontFamily =
     customizations.font === FontStyle.CUSTOM

@@ -8,6 +8,12 @@ export function updateSettings(partial: DeepPartial<DarkwriteUserSettings>) {
   store.dispatch(settingsSlice.actions.update(partial));
 }
 
+export function updateSettingsDebounced(
+  partial: DeepPartial<DarkwriteUserSettings>,
+) {
+  store.dispatch(settingsSlice.actions.updateWithDebounce(partial));
+}
+
 /**
  * @returns the current settings state.
  */
@@ -21,4 +27,8 @@ export function setPreferredPageSize(size: PageSize) {
       preferredPageSize: size,
     },
   });
+}
+
+export function updateAccentColor(color: string) {
+  updateSettingsDebounced({ appearance: { accentColor: color } });
 }

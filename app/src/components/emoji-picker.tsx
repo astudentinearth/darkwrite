@@ -9,7 +9,7 @@ import { CSSProperties, useState } from "react";
 import { cn } from "@/lib/utils";
 import "./emoji-picker.css";
 import { hex } from "color-convert";
-import { useSettings } from "@/query/use-settings";
+import { useAppearanceSettings } from "@/features/settings/store/settings-selectors";
 
 export function EmojiPicker(props: {
   show?: string;
@@ -20,7 +20,7 @@ export function EmojiPicker(props: {
   const [open, setOpen] = useState(false);
 
   // convert our hex color to rgb to force on the picker
-  const accent = useSettings().data.appearance.accentColor; 
+  const accent = useAppearanceSettings().accentColor;
   const rgb = hex.rgb(accent);
   const accentVar = `${rgb[0]}, ${rgb[1]}, ${rgb[2]}`;
 

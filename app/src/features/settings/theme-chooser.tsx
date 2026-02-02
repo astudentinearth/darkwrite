@@ -8,12 +8,12 @@ import {
   SelectTrigger,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
-import { useSettings, useUpdateSettings } from "@/query/use-settings";
 import { THEMES_QUERY_KEY, useThemes } from "@/query/use-themes";
 import { useQueryClient } from "@tanstack/react-query";
-import { produce } from "immer";
 import { Folder } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { useAppearanceSettings } from "./store/settings-selectors";
+import { updateAccentColor, updateSettings } from "./store/settings-actions";
 
 export function ThemeDropdown(props: {
   className?: string;
@@ -37,32 +37,31 @@ export function ThemeDropdown(props: {
 }
 
 export function ThemeChooser() {
-  const settings = useSettings().data;
-  const lightTheme = settings.appearance.lightColorScheme;
-  const darkTheme = settings.appearance.darkColorScheme;
-  const accentColor = settings.appearance.accentColor;
+  const settings = useAppearanceSettings();
+  const lightTheme = settings.lightColorScheme;
+  const darkTheme = settings.darkColorScheme;
+  const accentColor = settings.accentColor;
   const qc = useQueryClient();
-  const useSystemAccentColor = settings.appearance.useSystemAccentColor;
+  const useSystemAccentColor = settings.useSystemAccentColor;
   const { t } = useTranslation("translation");
-  const mutation = useUpdateSettings();
   const importTheme = async () => {
+    //FIXME react query detected
     await DarkwriteAPIClient.theme.importTheme();
     qc.refetchQueries({ queryKey: THEMES_QUERY_KEY });
   };
+
   const setScheme = (mode: "dark" | "light", id: string) => {
-    const updated = produce(settings, (draft) => {
-      draft.appearance[
-        mode === "dark" ? "darkColorScheme" : "lightColorScheme"
-      ] = id;
+    updateSettings({
+      appearance: {
+        [mode === "dark" ? "darkColorScheme" : "lightColorScheme"]: id,
+      },
     });
-    mutation.mutate(updated);
   };
+
   const toggleSystemAccentColor = (value: boolean) => {
-    const updated = produce(settings, (draft) => {
-      draft.appearance.useSystemAccentColor = value;
-    });
-    mutation.mutate(updated);
+    updateSettings({ appearance: { useSystemAccentColor: value } });
   };
+
   return (
     <>
       <div className="flex w-160 gap-2">
@@ -112,7 +111,7 @@ export function ThemeChooser() {
           <ColorPicker
             disabled={useSystemAccentColor}
             value={accentColor}
-            onChange={mutation.updateAccentColor}
+            onChange={updateAccentColor}
           />
         </div>
         <hr />
