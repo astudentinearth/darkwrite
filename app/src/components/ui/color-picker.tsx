@@ -22,7 +22,7 @@ export function ColorPicker(props: ColorPickerProps) {
           }}
           disabled={props.disabled}
           className={cn(
-            "p-0 w-8 h-8 rounded-lg border-border border",
+            "p-0 w-8 h-8 rounded-md border-border border",
             !props.value && "hover:bg-secondary/50! bg-secondary",
             props.className,
           )}

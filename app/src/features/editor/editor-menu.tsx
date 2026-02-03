@@ -30,12 +30,15 @@ import { useEditorCommand } from "./use-editor-command";
 import { PageSizeChooser } from "../export/page-size-chooser";
 import { useNoteById } from "../note/hooks/use-note-by-id";
 import { moveToTrash, restoreFromTrash } from "../note/store/note-actions";
+import { cn } from "@/lib/utils";
+import { useState } from "react";
 
 export default function EditorMenu() {
   const commands = useEditorCommand();
   const spellcheck = useLocalStore((s) => s.useSpellcheck);
   const importer = useNoteImport();
   const setSpellcheck = useLocalStore((s) => s.setSpellcheck);
+  const [open, setOpen] = useState(false);
 
   const { t } = useTranslation();
   const noteId = useNoteFromURL();
@@ -45,13 +48,13 @@ export default function EditorMenu() {
   const { exportHTML, exportJSON, exportPDF } = NoteExporter;
 
   return (
-    <DropdownMenu>
+    <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
-        <HeaderbarButton>
+        <HeaderbarButton className={cn(open && "bg-secondary/50")}>
           <Menu size={20} />
         </HeaderbarButton>
       </DropdownMenuTrigger>
-      <DropdownMenuContent>
+      <DropdownMenuContent className="mr-2">
         <DropdownMenuSwitchItem
           checked={spellcheck}
           onCheckedChange={setSpellcheck}

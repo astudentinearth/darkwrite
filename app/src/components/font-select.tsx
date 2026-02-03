@@ -46,7 +46,7 @@ export default function FontSelect(props: {
       defaultValue={props.value}
       placeholder="Type a font name"
       ref={inputRef}
-      className={cn("w-fit h-fit", props.className)}
+      className={cn("w-fit h-fit py-medium pl-large", props.className)}
       onKeyDown={(e) => {
         if (e.key === "Enter") saveOnTextInput(inputRef.current.value);
       }}
