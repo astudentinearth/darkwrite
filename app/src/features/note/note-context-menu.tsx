@@ -77,6 +77,7 @@ export function NoteContextMenuContainer({
         <ContextMenuSeparator />
         <ContextMenuItem
           onSelect={actions.trash}
+          variant="destructive"
           className="group focus:text-destructive"
         >
           <Trash
