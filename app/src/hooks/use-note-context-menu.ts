@@ -26,7 +26,7 @@ export const useNoteContextMenu = (noteId: string) => {
     createNote({
       workspaceId: note.workspaceId,
       navigateAfter: true,
-      parentId: note.parentId,
+      parentId: note.id,
     });
   };
 

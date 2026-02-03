@@ -14,10 +14,11 @@ import {
   Forward,
   Trash,
 } from "lucide-react";
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ToggleFavoriteContextMenuItem } from "./components/toggle-favorite-item";
 import { ModificationDateLabel } from "./components/modification-date-label";
+import { cn } from "@/lib/utils";
 
 export function NoteContextMenuContainer({
   children,
@@ -27,16 +28,24 @@ export function NoteContextMenuContainer({
   children: ReactNode;
   noteId: string;
   onOpenChange?: (val: boolean) => void;
-  finalOrderHint?: string;
 }) {
   const { t } = useTranslation("translation", {
     keyPrefix: "sidebar.notes.contextmenu",
   });
   const { t: _t } = useTranslation();
   const actions = useNoteContextMenu(noteId);
+  const [open, setOpen] = useState(false);
+
+  const openChanged = (val: boolean) => {
+    setOpen(val);
+    onOpenChange?.(val);
+  };
+
   return (
-    <ContextMenu onOpenChange={onOpenChange}>
-      <ContextMenuTrigger asChild>{children}</ContextMenuTrigger>
+    <ContextMenu onOpenChange={openChanged}>
+      <ContextMenuTrigger className={cn(open && "bg-primary/10")} asChild>
+        {children}
+      </ContextMenuTrigger>
       <ContextMenuContent className="min-w-64">
         <ToggleFavoriteContextMenuItem noteId={noteId} />
         <ContextMenuItem onSelect={actions.newSubpage}>

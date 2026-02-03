@@ -4,6 +4,7 @@ import { favoritesApi } from "../store/favorites-api";
 import { useTranslation } from "react-i18next";
 import { ContextMenuItem } from "@/components/ui";
 import { Star } from "lucide-react";
+import { favorite, unfavorite } from "../store/note-actions";
 
 export function ToggleFavoriteContextMenuItem(props: { noteId: string }) {
   const note = useAppSelector((state) => selectNoteById(state, props.noteId));
@@ -12,24 +13,24 @@ export function ToggleFavoriteContextMenuItem(props: { noteId: string }) {
   });
   if (!note) return <></>;
 
-  const favorite = () => {
-    favoritesApi.endpoints.favorite.initiate({ noteId: props.noteId });
+  const _favorite = () => {
+    favorite({ noteId: props.noteId });
   };
 
-  const unfavorite = () => {
-    favoritesApi.endpoints.unfavorite.initiate(props.noteId);
+  const _unfavorite = () => {
+    unfavorite(props.noteId);
   };
 
   return (
     <>
       {!note.isFavorite && (
-        <ContextMenuItem onSelect={favorite}>
+        <ContextMenuItem onSelect={_favorite}>
           <Star className={"opacity-75"} size={20}></Star>
           {t("addFavorite")}
         </ContextMenuItem>
       )}
       {note.isFavorite && (
-        <ContextMenuItem onSelect={unfavorite}>
+        <ContextMenuItem onSelect={_unfavorite}>
           <Star className={"text-star fill-star"} size={20}></Star>
           {t("removeFavorite")}
         </ContextMenuItem>
