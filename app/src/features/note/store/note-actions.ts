@@ -4,6 +4,7 @@
 import { store } from "@/features/store/redux";
 import { createNoteApi, CreateNoteArgs } from "./create-note";
 import { FavoriteNoteArgs, favoritesApi } from "./favorites-api";
+import { navigateToNote } from "@/features/navigation/navigator";
 
 const dispatch = store.dispatch;
 
@@ -19,8 +20,12 @@ export async function unfavorite(noteId: string) {
   dispatch(favoritesApi.endpoints.unfavorite.initiate(noteId));
 }
 
-export async function duplicateNote(id: string) {
-  //TODO
+export async function duplicateNote(id: string, navigateAfter = true) {
+  dispatch(createNoteApi.endpoints.duplicateNote.initiate(id))
+    .unwrap()
+    .then((note) => {
+      if (navigateAfter) navigateToNote(note.id);
+    });
 }
 
 export async function moveToTrash(noteId: string) {

@@ -28,6 +28,16 @@ async function _createNoteQueryFn(args: CreateNoteArgs) {
   }
 }
 
+async function _duplicateNoteQueryFn(noteId: string) {
+  try {
+    const { note } = await DarkwriteAPIClient.note.duplicate(noteId);
+    if (!note) throw new Error("Failed to duplicate note");
+    return { data: note };
+  } catch (error) {
+    return { error: error as Error };
+  }
+}
+
 export const createNoteApi = notesApi.injectEndpoints({
   endpoints: (builder) => ({
     createNote: builder.mutation<NoteDTO, CreateNoteArgs>({
@@ -49,6 +59,29 @@ export const createNoteApi = notesApi.injectEndpoints({
           id: noteByParentIdTag(args.workspaceId, args.parentId ?? "ROOT"),
         },
       ],
+    }),
+    duplicateNote: builder.mutation<NoteDTO, string>({
+      queryFn: _duplicateNoteQueryFn,
+
+      async onQueryStarted(_noteId, { dispatch, queryFulfilled }) {
+        try {
+          const { data: note } = await queryFulfilled;
+          dispatch(upsertNotes([note]));
+          navigateToNote(note.id);
+        } catch {
+          /* empty */
+        }
+      },
+
+      invalidatesTags: (result) =>
+        result
+          ? [
+              {
+                type: NOTES_TAG_TYPE,
+                id: noteByParentIdTag(result.workspaceId, result.parentId),
+              },
+            ]
+          : [],
     }),
   }),
 });

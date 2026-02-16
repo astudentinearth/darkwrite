@@ -1,13 +1,12 @@
 import { CreateNoteDTO, MoveNoteDTO, UpdateNoteDTO } from "@/common/dto";
+import { ParentId } from "@/common/note";
+import { Rank } from "@/common/rank";
 import { DatabaseDAO } from "../database/database.dao";
-import { Database, Note } from "../entity";
+import { AppDataSource } from "../db";
+import { Note } from "../entity";
 import { DocumentService } from "../service/document.service";
 import { WorkspaceDAO } from "../workspace/workspace.dao";
-import { NoteRankService } from "./note-rank.service";
 import { NoteDAO } from "./note.dao";
-import { Rank } from "@/common/rank";
-import { ParentId } from "@/common/note";
-import { AppDataSource } from "../db";
 
 const noteDAO = new NoteDAO();
 
@@ -51,7 +50,6 @@ export const NoteService = {
       ? await DatabaseDAO.findByIdOrThrow(databaseId)
       : undefined;
 
-    // reassign order key on restore
     const note = await noteDAO.findByIdOrThrow(id);
 
     Object.assign(note, rest);
@@ -218,7 +216,7 @@ export const NoteService = {
     const note = await noteDAO.findByIdOrThrow(id);
     const newNote: Note = new Note();
     newNote.icon = note.icon;
-    newNote.title = `${note.title} (1)`;
+    newNote.title = `${note.title} (copy)`;
     newNote.database = note.database;
     newNote.workspace = note.workspace;
 
@@ -246,6 +244,32 @@ export const NoteService = {
   async setModificationDate(id: string, date: Date) {
     const note = await noteDAO.findByIdOrThrow(id);
     note.modifiedAt = date;
+    await noteDAO.save(note);
+  },
+
+  async moveToTrash(id: string) {
+    const note = await noteDAO.findByIdOrThrow(id);
+    note.isTrashed = true;
+    note.orderHint = "";
+    note.favoriteOrderHint = "";
+    note.isFavorite = false;
+    await noteDAO.save(note);
+  },
+
+  async restoreFromTrash(id: string) {
+    const note = await noteDAO.findByIdOrThrow(id);
+    note.isTrashed = false;
+
+    if (note.parentId && !(await noteDAO.exists(note.parentId))) {
+      note.parentId = null;
+    }
+
+    const orderKeys = await noteDAO.computeOrderKeysForLayer(
+      note.workspace.id,
+      note.parentId,
+    );
+
+    note.orderHint = orderKeys.end;
     await noteDAO.save(note);
   },
 };

@@ -70,6 +70,10 @@ export class NoteDAO {
     return this.repo.delete({ id: note.id });
   }
 
+  async exists(id: string) {
+    return await this.repo.exists({ where: { id } });
+  }
+
   async findLastNoteInOrder(workspaceId: string) {
     const result = await this.repo.findOne({
       order: {
