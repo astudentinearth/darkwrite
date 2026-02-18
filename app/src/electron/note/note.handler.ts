@@ -55,6 +55,16 @@ export const ElectronNoteAPI: INoteAPI = {
     return { notes: dtos };
   },
 
+  async moveToTrash(noteId: string) {
+    const note = (await NoteService.moveToTrash(noteId)).mapToDTO();
+    return { note };
+  },
+
+  async restoreFromTrash(noteId: string) {
+    const note = (await NoteService.restoreFromTrash(noteId)).mapToDTO();
+    return { note };
+  },
+
   async getRecents(workspaceId: string) {
     const notes = await NoteQueryService.getRecents(workspaceId);
     const dtos = mapNotesToDTO(notes);
@@ -191,6 +201,8 @@ export const NoteApiBridge = {
   getFavorites: new IPCHandler(false, ElectronNoteAPI.getFavorites),
   getParentTree: new IPCHandler(false, ElectronNoteAPI.getParentTree),
   getTrashed: new IPCHandler(false, ElectronNoteAPI.getTrashed),
+  moveToTrash: new IPCHandler(false, ElectronNoteAPI.moveToTrash),
+  restoreFromTrash: new IPCHandler(false, ElectronNoteAPI.restoreFromTrash),
   search: new IPCHandler(false, ElectronNoteAPI.search),
   getRecents: new IPCHandler(false, ElectronNoteAPI.getRecents),
   getByParentId: new IPCHandler(false, ElectronNoteAPI.getByParentId),

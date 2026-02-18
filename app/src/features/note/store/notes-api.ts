@@ -196,3 +196,5 @@ export const {
   useGetFavoritesByWorkspaceIdQuery,
   useGetNoteByIdQuery,
 } = notesApi;
+
+export { tryFetch as _tryFetch };

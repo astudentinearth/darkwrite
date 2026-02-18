@@ -79,6 +79,9 @@ export interface INoteAPI {
    */
   getParentTree: (noteId: string) => Promise<ParentTreeResponseDTO>;
 
+  moveToTrash: (noteId: string) => Promise<NoteResponseDTO>;
+  restoreFromTrash: (noteId: string) => Promise<NoteResponseDTO>;
+
   /**
    * Favorites a note.
    * @param noteId

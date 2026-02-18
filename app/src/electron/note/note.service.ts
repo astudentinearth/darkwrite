@@ -253,7 +253,7 @@ export const NoteService = {
     note.orderHint = "";
     note.favoriteOrderHint = "";
     note.isFavorite = false;
-    await noteDAO.save(note);
+    return await noteDAO.save(note);
   },
 
   async restoreFromTrash(id: string) {
@@ -270,6 +270,6 @@ export const NoteService = {
     );
 
     note.orderHint = orderKeys.end;
-    await noteDAO.save(note);
+    return await noteDAO.save(note);
   },
 };
