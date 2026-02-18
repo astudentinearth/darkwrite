@@ -6,6 +6,7 @@ import { EmbedRepository } from "../repository/embed.repository";
 import { WorkspaceRepository } from "../repository/workspace.repository";
 import { readFile } from "fs/promises";
 import log from "electron-log";
+import { NotFoundError } from "@/common/error";
 
 export class EmbedService {
   constructor(
@@ -50,7 +51,7 @@ export class EmbedService {
 
   async createFromFilePath(filePath: string, workspaceId: string) {
     const workspace = await this.workspaceRepository.findById(workspaceId);
-    if (!workspace) throw new Error(`Workspace ${workspaceId} not found.`);
+    if (!workspace) throw new NotFoundError("Workspace", workspaceId);
     let embed = await this.initializeEmbedWithFileData(filePath);
     embed.id = randomUUID();
     embed.uploadedAt = new Date();
@@ -71,7 +72,7 @@ export class EmbedService {
     workspaceId: string,
   ) {
     const workspace = await this.workspaceRepository.findById(workspaceId);
-    if (!workspace) throw new Error(`Workspace ${workspaceId} not found.`);
+    if (!workspace) throw new NotFoundError("Workspace", workspaceId);
 
     let embed = new Embed();
     embed.fileSize = buffer.byteLength;
@@ -97,7 +98,7 @@ export class EmbedService {
 
   async getEmbedUrl(id: string) {
     const embed = await this.embedRepository.findById(id);
-    if (!embed) throw new Error(`Embed ${id} does not exist.`);
+    if (!embed) throw new NotFoundError("Embed", id);
     else return `embed://${embed.id}`;
   }
 

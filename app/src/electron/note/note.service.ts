@@ -7,6 +7,7 @@ import { Note } from "../entity";
 import { DocumentService } from "../service/document.service";
 import { WorkspaceDAO } from "../workspace/workspace.dao";
 import { NoteDAO } from "./note.dao";
+import { IllegalArgumentError, NotFoundError } from "@/common/error";
 
 const noteDAO = new NoteDAO();
 
@@ -16,7 +17,7 @@ export const NoteService = {
 
     const workspace = await WorkspaceDAO.findByIdOrThrow(workspaceId);
     if (!workspace) {
-      throw new Error("Workspace not found");
+      throw new NotFoundError("Workspace", workspaceId);
     }
 
     const database = databaseId
@@ -66,7 +67,7 @@ export const NoteService = {
   async move(dto: MoveNoteDTO) {
     if (dto.placement === "below") {
       if (!dto.destinationId)
-        throw new Error(
+        throw new IllegalArgumentError(
           "Destination ID cannot be null when placement is 'below'.",
         );
       return await NoteService.moveBelow(dto.sourceId, dto.destinationId);
@@ -94,7 +95,7 @@ export const NoteService = {
       const aboveNote = await noteRepository.findByIdOrThrow(aboveNoteId);
 
       if (aboveNote.isTrashed || sourceNote.isTrashed) {
-        throw new Error("Cannot move (below) a trashed note.");
+        throw new IllegalArgumentError("Cannot move (below) a trashed note.");
       }
 
       const siblings = await noteRepository.findAllByParentIdSortAsc(
@@ -179,7 +180,7 @@ export const NoteService = {
       const sourceNote = await noteRepository.findByIdOrThrow(sourceNoteId);
 
       if (sourceNote.isTrashed) {
-        throw new Error("Cannot move a trashed note.");
+        throw new IllegalArgumentError("Cannot move a trashed note.");
       }
 
       const isCircular = await noteRepository.isDescendant(
@@ -187,13 +188,17 @@ export const NoteService = {
         sourceNoteId,
       );
       if (isCircular) {
-        throw new Error("Cannot move a note into its own descendant.");
+        throw new IllegalArgumentError(
+          "Cannot move a note into its own descendant.",
+        );
       }
 
       if (destinationNoteId) {
         const dest = await noteRepository.findByIdOrThrow(destinationNoteId);
         if (dest.isTrashed) {
-          throw new Error("Cannot move a note into a trashed note.");
+          throw new IllegalArgumentError(
+            "Cannot move a note into a trashed note.",
+          );
         }
       }
 

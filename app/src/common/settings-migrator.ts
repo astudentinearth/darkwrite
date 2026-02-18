@@ -1,3 +1,4 @@
+import { InvalidSettingsError } from "./error";
 import { DarkwriteUserSettings, SettingsModel } from "./settings";
 import { SettingsV1Schema } from "./settings-v1-schema";
 
@@ -12,7 +13,7 @@ export class SettingsMigrator {
       this.settingsObj == null ||
       !("version" in this.settingsObj)
     ) {
-      throw new Error("Invalid settings file.");
+      throw new InvalidSettingsError("Invalid settings file.");
     }
 
     if (this.settingsObj.version === "1") return 1;
@@ -50,7 +51,7 @@ export class SettingsMigrator {
 
   migrate() {
     if (this.version == -1)
-      throw new Error(`Cannot determine settings file version.`);
+      throw new InvalidSettingsError(`Cannot determine settings file version.`);
     this.migratorMap[this.version].call(this);
     return this.settingsObj as DarkwriteUserSettings;
   }

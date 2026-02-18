@@ -12,6 +12,7 @@ import {
 import { selectNoteById, selectNotesByParentId } from "./note-selectors";
 import { updateNote, upsertNotes } from "./note-slice";
 import { noteByParentIdTag, NOTES_TAG_TYPE, notesApi } from "./notes-api";
+import { MutationError } from "@/common/error";
 
 export type MoveNoteBelowArgs = {
   sourceNoteId: string;
@@ -48,7 +49,7 @@ const _moveNoteIntoQueryFn = async ({
       sourceId: sourceNoteId,
     });
     if (!note) {
-      throw new Error("Failed to move note");
+      throw new MutationError("Failed to move note");
     }
     return { data: note };
   } catch (error) {
@@ -67,7 +68,7 @@ const _moveNoteBelowQueryFn = async ({
       sourceId: sourceNoteId,
     });
     if (!note) {
-      throw new Error("Failed to move note");
+      throw new MutationError("Failed to move note");
     }
     return { data: note };
   } catch (error) {

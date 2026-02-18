@@ -1,3 +1,4 @@
+import { NotFoundError } from "@/common/error";
 import { AppDataSource } from "../db";
 import { Database } from "../entity";
 
@@ -10,7 +11,7 @@ export const DatabaseDAO = {
 
   findByIdOrThrow: async (id: string) => {
     const database = await repo.findOne({ where: { id } });
-    if (!database) throw new Error(`Database with id ${id} not found.`);
+    if (!database) throw new NotFoundError("Database", id);
     return database;
   },
 

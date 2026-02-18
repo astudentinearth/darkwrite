@@ -16,6 +16,7 @@ import {
 } from "../lib/paths";
 import { openFile, saveFile } from "./dialog";
 import { logError } from "../lib/log";
+import { InvalidBackupError } from "@/common/error";
 
 /**
  * APIs to perform a complete workspace export.
@@ -95,8 +96,7 @@ export const BackupAPI = {
         ((await fse.exists(join(RESTORE_CACHE_DIR, "darkwrite.db"))) ||
           (await fse.exists(join(RESTORE_CACHE_DIR, "darkwrite.db")))) &&
         (await fse.exists(join(RESTORE_CACHE_DIR, "settings.json")));
-      if (!isValidBackup)
-        throw new Error("This does not seem to be a Darkwrite backup archive.");
+      if (!isValidBackup) throw new InvalidBackupError();
 
       // before we do anything else, we will rename the old directory so we can rollback if something goes wrong.
       try {

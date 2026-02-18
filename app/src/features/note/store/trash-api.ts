@@ -2,6 +2,7 @@ import { DarkwriteAPIClient } from "@/api/api-client";
 import { _tryFetch, NOTES_TAG_TYPE, notesApi } from "./notes-api";
 import { updateNote, upsertNotes } from "./note-slice";
 import { NoteDTO } from "@/common/dto";
+import { MutationError } from "@/common/error";
 
 export function trashedByWorkspaceIdTag(workspaceId: string) {
   return `TRASHED_BY_WORKSPACE_ID_${workspaceId}` as const;
@@ -14,7 +15,7 @@ export function trashedByNoteIdTag(noteId: string) {
 export const _moveToTrashMutationFn = async (noteId: string) => {
   try {
     const { note } = await DarkwriteAPIClient.note.moveToTrash(noteId);
-    if (!note) throw new Error("Note not found");
+    if (!note) throw new MutationError("Note not found");
     return { data: note };
   } catch (error) {
     return { error: error as Error };
@@ -24,7 +25,7 @@ export const _moveToTrashMutationFn = async (noteId: string) => {
 export const _restoreFromTrashMutationFn = async (noteId: string) => {
   try {
     const { note } = await DarkwriteAPIClient.note.restoreFromTrash(noteId);
-    if (!note) throw new Error("Note not found");
+    if (!note) throw new MutationError("Note not found");
     return { data: note };
   } catch (error) {
     return { error: error as Error };
@@ -67,7 +68,7 @@ export const trashApi = notesApi.injectEndpoints({
 
         try {
           const { data } = await queryFulfilled;
-          if (!data) throw new Error("Update failed");
+          if (!data) throw new MutationError("Update failed");
           dispatch(upsertNotes([data]));
         } catch {
           dispatch(updateNote({ id: noteId, changes: undoPatch }));
@@ -89,7 +90,7 @@ export const trashApi = notesApi.injectEndpoints({
 
         try {
           const { data } = await queryFulfilled;
-          if (!data) throw new Error("Update failed");
+          if (!data) throw new MutationError("Update failed");
           dispatch(upsertNotes([data]));
         } catch {
           /* empty */

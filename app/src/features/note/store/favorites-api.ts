@@ -5,6 +5,7 @@ import { Rank } from "@/common/rank";
 import { selectFavorites, selectNoteById } from "./note-selectors";
 import { RootState } from "@/features/store/types";
 import { updateNote } from "./note-slice";
+import { MutationError } from "@/common/error";
 
 export type FavoriteNoteArgs = { noteId: string; aboveNoteId?: string | null };
 
@@ -17,7 +18,7 @@ async function _favoriteNoteMutationFn({
       noteId,
       aboveNoteId,
     );
-    if (!note) throw new Error("Note not found");
+    if (!note) throw new MutationError("Note not found");
     return { data: note };
   } catch (error) {
     return { error: error as Error };
@@ -27,7 +28,7 @@ async function _favoriteNoteMutationFn({
 async function _unfavoriteNoteMutationFn(noteId: string) {
   try {
     const { note } = await DarkwriteAPIClient.note.unfavorite(noteId);
-    if (!note) throw new Error("Note not found");
+    if (!note) throw new MutationError("Note not found");
     return { data: note };
   } catch (error) {
     return { error: error as Error };

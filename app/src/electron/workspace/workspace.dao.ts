@@ -1,3 +1,4 @@
+import { NotFoundError } from "@/common/error";
 import { AppDataSource } from "../db";
 import { Workspace } from "../entity";
 
@@ -10,7 +11,7 @@ export const WorkspaceDAO = {
 
   findByIdOrThrow: async (id: string) => {
     const workspace = await repo.findOne({ where: { id } });
-    if (!workspace) throw new Error(`Workspace with id ${id} not found.`);
+    if (!workspace) throw new NotFoundError("Workspace", id);
     return workspace;
   },
 

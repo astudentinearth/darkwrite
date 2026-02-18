@@ -6,6 +6,7 @@ import { tryParse } from "@common/json-util";
 import _ from "lodash";
 import { DEFAULT_THEMES } from "@/common/themes";
 import { readFile } from "fs-extra";
+import { InvalidThemeError } from "@/common/error";
 
 export class ThemeService {
   constructor(
@@ -39,7 +40,7 @@ export class ThemeService {
   async importTheme(path: string) {
     const themeString = await readFile(path, "utf-8");
     const theme = this.parseTheme(themeString);
-    if (!theme) throw new Error("Invalid theme file.");
+    if (!theme) throw new InvalidThemeError(path);
     await this.themeStore.write(theme.id, themeString);
   }
 

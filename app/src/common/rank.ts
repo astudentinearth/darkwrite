@@ -1,4 +1,5 @@
 import { generateKeyBetween } from "fractional-indexing";
+import { IllegalArgumentError } from "./error";
 
 export class Rank {
   static default() {
@@ -17,7 +18,7 @@ export class Rank {
     const first = Rank.lesserOne(a, b);
     const second = Rank.greaterOne(a, b);
     if (first == null || second == null)
-      throw new Error(
+      throw new IllegalArgumentError(
         "`Rank.between()` requires two ranks that are not equal.",
       );
     return new Rank(generateKeyBetween(first, second));

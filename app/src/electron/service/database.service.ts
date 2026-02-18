@@ -1,3 +1,4 @@
+import { NotFoundError } from "@/common/error";
 import { DatabaseRepository } from "../repository/database.repository";
 
 export class DatabaseService {
@@ -5,10 +6,9 @@ export class DatabaseService {
 
   async findDatabaseOrThrow(id: string) {
     const result = await this.databaseRepository.findById(id);
-    if(result == null){ 
-      throw new Error(`Database ${id} does not exist.`);
+    if (result == null) {
+      throw new NotFoundError("Database", id);
     }
     return result;
   }
-
 }

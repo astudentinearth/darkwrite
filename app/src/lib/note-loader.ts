@@ -1,4 +1,5 @@
 import { DarkwriteAPIClient } from "@/api/api-client";
+import { NotFoundError } from "@/common/error";
 import { setWorkspaceId } from "@/context/local-state";
 import { store } from "@/features/store/redux";
 
@@ -8,7 +9,7 @@ export const noteLoader = async ({ params }: { params: any }) => {
   if (!pageId) throw new Error("Note id not found");
 
   const { note } = await DarkwriteAPIClient.note.getById(pageId);
-  if (!note) throw new Error("Note not found");
+  if (!note) throw new NotFoundError("Note", pageId);
 
   const workspaceId = store.getState().session.workspaceId;
   if (note.workspaceId && note.workspaceId !== workspaceId) {

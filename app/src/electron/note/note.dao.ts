@@ -3,6 +3,7 @@ import { AppDataSource } from "../db";
 import { Note } from "../entity";
 import { ParentId } from "@/common/note";
 import { Rank } from "@/common/rank";
+import { NotFoundError } from "@/common/error";
 
 export class NoteDAO {
   constructor(
@@ -27,7 +28,7 @@ export class NoteDAO {
 
   async findByIdOrThrow(id: string) {
     const note = await this.repo.findOne({ where: { id } });
-    if (!note) throw new Error(`Note with id ${id} not found.`);
+    if (!note) throw new NotFoundError("Note", id);
     return note;
   }
 

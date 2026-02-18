@@ -5,6 +5,7 @@ import {
 import { Workspace } from "../entity";
 import { getDefaultWorkspaceConfiguration } from "@/lib/workspace-config";
 import { WorkspaceDAO } from "./workspace.dao";
+import { NotFoundError } from "@/common/error";
 
 export class WorkspaceService {
   constructor(private workspaceDAO = WorkspaceDAO) {}
@@ -32,7 +33,7 @@ export class WorkspaceService {
   async findWorkspaceOrThrow(id: string): Promise<Workspace> {
     const result = await this.workspaceDAO.findById(id);
     if (result == null) {
-      throw new Error(`Workspace ${id} does not exist.`);
+      throw new NotFoundError("Workspace", id);
     }
     return result;
   }
