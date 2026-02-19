@@ -10,8 +10,8 @@ import AppMenu from "./app-menu";
 import { SidebarNavigation } from "./navigation";
 import { WorkspaceSwitcher } from "./workspace-switcher";
 import { CreatePageButton } from "./create-page-button";
-import { FavoritesView } from "../note/components/favorites";
 import FavoritesContainer from "./favorites-container";
+import { TrashWidget } from "../note/components/trash";
 
 export type SidebarProps = React.HTMLAttributes<HTMLDivElement> & {};
 
@@ -62,6 +62,7 @@ export function Sidebar(props: SidebarProps) {
           <FavoritesContainer />
           <NoteListRoot />
           <div className="flex flex-col gap-0.5"></div>
+          <TrashWidget />
         </div>
       </div>
     </div>

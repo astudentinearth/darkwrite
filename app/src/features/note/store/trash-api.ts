@@ -1,8 +1,9 @@
 import { DarkwriteAPIClient } from "@/api/api-client";
 import { _tryFetch, NOTES_TAG_TYPE, notesApi } from "./notes-api";
-import { updateNote, upsertNotes } from "./note-slice";
+import { removeNote, updateNote, upsertNotes } from "./note-slice";
 import { NoteDTO } from "@/common/dto";
 import { MutationError } from "@/common/error";
+import { RootState } from "@/features/store/types";
 
 export function trashedByWorkspaceIdTag(workspaceId: string) {
   return `TRASHED_BY_WORKSPACE_ID_${workspaceId}` as const;
@@ -103,7 +104,39 @@ export const trashApi = notesApi.injectEndpoints({
         },
       ],
     }),
+
+    delete: builder.mutation<true, string>({
+      queryFn: async (noteId) => {
+        try {
+          await DarkwriteAPIClient.note.delete(noteId);
+          return { data: true as const };
+        } catch (error) {
+          return { error: error as Error };
+        }
+      },
+      onQueryStarted: async (
+        noteId,
+        { dispatch, queryFulfilled, getState },
+      ) => {
+        const note = (getState() as RootState)["notes-slice"].entities[noteId];
+
+        if (note) {
+          dispatch(removeNote(noteId));
+        }
+
+        try {
+          await queryFulfilled;
+        } catch {
+          if (note) dispatch(upsertNotes([note]));
+        }
+      },
+    }),
   }),
 });
 
-export const { useGetTrashedQuery } = trashApi;
+export const {
+  useGetTrashedQuery,
+  useDeleteMutation,
+  useMoveToTrashMutation,
+  useRestoreFromTrashMutation,
+} = trashApi;

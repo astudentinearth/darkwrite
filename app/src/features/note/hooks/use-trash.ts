@@ -37,7 +37,7 @@ export function useTrash(query?: string) {
   const { isLoading, isFetching } = useGetTrashedQuery(
     workspaceId ?? skipToken,
   );
-  const notes = useAppSelector((state) =>
+  const noteIds = useAppSelector((state) =>
     selectNotesForTrashView(state, {
       workspaceId: workspaceId ?? "",
       query,
@@ -45,7 +45,7 @@ export function useTrash(query?: string) {
   );
 
   return {
-    notes,
+    noteIds,
     isLoading,
     isFetching,
   };

@@ -36,3 +36,7 @@ export async function moveToTrash(noteId: string) {
 export async function restoreFromTrash(noteId: string) {
   dispatch(trashApi.endpoints.restoreFromTrash.initiate(noteId));
 }
+
+export function permanentlyDeleteNote(noteId: string) {
+  dispatch(trashApi.endpoints.delete.initiate(noteId));
+}
