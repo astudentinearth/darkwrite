@@ -1,4 +1,4 @@
-import { EntityManager, IsNull, Repository } from "typeorm";
+import { EntityManager, IsNull, Like, Repository } from "typeorm";
 import { AppDataSource } from "../db";
 import { Note } from "../entity";
 import { ParentId } from "@/common/note";
@@ -204,12 +204,13 @@ export class NoteDAO {
   }
 
   async searchByTitle(workspaceId: string, query: string) {
-    return this.repo
-      .createQueryBuilder("note")
-      .where("note.workspaceId = :workspaceId", { workspaceId })
-      .andWhere("note.title ILIKE :query", { query: `%${query}%` })
-      .andWhere("note.isTrashed = false")
-      .getMany();
+    return this.repo.find({
+      where: {
+        title: Like(`%${query}%`),
+        workspace: { id: workspaceId },
+        isTrashed: false,
+      },
+    });
   }
 
   async getRecentlyModifiedNotes(workspaceId: string, limit: number) {

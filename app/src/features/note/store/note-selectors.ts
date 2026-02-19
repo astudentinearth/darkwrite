@@ -3,6 +3,7 @@ import { notesAdapter } from "./notes-adapter";
 import { createSelector } from "@reduxjs/toolkit";
 import { Rank } from "@/common/rank";
 import { byUpdateTime } from "@/common/note-filters";
+import { SearchArgs } from "./types";
 
 const selectNotesState = (store: RootState) => store["notes-slice"];
 
@@ -79,5 +80,22 @@ export const selectParentIdTree = createSelector(
     }
 
     return tree.reverse();
+  },
+);
+
+export const selectByWorkspaceAndSearchTerm = createSelector(
+  [selectAllNotes, (_state: RootState, args: SearchArgs) => args],
+  (notes, args) => {
+    const { workspaceId, query } = args;
+    if (!workspaceId) return [];
+    return notes
+      .filter(
+        (n) =>
+          n.workspaceId === workspaceId &&
+          n.title.toLowerCase().includes(query.toLowerCase()) &&
+          !n.isTrashed,
+      )
+      .toSorted((a, b) => Rank.sorter(a.orderHint, b.orderHint))
+      .map((n) => n.id);
   },
 );
