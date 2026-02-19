@@ -28,11 +28,13 @@ export function isDescendant(
 ): boolean {
   if (potentialChildId == null) return false;
   if (potentialChildId === potentialParentId) return true;
-  let currentNote = potentialChildId;
-  while (notes[currentNote] && notes[currentNote].parentId != null) {
-    if (notes[currentNote].parentId === potentialParentId) return true;
-    currentNote = notes[currentNote].parentId as string;
-    if (currentNote === potentialChildId) break; // prevent circular reference
+  let currentNoteId = potentialChildId;
+  while (notes[currentNoteId] && notes[currentNoteId]?.parentId != null) {
+    const currentNote = notes[currentNoteId];
+    if (!currentNote) break;
+    if (currentNote.parentId === potentialParentId) return true;
+    currentNoteId = currentNote.parentId as string;
+    if (currentNoteId === potentialChildId) break; // prevent circular reference
   }
   return false;
 }

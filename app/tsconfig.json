@@ -18,7 +18,6 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "emitDecoratorMetadata": true,
-    "noUncheckedIndexedAccess": true,
   },
   "ts-node": {
     "esm": true,
