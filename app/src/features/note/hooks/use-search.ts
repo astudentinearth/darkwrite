@@ -1,9 +1,9 @@
-import { useCurrentWorkspaceId } from "@/features/workspaces/hooks/use-workspace";
-import { useLazySearchQuery, useSearchQuery } from "../store/search-api";
-import { useMemo } from "react";
-import _ from "lodash";
 import { useAppSelector } from "@/features/store/hooks";
+import { useCurrentWorkspaceId } from "@/features/workspaces/hooks/use-workspace";
+import _ from "lodash";
+import { useMemo } from "react";
 import { selectByWorkspaceAndSearchTerm } from "../store/note-selectors";
+import { useLazySearchQuery } from "../store/search-api";
 
 export function useSearch(query: string) {
   const workspaceId = useCurrentWorkspaceId() ?? "";
@@ -12,7 +12,7 @@ export function useSearch(query: string) {
 
   const debouncedSearch = useMemo(
     () =>
-      _.debounce((q: string) => triggerSearch({ workspaceId, query: q }), 300),
+      _.debounce((q: string) => triggerSearch({ workspaceId, query: q }), 150),
     [triggerSearch, workspaceId],
   );
 

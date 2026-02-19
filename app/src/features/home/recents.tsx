@@ -9,7 +9,7 @@ export default function RecentNotes() {
   const { recents } = useRecents();
   const { t } = useTranslation();
   return (
-    <div className="flex flex-col bg-view-2 border-t border-t-white/10 rounded-xl drop-shadow-sm drop-shadow-black/2 p-1">
+    <div className="flex flex-col bg-view-2 top-highlight rounded-xl drop-shadow-sm drop-shadow-black/2 p-1">
       <h2 className="text-foreground text-xl p-3 tracking-tight">
         {t("home.recents")}
       </h2>

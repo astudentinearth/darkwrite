@@ -30,7 +30,7 @@ const TrashItem = memo(function ({ noteId, className }: TrashItemProps) {
       tabIndex={0}
       onClick={() => navigateToNote(noteId)}
       className={cn(
-        "grid grid-cols-[24px_1fr_32px_32px] gap-1 items-center pr-1 pl-2 py-1 rounded-lg hover:bg-secondary/20 transition-colors duration-100",
+        "grid grid-cols-[24px_1fr_32px_32px] gap-1 items-center pr-1 pl-2 py-1 rounded-lg hover:bg-secondary/90 transition-colors duration-100",
         className,
       )}
     >
@@ -55,8 +55,8 @@ const TrashItem = memo(function ({ noteId, className }: TrashItemProps) {
           e.stopPropagation();
           permanentlyDeleteNote(noteId);
         }}
-        variant={"ghost"}
-        className="w-8 h-8 p-0 text-destructive"
+        variant={"destructive"}
+        className="w-8 h-8 p-0 text-destructive hover:bg-destructive/25 border-none"
       >
         <Trash className="size-4" />
       </Button>
@@ -82,14 +82,14 @@ export function TrashWidget() {
       </PopoverTrigger>
       <PopoverContent
         side="right"
-        className="w-80 ml-2 grid grid-rows-[auto_1fr] max-h-[60vh] p-0 mb-2"
+        className="w-80 ml-2 grid grid-rows-[auto_1fr] bg-view-2/80 top-highlight max-h-[60vh] p-0 mb-2"
       >
         <div className="p-2">
           <Input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder={t("sidebar.trash.search")}
-            className="bg-view-2/75"
+            className="bg-secondary/50 top-highlight border-border/25"
           />
         </div>
         <div className="h-full overflow-y-auto flex flex-col scroll-view pl-2 pr-1 gutter-stable pt-0 pb-2 w-full">

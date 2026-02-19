@@ -10,7 +10,7 @@ export default function SettingsCard({
   return (
     <div
       className={cn(
-        "flex flex-col w-160 bg-view-2 p-4 gap-4 rounded-lg drop-shadpow-sm",
+        "flex flex-col w-160 bg-view-2 p-4 gap-4 rounded-lg drop-shadow-sm top-highlight",
         className,
       )}
     >

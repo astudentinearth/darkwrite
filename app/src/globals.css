@@ -359,3 +359,7 @@ body,
   animation-fill-mode: forwards;
   animation-iteration-count: 1;
 }
+
+@utility top-highlight {
+  box-shadow: 0 -0.5px 0 0 rgba(255, 255, 255, 0.15);
+}
