@@ -7,6 +7,7 @@
 - Fix crash when sidebar tree items had colliding order keys
 - Default note title ("Untitled") is now localized
 - Preferred page size is now persisted in settings.json
+- Reduced brightness of borders in Catppuccin themes
 
 ## 🛠️ Technical changes (definitely read if you have your own fork)
 - Dropped `@tanstack/react-query` in favor of Redux + RTK Query

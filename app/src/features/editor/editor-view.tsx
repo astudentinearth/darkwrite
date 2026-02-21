@@ -38,7 +38,6 @@ export function EditorViewRouteHandler() {
 
 export function EditorView({ noteId }: { noteId: string }) {
   const { note } = useNoteById(noteId);
-  const notes = useNotes().notes;
   const options = useEditorOptions();
   const settings = useSettings();
   const contents = useEditorStore((s) => s.content);
@@ -72,7 +71,7 @@ export function EditorView({ noteId }: { noteId: string }) {
         />
       )}
       <ConstrainedWidth fill={content?.customizations.widePage}>
-        {false && (
+        {/*false && (
           <DarkwriteEditor
             content={initialContent}
             commandItems={items}
@@ -87,7 +86,7 @@ export function EditorView({ noteId }: { noteId: string }) {
             onNavigateToNote={navToNote}
             onInstanceChange={setActiveEditorInstance}
           />
-        )}
+        )*/}
       </ConstrainedWidth>
     </div>
   );

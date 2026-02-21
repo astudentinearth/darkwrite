@@ -4,63 +4,20 @@ import { useLocalStore } from "@/context/local-state";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import _ from "lodash";
 import { produce } from "immer";
-import { useUpdateNote } from "@/query/use-update-note";
 import { uploadImage } from "@/lib/upload-image";
 import {
   setEditorCustomizations,
   useEditorStore,
 } from "@/context/editor-store";
-
-const persistTitle = _.debounce(
-  (id: string, title: string, callback?: () => void) => {
-    DarkwriteAPIClient.note.update(id, { title }).then(callback);
-  },
-  200,
-);
-
-function useUpdateTitleOptimistic(id: string) {
-  const qc = useQueryClient();
-  const workspaceId = useLocalStore((s) => s.workspaceId);
-  return useMutation({
-    mutationFn: async (title: string) => {
-      persistTitle(id, title, () => {
-        qc.invalidateQueries({ queryKey: [workspaceId, "notes", "children"] });
-      });
-    },
-    onSettled(_data, _error, title) {
-      qc.setQueryData(["note", id], (current: NoteResponseDTO) => {
-        const copy = { ...current.note };
-        copy.title = title;
-        return { note: copy };
-      });
-      qc.setQueryData(
-        [workspaceId, "notes"],
-        (current: {
-          notes: Record<string, NoteDTO>;
-          nextFavoriteHint: string;
-        }) => {
-          const copy = produce(current.notes, (draft) => {
-            draft[id].title = title;
-          });
-          return { notes: copy, nextFavoriteHint: current.nextFavoriteHint };
-        },
-      );
-    },
-  });
-}
+import { useMemo } from "react";
+import {
+  createTitleUpdater,
+  updateIcon,
+} from "@/features/note/store/update-note";
+import { restoreFromTrash } from "@/features/note/store/note-actions";
 
 export default function useEditorCover(noteId: string) {
-  const titleMutation = useUpdateTitleOptimistic(noteId);
-  const update = useUpdateNote().update;
-  const customizations = useEditorStore((s) => s.customizations);
-
-  const updateTitle = (title: string) => {
-    titleMutation.mutate(title);
-  };
-
-  const updateIcon = (icon: string | null | undefined) => {
-    update({ id: noteId, dto: { icon } });
-  };
+  const titleUpdater = useMemo(() => createTitleUpdater(noteId), [noteId]);
 
   const addCover = async () => {
     const embed = await uploadImage();
@@ -79,13 +36,11 @@ export default function useEditorCover(noteId: string) {
     setEditorCustomizations(updated);
   };
 
-  const restore = async () => {
-    update({ id: noteId, dto: { isTrashed: false } });
-  };
+  const restore = async () => restoreFromTrash(noteId);
 
   return {
-    updateTitle,
-    updateIcon,
+    updateTitle: titleUpdater.update,
+    updateIcon: (icon: string | null) => updateIcon(noteId, icon),
     addCover,
     onCoverImageSourceChange,
     restore,
