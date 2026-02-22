@@ -1,0 +1,54 @@
+import { setEditorCustomizations } from "@/features/editor/store/editor-actions";
+import {
+  selectCoverImageSource,
+  selectIsWidePage,
+} from "@/features/editor/store/editor-selectors";
+import { useNoteById } from "@/features/note/hooks/use-note-by-id";
+import { restoreFromTrash } from "@/features/note/store/note-actions";
+import {
+  selectNoteIcon,
+  selectNoteTitle,
+} from "@/features/note/store/note-selectors";
+import {
+  createTitleUpdater,
+  updateIcon,
+} from "@/features/note/store/update-note";
+import { useAppSelector } from "@/features/store/hooks";
+import { uploadImage } from "@/lib/upload-image";
+import { useMemo } from "react";
+
+export default function useEditorCover(noteId: string) {
+  const titleUpdater = useMemo(() => createTitleUpdater(noteId), [noteId]);
+  const title = useAppSelector((s) => selectNoteTitle(s, noteId));
+  const icon = useAppSelector((s) => selectNoteIcon(s, noteId));
+  const coverImageSource = useAppSelector((s) =>
+    selectCoverImageSource(s, noteId),
+  );
+
+  const wide = useAppSelector((s) => selectIsWidePage(s, noteId));
+
+  const addCover = async () => {
+    const embed = await uploadImage();
+    setEditorCustomizations(noteId, { coverImageSource: embed.url });
+  };
+
+  const onCoverImageSourceChange = async (
+    source: string | null | undefined,
+  ) => {
+    setEditorCustomizations(noteId, { coverImageSource: source || undefined });
+  };
+
+  const restore = async () => restoreFromTrash(noteId);
+
+  return {
+    updateTitle: titleUpdater.update,
+    updateIcon: (icon: string | null) => updateIcon(noteId, icon),
+    addCover,
+    onCoverImageSourceChange,
+    restore,
+    coverImageSource,
+    wide,
+    title,
+    icon,
+  };
+}

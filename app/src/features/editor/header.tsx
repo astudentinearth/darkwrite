@@ -10,50 +10,50 @@ import CoverImage from "./cover-image";
 import Alert from "@/components/ui/alert";
 import { useEditorStore } from "@/context/editor-store";
 import { UtilityNodes } from "./node-types";
+import useEditorCover from "@/features/editor/hooks/use-editor-cover";
 
 export type EditorHeaderProps = {
-  title: string;
-  onTitleChange: (val: string) => void;
-  icon: string | undefined | null;
-  onIconChange: (val: string | undefined | null) => void;
-  coverImageSource?: string;
-  onCoverSourceChange: (val: string | undefined | null) => void;
-  onAddCover: () => void;
-  wide?: boolean;
-  isTrashed?: boolean | null;
-  onRestore: () => void;
+  noteId: string;
 };
 
-export default function EditorHeader(props: EditorHeaderProps) {
+export default function EditorHeader({ noteId }: EditorHeaderProps) {
   const { t } = useTranslation();
+  const {
+    coverImageSource,
+    onCoverImageSourceChange,
+    addCover,
+    updateIcon,
+    updateTitle,
+    wide,
+    icon,
+    title,
+  } = useEditorCover(noteId);
+
   const mouseOver = useMouseOver();
   return (
     <div
       className={cn(
         "w-full flex flex-col items-center pt-24",
-        props.coverImageSource && "pt-48",
+        coverImageSource && "pt-48",
       )}
       {...mouseOver.hoverProps}
     >
       <CoverImage
-        onImageSourceChange={props.onCoverSourceChange}
-        imageSource={props.coverImageSource}
-        onAddCover={props.onAddCover}
+        onImageSourceChange={onCoverImageSourceChange}
+        imageSource={coverImageSource}
+        onAddCover={addCover}
       />
       <ConstrainedWidth
         className={cn("flex flex-col gap-2 px-4 pt-2")}
-        fill={props.wide}
+        fill={wide}
       >
         <div className="flex gap-2 items-end mb-4 font-ui">
-          {props.icon && (
+          {icon && (
             <EmojiPicker
-              show={fromUnicode(props.icon ?? "")}
+              show={fromUnicode(icon ?? "")}
               closeOnSelect
-              onSelect={props.onIconChange}
-              className={cn(
-                "z-50 -translate-x-2",
-                props.coverImageSource && "-mt-8",
-              )}
+              onSelect={updateIcon}
+              className={cn("z-50 -translate-x-2", coverImageSource && "-mt-8")}
             />
           )}
           <div
@@ -62,10 +62,10 @@ export default function EditorHeader(props: EditorHeaderProps) {
               mouseOver.mouseOver && "opacity-100",
             )}
           >
-            {!props.icon && (
+            {!icon && (
               <>
                 <Button
-                  onClick={() => props.onIconChange("1f4c4")}
+                  onClick={() => updateIcon("1f4c4")}
                   className="w-fit"
                   variant={"ghost"}
                 >
@@ -74,9 +74,9 @@ export default function EditorHeader(props: EditorHeaderProps) {
                 </Button>
               </>
             )}
-            {props.icon && (
+            {icon && (
               <Button
-                onClick={() => props.onIconChange(null)}
+                onClick={() => updateIcon(null)}
                 className="w-fit"
                 variant={"ghost"}
               >
@@ -84,12 +84,8 @@ export default function EditorHeader(props: EditorHeaderProps) {
                 {t("editor.cover.removeIcon")}
               </Button>
             )}
-            {!props.coverImageSource && (
-              <Button
-                onClick={props.onAddCover}
-                className="w-fit"
-                variant={"ghost"}
-              >
+            {coverImageSource && (
+              <Button onClick={addCover} className="w-fit" variant={"ghost"}>
                 <Image size={18} />
                 {t("editor.cover.addCover")}
               </Button>
@@ -99,7 +95,7 @@ export default function EditorHeader(props: EditorHeaderProps) {
 
         <DynamicTextarea
           className="text-4xl font-semibold box-border h-auto overflow-hidden resize-none grow outline-hidden block"
-          defaultValue={props.title}
+          defaultValue={title}
           preventNewline
           onKeyDown={(e) => {
             if (e.key === "Enter")
@@ -111,7 +107,7 @@ export default function EditorHeader(props: EditorHeaderProps) {
                 .run();
           }}
           onValueChange={(val) =>
-            props.onTitleChange(val.replace(/(\r\n|\n|\r)/gm, " "))
+            updateTitle(val.replace(/(\r\n|\n|\r)/gm, " "))
           }
         />
 

@@ -99,3 +99,13 @@ export const selectByWorkspaceAndSearchTerm = createSelector(
       .map((n) => n.id);
   },
 );
+
+export const selectNoteTitle = createSelector(
+  [selectNoteById],
+  (note) => note?.title,
+);
+
+export const selectNoteIcon = createSelector(
+  [selectNoteById],
+  (note) => note?.icon,
+);

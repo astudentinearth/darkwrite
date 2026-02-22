@@ -2,16 +2,20 @@ import { NoteContent } from "@/common/note-content";
 import { NoteCustomization } from "@/common/note-customization";
 import { createSlice } from "@reduxjs/toolkit";
 import { JSONContent } from "@tiptap/core";
+import _ from "lodash";
 
 export const EDITOR_SLICE_NAME = "editor";
 
 export interface EditorState {
-  docs: Record<string, NoteContent>;
+  docs: Record<string, NoteContent | undefined>;
 }
 
 export const editorSlice = createSlice({
   name: EDITOR_SLICE_NAME,
   reducers: {
+    /**
+     * Initializes the document in the editor state when it is fetched from the server. Do NOT use for updates.
+     */
     initializeDocument: (
       state,
       action: { payload: { noteId: string; document: NoteContent } },
@@ -20,6 +24,10 @@ export const editorSlice = createSlice({
       state.docs[noteId] = document;
     },
 
+    /**
+     * Updates the contents of a document's **contents.** Does not touch style metadata.
+     * _Updates made through this action will be automatically persisted through middleware._
+     */
     updateDocumentContent: (
       state,
       action: {
@@ -35,12 +43,12 @@ export const editorSlice = createSlice({
     updateDocumentCustomizations: (
       state,
       action: {
-        payload: { noteId: string; customizations: NoteCustomization };
+        payload: { noteId: string; customizations: Partial<NoteCustomization> };
       },
     ) => {
       const { noteId, customizations } = action.payload;
       if (state.docs[noteId]) {
-        state.docs[noteId].customizations = customizations;
+        _.merge(state.docs[noteId].customizations, customizations);
       }
     },
   },

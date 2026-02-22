@@ -24,10 +24,27 @@ declare global {
     | { value?: undefined; error: E };
 
   interface Window {
+    /**
+     * Interface with the Electron main process.
+     * @platform electron
+     */
     api: APIType;
+    /**
+     * Utility to get full paths of File objects in Electron windows.
+     * @platform electron
+     */
     webUtils: WebUtils;
     initPreload: PreloadInitFunction;
+    /**
+     * This field will exist and be set to `true` if the application
+     * is running inside an Electron container. This should not exist
+     * at all in normal browsers;
+     */
     isElectron: true | undefined;
+    /**
+     * Listen to events from the Electron main process.
+     * @platform electron
+     */
     events: {
       onEnterFullScreen: (callback: () => void) => void;
       onExitFullScreen: (callback: () => void) => void;

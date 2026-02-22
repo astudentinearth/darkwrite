@@ -6,6 +6,7 @@ import { notesSlice } from "../note/store/note-slice";
 import { notesApi } from "../note/store/notes-api";
 import { settingsSlice } from "../settings/store/settings-slice";
 import { settingsPersistenceMiddleware } from "../settings/store/settings-persistence";
+import { editorSlice } from "../editor/store/editor-slice";
 
 export const store = configureStore({
   reducer: {
@@ -13,6 +14,7 @@ export const store = configureStore({
     [notesSlice.name]: notesSlice.reducer,
     [notesApi.reducerPath]: notesApi.reducer,
     [settingsSlice.name]: settingsSlice.reducer,
+    [editorSlice.name]: editorSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()

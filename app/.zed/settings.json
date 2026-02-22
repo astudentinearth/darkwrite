@@ -1,0 +1,18 @@
+{
+  "lsp": {
+    "vtsls": {
+      "settings": {
+        "typescript": {
+          "preferences": {
+            "autoImportFileExcludePatterns": [
+              "@radix-ui/*",
+              "**/node_modules/@radix-ui/*",
+              "vitest/dist/chunks/*",
+            ],
+            "importModuleSpecifier": "non-relative",
+          },
+        },
+      },
+    },
+  },
+}

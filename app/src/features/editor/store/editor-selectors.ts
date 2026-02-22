@@ -1,0 +1,13 @@
+import { RootState } from "@/features/store/types";
+
+export const selectEditorCustomizations = (state: RootState, noteId: string) =>
+  state.editor.docs[noteId]?.customizations;
+
+export const selectEditorContent = (state: RootState, noteId: string) =>
+  state.editor.docs[noteId]?.contents;
+
+export const selectCoverImageSource = (state: RootState, noteId: string) =>
+  state.editor.docs[noteId]?.customizations.coverImageSource;
+
+export const selectIsWidePage = (state: RootState, noteId: string) =>
+  state.editor.docs[noteId]?.customizations.widePage ?? false;

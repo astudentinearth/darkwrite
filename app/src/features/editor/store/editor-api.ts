@@ -50,3 +50,5 @@ export const editorApi = createApi({
     }),
   }),
 });
+
+export const { useGetDocumentQuery } = editorApi;
