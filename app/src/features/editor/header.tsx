@@ -13,6 +13,7 @@ import { UtilityNodes } from "./node-types";
 import useEditorCover from "@/features/editor/hooks/use-editor-cover";
 import { use } from "react";
 import { EditorContext } from "@/features/editor/store/editor-context";
+import { AddRemoveIconButton } from "@/features/editor/components/add-remove-icon";
 
 export type EditorHeaderProps = {
   noteId: string;
@@ -53,28 +54,7 @@ export default function EditorHeader() {
               mouseOver.mouseOver && "opacity-100",
             )}
           >
-            {!icon && (
-              <>
-                <Button
-                  onClick={() => updateIcon("1f4c4")}
-                  className="w-fit"
-                  variant={"ghost"}
-                >
-                  <Smile size={18} />
-                  {t("editor.cover.addIcon")}
-                </Button>
-              </>
-            )}
-            {icon && (
-              <Button
-                onClick={() => updateIcon(null)}
-                className="w-fit"
-                variant={"ghost"}
-              >
-                <Frown size={18} />
-                {t("editor.cover.removeIcon")}
-              </Button>
-            )}
+            <AddRemoveIconButton />
             {hasCover && (
               <Button onClick={addCover} className="w-fit" variant={"ghost"}>
                 <Image size={18} />

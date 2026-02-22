@@ -6,8 +6,15 @@ import { persistContentDebounced } from "@/query/use-note-content";
 import { create } from "zustand";
 
 export interface EditorStore {
+  /** @deprecated */
   editor?: Editor;
+  /**
+   * @deprecated use redux selectors
+   */
   content: EditorContent;
+  /**
+   * @deprecated use redux selectors
+   */
   customizations: NoteCustomization;
   noteId: string;
   width: number;
@@ -24,6 +31,8 @@ export const setActiveEditorInstance = (editor?: Editor) => {
   useEditorStore.setState({ editor });
 };
 
+/** @deprecated use `editorSlice.actions.initializeDocument`
+ */
 export function initializeEditor(noteId: string, document: NoteContent) {
   useEditorStore.setState({
     content: document.contents,
@@ -32,34 +41,11 @@ export function initializeEditor(noteId: string, document: NoteContent) {
   });
 }
 
-function saveContents(debounce = true) {
-  const state = useEditorStore.getState();
-  const doc: NoteContent = {
-    contents: state.content,
-    customizations: state.customizations,
-  };
-  if (debounce) persistContentDebounced(state.noteId, JSON.stringify(doc));
-  else DarkwriteAPIClient.note.setDocument(state.noteId, JSON.stringify(doc));
-}
-
-export function setEditorContent(value: EditorContent) {
-  useEditorStore.setState({ content: value });
-  saveContents();
-}
-
+/** @deprecated */
 export function setEditorCustomizations(
   customizations: NoteCustomization,
   debounce = false,
 ) {
   useEditorStore.setState({ customizations });
   saveContents(debounce);
-}
-
-export function currentDocumentToSerializable() {
-  const state = useEditorStore.getState();
-  const doc: NoteContent = {
-    contents: state.content,
-    customizations: state.customizations,
-  };
-  return doc;
 }
