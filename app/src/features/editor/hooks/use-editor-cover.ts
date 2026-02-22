@@ -32,21 +32,14 @@ export default function useEditorCover(noteId: string) {
     setEditorCustomizations(noteId, { coverImageSource: embed.url });
   };
 
-  const onCoverImageSourceChange = async (
-    source: string | null | undefined,
-  ) => {
-    setEditorCustomizations(noteId, { coverImageSource: source || undefined });
-  };
-
   const restore = async () => restoreFromTrash(noteId);
 
   return {
     updateTitle: titleUpdater.update,
     updateIcon: (icon: string | null) => updateIcon(noteId, icon),
     addCover,
-    onCoverImageSourceChange,
     restore,
-    coverImageSource,
+    hasCover: !!coverImageSource,
     wide,
     title,
     icon,

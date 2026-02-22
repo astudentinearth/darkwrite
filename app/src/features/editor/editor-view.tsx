@@ -56,20 +56,7 @@ export function EditorView({ noteId }: { noteId: string }) {
       style={options.style}
       spellCheck={spellcheck}
     >
-      {note && (
-        <EditorHeader
-          icon={note.icon}
-          title={note.title}
-          onTitleChange={cover.updateTitle}
-          onIconChange={cover.updateIcon}
-          coverImageSource={content?.customizations.coverImageSource}
-          onCoverSourceChange={cover.onCoverImageSourceChange}
-          wide={content?.customizations.widePage}
-          onAddCover={cover.addCover}
-          isTrashed={note.isTrashed}
-          onRestore={cover.restore}
-        />
-      )}
+      {note && <EditorHeader />}
       <ConstrainedWidth fill={content?.customizations.widePage}>
         {/*false && (
           <DarkwriteEditor

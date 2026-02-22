@@ -11,38 +11,29 @@ import Alert from "@/components/ui/alert";
 import { useEditorStore } from "@/context/editor-store";
 import { UtilityNodes } from "./node-types";
 import useEditorCover from "@/features/editor/hooks/use-editor-cover";
+import { use } from "react";
+import { EditorContext } from "@/features/editor/store/editor-context";
 
 export type EditorHeaderProps = {
   noteId: string;
 };
 
-export default function EditorHeader({ noteId }: EditorHeaderProps) {
+export default function EditorHeader() {
   const { t } = useTranslation();
-  const {
-    coverImageSource,
-    onCoverImageSourceChange,
-    addCover,
-    updateIcon,
-    updateTitle,
-    wide,
-    icon,
-    title,
-  } = useEditorCover(noteId);
+  const { noteId } = use(EditorContext);
+  const { addCover, updateIcon, hasCover, updateTitle, wide, icon, title } =
+    useEditorCover(noteId);
 
   const mouseOver = useMouseOver();
   return (
     <div
       className={cn(
         "w-full flex flex-col items-center pt-24",
-        coverImageSource && "pt-48",
+        hasCover && "pt-48",
       )}
       {...mouseOver.hoverProps}
     >
-      <CoverImage
-        onImageSourceChange={onCoverImageSourceChange}
-        imageSource={coverImageSource}
-        onAddCover={addCover}
-      />
+      <CoverImage />
       <ConstrainedWidth
         className={cn("flex flex-col gap-2 px-4 pt-2")}
         fill={wide}
@@ -53,7 +44,7 @@ export default function EditorHeader({ noteId }: EditorHeaderProps) {
               show={fromUnicode(icon ?? "")}
               closeOnSelect
               onSelect={updateIcon}
-              className={cn("z-50 -translate-x-2", coverImageSource && "-mt-8")}
+              className={cn("z-50 -translate-x-2", hasCover && "-mt-8")}
             />
           )}
           <div
@@ -84,7 +75,7 @@ export default function EditorHeader({ noteId }: EditorHeaderProps) {
                 {t("editor.cover.removeIcon")}
               </Button>
             )}
-            {coverImageSource && (
+            {hasCover && (
               <Button onClick={addCover} className="w-fit" variant={"ghost"}>
                 <Image size={18} />
                 {t("editor.cover.addCover")}
