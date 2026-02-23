@@ -57,3 +57,7 @@ export type MovePlacement = "inside-start" | "inside-end" | "below";
 
 /** 📄*/
 export const DEFAULT_NOTE_ICON = "1f4c4";
+
+export function cleanNoteTitle(title: string) {
+  return title.replace(/(\r\n|\n|\r)/gm, " ");
+}

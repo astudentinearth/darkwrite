@@ -14,6 +14,7 @@ import useEditorCover from "@/features/editor/hooks/use-editor-cover";
 import { use } from "react";
 import { EditorContext } from "@/features/editor/store/editor-context";
 import { AddRemoveIconButton } from "@/features/editor/components/add-remove-icon";
+import { TitleEditField } from "./components/title-edit-field";
 
 export type EditorHeaderProps = {
   noteId: string;
@@ -64,24 +65,7 @@ export default function EditorHeader() {
           </div>
         </div>
 
-        <DynamicTextarea
-          className="text-4xl font-semibold box-border h-auto overflow-hidden resize-none grow outline-hidden block"
-          defaultValue={title}
-          preventNewline
-          onKeyDown={(e) => {
-            if (e.key === "Enter")
-              useEditorStore
-                .getState()
-                .editor?.chain()
-                .insertContentAt(0, UtilityNodes.EmptyParagraph)
-                .focus()
-                .run();
-          }}
-          onValueChange={(val) =>
-            updateTitle(val.replace(/(\r\n|\n|\r)/gm, " "))
-          }
-        />
-
+        <TitleEditField />
         {props.isTrashed && (
           <Alert>
             {t("editor.cover.trashWarning")}
