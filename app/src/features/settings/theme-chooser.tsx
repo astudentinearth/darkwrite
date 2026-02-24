@@ -8,19 +8,20 @@ import {
   SelectTrigger,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
-import { THEMES_QUERY_KEY, useThemes } from "@/query/use-themes";
 import { useQueryClient } from "@tanstack/react-query";
 import { Folder } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useAppearanceSettings } from "./store/settings-selectors";
 import { updateAccentColor, updateSettings } from "./store/settings-actions";
+import { useThemes } from "../themes/hooks/use-themes";
+import { initializeThemes } from "../themes/init";
 
 export function ThemeDropdown(props: {
   className?: string;
   value: string;
   onValueChange: (value: string) => void;
 }) {
-  const themes = useThemes().data;
+  const themes = useThemes();
   const entries = Object.values(themes);
   return (
     <Select value={props.value} onValueChange={props.onValueChange}>
@@ -45,9 +46,8 @@ export function ThemeChooser() {
   const useSystemAccentColor = settings.useSystemAccentColor;
   const { t } = useTranslation("translation");
   const importTheme = async () => {
-    //FIXME react query detected
     await DarkwriteAPIClient.theme.importTheme();
-    qc.refetchQueries({ queryKey: THEMES_QUERY_KEY });
+    initializeThemes();
   };
 
   const setScheme = (mode: "dark" | "light", id: string) => {

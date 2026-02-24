@@ -1,20 +1,17 @@
-import DynamicTextarea from "@/components/dynamic-textarea";
 import { EmojiPicker } from "@/components/emoji-picker";
 import { Button } from "@/components/ui";
+import Alert from "@/components/ui/alert";
+import { AddRemoveIconButton } from "@/features/editor/components/add-remove-icon";
+import useEditorCover from "@/features/editor/hooks/use-editor-cover";
+import { EditorContext } from "@/features/editor/store/editor-context";
 import useMouseOver from "@/hooks/layout/use-mouse-over";
 import { cn, fromUnicode } from "@/lib/utils";
-import { Frown, Image, Smile, Undo2 } from "lucide-react";
+import { Image, Undo2 } from "lucide-react";
+import { use } from "react";
 import { useTranslation } from "react-i18next";
+import { TitleEditField } from "./components/title-edit-field";
 import ConstrainedWidth from "./constrained-width";
 import CoverImage from "./cover-image";
-import Alert from "@/components/ui/alert";
-import { useEditorStore } from "@/context/editor-store";
-import { UtilityNodes } from "./node-types";
-import useEditorCover from "@/features/editor/hooks/use-editor-cover";
-import { use } from "react";
-import { EditorContext } from "@/features/editor/store/editor-context";
-import { AddRemoveIconButton } from "@/features/editor/components/add-remove-icon";
-import { TitleEditField } from "./components/title-edit-field";
 
 export type EditorHeaderProps = {
   noteId: string;
@@ -23,7 +20,7 @@ export type EditorHeaderProps = {
 export default function EditorHeader() {
   const { t } = useTranslation();
   const { noteId } = use(EditorContext);
-  const { addCover, updateIcon, hasCover, updateTitle, wide, icon, title } =
+  const { addCover, updateIcon, hasCover, wide, icon } =
     useEditorCover(noteId);
 
   const mouseOver = useMouseOver();

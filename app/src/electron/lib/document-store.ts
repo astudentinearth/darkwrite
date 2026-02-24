@@ -2,6 +2,7 @@ import { exists } from "fs-extra";
 import { readFile, writeFile, rm } from "fs/promises";
 import path from "node:path";
 import * as fslib from "@main/lib/fs";
+import { IllegalArgumentError } from "@/common/error";
 
 export interface IDocumentStore {
   create: (id: string) => Promise<void>;
@@ -20,6 +21,7 @@ export class DocumentFileStore implements IDocumentStore {
   constructor(private directory: string) {}
 
   private getPath(id: string) {
+    if(id.includes("/") || id.includes("\\")) throw new IllegalArgumentError("Invalid path passed into document store.");
     return path.join(this.directory, `${id}.json`);
   }
 
