@@ -53,6 +53,22 @@ src/features/editor contains a rich text editor based on TipTap/ProseMirror.
 > [!IMPORTANT]
 > React Query is being deprecated from our codebase as part of a refactor. We are moving to Redux Toolkit with RTK Query. Do not check queries inside @/query/*. Everything inside @/query is deprecated unless otherwise specified.
 
+## Feature folder structure
+```
+
+feature-name
+
+- components # react components that belong to this feature
+- hooks # react hooks
+- store # redux store code and rtk query APIs
+  - <feature>-slice.ts # the redux slice and reducers for this feature
+  - <feature>-selectors.ts # redux selectors for this feature
+  - <feature>-api.ts # RTK query APIs for this feature, actions and mutations # can have separate -api.ts files
+- types.ts # types specific to this feature
+
+```
+
+
 ## Component usage
 Always check if a component already exists in `src/components` or `src/features` before creating a new one. If a component is reusable across multiple features, it should be placed in `src/components`. If it is specific to a feature, it should be placed in the respective feature directory.
 
