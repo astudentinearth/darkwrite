@@ -23,7 +23,7 @@ export const DarkwriteImageView = (props: DarkwriteImageViewProps) => {
         contentEditable={false}
         className="flex justify-center dwimage-container"
       >
-        {(embedId == null || source === "") ? (
+        {embedId == null || source === "" ? (
           <span className="opacity-50">Loading image...</span>
         ) : (
           <img draggable={false} data-drag-handle="" src={source} />

@@ -35,11 +35,11 @@ export function constructWindow(
     },
     ...(process.platform != "darwin"
       ? {
-        titleBarOverlay:
-          titleBarStyle == "hidden"
-            ? metadata.windowDefaults.titleBarOverlay
-            : undefined,
-      }
+          titleBarOverlay:
+            titleBarStyle == "hidden"
+              ? metadata.windowDefaults.titleBarOverlay
+              : undefined,
+        }
       : {}),
     autoHideMenuBar: true,
     // TODO: Persist window size

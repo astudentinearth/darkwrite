@@ -1,4 +1,3 @@
-
 export interface SettingsV1Schema {
   appearance: {
     theme: string;

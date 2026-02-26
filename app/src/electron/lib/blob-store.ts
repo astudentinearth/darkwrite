@@ -1,4 +1,3 @@
-
 import fse from "fs/promises";
 import { join } from "path";
 import { Paths } from "./paths";

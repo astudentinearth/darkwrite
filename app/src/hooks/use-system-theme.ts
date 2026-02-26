@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 export default function useSystemTheme() {
   const [darkMode, setDarkMode] = useState(true); // we write in the dark after all
   useEffect(() => {
-    if (typeof window === 'undefined' || !window.matchMedia) {
+    if (typeof window === "undefined" || !window.matchMedia) {
       return;
     }
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
@@ -16,5 +16,5 @@ export default function useSystemTheme() {
       mediaQuery.removeEventListener("change", onChange);
     };
   }, []);
-  return darkMode ? "dark" : "light" ;
+  return darkMode ? "dark" : "light";
 }

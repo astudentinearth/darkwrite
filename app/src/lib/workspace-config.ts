@@ -1,13 +1,11 @@
 import z from "zod";
 
 export const WorkspaceSyncModeSchema = z.enum(["cloud", "offline"]);
-export type WorkspaceSyncMode =  z.infer<typeof WorkspaceSyncModeSchema>;
-
-
+export type WorkspaceSyncMode = z.infer<typeof WorkspaceSyncModeSchema>;
 
 export const WorkspaceConfigSchema = z.object({
   syncMode: WorkspaceSyncModeSchema,
-  defaultCodeLanguage: z.string()
+  defaultCodeLanguage: z.string(),
 });
 
 export type WorkspaceConfig = z.infer<typeof WorkspaceConfigSchema>;

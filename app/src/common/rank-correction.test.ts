@@ -224,7 +224,7 @@ describe("tests for order hint collision and their correction", () => {
     ] as NoteDTO[]; // we don't care about other keys
 
     const result = generateRankCollisionChangeset(notes, "orderHint");
-    const keys = new Set(result.map(e => e["orderHint"]));
+    const keys = new Set(result.map((e) => e["orderHint"]));
     expect(keys).toHaveLength(2);
     expect(result).toHaveLength(2);
     expect(keys).not.contain("a0"); // we don't want the healthy note to be affected

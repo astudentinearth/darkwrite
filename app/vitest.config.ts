@@ -5,7 +5,7 @@ import { defineConfig, type TestProjectConfiguration } from "vitest/config";
 const appAliases = {
   "@": resolve("src"),
   "@main": resolve("src/electron"),
-  "@common": resolve("src/common")
+  "@common": resolve("src/common"),
 };
 
 const electronConfig: TestProjectConfiguration = {
@@ -57,7 +57,7 @@ export default defineConfig({
   test: {
     workspace: [electronConfig, appConfig],
     env: {
-      "NODE_ENV": "test"
-    }
+      NODE_ENV: "test",
+    },
   },
 });

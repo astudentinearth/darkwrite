@@ -7,12 +7,12 @@
             "autoImportFileExcludePatterns": [
               "@radix-ui/*",
               "**/node_modules/@radix-ui/*",
-              "vitest/dist/chunks/*",
+              "vitest/dist/chunks/*"
             ],
-            "importModuleSpecifier": "non-relative",
-          },
-        },
-      },
-    },
-  },
+            "importModuleSpecifier": "non-relative"
+          }
+        }
+      }
+    }
+  }
 }

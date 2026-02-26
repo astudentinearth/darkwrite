@@ -1,2 +1,2 @@
-import { common, createLowlight} from "lowlight";
+import { common, createLowlight } from "lowlight";
 export default createLowlight(common);

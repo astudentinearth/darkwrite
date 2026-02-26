@@ -16,7 +16,7 @@ export const store = configureStore({
     [notesApi.reducerPath]: notesApi.reducer,
     [settingsSlice.name]: settingsSlice.reducer,
     [editorSlice.name]: editorSlice.reducer,
-    [themeSlice.name]: themeSlice.reducer
+    [themeSlice.name]: themeSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()

@@ -13,7 +13,7 @@ const ImagePlugin = (config: ImageExtensionConfig) =>
           const filetype = item.type.slice("image/".length);
           const file = item.getAsFile();
           if (!file) return;
-          config.saveArrayBuffer(file, filetype).then(id => {
+          config.saveArrayBuffer(file, filetype).then((id) => {
             const tr = view.state.tr;
             const node = view.state.schema.nodes.dwimage.create({
               src: `embed://${id}`,

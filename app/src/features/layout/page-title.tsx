@@ -6,19 +6,25 @@ import TitlebarNavTrigger from "./titlebar-nav-trigger";
 
 export default function PageTitle() {
   const pathname = useLocation().pathname;
-  const {t} = useTranslation();
-  switch(pathname) {
-    case "/": return <TitlebarNavTrigger>
-      <>
-      <Home size={18} />
-      {t("sidebar.button.home")}
-      </>
-    </TitlebarNavTrigger>
+  const { t } = useTranslation();
+  switch (pathname) {
+    case "/":
+      return (
+        <TitlebarNavTrigger>
+          <>
+            <Home size={18} />
+            {t("sidebar.button.home")}
+          </>
+        </TitlebarNavTrigger>
+      );
 
-    case "/settings": return <TitlebarNavTrigger>
-      <Settings size={18} />
-      {t("sidebar.button.settings")}
-    </TitlebarNavTrigger>
+    case "/settings":
+      return (
+        <TitlebarNavTrigger>
+          <Settings size={18} />
+          {t("sidebar.button.settings")}
+        </TitlebarNavTrigger>
+      );
   }
-  return <NoteDropdown/>
+  return <NoteDropdown />;
 }

@@ -24,7 +24,7 @@
   mac: {
     target: ["dmg"],
     artifactName: "${productName}-Installer.${ext}",
-    icon: "./resources/icon.icon"
+    icon: "./resources/icon.icon",
   },
   win: {
     target: [
@@ -45,6 +45,6 @@
     target: ["AppImage", "deb"],
     category: "Productivity",
     artifactName: "${productName}.${ext}",
-    icon: "resources/512x512.png"
+    icon: "resources/512x512.png",
   },
 }

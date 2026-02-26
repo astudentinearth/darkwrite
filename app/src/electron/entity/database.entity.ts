@@ -4,7 +4,7 @@ import { JSONTransformer } from "../lib/json-transformer";
 
 @Entity("database")
 export class Database {
-  @PrimaryColumn({type: "varchar", generated: "uuid"})
+  @PrimaryColumn({ type: "varchar", generated: "uuid" })
   id: string;
 
   @Column({ type: "varchar", nullable: true })
@@ -19,11 +19,11 @@ export class Database {
   @Column("datetime")
   createdAt: Date;
 
-    /** Fields map: key -> definition. */
+  /** Fields map: key -> definition. */
   @Column({
     type: "text",
     nullable: true,
-    transformer: JSONTransformer
+    transformer: JSONTransformer,
   })
   propertySchema: Record<string, PropertyField>;
 }

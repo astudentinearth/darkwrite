@@ -46,9 +46,9 @@ async function checkUpdate(
   const res = await checkUpdateFromGithub();
   if (!res || !("latest" in res || "release_page" in res)) return undefined;
   const info = <UpdateServerResponse>res;
-   return {
-     ...info,
-     updateAvailable: semver.gt(info.latest, app.getVersion()),
+  return {
+    ...info,
+    updateAvailable: semver.gt(info.latest, app.getVersion()),
   } satisfies UpdateStatus;
 }
 

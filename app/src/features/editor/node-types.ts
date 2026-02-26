@@ -1,14 +1,13 @@
-
 export interface INode {
   type: string;
-  content: Array<INode>
+  content: Array<INode>;
 }
 
 const EmptyParagraph: INode = {
   type: "paragraph",
-  content: []
-}
+  content: [],
+};
 
 export const UtilityNodes = {
-  EmptyParagraph
-}
+  EmptyParagraph,
+};

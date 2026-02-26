@@ -5,15 +5,15 @@ import { Brush } from "lucide-react";
 import EditorMenu from "../editor/editor-menu";
 
 export default function Toolbar() {
-  return <div className="flex gap-1">
-    <FavoriteToggle />
-    <StylePopover>
-      <HeaderbarButton>
-        <Brush
-          size={20}
-        />
-      </HeaderbarButton>
-    </StylePopover>
-    <EditorMenu /> 
-  </div>
+  return (
+    <div className="flex gap-1">
+      <FavoriteToggle />
+      <StylePopover>
+        <HeaderbarButton>
+          <Brush size={20} />
+        </HeaderbarButton>
+      </StylePopover>
+      <EditorMenu />
+    </div>
+  );
 }

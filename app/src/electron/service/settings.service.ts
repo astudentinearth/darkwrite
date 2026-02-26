@@ -1,14 +1,12 @@
-
-import {readFile, writeFile} from "fs/promises"
+import { readFile, writeFile } from "fs/promises";
 import { exists } from "fs-extra";
-import { SETTINGS_PATH } from "../lib/paths"
+import { SETTINGS_PATH } from "../lib/paths";
 import { SettingsModel } from "@/common/settings";
 
 export class SettingsService {
-
   async readSettingsFile() {
     const fileExists = await exists(SETTINGS_PATH);
-    if(!fileExists) {
+    if (!fileExists) {
       const defaults = JSON.stringify(SettingsModel.getDefaults());
       await this.writeSettingsFile(defaults);
       return defaults;
@@ -19,6 +17,4 @@ export class SettingsService {
   async writeSettingsFile(contents: string) {
     return writeFile(SETTINGS_PATH, contents);
   }
-  
-
 }

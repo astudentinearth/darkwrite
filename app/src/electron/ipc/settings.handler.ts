@@ -7,7 +7,7 @@ export const ElectronSettingsAPI: ISettingsAPI = {
   },
 
   async saveUserSettings(settings) {
-      ElectronPrefsModel.override(settings);
-      ElectronPrefsModel.save();
+    ElectronPrefsModel.override(settings);
+    ElectronPrefsModel.save();
   },
-}
+};

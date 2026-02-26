@@ -20,8 +20,7 @@ export type EditorHeaderProps = {
 export default function EditorHeader() {
   const { t } = useTranslation();
   const { noteId } = use(EditorContext);
-  const { addCover, updateIcon, hasCover, wide, icon } =
-    useEditorCover(noteId);
+  const { addCover, updateIcon, hasCover, wide, icon } = useEditorCover(noteId);
 
   const mouseOver = useMouseOver();
   return (

@@ -21,7 +21,10 @@ export class DocumentFileStore implements IDocumentStore {
   constructor(private directory: string) {}
 
   private getPath(id: string) {
-    if(id.includes("/") || id.includes("\\")) throw new IllegalArgumentError("Invalid path passed into document store.");
+    if (id.includes("/") || id.includes("\\"))
+      throw new IllegalArgumentError(
+        "Invalid path passed into document store.",
+      );
     return path.join(this.directory, `${id}.json`);
   }
 

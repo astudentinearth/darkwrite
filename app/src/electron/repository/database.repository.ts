@@ -17,7 +17,7 @@ export class DatabaseRepository {
   }
 
   async findById(id: string) {
-    return this._repo.findOne({where: {id}});
+    return this._repo.findOne({ where: { id } });
   }
 
   async findAll() {
@@ -25,11 +25,10 @@ export class DatabaseRepository {
   }
 
   async deleteById(id: string) {
-    return this._repo.delete({id});
+    return this._repo.delete({ id });
   }
 
   async delete(database: Database) {
-    return this._repo.delete({id: database.id});
+    return this._repo.delete({ id: database.id });
   }
-
 }

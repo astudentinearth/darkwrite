@@ -42,13 +42,13 @@ export function parseDragData(event: DragEvent<HTMLElement>) {
 
 export function extractDragDataType(event: DragEvent<HTMLElement>) {
   const data = parseDragData(event);
-  if(!data) return null;
+  if (!data) return null;
   return data.type as DragType;
 }
 
 export function extractNoteDragData(event: DragEvent<HTMLElement>) {
   const data = parseDragData(event);
-  if(!data) return null;
-  if(data.type !== DragType.NOTE) return null;
+  if (!data) return null;
+  if (data.type !== DragType.NOTE) return null;
   return data;
 }

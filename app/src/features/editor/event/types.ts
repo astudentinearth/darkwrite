@@ -26,5 +26,4 @@ export interface FocusEvent {
   type: EditorEventType.FOCUS;
 }
 
-
 export type EditorEvent = FocusEvent | InsertContentEvent;
