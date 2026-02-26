@@ -12,6 +12,7 @@ import { useTranslation } from "react-i18next";
 import { TitleEditField } from "./components/title-edit-field";
 import ConstrainedWidth from "./constrained-width";
 import CoverImage from "./cover-image";
+import TrashBanner from "./components/trash-banner";
 
 export type EditorHeaderProps = {
   noteId: string;
@@ -62,19 +63,7 @@ export default function EditorHeader() {
         </div>
 
         <TitleEditField />
-        {props.isTrashed && (
-          <Alert>
-            {t("editor.cover.trashWarning")}
-            <Button
-              onClick={props.onRestore}
-              variant={"secondary"}
-              className="w-fit"
-            >
-              <Undo2 className="size-4" />
-              {t("sidebar.trash.restore")}
-            </Button>
-          </Alert>
-        )}
+        <TrashBanner />
         <hr />
       </ConstrainedWidth>
     </div>

@@ -2,10 +2,8 @@ import { DarkwriteAPIClient } from "@/api/api-client";
 import {
   initializeEditor,
   setActiveEditorInstance,
-  setEditorContent,
   useEditorStore,
 } from "@/context/editor-store";
-import useEditorCover from "@/hooks/editor/use-editor-cover";
 import { useEditorOptions } from "@/hooks/editor/use-editor-options";
 import { useNoteFromURL } from "@/query/use-note-from-url";
 import { useEffect, useState } from "react";
@@ -47,7 +45,6 @@ export function EditorView({ noteId }: { noteId: string }) {
   const navToNote = useNavigateToNote();
   const spellcheck = useLocalStore((s) => s.useSpellcheck);
 
-  const cover = useEditorCover(noteId);
   const { items } = useSlashCommand(options.imageConfig);
   return (
     <div

@@ -8,7 +8,6 @@ import {
   SelectTrigger,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
-import { useQueryClient } from "@tanstack/react-query";
 import { Folder } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useAppearanceSettings } from "./store/settings-selectors";
@@ -42,7 +41,6 @@ export function ThemeChooser() {
   const lightTheme = settings.lightColorScheme;
   const darkTheme = settings.darkColorScheme;
   const accentColor = settings.accentColor;
-  const qc = useQueryClient();
   const useSystemAccentColor = settings.useSystemAccentColor;
   const { t } = useTranslation("translation");
   const importTheme = async () => {
