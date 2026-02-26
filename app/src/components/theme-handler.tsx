@@ -4,7 +4,7 @@ import { CatppuccinLatte } from "@/common/themes/catppuccin";
 import { useAppearanceSettings } from "@/features/settings/store/settings-selectors";
 import { useThemes } from "@/features/themes/hooks/use-themes";
 import useSystemTheme from "@/hooks/use-system-theme";
-import { applyTheme } from "@/lib/theme-util";
+import { applyFonts, applyTheme } from "@/lib/theme-util";
 import { useEffect } from "react";
 
 export default function ThemeHandler() {
@@ -38,26 +38,7 @@ export default function ThemeHandler() {
       (themeMode === "dark" ? DarkwriteDefault : CatppuccinLatte);
 
     applyTheme(theme);
-    document.documentElement.style.setProperty(
-      "--font-ui",
-      appearanceSettings.fonts.ui,
-    );
-    document.documentElement.style.setProperty(
-      "font-family",
-      appearanceSettings.fonts.ui,
-    );
-    document.documentElement.style.setProperty(
-      "--darkwrite-mono",
-      appearanceSettings.fonts.code,
-    );
-    document.documentElement.style.setProperty(
-      "--darkwrite-serif",
-      appearanceSettings.fonts.serif,
-    );
-    document.documentElement.style.setProperty(
-      "--darkwrite-sans",
-      appearanceSettings.fonts.sans,
-    );
+    applyFonts(appearanceSettings.fonts);
   }, [appearanceSettings, systemTheme, themes]);
 
   return <></>;

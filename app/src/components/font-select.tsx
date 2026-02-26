@@ -1,4 +1,4 @@
-import useFonts from "@/query/use-fonts";
+import useFonts from "@/features/themes/hooks/use-fonts";
 import { useMemo, useRef, useState } from "react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
@@ -13,7 +13,7 @@ export default function FontSelect(props: {
   onValueChange?: (val: string) => void;
   className?: string;
 }) {
-  const fonts = useFonts().data;
+  const fonts = useFonts();
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null!);

@@ -3,7 +3,7 @@ import { DarkwriteUserSettings } from "./common/settings";
 import { useLocalStore } from "./context/local-state";
 import { settingsSlice } from "./features/settings/store/settings-slice";
 import { store } from "./features/store/redux";
-import { initializeThemes } from "./features/themes/init";
+import { initializeFonts, initializeThemes } from "./features/themes/init";
 
 export class InitialUserSettings {
   static settings: DarkwriteUserSettings;
@@ -25,5 +25,5 @@ export async function initializeUserPrefs() {
   const settings = await DarkwriteAPIClient.settings.getUserSettings();
   InitialUserSettings.settings = settings;
   store.dispatch(settingsSlice.actions.initialize(settings));
-  await initializeThemes();
+  await Promise.all([initializeThemes(), initializeFonts()]);
 }
