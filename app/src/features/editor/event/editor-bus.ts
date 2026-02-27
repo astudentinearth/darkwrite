@@ -1,5 +1,5 @@
 import { EventBus } from "@/common/event/bus";
-import { Content, Editor } from "@tiptap/core";
+import { Editor } from "@tiptap/core";
 import { EditorEventType, EditorEvent } from "./types";
 import EditorUtil from "../editor-util";
 
@@ -12,14 +12,22 @@ export const EditorEventBus = new EventBus<EditorEvents>();
 export function handleEditorEvent(editor: Editor, event: EditorEvent) {
   const util = EditorUtil(editor);
   switch (event.type) {
-    case EditorEventType.FOCUS:
+    case EditorEventType.FOCUS: {
       editor.chain().focus().run();
       break;
+    }
 
-    case EditorEventType.INSERT_CONTENT:
+    case EditorEventType.INSERT_CONTENT: {
       const position = event.payload.position ?? util.getEndPos();
-      editor.chain().insertContentAt(position, event.payload.content).run();
+
+      // extract method and use switch/case if extension needed
+      if (event.payload.type === "html") util.insertHTML(event.payload.content);
+      else if (event.payload.type === "md")
+        util.insertMarkdown(event.payload.content);
+      else editor.chain().insertContentAt(position, event.payload.content);
+
       break;
+    }
   }
 }
 

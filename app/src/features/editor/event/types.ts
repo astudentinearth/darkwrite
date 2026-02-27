@@ -6,12 +6,17 @@ export enum EditorEventType {
   INSERT_CONTENT = "insert-content",
 }
 
+export type EditorContentType = "md" | "json" | "html";
+
 // insert content
 
-export interface InsertContentPayload {
-  position?: number;
-  content: Node | Content | Fragment;
-}
+export type InsertContentPayload = (
+  | {
+      content: Node | Content | Fragment;
+      type?: "json";
+    }
+  | { type: "md" | "html"; content: string }
+) & { position?: number };
 
 export interface InsertContentEvent {
   noteId: string;

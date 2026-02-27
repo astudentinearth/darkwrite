@@ -19,6 +19,7 @@ import { useTranslation } from "react-i18next";
 import { ImageExtensionConfig } from "../image/image-config";
 import { createImageNode } from "../image/image-upload-transaction";
 import { i18n } from "i18next";
+import { useMemo } from "react";
 
 export const useSlashCommand = (
   imageUploadConfig: ImageExtensionConfig,
@@ -28,7 +29,7 @@ export const useSlashCommand = (
     keyPrefix: "editor.slashCommand",
     i18n,
   });
-  const items: SlashCommandItem[] = [
+  const items: SlashCommandItem[] = useMemo(() => [
     {
       id: "builtin.text",
       title: t("text"),
@@ -248,7 +249,7 @@ export const useSlashCommand = (
           .run();
       },
     },
-  ];
+  ], []);
 
   return { items };
 };
