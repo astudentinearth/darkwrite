@@ -25,6 +25,5 @@ export default function TrashBanner() {
         {t("sidebar.trash.restore")}
       </Button>
     </Alert>
-  )
+  );
 }
-

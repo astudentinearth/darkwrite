@@ -8,15 +8,21 @@ import { useAppSelector } from "@/features/store/hooks";
 import { selectEditorCustomizations } from "@/features/editor/store/editor-selectors";
 import { useCurrentWorkspaceId } from "@/features/workspaces/hooks/use-workspace";
 import { Editor, JSONContent } from "@tiptap/core";
-import { setCharacterCount, setEditorContent, setWordCount } from "@/features/editor/store/editor-actions";
+import {
+  setCharacterCount,
+  setEditorContent,
+  setWordCount,
+} from "@/features/editor/store/editor-actions";
 import { EditorContext } from "@/features/editor/store/editor-context";
 import EditorUtil from "@/features/editor/editor-util";
 
 export function useEditorView(noteId: string) {
-  const customizations = useAppSelector(s => selectEditorCustomizations(s, noteId));
+  const customizations = useAppSelector((s) =>
+    selectEditorCustomizations(s, noteId),
+  );
   const editorWidth = useCenteredLayout(customizations?.widePage ? 0 : 984);
   const style: CSSProperties = useMemo(() => {
-    const draft: CSSProperties = {}
+    const draft: CSSProperties = {};
 
     draft.fontFamily =
       customizations?.font === FontStyle.CUSTOM
@@ -36,46 +42,54 @@ export function useEditorView(noteId: string) {
     }
 
     return draft;
-  }, [customizations])
+  }, [customizations]);
 
-  return { style, editorWidth }
-
+  return { style, editorWidth };
 }
 
 export function useEditorOptions() {
   const workspaceId = useCurrentWorkspaceId() ?? "";
   const indentSize = useEditorSettings().codeIndentSize;
   const { noteId } = use(EditorContext);
-  const imageConfig: ImageExtensionConfig = useMemo(() => ({
-    saveArrayBuffer: async (buf, filetype) =>
-      (
-        await DarkwriteAPIClient.embed.create({
-          file: buf,
-          fileType: filetype,
-          workspaceId,
-        })
-      ).embed?.id ?? "",
-    uploadFile: async (file) =>
-      (
-        await DarkwriteAPIClient.embed.create({
-          file,
-          fileType: file.type,
-          workspaceId,
-        })
-      ).embed?.id ?? "",
-  }), [workspaceId]);
+  const imageConfig: ImageExtensionConfig = useMemo(
+    () => ({
+      saveArrayBuffer: async (buf, filetype) =>
+        (
+          await DarkwriteAPIClient.embed.create({
+            file: buf,
+            fileType: filetype,
+            workspaceId,
+          })
+        ).embed?.id ?? "",
+      uploadFile: async (file) =>
+        (
+          await DarkwriteAPIClient.embed.create({
+            file,
+            fileType: file.type,
+            workspaceId,
+          })
+        ).embed?.id ?? "",
+    }),
+    [workspaceId],
+  );
 
-  const handleContentChange = useCallback((content: JSONContent) => {
-    setEditorContent(noteId, content);
-  }, [noteId])
+  const handleContentChange = useCallback(
+    (content: JSONContent) => {
+      setEditorContent(noteId, content);
+    },
+    [noteId],
+  );
 
-  const onUpdate = useCallback((editor: Editor) => {
-    const util = EditorUtil(editor);
-    const wordCount = util.countWords();
-    const characterCount = util.countCharacters();
-    setWordCount(noteId, wordCount);
-    setCharacterCount(noteId, characterCount);
-  }, [noteId])
+  const onUpdate = useCallback(
+    (editor: Editor) => {
+      const util = EditorUtil(editor);
+      const wordCount = util.countWords();
+      const characterCount = util.countCharacters();
+      setWordCount(noteId, wordCount);
+      setCharacterCount(noteId, characterCount);
+    },
+    [noteId],
+  );
 
   return { imageConfig, indentSize, handleContentChange, onUpdate };
 }

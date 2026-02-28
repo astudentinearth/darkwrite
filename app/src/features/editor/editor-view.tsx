@@ -1,6 +1,9 @@
 import { DarkwriteAPIClient } from "@/api/api-client";
 import { useLocalStore } from "@/context/local-state";
-import { useEditorOptions, useEditorView } from "@/hooks/editor/use-editor-options";
+import {
+  useEditorOptions,
+  useEditorView,
+} from "@/hooks/editor/use-editor-options";
 import { useNoteFromURL } from "@/query/use-note-from-url";
 import { use } from "react";
 import DarkwriteEditor from ".";
@@ -12,27 +15,34 @@ import { useSlashCommand } from "./extensions";
 import EditorHeader from "./header";
 import { useDocumentById } from "./hooks/use-document";
 import { EditorContext } from "./store/editor-context";
-import { selectEditorContent, selectEditorCustomizations } from "./store/editor-selectors";
+import {
+  selectEditorContent,
+  selectEditorCustomizations,
+} from "./store/editor-selectors";
 
 export function EditorViewRouteHandler() {
   const noteId = useNoteFromURL();
   const { document } = useDocumentById(noteId ?? "");
   if (!noteId) return null;
   return (
-    document && <EditorContext.Provider value={{ noteId }}>
-      <EditorView key={`editor-root-${noteId}`} noteId={noteId} />;
-    </EditorContext.Provider>
-  )
+    document && (
+      <EditorContext.Provider value={{ noteId }}>
+        <EditorView key={`editor-root-${noteId}`} noteId={noteId} />;
+      </EditorContext.Provider>
+    )
+  );
 }
 
 function EditorViewport() {
   const { noteId } = use(EditorContext);
 
   const options = useEditorOptions();
-  const customizations = useAppSelector(s => selectEditorCustomizations(s, noteId));
-  const content = useAppSelector(s => selectEditorContent(s, noteId));
+  const customizations = useAppSelector((s) =>
+    selectEditorCustomizations(s, noteId),
+  );
+  const content = useAppSelector((s) => selectEditorContent(s, noteId));
   const settings = useEditorSettings();
-  const { items } = useSlashCommand(options.imageConfig)
+  const { items } = useSlashCommand(options.imageConfig);
 
   if (!content || !customizations) return null;
   <ConstrainedWidth fill={customizations?.widePage}>
@@ -49,7 +59,7 @@ function EditorViewport() {
       key={noteId}
       onNavigateToNote={navigateToNote}
     />
-  </ConstrainedWidth>
+  </ConstrainedWidth>;
 }
 
 export function EditorView({ noteId }: { noteId: string }) {

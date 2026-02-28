@@ -33,7 +33,6 @@ export function setWordCount(noteId: string, wordCount: number) {
   );
 }
 
-
 export function setCharacterCount(noteId: string, characterCount: number) {
   store.dispatch(
     editorSlice.actions.setCharacterCount({

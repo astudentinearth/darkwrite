@@ -10,5 +10,4 @@ export const CreateEmbedDTOSchema = z.object({
   file: z.custom<File>(isFile),
 });
 
- 
 export type CreateEmbedDTO = z.infer<typeof CreateEmbedDTOSchema>;

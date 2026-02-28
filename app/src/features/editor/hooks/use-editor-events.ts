@@ -8,7 +8,7 @@ export function useEditorEvents() {
   const { noteId } = use(EditorContext);
 
   useEffect(() => {
-    if(!editor) return;
+    if (!editor) return;
     const unsubscribe = EditorEventBus.subscribe(noteId, (e) => {
       handleEditorEvent(editor, e.data);
     });

@@ -17,4 +17,3 @@ export const selectWordCount = (state: RootState, noteId: string) =>
 
 export const selectCharacterCount = (state: RootState, noteId: string) =>
   state.editor.characterCount[noteId] ?? 0;
-

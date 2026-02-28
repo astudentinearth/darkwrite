@@ -10,23 +10,32 @@ import Bubble from "../extensions/bubble-menu";
 import TableMenu from "../extensions/table/table-menu";
 
 export default function useEditorBuilder() {
-  const { imageUploadConfig, codeBlockIndentSize, commandItems } = use(DarkwriteEditorContext);
-  const extensions = useMemo(() => [
-    ...DefaultEditorExtensions,
-    ImageExtension(imageUploadConfig),
-    CodeBlockExtension(() => codeBlockIndentSize),
-    slashCommandExtension.configure({
-      suggestion: {
-        items: () => commandItems
-      }
-    })
-  ], [codeBlockIndentSize, imageUploadConfig, commandItems]);
+  const { imageUploadConfig, codeBlockIndentSize, commandItems } = use(
+    DarkwriteEditorContext,
+  );
+  const extensions = useMemo(
+    () => [
+      ...DefaultEditorExtensions,
+      ImageExtension(imageUploadConfig),
+      CodeBlockExtension(() => codeBlockIndentSize),
+      slashCommandExtension.configure({
+        suggestion: {
+          items: () => commandItems,
+        },
+      }),
+    ],
+    [codeBlockIndentSize, imageUploadConfig, commandItems],
+  );
 
-  const children = useMemo(() => (<>
-    <Bubble />
-    <TableMenu />
-  </>), [])
+  const children = useMemo(
+    () => (
+      <>
+        <Bubble />
+        <TableMenu />
+      </>
+    ),
+    [],
+  );
 
-  return { extensions, children }
+  return { extensions, children };
 }
-

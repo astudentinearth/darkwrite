@@ -7,4 +7,3 @@ export interface EditorStore {
 export const useEditorStore = create<EditorStore>()(() => ({
   width: 800,
 }));
-
