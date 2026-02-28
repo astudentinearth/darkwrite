@@ -69,5 +69,5 @@ export const editorSlice = createSlice({
       state.characterCount[noteId] = characterCount;
     },
   },
-  initialState: { docs: {} } as EditorState,
+  initialState: { docs: {}, characterCount: {}, wordCount: {} } as EditorState,
 });

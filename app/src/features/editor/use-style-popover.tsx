@@ -15,7 +15,7 @@ export default function useStylePopover() {
 
   const setColor = (
     type: "backgroundColor" | "textColor",
-    value: string | undefined,
+    value: string | null,
   ) => {
     if (!noteId) return;
     setEditorCustomizations(noteId, {

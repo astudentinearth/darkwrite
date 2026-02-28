@@ -27,7 +27,7 @@ export function EditorViewRouteHandler() {
   return (
     document && (
       <EditorContext.Provider value={{ noteId }}>
-        <EditorView key={`editor-root-${noteId}`} noteId={noteId} />;
+        <EditorView key={`editor-root-${noteId}`} noteId={noteId} />
       </EditorContext.Provider>
     )
   );
@@ -43,23 +43,24 @@ function EditorViewport() {
   const content = useAppSelector((s) => selectEditorContent(s, noteId));
   const settings = useEditorSettings();
   const { items } = useSlashCommand(options.imageConfig);
-
   if (!content || !customizations) return null;
-  <ConstrainedWidth fill={customizations?.widePage}>
-    <DarkwriteEditor
-      content={content}
-      commandItems={items}
-      onContentChange={options.handleContentChange}
-      onUpdate={options.onUpdate}
-      imageUploadConfig={options.imageConfig}
-      codeBlockIndentSize={settings.codeIndentSize}
-      embedSourceResolver={async (id) =>
-        (await DarkwriteAPIClient.embed.getById(id)).embed?.url ?? ""
-      }
-      key={noteId}
-      onNavigateToNote={navigateToNote}
-    />
-  </ConstrainedWidth>;
+  return (
+    <ConstrainedWidth fill={customizations?.widePage}>
+      <DarkwriteEditor
+        content={content}
+        commandItems={items}
+        onContentChange={options.handleContentChange}
+        onUpdate={options.onUpdate}
+        imageUploadConfig={options.imageConfig}
+        codeBlockIndentSize={settings.codeIndentSize}
+        embedSourceResolver={async (id) =>
+          (await DarkwriteAPIClient.embed.getById(id)).embed?.url ?? ""
+        }
+        key={noteId}
+        onNavigateToNote={navigateToNote}
+      />
+    </ConstrainedWidth>
+  );
 }
 
 export function EditorView({ noteId }: { noteId: string }) {

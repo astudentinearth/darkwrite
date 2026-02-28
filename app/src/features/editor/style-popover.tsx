@@ -117,12 +117,12 @@ export function StyleUI(props: {
         <label className="pl-2">{t("backgroundColorText")}</label>
         <div className="flex items-center gap-1">
           <ColorPicker
-            value={backgroundColor}
+            value={backgroundColor ?? undefined}
             onChange={(val) => setColor("backgroundColor", val)}
           />
           <Button
             className="w-8 h-8 p-0"
-            onClick={() => setColor("backgroundColor", undefined)}
+            onClick={() => setColor("backgroundColor", null)}
             variant={"outline"}
           >
             <RotateCcw size={18} />
@@ -134,12 +134,12 @@ export function StyleUI(props: {
         <label className="pl-2">{t("foregroundColorText")}</label>
         <div className="flex items-center gap-1">
           <ColorPicker
-            value={textColor}
+            value={textColor ?? undefined}
             onChange={(val) => setColor("textColor", val)}
           />
           <Button
             className="w-8 h-8 p-0"
-            onClick={() => setColor("textColor", undefined)}
+            onClick={() => setColor("textColor", null)}
             variant={"outline"}
           >
             <RotateCcw size={18} />
