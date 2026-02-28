@@ -21,7 +21,7 @@
     "preview": "vite preview",
     "build:pre": "npm-run-all --serial licenses build:vite",
     "build:vite": "vite build",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
     "format": "prettier . --write",
     "test": "npm-run-all --serial rebuild:restore test:run",
     "test:run": "vitest run",
@@ -137,8 +137,6 @@
     "@babel/preset-typescript": "^7.27.1",
     "@electron-toolkit/tsconfig": "^1.0.1",
     "@electron/rebuild": "^3.7.2",
-    "@eslint/compat": "^1.4.1",
-    "@eslint/eslintrc": "^3.3.1",
     "@eslint/js": "^9.39.1",
     "@swc/core": "^1.13.5",
     "@tailwindcss/vite": "^4.1.14",
@@ -161,8 +159,8 @@
     "electron": "^39.2.3",
     "electron-builder": "^26.4.0",
     "electron-devtools-installer": "^3.2.1",
-    "eslint": "^9.39.1",
-    "eslint-plugin-react-hooks": "^4.6.2",
+    "eslint": "^9.27.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.24",
     "generate-license-file": "^4.1.1",
     "globals": "^15.15.0",
@@ -189,5 +187,10 @@
     "js-yaml@>=4.0.0 <4.1.1": ">=4.1.1",
     "glob@>=10.3.7 <10.5.0": ">=10.5.0",
     "glob@>=11.0.0 <11.1.0": ">=11.1.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "ajv@^6": "6.12.6"
+    }
   }
 }
