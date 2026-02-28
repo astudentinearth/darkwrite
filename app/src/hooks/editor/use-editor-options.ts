@@ -1,8 +1,6 @@
 import { ImageExtensionConfig } from "@/features/editor/extensions/image/image-config";
 import { useCenteredLayout } from "../layout/use-centered-layout";
 import { DarkwriteAPIClient } from "@/api/api-client";
-import { useLocalStore } from "@/context/local-state";
-import { useEditorStore } from "@/context/editor-store";
 import { CSSProperties, use, useCallback, useMemo } from "react";
 import { FONT_VARS, FontStyle } from "@/common/note-customization";
 import { useEditorSettings } from "@/features/settings/store/settings-selectors";
@@ -77,7 +75,7 @@ export function useEditorOptions() {
     const characterCount = util.countCharacters();
     setWordCount(noteId, wordCount);
     setCharacterCount(noteId, characterCount);
-  }, [])
+  }, [noteId])
 
   return { imageConfig, indentSize, handleContentChange, onUpdate };
 }

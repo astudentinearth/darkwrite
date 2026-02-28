@@ -6,14 +6,15 @@ import { EditorContext } from "../store/editor-context";
 export function useEditorEvents() {
   const { editor } = useCurrentEditor();
   const { noteId } = use(EditorContext);
-  if (!editor) return;
 
   useEffect(() => {
+    if(!editor) return;
     const unsubscribe = EditorEventBus.subscribe(noteId, (e) => {
       handleEditorEvent(editor, e.data);
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [editor, noteId]);
 
+  if (!editor) return;
 }

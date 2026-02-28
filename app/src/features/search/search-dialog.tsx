@@ -36,7 +36,7 @@ export default function SearchDialog() {
   const open = useSearchState((s) => s.open);
   const query = useSearchState((s) => s.query);
   const { t } = useTranslation();
-  const { debouncedSearch, isError, isFetching, isLoading, results } =
+  const { debouncedSearch, isLoading, results } =
     useSearch(query);
 
   const listRef = useRef<HTMLDivElement>(null!);

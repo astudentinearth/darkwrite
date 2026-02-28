@@ -4,7 +4,6 @@ import {
   CodeBlockExtension,
   DefaultEditorExtensions,
   ImageExtension,
-  useSlashCommand
 } from "../extensions";
 import slashCommandExtension from "../extensions/slash-command/slash-command-extension";
 import Bubble from "../extensions/bubble-menu";

@@ -1,7 +1,7 @@
 import { HeaderbarButton } from "@/components/headerbar-button";
 import { cn } from "@/lib/utils";
 import { PanelRightClose } from "lucide-react";
-import { RefObject, useRef } from "react";
+import { useRef } from "react";
 import { HistoryNavigation } from "./navigation";
 import PageTitle from "./page-title";
 import Toolbar from "./toolbar";

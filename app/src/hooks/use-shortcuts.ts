@@ -26,6 +26,6 @@ export const useShortcuts = () => {
     document.addEventListener("keydown", down);
     return () => document.removeEventListener("keydown", down);
     // we'll get rid of react query.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, []);
 };

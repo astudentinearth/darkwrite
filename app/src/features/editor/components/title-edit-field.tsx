@@ -1,6 +1,5 @@
 import { cleanNoteTitle } from "@/common/note";
 import DynamicTextarea from "@/components/dynamic-textarea";
-import { useEditorStore } from "@/context/editor-store";
 import { EditorContext } from "@/features/editor/store/editor-context";
 import { selectNoteTitle } from "@/features/note/store/note-selectors";
 import { createTitleUpdater } from "@/features/note/store/update-note";

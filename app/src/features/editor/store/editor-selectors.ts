@@ -1,6 +1,4 @@
-import createAppSelector from "@/features/store/select";
 import { RootState } from "@/features/store/types";
-import { createSelector } from "@reduxjs/toolkit";
 
 export const selectEditorCustomizations = (state: RootState, noteId: string) =>
   state.editor.docs[noteId]?.customizations;

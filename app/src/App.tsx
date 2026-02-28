@@ -8,7 +8,6 @@ import UpdateChecker from "./features/update/update-checker";
 import { noteLoader } from "./lib/note-loader";
 import { Provider } from "react-redux";
 import { store } from "./features/store/redux";
-import NavigationHelper from "./features/navigation/navigation-helper";
 
 function App() {
   const [queryClient] = useState(() => new QueryClient());
@@ -23,14 +22,13 @@ function App() {
                 <Route
                   path="/page/:pageId"
                   loader={noteLoader}
-                  element={<></>}
+                  element={<EditorViewRouteHandler />}
                 ></Route>
                 <Route path="settings" element={<></>}></Route>
               </Route>
             </Routes>
           </HashRouter>
           <UpdateChecker />
-          {/* <ReactQueryDevtools initialIsOpen={false} /> */}
         </Provider>
       </QueryClientProvider>
     </div>

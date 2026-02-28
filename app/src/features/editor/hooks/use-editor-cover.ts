@@ -3,7 +3,6 @@ import {
   selectCoverImageSource,
   selectIsWidePage,
 } from "@/features/editor/store/editor-selectors";
-import { useNoteById } from "@/features/note/hooks/use-note-by-id";
 import { restoreFromTrash } from "@/features/note/store/note-actions";
 import {
   selectNoteIcon,

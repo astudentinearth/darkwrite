@@ -249,7 +249,7 @@ export const useSlashCommand = (
           .run();
       },
     },
-  ], []);
+  ], [imageUploadConfig, t]);
 
   return { items };
 };

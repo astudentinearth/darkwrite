@@ -1,6 +1,5 @@
 import { useAppSelector } from "@/features/store/hooks";
 import { selectNoteById } from "../store/note-selectors";
-import { favoritesApi } from "../store/favorites-api";
 import { useTranslation } from "react-i18next";
 import { ContextMenuItem } from "@/components/ui";
 import { Star } from "lucide-react";
