@@ -4,6 +4,7 @@ import { Fragment } from "@tiptap/pm/model";
 export enum EditorEventType {
   FOCUS = "focus",
   INSERT_CONTENT = "insert-content",
+  HISTORY = "history",
 }
 
 export type EditorContentType = "md" | "json" | "html";
@@ -31,4 +32,12 @@ export interface FocusEvent {
   type: EditorEventType.FOCUS;
 }
 
-export type EditorEvent = FocusEvent | InsertContentEvent;
+// history
+
+export interface HistoryEvent {
+  noteId: string;
+  type: EditorEventType.HISTORY;
+  payload: "undo" | "redo";
+}
+
+export type EditorEvent = FocusEvent | InsertContentEvent | HistoryEvent;

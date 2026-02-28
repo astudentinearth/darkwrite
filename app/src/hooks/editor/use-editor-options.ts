@@ -9,9 +9,10 @@ import { useEditorSettings } from "@/features/settings/store/settings-selectors"
 import { useAppSelector } from "@/features/store/hooks";
 import { selectEditorCustomizations } from "@/features/editor/store/editor-selectors";
 import { useCurrentWorkspaceId } from "@/features/workspaces/hooks/use-workspace";
-import { JSONContent } from "@tiptap/core";
-import { setEditorContent } from "@/features/editor/store/editor-actions";
+import { Editor, JSONContent } from "@tiptap/core";
+import { setCharacterCount, setEditorContent, setWordCount } from "@/features/editor/store/editor-actions";
 import { EditorContext } from "@/features/editor/store/editor-context";
+import EditorUtil from "@/features/editor/editor-util";
 
 export function useEditorView(noteId: string) {
   const customizations = useAppSelector(s => selectEditorCustomizations(s, noteId));
@@ -70,5 +71,13 @@ export function useEditorOptions() {
     setEditorContent(noteId, content);
   }, [noteId])
 
-  return { imageConfig, indentSize, handleContentChange };
+  const onUpdate = useCallback((editor: Editor) => {
+    const util = EditorUtil(editor);
+    const wordCount = util.countWords();
+    const characterCount = util.countCharacters();
+    setWordCount(noteId, wordCount);
+    setCharacterCount(noteId, characterCount);
+  }, [])
+
+  return { imageConfig, indentSize, handleContentChange, onUpdate };
 }

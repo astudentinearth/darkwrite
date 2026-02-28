@@ -1,6 +1,6 @@
 import { NoteContent } from "@/common/note-content";
 import { NoteCustomization } from "@/common/note-customization";
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { JSONContent } from "@tiptap/core";
 import _ from "lodash";
 
@@ -8,6 +8,8 @@ export const EDITOR_SLICE_NAME = "editor";
 
 export interface EditorState {
   docs: Record<string, NoteContent | undefined>;
+  wordCount: Record<string, number>;
+  characterCount: Record<string, number>;
 }
 
 export const editorSlice = createSlice({
@@ -18,7 +20,7 @@ export const editorSlice = createSlice({
      */
     initializeDocument: (
       state,
-      action: { payload: { noteId: string; document: NoteContent } },
+      action: PayloadAction<{ noteId: string; document: NoteContent }>,
     ) => {
       const { noteId, document } = action.payload;
       state.docs[noteId] = document;
@@ -30,9 +32,7 @@ export const editorSlice = createSlice({
      */
     updateDocumentContent: (
       state,
-      action: {
-        payload: { noteId: string; content: JSONContent };
-      },
+      action: PayloadAction<{ noteId: string; content: JSONContent }>,
     ) => {
       const { noteId, content } = action.payload;
       if (state.docs[noteId]) {
@@ -42,14 +42,31 @@ export const editorSlice = createSlice({
 
     updateDocumentCustomizations: (
       state,
-      action: {
-        payload: { noteId: string; customizations: Partial<NoteCustomization> };
-      },
+      action: PayloadAction<{
+        noteId: string;
+        customizations: Partial<NoteCustomization>;
+      }>,
     ) => {
       const { noteId, customizations } = action.payload;
       if (state.docs[noteId]) {
         _.merge(state.docs[noteId].customizations, customizations);
       }
+    },
+
+    setWordCount: (
+      state,
+      action: PayloadAction<{ noteId: string; wordCount: number }>,
+    ) => {
+      const { noteId, wordCount } = action.payload;
+      state.wordCount[noteId] = wordCount;
+    },
+
+    setCharacterCount: (
+      state,
+      action: PayloadAction<{ noteId: string; characterCount: number }>,
+    ) => {
+      const { noteId, characterCount } = action.payload;
+      state.characterCount[noteId] = characterCount;
     },
   },
   initialState: { docs: {} } as EditorState,

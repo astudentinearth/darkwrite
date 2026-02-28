@@ -14,6 +14,7 @@ export function EditorRoot(props: { content: EditorContent }) {
       onUpdate={({ editor }) => {
         const updatedContent = editor.getJSON();
         context.onContentChange(updatedContent);
+        context.onUpdate?.(editor);
       }}
       slotAfter={<Padder />}
       editorProps={{

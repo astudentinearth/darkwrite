@@ -40,6 +40,7 @@ function EditorViewport() {
       content={content}
       commandItems={items}
       onContentChange={options.handleContentChange}
+      onUpdate={options.onUpdate}
       imageUploadConfig={options.imageConfig}
       codeBlockIndentSize={settings.codeIndentSize}
       embedSourceResolver={async (id) =>

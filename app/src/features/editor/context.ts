@@ -7,8 +7,7 @@ import { ImageExtensionConfig } from "./extensions/image/image-config";
 export interface IDarkwriteEditorContext {
   notes?: NoteDTO[];
   onContentChange: (newContent: EditorContent) => void;
-  /** A function to be called when the editor instance changes. Use this to life the editor instance higher in the tree. */
-  onInstanceChange?: (editor: Editor) => void;
+  onUpdate?: (editor: Editor) => void;
   onNavigateToNote?: (noteId: string) => void;
   commandItems: SlashCommandItem[];
   codeBlockIndentSize: number;

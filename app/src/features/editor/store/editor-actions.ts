@@ -23,3 +23,22 @@ export function setEditorContent(noteId: string, content: EditorContent) {
     }),
   );
 }
+
+export function setWordCount(noteId: string, wordCount: number) {
+  store.dispatch(
+    editorSlice.actions.setWordCount({
+      noteId,
+      wordCount,
+    }),
+  );
+}
+
+
+export function setCharacterCount(noteId: string, characterCount: number) {
+  store.dispatch(
+    editorSlice.actions.setCharacterCount({
+      noteId,
+      characterCount,
+    }),
+  );
+}

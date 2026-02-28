@@ -1,4 +1,6 @@
+import createAppSelector from "@/features/store/select";
 import { RootState } from "@/features/store/types";
+import { createSelector } from "@reduxjs/toolkit";
 
 export const selectEditorCustomizations = (state: RootState, noteId: string) =>
   state.editor.docs[noteId]?.customizations;
@@ -11,3 +13,10 @@ export const selectCoverImageSource = (state: RootState, noteId: string) =>
 
 export const selectIsWidePage = (state: RootState, noteId: string) =>
   state.editor.docs[noteId]?.customizations.widePage ?? false;
+
+export const selectWordCount = (state: RootState, noteId: string) =>
+  state.editor.wordCount[noteId] ?? 0;
+
+export const selectCharacterCount = (state: RootState, noteId: string) =>
+  state.editor.characterCount[noteId] ?? 0;
+

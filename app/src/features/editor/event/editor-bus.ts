@@ -28,6 +28,11 @@ export function handleEditorEvent(editor: Editor, event: EditorEvent) {
 
       break;
     }
+
+    case EditorEventType.HISTORY: {
+      if (event.payload === "undo") editor.chain().undo().run();
+      else if (event.payload === "redo") editor.chain().redo().run();
+    }
   }
 }
 
