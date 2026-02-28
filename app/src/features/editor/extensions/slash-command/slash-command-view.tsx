@@ -39,12 +39,12 @@ function SlashCommandItem({
       }}
       value={`${item.title}`}
       className={cn(
-        "hover:bg-secondary/80 rounded-[8px] flex items-center p-1",
+        "hover:bg-secondary/40 hover:top-highlight data-[selected=true]:bg-secondary/40 data-[selected=true]:top-highlight rounded-lg flex items-center p-1",
       )}
     >
       <div
         className={cn(
-          "bg-view-2 w-9 h-9 rounded-md border flex justify-center items-center shrink-0",
+          "bg-view-1/75 w-9 h-9 rounded-md border flex justify-center items-center shrink-0",
         )}
       >
         {item.icon}
@@ -86,7 +86,7 @@ export const SlashCommandView = forwardRef(function (
   return (
     <div
       ref={containerRef}
-      className="max-h-[40vh] max-w-[600px] bg-popover border rounded-xl drop-shadow-xl pt-1 px-1 flex flex-col"
+      className="max-h-[40vh] max-w-[600px] bg-view-2/80 backdrop-blur-lg top-highlight border rounded-xl drop-shadow-xl pl-1 pr-0 flex flex-col"
     >
       <Command
         className={
@@ -111,7 +111,7 @@ export const SlashCommandView = forwardRef(function (
         </CommandEmpty>
         <CommandList
           ref={listRef}
-          className="bg-transparent pb-1 command-view-container"
+          className="bg-transparent pb-1 pt-1 pr-1 command-view-container"
         >
           {props.items.map((i) => (
             <SlashCommandItem

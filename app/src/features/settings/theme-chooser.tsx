@@ -72,7 +72,7 @@ export function ThemeChooser() {
           {t("settings.appearance.importTooltip")}
         </Button>
       </div>
-      <div className="flex flex-col bg-view-2 rounded-lg p-4 w-160 gap-4 drop-shadow-sm">
+      <div className="flex flex-col bg-view-2 top-highlight rounded-lg p-4 w-160 gap-4 drop-shadow-sm">
         <div className="flex justify-between items-center">
           <span className="font-medium">
             {t("settings.appearance.lightColorScheme")}

@@ -23,7 +23,7 @@ export interface NoteCustomization {
    * a base64 encoded image (discouraged) or any image that is accessible via a URL.
    * Replaces the `coverEmbedId` field from the previous iteration.
    * */
-  coverImageSource?: string;
+  coverImageSource?: string | null;
   widePage?: boolean;
 }
 

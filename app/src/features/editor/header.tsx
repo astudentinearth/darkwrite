@@ -52,7 +52,7 @@ export default function EditorHeader() {
             )}
           >
             <AddRemoveIconButton />
-            {hasCover && (
+            {!hasCover && (
               <Button onClick={addCover} className="w-fit" variant={"ghost"}>
                 <Image size={18} />
                 {t("editor.cover.addCover")}

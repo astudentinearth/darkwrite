@@ -26,7 +26,7 @@ export default function StylePopover({ children }: { children: ReactNode }) {
   return (
     <Popover>
       <PopoverTrigger asChild>{children}</PopoverTrigger>
-      <PopoverContent className="w-fit h-fit p-2 mr-2">
+      <PopoverContent className="w-fit h-fit p-2 mr-2 bg-view-2/80 top-highlight">
         <StyleUI customizations={customizations} noteId={id} />
       </PopoverContent>
     </Popover>

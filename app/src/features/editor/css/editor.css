@@ -108,7 +108,7 @@
 }
 
 .command-view-container::-webkit-scrollbar {
-  width: 6px;
+  width: 4px;
 }
 
 .command-view-container::-webkit-scrollbar-track {

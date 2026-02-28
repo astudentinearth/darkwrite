@@ -41,7 +41,7 @@ export default function SearchDialog() {
   const listRef = useRef<HTMLDivElement>(null!);
   return (
     <CommandDialog
-      className="max-w-120"
+      className="max-w-120 backdrop-blur-lg"
       open={open}
       onOpenChange={setSearchOpen}
     >

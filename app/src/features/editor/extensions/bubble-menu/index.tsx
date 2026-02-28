@@ -39,7 +39,7 @@ export default function Bubble() {
     >
       <div
         data-animation="slide"
-        className="flex w-fit h-fit max-w-[90vw] overflow-hidden gap-1 bubble-menu rounded-xl border border-border
+        className="flex w-fit h-fit max-w-[90vw] top-highlight overflow-hidden gap-1 bubble-menu rounded-xl border border-border
               bg-view-2/80 backdrop-blur-lg shadow-xl p-1 slide-in-from-top-1 transition-[opacity,transform,translate,scale,rotate]"
       >
         <FormattingButtons />

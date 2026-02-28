@@ -12,7 +12,7 @@ export function useCoverImage(noteId: string) {
   };
 
   const removeCover = () => {
-    setEditorCustomizations(noteId, { coverImageSource: undefined });
+    setEditorCustomizations(noteId, { coverImageSource: null });
   };
 
   const backgroundStyle: React.CSSProperties = imageSource
