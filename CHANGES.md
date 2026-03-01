@@ -11,6 +11,8 @@
 - Code blocks now correctly follow your monospace font choice
 - Added visual feedback to the copy button in code blocks to display a checkmark for 1 second
 - Language chooser in code blocks no longer go offscreen
+- Fix `⌥+←` and `⌥+→` interfering with text editing on macOS
+- `⌘+←` and `⌘+→` now handle history navigation instead of `⌥+←` and `⌥+→` on macOS to follow conventions
 
 ## 🛠️ Technical changes (definitely read if you have your own fork)
 - Dropped `@tanstack/react-query` in favor of Redux + RTK Query
