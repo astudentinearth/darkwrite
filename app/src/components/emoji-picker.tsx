@@ -46,7 +46,7 @@ export function EmojiPicker(props: {
       <DropdownMenuContent
         style={{ "--rgb-accent": accentVar } as CSSProperties}
         sticky="always"
-        className="bg-view-2 p-0 rounded-xl"
+        className="bg-view-2/80 p-0 rounded-xl top-highlight"
       >
         <Picker
           previewPosition="none"

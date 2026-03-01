@@ -30,7 +30,7 @@ export default function LanguageChooser(props: LanguageChooserProps) {
       <SelectTrigger className="w-fit border-none opacity-60 group-hover:opacity-100 shrink-0 hover:bg-secondary h-fit transition-[background,opacity] text-xs aria-expanded:bg-secondary/80">
         {value}
       </SelectTrigger>
-      <SelectContent hideArrows>{items}</SelectContent>
+      <SelectContent side="right" className="max-h-[70vh] top-highlight" hideArrows>{items}</SelectContent>
     </Select>
   );
 }

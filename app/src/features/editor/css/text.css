@@ -42,6 +42,8 @@ strong {
         @apply text-foreground/70;
       }
 
+      font-family: var(--darkwrite-mono), ui-monospace;
+
       .hljs-variable,
       .hljs-template-variable,
       .hljs-attribute,

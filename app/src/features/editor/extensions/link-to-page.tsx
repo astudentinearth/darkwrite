@@ -14,21 +14,44 @@ import { mergeAttributes, Node } from "@tiptap/core";
 import { NodeViewWrapper, ReactNodeViewRenderer } from "@tiptap/react";
 import { File } from "lucide-react";
 import { Plugin } from "@tiptap/pm/state";
-import { MouseEvent, use, useState } from "react";
+import { memo, MouseEvent, use, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { DarkwriteEditorContext } from "../context";
-import { getNoteIcon } from "@/lib/utils";
+import { cn, getNoteIcon } from "@/lib/utils";
+import { useNoteById } from "@/features/note/hooks/use-note-by-id";
+import { useSearch } from "@/features/note/hooks/use-search";
+
+const LinkResult = memo(function ({
+  id,
+  onSelect,
+}: {
+  id: string;
+  onSelect: () => void;
+}) {
+  const { note } = useNoteById(id);
+  if (!note) return null;
+  return (
+    <CommandItem
+      value={`${note.id}$${note.title}`}
+      className="flex gap-2"
+      onSelect={onSelect}
+    >
+      <span className="flex">{getNoteIcon(note.icon)}</span>
+      <span className="flex">{note.title}</span>
+    </CommandItem>
+  );
+});
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const LinkComponent = ({ node, updateAttributes }: any) => {
   const id = node.attrs.noteID;
   const context = use(DarkwriteEditorContext);
-  const notes = context.notes?.filter((n) => !n.isTrashed);
-  const note = notes?.find((n) => n.id === id);
+  const { note } = useNoteById(id);
   const navToNote = context.onNavigateToNote;
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
+  const { results, debouncedSearch } = useSearch(search);
 
   const contextMenu = (e: MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -46,7 +69,7 @@ const LinkComponent = ({ node, updateAttributes }: any) => {
               if (note) navToNote?.call(undefined, id);
               else setOpen(true);
             }}
-            className="link-to-page hover:bg-secondary/75 cursor-pointer select-none rounded-md p-1 py-0.5 transition-colors flex items-center gap-2 my-1 text-(--dw-editor-foreground)"
+            className={ cn ( "link-to-page hover:bg-secondary/75 cursor-pointer select-none rounded-md p-1 py-0.5 transition-colors flex items-center gap-2 my-1 text-(--dw-editor-foreground)" , open && "bg-primary/20") }
           >
             {!note ? (
               <File size={18} className="opacity-75" />
@@ -63,36 +86,29 @@ const LinkComponent = ({ node, updateAttributes }: any) => {
         <PopoverContent
           sticky="always"
           align={"center"}
-          className="p-0 max-h-[30vh] overflow-clip border-border"
+          className="p-0 max-h-[30vh] overflow-clip border-border top-highlight bg-view-2/80 backdrop-blur-lg"
         >
           <Command className="h-full max-h-[30vh]">
             <CommandInput
               value={search}
-              onValueChange={setSearch}
+              onValueChange={(val) => {
+                setSearch(val);
+                debouncedSearch(search);
+              }}
               placeholder={t("search.chooserPlaceholder")}
             />
             <CommandList className="scrollbar p-1 ">
               <CommandEmpty>{t("search.noResult")}</CommandEmpty>
-              {notes
-                ?.filter((n) =>
-                  n.title
-                    .toLocaleLowerCase()
-                    .includes(search.toLocaleLowerCase()),
-                )
-                .map((n) => (
-                  <CommandItem
-                    onSelect={() => {
-                      updateAttributes({ noteID: n.id });
-                      setOpen(false);
-                    }}
-                    key={n.id}
-                    value={`${n.id}$${n.title}`}
-                    className="flex gap-2"
-                  >
-                    {getNoteIcon(n.icon)}
-                    {n.title}
-                  </CommandItem>
-                ))}
+              {results.map((n) => (
+                <LinkResult
+                  onSelect={() => {
+                    updateAttributes({ noteID: n });
+                    setOpen(false);
+                  }}
+                  key={n}
+                  id={n}
+                />
+              ))}
             </CommandList>
           </Command>
         </PopoverContent>
