@@ -144,7 +144,8 @@
       "copy": "Copy",
       "cut": "Cut",
       "paste": "Paste",
-      "delete": "Delete"
+      "delete": "Delete",
+      "downloadImage": "Download image"
     },
     "slashCommand": {
       "text": "Text",

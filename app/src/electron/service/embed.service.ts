@@ -43,7 +43,7 @@ export class EmbedService {
     embed.id = randomUUID();
     embed.displayName = file.basename;
     embed.fileSize = file.size;
-    embed.fileType = file.extension;
+    embed.fileType = file.extension.replace('.', '');
     embed.fileName = file.basename;
 
     return embed;
@@ -76,7 +76,7 @@ export class EmbedService {
 
     let embed = new Embed();
     embed.fileSize = buffer.byteLength;
-    embed.fileType = fileType;
+    embed.fileType = fileType.replace('.', '');
     embed.id = randomUUID();
     embed.workspace = workspace;
     embed.uploadedAt = new Date();

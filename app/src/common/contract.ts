@@ -130,6 +130,7 @@ export interface IEmbedAPI {
   create: (dto: CreateEmbedDTO) => Promise<EmbedResponseDTO>;
   getById: (id: string) => Promise<EmbedResponseDTO>;
   getEncoded: (ids: string[]) => Promise<Record<string, string>>;
+  download: (id: string) => Promise<void>;
 }
 
 export interface ISettingsAPI {

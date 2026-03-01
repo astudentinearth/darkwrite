@@ -38,6 +38,7 @@ export const DarkwriteElectronAPI = {
     ),
     getById: new IPCHandler(false, ElectronEmbedAPI.getById),
     getEncoded: new IPCHandler(false, ElectronEmbedAPI.getEncoded),
+    download: new IPCHandler(false, ElectronEmbedAPI.download),
   },
   workspace: WorkspacesApiBridge,
   settings: {

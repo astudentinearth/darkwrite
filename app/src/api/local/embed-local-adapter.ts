@@ -30,4 +30,8 @@ export class EmbedLocalAdapter implements IEmbedAPI {
   async getEncoded(ids: string[]) {
     return window.api.embed.getEncoded(ids);
   }
+
+  async download(id: string) {
+    window.api.embed.download(id);
+  }
 }

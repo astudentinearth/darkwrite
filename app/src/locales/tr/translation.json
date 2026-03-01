@@ -144,7 +144,8 @@
       "copy": "Kopyala",
       "cut": "Kes",
       "paste": "Yapıştır",
-      "delete": "Sil"
+      "delete": "Sil",
+      "downloadImage": "Resmi indir"
     },
     "slashCommand": {
       "text": "Metin",
