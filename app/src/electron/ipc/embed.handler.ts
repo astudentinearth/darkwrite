@@ -1,9 +1,8 @@
 import { EmbedResponseDTO } from "@/common/dto/response/embed.response";
-import { ServiceContainer } from "../service-container";
-import { clipboard, dialog, nativeImage, net } from "electron";
-import { EmbedService } from "../service/embed.service";
 import { NotFoundError } from "@/common/error";
+import { dialog, net } from "electron";
 import { writeFile } from "fs/promises";
+import { EmbedService } from "../service/embed.service";
 
 const embedService = new EmbedService();
 
