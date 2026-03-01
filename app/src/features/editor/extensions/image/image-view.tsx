@@ -41,7 +41,7 @@ export const DarkwriteImageView = (props: DarkwriteImageViewProps) => {
         ) : (
           <ContextMenu onOpenChange={setMenuOpen}>
             <ContextMenuTrigger asChild>
-              <img draggable={false} data-drag-handle="" className={cn(menuOpen && "outline outline-primary/50")} src={source} />
+              <img draggable={false} data-drag-handle="" className={cn(menuOpen && "opacity-75 outline-2 outline-primary" )} src={source} />
             </ContextMenuTrigger>
             <ContextMenuContent>
               <ContextMenuItem

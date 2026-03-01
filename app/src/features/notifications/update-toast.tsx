@@ -1,5 +1,4 @@
 import { ArrowUpRightFromSquare } from "lucide-react";
-import * as React from "react";
 import { useTranslation } from "react-i18next";
 
 interface UpdateToastProps {

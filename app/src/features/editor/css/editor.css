@@ -129,3 +129,18 @@
     display: none;
   }
 }
+
+.dwimage-selection-overlay {
+  position: relative;
+}
+
+.dwimage-selection-overlay::before {
+  content: "";
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  pointer-events: none;
+  @apply bg-primary/20;
+}

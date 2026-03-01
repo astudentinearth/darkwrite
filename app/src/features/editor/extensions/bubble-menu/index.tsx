@@ -16,7 +16,7 @@ export default function Bubble() {
       pluginKey={"bubbleMenu"}
       shouldShow={({ editor, state }) => {
         if (state.selection instanceof CellSelection) return false;
-        if (editor.isActive("dwimage")) return false;
+        if (editor.isActive("dwimage") || editor.isActive("linkToPage")) return false;
         return !editor.isEmpty && editor.state.selection?.empty === false;
       }}
       options={{

@@ -10,7 +10,7 @@ export function WorkspaceLetterIcon({
   return (
     <div
       className={cn(
-        "w-6 h-6 rounded-[4px] bg-primary/50 font-semibold flex justify-center items-center shrink-0",
+        "w-6 h-6 rounded-md bg-primary/50 font-semibold flex justify-center items-center shrink-0",
         className,
       )}
     >

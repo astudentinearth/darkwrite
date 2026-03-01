@@ -256,5 +256,12 @@
     "migrationErrorDesc2": "Aktarımı tekrar deneyebilirsiniz, ya da en son alpha sürümünü indirerek hemen çalışmaya dönebilirsiniz: ",
     "latestAlpha": "İndirmeye git",
     "checkForUpdates": "Açılışta güncelleştirmeleri kontrol et"
+  },
+  "ui": {
+    "font": {
+      "typeFontName": "Bir yazı tipi yazın",
+      "search": "Yazı tiplerini arayın",
+      "placeholder": "Yazı tipi seçin"
+    }
   }
 }

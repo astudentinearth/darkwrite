@@ -257,5 +257,12 @@
     "migrationErrorDesc2": "You can retry, or access your notes by downgrading to",
     "latestAlpha": "the latest alpha version",
     "checkForUpdates": "Check for updates on startup"
+  },
+  "ui": {
+    "font": {
+      "typeFontName": "Type a font name",
+      "search": "Search fonts",
+      "placeholder": "Select a font"
+    }
   }
 }

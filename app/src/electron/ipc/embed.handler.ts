@@ -75,8 +75,8 @@ export class ElectronEmbedAPI {
     
     const arrayBuffer = await response.arrayBuffer();
     const result = await dialog.showSaveDialog({
-      filters: [{ name: "All Files", extensions: ["*"] }, {name: "Images", extensions: [embed.fileType]}],
-      defaultPath: `${embed.displayName}.${embed.fileType.replace('.', '')}`,
+      filters: [{ name: "All Files", extensions: ["*"] }],
+      defaultPath: `${embed.displayName ?? embed.fileName + embed.fileType.replace(".", "")}`,
     });
     if (result.canceled || !result.filePath) return;
     const buffer = Buffer.from(arrayBuffer);

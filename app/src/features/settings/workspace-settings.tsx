@@ -50,7 +50,7 @@ export default function WorkspaceSettings() {
         <SettingsCard>
           <div className="flex gap-4">
             <WorkspaceIcon
-              className="size-16 rounded-xl text-3xl"
+              className="size-16 rounded-md text-3xl"
               workspace={currentWorkspace}
             />
             <div className="flex flex-col">
@@ -87,13 +87,13 @@ export default function WorkspaceSettings() {
           <div className="flex gap-2">
             <Button
               onClick={() => i18n.changeLanguage("en")}
-              variant={i18n.language == "en" ? "default" : "outline"}
+              variant={i18n.language == "en" ? "default" : "secondary"}
             >
               English
             </Button>
             <Button
               onClick={() => i18n.changeLanguage("tr")}
-              variant={i18n.language == "tr" ? "default" : "outline"}
+              variant={i18n.language == "tr" ? "default" : "secondary"}
             >
               Türkçe
             </Button>
@@ -124,7 +124,7 @@ export default function WorkspaceSettings() {
           </div>
           <Input
             type="number"
-            className="w-fit max-w-16"
+            className="w-fit max-w-16 bg-secondary border-none top-highlight"
             onChange={(e) => {
               const val = parseInt(e.target.value);
               if (!isNaN(val) && val > 0) {

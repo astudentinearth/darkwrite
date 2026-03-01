@@ -1,18 +1,22 @@
 # 1.1.0-beta.1
+## 🌟 Features
+- Added ability to download images from right click menu
 
 ## ✨ Improvements and fixes
 - Significantly improved sidebar performance (reordering notes is now instant)
 - Fixed a bug that allowed you to create circular references when moving notes
 - Fixed an infinite loop crash when you tried to access a note that was part of a circular reference
-- Fix crash when sidebar tree items had colliding order keys
+- Fixed crash when sidebar tree items had colliding order keys
 - Default note title ("Untitled") is now localized
 - Preferred page size is now persisted in settings.json
 - Reduced brightness of borders in Catppuccin themes
 - Code blocks now correctly follow your monospace font choice
 - Added visual feedback to the copy button in code blocks to display a checkmark for 1 second
+- Added highlights to elements that have an open context menu
 - Language chooser in code blocks no longer go offscreen
-- Fix `⌥+←` and `⌥+→` interfering with text editing on macOS
+- Fixed `⌥+←` and `⌥+→` interfering with text editing on macOS
 - `⌘+←` and `⌘+→` now handle history navigation instead of `⌥+←` and `⌥+→` on macOS to follow conventions
+- Font selectors are now localized
 
 ## 🛠️ Technical changes (definitely read if you have your own fork)
 - Dropped `@tanstack/react-query` in favor of Redux + RTK Query

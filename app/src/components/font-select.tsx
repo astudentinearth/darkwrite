@@ -7,6 +7,7 @@ import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { getOperatingSystem } from "@/lib/platform";
 import { OS } from "@/common/os";
+import { useTranslation } from "react-i18next";
 
 export default function FontSelect(props: {
   value?: string;
@@ -17,6 +18,7 @@ export default function FontSelect(props: {
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null!);
+  const {t} = useTranslation("translation", {keyPrefix: "ui.font"});
   const items = useMemo(
     () =>
       fonts
@@ -44,9 +46,9 @@ export default function FontSelect(props: {
   return getOperatingSystem() == OS.MACOS ? (
     <Input
       defaultValue={props.value}
-      placeholder="Type a font name"
+      placeholder={t("typeFontName")}
       ref={inputRef}
-      className={cn("w-fit h-fit py-medium pl-large", props.className)}
+      className={cn("w-fit h-fit py-medium pl-large border-border/50 top-highlight", props.className)}
       onKeyDown={(e) => {
         if (e.key === "Enter") saveOnTextInput(inputRef.current.value);
       }}
@@ -59,7 +61,7 @@ export default function FontSelect(props: {
           variant={"outline"}
           className={cn("w-fit h-fit", props.className)}
         >
-          {props.value?.replaceAll('"', "") ?? "Choose font"}{" "}
+          {props.value?.replaceAll('"', "") ?? t("placeholder")}{" "}
           <ChevronDown size={16} />
         </Button>
       </PopoverTrigger>
@@ -68,7 +70,7 @@ export default function FontSelect(props: {
         className="overflow-hidden p-1 w-80 flex flex-col gap-2"
       >
         <Input
-          placeholder="Search fonts"
+          placeholder={t("search")}
           value={query}
           onChange={(e) => setQuery(e.target.value)}
         />

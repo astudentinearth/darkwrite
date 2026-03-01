@@ -20,6 +20,7 @@ import { DarkwriteEditorContext } from "../context";
 import { cn, getNoteIcon } from "@/lib/utils";
 import { useNoteById } from "@/features/note/hooks/use-note-by-id";
 import { useSearch } from "@/features/note/hooks/use-search";
+import { DRAG_DATA_TYPE, extractNoteIdFromDragData, parseDragData } from "@/features/dnd/datatransfer";
 
 const LinkResult = memo(function ({
   id,
@@ -153,9 +154,10 @@ export const LinkToPage = Node.create({
           handleDrop(view, event) {
             if (
               event.dataTransfer &&
-              event.dataTransfer.types.includes("note_id")
+              event.dataTransfer.types.includes(DRAG_DATA_TYPE)
             ) {
-              const id = event.dataTransfer.getData("note_id");
+              const id = extractNoteIdFromDragData(event);
+              if(!id) return false;
               const nodeType = view.state.schema.nodes.linkToPage;
               const pos = view.posAtCoords({
                 left: event.clientX,
