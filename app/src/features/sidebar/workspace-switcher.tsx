@@ -5,24 +5,19 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import WorkspaceIcon from "@/components/workspace-icon";
-import { useWorkspaceManager } from "@/features/workspaces/hooks/use-workspace-manager";
-import { useCurrentWorkspace, useWorkspacesQuery } from "@/query/use-workspace";
+import NewWorkspaceDialog from "@/features/workspaces/components/new-workspace-dialog";
 import { ChevronDown, Cloud, HardDrive, Plus } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import NewWorkspaceDialog from "@/features/workspaces/components/new-workspace-dialog";
+import { useWorkspaceSwitcher } from "../workspaces/hooks/use-workspace-switcher";
 import { WorkspaceItem } from "./workspace-item";
 
 export function WorkspaceSwitcher() {
-  const workspace = useCurrentWorkspace();
-  const workspacesQuery = useWorkspacesQuery();
-  const workspaces = workspacesQuery.data;
-  const manager = useWorkspaceManager();
+  const { switchWorkspace, currentWorkspace, localWorkspaces } =
+    useWorkspaceSwitcher();
+
   const [dialogOpen, setDialogOpen] = useState(false);
   const [open, setOpen] = useState(false);
-  const localWorkspaces = workspaces?.filter(
-    (w) => w.config.syncMode === "offline" && w.id !== workspace?.id,
-  );
   const { t } = useTranslation("translation", {
     keyPrefix: "sidebar.workspace",
   });
@@ -30,14 +25,14 @@ export function WorkspaceSwitcher() {
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <div className="flex items-center gap-1 text-muted-foreground hover:text-foreground max-w-fit overflow-hidden text-ellipsis whitespace-nowrap opacity-80 p-1 hover:bg-secondary/50 hover:opacity-100 rounded-[8px] select-none transition-[background,opacity] duration-75">
-          {workspace && (
+          {currentWorkspace && (
             <>
               <WorkspaceIcon
                 className="size-6 rounded-md"
-                workspace={workspace}
+                workspace={currentWorkspace}
               />
               <span className="ml-1 text-ellipsis text-sm overflow-hidden whitespace-nowrap">
-                {workspace.name}
+                {currentWorkspace.name}
               </span>
               <ChevronDown className="shrink-0" size={18} />
             </>
@@ -46,22 +41,22 @@ export function WorkspaceSwitcher() {
       </PopoverTrigger>
       <PopoverContent className="ml-2 p-1 flex top-highlight">
         <div className="w-full flex flex-col gap-2">
-          {workspace && (
+          {currentWorkspace && (
             <div className="p-1 flex flex-col gap-2">
               <div className="flex gap-3 items-center">
                 <WorkspaceIcon
                   className="w-10 h-10 rounded-md text-xl"
-                  workspace={workspace}
+                  workspace={currentWorkspace}
                 ></WorkspaceIcon>
                 <div>
-                  <span>{workspace.name}</span>
+                  <span>{currentWorkspace.name}</span>
                   <span className="flex gap-2 items-center text-sm text-popover-foreground/80">
-                    {workspace.config.syncMode === "offline" ? (
+                    {currentWorkspace.config.syncMode === "offline" ? (
                       <HardDrive size={18}></HardDrive>
                     ) : (
                       <Cloud size={18}></Cloud>
                     )}
-                    {t(workspace.config.syncMode)}
+                    {t(currentWorkspace.config.syncMode)}
                   </span>
                 </div>
               </div>
@@ -75,13 +70,13 @@ export function WorkspaceSwitcher() {
                 {t("offlineHeading")}
               </span>
               {localWorkspaces
-                ?.filter((w) => w.id !== workspace?.id)
+                ?.filter((w) => w.id !== currentWorkspace?.id)
                 .map((w) => (
                   <WorkspaceItem
                     workspace={w}
-                    active={w.id === workspace?.id}
+                    active={w.id === currentWorkspace?.id}
                     onClick={() => {
-                      manager.switchWorkspace(w.id);
+                      switchWorkspace(w.id);
                       setOpen(false);
                     }}
                   />

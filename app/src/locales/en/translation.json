@@ -13,6 +13,7 @@
       "offline": "On your device",
       "cloud": "In the cloud",
       "newWorkspace": "Create new workspace",
+      "newWorkspaceError": "Failed to create workspace",
       "offlineHeading": "Workspaces on your device",
       "cloudHeading": "Workspaces in the cloud"
     },

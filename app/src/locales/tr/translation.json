@@ -13,6 +13,7 @@
       "offline": "Cihazınızda",
       "cloud": "Bulutta",
       "newWorkspace": "Çalışma alanı oluştur",
+      "newWorkspaceError": "Çalışma alanı oluşturulamadı.",
       "offlineHeading": "Cihazınızdaki çalışma alanları",
       "cloudHeading": "Buluttaki çalışma alanları"
     },

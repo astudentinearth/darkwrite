@@ -11,6 +11,8 @@ import { themeSlice } from "../themes/store/theme-slice";
 import { editorApi } from "../editor/store/editor-api";
 import editorMiddleware from "../editor/store/editor-middleware";
 import { updateApi } from "../update/store/update-api";
+import { workspaceSlice } from "../workspaces/store/workspace-slice";
+import { workspaceApi } from "../workspaces/store/workspace-api";
 
 export const store = configureStore({
   reducer: {
@@ -22,13 +24,20 @@ export const store = configureStore({
     [editorApi.reducerPath]: editorApi.reducer,
     [themeSlice.name]: themeSlice.reducer,
     [updateApi.reducerPath]: updateApi.reducer,
+    [workspaceSlice.name]: workspaceSlice.reducer,
+    [workspaceApi.reducerPath]: workspaceApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
       .prepend(sessionListenerMiddleware.middleware)
       .prepend(settingsPersistenceMiddleware.middleware)
       .prepend(editorMiddleware.middleware)
-      .concat(notesApi.middleware, editorApi.middleware, updateApi.middleware),
+      .concat(
+        notesApi.middleware,
+        editorApi.middleware,
+        updateApi.middleware,
+        workspaceApi.middleware,
+      ),
   preloadedState: {
     [appSessionSlice.name]: loadSessionState() || { workspaceId: null },
   },

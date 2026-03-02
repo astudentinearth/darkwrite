@@ -9,22 +9,30 @@ import {
   Label,
 } from "@/components/ui";
 import { ReactNode, useState } from "react";
-import useCreateWorkspace from "../hooks/use-create-workspace";
 import { getDefaultWorkspaceConfiguration } from "@/lib/workspace-config";
 import { useWorkspaceManager } from "@/features/workspaces/hooks/use-workspace-manager";
+import { useCreateWorkspaceMutation } from "../store/workspace-api";
+import { toast } from "sonner";
+import { t } from "i18next";
 
 export default function NewWorkspaceDialog(
   props: ControlledDialogProps & { children: ReactNode },
 ) {
   const [name, setName] = useState("");
-  const createMutation = useCreateWorkspace();
+  const [create, { isLoading }] = useCreateWorkspaceMutation();
   const manager = useWorkspaceManager();
   const handleCreate = async () => {
-    const workspace = await createMutation.mutateAsync({
+    const workspace = await create({
       name,
       config: getDefaultWorkspaceConfiguration(),
     });
-    manager.switchWorkspace(workspace.workspace.id);
+    if (!workspace.data) {
+      toast.error(
+        t("sidebar.workspace.newWorkspaceError") + ": " + workspace.error,
+      );
+      return;
+    }
+    manager.switchWorkspace(workspace.data.id);
     setName("");
     props.onOpenChange(false);
   };
@@ -46,7 +54,7 @@ export default function NewWorkspaceDialog(
           <Button
             onClick={handleCreate}
             className="transition-opacity duration-75"
-            disabled={name.trim().length < 1 || createMutation.isPending}
+            disabled={name.trim().length < 1 || isLoading}
           >
             Create workspace
           </Button>

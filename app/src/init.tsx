@@ -4,6 +4,7 @@ import { useLocalStore } from "./context/local-state";
 import { settingsSlice } from "./features/settings/store/settings-slice";
 import { store } from "./features/store/redux";
 import { initializeFonts, initializeThemes } from "./features/themes/init";
+import { fetchWorkspaces } from "./features/workspaces/store/workspace-actions";
 
 export class InitialUserSettings {
   static settings: DarkwriteUserSettings;
@@ -11,7 +12,7 @@ export class InitialUserSettings {
 
 export async function correctWorkspaceState() {
   const state = store.getState().session;
-  const { workspaces } = await DarkwriteAPIClient.workspace.getAll();
+  const workspaces = await fetchWorkspaces();
 
   if (
     !state.workspaceId ||

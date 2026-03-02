@@ -1,7 +1,6 @@
 import { WorkspaceDTO } from "@/common/dto/response/workspace.response";
 import { Button, Input, Label, Switch } from "@/components/ui";
 import WorkspaceIcon from "@/components/workspace-icon";
-import { useCurrentWorkspace, useUpdateWorkspace } from "@/query/use-workspace";
 import {
   Archive,
   Cloud,
@@ -19,17 +18,19 @@ import useBackup from "@/features/backup/hooks/use-backup";
 import { RestoreDataDialog } from "./restore-dialog";
 import { useSettings } from "./store/settings-selectors";
 import { updateSettings } from "./store/settings-actions";
+import { useCurrentWorkspace } from "../workspaces/hooks/use-workspace";
+import { useUpdateWorkspaceMutation } from "../workspaces/store/workspace-api";
 
 export default function WorkspaceSettings() {
   const currentWorkspace = useCurrentWorkspace();
   const [editDialogOpen, setEditDialogOpen] = useState(false);
-  const update = useUpdateWorkspace();
+  const [update] = useUpdateWorkspaceMutation();
   const { t: tW } = useTranslation("translation", {
     keyPrefix: "sidebar.workspace",
   });
   const { t, i18n } = useTranslation();
   const save = async (w: WorkspaceDTO) => {
-    update.mutate(w);
+    update(w);
     setEditDialogOpen(false);
   };
   const settings = useSettings();
