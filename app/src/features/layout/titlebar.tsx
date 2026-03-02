@@ -8,7 +8,7 @@ import Toolbar from "./toolbar";
 import TrafficLightsPlaceholder from "./traffic-lights-placeholder";
 import { useWindowControlsOverlay } from "@/hooks/layout/use-window-controls-overlay";
 import { useLocalStore } from "@/context/local-state";
-import { useNoteFromURL } from "@/query/use-note-from-url";
+import { useNoteFromURL } from "@/features/note/hooks/use-note-from-url";
 
 export function Titlebar() {
   const headerRef = useRef<HTMLDivElement>(null);

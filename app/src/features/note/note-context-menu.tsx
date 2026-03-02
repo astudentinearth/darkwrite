@@ -5,7 +5,7 @@ import {
   ContextMenuSeparator,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
-import { useNoteContextMenu } from "@/hooks/use-note-context-menu";
+import { useNoteContextMenu } from "./hooks/use-note-context-menu";
 import {
   Copy,
   FileCode,

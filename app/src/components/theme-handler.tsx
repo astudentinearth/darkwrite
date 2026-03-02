@@ -3,7 +3,7 @@ import { DarkwriteDefault } from "@/common/themes";
 import { CatppuccinLatte } from "@/common/themes/catppuccin";
 import { useAppearanceSettings } from "@/features/settings/store/settings-selectors";
 import { useThemes } from "@/features/themes/hooks/use-themes";
-import useSystemTheme from "@/hooks/use-system-theme";
+import useSystemTheme from "@/features/themes/hooks/use-system-theme";
 import { applyFonts, applyTheme } from "@/lib/theme-util";
 import { useEffect } from "react";
 

@@ -1,5 +1,5 @@
 import { FontStyle } from "@/common/note-customization";
-import { useNoteFromURL } from "@/query/use-note-from-url";
+import { useNoteFromURL } from "@/features/note/hooks/use-note-from-url";
 import { setEditorCustomizations } from "./store/editor-actions";
 
 export default function useStylePopover() {

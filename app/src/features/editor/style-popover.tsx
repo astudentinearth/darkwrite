@@ -9,7 +9,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
-import { useNoteFromURL } from "@/query/use-note-from-url";
+import { useNoteFromURL } from "@/features/note/hooks/use-note-from-url";
 import { RotateCcw } from "lucide-react";
 import { ReactNode } from "react";
 import { useTranslation } from "react-i18next";

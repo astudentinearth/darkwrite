@@ -1,5 +1,5 @@
 import { NoteExporter } from "@/features/export/note-exporter";
-import useNoteImport from "@/hooks/use-note-import";
+import useNoteImport from "@/features/note/hooks/use-note-import";
 import { useNoteById } from "@/features/note/hooks/use-note-by-id";
 import {
   moveToTrash,

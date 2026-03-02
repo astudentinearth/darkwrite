@@ -5,7 +5,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { getNoteIcon } from "@/lib/utils";
-import { useNoteFromURL } from "@/query/use-note-from-url";
+import { useNoteFromURL } from "@/features/note/hooks/use-note-from-url";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { navigateToNote } from "../navigation/navigator";

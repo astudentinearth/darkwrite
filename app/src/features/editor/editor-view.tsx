@@ -4,7 +4,7 @@ import {
   useEditorOptions,
   useEditorView,
 } from "@/hooks/editor/use-editor-options";
-import { useNoteFromURL } from "@/query/use-note-from-url";
+import { useNoteFromURL } from "@/features/note/hooks/use-note-from-url";
 import { use } from "react";
 import DarkwriteEditor from ".";
 import { navigateToNote } from "../navigation/navigator";

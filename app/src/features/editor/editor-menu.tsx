@@ -12,7 +12,7 @@ import {
 } from "@/components/ui";
 import { useLocalStore } from "@/context/local-state";
 import { cn } from "@/lib/utils";
-import { useNoteFromURL } from "@/query/use-note-from-url";
+import { useNoteFromURL } from "@/features/note/hooks/use-note-from-url";
 import {
   Download,
   FileCode,

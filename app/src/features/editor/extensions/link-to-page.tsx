@@ -20,7 +20,10 @@ import { DarkwriteEditorContext } from "../context";
 import { cn, getNoteIcon } from "@/lib/utils";
 import { useNoteById } from "@/features/note/hooks/use-note-by-id";
 import { useSearch } from "@/features/note/hooks/use-search";
-import { DRAG_DATA_TYPE, extractNoteIdFromDragData, parseDragData } from "@/features/dnd/datatransfer";
+import {
+  DRAG_DATA_TYPE,
+  extractNoteIdFromDragData,
+} from "@/features/dnd/datatransfer";
 
 const LinkResult = memo(function ({
   id,
@@ -70,7 +73,10 @@ const LinkComponent = ({ node, updateAttributes }: any) => {
               if (note) navToNote?.call(undefined, id);
               else setOpen(true);
             }}
-            className={ cn ( "link-to-page hover:bg-secondary/75 cursor-pointer select-none rounded-md p-1 py-0.5 transition-colors flex items-center gap-2 my-1 text-(--dw-editor-foreground)" , open && "bg-primary/20") }
+            className={cn(
+              "link-to-page hover:bg-secondary/75 cursor-pointer select-none rounded-md p-1 py-0.5 transition-colors flex items-center gap-2 my-1 text-(--dw-editor-foreground)",
+              open && "bg-primary/20",
+            )}
           >
             {!note ? (
               <File size={18} className="opacity-75" />
@@ -157,7 +163,7 @@ export const LinkToPage = Node.create({
               event.dataTransfer.types.includes(DRAG_DATA_TYPE)
             ) {
               const id = extractNoteIdFromDragData(event);
-              if(!id) return false;
+              if (!id) return false;
               const nodeType = view.state.schema.nodes.linkToPage;
               const pos = view.posAtCoords({
                 left: event.clientX,

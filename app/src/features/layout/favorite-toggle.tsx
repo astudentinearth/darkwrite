@@ -1,6 +1,6 @@
 import { HeaderbarButton } from "@/components/headerbar-button";
 import { cn } from "@/lib/utils";
-import { useNoteFromURL } from "@/query/use-note-from-url";
+import { useNoteFromURL } from "@/features/note/hooks/use-note-from-url";
 import { Star } from "lucide-react";
 import { useNoteById } from "../note/hooks/use-note-by-id";
 import { favorite, unfavorite } from "../note/store/note-actions";
