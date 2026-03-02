@@ -5,7 +5,7 @@ export interface WorkspaceDTO {
   owner_id?: string;
   name: string;
   icon_url?: string | null;
-  created_at: Date;
+  created_at: string;
   config: WorkspaceConfig;
 }
 

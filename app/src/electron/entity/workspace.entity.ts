@@ -33,7 +33,7 @@ export class Workspace {
       config,
       id,
       name,
-      created_at,
+      created_at: created_at.toISOString(),
       icon_url,
       owner_id,
     } satisfies WorkspaceDTO;

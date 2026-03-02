@@ -48,9 +48,6 @@ Global state is managed with Redux slices. Do NOT directly subscribe to RTK Quer
 
 src/features/editor contains a rich text editor based on TipTap/ProseMirror.
 
-> [!IMPORTANT]
-> React Query is being deprecated from our codebase as part of a refactor. We are moving to Redux Toolkit with RTK Query. Do not check queries inside @/query/*. Everything inside @/query is deprecated unless otherwise specified.
-
 ## Feature folder structure
 ```
 

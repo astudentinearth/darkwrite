@@ -4,7 +4,7 @@ import { showSearch } from "@/features/search/search-state";
 import { getOperatingSystem } from "@/lib/platform";
 import { useEffect } from "react";
 
-const isMac = getOperatingSystem() == OS.MACOS;
+const isMac = () => getOperatingSystem() == OS.MACOS;
 
 /**
  * Checks if the currently focused element is editable (input, textarea,
@@ -47,7 +47,7 @@ export const useShortcuts = () => {
         showSearch();
       } else if (alt("b")) {
         toggleSidebar();
-      } else if (isMac) {
+      } else if (isMac()) {
         // macOS: Cmd+Arrow for history navigation
         // (Option+Arrow is reserved for word-by-word text navigation)
         // Skip if focus is on an editable element to preserve line start/end
