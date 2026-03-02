@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { useCoverImage } from "@/features/editor/hooks/use-cover-image";
 import { EditorContext } from "@/features/editor/store/editor-context";
-import useMouseOver from "@/hooks/layout/use-mouse-over";
+import useMouseOver from "@/features/ui/hooks/use-mouse-over";
 import { cn } from "@/lib/utils";
 import { use } from "react";
 import { useTranslation } from "react-i18next";

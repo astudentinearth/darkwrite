@@ -5,6 +5,7 @@ import { useLocalStore } from "@/context/local-state";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import _ from "lodash";
 
+/** @deprecated */
 export const useWorkspacesQuery = () => {
   return useQuery({
     queryKey: ["workspace"],
@@ -28,6 +29,7 @@ export const useCurrentWorkspace = () => {
   return workspaces.find((w) => w.id === workspaceId);
 };
 
+/** @deprecated */
 export const useUpdateWorkspace = () => {
   const qc = useQueryClient();
   const mutation = useMutation({

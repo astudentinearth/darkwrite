@@ -3,7 +3,7 @@ import { Button } from "@/components/ui";
 import { AddRemoveIconButton } from "@/features/editor/components/add-remove-icon";
 import useEditorCover from "@/features/editor/hooks/use-editor-cover";
 import { EditorContext } from "@/features/editor/store/editor-context";
-import useMouseOver from "@/hooks/layout/use-mouse-over";
+import useMouseOver from "@/features/ui/hooks/use-mouse-over";
 import { cn, fromUnicode } from "@/lib/utils";
 import { Image } from "lucide-react";
 import { use } from "react";

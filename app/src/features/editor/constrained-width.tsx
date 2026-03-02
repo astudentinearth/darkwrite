@@ -1,5 +1,5 @@
 import { useEditorStore } from "@/context/editor-store";
-import { useCenteredLayout } from "@/hooks/layout/use-centered-layout";
+import { useCenteredLayout } from "@/features/layout/hooks/use-centered-layout";
 import { cn } from "@/lib/utils";
 import React, { useEffect } from "react";
 

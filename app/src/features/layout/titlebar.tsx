@@ -6,7 +6,7 @@ import { HistoryNavigation } from "./navigation";
 import PageTitle from "./page-title";
 import Toolbar from "./toolbar";
 import TrafficLightsPlaceholder from "./traffic-lights-placeholder";
-import { useWindowControlsOverlay } from "@/hooks/layout/use-window-controls-overlay";
+import { useWindowControlsOverlay } from "@/features/layout/hooks/use-window-controls-overlay";
 import { useLocalStore } from "@/context/local-state";
 import { useNoteFromURL } from "@/features/note/hooks/use-note-from-url";
 

@@ -39,8 +39,7 @@
     "build:linux": "pnpm build:pre && electron-builder --linux",
     "rebuild": "electron-rebuild -f -w better-sqlite3",
     "rebuild:restore": "pnpm rebuild better-sqlite3",
-    "typecheck": "tsc --noEmit --project tsconfig.json",
-    "prepare": "husky"
+    "typecheck": "tsc --noEmit --project tsconfig.json"
   },
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.2",

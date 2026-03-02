@@ -1,5 +1,5 @@
 import { ImageExtensionConfig } from "@/features/editor/extensions/image/image-config";
-import { useCenteredLayout } from "../layout/use-centered-layout";
+import { useCenteredLayout } from "@/features/layout/hooks/use-centered-layout";
 import { DarkwriteAPIClient } from "@/api/api-client";
 import { CSSProperties, use, useCallback, useMemo } from "react";
 import { FONT_VARS, FontStyle } from "@/common/note-customization";
