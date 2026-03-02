@@ -16,7 +16,7 @@ function AboutButton(props: { children: React.ReactNode; href: string }) {
     <a
       href={props.href}
       target="_blank"
-      className="flex gap-2 items-center rounded-lg h-fit px-large text-foreground py-medium bg-view-2 hover:bg-view-2/80 w-full"
+      className="flex gap-2 items-center top-highlight rounded-lg h-fit px-large text-foreground py-medium bg-view-2 hover:bg-view-2/80 w-full"
     >
       {props.children}
     </a>
@@ -31,7 +31,7 @@ export default function About() {
   const { data: updateData, refetch, isFetching } = useUpdate();
   const { t } = useTranslation();
   const checkUpdate = () => {
-    refetch();
+    refetch(undefined, true);
   };
   return (
     <div className="w-full h-full flex flex-col justify-center items-center pt-3 gap-1">
@@ -46,7 +46,7 @@ export default function About() {
       </span>
       <div className="gap-2 text-center grid w-120 grid-cols-[1fr_1fr] items-center mt-4">
         {updateData ? (
-          <div className="bg-view-2 col-span-2 rounded-lg px-large py-medium flex justify-between items-center">
+          <div className="bg-view-2 top-highlight col-span-2 rounded-lg px-large py-medium flex justify-between items-center">
             {!updateData.updateAvailable ? (
               t("toast.update.upToDate")
             ) : (
@@ -67,7 +67,7 @@ export default function About() {
           </div>
         ) : (
           <a
-            className="cursor-pointer col-span-2 px-large py-medium bg-view-2 rounded-lg hover:underline flex items-center gap-2 justify-center"
+            className="cursor-pointer col-span-2 px-large py-medium bg-view-2 top-highlight rounded-lg hover:underline flex items-center gap-2 justify-center"
             onClick={checkUpdate}
           >
             <RotateCw className={cn(isFetching && "animate-spin")} size={18} />

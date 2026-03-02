@@ -10,6 +10,7 @@ import { editorSlice } from "../editor/store/editor-slice";
 import { themeSlice } from "../themes/store/theme-slice";
 import { editorApi } from "../editor/store/editor-api";
 import editorMiddleware from "../editor/store/editor-middleware";
+import { updateApi } from "../update/store/update-api";
 
 export const store = configureStore({
   reducer: {
@@ -20,13 +21,14 @@ export const store = configureStore({
     [editorSlice.name]: editorSlice.reducer,
     [editorApi.reducerPath]: editorApi.reducer,
     [themeSlice.name]: themeSlice.reducer,
+    [updateApi.reducerPath]: updateApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
       .prepend(sessionListenerMiddleware.middleware)
       .prepend(settingsPersistenceMiddleware.middleware)
       .prepend(editorMiddleware.middleware)
-      .concat(notesApi.middleware, editorApi.middleware),
+      .concat(notesApi.middleware, editorApi.middleware, updateApi.middleware),
   preloadedState: {
     [appSessionSlice.name]: loadSessionState() || { workspaceId: null },
   },

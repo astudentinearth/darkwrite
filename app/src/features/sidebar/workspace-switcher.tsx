@@ -42,7 +42,7 @@ export function WorkspaceSwitcher() {
           )}
         </div>
       </PopoverTrigger>
-      <PopoverContent className="ml-2 p-1 flex">
+      <PopoverContent className="ml-2 p-1 flex top-highlight">
         <div className="w-full flex flex-col gap-2">
           {workspace && (
             <div className="p-1 flex flex-col gap-2">

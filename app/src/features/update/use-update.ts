@@ -1,28 +1,19 @@
-import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import showUpdateToast from "../notifications/update";
+import { useLazyCheckUpdateQuery } from "./store/update-api";
 
 export const useUpdate = () => {
-  const [notified, setNotified] = useState(true);
-  const updateQuery = useQuery({
-    queryKey: ["update"],
-    queryFn: async () => {
-      if (!window.isElectron) return undefined;
-      const result = await window.api.checkUpdate();
-      setNotified(false);
-      return result;
-    },
-    enabled: false,
-  });
+  const [notified, setNotified] = useState(false);
+  const [checkUpdate, {isFetching, isLoading, isError, data} ] = useLazyCheckUpdateQuery();
 
   useEffect(() => {
-    if (updateQuery.isFetching) return;
+    if (isFetching) return;
     if (notified) return;
-    if (!updateQuery.data) return;
-    if (!updateQuery.data.updateAvailable) return;
-    showUpdateToast(updateQuery.data.latest, updateQuery.data.release_page);
+    if (!data) return;
+    if (!data.updateAvailable) return;
+    showUpdateToast(data.latest, data.release_page);
     setNotified(true);
-  }, [updateQuery.data, notified, updateQuery.isFetching]);
+  }, [data, notified, isFetching]);
 
-  return updateQuery;
+  return {data, isError, isLoading, isFetching, refetch: checkUpdate};
 };

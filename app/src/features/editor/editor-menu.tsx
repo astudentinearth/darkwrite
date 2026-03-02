@@ -36,7 +36,7 @@ function EditorMenuContent({ noteId }: { noteId: string }) {
   const { t } = useTranslation();
 
   return (
-    <DropdownMenuContent className="mr-2">
+    <DropdownMenuContent className="mr-2 top-highlight">
       <DropdownMenuSwitchItem
         checked={spellcheck}
         onCheckedChange={setSpellcheck}
