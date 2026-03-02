@@ -98,7 +98,7 @@ export const SlashCommandView = forwardRef(function (
         }}
         filter={(val, search, keywords) => {
           const extended = val + " " + keywords?.join(" ");
-          if (extended.includes(search)) return 1;
+          if (extended.toLocaleLowerCase().includes(search)) return 1;
           return 0;
         }}
       >

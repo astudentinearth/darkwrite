@@ -21,6 +21,7 @@
 - `⌘+←` and `⌘+→` now handle history navigation instead of `⌥+←` and `⌥+→` on macOS to follow conventions
 - Font selectors are now localized
 - Undo and redo actions no longer close the menu on click, and get greyed out at both ends of history
+- Fixed Turkish search not working in /command
 
 ## 🛠️ Technical changes (definitely read if you have your own fork)
 

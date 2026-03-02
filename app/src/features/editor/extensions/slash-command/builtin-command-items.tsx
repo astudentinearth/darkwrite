@@ -253,6 +253,5 @@ export const useSlashCommand = (
     ],
     [imageUploadConfig, t],
   );
-
   return { items };
 };
