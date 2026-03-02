@@ -9,9 +9,9 @@ import {
   Label,
 } from "@/components/ui";
 import { ReactNode, useState } from "react";
-import useCreateWorkspace from "./use-create-workspace";
+import useCreateWorkspace from "../hooks/use-create-workspace";
 import { getDefaultWorkspaceConfiguration } from "@/lib/workspace-config";
-import { useWorkspaceManager } from "@/hooks/use-workspace-manager";
+import { useWorkspaceManager } from "@/features/workspaces/hooks/use-workspace-manager";
 
 export default function NewWorkspaceDialog(
   props: ControlledDialogProps & { children: ReactNode },

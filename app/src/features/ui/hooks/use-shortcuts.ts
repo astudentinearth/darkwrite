@@ -1,8 +1,10 @@
+import { OS } from "@/common/os";
 import { toggleSidebar } from "@/context/local-state";
 import { showSearch } from "@/features/search/search-state";
+import { getOperatingSystem } from "@/lib/platform";
 import { useEffect } from "react";
 
-const isMac = navigator.platform.toUpperCase().indexOf("MAC") >= 0;
+const isMac = getOperatingSystem() == OS.MACOS;
 
 /**
  * Checks if the currently focused element is editable (input, textarea,

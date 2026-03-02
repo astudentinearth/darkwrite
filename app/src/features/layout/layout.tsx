@@ -2,7 +2,7 @@ import ThemeHandler from "@/components/theme-handler";
 import { Toaster } from "@/components/ui";
 import { useLocalStore } from "@/context/local-state";
 import { Sidebar } from "@/features/sidebar";
-import { useShortcuts } from "@/hooks/use-shortcuts";
+import { useShortcuts } from "@/features/ui/hooks/use-shortcuts";
 import { cn } from "@/lib/utils";
 import { Outlet } from "react-router-dom";
 import NavigationHelper from "../navigation/navigation-helper";

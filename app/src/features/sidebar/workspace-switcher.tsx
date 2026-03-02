@@ -1,17 +1,17 @@
+import { Button } from "@/components/ui/button";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import WorkspaceIcon from "@/components/workspace-icon";
+import { useWorkspaceManager } from "@/features/workspaces/hooks/use-workspace-manager";
 import { useCurrentWorkspace, useWorkspacesQuery } from "@/query/use-workspace";
 import { ChevronDown, Cloud, HardDrive, Plus } from "lucide-react";
-import { WorkspaceItem } from "./workspace-item";
-import { Button } from "@/components/ui/button";
-import { useT } from "@/hooks/useT";
-import { useWorkspaceManager } from "@/hooks/use-workspace-manager";
-import WorkspaceIcon from "@/components/workspace-icon";
-import NewWorkspaceDialog from "../workspaces/new-workspace-dialog";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
+import NewWorkspaceDialog from "@/features/workspaces/components/new-workspace-dialog";
+import { WorkspaceItem } from "./workspace-item";
 
 export function WorkspaceSwitcher() {
   const workspace = useCurrentWorkspace();
@@ -23,7 +23,9 @@ export function WorkspaceSwitcher() {
   const localWorkspaces = workspaces?.filter(
     (w) => w.config.syncMode === "offline" && w.id !== workspace?.id,
   );
-  const t = useT("sidebar.workspace");
+  const { t } = useTranslation("translation", {
+    keyPrefix: "sidebar.workspace",
+  });
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>

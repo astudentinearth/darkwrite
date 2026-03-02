@@ -16,12 +16,14 @@ export const useWorkspacesQuery = () => {
   });
 };
 
+/** @deprecated */
 export const useWorkspaceById = (id: string) => {
   const workspaces = useWorkspacesQuery().data;
   if (workspaces == null) return undefined;
   return workspaces.find((w) => w.id === id);
 };
 
+/** @deprecated */
 export const useCurrentWorkspace = () => {
   const workspaceId = useLocalStore((s) => s.workspaceId);
   const workspaces = useWorkspacesQuery().data;
