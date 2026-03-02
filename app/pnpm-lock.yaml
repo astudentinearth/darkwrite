@@ -67,15 +67,6 @@ importers:
       "@tailwindcss/typography":
         specifier: ^0.5.19
         version: 0.5.19(tailwindcss@4.2.1)
-      "@tanstack/react-query":
-        specifier: ^5.90.2
-        version: 5.90.21(react@19.2.4)
-      "@tanstack/react-query-devtools":
-        specifier: ^5.90.2
-        version: 5.91.3(@tanstack/react-query@5.90.21(react@19.2.4))(react@19.2.4)
-      "@tanstack/react-virtual":
-        specifier: ^3.13.12
-        version: 3.13.19(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       "@tiptap/core":
         specifier: ^3.13.0
         version: 3.20.0(@tiptap/pm@3.20.0)
@@ -3312,50 +3303,6 @@ packages:
       }
     peerDependencies:
       vite: ^5.2.0 || ^6 || ^7
-
-  "@tanstack/query-core@5.90.20":
-    resolution:
-      {
-        integrity: sha512-OMD2HLpNouXEfZJWcKeVKUgQ5n+n3A2JFmBaScpNDUqSrQSjiveC7dKMe53uJUg1nDG16ttFPz2xfilz6i2uVg==,
-      }
-
-  "@tanstack/query-devtools@5.93.0":
-    resolution:
-      {
-        integrity: sha512-+kpsx1NQnOFTZsw6HAFCW3HkKg0+2cepGtAWXjiiSOJJ1CtQpt72EE2nyZb+AjAbLRPoeRmPJ8MtQd8r8gsPdg==,
-      }
-
-  "@tanstack/react-query-devtools@5.91.3":
-    resolution:
-      {
-        integrity: sha512-nlahjMtd/J1h7IzOOfqeyDh5LNfG0eULwlltPEonYy0QL+nqrBB+nyzJfULV+moL7sZyxc2sHdNJki+vLA9BSA==,
-      }
-    peerDependencies:
-      "@tanstack/react-query": ^5.90.20
-      react: ^18 || ^19
-
-  "@tanstack/react-query@5.90.21":
-    resolution:
-      {
-        integrity: sha512-0Lu6y5t+tvlTJMTO7oh5NSpJfpg/5D41LlThfepTixPYkJ0sE2Jj0m0f6yYqujBwIXlId87e234+MxG3D3g7kg==,
-      }
-    peerDependencies:
-      react: ^18 || ^19
-
-  "@tanstack/react-virtual@3.13.19":
-    resolution:
-      {
-        integrity: sha512-KzwmU1IbE0IvCZSm6OXkS+kRdrgW2c2P3Ho3NC+zZXWK6oObv/L+lcV/2VuJ+snVESRlMJ+w/fg4WXI/JzoNGQ==,
-      }
-    peerDependencies:
-      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
-      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
-
-  "@tanstack/virtual-core@3.13.19":
-    resolution:
-      {
-        integrity: sha512-/BMP7kNhzKOd7wnDeB8NrIRNLwkf5AhCYCvtfZV2GXWbBieFm/el0n6LOAXlTi6ZwHICSNnQcIxRCWHrLzDY+g==,
-      }
 
   "@testing-library/dom@10.4.1":
     resolution:
@@ -12528,29 +12475,6 @@ snapshots:
       "@tailwindcss/oxide": 4.2.1
       tailwindcss: 4.2.1
       vite: 7.3.1(@types/node@20.19.35)(jiti@2.6.1)(lightningcss@1.31.1)(yaml@2.8.2)
-
-  "@tanstack/query-core@5.90.20": {}
-
-  "@tanstack/query-devtools@5.93.0": {}
-
-  "@tanstack/react-query-devtools@5.91.3(@tanstack/react-query@5.90.21(react@19.2.4))(react@19.2.4)":
-    dependencies:
-      "@tanstack/query-devtools": 5.93.0
-      "@tanstack/react-query": 5.90.21(react@19.2.4)
-      react: 19.2.4
-
-  "@tanstack/react-query@5.90.21(react@19.2.4)":
-    dependencies:
-      "@tanstack/query-core": 5.90.20
-      react: 19.2.4
-
-  "@tanstack/react-virtual@3.13.19(react-dom@19.2.4(react@19.2.4))(react@19.2.4)":
-    dependencies:
-      "@tanstack/virtual-core": 3.13.19
-      react: 19.2.4
-      react-dom: 19.2.4(react@19.2.4)
-
-  "@tanstack/virtual-core@3.13.19": {}
 
   "@testing-library/dom@10.4.1":
     dependencies:
