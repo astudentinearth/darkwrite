@@ -220,7 +220,8 @@
       "removeCover": "Kapak resmini kaldırın",
       "addIcon": "Simge ekle",
       "removeIcon": "Simgeyi kaldır",
-      "addCover": "Kapak resmi ekle"
+      "addCover": "Kapak resmi ekle",
+      "trashWarning": "Bu sayfa şu anda çöp kutusunda."
     }
   },
   "search": {
