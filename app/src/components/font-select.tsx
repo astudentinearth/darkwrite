@@ -18,7 +18,7 @@ export default function FontSelect(props: {
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null!);
-  const {t} = useTranslation("translation", {keyPrefix: "ui.font"});
+  const { t } = useTranslation("translation", { keyPrefix: "ui.font" });
   const items = useMemo(
     () =>
       fonts
@@ -48,7 +48,10 @@ export default function FontSelect(props: {
       defaultValue={props.value}
       placeholder={t("typeFontName")}
       ref={inputRef}
-      className={cn("w-fit h-fit py-medium pl-large border-border/50 top-highlight", props.className)}
+      className={cn(
+        "w-fit h-fit py-medium pl-large border-border/50 top-highlight",
+        props.className,
+      )}
       onKeyDown={(e) => {
         if (e.key === "Enter") saveOnTextInput(inputRef.current.value);
       }}

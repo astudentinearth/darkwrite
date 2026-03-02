@@ -14,10 +14,7 @@ const embedService = new EmbedService();
 // adapter of their own to build multipart requests.
 export class ElectronEmbedAPI {
   static async createFromLocalFile(filePath: string, workspaceId: string) {
-    const embed = await embedService.createFromFilePath(
-      filePath,
-      workspaceId,
-    );
+    const embed = await embedService.createFromFilePath(filePath, workspaceId);
     const url = await embedService.getEmbedUrl(embed.id);
     return { embed: embed.mapToDTO(url) } satisfies EmbedResponseDTO;
   }
@@ -72,7 +69,7 @@ export class ElectronEmbedAPI {
 
     const embed = await embedService.getEmbedById(id);
     if (!embed) throw new NotFoundError("Embed", id);
-    
+
     const arrayBuffer = await response.arrayBuffer();
     const result = await dialog.showSaveDialog({
       filters: [{ name: "All Files", extensions: ["*"] }],

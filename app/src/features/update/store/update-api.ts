@@ -4,9 +4,10 @@ export const UPDATE_TAG_TYPE = "update";
 
 export async function _updateQueryFn() {
   try {
-    if (!window.isElectron) throw new Error("Not running in Electron environment");
+    if (!window.isElectron)
+      throw new Error("Not running in Electron environment");
     const result = await window.api.checkUpdate();
-    if(!result) throw new Error("Update check failed");
+    if (!result) throw new Error("Update check failed");
     return { data: result };
   } catch (e) {
     return { error: e as Error };
@@ -19,7 +20,10 @@ export const updateApi = createApi({
   tagTypes: [UPDATE_TAG_TYPE],
   keepUnusedDataFor: 60 * 15,
   endpoints: (builder) => ({
-    checkUpdate: builder.query<Awaited<ReturnType<typeof window.api.checkUpdate>>, void>({
+    checkUpdate: builder.query<
+      Awaited<ReturnType<typeof window.api.checkUpdate>>,
+      void
+    >({
       queryFn: _updateQueryFn,
       providesTags: [UPDATE_TAG_TYPE],
     }),
@@ -27,4 +31,3 @@ export const updateApi = createApi({
 });
 
 export const { useLazyCheckUpdateQuery, useCheckUpdateQuery } = updateApi;
-

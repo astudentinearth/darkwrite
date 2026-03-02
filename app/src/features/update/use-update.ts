@@ -4,7 +4,8 @@ import { useLazyCheckUpdateQuery } from "./store/update-api";
 
 export const useUpdate = () => {
   const [notified, setNotified] = useState(false);
-  const [checkUpdate, {isFetching, isLoading, isError, data} ] = useLazyCheckUpdateQuery();
+  const [checkUpdate, { isFetching, isLoading, isError, data }] =
+    useLazyCheckUpdateQuery();
 
   useEffect(() => {
     if (isFetching) return;
@@ -15,5 +16,5 @@ export const useUpdate = () => {
     setNotified(true);
   }, [data, notified, isFetching]);
 
-  return {data, isError, isLoading, isFetching, refetch: checkUpdate};
+  return { data, isError, isLoading, isFetching, refetch: checkUpdate };
 };

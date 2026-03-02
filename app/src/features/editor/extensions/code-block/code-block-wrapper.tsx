@@ -16,10 +16,9 @@ export default function CodeBlockNodeView(props: NodeViewProps) {
     setCopied(true);
     setTimeout(() => setCopied(false), 1000);
   };
-  const updateLanguage = (language: string) =>
-  {
+  const updateLanguage = (language: string) => {
     props.updateAttributes({ language });
-  }
+  };
   const { t } = useTranslation(undefined, { keyPrefix: "editor.contextmenu" });
   return (
     <NodeViewWrapper>
@@ -36,7 +35,7 @@ export default function CodeBlockNodeView(props: NodeViewProps) {
             onClick={copy}
             className="justify-self-end opacity-0 transition-opacity group-hover:opacity-100 shrink-0 text-xs h-fit p-2 text-foreground/70 hover:text-foreground"
           >
-            { copied ? <Check size={16} /> : <Copy size={16} /> } {t("copy")}
+            {copied ? <Check size={16} /> : <Copy size={16} />} {t("copy")}
           </Button>
         </div>
         <pre spellCheck={false} className={`language-${language}`}>

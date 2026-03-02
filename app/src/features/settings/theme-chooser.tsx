@@ -24,7 +24,12 @@ export function ThemeDropdown(props: {
   const entries = Object.values(themes);
   return (
     <Select value={props.value} onValueChange={props.onValueChange}>
-      <SelectTrigger className={cn(props.className, "max-w-fit dark:bg-secondary/50 bg-secondary border-none top-highlight")}>
+      <SelectTrigger
+        className={cn(
+          props.className,
+          "max-w-fit dark:bg-secondary/50 bg-secondary border-none top-highlight",
+        )}
+      >
         {themes[props.value].name}
       </SelectTrigger>
       <SelectContent>

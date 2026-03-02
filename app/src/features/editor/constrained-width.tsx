@@ -6,7 +6,7 @@ import React, { useEffect } from "react";
 export default function ConstrainedWidth(
   props: { fill?: boolean } & React.ComponentProps<"div">,
 ) {
-  const {className, fill, ...rest} = props;
+  const { className, fill, ...rest } = props;
   const width = useCenteredLayout(fill ? 0 : 960);
   useEffect(() => {
     useEditorStore.setState({ width });

@@ -37,10 +37,7 @@ export function RestoreDataDialog() {
       }}
     >
       <AlertDialogTrigger asChild>
-        <Button
-          variant={"secondary"}
-          className="shrink-0 w-fit"
-        >
+        <Button variant={"secondary"} className="shrink-0 w-fit">
           <span className="flex gap-2 items-center">
             <ArchiveRestore size={18} className="inline" />
             {t("restoreButton")}

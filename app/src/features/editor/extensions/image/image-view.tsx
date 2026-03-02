@@ -26,7 +26,7 @@ export type DarkwriteImageViewProps = NodeViewProps & {
 
 export const DarkwriteImageView = (props: DarkwriteImageViewProps) => {
   const { embedId } = props.node.attrs;
-  const {t} = useTranslation();
+  const { t } = useTranslation();
   const source = useEmbedSource(embedId ?? "");
   const [menuOpen, setMenuOpen] = useState(false);
   return (
@@ -41,14 +41,23 @@ export const DarkwriteImageView = (props: DarkwriteImageViewProps) => {
         ) : (
           <ContextMenu onOpenChange={setMenuOpen}>
             <ContextMenuTrigger asChild>
-              <img draggable={false} data-drag-handle="" className={cn(menuOpen && "opacity-75 outline-2 outline-primary" )} src={source} />
+              <img
+                draggable={false}
+                data-drag-handle=""
+                className={cn(
+                  menuOpen && "opacity-75 outline-2 outline-primary",
+                )}
+                src={source}
+              />
             </ContextMenuTrigger>
             <ContextMenuContent>
               <ContextMenuItem
                 onSelect={() => {
                   DarkwriteAPIClient.embed.download(embedId);
                 }}
-              ><Download size={18} /> {t("editor.contextmenu.downloadImage")}</ContextMenuItem>
+              >
+                <Download size={18} /> {t("editor.contextmenu.downloadImage")}
+              </ContextMenuItem>
             </ContextMenuContent>
           </ContextMenu>
         )}
