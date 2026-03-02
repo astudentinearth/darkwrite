@@ -95,5 +95,16 @@ export function useEditorOptions() {
     [noteId],
   );
 
-  return { imageConfig, indentSize, handleContentChange, onUpdate };
+  const onCreate = useCallback(
+    (editor: Editor) => {
+      const util = EditorUtil(editor);
+      const wordCount = util.countWords();
+      const characterCount = util.countCharacters();
+      setWordCount(noteId, wordCount);
+      setCharacterCount(noteId, characterCount);
+    },
+    [noteId],
+  );
+
+  return { imageConfig, indentSize, handleContentChange, onUpdate, onCreate };
 }

@@ -8,6 +8,7 @@ export interface IDarkwriteEditorContext {
   notes?: NoteDTO[];
   onContentChange: (newContent: EditorContent) => void;
   onUpdate?: (editor: Editor) => void;
+  onCreate?: (editor: Editor) => void;
   onNavigateToNote?: (noteId: string) => void;
   commandItems: SlashCommandItem[];
   codeBlockIndentSize: number;

@@ -16,6 +16,9 @@ export function EditorRoot(props: { content: EditorContent }) {
         context.onContentChange(updatedContent);
         context.onUpdate?.(editor);
       }}
+      onCreate={({ editor }) => {
+        context.onCreate?.(editor);
+      }}
       slotAfter={<Padder />}
       editorProps={{
         attributes: {

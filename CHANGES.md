@@ -1,8 +1,11 @@
 # 1.1.0-beta.1
+
 ## 🌟 Features
+
 - Added ability to download images from right click menu
 
 ## ✨ Improvements and fixes
+
 - Significantly improved sidebar performance (reordering notes is now instant)
 - Fixed a bug that allowed you to create circular references when moving notes
 - Fixed an infinite loop crash when you tried to access a note that was part of a circular reference
@@ -20,17 +23,21 @@
 - Undo and redo actions no longer close the menu on click, and get greyed out at both ends of history
 
 ## 🛠️ Technical changes (definitely read if you have your own fork)
+
 - Dropped `@tanstack/react-query` in favor of Redux + RTK Query
 - ⚠️ Breaking change: orderHint and favoriteOrderHint are no longer part of note updates or creation. Moving and/or reordering notes are now backend-authoritative commands.
 - IPC bridge now correctly handles union types
 
 # 1.0.3-beta.1
+
 ## 🌟 Features
+
 - Added more page sizes to PDF export (it remembers the latest one)
 - New logo
 - Updated about screen
 
 ## ✨ Improvements and fixes
+
 - Fix macOS build crashing on startup
 - Fall back to text inputs for font customization on macOS
 - Fix traffic light position on macOS
@@ -39,6 +46,7 @@
 - Add edit and window menus
 
 ## 🛠️ Technical changes
+
 - Deprecated `appearance.experimental.darwinCustomTitlebarEnabled` settings key
   - It is now directly tied to `appearance.useSystemWindowFrame`, and the titlebar is now merged by default
 - Removed compile time metadata:
@@ -46,18 +54,23 @@
 - Icons are now stored in res/icons, and subprojects refer to them with symbolic links to reduce duplication
 
 # 1.0.2-beta.2
+
 ## ✨ Improvements and fixes
+
 - Fixed image paste
 - Fixed the spellcheck option not actually toggling spellcheck
 
 # 1.0.2-beta.1
+
 ## 🌟 Features
+
 - Added tables: headers, custom background colors and resize included
 - Images are now included in note exports
 - Added PDF export
 - Added icon and title to exported documents
 
 ## ✨ Improvements and fixes
+
 - Added a tooltip on note list items for better accessibility
 - Improved HTML serialization
 - Fixed checkbox styling in exports
@@ -66,20 +79,25 @@
 - Hitting Enter on the title box now moves the cursor into the editor
 - Removed excess margins around blockquotes
 
-
 # 1.0.1-beta.1
+
 ## ✨ Improvements and fixes
+
 - Trashed pages can now be viewed/edited before restoring them
 - "Check for updates" option in the about screen now works
 - I had forgotten to bump the version in 1.0.0-beta.2, which showed unnecessary update notifications. This has been fixed in this release
 
 # 1.0.0-beta.2
+
 ## 🚑 Hotfixes
+
 - Fixed failing migration checks on Windows 11 25H2 due to the removal of WMIC utility.
 - Added additional guards to ensure data is not lost during migrations.
 
 # 1.0.0-beta.1
+
 ## 🌟 Features
+
 - Introducing workspaces
   - Stay organized with a space for each of your projects
   - Workspaces cannot be deleted for now, this will be introduced in the upcoming patches
@@ -100,6 +118,7 @@
 - Onboarding
 
 ## ✨ Improvements and fixes
+
 - Add missing translations for various places
 - Improve note ordering performance by dropping index based ordering
 - New icon
@@ -109,39 +128,50 @@
 - Multiple HTML, JSON and Markdown files can now be imported at once
 
 # 0.5.3-alpha.2
+
 ## 🌟 Features
+
 - Add support for text colors and highlighting (#3, #5)
   - There are 9 colors available by default, and these follow your theme
   - It's also possible to choose a custom color using the eyedropper button
 
 ## ✨ Improvements and fixes
+
 - Removed old editor code, which reduced the app size by ~1MB
 
 # 0.5.2-alpha.2
+
 ## 🌟 Features
+
 - Upgraded code blocks with syntax highlighting.
 - Clicking on the empty space below the editor contents now moves the cursor to the end.
 
 ## ✨ Improvements and fixes
+
 - We have rebuilt the editor from the ground up and extracted it into a new package.
-You should not notice much difference at first sight other than the new slash menu animation,
-however this changes a lot under the hood stuff and will speed up development in the long run.
+  You should not notice much difference at first sight other than the new slash menu animation,
+  however this changes a lot under the hood stuff and will speed up development in the long run.
 
 # 0.5.1-alpha.2
+
 ## ✨ Improvements and fixes
+
 - Fixed a bug which showed the "Darkwrite is up to date" toast on every automatic update check. This toast now appears only when you check for updates explicitly.
 
 ## 🛠️ Technical changes
+
 - Upgraded `react-router-dom` and `vite` to address dependabot alerts
 - Upgraded `@radix-ui/react-dropdown-menu` to fix broken unit tests
 
 # 0.5.1-alpha.1
 
 ## 🌟 Features
+
 - Added update checks on startup. **To protect your privacy, it is disabled by default, but you can enable it in settings.**
-- - It makes a request to the GitHub API to get the latest release. Although we already developed a server to check for updates, we decided to use the GitHub API for now. 
+- - It makes a request to the GitHub API to get the latest release. Although we already developed a server to check for updates, we decided to use the GitHub API for now.
 
 ## ✨ Improvements and fixes
+
 - Hitting enter after editing a link's URL now saves the link
 - Fixed editor contents going off screen as window got narrower
 
