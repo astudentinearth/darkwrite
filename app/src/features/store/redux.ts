@@ -13,6 +13,7 @@ import editorMiddleware from "../editor/store/editor-middleware";
 import { updateApi } from "../update/store/update-api";
 import { workspaceSlice } from "../workspaces/store/workspace-slice";
 import { workspaceApi } from "../workspaces/store/workspace-api";
+import { clientInfoApi } from "../settings/store/client-info-api";
 
 export const store = configureStore({
   reducer: {
@@ -26,6 +27,7 @@ export const store = configureStore({
     [updateApi.reducerPath]: updateApi.reducer,
     [workspaceSlice.name]: workspaceSlice.reducer,
     [workspaceApi.reducerPath]: workspaceApi.reducer,
+    [clientInfoApi.reducerPath]: clientInfoApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
@@ -37,6 +39,7 @@ export const store = configureStore({
         editorApi.middleware,
         updateApi.middleware,
         workspaceApi.middleware,
+        clientInfoApi.middleware,
       ),
   preloadedState: {
     [appSessionSlice.name]: loadSessionState() || { workspaceId: null },

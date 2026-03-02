@@ -1,6 +1,4 @@
-import { DarkwriteAPIClient } from "@/api/api-client";
 import { cn } from "@/lib/utils";
-import { useQuery } from "@tanstack/react-query";
 import {
   ArrowUpRightFromSquare,
   Code2,
@@ -10,6 +8,7 @@ import {
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useUpdate } from "../update/use-update";
+import { useGetClientInfoQuery } from "./store/client-info-api";
 
 function AboutButton(props: { children: React.ReactNode; href: string }) {
   return (
@@ -24,10 +23,7 @@ function AboutButton(props: { children: React.ReactNode; href: string }) {
 }
 
 export default function About() {
-  const { data } = useQuery({
-    queryKey: ["client-info"],
-    queryFn: DarkwriteAPIClient.desktop.getClientInfo,
-  });
+  const { data } = useGetClientInfoQuery();
   const { data: updateData, refetch, isFetching } = useUpdate();
   const { t } = useTranslation();
   const checkUpdate = () => {
