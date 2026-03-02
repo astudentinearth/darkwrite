@@ -32,7 +32,8 @@ import useEditorMenu from "./hooks/use-editor-menu";
 function EditorMenuContent({ noteId }: { noteId: string }) {
   const spellcheck = useLocalStore((s) => s.useSpellcheck);
   const setSpellcheck = useLocalStore((s) => s.setSpellcheck);
-  const { actions, isTrashed, wordCount } = useEditorMenu(noteId);
+  const { actions, isTrashed, wordCount, canUndo, canRedo } =
+    useEditorMenu(noteId);
   const { t } = useTranslation();
 
   return (
@@ -71,11 +72,23 @@ function EditorMenuContent({ noteId }: { noteId: string }) {
         {t("editor.menu.import")}
       </DropdownMenuItem>
       <DropdownMenuSeparator />
-      <DropdownMenuItem onSelect={actions.undo}>
+      <DropdownMenuItem
+        disabled={!canUndo}
+        onSelect={(e) => {
+          actions.undo();
+          e.preventDefault();
+        }}
+      >
         <Undo size={20} />
         {t("editor.menu.undo")}
       </DropdownMenuItem>
-      <DropdownMenuItem onSelect={actions.redo}>
+      <DropdownMenuItem
+        disabled={!canRedo}
+        onSelect={(e) => {
+          actions.redo();
+          e.preventDefault();
+        }}
+      >
         <Redo size={20} />
         {t("editor.menu.redo")}
       </DropdownMenuItem>

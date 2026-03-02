@@ -41,3 +41,21 @@ export function setCharacterCount(noteId: string, characterCount: number) {
     }),
   );
 }
+
+export function setCanUndo(noteId: string, canUndo: boolean) {
+  store.dispatch(
+    editorSlice.actions.setCanUndo({
+      noteId,
+      canUndo,
+    }),
+  );
+}
+
+export function setCanRedo(noteId: string, canRedo: boolean) {
+  store.dispatch(
+    editorSlice.actions.setCanRedo({
+      noteId,
+      canRedo,
+    }),
+  );
+}

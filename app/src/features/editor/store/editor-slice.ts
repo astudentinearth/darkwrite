@@ -10,7 +10,17 @@ export interface EditorState {
   docs: Record<string, NoteContent | undefined>;
   wordCount: Record<string, number>;
   characterCount: Record<string, number>;
+  canUndo: Record<string, boolean>;
+  canRedo: Record<string, boolean>;
 }
+
+const initialState: EditorState = {
+  docs: {},
+  characterCount: {},
+  wordCount: {},
+  canRedo: {},
+  canUndo: {},
+};
 
 export const editorSlice = createSlice({
   name: EDITOR_SLICE_NAME,
@@ -68,6 +78,22 @@ export const editorSlice = createSlice({
       const { noteId, characterCount } = action.payload;
       state.characterCount[noteId] = characterCount;
     },
+
+    setCanUndo: (
+      state,
+      action: PayloadAction<{ noteId: string; canUndo: boolean }>,
+    ) => {
+      const { noteId, canUndo } = action.payload;
+      state.canUndo[noteId] = canUndo;
+    },
+
+    setCanRedo: (
+      state,
+      action: PayloadAction<{ noteId: string; canRedo: boolean }>,
+    ) => {
+      const { noteId, canRedo } = action.payload;
+      state.canRedo[noteId] = canRedo;
+    },
   },
-  initialState: { docs: {}, characterCount: {}, wordCount: {} } as EditorState,
+  initialState,
 });

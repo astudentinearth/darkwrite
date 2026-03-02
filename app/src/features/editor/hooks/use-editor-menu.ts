@@ -9,6 +9,8 @@ import { emitEditorEvent } from "../event/editor-bus";
 import { EditorEventType } from "../event/types";
 import { useAppSelector } from "@/features/store/hooks";
 import {
+  selectCanRedo,
+  selectCanUndo,
   selectCharacterCount,
   selectWordCount,
 } from "../store/editor-selectors";
@@ -28,6 +30,8 @@ export interface UseEditorMenuResult {
   isTrashed: boolean;
   wordCount: number;
   characterCount: number;
+  canUndo: boolean;
+  canRedo: boolean;
 }
 
 export default function useEditorMenu(noteId: string): UseEditorMenuResult {
@@ -35,6 +39,8 @@ export default function useEditorMenu(noteId: string): UseEditorMenuResult {
   const importer = useNoteImport(noteId);
   const wordCount = useAppSelector((s) => selectWordCount(s, noteId));
   const characterCount = useAppSelector((s) => selectCharacterCount(s, noteId));
+  const canUndo = useAppSelector((s) => selectCanUndo(s, noteId));
+  const canRedo = useAppSelector((s) => selectCanRedo(s, noteId));
 
   const actions: EditorMenuActions = {
     exportHTML: () => NoteExporter.exportHTML(noteId),
@@ -64,5 +70,7 @@ export default function useEditorMenu(noteId: string): UseEditorMenuResult {
     isTrashed: note?.isTrashed ?? false,
     wordCount,
     characterCount,
+    canUndo,
+    canRedo,
   };
 }

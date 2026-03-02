@@ -17,3 +17,9 @@ export const selectWordCount = (state: RootState, noteId: string) =>
 
 export const selectCharacterCount = (state: RootState, noteId: string) =>
   state.editor.characterCount[noteId] ?? 0;
+
+export const selectCanUndo = (state: RootState, noteId: string) =>
+  state.editor.canUndo[noteId] ?? false;
+
+export const selectCanRedo = (state: RootState, noteId: string) =>
+  state.editor.canRedo[noteId] ?? false;

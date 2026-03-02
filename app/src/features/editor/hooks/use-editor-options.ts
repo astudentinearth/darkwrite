@@ -8,6 +8,8 @@ import { selectEditorCustomizations } from "@/features/editor/store/editor-selec
 import { useCurrentWorkspaceId } from "@/features/workspaces/hooks/use-workspace";
 import { Editor, JSONContent } from "@tiptap/core";
 import {
+  setCanRedo,
+  setCanUndo,
   setCharacterCount,
   setEditorContent,
   setWordCount,
@@ -87,6 +89,8 @@ export function useEditorOptions() {
       const characterCount = util.countCharacters();
       setWordCount(noteId, wordCount);
       setCharacterCount(noteId, characterCount);
+      setCanUndo(noteId, util.canUndo()());
+      setCanRedo(noteId, util.canRedo()());
     },
     [noteId],
   );

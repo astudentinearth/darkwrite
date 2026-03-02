@@ -17,6 +17,7 @@
 - Fixed `⌥+←` and `⌥+→` interfering with text editing on macOS
 - `⌘+←` and `⌘+→` now handle history navigation instead of `⌥+←` and `⌥+→` on macOS to follow conventions
 - Font selectors are now localized
+- Undo and redo actions no longer close the menu on click, and get greyed out at both ends of history
 
 ## 🛠️ Technical changes (definitely read if you have your own fork)
 - Dropped `@tanstack/react-query` in favor of Redux + RTK Query
