@@ -8,6 +8,7 @@ import {
 import slashCommandExtension from "../extensions/slash-command/slash-command-extension";
 import Bubble from "../extensions/bubble-menu";
 import TableMenu from "../extensions/table/table-menu";
+import { EventHelper } from "../components/event-helper";
 
 export default function useEditorBuilder() {
   const { imageUploadConfig, codeBlockIndentSize, commandItems } = use(
@@ -30,6 +31,7 @@ export default function useEditorBuilder() {
   const children = useMemo(
     () => (
       <>
+        <EventHelper />
         <Bubble />
         <TableMenu />
       </>

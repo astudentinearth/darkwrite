@@ -24,7 +24,8 @@ export function handleEditorEvent(editor: Editor, event: EditorEvent) {
       if (event.payload.type === "html") util.insertHTML(event.payload.content);
       else if (event.payload.type === "md")
         util.insertMarkdown(event.payload.content);
-      else editor.chain().insertContentAt(position, event.payload.content);
+      else
+        editor.chain().insertContentAt(position, event.payload.content).run();
 
       break;
     }

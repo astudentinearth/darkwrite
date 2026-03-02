@@ -29,6 +29,7 @@ export function TitleEditField() {
               content: UtilityNodes.EmptyParagraph,
             },
           });
+        emitEditorEvent({ noteId, type: EditorEventType.FOCUS });
       }}
       onValueChange={(val) => titleUpdater.update(cleanNoteTitle(val))}
     />
