@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import { setPreferredPageSize } from "../settings/store/settings-actions";
-import { useEditorSettings } from "../settings/store/settings-selectors";
+import { useEditorSettings } from "../settings/hooks/use-settings";
 
 interface PageSizeChooserProps {
   className?: string;

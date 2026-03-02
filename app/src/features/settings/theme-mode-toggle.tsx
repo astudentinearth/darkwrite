@@ -3,8 +3,8 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Monitor, Moon, Sun } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { useAppearanceSettings } from "./store/settings-selectors";
 import { updateSettings } from "./store/settings-actions";
+import { useAppearanceSettings } from "./hooks/use-settings";
 
 export default function ThemeModeToggle() {
   const settings = useAppearanceSettings();

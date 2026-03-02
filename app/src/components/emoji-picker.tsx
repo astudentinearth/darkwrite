@@ -9,7 +9,7 @@ import { CSSProperties, useState } from "react";
 import { cn } from "@/lib/utils";
 import "./emoji-picker.css";
 import { hex } from "color-convert";
-import { useAppearanceSettings } from "@/features/settings/store/settings-selectors";
+import { useAppearanceSettings } from "@/features/settings/hooks/use-settings";
 
 export function EmojiPicker(props: {
   show?: string;

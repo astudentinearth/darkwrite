@@ -1,7 +1,7 @@
 import FontSelect from "@/components/font-select";
 import { useTranslation } from "react-i18next";
-import { useFontSettings } from "./store/settings-selectors";
 import { updateSettings } from "./store/settings-actions";
+import { useFontSettings } from "./hooks/use-settings";
 
 export default function FontSettings() {
   const settings = useFontSettings();

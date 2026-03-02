@@ -10,10 +10,10 @@ import {
 import { cn } from "@/lib/utils";
 import { Folder } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { useAppearanceSettings } from "./store/settings-selectors";
 import { updateAccentColor, updateSettings } from "./store/settings-actions";
 import { useThemes } from "../themes/hooks/use-themes";
 import { initializeThemes } from "../themes/init";
+import { useAppearanceSettings } from "./hooks/use-settings";
 
 export function ThemeDropdown(props: {
   className?: string;

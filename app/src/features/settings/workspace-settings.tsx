@@ -16,10 +16,10 @@ import SettingsCard from "./settings-card";
 import { useWorkspaceExport } from "@/features/workspaces/hooks/use-workspace-export";
 import useBackup from "@/features/backup/hooks/use-backup";
 import { RestoreDataDialog } from "./restore-dialog";
-import { useSettings } from "./store/settings-selectors";
 import { updateSettings } from "./store/settings-actions";
 import { useCurrentWorkspace } from "../workspaces/hooks/use-workspace";
 import { useUpdateWorkspaceMutation } from "../workspaces/store/workspace-api";
+import { useSettings } from "./hooks/use-settings";
 
 export default function WorkspaceSettings() {
   const currentWorkspace = useCurrentWorkspace();

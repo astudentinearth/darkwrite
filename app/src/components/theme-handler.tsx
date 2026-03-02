@@ -1,11 +1,11 @@
 import { DarkwriteAPIClient } from "@/api/api-client";
 import { DarkwriteDefault } from "@/common/themes";
 import { CatppuccinLatte } from "@/common/themes/catppuccin";
-import { useAppearanceSettings } from "@/features/settings/store/settings-selectors";
 import { useThemes } from "@/features/themes/hooks/use-themes";
 import useSystemTheme from "@/features/themes/hooks/use-system-theme";
 import { applyFonts, applyTheme } from "@/lib/theme-util";
 import { useEffect } from "react";
+import { useAppearanceSettings } from "@/features/settings/hooks/use-settings";
 
 export default function ThemeHandler() {
   const themes = useThemes();

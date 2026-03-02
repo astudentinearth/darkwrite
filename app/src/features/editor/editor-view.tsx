@@ -5,7 +5,6 @@ import { useNoteFromURL } from "@/features/note/hooks/use-note-from-url";
 import { use } from "react";
 import DarkwriteEditor from ".";
 import { navigateToNote } from "../navigation/navigator";
-import { useEditorSettings } from "../settings/store/settings-selectors";
 import { useAppSelector } from "../store/hooks";
 import ConstrainedWidth from "./constrained-width";
 import { useSlashCommand } from "./extensions";
@@ -16,6 +15,7 @@ import {
   selectEditorContent,
   selectEditorCustomizations,
 } from "./store/editor-selectors";
+import { useEditorSettings } from "../settings/hooks/use-settings";
 
 export function EditorViewRouteHandler() {
   const noteId = useNoteFromURL();

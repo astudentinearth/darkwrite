@@ -1,7 +1,7 @@
 import { Label, Switch } from "@/components/ui";
 import { useTranslation } from "react-i18next";
-import { useSettings } from "./store/settings-selectors";
 import { updateSettings } from "./store/settings-actions";
+import { useSettings } from "./hooks/use-settings";
 
 export function WindowFrameSettings() {
   const { t } = useTranslation("translation");

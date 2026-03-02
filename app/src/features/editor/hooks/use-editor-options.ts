@@ -3,7 +3,6 @@ import { useCenteredLayout } from "@/features/layout/hooks/use-centered-layout";
 import { DarkwriteAPIClient } from "@/api/api-client";
 import { CSSProperties, use, useCallback, useMemo } from "react";
 import { FONT_VARS, FontStyle } from "@/common/note-customization";
-import { useEditorSettings } from "@/features/settings/store/settings-selectors";
 import { useAppSelector } from "@/features/store/hooks";
 import { selectEditorCustomizations } from "@/features/editor/store/editor-selectors";
 import { useCurrentWorkspaceId } from "@/features/workspaces/hooks/use-workspace";
@@ -15,6 +14,7 @@ import {
 } from "@/features/editor/store/editor-actions";
 import { EditorContext } from "@/features/editor/store/editor-context";
 import EditorUtil from "@/features/editor/editor-util";
+import { useEditorSettings } from "@/features/settings/hooks/use-settings";
 
 export function useEditorView(noteId: string) {
   const customizations = useAppSelector((s) =>
