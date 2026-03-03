@@ -4,6 +4,7 @@
 
 - Added ability to move notes directly via context menu (after a long wait)
 - Added ability to download images from right click menu
+- Added a "New page" button to the home page for easier onboarding
 
 ## ✨ Improvements and fixes
 
@@ -26,6 +27,7 @@
 - Added highlight to links to pages to indicate they are selected
 - Automatically switch workspace when navigating through history (in addition to page reload)
 - Note titles are now automatically focused upon navigation
+- Favorites and all notes views now remember if they were open
 
 ## 🛠️ Technical changes (definitely read if you have your own fork)
 
