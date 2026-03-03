@@ -264,6 +264,9 @@
       "typeFontName": "Type a font name",
       "search": "Search fonts",
       "placeholder": "Select a font"
+    },
+    "moveToDialog": {
+      "title": "Move <0></0> to:"
     }
   }
 }

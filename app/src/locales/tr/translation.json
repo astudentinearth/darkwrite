@@ -264,6 +264,9 @@
       "typeFontName": "Bir yazı tipi yazın",
       "search": "Yazı tiplerini arayın",
       "placeholder": "Yazı tipi seçin"
+    },
+    "moveToDialog": {
+      "title": "<0></0> sayfasını şuraya taşı:"
     }
   }
 }

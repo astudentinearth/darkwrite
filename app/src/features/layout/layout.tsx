@@ -9,6 +9,7 @@ import NavigationHelper from "../navigation/navigation-helper";
 import SearchDialog from "../search/search-dialog";
 import SidebarResizeHandle from "./sidebar-resize-handle";
 import { Titlebar } from "./titlebar";
+import MoveNoteDialog from "../note/components/move-note-dialog";
 
 //import { useStartup } from "@/hooks/use-startup";
 
@@ -31,6 +32,7 @@ export function Layout() {
           )}
         >
           <SearchDialog />
+          <MoveNoteDialog />
           <Toaster />
           <Outlet />
         </div>

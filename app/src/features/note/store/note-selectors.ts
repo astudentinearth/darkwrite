@@ -3,7 +3,8 @@ import { notesAdapter } from "./notes-adapter";
 import { createSelector } from "@reduxjs/toolkit";
 import { Rank } from "@/common/rank";
 import { byUpdateTime } from "@/common/note-filters";
-import { SearchArgs } from "./types";
+import { MoveNoteSearchArgs, SearchArgs } from "./types";
+import { isDescendant } from "@/common/note";
 
 const selectNotesState = (store: RootState) => store["notes-slice"];
 
@@ -108,4 +109,24 @@ export const selectNoteTitle = createSelector(
 export const selectNoteIcon = createSelector(
   [selectNoteById],
   (note) => note?.icon,
+);
+
+/** This selector is for the move note UI, where descendant notes and the note we are moving should be excluded from the search results.
+ */
+export const selectNotesToMoveInto = createSelector(
+  [selectAllNotesAsMap, (_state: RootState, args: MoveNoteSearchArgs) => args],
+  (notes, args) => {
+    const { workspaceId, query, targetNoteId } = args;
+    if (!workspaceId) return [];
+    return Object.values(notes)
+      .filter(
+        (n) =>
+          n.workspaceId === workspaceId &&
+          n.id !== targetNoteId &&
+          !isDescendant(n.id, targetNoteId, notes) &&
+          n.title.toLowerCase().includes(query.toLowerCase()) &&
+          !n.isTrashed,
+      )
+      .map((n) => n.id);
+  },
 );

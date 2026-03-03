@@ -14,6 +14,7 @@ import { updateApi } from "../update/store/update-api";
 import { workspaceSlice } from "../workspaces/store/workspace-slice";
 import { workspaceApi } from "../workspaces/store/workspace-api";
 import { clientInfoApi } from "../settings/store/client-info-api";
+import { notesUiSlice } from "../note/store/notes-ui-slice";
 
 export const store = configureStore({
   reducer: {
@@ -28,6 +29,7 @@ export const store = configureStore({
     [workspaceSlice.name]: workspaceSlice.reducer,
     [workspaceApi.reducerPath]: workspaceApi.reducer,
     [clientInfoApi.reducerPath]: clientInfoApi.reducer,
+    [notesUiSlice.name]: notesUiSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()

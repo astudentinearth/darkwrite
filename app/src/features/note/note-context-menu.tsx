@@ -52,7 +52,7 @@ export function NoteContextMenuContainer({
           <FilePlus2 className="opacity-75" size={20}></FilePlus2>
           {t("newSubpage")}
         </ContextMenuItem>
-        <ContextMenuItem disabled>
+        <ContextMenuItem onSelect={actions.move}>
           <Forward className="opacity-75" size={20}></Forward>
           {t("moveTo")}
         </ContextMenuItem>

@@ -6,6 +6,7 @@ import {
 } from "@/features/note/store/note-actions";
 import { selectNoteById } from "@/features/note/store/note-selectors";
 import { store } from "@/features/store/redux";
+import { showMoveNoteDialog } from "../store/notes-ui-actions";
 
 export const useNoteContextMenu = (noteId: string) => {
   const exportPDF = () => {
@@ -33,6 +34,10 @@ export const useNoteContextMenu = (noteId: string) => {
   const trash = () => moveToTrash(noteId);
   const duplicate = () => duplicateNote(noteId);
 
+  const move = () => {
+    showMoveNoteDialog(noteId);
+  };
+
   return {
     newSubpage,
     trash,
@@ -40,5 +45,6 @@ export const useNoteContextMenu = (noteId: string) => {
     exportHTML,
     exportJSON,
     exportPDF,
+    move,
   };
 };

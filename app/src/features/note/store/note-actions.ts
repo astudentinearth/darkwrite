@@ -6,6 +6,7 @@ import { createNoteApi, CreateNoteArgs } from "./create-note";
 import { FavoriteNoteArgs, favoritesApi } from "./favorites-api";
 import { navigateToNote } from "@/features/navigation/navigator";
 import { trashApi } from "./trash-api";
+import { moveNoteApi } from "./move-note";
 
 const dispatch = store.dispatch;
 
@@ -39,4 +40,14 @@ export async function restoreFromTrash(noteId: string) {
 
 export function permanentlyDeleteNote(noteId: string) {
   dispatch(trashApi.endpoints.delete.initiate(noteId));
+}
+
+export function moveInto(noteId: string, destinationNoteId: string) {
+  return dispatch(
+    moveNoteApi.endpoints.moveInto.initiate({
+      destinationNoteId,
+      placement: "inside-end",
+      sourceNoteId: noteId,
+    }),
+  ).unwrap();
 }

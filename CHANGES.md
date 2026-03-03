@@ -2,6 +2,7 @@
 
 ## 🌟 Features
 
+- Added ability to move notes directly via context menu (after a long wait)
 - Added ability to download images from right click menu
 
 ## ✨ Improvements and fixes
