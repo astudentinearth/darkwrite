@@ -23,6 +23,7 @@
 - Font selectors are now localized
 - Undo and redo actions no longer close the menu on click, and get greyed out at both ends of history
 - Fixed Turkish search not working in /command
+- Added highlight to links to pages to indicate they are selected
 
 ## 🛠️ Technical changes (definitely read if you have your own fork)
 

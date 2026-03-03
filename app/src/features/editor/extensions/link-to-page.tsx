@@ -46,8 +46,9 @@ const LinkResult = memo(function ({
   );
 });
 
+// TODO: make this type safe
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const LinkComponent = ({ node, updateAttributes }: any) => {
+const LinkComponent = ({ node, updateAttributes, selected }: any) => {
   const id = node.attrs.noteID;
   const context = use(DarkwriteEditorContext);
   const { note } = useNoteById(id);
@@ -75,7 +76,7 @@ const LinkComponent = ({ node, updateAttributes }: any) => {
             }}
             className={cn(
               "link-to-page hover:bg-secondary/75 cursor-pointer select-none rounded-md p-1 py-0.5 transition-colors flex items-center gap-2 my-1 text-(--dw-editor-foreground)",
-              open && "bg-primary/20",
+              (open || selected) && "bg-primary/20",
             )}
           >
             {!note ? (
