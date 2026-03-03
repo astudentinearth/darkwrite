@@ -7,6 +7,8 @@ import { FavoriteNoteArgs, favoritesApi } from "./favorites-api";
 import { navigateToNote } from "@/features/navigation/navigator";
 import { trashApi } from "./trash-api";
 import { moveNoteApi } from "./move-note";
+import { toast } from "sonner";
+import { t } from "i18next";
 
 const dispatch = store.dispatch;
 
@@ -42,12 +44,26 @@ export function permanentlyDeleteNote(noteId: string) {
   dispatch(trashApi.endpoints.delete.initiate(noteId));
 }
 
-export function moveInto(noteId: string, destinationNoteId: string) {
-  return dispatch(
+export async function moveInto(
+  noteId: string,
+  destinationNoteId: string,
+  showToast = true,
+) {
+  const result = dispatch(
     moveNoteApi.endpoints.moveInto.initiate({
       destinationNoteId,
       placement: "inside-end",
       sourceNoteId: noteId,
     }),
   ).unwrap();
+  try {
+    await result;
+    if (showToast) toast.success(t("toast.movePage.success"));
+  } catch (error) {
+    if (showToast) {
+      toast.error(t("toast.movePage.error"));
+    }
+    console.error("Failed to move note:", error);
+  }
+  return result;
 }

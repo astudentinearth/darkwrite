@@ -76,7 +76,10 @@ export default function MoveNoteDialog() {
       className="max-w-120 backdrop-blur-lg"
       open={open}
       onOpenChange={(show) => {
-        if (!show) hideMoveNoteDialog();
+        if (!show) {
+          setQuery("");
+          hideMoveNoteDialog();
+        }
       }}
     >
       <DialogTitle className="flex gap-2 pl-4 pt-2 items-center font-semibold">

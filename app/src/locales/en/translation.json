@@ -234,6 +234,10 @@
       "description": "Update available: {{version}}",
       "releasePageButton": "Show release",
       "upToDate": "Darkwrite is up to date."
+    },
+    "movePage": {
+      "success": "Page moved successfully",
+      "error": "Failed to move page"
     }
   },
   "titlebar": {

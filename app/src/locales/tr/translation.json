@@ -234,6 +234,10 @@
       "description": "Yeni sürüm mevcut: {{version}}",
       "releasePageButton": "Göster",
       "upToDate": "Sürüm güncel."
+    },
+    "movePage": {
+      "success": "Sayfa taşındı.",
+      "error": "Sayfayı taşıyamadık."
     }
   },
   "titlebar": {

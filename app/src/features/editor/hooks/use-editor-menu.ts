@@ -14,6 +14,7 @@ import {
   selectCharacterCount,
   selectWordCount,
 } from "../store/editor-selectors";
+import { showMoveNoteDialog } from "@/features/note/store/notes-ui-actions";
 
 export interface EditorMenuActions {
   exportHTML: () => Promise<void>;
@@ -23,6 +24,7 @@ export interface EditorMenuActions {
   undo: () => void;
   redo: () => void;
   toggleTrash: () => void;
+  move: () => void;
 }
 
 export interface UseEditorMenuResult {
@@ -47,6 +49,7 @@ export default function useEditorMenu(noteId: string): UseEditorMenuResult {
     exportJSON: () => NoteExporter.exportJSON(noteId),
     exportPDF: () => NoteExporter.exportPDF(noteId),
     importNotes: importer.importNotes,
+    move: () => showMoveNoteDialog(noteId),
     undo: () =>
       emitEditorEvent({
         noteId,

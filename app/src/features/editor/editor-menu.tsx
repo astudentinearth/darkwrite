@@ -17,6 +17,7 @@ import {
   Download,
   FileCode,
   FileText,
+  Forward,
   Menu,
   Redo,
   Trash,
@@ -37,7 +38,7 @@ function EditorMenuContent({ noteId }: { noteId: string }) {
   const { t } = useTranslation();
 
   return (
-    <DropdownMenuContent className="mr-2 top-highlight">
+    <DropdownMenuContent className="mr-2 top-highlight bg-view-2/85">
       <DropdownMenuSwitchItem
         checked={spellcheck}
         onCheckedChange={setSpellcheck}
@@ -45,12 +46,17 @@ function EditorMenuContent({ noteId }: { noteId: string }) {
         {t("editor.menu.checkSpelling")}
       </DropdownMenuSwitchItem>
       <DropdownMenuSeparator />
+      <DropdownMenuItem onSelect={actions.move}>
+        <Forward className="opacity-75" size={18}></Forward>
+        {t("sidebar.notes.contextmenu.moveTo")}
+      </DropdownMenuItem>
+      <DropdownMenuSeparator />
       <DropdownMenuSub>
         <DropdownMenuSubTrigger>
           <Download size={18} />
           {t("editor.menu.export")}
         </DropdownMenuSubTrigger>
-        <DropdownMenuSubContent className="bg-view-2">
+        <DropdownMenuSubContent className="bg-view-2 top-highlight">
           <DropdownMenuItem onSelect={actions.exportHTML}>
             <FileCode size={18} />
             {t("editor.menu.htmlExport")}
@@ -64,7 +70,7 @@ function EditorMenuContent({ noteId }: { noteId: string }) {
             <FileText size={18} />
             PDF
           </DropdownMenuItem>
-          <PageSizeChooser className="bg-secondary mt-small" />
+          <PageSizeChooser className="bg-view-1 top-highlight mt-small" />
         </DropdownMenuSubContent>
       </DropdownMenuSub>
       <DropdownMenuItem onSelect={actions.importNotes}>
