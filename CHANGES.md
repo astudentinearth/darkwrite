@@ -5,6 +5,7 @@
 - Added ability to move notes directly via context menu (after a long wait)
 - Added ability to download images from right click menu
 - Added a "New page" button to the home page for easier onboarding
+- Note specific colors now blend in with the titlebar when sidebar is collapsed
 
 ## ✨ Improvements and fixes
 

@@ -24,7 +24,9 @@ export function Titlebar() {
       className={cn(
         "titlebar h-12 bg-background shrink-0 flex [&>div]:shrink-0 p-2 justify-start gap-2 items-center",
         isSidebarCollapsed && "bg-view-1",
-        isSidebarCollapsed && noteId && "bg-(--dw-editor-background)",
+        isSidebarCollapsed &&
+          noteId &&
+          "bg-(--dw-editor-background) text-(--dw-editor-foreground)",
       )}
     >
       <TrafficLightsPlaceholder />

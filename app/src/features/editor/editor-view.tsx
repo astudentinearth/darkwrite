@@ -63,7 +63,7 @@ function EditorViewport() {
 
 export function EditorView({ noteId }: { noteId: string }) {
   const spellcheck = useLocalStore((s) => s.useSpellcheck);
-  const { style } = useEditorView(noteId);
+  const { style } = useEditorView(noteId, true);
 
   return (
     <div

@@ -1,7 +1,7 @@
 import { ImageExtensionConfig } from "@/features/editor/extensions/image/image-config";
 import { useCenteredLayout } from "@/features/layout/hooks/use-centered-layout";
 import { DarkwriteAPIClient } from "@/api/api-client";
-import { CSSProperties, use, useCallback, useMemo } from "react";
+import { CSSProperties, use, useCallback, useEffect, useMemo } from "react";
 import { FONT_VARS, FontStyle } from "@/common/note-customization";
 import { useAppSelector } from "@/features/store/hooks";
 import { selectEditorCustomizations } from "@/features/editor/store/editor-selectors";
@@ -18,7 +18,7 @@ import { EditorContext } from "@/features/editor/store/editor-context";
 import EditorUtil from "@/features/editor/editor-util";
 import { useEditorSettings } from "@/features/settings/hooks/use-settings";
 
-export function useEditorView(noteId: string) {
+export function useEditorView(noteId: string, rootView: boolean = false) {
   const customizations = useAppSelector((s) =>
     selectEditorCustomizations(s, noteId),
   );
@@ -43,8 +43,37 @@ export function useEditorView(noteId: string) {
       draft["--dw-editor-foreground"] = customizations.textColor;
     }
 
+    if (rootView) {
+      if (customizations?.backgroundColor) {
+        document.documentElement.style.setProperty(
+          "--dw-editor-background",
+          customizations.backgroundColor,
+        );
+      } else {
+        document.documentElement.style.removeProperty("--dw-editor-background");
+      }
+
+      if (customizations?.textColor) {
+        document.documentElement.style.setProperty(
+          "--dw-editor-foreground",
+          customizations.textColor,
+        );
+      } else {
+        document.documentElement.style.removeProperty("--dw-editor-foreground");
+      }
+    }
+
     return draft;
-  }, [customizations]);
+  }, [customizations, rootView]);
+
+  useEffect(() => {
+    return () => {
+      if (rootView) {
+        document.documentElement.style.removeProperty("--dw-editor-background");
+        document.documentElement.style.removeProperty("--dw-editor-foreground");
+      }
+    };
+  }, [rootView]);
 
   return { style, editorWidth };
 }
