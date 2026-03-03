@@ -1,6 +1,6 @@
 import { DarkwriteAPIClient } from "@/api/api-client";
 import { EmbedDTO } from "@/common/dto/response/embed.response";
-import { useLocalStore } from "@/context/local-state";
+import { getCurrentWorkspaceId } from "@/features/workspaces/store/workspace-actions";
 
 export function uploadImage() {
   return new Promise<EmbedDTO>((resolve, reject) => {
@@ -8,7 +8,8 @@ export function uploadImage() {
     input.type = "file";
     input.accept = "image/*";
 
-    const workspaceId = useLocalStore.getState().workspaceId;
+    const workspaceId = getCurrentWorkspaceId();
+    if (!workspaceId) throw new Error("No workspace ID found");
 
     const handleChange = async () => {
       if (!input.files?.length) return;

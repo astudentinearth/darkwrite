@@ -25,3 +25,7 @@ export async function createWorkspace(dto: CreateWorkspaceDTO) {
     .dispatch(workspaceApi.endpoints.createWorkspace.initiate(dto))
     .unwrap();
 }
+
+export function getCurrentWorkspaceId() {
+  return store.getState().session.workspaceId;
+}

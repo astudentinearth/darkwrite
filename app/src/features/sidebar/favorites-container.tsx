@@ -1,18 +1,20 @@
+import { Button } from "@/components/ui/button";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { ChevronRight } from "lucide-react";
-import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FavoritesView } from "../note/components/favorites";
+import { setFavoritesViewOpen } from "../session/session-actions";
+import { useFavoritesViewOpen } from "../session/session-hooks";
 
 export default function FavoritesContainer() {
   const { t } = useTranslation("translation", { keyPrefix: "sidebar" });
-  const [open, setOpen] = useState(false);
+  const open = useFavoritesViewOpen();
+  const setOpen = setFavoritesViewOpen;
   return (
     <Collapsible open={open} onOpenChange={setOpen}>
       <CollapsibleTrigger asChild>

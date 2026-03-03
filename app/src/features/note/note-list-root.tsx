@@ -6,13 +6,15 @@ import {
 } from "@/components/ui/collapsible";
 import { cn } from "@/lib/utils";
 import { ChevronRight } from "lucide-react";
-import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import NoteList from "./components/note-list";
+import { useAllNotesViewOpen } from "../session/session-hooks";
+import { setAllNotesViewOpen } from "../session/session-actions";
 
 export default function NoteListRoot() {
   const { t } = useTranslation("translation", { keyPrefix: "sidebar" });
-  const [open, setOpen] = useState(false);
+  const open = useAllNotesViewOpen();
+  const setOpen = setAllNotesViewOpen;
 
   return (
     <Collapsible open={open} onOpenChange={setOpen}>

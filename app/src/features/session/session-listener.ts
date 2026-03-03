@@ -1,14 +1,18 @@
-import { createListenerMiddleware } from "@reduxjs/toolkit";
+import { createListenerMiddleware, isAnyOf } from "@reduxjs/toolkit";
 import { appSessionSlice } from "./session-slice";
 import { saveSessionState } from "./session-persistence";
 import { RootState } from "../store/types";
 
 export const sessionListenerMiddleware = createListenerMiddleware();
 
-sessionListenerMiddleware.startListening({
-  actionCreator: appSessionSlice.actions.switchWorkspace,
+sessionListenerMiddleware.startListening.withTypes<RootState>()({
+  matcher: isAnyOf(
+    appSessionSlice.actions.setFavoritesViewOpen,
+    appSessionSlice.actions.setAllNotesViewOpen,
+    appSessionSlice.actions.switchWorkspace,
+  ),
   effect: async (_action, listenerApi) => {
-    const state = listenerApi.getState() as RootState;
+    const state = listenerApi.getState();
     const sessionState = state[appSessionSlice.name];
 
     saveSessionState(sessionState);

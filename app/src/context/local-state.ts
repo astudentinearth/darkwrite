@@ -19,12 +19,8 @@ type localStore = {
   sidebarWidth: number;
   route: string;
   useSpellcheck: boolean;
-  allNotesCollapsed: boolean;
-  favoritesCollapsed: boolean;
   alwaysShowWordCount: boolean;
   lastUpdateCheck: string;
-  /** @deprecated use redux appSessionSlice instead */
-  workspaceId: string;
   pdfExportPageSize: PageSize;
 };
 
@@ -34,12 +30,8 @@ type localStoreAction = {
   setRoute: (r: string) => void;
   setCalculatedWidth: (change: number) => void;
   setSpellcheck: (val: boolean) => void;
-  setAllNotesCollapsed: (val: boolean) => void;
-  setFavoritesCollapsed: (val: boolean) => void;
   setAlwaysShowWordCount: (val: boolean) => void;
   setLastUpdateCheckTimestamp: (val: Date) => void;
-  /** @deprecated use redux appSessionSlice instead */
-  setWorkspaceId: (val: string) => void;
   setPdfExportPageSize: (size: PageSize) => void;
 };
 
@@ -55,9 +47,6 @@ export const useLocalStore = create<localStore & localStoreAction>()(
       alwaysShowWordCount: false,
       lastUpdateCheck: "1970-01-01T00:00:00.000Z",
       pdfExportPageSize: "A4",
-      workspaceId: "",
-      setFavoritesCollapsed: (val) => set({ favoritesCollapsed: val }),
-      setAllNotesCollapsed: (val) => set({ allNotesCollapsed: val }),
       setSidebarCollapsed: (collapsed: boolean) =>
         set({ isSidebarCollapsed: collapsed }),
       setSidebarWidth: (width: number) => set({ sidebarWidth: width }),
@@ -70,7 +59,6 @@ export const useLocalStore = create<localStore & localStoreAction>()(
       setAlwaysShowWordCount: (val) => set({ alwaysShowWordCount: val }),
       setLastUpdateCheckTimestamp: (val) =>
         set({ lastUpdateCheck: val.toISOString() }),
-      setWorkspaceId: (val) => set({ workspaceId: val }),
       setPdfExportPageSize: (pdfExportPageSize) => set({ pdfExportPageSize }),
     }),
     {
@@ -80,7 +68,6 @@ export const useLocalStore = create<localStore & localStoreAction>()(
 );
 
 export const setWorkspaceId = (id: string) => {
-  useLocalStore.setState({ workspaceId: id });
   store.dispatch(appSessionSlice.actions.switchWorkspace(id));
 };
 

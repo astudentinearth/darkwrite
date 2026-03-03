@@ -1,7 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { appSessionSlice } from "../session/session-slice";
 import { sessionListenerMiddleware } from "../session/session-listener";
-import { loadSessionState } from "../session/session-persistence";
+import {
+  DEFAULT_SESSION_STATE,
+  loadSessionState,
+} from "../session/session-persistence";
 import { notesSlice } from "../note/store/note-slice";
 import { notesApi } from "../note/store/notes-api";
 import { settingsSlice } from "../settings/store/settings-slice";
@@ -44,6 +47,6 @@ export const store = configureStore({
         clientInfoApi.middleware,
       ),
   preloadedState: {
-    [appSessionSlice.name]: loadSessionState() || { workspaceId: null },
+    [appSessionSlice.name]: loadSessionState() || DEFAULT_SESSION_STATE,
   },
 });
