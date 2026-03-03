@@ -1,6 +1,6 @@
 import { DarkwriteAPIClient } from "./api/api-client";
 import { DarkwriteUserSettings } from "./common/settings";
-import { useLocalStore } from "./context/local-state";
+import { setWorkspaceId } from "./context/local-state";
 import { settingsSlice } from "./features/settings/store/settings-slice";
 import { store } from "./features/store/redux";
 import { initializeFonts, initializeThemes } from "./features/themes/init";
@@ -18,7 +18,7 @@ export async function correctWorkspaceState() {
     !state.workspaceId ||
     workspaces.findIndex((w) => w.id === state.workspaceId) === -1
   ) {
-    useLocalStore.setState(() => ({ workspaceId: workspaces.at(0)?.id }));
+    if (workspaces.length > 0) setWorkspaceId(workspaces[0].id);
   }
 }
 

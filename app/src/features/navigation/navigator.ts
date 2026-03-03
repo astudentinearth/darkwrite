@@ -1,5 +1,8 @@
 import { EventBus } from "@/common/event/bus";
 import { matchPath } from "react-router-dom";
+import { resolveNote } from "../note/store/fetcher";
+import { store } from "../store/redux";
+import { setWorkspaceId } from "@/context/local-state";
 
 export enum NavigationEventType {
   NOTE = "note",
@@ -55,7 +58,26 @@ function notifyNoteChange(noteId: string | null) {
   NavigationEventBus.emit("note", { type: NavigationEventType.NOTE, noteId });
 }
 
+let targetNoteId: string | null = null;
+
+async function correctCurrentWorkspace() {
+  const noteId = getCurrentNoteIdFromPath();
+  if (!noteId) return;
+  targetNoteId = noteId;
+  const currentNote = await resolveNote(noteId);
+  const currentWorkspaceId = store.getState().session.workspaceId;
+  // explictly check to prevent race condition
+  if (
+    currentNote.workspaceId !== currentWorkspaceId &&
+    targetNoteId === noteId
+  ) {
+    setWorkspaceId(currentNote.workspaceId);
+    targetNoteId = null;
+  }
+}
+
 window.addEventListener("popstate", () => {
   const noteId = getCurrentNoteIdFromPath();
   notifyNoteChange(noteId);
+  correctCurrentWorkspace();
 });
