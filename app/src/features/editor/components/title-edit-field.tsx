@@ -19,6 +19,7 @@ export function TitleEditField() {
       className="text-4xl font-semibold box-border h-auto overflow-hidden resize-none grow outline-hidden block"
       defaultValue={title}
       preventNewline
+      autoFocus
       onKeyDown={(e) => {
         if (e.key === "Enter") {
           emitEditorEvent({

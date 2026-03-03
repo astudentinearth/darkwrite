@@ -16,6 +16,7 @@ export interface DynamicTextareaProps
   preventNewline?: boolean;
   defaultValue?: string;
   newLineCallback?: () => void;
+  autoFocus?: boolean;
 }
 
 /**
@@ -26,8 +27,16 @@ export default function DynamicTextarea(props: DynamicTextareaProps) {
   const sidebarWidth = useLocalStore((s) => s.sidebarWidth);
   const sidebarState = useLocalStore((s) => s.isSidebarCollapsed);
   const width = useEditorStore((s) => s.width);
+  const { preventNewline, className, autoFocus, ...attributes } = props;
   useLayoutEffect(() => {
     adjustHeight();
+    if (autoFocus && ref.current) {
+      ref.current.focus();
+      ref.current.setSelectionRange(
+        ref.current.value.length,
+        ref.current.value.length,
+      );
+    }
     const resize = () => {
       adjustHeight();
     };
@@ -35,7 +44,7 @@ export default function DynamicTextarea(props: DynamicTextareaProps) {
     return () => {
       window.removeEventListener("resize", resize);
     };
-  }, []);
+  }, [autoFocus]);
 
   useLayoutEffect(() => {
     adjustHeight();
@@ -55,8 +64,6 @@ export default function DynamicTextarea(props: DynamicTextareaProps) {
     props.onValueChange?.call(null, ref.current.value);
     adjustHeight();
   };
-
-  const { preventNewline, className, ...attributes } = props;
 
   return (
     <textarea

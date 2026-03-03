@@ -25,6 +25,7 @@
 - Fixed Turkish search not working in /command
 - Added highlight to links to pages to indicate they are selected
 - Automatically switch workspace when navigating through history (in addition to page reload)
+- Note titles are now automatically focused upon navigation
 
 ## 🛠️ Technical changes (definitely read if you have your own fork)
 
