@@ -20,7 +20,7 @@ export function TitleEditField() {
       defaultValue={title}
       preventNewline
       onKeyDown={(e) => {
-        if (e.key === "Enter")
+        if (e.key === "Enter") {
           emitEditorEvent({
             noteId,
             type: EditorEventType.INSERT_CONTENT,
@@ -29,7 +29,8 @@ export function TitleEditField() {
               content: UtilityNodes.EmptyParagraph,
             },
           });
-        emitEditorEvent({ noteId, type: EditorEventType.FOCUS });
+          emitEditorEvent({ noteId, type: EditorEventType.FOCUS });
+        }
       }}
       onValueChange={(val) => titleUpdater.update(cleanNoteTitle(val))}
     />
