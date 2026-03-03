@@ -277,10 +277,12 @@ body,
 
 .main-view::-webkit-scrollbar {
   width: 6px;
+  background: var(--dw-editor-background) !important;
 }
 
 .main-view::-webkit-scrollbar-track {
   overflow: hidden;
+  background: var(--dw-editor-background) !important;
 }
 
 .main-view::-webkit-scrollbar-thumb {

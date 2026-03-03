@@ -1,7 +1,7 @@
 import { ImageExtensionConfig } from "@/features/editor/extensions/image/image-config";
 import { useCenteredLayout } from "@/features/layout/hooks/use-centered-layout";
 import { DarkwriteAPIClient } from "@/api/api-client";
-import { CSSProperties, use, useCallback, useEffect, useMemo } from "react";
+import { CSSProperties, use, useCallback, useMemo } from "react";
 import { FONT_VARS, FontStyle } from "@/common/note-customization";
 import { useAppSelector } from "@/features/store/hooks";
 import { selectEditorCustomizations } from "@/features/editor/store/editor-selectors";
@@ -66,14 +66,14 @@ export function useEditorView(noteId: string, rootView: boolean = false) {
     return draft;
   }, [customizations, rootView]);
 
-  useEffect(() => {
-    return () => {
-      if (rootView) {
-        document.documentElement.style.removeProperty("--dw-editor-background");
-        document.documentElement.style.removeProperty("--dw-editor-foreground");
-      }
-    };
-  }, [rootView]);
+  //  useEffect(() => {
+  //    return () => {
+  //      if (rootView) {
+  //        document.documentElement.style.removeProperty("--dw-editor-background");
+  //        document.documentElement.style.removeProperty("--dw-editor-foreground");
+  //      }
+  //    };
+  //  }, [rootView]);
 
   return { style, editorWidth };
 }
