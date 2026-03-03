@@ -26,15 +26,21 @@ export default function CoverImage() {
     >
       <Button
         onClick={removeCover}
-        variant={"outline"}
-        className={cn("bg-view-1 drop-shadow-sm", !mouseOver && "hidden")}
+        variant={"secondary"}
+        className={cn(
+          "bg-view-1 hover:bg-secondary! drop-shadow-md",
+          !mouseOver && "hidden",
+        )}
       >
         {t("removeCover")}
       </Button>
       <Button
         onClick={chooseNewCover}
-        variant={"outline"}
-        className={cn("bg-view-1 drop-shadow-sm", !mouseOver && "hidden")}
+        variant={"secondary"}
+        className={cn(
+          "bg-view-1 hover:bg-secondary! drop-shadow-md",
+          !mouseOver && "hidden",
+        )}
       >
         {t("changeCover")}
       </Button>
