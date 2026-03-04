@@ -136,6 +136,7 @@
     "@babel/preset-env": "^7.28.3",
     "@babel/preset-typescript": "^7.27.1",
     "@electron-toolkit/tsconfig": "^1.0.1",
+    "@electron/notarize": "^3.1.1",
     "@electron/rebuild": "^3.7.2",
     "@eslint/js": "^9.39.1",
     "@swc/core": "^1.13.5",

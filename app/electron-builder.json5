@@ -9,6 +9,7 @@
     buildResources: "resources",
   },
   files: ["dist-electron", "dist"],
+  afterSign: "./notarize.js",
   extraResources: [
     {
       from: "resources/icon512.png",
@@ -25,6 +26,13 @@
     target: ["dmg"],
     artifactName: "${productName}-Installer.${ext}",
     icon: "./resources/icon.icon",
+    entitlements: "./resources/entitlements.mac.plist",
+    entitlementsInherit: "./resources/entitlements.mac.plist",
+    hardenedRuntime: true,
+    gatekeeperAssess: false,
+  },
+  dmg: {
+    sign: false,
   },
   win: {
     target: [
