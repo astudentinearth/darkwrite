@@ -17,16 +17,16 @@ const _saveWithDebounce = _.debounce(
 
 settingsPersistenceMiddleware.startListening({
   actionCreator: settingsSlice.actions.update,
-  effect: async (_action, listenerApi) => {
+  effect: (_action, listenerApi) => {
     const state = listenerApi.getState() as RootState;
     const settings = state.settings;
-    await DarkwriteAPIClient.settings.saveUserSettings(settings);
+    DarkwriteAPIClient.settings.saveUserSettings(settings);
   },
 });
 
 settingsPersistenceMiddleware.startListening({
   actionCreator: settingsSlice.actions.updateWithDebounce,
-  effect: async (_action, listenerApi) => {
+  effect: (_action, listenerApi) => {
     const state = listenerApi.getState() as RootState;
     const settings = state.settings;
     _saveWithDebounce(settings);

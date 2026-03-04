@@ -64,6 +64,10 @@
   border-radius: 8px;
 }
 
+hr.ProseMirror-selectednode {
+  @apply border-primary/75;
+}
+
 @keyframes slide-down {
   0% {
     transform: translateY(-10%);

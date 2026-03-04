@@ -1,4 +1,4 @@
-import { NodeViewProps, NodeViewWrapper } from "@tiptap/react";
+import { NodeViewWrapper, ReactNodeViewProps } from "@tiptap/react";
 import { useEmbedSource } from "../../use-embed-source";
 import {
   ContextMenu,
@@ -17,7 +17,7 @@ export type DarkwriteImageAttributes = {
   pendingId: string | null;
 };
 
-export type DarkwriteImageViewProps = NodeViewProps & {
+export type DarkwriteImageViewProps = ReactNodeViewProps & {
   node: {
     attrs: DarkwriteImageAttributes;
   };
@@ -34,21 +34,17 @@ export const DarkwriteImageView = (props: DarkwriteImageViewProps) => {
       <div
         data-drag-handle=""
         contentEditable={false}
-        className="flex justify-center dwimage-container"
+        className={cn(
+          "flex justify-center dwimage-container",
+          (menuOpen || props.selected) && "bg-primary/20 rounded-md",
+        )}
       >
         {embedId == null || source === "" ? (
           <span className="opacity-50">Loading image...</span>
         ) : (
           <ContextMenu onOpenChange={setMenuOpen}>
             <ContextMenuTrigger asChild>
-              <img
-                draggable={false}
-                data-drag-handle=""
-                className={cn(
-                  menuOpen && "opacity-75 outline-2 outline-primary",
-                )}
-                src={source}
-              />
+              <img draggable={false} data-drag-handle="" src={source} />
             </ContextMenuTrigger>
             <ContextMenuContent>
               <ContextMenuItem
