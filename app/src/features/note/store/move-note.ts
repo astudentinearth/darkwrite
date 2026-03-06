@@ -2,7 +2,7 @@ import { DarkwriteAPIClient } from "@/api/api-client";
 import { NoteDTO } from "@/common/dto";
 import { isDescendant, ParentId } from "@/common/note";
 import { extractNoteDragData } from "@/features/dnd/datatransfer";
-import { AppStore, RootState } from "@/features/store/types";
+import { RootState } from "@/features/store/types";
 import { DragEvent } from "react";
 import {
   calculateOptimisticRankInLayer,

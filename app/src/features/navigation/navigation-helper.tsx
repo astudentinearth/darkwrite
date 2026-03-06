@@ -1,42 +1,38 @@
-import { useCallback, useEffect } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { resolveNote } from "../note/store/fetcher";
+import { appSessionSlice } from "../session/session-slice";
+import { useAppStore } from "../store/hooks";
+import { AppStore } from "../store/redux";
 import {
   getCurrentNoteIdFromPath,
   NavigationEventBus,
   notifyNoteChange,
 } from "./navigator";
-import { useAppStore } from "../store/hooks";
-import { useWorkspaceManager } from "../workspaces/hooks/use-workspace-manager";
-import { resolveNote } from "../note/store/fetcher";
 
 let targetNoteId: string | null = null;
+
+async function correctWorkspace(store: AppStore) {
+  const noteId = getCurrentNoteIdFromPath();
+  if (!noteId) return;
+  targetNoteId = noteId;
+  const currentNote = await resolveNote(noteId, store);
+  const currentWorkspaceId = store.getState().session.workspaceId;
+  // explictly check to prevent race condition
+  if (
+    currentNote.workspaceId !== currentWorkspaceId &&
+    targetNoteId === noteId
+  ) {
+    store.dispatch(
+      appSessionSlice.actions.switchWorkspace(currentNote.workspaceId),
+    );
+    targetNoteId = null;
+  }
+}
 
 export default function NavigationHelper() {
   const navigate = useNavigate();
   const store = useAppStore();
-  const { switchWorkspace } = useWorkspaceManager();
-
-  const correctCurrentWorkspace = useCallback(async () => {
-    const noteId = getCurrentNoteIdFromPath();
-    if (!noteId) return;
-    targetNoteId = noteId;
-    const currentNote = await resolveNote(noteId, store);
-    const currentWorkspaceId = store.getState().session.workspaceId;
-    // explictly check to prevent race condition
-    if (
-      currentNote.workspaceId !== currentWorkspaceId &&
-      targetNoteId === noteId
-    ) {
-      switchWorkspace(currentNote.workspaceId, false);
-      targetNoteId = null;
-    }
-  }, [store, switchWorkspace]);
-
-  const correctionListener = useCallback(() => {
-    const noteId = getCurrentNoteIdFromPath();
-    notifyNoteChange(noteId);
-    correctCurrentWorkspace();
-  }, [correctCurrentWorkspace]);
 
   useEffect(() => {
     const unsubcribe = NavigationEventBus.subscribe(
@@ -46,12 +42,22 @@ export default function NavigationHelper() {
       },
     );
 
-    window.addEventListener("popstate", correctionListener);
     return () => {
       unsubcribe();
+    };
+  }, [navigate, store]);
+
+  useEffect(() => {
+    const correctionListener = () => {
+      const noteId = getCurrentNoteIdFromPath();
+      notifyNoteChange(noteId);
+      correctWorkspace(store);
+    };
+    window.addEventListener("popstate", correctionListener);
+    return () => {
       window.removeEventListener("popstate", correctionListener);
     };
-  }, [navigate, correctionListener]);
+  }, [store]);
 
   return <></>;
 }

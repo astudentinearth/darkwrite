@@ -28,5 +28,5 @@ export async function initializeUserPrefs(store: AppStore) {
   const settings = await DarkwriteAPIClient.settings.getUserSettings();
   InitialUserSettings.settings = settings;
   store.dispatch(settingsSlice.actions.initialize(settings));
-  await Promise.all([initializeThemes(), initializeFonts()]);
+  await Promise.all([initializeThemes(store), initializeFonts(store)]);
 }

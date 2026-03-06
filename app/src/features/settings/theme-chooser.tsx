@@ -14,6 +14,7 @@ import { useThemes } from "../themes/hooks/use-themes";
 import { initializeThemes } from "../themes/init";
 import { useAppearanceSettings } from "./hooks/use-settings";
 import { useSettingsActions } from "./store/settings-actions";
+import { useAppStore } from "../store/hooks";
 
 export function ThemeDropdown(props: {
   className?: string;
@@ -48,9 +49,10 @@ export function ThemeChooser() {
   const accentColor = settings.accentColor;
   const useSystemAccentColor = settings.useSystemAccentColor;
   const { t } = useTranslation("translation");
+  const store = useAppStore();
   const importTheme = async () => {
     await DarkwriteAPIClient.theme.importTheme();
-    initializeThemes();
+    initializeThemes(store);
   };
   const { updateAccentColor, updateSettings } = useSettingsActions();
 

@@ -1,12 +1,13 @@
 import { DarkwriteAPIClient } from "@/api/api-client";
-import { setFonts, setThemes } from "./store/theme-actions";
+import { AppStore } from "../store/redux";
+import { getThemeActions } from "./store/theme-actions";
 
-export async function initializeThemes() {
+export async function initializeThemes(store: AppStore) {
   const response = await DarkwriteAPIClient.theme.getThemes();
-  setThemes(Object.values(response.themes));
+  getThemeActions(store).setThemes(Object.values(response.themes));
 }
 
-export async function initializeFonts() {
+export async function initializeFonts(store: AppStore) {
   const fonts = await DarkwriteAPIClient.desktop.getFontList();
-  setFonts(fonts);
+  getThemeActions(store).setFonts(fonts);
 }

@@ -3,7 +3,6 @@ import { DarkwriteUserSettings } from "@/common/settings";
 import { DeepPartial } from "@/common/ts-util";
 import { AppStore } from "@/features/store/redux";
 import { settingsSlice } from "./settings-slice";
-import { useStore } from "react-redux";
 import { useMemo } from "react";
 import { useAppStore } from "@/features/store/hooks";
 
