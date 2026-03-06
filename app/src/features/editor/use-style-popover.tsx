@@ -1,10 +1,10 @@
 import { FontStyle } from "@/common/note-customization";
 import { useNoteFromURL } from "@/features/note/hooks/use-note-from-url";
-import { setEditorCustomizations } from "./store/editor-actions";
+import { useEditorActions } from "./store/editor-actions";
 
 export default function useStylePopover() {
   const noteId = useNoteFromURL();
-
+  const { setEditorCustomizations } = useEditorActions();
   const setFont = (fontStyle: FontStyle, customFont?: string) => {
     if (!noteId) return;
     setEditorCustomizations(noteId, {

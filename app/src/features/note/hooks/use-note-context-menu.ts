@@ -1,23 +1,24 @@
-import { NoteExporter } from "@/features/export/note-exporter";
 import { useNoteActions } from "@/features/note/store/note-actions";
 import { selectNoteById } from "@/features/note/store/note-selectors";
 import { useAppSelector } from "@/features/store/hooks";
 import { showMoveNoteDialog } from "../store/notes-ui-actions";
+import { useNoteExport } from "@/features/export/note-exporter";
 
 export const useNoteContextMenu = (noteId: string) => {
   const note = useAppSelector((state) => selectNoteById(state, noteId));
   const { createNote, duplicateNote, moveToTrash } = useNoteActions();
+  const exporter = useNoteExport();
 
   const exportPDF = () => {
-    NoteExporter.exportPDF(noteId);
+    exporter.exportPDF(noteId);
   };
 
   const exportHTML = () => {
-    NoteExporter.exportHTML(noteId);
+    exporter.exportHTML(noteId);
   };
 
   const exportJSON = () => {
-    NoteExporter.exportJSON(noteId);
+    exporter.exportJSON(noteId);
   };
 
   const newSubpage = () => {

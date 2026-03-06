@@ -19,7 +19,7 @@ function App() {
               <Route index element={<HomePage />}></Route>
               <Route
                 path="/page/:pageId"
-                loader={noteLoader}
+                loader={({ params }) => noteLoader({ params, store })}
                 element={<EditorViewRouteHandler />}
               ></Route>
               <Route path="settings" element={<></>}></Route>

@@ -1,34 +1,53 @@
+import { PageSize } from "@/common/pdf";
 import { DarkwriteUserSettings } from "@/common/settings";
 import { DeepPartial } from "@/common/ts-util";
-import { store } from "@/features/store/redux";
+import { AppStore } from "@/features/store/redux";
 import { settingsSlice } from "./settings-slice";
-import { PageSize } from "@/common/pdf";
+import { useStore } from "react-redux";
+import { useMemo } from "react";
+import { useAppStore } from "@/features/store/hooks";
 
-export function updateSettings(partial: DeepPartial<DarkwriteUserSettings>) {
-  store.dispatch(settingsSlice.actions.update(partial));
-}
+export const getSettingsActions = (store: AppStore) => {
+  function updateSettings(partial: DeepPartial<DarkwriteUserSettings>) {
+    store.dispatch(settingsSlice.actions.update(partial));
+  }
 
-export function updateSettingsDebounced(
-  partial: DeepPartial<DarkwriteUserSettings>,
-) {
-  store.dispatch(settingsSlice.actions.updateWithDebounce(partial));
-}
+  function updateSettingsDebounced(
+    partial: DeepPartial<DarkwriteUserSettings>,
+  ) {
+    store.dispatch(settingsSlice.actions.updateWithDebounce(partial));
+  }
 
-/**
- * @returns the current settings state.
- */
-export function getSettings() {
-  return store.getState().settings;
-}
+  /**
+   * @returns the current settings state.
+   */
+  function getSettings() {
+    return store.getState().settings;
+  }
 
-export function setPreferredPageSize(size: PageSize) {
-  updateSettings({
-    editor: {
-      preferredPageSize: size,
-    },
-  });
-}
+  function setPreferredPageSize(size: PageSize) {
+    updateSettings({
+      editor: {
+        preferredPageSize: size,
+      },
+    });
+  }
 
-export function updateAccentColor(color: string) {
-  updateSettingsDebounced({ appearance: { accentColor: color } });
+  function updateAccentColor(color: string) {
+    updateSettingsDebounced({ appearance: { accentColor: color } });
+  }
+
+  return {
+    updateSettings,
+    updateSettingsDebounced,
+    getSettings,
+    setPreferredPageSize,
+    updateAccentColor,
+  };
+};
+
+export function useSettingsActions() {
+  const store = useAppStore();
+  const actions = useMemo(() => getSettingsActions(store), [store]);
+  return actions;
 }

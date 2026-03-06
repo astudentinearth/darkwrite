@@ -7,13 +7,7 @@ import { useAppSelector } from "@/features/store/hooks";
 import { selectEditorCustomizations } from "@/features/editor/store/editor-selectors";
 import { useCurrentWorkspaceId } from "@/features/workspaces/hooks/use-workspace";
 import { Editor, JSONContent } from "@tiptap/core";
-import {
-  setCanRedo,
-  setCanUndo,
-  setCharacterCount,
-  setEditorContent,
-  setWordCount,
-} from "@/features/editor/store/editor-actions";
+import { useEditorActions } from "@/features/editor/store/editor-actions";
 import { EditorContext } from "@/features/editor/store/editor-context";
 import EditorUtil from "@/features/editor/editor-util";
 import { useEditorSettings } from "@/features/settings/hooks/use-settings";
@@ -79,6 +73,13 @@ export function useEditorView(noteId: string, rootView: boolean = false) {
 }
 
 export function useEditorOptions() {
+  const {
+    setCanUndo,
+    setCanRedo,
+    setWordCount,
+    setEditorContent,
+    setCharacterCount,
+  } = useEditorActions();
   const workspaceId = useCurrentWorkspaceId() ?? "";
   const indentSize = useEditorSettings().codeIndentSize;
   const { noteId } = use(EditorContext);
@@ -108,7 +109,7 @@ export function useEditorOptions() {
     (content: JSONContent) => {
       setEditorContent(noteId, content);
     },
-    [noteId],
+    [noteId, setEditorContent],
   );
 
   const onUpdate = useCallback(
@@ -121,7 +122,7 @@ export function useEditorOptions() {
       setCanUndo(noteId, util.canUndo()());
       setCanRedo(noteId, util.canRedo()());
     },
-    [noteId],
+    [noteId, setCanRedo, setCanUndo, setCharacterCount, setWordCount],
   );
 
   const onCreate = useCallback(
@@ -132,7 +133,7 @@ export function useEditorOptions() {
       setWordCount(noteId, wordCount);
       setCharacterCount(noteId, characterCount);
     },
-    [noteId],
+    [noteId, setCharacterCount, setWordCount],
   );
 
   return { imageConfig, indentSize, handleContentChange, onUpdate, onCreate };

@@ -1,61 +1,71 @@
 import { NoteCustomization } from "@/common/note-customization";
-import { store } from "@/features/store/redux";
 import { editorSlice } from "./editor-slice";
 import { EditorContent } from "../types";
+import { AppDispatch } from "@/features/store/types";
+import { useAppDispatch } from "@/features/store/hooks";
+import { useMemo } from "react";
 
-export function setEditorCustomizations(
-  noteId: string,
-  customizations: Partial<NoteCustomization>,
-) {
-  store.dispatch(
-    editorSlice.actions.updateDocumentCustomizations({
-      noteId,
-      customizations,
-    }),
-  );
-}
+export const getEditorActions = (dispatch: AppDispatch) => ({
+  setEditorCustomizations(
+    noteId: string,
+    customizations: Partial<NoteCustomization>,
+  ) {
+    dispatch(
+      editorSlice.actions.updateDocumentCustomizations({
+        noteId,
+        customizations,
+      }),
+    );
+  },
 
-export function setEditorContent(noteId: string, content: EditorContent) {
-  store.dispatch(
-    editorSlice.actions.updateDocumentContent({
-      noteId,
-      content,
-    }),
-  );
-}
+  setEditorContent(noteId: string, content: EditorContent) {
+    dispatch(
+      editorSlice.actions.updateDocumentContent({
+        noteId,
+        content,
+      }),
+    );
+  },
 
-export function setWordCount(noteId: string, wordCount: number) {
-  store.dispatch(
-    editorSlice.actions.setWordCount({
-      noteId,
-      wordCount,
-    }),
-  );
-}
+  setWordCount(noteId: string, wordCount: number) {
+    dispatch(
+      editorSlice.actions.setWordCount({
+        noteId,
+        wordCount,
+      }),
+    );
+  },
 
-export function setCharacterCount(noteId: string, characterCount: number) {
-  store.dispatch(
-    editorSlice.actions.setCharacterCount({
-      noteId,
-      characterCount,
-    }),
-  );
-}
+  setCharacterCount(noteId: string, characterCount: number) {
+    dispatch(
+      editorSlice.actions.setCharacterCount({
+        noteId,
+        characterCount,
+      }),
+    );
+  },
 
-export function setCanUndo(noteId: string, canUndo: boolean) {
-  store.dispatch(
-    editorSlice.actions.setCanUndo({
-      noteId,
-      canUndo,
-    }),
-  );
-}
+  setCanUndo(noteId: string, canUndo: boolean) {
+    dispatch(
+      editorSlice.actions.setCanUndo({
+        noteId,
+        canUndo,
+      }),
+    );
+  },
 
-export function setCanRedo(noteId: string, canRedo: boolean) {
-  store.dispatch(
-    editorSlice.actions.setCanRedo({
-      noteId,
-      canRedo,
-    }),
-  );
+  setCanRedo(noteId: string, canRedo: boolean) {
+    dispatch(
+      editorSlice.actions.setCanRedo({
+        noteId,
+        canRedo,
+      }),
+    );
+  },
+});
+
+export function useEditorActions() {
+  const dispatch = useAppDispatch();
+  const actions = useMemo(() => getEditorActions(dispatch), [dispatch]);
+  return actions;
 }

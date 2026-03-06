@@ -10,10 +10,10 @@ import {
 import { cn } from "@/lib/utils";
 import { Folder } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { updateAccentColor, updateSettings } from "./store/settings-actions";
 import { useThemes } from "../themes/hooks/use-themes";
 import { initializeThemes } from "../themes/init";
 import { useAppearanceSettings } from "./hooks/use-settings";
+import { useSettingsActions } from "./store/settings-actions";
 
 export function ThemeDropdown(props: {
   className?: string;
@@ -52,6 +52,7 @@ export function ThemeChooser() {
     await DarkwriteAPIClient.theme.importTheme();
     initializeThemes();
   };
+  const { updateAccentColor, updateSettings } = useSettingsActions();
 
   const setScheme = (mode: "dark" | "light", id: string) => {
     updateSettings({

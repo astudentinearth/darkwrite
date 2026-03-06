@@ -1,10 +1,16 @@
 import { DarkwriteAPIClient } from "@/api/api-client";
 import { NotFoundError } from "@/common/error";
 import { setWorkspaceId } from "@/context/local-state";
-import { store } from "@/features/store/redux";
+import { AppStore } from "@/features/store/redux";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const noteLoader = async ({ params }: { params: any }) => {
+export const noteLoader = async ({
+  params,
+  store,
+}: {
+  params: any;
+  store: AppStore;
+}) => {
   const { pageId } = params;
   if (!pageId) throw new Error("Note id not found");
 

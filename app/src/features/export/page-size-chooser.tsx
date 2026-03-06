@@ -7,8 +7,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
-import { setPreferredPageSize } from "../settings/store/settings-actions";
 import { useEditorSettings } from "../settings/hooks/use-settings";
+import { useSettingsActions } from "../settings/store/settings-actions";
 
 interface PageSizeChooserProps {
   className?: string;
@@ -16,7 +16,7 @@ interface PageSizeChooserProps {
 
 export function PageSizeChooser({ className }: PageSizeChooserProps) {
   const pdfExportPageSize = useEditorSettings().preferredPageSize;
-
+  const { setPreferredPageSize } = useSettingsActions();
   return (
     <Select
       value={pdfExportPageSize}

@@ -1,14 +1,14 @@
-import { store } from "@/features/store/redux";
 import { selectNoteById } from "./note-selectors";
 import { DarkwriteAPIClient } from "@/api/api-client";
 import { upsertNotes } from "./note-slice";
+import { AppStore } from "@/features/store/types";
 
 /**
  * Returns a note from cache, or fetches it from the backend.
  * The note will be placed into the cache if it's fetched later.
  * @param id
  */
-export async function resolveNote(id: string) {
+export async function resolveNote(id: string, store: AppStore) {
   const cached = selectNoteById(store.getState(), id);
   if (cached != null) return cached;
 

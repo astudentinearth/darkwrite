@@ -2,8 +2,7 @@ import { DarkwriteAPIClient } from "@/api/api-client";
 import { NoteDTO } from "@/common/dto";
 import { isDescendant, ParentId } from "@/common/note";
 import { extractNoteDragData } from "@/features/dnd/datatransfer";
-import { store } from "@/features/store/redux";
-import { RootState } from "@/features/store/types";
+import { AppStore, RootState } from "@/features/store/types";
 import { DragEvent } from "react";
 import {
   calculateOptimisticRankInLayer,
@@ -30,7 +29,7 @@ export type MoveNoteIntoArgs = {
   placement: "inside-start" | "inside-end";
 };
 
-export function getMovingNote(e: DragEvent<HTMLElement>) {
+export function getMovingNote(e: DragEvent<HTMLElement>, store: AppStore) {
   const sourceId = extractNoteDragData(e)?.noteId;
   if (!sourceId) return;
   const movingNote = selectNoteById(store.getState() as RootState, sourceId);

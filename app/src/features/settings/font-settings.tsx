@@ -1,11 +1,12 @@
 import FontSelect from "@/components/font-select";
 import { useTranslation } from "react-i18next";
-import { updateSettings } from "./store/settings-actions";
 import { useFontSettings } from "./hooks/use-settings";
+import { useSettingsActions } from "./store/settings-actions";
 
 export default function FontSettings() {
   const settings = useFontSettings();
   const { code, sans, serif, ui } = settings;
+  const { updateSettings } = useSettingsActions();
   const { t } = useTranslation("translation", { keyPrefix: "settings.fonts" });
   const setFont = (type: "ui" | "code" | "sans" | "serif", value: string) => {
     updateSettings({ appearance: { fonts: { [type]: value } } });

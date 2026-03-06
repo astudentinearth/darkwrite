@@ -1,6 +1,6 @@
 import { beginDrag, DragType } from "@/features/dnd/datatransfer";
 import { useDragState } from "@/features/dnd/use-drag-state";
-import { useAppSelector } from "@/features/store/hooks";
+import { useAppSelector, useAppStore } from "@/features/store/hooks";
 import { useCallback, useEffect, useState } from "react";
 import { matchPath } from "react-router-dom";
 import {
@@ -50,6 +50,7 @@ export function useNoteItem(id: string) {
 }
 
 export function useNoteItemDrag(id: string) {
+  const store = useAppStore();
   const {
     isDraggingOver,
     onDragEnter,
@@ -73,7 +74,7 @@ export function useNoteItemDrag(id: string) {
       e.stopPropagation();
 
       setIsDraggingOver(false);
-      const note = getMovingNote(e);
+      const note = getMovingNote(e, store);
       if (!note) return;
 
       if (!canMoveNoteInto(note.id, id)) return;
@@ -90,7 +91,7 @@ export function useNoteItemDrag(id: string) {
         console.error("Failed to move note:", error);
       }
     },
-    [id, trigger, setIsDraggingOver],
+    [id, trigger, setIsDraggingOver, store],
   );
 
   return {
@@ -119,6 +120,7 @@ export function useNoteDropZone(
   const [moveInto] = useMoveIntoMutation();
 
   type DragEvent = React.DragEvent<HTMLElement>;
+  const store = useAppStore();
 
   const handleDropForBelow = useCallback(
     (e: DragEvent) => {
@@ -128,7 +130,7 @@ export function useNoteDropZone(
 
       if (!aboveOrParentId) return;
 
-      const movingNote = getMovingNote(e);
+      const movingNote = getMovingNote(e, store);
       if (!movingNote) return;
 
       if (!canMoveNoteBelow(movingNote.id, aboveOrParentId)) return;
@@ -142,7 +144,7 @@ export function useNoteDropZone(
         console.error("Failed to move note below:", error);
       }
     },
-    [aboveOrParentId, moveBelow, setIsDraggingOver],
+    [aboveOrParentId, moveBelow, setIsDraggingOver, store],
   );
 
   const handleDropInto = useCallback(
@@ -151,7 +153,7 @@ export function useNoteDropZone(
       e.stopPropagation();
       setIsDraggingOver(false);
 
-      const movingNote = getMovingNote(e);
+      const movingNote = getMovingNote(e, store);
       if (!movingNote) return;
 
       if (!canMoveNoteInto(movingNote.id, aboveOrParentId)) return;
@@ -166,7 +168,7 @@ export function useNoteDropZone(
         console.error("Failed to move note into:", error);
       }
     },
-    [aboveOrParentId, moveInto, setIsDraggingOver],
+    [aboveOrParentId, moveInto, setIsDraggingOver, store],
   );
 
   return {
