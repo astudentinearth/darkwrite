@@ -5,7 +5,9 @@ import HomePage from "./features/home/home-page";
 import UpdateChecker from "./features/update/update-checker";
 import { noteLoader } from "./lib/note-loader";
 import { Provider } from "react-redux";
-import { store } from "./features/store/redux";
+import { createAppStore } from "./features/store/redux";
+
+const store = createAppStore();
 
 function App() {
   return (

@@ -3,13 +3,14 @@ import { selectNoteById } from "../store/note-selectors";
 import { useTranslation } from "react-i18next";
 import { ContextMenuItem } from "@/components/ui";
 import { Star } from "lucide-react";
-import { favorite, unfavorite } from "../store/note-actions";
+import { useNoteActions } from "../store/note-actions";
 
 export function ToggleFavoriteContextMenuItem(props: { noteId: string }) {
   const note = useAppSelector((state) => selectNoteById(state, props.noteId));
   const { t } = useTranslation("translation", {
     keyPrefix: "sidebar.notes.contextmenu",
   });
+  const { favorite, unfavorite } = useNoteActions();
   if (!note) return <></>;
 
   const _favorite = () => {

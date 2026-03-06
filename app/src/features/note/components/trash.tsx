@@ -13,7 +13,7 @@ import { memo, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNoteById } from "../hooks/use-note-by-id";
 import { useTrash } from "../hooks/use-trash";
-import { permanentlyDeleteNote, restoreFromTrash } from "../store/note-actions";
+import { useNoteActions } from "../store/note-actions";
 
 type TrashItemProps = {
   noteId: string;
@@ -23,6 +23,7 @@ type TrashItemProps = {
 const TrashItem = memo(function ({ noteId, className }: TrashItemProps) {
   const { note } = useNoteById(noteId);
   const { t } = useTranslation();
+  const { restoreFromTrash, permanentlyDeleteNote } = useNoteActions();
   if (!note) return null;
 
   return (

@@ -19,34 +19,38 @@ import { workspaceApi } from "../workspaces/store/workspace-api";
 import { clientInfoApi } from "../settings/store/client-info-api";
 import { notesUiSlice } from "../note/store/notes-ui-slice";
 
-export const store = configureStore({
-  reducer: {
-    [appSessionSlice.name]: appSessionSlice.reducer,
-    [notesSlice.name]: notesSlice.reducer,
-    [notesApi.reducerPath]: notesApi.reducer,
-    [settingsSlice.name]: settingsSlice.reducer,
-    [editorSlice.name]: editorSlice.reducer,
-    [editorApi.reducerPath]: editorApi.reducer,
-    [themeSlice.name]: themeSlice.reducer,
-    [updateApi.reducerPath]: updateApi.reducer,
-    [workspaceSlice.name]: workspaceSlice.reducer,
-    [workspaceApi.reducerPath]: workspaceApi.reducer,
-    [clientInfoApi.reducerPath]: clientInfoApi.reducer,
-    [notesUiSlice.name]: notesUiSlice.reducer,
-  },
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware()
-      .prepend(sessionListenerMiddleware.middleware)
-      .prepend(settingsPersistenceMiddleware.middleware)
-      .prepend(editorMiddleware.middleware)
-      .concat(
-        notesApi.middleware,
-        editorApi.middleware,
-        updateApi.middleware,
-        workspaceApi.middleware,
-        clientInfoApi.middleware,
-      ),
-  preloadedState: {
-    [appSessionSlice.name]: loadSessionState() || DEFAULT_SESSION_STATE,
-  },
-});
+export function createAppStore() {
+  return configureStore({
+    reducer: {
+      [appSessionSlice.name]: appSessionSlice.reducer,
+      [notesSlice.name]: notesSlice.reducer,
+      [notesApi.reducerPath]: notesApi.reducer,
+      [settingsSlice.name]: settingsSlice.reducer,
+      [editorSlice.name]: editorSlice.reducer,
+      [editorApi.reducerPath]: editorApi.reducer,
+      [themeSlice.name]: themeSlice.reducer,
+      [updateApi.reducerPath]: updateApi.reducer,
+      [workspaceSlice.name]: workspaceSlice.reducer,
+      [workspaceApi.reducerPath]: workspaceApi.reducer,
+      [clientInfoApi.reducerPath]: clientInfoApi.reducer,
+      [notesUiSlice.name]: notesUiSlice.reducer,
+    },
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware()
+        .prepend(sessionListenerMiddleware.middleware)
+        .prepend(settingsPersistenceMiddleware.middleware)
+        .prepend(editorMiddleware.middleware)
+        .concat(
+          notesApi.middleware,
+          editorApi.middleware,
+          updateApi.middleware,
+          workspaceApi.middleware,
+          clientInfoApi.middleware,
+        ),
+    preloadedState: {
+      [appSessionSlice.name]: loadSessionState() || DEFAULT_SESSION_STATE,
+    },
+  });
+}
+
+export type AppStore = ReturnType<typeof createAppStore>;

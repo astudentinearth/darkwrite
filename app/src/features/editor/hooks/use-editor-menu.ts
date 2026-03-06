@@ -1,10 +1,7 @@
 import { NoteExporter } from "@/features/export/note-exporter";
 import useNoteImport from "@/features/note/hooks/use-note-import";
 import { useNoteById } from "@/features/note/hooks/use-note-by-id";
-import {
-  moveToTrash,
-  restoreFromTrash,
-} from "@/features/note/store/note-actions";
+import { useNoteActions } from "@/features/note/store/note-actions";
 import { emitEditorEvent } from "../event/editor-bus";
 import { EditorEventType } from "../event/types";
 import { useAppSelector } from "@/features/store/hooks";
@@ -43,6 +40,7 @@ export default function useEditorMenu(noteId: string): UseEditorMenuResult {
   const characterCount = useAppSelector((s) => selectCharacterCount(s, noteId));
   const canUndo = useAppSelector((s) => selectCanUndo(s, noteId));
   const canRedo = useAppSelector((s) => selectCanRedo(s, noteId));
+  const { moveToTrash, restoreFromTrash } = useNoteActions();
 
   const actions: EditorMenuActions = {
     exportHTML: () => NoteExporter.exportHTML(noteId),

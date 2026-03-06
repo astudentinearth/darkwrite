@@ -12,7 +12,7 @@ import { memo, useRef } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { useNoteById } from "../hooks/use-note-by-id";
 import { useMoveNoteDialog } from "../hooks/use-move-note-dialog";
-import { moveInto } from "../store/note-actions";
+import { useNoteActions } from "../store/note-actions";
 import { hideMoveNoteDialog } from "../store/notes-ui-actions";
 import { useAppSelector } from "@/features/store/hooks";
 import { selectNoteIcon, selectNoteTitle } from "../store/note-selectors";
@@ -42,6 +42,7 @@ const SearchItem = memo(function ({
   targetNoteId: string;
 }) {
   const { note } = useNoteById(noteId);
+  const { moveInto } = useNoteActions();
   if (!note) return <></>;
   return (
     <CommandItem

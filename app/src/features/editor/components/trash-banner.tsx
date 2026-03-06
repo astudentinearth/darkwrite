@@ -5,12 +5,13 @@ import { use } from "react";
 import { useTranslation } from "react-i18next";
 import { EditorContext } from "../store/editor-context";
 import { useNoteById } from "@/features/note/hooks/use-note-by-id";
-import { restoreFromTrash } from "@/features/note/store/note-actions";
+import { useNoteActions } from "@/features/note/store/note-actions";
 
 export default function TrashBanner() {
   const { t } = useTranslation();
   const { noteId } = use(EditorContext);
   const { note } = useNoteById(noteId);
+  const { restoreFromTrash } = useNoteActions();
   if (!note?.isTrashed) return <></>;
 
   return (

@@ -3,12 +3,13 @@ import ConstrainedWidth from "../editor/constrained-width";
 import RecentNotes from "./recents";
 import { Button } from "@/components/ui";
 import { SquarePen } from "lucide-react";
-import { createNote } from "../note/store/note-actions";
+import { useNoteActions } from "../note/store/note-actions";
 import { useCurrentWorkspaceId } from "../workspaces/hooks/use-workspace";
 
 export default function HomePage() {
   const { t } = useTranslation();
   const workspaceId = useCurrentWorkspaceId();
+  const { createNote } = useNoteActions();
   return (
     <div className="flex items-center flex-col px-24 editor-fade-in min-h-full relative p-12">
       <ConstrainedWidth className="flex flex-col gap-6">

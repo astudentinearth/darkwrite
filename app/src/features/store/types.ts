@@ -1,7 +1,8 @@
-import { store } from "./redux";
+import type { AppStore } from "./redux";
 
-export type RootState = ReturnType<typeof store.getState>;
-export type AppDispatch = typeof store.dispatch;
+export type { AppStore };
+export type RootState = ReturnType<AppStore["getState"]>;
+export type AppDispatch = AppStore["dispatch"];
 
 export type Selector<argType, retType> = (
   state: RootState,

@@ -1,14 +1,13 @@
 import { NoteExporter } from "@/features/export/note-exporter";
-import {
-  createNote,
-  duplicateNote,
-  moveToTrash,
-} from "@/features/note/store/note-actions";
+import { useNoteActions } from "@/features/note/store/note-actions";
 import { selectNoteById } from "@/features/note/store/note-selectors";
-import { store } from "@/features/store/redux";
+import { useAppSelector } from "@/features/store/hooks";
 import { showMoveNoteDialog } from "../store/notes-ui-actions";
 
 export const useNoteContextMenu = (noteId: string) => {
+  const note = useAppSelector((state) => selectNoteById(state, noteId));
+  const { createNote, duplicateNote, moveToTrash } = useNoteActions();
+
   const exportPDF = () => {
     NoteExporter.exportPDF(noteId);
   };
@@ -22,7 +21,6 @@ export const useNoteContextMenu = (noteId: string) => {
   };
 
   const newSubpage = () => {
-    const note = selectNoteById(store.getState(), noteId);
     if (!note) return;
     createNote({
       workspaceId: note.workspaceId,

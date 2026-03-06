@@ -3,7 +3,7 @@ import {
   selectCoverImageSource,
   selectIsWidePage,
 } from "@/features/editor/store/editor-selectors";
-import { restoreFromTrash } from "@/features/note/store/note-actions";
+import { useNoteActions } from "@/features/note/store/note-actions";
 import {
   selectNoteIcon,
   selectNoteTitle,
@@ -20,6 +20,7 @@ export default function useEditorCover(noteId: string) {
   const titleUpdater = useMemo(() => createTitleUpdater(noteId), [noteId]);
   const title = useAppSelector((s) => selectNoteTitle(s, noteId));
   const icon = useAppSelector((s) => selectNoteIcon(s, noteId));
+  const { restoreFromTrash } = useNoteActions();
   const coverImageSource = useAppSelector((s) =>
     selectCoverImageSource(s, noteId),
   );
