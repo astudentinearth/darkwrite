@@ -13,9 +13,9 @@ import { Trans, useTranslation } from "react-i18next";
 import { useNoteById } from "../hooks/use-note-by-id";
 import { useMoveNoteDialog } from "../hooks/use-move-note-dialog";
 import { useNoteActions } from "../store/note-actions";
-import { hideMoveNoteDialog } from "../store/notes-ui-actions";
-import { useAppSelector } from "@/features/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/features/store/hooks";
 import { selectNoteIcon, selectNoteTitle } from "../store/note-selectors";
+import { MoveNoteDialogPortal } from "../store/notes-ui-actions";
 
 function LocalizedTitle({ noteId }: { noteId: string }) {
   const title = useAppSelector((s) => selectNoteTitle(s, noteId));
@@ -43,6 +43,7 @@ const SearchItem = memo(function ({
 }) {
   const { note } = useNoteById(noteId);
   const { moveInto } = useNoteActions();
+  const dispatch = useAppDispatch();
   if (!note) return <></>;
   return (
     <CommandItem
@@ -50,7 +51,7 @@ const SearchItem = memo(function ({
       value={note.id + " " + note.title}
       onSelect={() => {
         moveInto(targetNoteId, noteId);
-        hideMoveNoteDialog();
+        MoveNoteDialogPortal(dispatch).hideMoveNoteDialog();
       }}
     >
       <span>{getNoteIcon(note.icon)}</span>

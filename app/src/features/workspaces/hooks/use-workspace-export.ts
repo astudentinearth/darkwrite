@@ -1,7 +1,7 @@
 import { DarkwriteAPIClient } from "@/api/api-client";
 import { generateHTML } from "@/features/editor/html-export";
 import { useState } from "react";
-import { getCurrentWorkspaceId } from "../store/workspace-actions";
+import { useCurrentWorkspaceId } from "./use-workspace";
 
 async function exportWorkspace(workspaceId: string, _generator = generateHTML) {
   await DarkwriteAPIClient.backup.initCache();
@@ -20,8 +20,7 @@ async function exportWorkspace(workspaceId: string, _generator = generateHTML) {
 }
 
 export function useWorkspaceExport() {
-  const workspaceId = getCurrentWorkspaceId();
-
+  const workspaceId = useCurrentWorkspaceId();
   const [exporting, setExporting] = useState(false);
   const _export = () => {
     if (!workspaceId) return;

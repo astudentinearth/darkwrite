@@ -15,6 +15,8 @@ import { produce } from "immer";
 import { Check, X } from "lucide-react";
 import { ReactNode, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { getWorkspaceActions } from "../workspaces/store/workspace-actions";
+import { useAppStore } from "../store/hooks";
 
 export type EditWorkspaceDialogProps = {
   className?: string;
@@ -28,6 +30,8 @@ export type EditWorkspaceDialogProps = {
 export default function EditWorkspaceDialog(props: EditWorkspaceDialogProps) {
   const { className, workspace, children } = props;
   const [name, setName] = useState(props.workspace.name);
+  const store = useAppStore();
+  const { getCurrentWorkspaceId } = getWorkspaceActions(store);
   const [imageUrl, setImageUrl] = useState<string | undefined | null>(
     workspace.icon_url,
   );
@@ -48,7 +52,7 @@ export default function EditWorkspaceDialog(props: EditWorkspaceDialogProps) {
   };
 
   const updateImage = async () => {
-    const embed = await uploadImage();
+    const embed = await uploadImage(getCurrentWorkspaceId);
     setImageUrl(embed.url);
   };
 

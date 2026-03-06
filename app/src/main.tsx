@@ -9,10 +9,11 @@ import { correctWorkspaceState, initializeUserPrefs } from "./init";
 import { ReactRootContainer } from "./react-root-helper";
 import { useOnboardingState } from "./features/onboarding/onboarding-state";
 import { initalizePlatform } from "./lib/platform";
+import store from "./store";
 
 const renderApp = async () => {
-  await correctWorkspaceState();
-  ReactRootContainer.root.render(<App />);
+  await correctWorkspaceState(store);
+  ReactRootContainer.root.render(<App store={store} />);
 };
 
 const renderOnboarding = () => {
@@ -25,7 +26,7 @@ const initialize = async () => {
   }
   DarkwriteAPIClient.initialize(APIClientMode.LOCAL);
   init({ data });
-  await initializeUserPrefs();
+  await initializeUserPrefs(store);
   await initalizePlatform();
   if ((await DarkwriteAPIClient.onboarding.isCompleted()) === false) {
     if (

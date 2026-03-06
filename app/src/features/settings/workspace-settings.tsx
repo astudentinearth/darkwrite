@@ -16,7 +16,7 @@ import SettingsCard from "./settings-card";
 import { useWorkspaceExport } from "@/features/workspaces/hooks/use-workspace-export";
 import useBackup from "@/features/backup/hooks/use-backup";
 import { RestoreDataDialog } from "./restore-dialog";
-import { updateSettings } from "./store/settings-actions";
+import { useSettingsActions } from "./store/settings-actions";
 import { useCurrentWorkspace } from "../workspaces/hooks/use-workspace";
 import { useUpdateWorkspaceMutation } from "../workspaces/store/workspace-api";
 import { useSettings } from "./hooks/use-settings";
@@ -36,7 +36,7 @@ export default function WorkspaceSettings() {
   const settings = useSettings();
   const exporter = useWorkspaceExport();
   const backup = useBackup();
-
+  const { updateSettings } = useSettingsActions();
   const handleUpdateCheck = (val: boolean) => {
     updateSettings({ client: { autoUpdateCheck: val } });
   };

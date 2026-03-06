@@ -2,16 +2,16 @@ import { cleanNoteTitle } from "@/common/note";
 import DynamicTextarea from "@/components/dynamic-textarea";
 import { EditorContext } from "@/features/editor/store/editor-context";
 import { selectNoteTitle } from "@/features/note/store/note-selectors";
-import { createTitleUpdater } from "@/features/note/store/update-note";
+import { useTitleUpdater } from "@/features/note/store/update-note";
 import { useAppSelector } from "@/features/store/hooks";
-import { use, useMemo } from "react";
+import { use } from "react";
 import { emitEditorEvent } from "../event/editor-bus";
 import { EditorEventType } from "../event/types";
 import { UtilityNodes } from "../node-types";
 
 export function TitleEditField() {
   const { noteId } = use(EditorContext);
-  const titleUpdater = useMemo(() => createTitleUpdater(noteId), [noteId]);
+  const titleUpdater = useTitleUpdater(noteId);
   const title = useAppSelector((s) => selectNoteTitle(s, noteId));
 
   return (

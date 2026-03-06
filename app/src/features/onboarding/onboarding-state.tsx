@@ -12,6 +12,7 @@ import { correctWorkspaceState, InitialUserSettings } from "@/init";
 import WorkspaceNameMigratorStep from "./workspace-name-migrator";
 import MigrationFinish from "./finish-migrator";
 import MigrationError from "./migration-error";
+import store from "@/store";
 
 export type OnboardingPage =
   | "language"
@@ -116,8 +117,8 @@ export async function finishOnboarding() {
 
   await DarkwriteAPIClient.onboarding.markFinished();
   InitialUserSettings.settings = prefs;
-  correctWorkspaceState();
-  ReactRootContainer.root.render(<App />);
+  correctWorkspaceState(store);
+  ReactRootContainer.root.render(<App store={store} />);
 }
 
 export async function migrateAndFinishOnboarding() {
@@ -130,8 +131,8 @@ export async function migrateAndFinishOnboarding() {
       name: state.workspaceName,
     });
     await DarkwriteAPIClient.onboarding.markFinished();
-    correctWorkspaceState();
-    ReactRootContainer.root.render(<App />);
+    correctWorkspaceState(store);
+    ReactRootContainer.root.render(<App store={store} />);
   } catch {
     useOnboardingState.setState({ currentPage: "migration-error" });
   }

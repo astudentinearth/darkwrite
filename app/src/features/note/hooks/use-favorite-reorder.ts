@@ -1,18 +1,19 @@
 import { useDragState } from "@/features/dnd/use-drag-state";
 import { getMovingNote } from "../store/move-note";
-import { useAppDispatch } from "@/features/store/hooks";
+import { useAppDispatch, useAppStore } from "@/features/store/hooks";
 import { favoritesApi } from "../store/favorites-api";
 
 export function useFavoriteDropZone(aboveId: string | null) {
   const dragState = useDragState();
   const dispatch = useAppDispatch();
+  const store = useAppStore();
 
   const onDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     e.stopPropagation();
     dragState.setIsDraggingOver(false);
 
-    const note = getMovingNote(e);
+    const note = getMovingNote(e, store.getState());
     if (!note) return;
 
     try {

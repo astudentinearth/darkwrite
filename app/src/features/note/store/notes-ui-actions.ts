@@ -1,14 +1,18 @@
-import { store } from "@/features/store/redux";
 import { notesUiSlice } from "./notes-ui-slice";
+import { AppDispatch } from "@/features/store/types";
 
-export function showMoveNoteDialog(noteId: string) {
-  store.dispatch(
-    notesUiSlice.actions.showMoveNoteDialog({
-      noteId,
-    }),
-  );
-}
+export function MoveNoteDialogPortal(dispatch: AppDispatch) {
+  function showMoveNoteDialog(noteId: string) {
+    dispatch(
+      notesUiSlice.actions.showMoveNoteDialog({
+        noteId,
+      }),
+    );
+  }
 
-export function hideMoveNoteDialog() {
-  store.dispatch(notesUiSlice.actions.closeMoveNoteDialog());
+  function hideMoveNoteDialog() {
+    dispatch(notesUiSlice.actions.closeMoveNoteDialog());
+  }
+
+  return { showMoveNoteDialog, hideMoveNoteDialog };
 }

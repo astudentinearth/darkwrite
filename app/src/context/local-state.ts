@@ -1,6 +1,5 @@
 import { PageSize } from "@/common/pdf";
 import { appSessionSlice } from "@/features/session/session-slice";
-import { store } from "@/features/store/redux";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
@@ -66,10 +65,6 @@ export const useLocalStore = create<localStore & localStoreAction>()(
     },
   ),
 );
-
-export const setWorkspaceId = (id: string) => {
-  store.dispatch(appSessionSlice.actions.switchWorkspace(id));
-};
 
 export function toggleSidebar() {
   useLocalStore.setState((state) => ({

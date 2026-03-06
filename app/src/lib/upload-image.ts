@@ -1,8 +1,9 @@
 import { DarkwriteAPIClient } from "@/api/api-client";
 import { EmbedDTO } from "@/common/dto/response/embed.response";
-import { getCurrentWorkspaceId } from "@/features/workspaces/store/workspace-actions";
 
-export function uploadImage() {
+export function uploadImage(
+  getCurrentWorkspaceId: () => string | null,
+): Promise<EmbedDTO> {
   return new Promise<EmbedDTO>((resolve, reject) => {
     const input = document.createElement("input");
     input.type = "file";

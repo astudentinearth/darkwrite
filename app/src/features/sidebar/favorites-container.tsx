@@ -8,15 +8,15 @@ import { cn } from "@/lib/utils";
 import { ChevronRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { FavoritesView } from "../note/components/favorites";
-import { setFavoritesViewOpen } from "../session/session-actions";
+import { useSessionActions } from "../session/session-actions";
 import { useFavoritesViewOpen } from "../session/session-hooks";
 
 export default function FavoritesContainer() {
   const { t } = useTranslation("translation", { keyPrefix: "sidebar" });
   const open = useFavoritesViewOpen();
-  const setOpen = setFavoritesViewOpen;
+  const { setFavoritesViewOpen } = useSessionActions();
   return (
-    <Collapsible open={open} onOpenChange={setOpen}>
+    <Collapsible open={open} onOpenChange={setFavoritesViewOpen}>
       <CollapsibleTrigger asChild>
         <Button
           className="text-xs p-1 gap-1 h-fit w-full text-foreground/80 hover:text-foreground justify-start"

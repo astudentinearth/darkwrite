@@ -12,7 +12,7 @@ import {
   canMoveNoteBelow,
   canMoveNoteInto,
 } from "../store/move-note-validator";
-import { selectNoteById } from "../store/note-selectors";
+import { selectAllNotesAsMap, selectNoteById } from "../store/note-selectors";
 import {
   getCurrentRoutePath,
   NavigationEventBus,
@@ -74,10 +74,11 @@ export function useNoteItemDrag(id: string) {
       e.stopPropagation();
 
       setIsDraggingOver(false);
-      const note = getMovingNote(e, store);
+      const note = getMovingNote(e, store.getState());
       if (!note) return;
 
-      if (!canMoveNoteInto(note.id, id)) return;
+      if (!canMoveNoteInto(note.id, id, selectAllNotesAsMap(store.getState())))
+        return;
 
       if (note.parentId === id) return;
 
@@ -130,10 +131,17 @@ export function useNoteDropZone(
 
       if (!aboveOrParentId) return;
 
-      const movingNote = getMovingNote(e, store);
+      const movingNote = getMovingNote(e, store.getState());
       if (!movingNote) return;
 
-      if (!canMoveNoteBelow(movingNote.id, aboveOrParentId)) return;
+      if (
+        !canMoveNoteBelow(
+          movingNote.id,
+          aboveOrParentId,
+          selectAllNotesAsMap(store.getState()),
+        )
+      )
+        return;
 
       try {
         moveBelow({
@@ -153,10 +161,17 @@ export function useNoteDropZone(
       e.stopPropagation();
       setIsDraggingOver(false);
 
-      const movingNote = getMovingNote(e, store);
+      const movingNote = getMovingNote(e, store.getState());
       if (!movingNote) return;
 
-      if (!canMoveNoteInto(movingNote.id, aboveOrParentId)) return;
+      if (
+        !canMoveNoteInto(
+          movingNote.id,
+          aboveOrParentId,
+          selectAllNotesAsMap(store.getState()),
+        )
+      )
+        return;
 
       try {
         moveInto({

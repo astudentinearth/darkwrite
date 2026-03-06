@@ -1,11 +1,13 @@
 import { DarkwriteAPIClient } from "@/api/api-client";
 import _ from "lodash";
 import { notesSlice } from "./note-slice";
-import { store } from "@/features/store/redux";
+import { AppStore } from "@/features/store/types";
+import { useAppStore } from "@/features/store/hooks";
+import { useMemo } from "react";
 
 const DEBOUNCE_TIME = 150;
 
-export function createTitleUpdater(noteId: string) {
+export function createTitleUpdater(noteId: string, store: AppStore) {
   async function _titleUpdater(title: string) {
     return await DarkwriteAPIClient.note.update(noteId, { title });
   }
@@ -33,15 +35,24 @@ export function createTitleUpdater(noteId: string) {
     }
   }
 
+  function updateIcon(noteId: string, icon: string | null) {
+    store.dispatch(
+      notesSlice.actions.updateNote({ id: noteId, changes: { icon } }),
+    );
+    DarkwriteAPIClient.note.update(noteId, { icon });
+  }
   return {
     update,
     flush,
+    updateIcon,
   };
 }
 
-export function updateIcon(noteId: string, icon: string | null) {
-  store.dispatch(
-    notesSlice.actions.updateNote({ id: noteId, changes: { icon } }),
+export function useTitleUpdater(noteId: string) {
+  const store = useAppStore();
+  const updater = useMemo(
+    () => createTitleUpdater(noteId, store),
+    [noteId, store],
   );
-  DarkwriteAPIClient.note.update(noteId, { icon });
+  return updater;
 }

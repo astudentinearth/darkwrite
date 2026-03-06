@@ -1,9 +1,6 @@
-import { useAppSelector } from "@/features/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/features/store/hooks";
 import { selectMoveNoteDialogState } from "../store/notes-ui-selectors";
-import {
-  hideMoveNoteDialog,
-  showMoveNoteDialog,
-} from "../store/notes-ui-actions";
+import { MoveNoteDialogPortal } from "../store/notes-ui-actions";
 import { useCurrentWorkspaceId } from "@/features/workspaces/hooks/use-workspace";
 import { useLazySearchQuery } from "../store/search-api";
 import { useMemo, useState } from "react";
@@ -14,8 +11,12 @@ export function useMoveNoteDialog() {
   const { open, noteId } = useAppSelector(selectMoveNoteDialogState);
   const workspaceId = useCurrentWorkspaceId() ?? "";
   const [query, setQuery] = useState("");
+  const dispatch = useAppDispatch();
   const [triggerSearch, { isError, isFetching, isLoading }] =
     useLazySearchQuery();
+
+  const { hideMoveNoteDialog, showMoveNoteDialog } =
+    MoveNoteDialogPortal(dispatch);
 
   const debouncedSearch = useMemo(
     () =>

@@ -29,10 +29,10 @@ export type MoveNoteIntoArgs = {
   placement: "inside-start" | "inside-end";
 };
 
-export function getMovingNote(e: DragEvent<HTMLElement>, store: AppStore) {
+export function getMovingNote(e: DragEvent<HTMLElement>, state: RootState) {
   const sourceId = extractNoteDragData(e)?.noteId;
   if (!sourceId) return;
-  const movingNote = selectNoteById(store.getState() as RootState, sourceId);
+  const movingNote = selectNoteById(state, sourceId);
   return movingNote ?? null;
 }
 

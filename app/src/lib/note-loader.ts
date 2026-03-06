@@ -1,16 +1,15 @@
 import { DarkwriteAPIClient } from "@/api/api-client";
 import { NotFoundError } from "@/common/error";
-import { setWorkspaceId } from "@/context/local-state";
-import { AppStore } from "@/features/store/redux";
+import { appSessionSlice } from "@/features/session/session-slice";
+import { AppStore } from "@/features/store/types";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const noteLoader = async ({
-  params,
-  store,
-}: {
+type NoteLoaderProps = {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   params: any;
   store: AppStore;
-}) => {
+};
+
+export const noteLoader = async ({ params, store }: NoteLoaderProps) => {
   const { pageId } = params;
   if (!pageId) throw new Error("Note id not found");
 
@@ -19,7 +18,7 @@ export const noteLoader = async ({
 
   const workspaceId = store.getState().session.workspaceId;
   if (note.workspaceId && note.workspaceId !== workspaceId) {
-    setWorkspaceId(note.workspaceId);
+    store.dispatch(appSessionSlice.actions.switchWorkspace(note.workspaceId));
   }
 
   return { note };

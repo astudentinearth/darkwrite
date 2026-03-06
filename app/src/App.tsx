@@ -1,15 +1,13 @@
 import { Layout } from "@/features/layout";
+import { Provider } from "react-redux";
 import { HashRouter, Route, Routes } from "react-router-dom";
 import { EditorViewRouteHandler } from "./features/editor/editor-view";
 import HomePage from "./features/home/home-page";
+import { AppStore } from "./features/store/redux";
 import UpdateChecker from "./features/update/update-checker";
 import { noteLoader } from "./lib/note-loader";
-import { Provider } from "react-redux";
-import { createAppStore } from "./features/store/redux";
 
-const store = createAppStore();
-
-function App() {
+function App({ store }: { store: AppStore }) {
   return (
     <div className="w-full h-full overflow-hidden app-fade-in">
       <Provider store={store}>

@@ -1,17 +1,17 @@
-import { NoteExporter } from "@/features/export/note-exporter";
 import useNoteImport from "@/features/note/hooks/use-note-import";
 import { useNoteById } from "@/features/note/hooks/use-note-by-id";
 import { useNoteActions } from "@/features/note/store/note-actions";
 import { emitEditorEvent } from "../event/editor-bus";
 import { EditorEventType } from "../event/types";
-import { useAppSelector } from "@/features/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/features/store/hooks";
 import {
   selectCanRedo,
   selectCanUndo,
   selectCharacterCount,
   selectWordCount,
 } from "../store/editor-selectors";
-import { showMoveNoteDialog } from "@/features/note/store/notes-ui-actions";
+import { MoveNoteDialogPortal } from "@/features/note/store/notes-ui-actions";
+import { useNoteExport } from "@/features/export/note-exporter";
 
 export interface EditorMenuActions {
   exportHTML: () => Promise<void>;
@@ -34,8 +34,10 @@ export interface UseEditorMenuResult {
 }
 
 export default function useEditorMenu(noteId: string): UseEditorMenuResult {
+  const dispatch = useAppDispatch();
   const { note } = useNoteById(noteId);
   const importer = useNoteImport(noteId);
+  const NoteExporter = useNoteExport();
   const wordCount = useAppSelector((s) => selectWordCount(s, noteId));
   const characterCount = useAppSelector((s) => selectCharacterCount(s, noteId));
   const canUndo = useAppSelector((s) => selectCanUndo(s, noteId));
@@ -47,7 +49,7 @@ export default function useEditorMenu(noteId: string): UseEditorMenuResult {
     exportJSON: () => NoteExporter.exportJSON(noteId),
     exportPDF: () => NoteExporter.exportPDF(noteId),
     importNotes: importer.importNotes,
-    move: () => showMoveNoteDialog(noteId),
+    move: () => MoveNoteDialogPortal(dispatch).showMoveNoteDialog(noteId),
     undo: () =>
       emitEditorEvent({
         noteId,

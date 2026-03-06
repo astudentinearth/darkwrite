@@ -2,7 +2,7 @@ import { DEFAULT_NOTE_ICON } from "@/common/note";
 import { Button } from "@/components/ui";
 import { EditorContext } from "@/features/editor/store/editor-context";
 import { selectNoteIcon } from "@/features/note/store/note-selectors";
-import { updateIcon } from "@/features/note/store/update-note";
+import { useTitleUpdater } from "@/features/note/store/update-note";
 import { useAppSelector } from "@/features/store/hooks";
 import { Frown, Smile } from "lucide-react";
 import { use } from "react";
@@ -12,6 +12,7 @@ export function AddRemoveIconButton() {
   const { noteId } = use(EditorContext);
   const { t } = useTranslation();
   const icon = useAppSelector((s) => selectNoteIcon(s, noteId));
+  const { updateIcon } = useTitleUpdater(noteId);
 
   return icon ? (
     <Button
