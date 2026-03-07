@@ -1,1 +1,0 @@
-cd app && pnpm lint-staged

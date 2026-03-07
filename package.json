@@ -6,8 +6,15 @@
   },
   "packageManager": "pnpm@10.26.2",
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@typescript-eslint/eslint-plugin": "^8.56.1",
+    "@typescript-eslint/parser": "^8.56.1",
     "husky": "^9.1.7",
     "lint-staged": "^16.3.1",
-    "prettier": "^3.8.1"
+    "prettier": "^3.8.1",
+    "tsx": "catalog:",
+    "typescript": "catalog:",
+    "vite": "catalog:",
+    "vitest": "catalog:"
   }
 }

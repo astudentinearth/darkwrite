@@ -1,0 +1,60 @@
+{
+  "name": "@darkwrite/app-desktop",
+  "packageManager": "pnpm@10.26.2",
+  "author": {
+    "name": "astudentinearth",
+    "email": "burak.yn.dev@gmail.com"
+  },
+  "description": "A notebook that is truly yours.",
+  "homepage": "https://darkwrite.app",
+  "productName": "Darkwrite",
+  "private": true,
+  "version": "1.1.0-beta.1",
+  "type": "module",
+  "license": "AGPL-3.0-or-later",
+  "main": "dist-electron/main.js",
+  "lint-staged": {
+    "*.{ts,tsx,css,md}": "prettier --check"
+  },
+  "scripts": {
+    "dev": "vite",
+    "preview": "vite preview",
+    "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
+    "format": "prettier --check --write .",
+    "test": "npm-run-all --serial rebuild:restore test:run",
+    "test:run": "vitest run",
+    "test:watch": "vitest watch",
+    "coverage": "vitest run --coverage",
+    "build:electron:win": "electron-builder --win",
+    "build:win": "npm-run-all --serial build:pre build:electron:win",
+    "build:mac": "pnpm build:pre && electron-builder --mac",
+    "build:linux": "pnpm build:pre && electron-builder --linux",
+    "rebuild": "electron-rebuild -f -w better-sqlite3",
+    "rebuild:restore": "pnpm rebuild better-sqlite3",
+    "typecheck": "tsc --noEmit --project tsconfig.json"
+  },
+  "dependencies": {
+    "@electron-toolkit/preload": "^3.0.2",
+    "@electron-toolkit/utils": "^3.0.0",
+    "@types/fs-extra": "^11.0.4",
+    "@types/lodash": "^4.17.20",
+    "font-list": "^2.0.1",
+    "extract-zip": "^2.0.1",
+    "fs-extra": "^11.3.2",
+    "lodash": "^4.17.21",
+    "reflect-metadata": "^0.2.2",
+    "semver": "^7.7.2",
+    "typeorm": "^0.3.27",
+    "zip-a-folder": "^3.1.9"
+  },
+  "devDependencies": {
+    "@electron/notarize": "^3.1.1",
+    "@electron/rebuild": "^3.7.2",
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/node": "^20.19.19",
+    "electron": "^39.2.3",
+    "electron-builder": "^26.4.0",
+    "electron-devtools-installer": "^3.2.1",
+    "vite-plugin-electron": "^0.29.0"
+  }
+}

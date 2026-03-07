@@ -1,0 +1,9 @@
+packages:
+  - "packages/*"
+
+catalog:
+  tsx: ^4.21.0
+  typescript: ^5.9.3
+  tailwindcss: ^4.1.14
+  vite: ^7.1.9
+  vitest: ^3.2.4
