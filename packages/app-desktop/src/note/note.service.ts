@@ -1,13 +1,13 @@
-import { CreateNoteDTO, MoveNoteDTO, UpdateNoteDTO } from "@darkwrite/common/dto";
-import { ParentId } from "@darkwrite/common/note";
-import { Rank } from "@darkwrite/common/rank";
+import { CreateNoteDTO, MoveNoteDTO, UpdateNoteDTO } from "@darkwrite/common";
+import { ParentId } from "@darkwrite/common";
+import { Rank } from "@darkwrite/common";
 import { DatabaseDAO } from "../database/database.dao";
 import { AppDataSource } from "../db";
 import { Note } from "../entity";
 import { DocumentService } from "../service/document.service";
 import { WorkspaceDAO } from "../workspace/workspace.dao";
 import { NoteDAO } from "./note.dao";
-import { IllegalArgumentError, NotFoundError } from "@darkwrite/common/error";
+import { IllegalArgumentError, NotFoundError } from "@darkwrite/common";
 
 const noteDAO = new NoteDAO();
 

@@ -3,7 +3,7 @@ import { type BrowserWindowConstructorOptions } from "electron";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import metadata from "./metadata.json";
-import { DarkwriteUserSettings } from "@darkwrite/common/settings";
+import { DarkwriteUserSettings } from "@darkwrite/common";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

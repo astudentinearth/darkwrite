@@ -2,7 +2,7 @@ import { describe, expect, it, beforeAll, afterAll, beforeEach } from "vitest";
 import { NoteService } from "./note.service";
 import { AppDataSource } from "../db";
 import { Note, Workspace } from "../entity";
-import { Rank } from "@darkwrite/common/rank";
+import { Rank } from "@darkwrite/common";
 import { NoteDAO } from "./note.dao";
 
 describe("note service tests", () => {

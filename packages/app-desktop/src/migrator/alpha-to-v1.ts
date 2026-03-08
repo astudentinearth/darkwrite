@@ -32,10 +32,10 @@
  * Create a .version file in there, with contents set to "1".
  */
 
-import { NoteContent } from "@darkwrite/common/note-content";
-import { Rank } from "@darkwrite/common/rank";
-import { SettingsMigrator } from "@darkwrite/common/settings-migrator";
-import { Theme } from "@darkwrite/common/theme";
+import { NoteContent } from "@darkwrite/common";
+import { Rank } from "@darkwrite/common";
+import { SettingsMigrator } from "@darkwrite/common";
+import { Theme } from "@darkwrite/common";
 import { getDefaultWorkspaceConfiguration } from "@/lib/workspace-config";
 import * as entities from "@/entity";
 import sqlite3 from "better-sqlite3";

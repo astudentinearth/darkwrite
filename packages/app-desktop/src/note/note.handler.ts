@@ -1,6 +1,6 @@
-import { INoteAPI } from "@darkwrite/common/contract";
-import { CreateNoteDTOSchema, UpdateNoteDTOSchema } from "@darkwrite/common/dto";
-import { FileFormatMap, NoteExportFormat } from "@darkwrite/common/note";
+import { INoteAPI } from "@darkwrite/common";
+import { CreateNoteDTOSchema, UpdateNoteDTOSchema } from "@darkwrite/common";
+import { FileFormatMap, NoteExportFormat } from "@darkwrite/common";
 import { BrowserWindow, dialog } from "electron";
 import { readFile, writeFile } from "fs-extra";
 import { extname } from "path";

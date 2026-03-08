@@ -1,6 +1,6 @@
-import { SettingsMigrator } from "@darkwrite/common/settings-migrator";
-import { Theme } from "@darkwrite/common/theme";
-import { DarkwriteDefault } from "@darkwrite/common/themes";
+import { SettingsMigrator } from "@darkwrite/common";
+import { Theme } from "@darkwrite/common";
+import { DarkwriteDefault } from "@darkwrite/common";
 import { DarkwriteUserSettings, SettingsModel } from "@common/settings";
 import { nativeTheme } from "electron";
 import { SettingsService } from "./service/settings.service";

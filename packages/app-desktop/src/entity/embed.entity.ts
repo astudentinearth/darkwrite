@@ -1,6 +1,6 @@
 import { Column, Entity, ManyToOne, PrimaryColumn } from "typeorm";
 import { Workspace } from "./workspace.entity";
-import { EmbedDTO } from "@darkwrite/common/dto/response/embed.response";
+import { EmbedDTO } from "@darkwrite/common";
 
 @Entity("embed")
 export class Embed {

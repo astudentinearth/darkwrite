@@ -1,11 +1,11 @@
-import { stripAlpha } from "@darkwrite/common/theme";
+import { stripAlpha } from "@darkwrite/common";
 import { app, BrowserWindow, nativeTheme, systemPreferences } from "electron";
 import _ from "lodash";
 import os from "os";
 import { ThemeMode } from "../types";
 import { OS } from "../../common/os";
-import { Font } from "@darkwrite/common/font";
-import { DarkwriteDesktopClientInfo } from "@darkwrite/common/client";
+import { Font } from "@darkwrite/common";
+import { DarkwriteDesktopClientInfo } from "@darkwrite/common";
 
 export class DesktopIntegration {
   static get operatingSystem() {

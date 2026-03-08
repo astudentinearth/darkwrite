@@ -2,7 +2,7 @@ import { exists } from "fs-extra";
 import { readFile, writeFile, rm } from "fs/promises";
 import path from "node:path";
 import * as fslib from "@/lib/fs";
-import { IllegalArgumentError } from "@darkwrite/common/error";
+import { IllegalArgumentError } from "@darkwrite/common";
 
 export interface IDocumentStore {
   create: (id: string) => Promise<void>;

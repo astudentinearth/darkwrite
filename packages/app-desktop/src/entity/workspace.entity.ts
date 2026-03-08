@@ -1,7 +1,7 @@
 import { WorkspaceConfig } from "@/lib/workspace-config";
 import { Column, Entity, PrimaryColumn } from "typeorm";
 import { JSONTransformer } from "../lib/json-transformer";
-import { WorkspaceDTO } from "@darkwrite/common/dto/response/workspace.response";
+import { WorkspaceDTO } from "@darkwrite/common";
 
 @Entity("workspace")
 export class Workspace {

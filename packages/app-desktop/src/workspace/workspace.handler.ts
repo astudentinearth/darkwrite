@@ -1,8 +1,8 @@
-import { IWorkspaceAPI } from "@darkwrite/common/contract";
+import { IWorkspaceAPI } from "@darkwrite/common";
 import {
   UpdateWorkspaceDTO,
   UpdateWorkspaceDTOSchema,
-} from "@darkwrite/common/dto/request/workspace.request";
+} from "@darkwrite/common";
 import { WorkspaceService } from "./workspace.service";
 import { IPCHandler } from "../types/ipc-handler";
 

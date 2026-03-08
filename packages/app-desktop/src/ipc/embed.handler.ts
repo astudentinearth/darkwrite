@@ -1,5 +1,5 @@
-import { EmbedResponseDTO } from "@darkwrite/common/dto/response/embed.response";
-import { NotFoundError } from "@darkwrite/common/error";
+import { EmbedResponseDTO } from "@darkwrite/common";
+import { NotFoundError } from "@darkwrite/common";
 import { dialog, net } from "electron";
 import { writeFile } from "fs/promises";
 import { EmbedService } from "../service/embed.service";

@@ -1,4 +1,4 @@
-import { ISettingsAPI } from "@darkwrite/common/contract";
+import { ISettingsAPI } from "@darkwrite/common";
 import { ElectronPrefsModel } from "../prefs";
 
 export const ElectronSettingsAPI: ISettingsAPI = {

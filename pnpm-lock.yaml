@@ -83,6 +83,9 @@ importers:
 
   packages/app-desktop:
     dependencies:
+      '@darkwrite/common':
+        specifier: 'workspace:'
+        version: link:../common
       '@electron-toolkit/preload':
         specifier: ^3.0.2
         version: 3.0.2(electron@39.8.0)

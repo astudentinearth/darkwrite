@@ -6,7 +6,7 @@ import { EmbedRepository } from "../repository/embed.repository";
 import { WorkspaceRepository } from "../repository/workspace.repository";
 import { readFile } from "fs/promises";
 import log from "electron-log";
-import { NotFoundError } from "@darkwrite/common/error";
+import { NotFoundError } from "@darkwrite/common";
 
 export class EmbedService {
   constructor(
