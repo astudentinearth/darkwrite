@@ -1,4 +1,4 @@
-import { cssTextColorVariables } from "@/common/theme";
+import { cssTextColorVariables } from "@darkwrite/common"
 import {
   Button,
   ColorPicker,

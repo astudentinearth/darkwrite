@@ -1,4 +1,4 @@
-import { DEFAULT_NOTE_ICON } from "@/common/note";
+import { DEFAULT_NOTE_ICON } from "@darkwrite/common"
 import { Button } from "@/components/ui";
 import { EditorContext } from "@/features/editor/store/editor-context";
 import { selectNoteIcon } from "@/features/note/store/note-selectors";

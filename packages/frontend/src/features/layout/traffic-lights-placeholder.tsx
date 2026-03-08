@@ -1,6 +1,6 @@
 import { getOperatingSystem } from "@/lib/platform";
 import { useLayoutStore } from "./layout-store";
-import { OS } from "@/common/os";
+import { OS } from "@darkwrite/common"
 import { InitialUserSettings } from "@/init";
 import { useLocalStore } from "@/context/local-state";
 

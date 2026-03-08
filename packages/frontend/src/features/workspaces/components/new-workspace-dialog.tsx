@@ -9,7 +9,7 @@ import {
   Label,
 } from "@/components/ui";
 import { ReactNode, useState } from "react";
-import { getDefaultWorkspaceConfiguration } from "@/lib/workspace-config";
+import { getDefaultWorkspaceConfiguration } from "@darkwrite/common"
 import { useWorkspaceManager } from "@/features/workspaces/hooks/use-workspace-manager";
 import { useCreateWorkspaceMutation } from "../store/workspace-api";
 import { toast } from "sonner";

@@ -6,7 +6,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { getOperatingSystem } from "@/lib/platform";
-import { OS } from "@/common/os";
+import { OS } from "@darkwrite/common"
 import { useTranslation } from "react-i18next";
 
 export default function FontSelect(props: {

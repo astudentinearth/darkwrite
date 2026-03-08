@@ -1,4 +1,4 @@
-import { DEFAULT_THEME_LIST, DEFAULT_THEMES } from "@/common/themes";
+import { DEFAULT_THEME_LIST, DEFAULT_THEMES } from "@darkwrite/common"
 import {
   Label,
   Select,

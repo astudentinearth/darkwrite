@@ -1,4 +1,4 @@
-import { cleanNoteTitle } from "@/common/note";
+import { cleanNoteTitle } from "@darkwrite/common"
 import DynamicTextarea from "@/components/dynamic-textarea";
 import { EditorContext } from "@/features/editor/store/editor-context";
 import { selectNoteTitle } from "@/features/note/store/note-selectors";

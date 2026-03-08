@@ -1,4 +1,4 @@
-import { WorkspaceDTO } from "@/common/dto/response/workspace.response";
+import { WorkspaceDTO } from "@darkwrite/common"
 import {
   AlertDialog,
   AlertDialogContent,

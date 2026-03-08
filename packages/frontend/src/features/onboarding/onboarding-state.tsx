@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import LanguageSelection from "./language-selection";
 import WorkspaceNameStep from "./workspace-name";
-import { DEFAULT_THEMES } from "@/common/themes";
+import { DEFAULT_THEMES } from "@darkwrite/common"
 import { applyTheme } from "@/lib/theme-util";
 import ThemeSelection from "./theme-selection";
 import OnboardingFinish from "./finish";

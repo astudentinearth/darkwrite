@@ -1,5 +1,5 @@
 import { showAppMenu } from "@/api/appmenu";
-import { OS } from "@/common/os";
+import { OS } from "@darkwrite/common"
 import { HeaderbarButton } from "@/components/headerbar-button";
 import { InitialUserSettings } from "@/init";
 import { getOperatingSystem } from "@/lib/platform";

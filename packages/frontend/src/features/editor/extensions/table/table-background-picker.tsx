@@ -1,4 +1,4 @@
-import { csshighlightColorVariables } from "@/common/theme";
+import { csshighlightColorVariables } from "@darkwrite/common"
 import {
   Button,
   ColorPicker,

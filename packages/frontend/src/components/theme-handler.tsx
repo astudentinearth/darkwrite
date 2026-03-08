@@ -1,6 +1,5 @@
 import { DarkwriteAPIClient } from "@/api/api-client";
-import { DarkwriteDefault } from "@/common/themes";
-import { CatppuccinLatte } from "@/common/themes/catppuccin";
+import { DarkwriteDefault ,CatppuccinLatte} from "@darkwrite/common"
 import { useThemes } from "@/features/themes/hooks/use-themes";
 import useSystemTheme from "@/features/themes/hooks/use-system-theme";
 import { applyFonts, applyTheme } from "@/lib/theme-util";
