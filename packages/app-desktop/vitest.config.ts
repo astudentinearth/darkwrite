@@ -16,15 +16,14 @@ const electronConfig: TestProjectConfiguration = {
     pool: "forks",
     poolOptions: {
       forks: {
-        singleFork: true
-      }
-    }
+        singleFork: true,
+      },
+    },
   },
   resolve: {
     alias: appAliases,
   },
 };
-
 
 export default defineConfig({
   test: {
