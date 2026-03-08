@@ -12,7 +12,7 @@ const resolve = {
 const plugins: PluginOption[] = [
   electron({
     main: {
-      entry: path.resolve("src/electron/main.ts"),
+      entry: path.resolve("src/main.ts"),
       vite: {
         resolve,
         build: {
@@ -23,7 +23,7 @@ const plugins: PluginOption[] = [
       },
     },
     preload: {
-      input: path.resolve("src/electron/preload/preload.ts"),
+      input: path.resolve("src/preload/preload.ts"),
       vite: {
         resolve,
       },

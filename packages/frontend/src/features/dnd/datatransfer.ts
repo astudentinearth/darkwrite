@@ -1,4 +1,4 @@
-import JSONUtil from "@darkwrite/common";
+import { tryParse } from "@darkwrite/common";
 import { DragEvent as ReactDragEvent } from "react";
 
 export const DRAG_DATA_TYPE = "application/darkwrite-drag-internal";
@@ -35,7 +35,7 @@ export function isDragging(event: ReactDragEvent<HTMLElement> | DragEvent) {
 export function parseDragData(event: ReactDragEvent<HTMLElement> | DragEvent) {
   if (!event.dataTransfer) return null;
   const dataString = event.dataTransfer.getData(DRAG_DATA_TYPE);
-  const dataOptional = JSONUtil.tryParse(dataString);
+  const dataOptional = tryParse(dataString);
   if (dataOptional.error) return null;
   const data = dataOptional.result;
   if (!("type" in data) || typeof data.type !== "string") return null;
