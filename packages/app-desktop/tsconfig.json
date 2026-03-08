@@ -2,15 +2,12 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"],
-      "@main/*": ["src/electron/*"],
-      "@common/*": ["src/common/*"]
+      "@/*": ["src/*"]
     },
     "types": ["vitest/globals", "node"],
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "strict": true,
     "moduleResolution": "bundler",
-    "jsx": "react-jsx",
     "target": "ESNext",
     "module": "ESNext",
     "experimentalDecorators": true,

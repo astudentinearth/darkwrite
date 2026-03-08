@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Optional } from "@/common/ts-util";
+import { Optional } from "@/ts-util";
 import _ from "lodash";
 
 export function tryParse(str: string): Optional<Record<string, any>> {

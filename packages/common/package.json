@@ -1,14 +1,15 @@
 {
   "name": "@darkwrite/common",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "packageManager": "pnpm@10.26.2",
   "dependencies": {
+    "@tiptap/core": "catalog:",
     "color-string": "^2.1.4",
-    "lodash": "^4.17.23",
+    "lodash": "catalog:",
     "nanoid": "^5.1.6",
     "showdown": "^2.1.0",
     "zod": "^4.3.6"

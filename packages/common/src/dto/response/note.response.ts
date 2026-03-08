@@ -1,4 +1,4 @@
-import { NoteContent } from "@/common/note-content";
+import { NoteContent } from "@/note-content";
 
 export interface NoteDTO {
   id: string;

@@ -1,4 +1,4 @@
-import { Theme } from "@/common/theme";
+import { Theme } from "@/theme";
 
 export interface ThemesResponseDTO {
   themes: Record<string, Theme>;
