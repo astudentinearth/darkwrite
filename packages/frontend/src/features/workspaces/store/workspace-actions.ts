@@ -1,5 +1,5 @@
-import { CreateWorkspaceDTO } from "@/common/dto/request/workspace.request";
-import { WorkspaceDTO } from "@/common/dto/response/workspace.response";
+import { CreateWorkspaceDTO } from "@darkwrite/common";
+import { WorkspaceDTO } from "@darkwrite/common";
 import { AppStore } from "@/features/store/redux";
 import { workspaceApi } from "./workspace-api";
 import { UpdateWorkspaceArg, workspaceSlice } from "./workspace-slice";

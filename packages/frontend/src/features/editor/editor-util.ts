@@ -1,7 +1,7 @@
 import { Editor } from "@tiptap/core";
 import { UtilityNodes } from "./node-types";
 import { useCurrentEditor } from "@tiptap/react";
-import { MarkdownConverter } from "@/common/markdown";
+import { MarkdownConverter } from "@darkwrite/common";
 
 export default function EditorUtil(editor: Editor) {
   return {

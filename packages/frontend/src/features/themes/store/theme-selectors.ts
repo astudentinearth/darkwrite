@@ -1,4 +1,4 @@
-import { Theme } from "@/common/theme";
+import { Theme } from "@darkwrite/common";
 import { RootState, Selector } from "@/features/store/types";
 import { createSelector } from "@reduxjs/toolkit";
 

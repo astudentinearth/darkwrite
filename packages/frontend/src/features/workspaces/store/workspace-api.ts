@@ -1,8 +1,8 @@
 import { DarkwriteAPIClient } from "@/api/api-client";
-import { WorkspaceDTO } from "@/common/dto/response/workspace.response";
+import { WorkspaceDTO } from "@darkwrite/common";
 import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
 import { UpdateWorkspaceArg, workspaceSlice } from "./workspace-slice";
-import { CreateWorkspaceDTO } from "@/common/dto/request/workspace.request";
+import { CreateWorkspaceDTO } from "@darkwrite/common";
 
 export async function _getWorkspacesQueryFn() {
   try {

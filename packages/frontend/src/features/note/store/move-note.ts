@@ -1,6 +1,6 @@
 import { DarkwriteAPIClient } from "@/api/api-client";
-import { NoteDTO } from "@/common/dto";
-import { isDescendant, ParentId } from "@/common/note";
+import { NoteDTO } from "@darkwrite/common";
+import { isDescendant, ParentId } from "@darkwrite/common";
 import { extractNoteDragData } from "@/features/dnd/datatransfer";
 import { RootState } from "@/features/store/types";
 import { DragEvent } from "react";
@@ -11,7 +11,7 @@ import {
 import { selectNoteById, selectNotesByParentId } from "./note-selectors";
 import { updateNote, upsertNotes } from "./note-slice";
 import { noteByParentIdTag, NOTES_TAG_TYPE, notesApi } from "./notes-api";
-import { MutationError } from "@/common/error";
+import { MutationError } from "@darkwrite/common";
 
 export type MoveNoteBelowArgs = {
   sourceNoteId: string;

@@ -1,5 +1,5 @@
-import { DarkwriteUserSettings, SettingsModel } from "@/common/settings";
-import { DeepPartial } from "@/common/ts-util";
+import { DarkwriteUserSettings, SettingsModel } from "@darkwrite/common";
+import { DeepPartial } from "@darkwrite/common";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import _ from "lodash";
 

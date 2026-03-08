@@ -1,5 +1,5 @@
-import { WorkspaceDTO } from "@/common/dto/response/workspace.response";
-import { DeepPartial } from "@/common/ts-util";
+import { WorkspaceDTO } from "@darkwrite/common";
+import { DeepPartial } from "@darkwrite/common";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import _ from "lodash";
 

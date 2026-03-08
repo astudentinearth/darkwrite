@@ -1,6 +1,6 @@
-import { ParentId } from "@/common/note";
+import { ParentId } from "@darkwrite/common";
 import { noteByParentIdTag, NOTES_TAG_TYPE, notesApi } from "./notes-api";
-import { NoteDTO } from "@/common/dto";
+import { NoteDTO } from "@darkwrite/common";
 import { DarkwriteAPIClient } from "@/api/api-client";
 import i18n from "@/i18n";
 import { upsertNotes } from "./note-slice";

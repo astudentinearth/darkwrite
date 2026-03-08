@@ -1,7 +1,7 @@
 import { EditorContent, SlashCommandItem } from "./types";
 import { Editor } from "@tiptap/core";
 import { createContext } from "react";
-import { NoteDTO } from "@/common/dto";
+import { NoteDTO } from "@darkwrite/common";
 import { ImageExtensionConfig } from "./extensions/image/image-config";
 
 export interface IDarkwriteEditorContext {

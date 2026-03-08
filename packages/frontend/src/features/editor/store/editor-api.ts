@@ -1,5 +1,5 @@
 import { DarkwriteAPIClient } from "@/api/api-client";
-import { NoteContent } from "@/common/note-content";
+import { NoteContent } from "@darkwrite/common";
 import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
 import { editorSlice } from "./editor-slice";
 

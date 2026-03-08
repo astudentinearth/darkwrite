@@ -1,4 +1,4 @@
-import { OS } from "@/common/os";
+import { OS } from "@darkwrite/common";
 
 let os: OS = OS.WINDOWS;
 

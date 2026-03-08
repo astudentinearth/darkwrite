@@ -1,4 +1,4 @@
-import { NoteDTO } from "@/common/dto";
+import { NoteDTO } from "@darkwrite/common";
 import { NOTES_TAG_TYPE, notesApi } from "./notes-api";
 import { DarkwriteAPIClient } from "@/api/api-client";
 import { upsertNotes } from "./note-slice";

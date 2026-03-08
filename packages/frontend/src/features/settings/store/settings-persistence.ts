@@ -3,7 +3,7 @@ import { settingsSlice } from "./settings-slice";
 import { RootState } from "@/features/store/types";
 import { DarkwriteAPIClient } from "@/api/api-client";
 import _ from "lodash";
-import { DarkwriteUserSettings } from "@/common/settings";
+import { DarkwriteUserSettings } from "@darkwrite/common";
 
 export const settingsPersistenceMiddleware = createListenerMiddleware();
 const DEBOUNCE_DELAY_MS = 300;

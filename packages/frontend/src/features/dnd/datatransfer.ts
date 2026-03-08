@@ -1,4 +1,4 @@
-import JSONUtil from "@/common/json-util";
+import JSONUtil from "@darkwrite/common";
 import { DragEvent as ReactDragEvent } from "react";
 
 export const DRAG_DATA_TYPE = "application/darkwrite-drag-internal";

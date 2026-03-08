@@ -1,4 +1,4 @@
-import { OS } from "@/common/os";
+import { OS } from "@darkwrite/common";
 import { toggleSidebar } from "@/context/local-state";
 import { showSearch } from "@/features/search/search-state";
 import { getOperatingSystem } from "@/lib/platform";

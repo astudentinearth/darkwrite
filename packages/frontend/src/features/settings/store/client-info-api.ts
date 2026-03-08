@@ -1,5 +1,5 @@
 import { DarkwriteAPIClient } from "@/api/api-client";
-import { DarkwriteDesktopClientInfo } from "@/common/client";
+import { DarkwriteDesktopClientInfo } from "@darkwrite/common";
 import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const clientInfoApi = createApi({

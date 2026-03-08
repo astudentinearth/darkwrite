@@ -5,7 +5,7 @@ import {
   ISettingsAPI,
   IThemeAPI,
   IWorkspaceAPI,
-} from "@/common/contract";
+} from "@darkwrite/common";
 import { EmbedLocalAdapter } from "./local/embed-local-adapter";
 
 export enum APIClientMode {

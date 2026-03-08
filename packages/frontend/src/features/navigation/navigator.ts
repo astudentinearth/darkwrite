@@ -1,4 +1,4 @@
-import { EventBus } from "@/common/event/bus";
+import { EventBus } from "@darkwrite/common";
 import { matchPath } from "react-router-dom";
 
 export enum NavigationEventType {

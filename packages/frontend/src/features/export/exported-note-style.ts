@@ -1,4 +1,4 @@
-import { sanitizeQuotedCssValue } from "@/common/sanitizer";
+import { sanitizeQuotedCssValue } from "@darkwrite/common";
 import embeddedStyle from "./embedded-style.css?raw";
 
 export class EmbeddedStyleBuilder {

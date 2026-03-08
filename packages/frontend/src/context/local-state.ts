@@ -1,4 +1,4 @@
-import { PageSize } from "@/common/pdf";
+import { PageSize } from "@darkwrite/common";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 

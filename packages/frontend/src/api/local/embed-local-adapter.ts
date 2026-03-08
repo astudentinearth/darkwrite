@@ -1,5 +1,5 @@
-import { IEmbedAPI } from "@/common/contract";
-import { CreateEmbedDTO } from "@/common/dto/request/embed.request";
+import { IEmbedAPI } from "@darkwrite/common";
+import { CreateEmbedDTO } from "@darkwrite/common";
 
 export class EmbedLocalAdapter implements IEmbedAPI {
   async create(dto: CreateEmbedDTO) {

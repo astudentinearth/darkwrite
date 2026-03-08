@@ -1,5 +1,5 @@
 import { DarkwriteAPIClient } from "@/api/api-client";
-import { NoteDTO, NotesResponseDTO } from "@/common/dto";
+import { NoteDTO, NotesResponseDTO } from "@darkwrite/common";
 import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
 import { upsertNotes } from "./note-slice";
 

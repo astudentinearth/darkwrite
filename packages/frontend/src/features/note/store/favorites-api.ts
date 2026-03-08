@@ -1,11 +1,11 @@
-import { NoteDTO } from "@/common/dto";
+import { NoteDTO } from "@darkwrite/common";
 import { notesApi } from "./notes-api";
 import { DarkwriteAPIClient } from "@/api/api-client";
-import { Rank } from "@/common/rank";
+import { Rank } from "@darkwrite/common";
 import { selectFavorites, selectNoteById } from "./note-selectors";
 import { RootState } from "@/features/store/types";
 import { updateNote } from "./note-slice";
-import { MutationError } from "@/common/error";
+import { MutationError } from "@darkwrite/common";
 
 export type FavoriteNoteArgs = { noteId: string; aboveNoteId?: string | null };
 

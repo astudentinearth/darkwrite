@@ -1,8 +1,8 @@
 import { DarkwriteAPIClient } from "@/api/api-client";
 import { _tryFetch, NOTES_TAG_TYPE, notesApi } from "./notes-api";
 import { removeNote, updateNote, upsertNotes } from "./note-slice";
-import { NoteDTO } from "@/common/dto";
-import { MutationError } from "@/common/error";
+import { NoteDTO } from "@darkwrite/common";
+import { MutationError } from "@darkwrite/common";
 import { RootState } from "@/features/store/types";
 
 export function trashedByWorkspaceIdTag(workspaceId: string) {

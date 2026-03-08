@@ -1,6 +1,6 @@
-import { PageSize } from "@/common/pdf";
-import { DarkwriteUserSettings } from "@/common/settings";
-import { DeepPartial } from "@/common/ts-util";
+import { PageSize } from "@darkwrite/common";
+import { DarkwriteUserSettings } from "@darkwrite/common";
+import { DeepPartial } from "@darkwrite/common";
 import { AppStore } from "@/features/store/redux";
 import { settingsSlice } from "./settings-slice";
 import { useMemo } from "react";

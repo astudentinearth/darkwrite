@@ -1,5 +1,5 @@
-import { NoteContent } from "@/common/note-content";
-import { NoteCustomization } from "@/common/note-customization";
+import { NoteContent } from "@darkwrite/common";
+import { NoteCustomization } from "@darkwrite/common";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { JSONContent } from "@tiptap/core";
 import _ from "lodash";

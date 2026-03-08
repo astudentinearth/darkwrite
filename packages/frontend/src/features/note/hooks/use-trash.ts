@@ -5,7 +5,7 @@ import { useAppSelector } from "@/features/store/hooks";
 import { createSelector } from "@reduxjs/toolkit";
 import { selectAllNotes } from "../store/note-selectors";
 import { RootState } from "@/features/store/types";
-import { byUpdateTime } from "@/common/note-filters";
+import { byUpdateTime } from "@darkwrite/common";
 
 export type SelectTrashedProps = {
   workspaceId: string;

@@ -1,5 +1,5 @@
-import { Font } from "@/common/font";
-import { Theme } from "@/common/theme";
+import { Font } from "@darkwrite/common";
+import { Theme } from "@darkwrite/common";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export type ThemeState = {

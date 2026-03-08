@@ -1,4 +1,4 @@
-import { NoteCustomization } from "@/common/note-customization";
+import { NoteCustomization } from "@darkwrite/common";
 import { editorSlice } from "./editor-slice";
 import { EditorContent } from "../types";
 import { AppDispatch } from "@/features/store/types";

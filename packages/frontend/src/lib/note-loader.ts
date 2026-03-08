@@ -1,5 +1,5 @@
 import { DarkwriteAPIClient } from "@/api/api-client";
-import { NotFoundError } from "@/common/error";
+import { NotFoundError } from "@darkwrite/common";
 import { appSessionSlice } from "@/features/session/session-slice";
 import { AppStore } from "@/features/store/types";
 

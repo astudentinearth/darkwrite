@@ -2,7 +2,7 @@ import { ImageExtensionConfig } from "@/features/editor/extensions/image/image-c
 import { useCenteredLayout } from "@/features/layout/hooks/use-centered-layout";
 import { DarkwriteAPIClient } from "@/api/api-client";
 import { CSSProperties, use, useCallback, useMemo } from "react";
-import { FONT_VARS, FontStyle } from "@/common/note-customization";
+import { FONT_VARS, FontStyle } from "@darkwrite/common";
 import { useAppSelector } from "@/features/store/hooks";
 import { selectEditorCustomizations } from "@/features/editor/store/editor-selectors";
 import { useCurrentWorkspaceId } from "@/features/workspaces/hooks/use-workspace";

@@ -1,6 +1,6 @@
-import { NoteDTO } from "@/common/dto";
-import { MovePlacement, OrderKey } from "@/common/note";
-import { Rank } from "@/common/rank";
+import { NoteDTO } from "@darkwrite/common";
+import { MovePlacement, OrderKey } from "@darkwrite/common";
+import { Rank } from "@darkwrite/common";
 
 /**
  * Calculates an optimistic rank for a note being moved into a different tree layer
