@@ -1,4 +1,4 @@
-import { Rank } from "@/common/rank";
+import { Rank } from "@darkwrite/common/rank";
 import { NoteDAO } from "./note.dao";
 
 const noteDAO = new NoteDAO();

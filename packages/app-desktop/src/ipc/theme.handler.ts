@@ -1,4 +1,4 @@
-import { IThemeAPI } from "@/common/contract";
+import { IThemeAPI } from "@darkwrite/common/contract";
 import { BrowserWindow, dialog } from "electron";
 import { ServiceContainer } from "../service-container";
 

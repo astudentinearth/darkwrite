@@ -1,6 +1,6 @@
 import { DataSource } from "typeorm";
 import { DB_PATH } from "../lib/paths";
-import * as entities from "@main/entity";
+import * as entities from "@/entity";
 
 const dbPath = DB_PATH;
 

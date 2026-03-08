@@ -1,4 +1,4 @@
-import { NotFoundError } from "@/common/error";
+import { NotFoundError } from "@darkwrite/common/error";
 import { DatabaseRepository } from "../repository/database.repository";
 
 export class DatabaseService {

@@ -1,9 +1,9 @@
 import { EntityManager, IsNull, Like, Repository } from "typeorm";
 import { AppDataSource } from "../db";
 import { Note } from "../entity";
-import { ParentId } from "@/common/note";
-import { Rank } from "@/common/rank";
-import { NotFoundError } from "@/common/error";
+import { ParentId } from "@darkwrite/common/note";
+import { Rank } from "@darkwrite/common/rank";
+import { NotFoundError } from "@darkwrite/common/error";
 
 export class NoteDAO {
   constructor(

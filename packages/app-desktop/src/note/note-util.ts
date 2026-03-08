@@ -1,4 +1,4 @@
-import { NoteDTO } from "@/common/dto";
+import { NoteDTO } from "@darkwrite/common/dto";
 import { Note } from "../entity";
 
 export function mapNotesToDTO(notes: Note[]): Record<string, NoteDTO> {

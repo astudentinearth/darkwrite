@@ -4,7 +4,7 @@ import { defineConfig, type TestProjectConfiguration } from "vitest/config";
 
 const appAliases = {
   "@": resolve("src"),
-  "@main": resolve("src/electron"),
+  "@": resolve("src/electron"),
   "@common": resolve("src/common"),
 };
 

@@ -1,7 +1,7 @@
 import { Entity, PrimaryColumn, Column, ManyToOne } from "typeorm";
 import { Database } from "./database.entity";
 import { Workspace } from "./workspace.entity";
-import { NoteDTO } from "@/common/dto";
+import { NoteDTO } from "@darkwrite/common/dto";
 
 @Entity("note")
 export class Note {

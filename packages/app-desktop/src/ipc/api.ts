@@ -1,12 +1,12 @@
 import { deepAssign, find, recursiveKeys } from "@common/object";
-import { showAppMenu } from "@main/menu";
+import { showAppMenu } from "@/menu";
 import {
   DarkwriteAPI,
   InferPreloadAPI,
   IPCHandler,
   IPCMainListenerUnion,
   IPCMainListenerWithoutEvent,
-} from "@main/types";
+} from "@/types";
 import { ipcMain } from "electron";
 import log from "electron-log";
 import { BackupAPI, HTMLExporterAPI } from "../api/backup.electron";

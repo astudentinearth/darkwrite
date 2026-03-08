@@ -1,7 +1,7 @@
 import { AppDataSource } from "../db";
 import { Note } from "../entity";
 import { NoteDAO } from "../note/note.dao";
-import { Rank } from "@/common/rank";
+import { Rank } from "@darkwrite/common/rank";
 import { WorkspaceDAO } from "../workspace/workspace.dao";
 
 export class HealthService {

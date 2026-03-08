@@ -1,4 +1,4 @@
-import { NoteContent } from "@/common/note-content";
+import { NoteContent } from "@darkwrite/common/note-content";
 import _ from "lodash";
 import { DocumentFileStore, IDocumentStore } from "../lib/document-store";
 import { NOTE_CONTENTS_DIR } from "../lib/paths";

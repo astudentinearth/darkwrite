@@ -1,7 +1,7 @@
 import { readFile, writeFile } from "fs/promises";
 import { exists } from "fs-extra";
 import { SETTINGS_PATH } from "../lib/paths";
-import { SettingsModel } from "@/common/settings";
+import { SettingsModel } from "@darkwrite/common/settings";
 
 export class SettingsService {
   async readSettingsFile() {

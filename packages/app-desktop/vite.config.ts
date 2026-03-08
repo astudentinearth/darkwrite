@@ -7,7 +7,7 @@ import svgr from "vite-plugin-svgr";
 
 const resolve = {
   alias: {
-    "@main": path.resolve("src/electron/"),
+    "@": path.resolve("src/electron/"),
     "@": path.resolve("src/"),
     "@common": path.resolve("src/common"),
     "font-list": path.resolve("node_modules/font-list/index.js"),

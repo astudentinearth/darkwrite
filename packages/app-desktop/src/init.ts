@@ -1,4 +1,4 @@
-import { SettingsModel } from "@/common/settings";
+import { SettingsModel } from "@darkwrite/common/settings";
 import { is } from "@electron-toolkit/utils";
 import { app, BrowserWindow, protocol, shell } from "electron";
 import log from "electron-log/main.js";

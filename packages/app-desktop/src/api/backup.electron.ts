@@ -16,7 +16,7 @@ import {
 } from "../lib/paths";
 import { openFile, saveFile } from "./dialog";
 import { logError } from "../lib/log";
-import { InvalidBackupError } from "@/common/error";
+import { InvalidBackupError } from "@darkwrite/common/error";
 
 /**
  * APIs to perform a complete workspace export.
