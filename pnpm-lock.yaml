@@ -98,6 +98,12 @@ importers:
       '@types/lodash':
         specifier: ^4.17.20
         version: 4.17.24
+      '@types/semver':
+        specifier: ^7.7.1
+        version: 7.7.1
+      electron-log:
+        specifier: ^5.4.3
+        version: 5.4.3
       extract-zip:
         specifier: ^2.0.1
         version: 2.0.1
@@ -114,7 +120,7 @@ importers:
         specifier: ^0.2.2
         version: 0.2.2
       semver:
-        specifier: ^7.7.2
+        specifier: ^7.7.4
         version: 7.7.4
       typeorm:
         specifier: ^0.3.27
@@ -3016,6 +3022,10 @@ packages:
 
   electron-devtools-installer@3.2.1:
     resolution: {integrity: sha512-FaCi+oDCOBTw0gJUsuw5dXW32b2Ekh5jO8lI1NRCQigo3azh2VogsIi0eelMVrP1+LkN/bewyH3Xoo1USjO0eQ==}
+
+  electron-log@5.4.3:
+    resolution: {integrity: sha512-sOUsM3LjZdugatazSQ/XTyNcw8dfvH1SYhXWiJyfYodAAKOZdHs0txPiLDXFzOZbhXgAgshQkshH2ccq0feyLQ==}
+    engines: {node: '>= 14'}
 
   electron-publish@26.8.1:
     resolution: {integrity: sha512-q+jrSTIh/Cv4eGZa7oVR+grEJo/FoLMYBAnSL5GCtqwUpr1T+VgKB/dn1pnzxIxqD8S/jP1yilT9VrwCqINR4w==}
@@ -8095,6 +8105,8 @@ snapshots:
       semver: 7.7.4
       tslib: 2.8.1
       unzip-crx-3: 0.2.0
+
+  electron-log@5.4.3: {}
 
   electron-publish@26.8.1:
     dependencies:

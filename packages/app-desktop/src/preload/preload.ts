@@ -1,4 +1,4 @@
-import { deepAssign, recursiveKeys } from "@common/object";
+import { deepAssign, recursiveKeys } from "@darkwrite/common";
 import { contextBridge, ipcRenderer, webUtils } from "electron";
 // import { DarkwriteElectronAPI } from "../ipc/api";
 // import { DarkwriteAPI, IPCHandler } from "../ipc/handler";

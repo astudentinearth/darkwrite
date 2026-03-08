@@ -1,4 +1,4 @@
-import { WorkspaceConfig } from "@/lib/workspace-config";
+import { WorkspaceConfig } from "@darkwrite/common";
 import { Column, Entity, PrimaryColumn } from "typeorm";
 import { JSONTransformer } from "../lib/json-transformer";
 import { WorkspaceDTO } from "@darkwrite/common";

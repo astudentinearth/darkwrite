@@ -1,11 +1,8 @@
-import react from "@vitejs/plugin-react";
 import { resolve } from "node:path";
 import { defineConfig, type TestProjectConfiguration } from "vitest/config";
 
 const appAliases = {
   "@": resolve("src"),
-  "@": resolve("src/electron"),
-  "@common": resolve("src/common"),
 };
 
 const electronConfig: TestProjectConfiguration = {
@@ -24,7 +21,6 @@ const electronConfig: TestProjectConfiguration = {
 };
 
 const appConfig: TestProjectConfiguration = {
-  plugins: [react()],
   test: {
     name: "app-frontend",
     environment: "jsdom",
@@ -55,7 +51,7 @@ const appConfig: TestProjectConfiguration = {
 
 export default defineConfig({
   test: {
-    workspace: [electronConfig, appConfig],
+    workspace: [electronConfig],
     env: {
       NODE_ENV: "test",
     },

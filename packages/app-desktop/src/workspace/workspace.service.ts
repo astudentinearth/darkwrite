@@ -1,11 +1,10 @@
-import {
-  CreateWorkspaceDTO,
-  UpdateWorkspaceDTO,
-} from "@darkwrite/common";
+import { CreateWorkspaceDTO, UpdateWorkspaceDTO } from "@darkwrite/common";
 import { Workspace } from "../entity";
-import { getDefaultWorkspaceConfiguration } from "@/lib/workspace-config";
 import { WorkspaceDAO } from "./workspace.dao";
-import { NotFoundError } from "@darkwrite/common";
+import {
+  NotFoundError,
+  getDefaultWorkspaceConfiguration,
+} from "@darkwrite/common";
 
 export class WorkspaceService {
   constructor(private workspaceDAO = WorkspaceDAO) {}

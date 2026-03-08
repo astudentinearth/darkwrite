@@ -1,4 +1,4 @@
-import { deepAssign, find, recursiveKeys } from "@common/object";
+import { deepAssign, find, recursiveKeys } from "@darkwrite/common";
 import { showAppMenu } from "@/menu";
 import {
   DarkwriteAPI,

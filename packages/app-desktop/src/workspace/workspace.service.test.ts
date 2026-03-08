@@ -1,4 +1,4 @@
-import { getDefaultWorkspaceConfiguration } from "@/lib/workspace-config";
+import { getDefaultWorkspaceConfiguration } from "@darkwrite/common";
 import { AppDataSource } from "../db";
 import { Workspace } from "../entity";
 import { WorkspaceService } from "./workspace.service";

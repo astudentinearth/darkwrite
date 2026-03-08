@@ -1,12 +1,15 @@
-import { isTheme, Theme } from "@darkwrite/common";
+import {
+  DEFAULT_THEMES,
+  InvalidThemeError,
+  isTheme,
+  Theme,
+  tryParse,
+} from "@darkwrite/common";
 import log from "electron-log";
+import { readFile } from "fs-extra";
+import _ from "lodash";
 import { DocumentFileStore, IDocumentStore } from "../lib/document-store";
 import { THEME_DIR } from "../lib/paths";
-import { tryParse } from "@common/json-util";
-import _ from "lodash";
-import { DEFAULT_THEMES } from "@darkwrite/common";
-import { readFile } from "fs-extra";
-import { InvalidThemeError } from "@darkwrite/common";
 
 export class ThemeService {
   constructor(

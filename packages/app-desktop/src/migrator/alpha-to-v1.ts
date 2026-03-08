@@ -32,12 +32,14 @@
  * Create a .version file in there, with contents set to "1".
  */
 
-import { NoteContent } from "@darkwrite/common";
-import { Rank } from "@darkwrite/common";
-import { SettingsMigrator } from "@darkwrite/common";
-import { Theme } from "@darkwrite/common";
-import { getDefaultWorkspaceConfiguration } from "@/lib/workspace-config";
 import * as entities from "@/entity";
+import {
+  NoteContent,
+  Rank,
+  SettingsMigrator,
+  Theme,
+  getDefaultWorkspaceConfiguration,
+} from "@darkwrite/common";
 import sqlite3 from "better-sqlite3";
 import { app, dialog } from "electron";
 import electronlog from "electron-log";
