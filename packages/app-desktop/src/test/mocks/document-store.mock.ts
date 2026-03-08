@@ -1,4 +1,4 @@
-import { IDocumentStore } from "@/electron/lib/document-store";
+import { IDocumentStore } from "@/lib/document-store";
 
 export class MockDocumentStore implements IDocumentStore {
   docs: Map<string, string> = new Map();

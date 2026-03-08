@@ -10,44 +10,21 @@ const electronConfig: TestProjectConfiguration = {
     name: "app-electron",
     environment: "node",
     root: resolve("."),
-    include: ["src/electron/**/*.test.ts"],
+    include: ["src/**/*.test.ts"],
     setupFiles: ["src/test/setup.electron.ts"],
     globals: true,
-    pool: "threads",
+    pool: "forks",
+    poolOptions: {
+      forks: {
+        singleFork: true
+      }
+    }
   },
   resolve: {
     alias: appAliases,
   },
 };
 
-const appConfig: TestProjectConfiguration = {
-  test: {
-    name: "app-frontend",
-    environment: "jsdom",
-    root: resolve("."),
-    include: ["src/**/*.test.{ts,tsx}"],
-    exclude: ["src/electron/**/*.test.{ts,tsx}"],
-    setupFiles: ["src/test/setup.react.ts"],
-    globals: true,
-    css: true,
-    deps: {
-      optimizer: {
-        web: {
-          include: ["react-tweet", "katex", "lucide-react"],
-        },
-      },
-    },
-    server: {
-      deps: {
-        inline: ["react-tweet", "katex", "lucide-react"],
-      },
-    },
-    pool: "threads",
-  },
-  resolve: {
-    alias: appAliases,
-  },
-};
 
 export default defineConfig({
   test: {

@@ -23,6 +23,6 @@ export default defineConfig({
     },
     outDir: path.resolve("dist"),
   },
-  plugins: [dts({rollupTypes: true})]
+  plugins: [dts({rollupTypes: true})],
 })
 
