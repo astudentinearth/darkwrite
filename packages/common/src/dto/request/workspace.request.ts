@@ -8,8 +8,9 @@ export const CreateWorkspaceDTOSchema = z.object({
   config: WorkspaceConfigSchema,
 });
 
-export interface CreateWorkspaceDTO
-  extends z.infer<typeof CreateWorkspaceDTOSchema> {}
+export interface CreateWorkspaceDTO extends z.infer<
+  typeof CreateWorkspaceDTOSchema
+> {}
 
 export const UpdateWorkspaceDTOSchema = z.object({
   name: z.string().optional(),
@@ -17,5 +18,6 @@ export const UpdateWorkspaceDTOSchema = z.object({
   config: WorkspaceConfigSchema.partial().optional(),
 });
 
-export interface UpdateWorkspaceDTO
-  extends z.infer<typeof UpdateWorkspaceDTOSchema> {}
+export interface UpdateWorkspaceDTO extends z.infer<
+  typeof UpdateWorkspaceDTOSchema
+> {}

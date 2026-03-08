@@ -3,11 +3,10 @@ import { useLocalStore } from "@/context/local-state";
 import { cn } from "@/lib/utils";
 import { TextareaHTMLAttributes, useLayoutEffect, useRef } from "react";
 
-export interface DynamicTextareaProps
-  extends Omit<
-    TextareaHTMLAttributes<HTMLTextAreaElement>,
-    "onChange" | "onPaste"
-  > {
+export interface DynamicTextareaProps extends Omit<
+  TextareaHTMLAttributes<HTMLTextAreaElement>,
+  "onChange" | "onPaste"
+> {
   /** The callback to run when value changes. Height will get adjusted **after** this method is called. */
   onValueChange?: (value: string) => void;
   /** Placeholder of the textarea */

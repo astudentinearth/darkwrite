@@ -1,4 +1,4 @@
-import { WorkspaceDTO } from "@darkwrite/common"
+import { WorkspaceDTO } from "@darkwrite/common";
 import { Button } from "@/components/ui/button";
 import WorkspaceIcon from "@/components/workspace-icon";
 import { cn } from "@/lib/utils";

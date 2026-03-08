@@ -51,7 +51,9 @@ export default function NoteDropdown() {
         </TitlebarNavTrigger>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        {tree?.map((n) => <ParentItem key={n} id={n} setOpen={setOpen} />)}
+        {tree?.map((n) => (
+          <ParentItem key={n} id={n} setOpen={setOpen} />
+        ))}
         {tree.length == 0 && (
           <span className="text-foreground/80 block px-4 py-2">
             {t("titlebar.noPagesAbove")}

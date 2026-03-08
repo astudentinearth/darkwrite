@@ -1,4 +1,3 @@
-
 import { nanoid } from "nanoid";
 
 export function generateId() {
@@ -6,4 +5,3 @@ export function generateId() {
     return self.crypto.randomUUID();
   else return nanoid();
 }
-

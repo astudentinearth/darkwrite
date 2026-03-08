@@ -1,4 +1,4 @@
-import { PageMargins, PageSize } from "@darkwrite/common"
+import { PageMargins, PageSize } from "@darkwrite/common";
 import {
   Select,
   SelectContent,

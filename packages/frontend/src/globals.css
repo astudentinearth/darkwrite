@@ -46,7 +46,8 @@
   /* generic fonts until its loaded from settings */
   --darkwrite-sans: "Segoe UI", "Noto Sans", "Roboto", sans-serif;
   --darkwrite-serif: "Times New Roman", "Noto Serif", "Liberation Serif", serif;
-  --darkwrite-mono: "Cascadia Code", "Courier New", "Liberation Mono", monospace;
+  --darkwrite-mono:
+    "Cascadia Code", "Courier New", "Liberation Mono", monospace;
   --font-ui: "";
 
   --editor-text-red: hsl(0 100% 58%);

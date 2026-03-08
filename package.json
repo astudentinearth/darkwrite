@@ -2,7 +2,10 @@
   "name": "darkwrite",
   "scripts": {
     "prepare": "husky",
-    "precommit": "prettier --check app"
+    "precommit": "prettier --check app",
+    "test": "pnpm -r test",
+    "lint": "pnpm -r lint",
+    "format": "pnpm -r format"
   },
   "packageManager": "pnpm@10.26.2",
   "devDependencies": {

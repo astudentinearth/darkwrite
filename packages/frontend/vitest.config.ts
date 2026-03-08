@@ -1,4 +1,3 @@
-
 import { resolve } from "path";
 import { defineConfig, type TestProjectConfiguration } from "vitest/config";
 import react from "@vitejs/plugin-react";
@@ -42,5 +41,4 @@ export default defineConfig({
     alias: appAliases,
   },
   plugins: [react(), svgr()],
-})
-
+});

@@ -10,11 +10,7 @@ const resolve = {
   },
 };
 
-const plugins: PluginOption[] = [
-  react(),
-  tailwind(),
-  svgr(),
-];
+const plugins: PluginOption[] = [react(), tailwind(), svgr()];
 
 export default defineConfig({
   plugins,

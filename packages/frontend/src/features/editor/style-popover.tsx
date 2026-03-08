@@ -1,4 +1,4 @@
-import { FontStyle, NoteCustomization } from "@darkwrite/common"
+import { FontStyle, NoteCustomization } from "@darkwrite/common";
 import FontSelect from "@/components/font-select";
 import { Switch } from "@/components/ui";
 import { Button } from "@/components/ui/button";

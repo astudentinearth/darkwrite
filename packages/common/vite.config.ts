@@ -1,4 +1,3 @@
-
 import path from "node:path";
 import { defineConfig } from "vite";
 import dts from "vite-plugin-dts";
@@ -15,14 +14,13 @@ export default defineConfig({
     lib: {
       entry: [path.resolve("src/index.ts")],
       formats: ["es"],
-      name: "@darkwrite/common"
+      name: "@darkwrite/common",
     },
     target: "esnext",
     license: {
-      fileName: "thirdparty.common.md"
+      fileName: "thirdparty.common.md",
     },
     outDir: path.resolve("dist"),
   },
-  plugins: [dts({rollupTypes: true})],
-})
-
+  plugins: [dts({ rollupTypes: true })],
+});

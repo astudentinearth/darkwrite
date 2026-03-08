@@ -1,0 +1,7 @@
+dist
+build
+coverage
+out
+release
+node_modules
+resources

@@ -1,5 +1,5 @@
 import { DarkwriteAPIClient } from "./api/api-client";
-import { DarkwriteUserSettings } from "@darkwrite/common"
+import { DarkwriteUserSettings } from "@darkwrite/common";
 import { appSessionSlice } from "./features/session/session-slice";
 import { settingsSlice } from "./features/settings/store/settings-slice";
 import { AppStore } from "./features/store/redux";
