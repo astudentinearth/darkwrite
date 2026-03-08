@@ -10,6 +10,7 @@
     "moduleResolution": "bundler",
     "target": "ESNext",
     "module": "ESNext",
+    "declaration": true,
     "experimentalDecorators": true,
     "strictPropertyInitialization": false,
     "esModuleInterop": true,

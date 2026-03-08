@@ -1,4 +1,4 @@
-import { generateId } from "@/lib/utils";
+import { generateId } from "@/id";
 
 export enum PropertyFieldType {
   TEXT = 0,

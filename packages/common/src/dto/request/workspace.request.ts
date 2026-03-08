@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-empty-object-type */
-import { WorkspaceConfigSchema } from "@/lib/workspace-config";
+import { WorkspaceConfigSchema } from "@/workspace-config";
 import { z } from "zod";
 
 export const CreateWorkspaceDTOSchema = z.object({

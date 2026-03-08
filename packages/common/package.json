@@ -1,14 +1,26 @@
 {
   "name": "@darkwrite/common",
   "version": "1.1.0",
-  "description": "",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "format": "prettier --check --write .",
+    "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
+    "typecheck": "tsc --noEmit --project tsconfig.json",
+    "test": "vitest run",
+    "test:watch": "vitest watch",
+    "build": "vite build"
   },
   "packageManager": "pnpm@10.26.2",
   "dependencies": {
     "@tiptap/core": "catalog:",
     "color-string": "^2.1.4",
+    "fractional-indexing": "^3.2.0",
     "lodash": "catalog:",
     "nanoid": "^5.1.6",
     "showdown": "^2.1.0",
@@ -16,6 +28,8 @@
   },
   "devDependencies": {
     "@types/lodash": "catalog:",
-    "@types/node": "catalog:"
+    "@types/node": "catalog:",
+    "@types/showdown": "^2.0.6",
+    "vite-plugin-dts": "^4.5.4"
   }
 }
