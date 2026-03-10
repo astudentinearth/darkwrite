@@ -35,15 +35,16 @@ Run the following commands:
 ```ps
 cd C:\
 git clone https://github.com/astudentinearth/darkwrite
-cd darkwrite/app
+cd darkwrite
+pnpm install
 pnpm build
 ```
 
-This will run our [custom build script,](../app/darkwrite-builder.js) which will install dependencies, compile the app, and create the final build automatically.
+This will run our [custom build script,](../tools/darkwrite-builder.js) which will compile the app and create the final build automatically.
 
 > See the troubleshooting section below if the build fails.
 
-An installer should appear in `release/`, under a subdirectory which is named after the compiled version number.
+An installer should appear in `packages/app-desktop/release/`, under a subdirectory which is named after the compiled version number.
 
 ## Troubleshooting
 
@@ -51,8 +52,8 @@ An installer should appear in `release/`, under a subdirectory which is named af
 
 Run the command below to ensure the module is compiled against the correct node and electron version.
 
-```
-pnpm install_app_deps
+```bash
+pnpm --filter=@darkwrite/app-desktop electron-rebuild -f -w better-sqlite3
 ```
 
 ### Electron builder throws some error involving `rcedit-x64.exe`, or `wincodesign` (or anything else)
@@ -77,32 +78,33 @@ Clone the repository to the root of your `C:\` drive and run the build commands 
 
 ```bash
 git clone https://github.com/astudentinearth/darkwrite
-cd darkwrite/app
+cd darkwrite
+pnpm install
 pnpm build
 ```
 
-You can find your AppImage and Debian package in `release/<version>/Darkwrite.{deb,AppImage}`
+You can find your AppImage and Debian package in `packages/app-desktop/release/<version>/Darkwrite.{deb,AppImage}`
 
 # macOS
 
 > [!WARNING]  
-> These instructions have not been tested, though it should work anyways.
-
-> [!WARNING]  
-> **Neither code signing nor notarization was set up for Darkwrite. You will need to create an exception for it. [This Apple support page explains how to create an exception.](https://support.apple.com/guide/mac-help/open-a-mac-app-from-an-unknown-developer-mh40616/mac)**
+> Electron builder will attempt to code sign and notarize the app by default. If you don't want to sign/notarize your version, run `export CSC_IDENTITY_AUTO_DISCOVERY=false` before starting the build. Alternatively, set the `mac.identity` field to `null` in `packages/app-desktop/electron-builder.json5`. If there's no Developer ID Application certificate on your system, you don't need to do anything.
 
 ## Requirements
 
+- macOS Sequoia or newer (Xcode 26 does not support older versions)
+- Xcode 26 (or later) with command line tools
 - pnpm
 - Node 22
-- git (install whatever XCode provides)
+- git
 
 ## Building
 
 ```bash
 git clone https://github.com/astudentinearth/darkwrite
-cd darkwrite/app
+cd darkwrite
+pnpm install
 pnpm build
 ```
 
-You can find your dmg in `release/<version>/Darkwrite-Installer.dmg`
+You can find your dmg in `packages/app-desktop/release/<version>/Darkwrite-Installer.dmg`
