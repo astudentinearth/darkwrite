@@ -14,11 +14,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        platform: [macos-latest, ubuntu-22.04, windows-latest]
+        platform: [ubuntu-22.04, windows-latest] # macOS temporarily removed until CI notarization is ready
     runs-on: ${{matrix.platform}}
-    defaults:
-      run:
-        working-directory: app
     steps:
       - uses: actions/checkout@v4
       - name: Install node
@@ -55,10 +52,10 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         with:
           files: |
-            app/release/*/*.exe
-            app/release/*/*.dmg
-            app/release/*/*.AppImage
-            app/release/*/*.deb
-            app/release/*/*.tar.zst
-            app/release/*/*.rpm
+            packages/app-desktop/release/*/*.exe
+            packages/app-desktop/release/*/*.dmg
+            packages/app-desktop/release/*/*.AppImage
+            packages/app-desktop/release/*/*.deb
+            packages/app-desktop/release/*/*.tar.zst
+            packages/app-desktop/release/*/*.rpm
           draft: true
