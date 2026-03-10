@@ -25,9 +25,9 @@ function LocalizedTitle({ noteId }: { noteId: string }) {
     <Trans
       i18nKey="ui.moveToDialog.title"
       components={[
-        <span className="font-semibold flex items-center gap-2 p-2 bg-secondary/50 rounded-md">
+        <span className="font-semibold flex items-center gap-2 p-2 bg-secondary/50 max-w-1/2 overflow-hidden text-ellipsis whitespace-nowrap rounded-md">
           <span>{getNoteIcon(icon)}</span>
-          <span>{title}</span>
+          <span className="w-full overflow-hidden text-ellipsis whitespace-nowrap">{title}</span>
         </span>,
       ]}
     />
