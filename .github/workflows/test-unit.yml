@@ -4,9 +4,10 @@ on:
     branches:
       - dev
     paths:
-      - "app/src/**/*"
-      - "app/pnpm-lock.yaml"
-      - "app/package.json"
+      - "packages/*/src/**/*"
+      - "packages/*/package.json"
+      - "pnpm-lock.yaml"
+      - "package.json"
       - "!*.md"
       - "!./**/*.md"
       - ".github/workflows/test-unit.yml"
