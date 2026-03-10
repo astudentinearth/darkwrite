@@ -1,0 +1,58 @@
+// @see - https://www.electron.build/configuration/configuration
+{
+  $schema: "https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json",
+  appId: "io.github.astudentinearth.darkwrite",
+  asar: true,
+  productName: "Darkwrite",
+  directories: {
+    output: "release/${version}",
+    buildResources: "resources",
+  },
+  files: ["dist-electron", "dist"],
+  extraResources: [
+    {
+      from: "resources/icon512.png",
+      to: "icon.png",
+    },
+    "THIRDPARTY.md",
+    "LICENSE_NOVEL.txt",
+    {
+      from: "../../LICENSE",
+      to: "LICENSE.darkwrite.txt",
+    },
+  ],
+  mac: {
+    target: ["dmg"],
+    artifactName: "${productName}-Installer.${ext}",
+    icon: "./resources/icon.icon",
+    entitlements: "./resources/entitlements.mac.plist",
+    entitlementsInherit: "./resources/entitlements.mac.plist",
+    hardenedRuntime: true,
+    gatekeeperAssess: false,
+    identity: null
+  },
+  dmg: {
+    sign: false,
+  },
+  win: {
+    target: [
+      {
+        target: "nsis",
+        arch: ["x64"],
+      },
+    ],
+    artifactName: "${productName}-Installer.${ext}",
+  },
+  nsis: {
+    oneClick: false,
+    perMachine: false,
+    allowToChangeInstallationDirectory: true,
+    deleteAppDataOnUninstall: false,
+  },
+  linux: {
+    target: ["AppImage", "deb"],
+    category: "Productivity",
+    artifactName: "${productName}.${ext}",
+    icon: "resources/512x512.png",
+  },
+}

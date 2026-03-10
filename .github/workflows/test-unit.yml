@@ -20,9 +20,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
     name: unit/integration tests and type checking
-    defaults:
-      run:
-        working-directory: app
 
     steps:
       - name: Install node
@@ -40,7 +37,7 @@ jobs:
         run: pnpm install
 
       - name: Ensure better-sqlite3 is built
-        run: pnpm rebuild better-sqlite3
+        run: pnpm --filter=@darkwrite/app-desktop rebuild better-sqlite3
 
       - name: Lint
         run: pnpm lint
