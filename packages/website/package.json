@@ -9,7 +9,8 @@
     "astro": "astro",
     "test": "exit 0",
     "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
-    "format": "prettier --check --write ."
+    "format": "prettier --check --write .",
+    "typecheck": "tsc --noEmit --project tsconfig.json"
   },
   "dependencies": {
     "@fontsource/karla": "^5.2.8",
