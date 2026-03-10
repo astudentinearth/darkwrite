@@ -1,4 +1,5 @@
 export function getOperatingSystem(): string {
+  //eslint-disable-next-line @typescript-eslint/no-explicit-any
   const ua = navigator.userAgent || navigator.vendor || (window as any).opera;
   if (/Windows NT/.test(ua)) {
     return "Windows";

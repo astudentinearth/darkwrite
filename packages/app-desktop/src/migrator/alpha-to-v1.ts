@@ -385,7 +385,7 @@ async function swap() {
       await fse.move(backupPath, Paths.DATA_DIR);
 
       throw new Error(
-        "Failed to move new data directory into place - rollback performed.",
+        "Failed to move new data directory into place - rollback performed.", {cause: err}
       );
     } catch (_err) {
       log.error(

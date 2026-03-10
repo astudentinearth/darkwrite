@@ -1,5 +1,5 @@
-import { defineConfig, PluginOption } from "vite";
 import path from "path";
+import { defineConfig } from "vite";
 import electron from "vite-plugin-electron";
 
 const resolve = {

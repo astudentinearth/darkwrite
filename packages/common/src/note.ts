@@ -26,13 +26,17 @@ export function isDescendant(
   potentialParentId: string,
   notes: Record<string, NoteDTO>,
 ): boolean {
+  const visited = new Set<string>();
   if (potentialChildId == null) return false;
   if (potentialChildId === potentialParentId) return true;
   let currentNoteId = potentialChildId;
   while (notes[currentNoteId] && notes[currentNoteId]?.parentId != null) {
+    if (visited.has(currentNoteId)) break; // prevent circular reference
     const currentNote = notes[currentNoteId];
+    console.log("Checking note", currentNote);
     if (!currentNote) break;
-    if (currentNote.parentId === potentialParentId) return true;
+    if (currentNote.parentId === potentialParentId) break;
+    visited.add(currentNoteId);
     currentNoteId = currentNote.parentId as string;
     if (currentNoteId === potentialChildId) break; // prevent circular reference
   }

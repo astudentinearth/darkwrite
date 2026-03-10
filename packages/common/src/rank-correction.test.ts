@@ -23,7 +23,6 @@ describe("tests for order hint collision and their correction", () => {
     expect(group.length === 3);
     expect(group[0].id).toBe(ANCHOR_ELEMENT_ID);
     expect(group[0].rank).toBe(Rank.default().get());
-    console.log(group);
   });
 
   it("should identify collision groups in a list where all ranks are the same", () => {
@@ -39,7 +38,6 @@ describe("tests for order hint collision and their correction", () => {
     expect(group.length === 4);
     expect(group[0].id).toBe(ANCHOR_ELEMENT_ID);
     expect(group[0].rank).toBe(Rank.default().toString());
-    console.log(group);
   });
 
   it("should identify a collision group in the middle of the list", () => {
@@ -57,7 +55,6 @@ describe("tests for order hint collision and their correction", () => {
     expect(group[0].id === "a");
     expect(group[1].rank === "aaazzc");
     expect(group[2].rank === "aaazzc");
-    console.log(group);
   });
 
   it("should identify 2 independent collision groups", () => {
@@ -83,7 +80,6 @@ describe("tests for order hint collision and their correction", () => {
     expect(group2[1].rank === "aaazzd");
     expect(group2[2].rank === "aaazzd");
     expect(group2[3].rank === "aaazzd");
-    console.log(groups);
   });
 
   it("should return an empty list when no items are given", () => {
@@ -124,7 +120,6 @@ describe("tests for order hint collision and their correction", () => {
     expect(group[2].rank).toBe("aaazzf");
     expect(group[3].rank).toBe("aaazzf");
 
-    console.log(group);
   });
 
   it("should identify a start, a middle and an end collision all at once", () => {
@@ -170,7 +165,6 @@ describe("tests for order hint collision and their correction", () => {
     expect(group3[3].rank).toBe("aaazzf");
     expect(group3[4].rank).toBe("aaazzf");
 
-    console.log(result);
   });
 
   it("should refuse to perform a correction when group size is <3", () => {
@@ -194,7 +188,6 @@ describe("tests for order hint collision and their correction", () => {
     expect(result[1].rank).toBe(
       collidingRank.between(Rank.default()).between(collidingRank).get(),
     );
-    console.log(result);
   });
 
   it("should fix collisions in a group", () => {
@@ -208,7 +201,6 @@ describe("tests for order hint collision and their correction", () => {
     const result = fixCollisionsInGroup(list);
     expect(result).toHaveLength(3);
     expect(new Set(result.map((e) => e.rank))).toHaveLength(3); // all different ranks
-    console.log(result);
   });
 
   // full run
@@ -228,6 +220,5 @@ describe("tests for order hint collision and their correction", () => {
     expect(keys).toHaveLength(2);
     expect(result).toHaveLength(2);
     expect(keys).not.contain("a0"); // we don't want the healthy note to be affected
-    console.log(result);
   });
 });

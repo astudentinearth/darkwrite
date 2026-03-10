@@ -77,7 +77,7 @@ function accessDataDirOrExit(root: string) {
   try {
     fs.accessSync(root, fse.constants.W_OK);
   } catch (err) {
-    if (err == null) throw new Error("Something went horribly wrong. Goodbye.");
+    if (err == null) throw new Error("Something went horribly wrong. Goodbye.", {cause: err});
     log.error(
       `Darkwrite cannot access ${root} : Make sure the directory exists and you have write permissions for that directory.`,
     );

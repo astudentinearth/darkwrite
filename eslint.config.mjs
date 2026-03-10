@@ -25,6 +25,7 @@ export default [
       "**/.next/**",
       "**/coverage/**",
       "**/dist-electron/**",
+      "**/.astro/**"
     ],
   },
   ...fixupConfigRules(

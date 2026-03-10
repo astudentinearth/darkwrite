@@ -158,6 +158,7 @@ export class NoteDAO {
     targetId: ParentId,
     potentialParentId: ParentId,
   ): Promise<boolean> {
+    const visited = new Set<string>();
     if (potentialParentId === null) return false;
     if (targetId === null) return false;
     if (targetId === potentialParentId) return true;
@@ -165,6 +166,8 @@ export class NoteDAO {
     let currentNote = await this.findById(targetId);
     while (currentNote && currentNote.parentId != null) {
       if (currentNote.parentId === potentialParentId) return true;
+      if (visited.has(currentNote.id)) break; // prevent circular reference
+      visited.add(currentNote.id);
       currentNote = await this.findById(currentNote.parentId);
       if (currentNote?.id === targetId) break; // prevent circular reference
     }
