@@ -1,6 +1,6 @@
 import { defineConfig, PluginOption } from "vite";
 import path from "path";
-import electron from "vite-plugin-electron/simple";
+import electron from "vite-plugin-electron";
 
 const resolve = {
   alias: {
@@ -9,32 +9,39 @@ const resolve = {
   },
 };
 
-const plugins: PluginOption[] = [
-  electron({
-    main: {
-      entry: path.resolve("src/main.ts"),
-      vite: {
-        resolve,
-        build: {
-          rollupOptions: {
-            external: ["typeorm"],
+export default defineConfig({
+  plugins: [
+    electron([
+      {
+        entry: "src/main.ts",
+        vite: {
+          resolve,
+          build: {
+            outDir: path.resolve("dist"),
+            rollupOptions: {
+              external: ["typeorm"],
+            },
+            license: {
+              fileName: "thirdparty.main.md",
+            },
           },
         },
       },
-    },
-    preload: {
-      input: path.resolve("src/preload/preload.ts"),
-      vite: {
-        resolve,
+      {
+        entry: "src/preload/preload.ts",
+        vite: {
+          resolve,
+          build: {
+            outDir: path.resolve("dist"),
+            rollupOptions: {
+              external: ["typeorm"],
+            },
+            license: {
+              fileName: "thirdparty.preload.md",
+            },
+          },
+        },
       },
-    },
-  }),
-];
-
-export default defineConfig({
-  plugins,
-  resolve,
-  build: {
-    outDir: path.resolve("dist"),
-  },
+    ]),
+  ],
 });

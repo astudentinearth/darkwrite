@@ -17,5 +17,8 @@ export default defineConfig({
   resolve,
   build: {
     outDir: path.resolve("dist"),
+    license: {
+      fileName: "thirdparty.frontend.md"
+    }
   },
 });

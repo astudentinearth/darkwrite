@@ -18,7 +18,8 @@ catalog:
 
 onlyBuiltDependencies:
   - '@swc/core'
+  - better-sqlite3
   - electron
   - electron-winstaller
   - esbuild
-  - better-sqlite3
+  - sharp

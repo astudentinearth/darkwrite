@@ -25,7 +25,7 @@
     "test:run": "vitest run",
     "test:watch": "vitest watch",
     "coverage": "vitest run --coverage",
-    "build:electron:win": "electron-builder --win",
+    "build:pre": "vite build",
     "build:win": "npm-run-all --serial build:pre build:electron:win",
     "build:mac": "pnpm build:pre && electron-builder --mac",
     "build:linux": "pnpm build:pre && electron-builder --linux",
