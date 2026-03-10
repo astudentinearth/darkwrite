@@ -2,6 +2,10 @@ import { existsSync, readFileSync, rmSync } from "fs";
 import { join } from "path";
 import os from "os";
 import proc from "child_process";
+import { collectPackageLicenses } from "./licenses";
+import chalk from "chalk";
+import { getDesktopPackageInfo } from "./package-info";
+import { bundleCopy } from "./build-desktop";
 
 const __dirname = import.meta.dirname; // polyfill __dirname
 
@@ -23,14 +27,27 @@ async function installDependencies() {
   });
 }
 
+async function runPnpmScript(script) {
+  console.log(`Running pnpm script: ${script}`);
+  proc.execSync(`pnpm ${script}`, {
+    shell: true,
+    stdio: "inherit",
+  });
+}
+
 async function removeArtifacts(version) {
-  console.log("\u001b[30mChecking for previous artifacts...");
-  const artifactDir = join(__dirname, `release/${version}/`);
+  console.log(chalk.gray("Checking for previous artifacts..."));
+  const artifactDir = join(
+    process.cwd(),
+    `packages/app-desktop/release/${version}/`,
+  );
   const artifactExists = existsSync(artifactDir);
 
   if (artifactExists) {
     console.log(
-      "Found older artifacts for this version. Removing for rebuild...",
+      chalk.gray(
+        "Found older artifacts for this version. Removing for rebuild...",
+      ),
     );
     if (os.type() == "Windows_NT") {
       console.log("Killing all Darkwrite.exe processes");
@@ -40,23 +57,18 @@ async function removeArtifacts(version) {
         /*empty*/
       }
     }
-    console.log("Removing old artifacts...");
+    console.log(chalk.gray("Removing old artifacts..."));
     rmSync(artifactDir, { recursive: true });
   } else
     console.log("There are no previous artifacts. Proceeding with build...");
 }
 
 async function main() {
-  console.log("\u001b[1;36m📦 Darkwrite Builder ---\u001b[22m");
+  console.log(chalk.cyanBright.bold("📦 Darkwrite Builder ---"));
   console.log(`\u001b[30mRunning on ${os.type()} ${os.release()}`);
 
-  console.log("Reading package.json");
-  const packageJsonPath = join(__dirname, "package.json");
-  const packageJsonContents = readFileSync(packageJsonPath);
-  const packageJSON = JSON.parse(packageJsonContents);
-
-  const version = packageJSON.version;
-  console.log(`Target Darkwrite version: ${version}`);
+  const { version } = await getDesktopPackageInfo();
+  console.log(chalk.blue(`Target Darkwrite version: ${version}`));
 
   await installDependencies();
   await removeArtifacts(version);
@@ -65,6 +77,16 @@ async function main() {
 
   const startTimestamp = Date.now();
 
+  const rootDir = process.cwd();
+
+  await runPnpmScript("build:common");
+  await runPnpmScript("build:frontend");
+  await runPnpmScript("bundle:desktop");
+
+  await collectPackageLicenses();
+  
+  await bundleCopy();
+  process.chdir(join(rootDir, "packages/app-desktop"));
   const buildProcess = proc.spawn(`pnpm`, [scripts[os.type()]], {
     stdio: "inherit",
     shell: true,
@@ -85,6 +107,12 @@ async function main() {
       console.log(
         `\u001b[31;1m✘ Build failed with exit code ${code}: \u001b[0m`,
       );
+  });
+
+  process.on("SIGINT", () => {
+    console.log("\nBuild interrupted by user. Exiting...");
+    buildProcess.kill("SIGINT");
+    process.exit(1);
   });
 }
 

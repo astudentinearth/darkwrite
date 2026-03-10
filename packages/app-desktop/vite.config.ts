@@ -9,6 +9,8 @@ const resolve = {
   },
 };
 
+const DISTDIR = path.resolve("dist-electron");
+
 export default defineConfig({
   plugins: [
     electron([
@@ -17,7 +19,7 @@ export default defineConfig({
         vite: {
           resolve,
           build: {
-            outDir: path.resolve("dist"),
+            outDir: path.resolve(DISTDIR),
             rollupOptions: {
               external: ["typeorm"],
             },
@@ -32,7 +34,7 @@ export default defineConfig({
         vite: {
           resolve,
           build: {
-            outDir: path.resolve("dist"),
+            outDir: path.resolve(DISTDIR),
             rollupOptions: {
               external: ["typeorm"],
             },
@@ -44,4 +46,7 @@ export default defineConfig({
       },
     ]),
   ],
+  build: {
+    outDir: path.resolve("dist_discarded")
+  }
 });

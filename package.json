@@ -5,13 +5,19 @@
     "precommit": "prettier --check app",
     "test": "pnpm -r test",
     "lint": "pnpm -r lint",
-    "format": "pnpm -r format"
+    "format": "pnpm -r format",
+    "build": "tsx tools/darkwrite-builder.js",
+    "build:common": "pnpm --filter=@darkwrite/common build",
+    "bundle:desktop": "pnpm --filter=@darkwrite/app-desktop build:pre",
+    "build:frontend": "pnpm --filter=@darkwrite/frontend build"
   },
   "packageManager": "pnpm@10.26.2",
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@types/node": "catalog:",
     "@typescript-eslint/eslint-plugin": "^8.56.1",
     "@typescript-eslint/parser": "^8.56.1",
+    "chalk": "^5.6.2",
     "husky": "^9.1.7",
     "lint-staged": "^16.3.1",
     "npm-run-all": "^4.1.5",

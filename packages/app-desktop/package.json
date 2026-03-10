@@ -26,9 +26,9 @@
     "test:watch": "vitest watch",
     "coverage": "vitest run --coverage",
     "build:pre": "vite build",
-    "build:win": "npm-run-all --serial build:pre build:electron:win",
-    "build:mac": "pnpm build:pre && electron-builder --mac",
-    "build:linux": "pnpm build:pre && electron-builder --linux",
+    "build:win": "electron-builder --win",
+    "build:mac": "electron-builder --mac",
+    "build:linux": "electron-builder --linux",
     "rebuild": "electron-rebuild -f -w better-sqlite3",
     "rebuild:restore": "pnpm rebuild better-sqlite3",
     "typecheck": "tsc --noEmit --project tsconfig.json"

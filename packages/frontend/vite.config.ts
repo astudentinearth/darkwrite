@@ -21,4 +21,5 @@ export default defineConfig({
       fileName: "thirdparty.frontend.md"
     }
   },
+  base: "./"
 });

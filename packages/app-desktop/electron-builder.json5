@@ -9,16 +9,15 @@
     buildResources: "resources",
   },
   files: ["dist-electron", "dist"],
-  afterSign: "./notarize.js",
   extraResources: [
     {
       from: "resources/icon512.png",
       to: "icon.png",
     },
-    "THIRDPARTY.txt",
+    "THIRDPARTY.md",
     "LICENSE_NOVEL.txt",
     {
-      from: "../LICENSE",
+      from: "../../LICENSE",
       to: "LICENSE.darkwrite.txt",
     },
   ],
@@ -30,6 +29,7 @@
     entitlementsInherit: "./resources/entitlements.mac.plist",
     hardenedRuntime: true,
     gatekeeperAssess: false,
+    identity: null
   },
   dmg: {
     sign: false,
