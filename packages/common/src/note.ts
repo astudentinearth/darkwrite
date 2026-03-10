@@ -33,7 +33,6 @@ export function isDescendant(
   while (notes[currentNoteId] && notes[currentNoteId]?.parentId != null) {
     if (visited.has(currentNoteId)) break; // prevent circular reference
     const currentNote = notes[currentNoteId];
-    console.log("Checking note", currentNote);
     if (!currentNote) break;
     if (currentNote.parentId === potentialParentId) break;
     visited.add(currentNoteId);

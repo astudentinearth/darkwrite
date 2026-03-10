@@ -36,7 +36,6 @@ describe("isDescendant", () => {
       isDescendant("a", "c", notes),
     ).toBe(true);
 
-
   });
 });
 

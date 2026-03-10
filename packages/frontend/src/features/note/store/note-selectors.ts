@@ -73,10 +73,13 @@ export const selectParentIdTree = createSelector(
   [selectAllNotesAsMap, (_state: RootState, noteId: string) => noteId],
   (notesMap, noteId) => {
     const tree: string[] = [];
+    const seen = new Set<string>();
     let currentNote = notesMap[noteId];
 
     while (currentNote && currentNote.parentId) {
+      if (seen.has(currentNote.id)) break; // prevent circular reference
       tree.push(currentNote.parentId);
+      seen.add(currentNote.id);
       currentNote = notesMap[currentNote.parentId];
     }
 
