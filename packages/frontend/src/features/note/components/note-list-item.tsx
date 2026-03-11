@@ -83,7 +83,7 @@ export function NoteItem({
             {note.title || "Untitled"}
           </span>
           <button
-          onClick={createChild}
+            onClick={createChild}
             className={cn(
               "hover:bg-secondary/50 size-5 group-hover:opacity-100 rounded-[6px] group-hover:flex hidden justify-center items-center",
               isDragging && "hidden",

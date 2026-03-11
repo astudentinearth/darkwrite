@@ -9,6 +9,7 @@
 
 ## ✨ Improvements and fixes
 
+- Removed lots of bloat from the final bundle (#18)
 - Significantly improved sidebar performance (reordering notes is now instant)
 - Fixed a bug that allowed you to create circular references when moving notes
 - Fixed an infinite loop crash when you tried to access a note that was part of a circular reference
@@ -35,6 +36,7 @@
 - Dropped `@tanstack/react-query` in favor of Redux + RTK Query
 - ⚠️ Breaking change: orderHint and favoriteOrderHint are no longer part of note updates or creation. Moving and/or reordering notes are now backend-authoritative commands.
 - IPC bridge now correctly handles union types
+- Switched to pnpm workspaces
 
 # 1.0.3-beta.1
 
