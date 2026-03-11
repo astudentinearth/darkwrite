@@ -1,7 +1,7 @@
 import { beginDrag, DragType } from "@/features/dnd/datatransfer";
 import { useDragState } from "@/features/dnd/use-drag-state";
 import { useAppSelector, useAppStore } from "@/features/store/hooks";
-import { useCallback, useEffect, useState } from "react";
+import { MouseEvent, useCallback, useEffect, useState } from "react";
 import { matchPath } from "react-router-dom";
 import {
   getMovingNote,
@@ -17,6 +17,8 @@ import {
   getCurrentRoutePath,
   NavigationEventBus,
 } from "@/features/navigation/navigator";
+import { useNoteActions } from "../store/note-actions";
+import { useCurrentWorkspaceId } from "@/features/workspaces/hooks/use-workspace";
 
 /**
  * Hook to get note data **within sidebar views.** Do NOT use this to
@@ -26,6 +28,8 @@ import {
 export function useNoteItem(id: string) {
   const note = useAppSelector((state) => selectNoteById(state, id));
   const [isActive, setIsActive] = useState(false);
+  const { createNote } = useNoteActions();
+  const workspaceId = useCurrentWorkspaceId();
 
   useEffect(() => {
     // get the path name at the moment of render to determine
@@ -46,7 +50,14 @@ export function useNoteItem(id: string) {
     return () => unsubscribe();
   }, [id, isActive]);
 
-  return { note, isActive };
+  const createChild = (e?: MouseEvent<HTMLElement>) => {
+    e?.preventDefault();
+    e?.stopPropagation();
+    if (!workspaceId) return;
+    createNote({ parentId: id, workspaceId });
+  };
+
+  return { note, isActive, createChild };
 }
 
 export function useNoteItemDrag(id: string) {

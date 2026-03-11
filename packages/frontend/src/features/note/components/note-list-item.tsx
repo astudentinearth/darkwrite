@@ -37,7 +37,7 @@ export function NoteItem({
   children: ReactNode[] | ReactNode;
 }) {
   const [open, setOpen] = useState(false);
-  const { note, isActive } = useNoteItem(id);
+  const { note, isActive, createChild } = useNoteItem(id);
   const { isDragging, onDrag, onDragEnter, onDragLeave, onDrop, onDragOver } =
     useNoteItemDrag(id);
 
@@ -83,6 +83,7 @@ export function NoteItem({
             {note.title || "Untitled"}
           </span>
           <button
+          onClick={createChild}
             className={cn(
               "hover:bg-secondary/50 size-5 group-hover:opacity-100 rounded-[6px] group-hover:flex hidden justify-center items-center",
               isDragging && "hidden",
