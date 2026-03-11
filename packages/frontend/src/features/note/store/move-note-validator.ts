@@ -7,7 +7,7 @@ export function canMoveNoteInto(
   notes: Record<string, NoteDTO>,
 ): boolean {
   if (movingNoteId === destinationId) return false;
-
+  if (destinationId == null) return true;
   const isCircularMovement = isDescendant(destinationId, movingNoteId, notes);
   if (isCircularMovement) return false;
 
@@ -21,7 +21,7 @@ export function canMoveNoteBelow(
 ) {
   const aboveNote = notes[aboveNoteId];
   if (!aboveNote) return false;
-
+  if (aboveNote.parentId == null) return true;
   const isCircularMovement = isDescendant(
     aboveNote.parentId,
     movingNoteId,

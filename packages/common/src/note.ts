@@ -19,27 +19,81 @@ export function resolveUpperTree(id: string, notes: Record<string, NoteDTO>) {
  * @param potentialChildId
  * @param potentialParentId
  * @param notes
- * @returns
+ * @returns "CIRCULAR" if child and parent are in a circular reference, true if is a descendant, false in all other cases
  */
 export function isDescendant(
-  potentialChildId: ParentId,
+  potentialChildId: string,
   potentialParentId: string,
-  notes: Record<string, NoteDTO>,
-): boolean {
+  notesMapOrGetter: Record<string, NoteDTO> | ((id: string) => NoteDTO),
+): boolean | "CIRCULAR" {
   const visited = new Set<string>();
-  if (potentialChildId == null) return false;
-  if (potentialChildId === potentialParentId) return true;
+  if (potentialChildId === potentialParentId) return "CIRCULAR";
+
+  const getNote = (id: string) => {
+    if (typeof notesMapOrGetter === "function") return notesMapOrGetter(id);
+    else return notesMapOrGetter[id];
+  };
+
   let currentNoteId = potentialChildId;
-  while (notes[currentNoteId] && notes[currentNoteId]?.parentId != null) {
-    if (visited.has(currentNoteId)) break; // prevent circular reference
-    const currentNote = notes[currentNoteId];
-    if (!currentNote) break;
-    if (currentNote.parentId === potentialParentId) break;
+  while (!visited.has(currentNoteId)) {
+    const currentNote = getNote(currentNoteId);
+    if (!currentNote) return false;
     visited.add(currentNoteId);
-    currentNoteId = currentNote.parentId as string;
-    if (currentNoteId === potentialChildId) break; // prevent circular reference
+    if (!currentNote.parentId) break;
+    currentNoteId = currentNote.parentId;
   }
-  return false;
+  // check for circular dependency
+  const currentNote = getNote(currentNoteId);
+
+  // test candidate isn't part of the tree, we don't care if there's a circle somewhere else
+  if (!visited.has(potentialParentId)) return false;
+
+  if (currentNote.parentId != null && visited.has(currentNote.parentId)) {
+    // we walked all nodes but we walked the parent of the last node too
+    // there's a circular dependency
+    return "CIRCULAR";
+  }
+
+  return true;
+}
+
+/**
+ * Returns true if potentialChildId is a descendant of potentialParentId
+ * @param potentialChildId
+ * @param potentialParentId
+ * @param notes
+ * @returns "CIRCULAR" if child and parent are in a circular reference, true if is a descendant, false in all other cases
+ */
+export async function isDescendantAsync(
+  potentialChildId: string,
+  potentialParentId: string,
+  getNote: (id: string) => Promise<NoteDTO | undefined | null>,
+): Promise<boolean | "CIRCULAR"> {
+  const visited = new Set<string>();
+  if (potentialChildId === potentialParentId) return "CIRCULAR";
+
+  let currentNoteId = potentialChildId;
+  while (!visited.has(currentNoteId)) {
+    const currentNote = await getNote(currentNoteId);
+    if (!currentNote) return false;
+    visited.add(currentNoteId);
+    if (!currentNote.parentId) break;
+    currentNoteId = currentNote.parentId;
+  }
+  // check for circular dependency
+  const currentNote = await getNote(currentNoteId);
+  if (!currentNote) return false;
+
+  // test candidate isn't part of the tree, we don't care if there's a circle somewhere else
+  if (!visited.has(potentialParentId)) return false;
+
+  if (currentNote.parentId != null && visited.has(currentNote.parentId)) {
+    // we walked all nodes but we walked the parent of the last node too
+    // there's a circular dependency
+    return "CIRCULAR";
+  }
+
+  return true;
 }
 
 export type NoteExportFormat = "md" | "html" | "json";

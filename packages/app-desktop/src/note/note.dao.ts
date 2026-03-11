@@ -1,4 +1,9 @@
-import { NotFoundError, ParentId, Rank } from "@darkwrite/common";
+import {
+  isDescendantAsync,
+  NotFoundError,
+  ParentId,
+  Rank,
+} from "@darkwrite/common";
 import { EntityManager, IsNull, Like, Repository } from "typeorm";
 import { AppDataSource } from "../db";
 import { Note } from "../entity";
@@ -150,28 +155,21 @@ export class NoteDAO {
 
   /**
    * Is
-   * @param targetId inside
+   * @param potentialChildId inside
    * @param potentialParentId ?
    * @returns
    */
   async isDescendant(
-    targetId: ParentId,
+    potentialChildId: ParentId,
     potentialParentId: ParentId,
-  ): Promise<boolean> {
-    const visited = new Set<string>();
-    if (potentialParentId === null) return false;
-    if (targetId === null) return false;
-    if (targetId === potentialParentId) return true;
-
-    let currentNote = await this.findById(targetId);
-    while (currentNote && currentNote.parentId != null) {
-      if (currentNote.parentId === potentialParentId) return true;
-      if (visited.has(currentNote.id)) break; // prevent circular reference
-      visited.add(currentNote.id);
-      currentNote = await this.findById(currentNote.parentId);
-      if (currentNote?.id === targetId) break; // prevent circular reference
-    }
-    return false;
+  ): Promise<boolean | "CIRCULAR"> {
+    if (potentialParentId == null) return false;
+    if (potentialChildId == null) return false;
+    return await isDescendantAsync(
+      potentialChildId,
+      potentialParentId,
+      async (id: string) => (await this.findById(id))?.mapToDTO(),
+    );
   }
 
   async computeOrderKeysForLayer(workspaceId: string, parentId: ParentId) {

@@ -1,4 +1,9 @@
-import { CreateNoteDTO, MoveNoteDTO, UpdateNoteDTO } from "@darkwrite/common";
+import {
+  CreateNoteDTO,
+  isDescendantAsync,
+  MoveNoteDTO,
+  UpdateNoteDTO,
+} from "@darkwrite/common";
 import { ParentId } from "@darkwrite/common";
 import { Rank } from "@darkwrite/common";
 import { DatabaseDAO } from "../database/database.dao";
@@ -183,10 +188,14 @@ export const NoteService = {
         throw new IllegalArgumentError("Cannot move a trashed note.");
       }
 
-      const isCircular = await noteRepository.isDescendant(
-        destinationNoteId,
-        sourceNoteId,
-      );
+      const isCircular = destinationNoteId
+        ? await isDescendantAsync(
+            destinationNoteId,
+            sourceNoteId,
+            async (id: string) =>
+              (await noteRepository.findById(id))?.mapToDTO(),
+          )
+        : false;
       if (isCircular) {
         throw new IllegalArgumentError(
           "Cannot move a note into its own descendant.",

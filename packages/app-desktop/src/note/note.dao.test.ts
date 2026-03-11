@@ -42,10 +42,10 @@ describe("NoteDAO", () => {
   };
 
   describe("isDescendant", () => {
-    it("should return true when target is the parent (self-descendant check)", async () => {
+    it("should return 'CIRCULAR' when target is the parent (self-descendant check)", async () => {
       // Logic: if (targetId === potentialParentId) return true;
       const res = await noteDao.isDescendant("note1", "note1");
-      expect(res).toBe(true);
+      expect(res).toBe("CIRCULAR");
     });
 
     it("should return true when target is a direct child", async () => {
