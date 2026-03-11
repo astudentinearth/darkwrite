@@ -18,8 +18,8 @@ export default defineConfig({
   build: {
     outDir: path.resolve("dist"),
     license: {
-      fileName: "thirdparty.frontend.md"
-    }
+      fileName: "thirdparty.frontend.md",
+    },
   },
-  base: "./"
+  base: "./",
 });

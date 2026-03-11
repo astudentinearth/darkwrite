@@ -47,6 +47,6 @@ export default defineConfig({
     ]),
   ],
   build: {
-    outDir: path.resolve("dist_discarded")
-  }
+    outDir: path.resolve("dist_discarded"),
+  },
 });

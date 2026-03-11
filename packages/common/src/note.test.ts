@@ -14,11 +14,8 @@ test("should resolve the parent tree of a note", () => {
   expect(result.findIndex((n) => n.id === "a")).not.toBe(-1);
 });
 
-
 describe("isDescendant", () => {
-
   it("should break gracefully on circular references", () => {
-
     const notes = {
       a: { id: "a", parentId: "b" },
       b: { id: "b", parentId: "c" },
@@ -26,16 +23,8 @@ describe("isDescendant", () => {
     } as unknown as Record<string, NoteDTO>;
 
     expect(isDescendant("a", "d", notes)).toBe(false);
-    expect(
-      isDescendant("a", "a", notes),
-    ).toBe(true);
-    expect(
-      isDescendant("a", "b", notes),
-    ).toBe(true);
-    expect(
-      isDescendant("a", "c", notes),
-    ).toBe(true);
-
+    expect(isDescendant("a", "a", notes)).toBe(true);
+    expect(isDescendant("a", "b", notes)).toBe(true);
+    expect(isDescendant("a", "c", notes)).toBe(true);
   });
 });
-

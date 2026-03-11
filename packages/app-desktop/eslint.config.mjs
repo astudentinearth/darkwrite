@@ -15,7 +15,7 @@ const configuration = defineConfig([
       "**/out/**",
       "**/.next/**",
       "**/coverage/**",
-      "**/dist-electron/**"
+      "**/dist-electron/**",
     ],
   },
   {

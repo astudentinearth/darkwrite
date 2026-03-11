@@ -29,7 +29,7 @@
     entitlementsInherit: "./resources/entitlements.mac.plist",
     hardenedRuntime: true,
     gatekeeperAssess: false,
-    identity: null
+    identity: null,
   },
   dmg: {
     sign: false,

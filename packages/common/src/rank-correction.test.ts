@@ -119,7 +119,6 @@ describe("tests for order hint collision and their correction", () => {
     expect(group[1].rank).toBe("aaazzf");
     expect(group[2].rank).toBe("aaazzf");
     expect(group[3].rank).toBe("aaazzf");
-
   });
 
   it("should identify a start, a middle and an end collision all at once", () => {
@@ -164,7 +163,6 @@ describe("tests for order hint collision and their correction", () => {
     expect(group3[2].rank).toBe("aaazzf");
     expect(group3[3].rank).toBe("aaazzf");
     expect(group3[4].rank).toBe("aaazzf");
-
   });
 
   it("should refuse to perform a correction when group size is <3", () => {

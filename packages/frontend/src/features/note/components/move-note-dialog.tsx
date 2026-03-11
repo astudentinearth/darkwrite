@@ -27,7 +27,9 @@ function LocalizedTitle({ noteId }: { noteId: string }) {
       components={[
         <span className="font-semibold flex items-center gap-2 p-2 bg-secondary/50 max-w-1/2 overflow-hidden text-ellipsis whitespace-nowrap rounded-md">
           <span>{getNoteIcon(icon)}</span>
-          <span className="w-full overflow-hidden text-ellipsis whitespace-nowrap">{title}</span>
+          <span className="w-full overflow-hidden text-ellipsis whitespace-nowrap">
+            {title}
+          </span>
         </span>,
       ]}
     />
