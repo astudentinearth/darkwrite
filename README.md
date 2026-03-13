@@ -73,4 +73,4 @@ Feel free to raise an issue or discussion if you have any questions.
 ## License
 
 Darkwrite is free and open source, licensed under GNU Affero General Public License, version 3 or any later version at your option.  
-Licenses for 3rd party packages used to make Darkwrite possible can be found [here.](https://github.com/astudentinearth/darkwrite/blob/dev/packages/app-desktop/THIRDPARTY.txt)
+Licenses for 3rd party packages used to make Darkwrite possible can be found [here.](https://github.com/astudentinearth/darkwrite/blob/dev/packages/app-desktop/THIRDPARTY.md)
