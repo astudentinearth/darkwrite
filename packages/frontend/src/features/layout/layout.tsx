@@ -18,7 +18,7 @@ export function Layout() {
 
   useShortcuts();
   return (
-    <div className="flex [&>div]:shrink-0 w-full h-full bg-background overflow-hidden [--slide-distance:32px]">
+    <div className={ cn( "flex [&>div]:shrink-0 w-full h-full bg-background overflow-hidden [--slide-distance:32px]" , isSidebarCollapsed && "bg-(--dw-editor-background)") }>
       <ThemeHandler />
       <NavigationHelper />
       <Sidebar></Sidebar>
