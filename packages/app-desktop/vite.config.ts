@@ -1,5 +1,5 @@
 import path from "path";
-import { BuildEnvironmentOptions, defineConfig, build, type InlineConfig } from "vite";
+import { defineConfig, build, type InlineConfig } from "vite";
 import electron from "vite-plugin-electron";
 
 const resolve = {
