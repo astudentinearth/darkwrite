@@ -1,5 +1,5 @@
 {
-  "preloadScriptPath": "preload.mjs",
+  "preloadScriptPath": "preload.js",
   "webcontentsUrl": "../dist/index.html",
   "icons": {
     "development": "../resources/darkwrite_icon.png"
