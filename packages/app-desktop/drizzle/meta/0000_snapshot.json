@@ -1,0 +1,341 @@
+{
+  "id": "00000000-0000-0000-0000-000000000000",
+  "prevId": "",
+  "version": "6",
+  "dialect": "sqlite",
+  "tables": {
+    "database": {
+      "name": "database",
+      "columns": {
+        "id": {
+          "autoincrement": false,
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "userId": {
+          "autoincrement": false,
+          "name": "userId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "name": {
+          "autoincrement": false,
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "workspaceId": {
+          "autoincrement": false,
+          "name": "workspaceId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "createdAt": {
+          "autoincrement": false,
+          "name": "createdAt",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "propertySchema": {
+          "autoincrement": false,
+          "name": "propertySchema",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "compositePrimaryKeys": {},
+      "indexes": {},
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "workspace": {
+      "name": "workspace",
+      "columns": {
+        "id": {
+          "autoincrement": false,
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "owner_id": {
+          "autoincrement": false,
+          "name": "owner_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "name": {
+          "autoincrement": false,
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "icon_url": {
+          "autoincrement": false,
+          "name": "icon_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "autoincrement": false,
+          "name": "created_at",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "config": {
+          "autoincrement": false,
+          "name": "config",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "compositePrimaryKeys": {},
+      "indexes": {},
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "note": {
+      "name": "note",
+      "columns": {
+        "id": {
+          "autoincrement": false,
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "userId": {
+          "autoincrement": false,
+          "name": "userId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "parentId": {
+          "autoincrement": false,
+          "name": "parentId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "propertyValues": {
+          "autoincrement": false,
+          "name": "propertyValues",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "title": {
+          "autoincrement": false,
+          "name": "title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "icon": {
+          "autoincrement": false,
+          "name": "icon",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "createdAt": {
+          "autoincrement": false,
+          "name": "createdAt",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "modifiedAt": {
+          "autoincrement": false,
+          "name": "modifiedAt",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "trashedAt": {
+          "autoincrement": false,
+          "name": "trashedAt",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "isFavorite": {
+          "autoincrement": false,
+          "name": "isFavorite",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "isTrashed": {
+          "autoincrement": false,
+          "name": "isTrashed",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "favoriteOrderHint": {
+          "autoincrement": false,
+          "name": "favoriteOrderHint",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "orderHint": {
+          "autoincrement": false,
+          "name": "orderHint",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "databaseId": {
+          "autoincrement": false,
+          "name": "databaseId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "workspaceId": {
+          "autoincrement": false,
+          "name": "workspaceId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "compositePrimaryKeys": {},
+      "indexes": {},
+      "foreignKeys": {
+        "note_workspaceId_workspace_id_fk": {
+          "name": "note_workspaceId_workspace_id_fk",
+          "tableFrom": "note",
+          "tableTo": "workspace",
+          "columnsFrom": [
+            "workspaceId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "note_databaseId_database_id_fk": {
+          "name": "note_databaseId_database_id_fk",
+          "tableFrom": "note",
+          "tableTo": "database",
+          "columnsFrom": [
+            "databaseId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "embed": {
+      "name": "embed",
+      "columns": {
+        "id": {
+          "autoincrement": false,
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "ownerId": {
+          "autoincrement": false,
+          "name": "ownerId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "fileType": {
+          "autoincrement": false,
+          "name": "fileType",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "fileSize": {
+          "autoincrement": false,
+          "name": "fileSize",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "displayName": {
+          "autoincrement": false,
+          "name": "displayName",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "fileName": {
+          "autoincrement": false,
+          "name": "fileName",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "uploadedAt": {
+          "autoincrement": false,
+          "name": "uploadedAt",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "workspaceId": {
+          "autoincrement": false,
+          "name": "workspaceId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "compositePrimaryKeys": {},
+      "indexes": {},
+      "foreignKeys": {
+        "embed_workspaceId_workspace_id_fk": {
+          "name": "embed_workspaceId_workspace_id_fk",
+          "tableFrom": "embed",
+          "tableTo": "workspace",
+          "columnsFrom": [
+            "workspaceId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    }
+  },
+  "views": {},
+  "enums": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  }
+}
