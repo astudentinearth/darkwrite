@@ -51,4 +51,3 @@ CREATE TABLE IF NOT EXISTS `embed` (
 	FOREIGN KEY (`workspaceId`) REFERENCES `workspace`(`id`) ON UPDATE no action ON DELETE set null
 );
 
-*/

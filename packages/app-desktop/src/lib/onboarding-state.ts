@@ -18,11 +18,6 @@ export async function isNewUser() {
   return !(await fse.pathExists(Paths.SETTINGS_PATH));
 }
 
-export async function isAlphaMigrationPerformed() {
-  if (!(await fse.pathExists(Paths.inData("data.db")))) return true;
-  else return false;
-}
-
 export async function markOnboardingCompleted() {
   await fse.writeFile(Paths.ONBOARD_FLAG_PATH, "onboarded");
 }

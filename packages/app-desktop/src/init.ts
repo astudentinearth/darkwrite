@@ -8,7 +8,7 @@ import { AppDataSource } from "./db";
 import { initDevtools } from "./debug/server";
 import { InitializeElectronAPI } from "./ipc/api";
 import { embedProtocolHandler } from "./ipc/embed-protocol-handler";
-import { isAlphaMigrationPerformed, isNewUser } from "./lib/onboarding-state";
+import { isNewUser } from "./lib/onboarding-state";
 import { Paths } from "./lib/paths";
 import { initAppMenu } from "./menu";
 import { webcontentsUrl } from "./metadata.json";
@@ -87,8 +87,7 @@ export async function init() {
     await installExtension([REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS]);
   }
   await Paths.initialize();
-  const migrationsPerformed = await isAlphaMigrationPerformed();
-  if (!migrationsPerformed && !(await isNewUser())) {
+  if (!await isNewUser()) {
     // settings will be persisted after the onboarding
     ElectronPrefsModel.override(SettingsModel.getDefaults());
   } else {

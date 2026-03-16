@@ -13,12 +13,10 @@ import { BackupAPI, HTMLExporterAPI } from "../api/backup.electron";
 import { DesktopIntegration } from "../lib/desktop-integration";
 import {
   hasOnboarded,
-  isAlphaMigrationPerformed,
   isNewUser,
   markOnboardingCompleted,
 } from "../lib/onboarding-state";
 import { Updater } from "../lib/update";
-import { migrateAlphaToV1 } from "../migrator/alpha-to-v1";
 import { NoteApiBridge } from "../note/note.handler";
 import { ElectronEmbedAPI } from "./embed.handler";
 import { ElectronSettingsAPI } from "./settings.handler";
@@ -54,9 +52,7 @@ export const DarkwriteElectronAPI = {
   },
   onboarding: {
     isCompleted: new IPCHandler(false, hasOnboarded),
-    isAlphaMigrationPerformed: new IPCHandler(false, isAlphaMigrationPerformed),
     markFinished: new IPCHandler(false, markOnboardingCompleted),
-    migrateToV1: new IPCHandler(false, migrateAlphaToV1),
     isNewUser: new IPCHandler(false, isNewUser),
   },
   showAppMenu: new IPCHandler(false, showAppMenu),

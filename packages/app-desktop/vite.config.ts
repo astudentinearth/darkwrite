@@ -47,7 +47,7 @@ export default defineConfig({
           build: {
             outDir: path.resolve(DISTDIR),
             rollupOptions: {
-              external: ["typeorm"],
+              external: ["typeorm", "better-sqlite3", "@libsql/client", /^@libsql\/.*/],
             },
             license: {
               fileName: "thirdparty.main.md",
