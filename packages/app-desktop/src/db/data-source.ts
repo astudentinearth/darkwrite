@@ -3,7 +3,7 @@ import { DB_PATH } from "../lib/paths";
 import * as entities from "@/entity";
 
 //import Database from "better-sqlite3";
-import {drizzle} from "drizzle-orm/libsql/node";
+import { drizzle } from "drizzle-orm/libsql/node";
 
 const dbPath = DB_PATH;
 
@@ -16,7 +16,6 @@ export const AppDataSource = new DataSource({
 
 export const drizzleDb = drizzle({
   connection: {
-    url: ":memory:"
-  }
+    url: ":memory:",
+  },
 });
-

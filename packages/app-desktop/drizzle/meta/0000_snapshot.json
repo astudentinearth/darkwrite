@@ -224,12 +224,8 @@
           "name": "note_workspaceId_workspace_id_fk",
           "tableFrom": "note",
           "tableTo": "workspace",
-          "columnsFrom": [
-            "workspaceId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["workspaceId"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -237,12 +233,8 @@
           "name": "note_databaseId_database_id_fk",
           "tableFrom": "note",
           "tableTo": "database",
-          "columnsFrom": [
-            "databaseId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["databaseId"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -317,12 +309,8 @@
           "name": "embed_workspaceId_workspace_id_fk",
           "tableFrom": "embed",
           "tableTo": "workspace",
-          "columnsFrom": [
-            "workspaceId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["workspaceId"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }

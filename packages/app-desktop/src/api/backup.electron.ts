@@ -1,3 +1,5 @@
+import { InferPreloadAPI, IPCHandler } from "@/types";
+import { IBackupAPI, InvalidBackupError } from "@darkwrite/common";
 import { app, dialog } from "electron";
 import log from "electron-log";
 import extract from "extract-zip";
@@ -7,6 +9,7 @@ import os from "os";
 import { zip } from "zip-a-folder";
 import { AppDataSource as DB } from "../db";
 import { rmIfExists } from "../lib/fs";
+import { logError } from "../lib/log";
 import {
   BACKUP_CACHE_DIR,
   DATA_DIR,
@@ -15,8 +18,6 @@ import {
   RESTORE_CACHE_DIR,
 } from "../lib/paths";
 import { openFile, saveFile } from "./dialog";
-import { logError } from "../lib/log";
-import { InvalidBackupError } from "@darkwrite/common";
 
 /**
  * APIs to perform a complete workspace export.
@@ -145,4 +146,13 @@ export const BackupAPI = {
     if (result.canceled) return null;
     else return result.filePaths[0];
   },
+};
+
+export const BackupApiBridge = {
+  initCache: new IPCHandler(false, HTMLExporterAPI.initializeExporterCache),
+  pushFile: new IPCHandler(false, HTMLExporterAPI.pushToExporterCache),
+  finishExport: new IPCHandler(false, HTMLExporterAPI.finishExport),
+  chooseArchive: new IPCHandler(false, BackupAPI.openArchive),
+  performBackup: new IPCHandler(false, BackupAPI.backup),
+  restoreBackup: new IPCHandler(false, BackupAPI.restore),
 };

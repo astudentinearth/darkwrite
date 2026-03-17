@@ -87,7 +87,7 @@ export async function init() {
     await installExtension([REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS]);
   }
   await Paths.initialize();
-  if (!await isNewUser()) {
+  if (!(await isNewUser())) {
     // settings will be persisted after the onboarding
     ElectronPrefsModel.override(SettingsModel.getDefaults());
   } else {

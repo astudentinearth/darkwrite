@@ -9,7 +9,11 @@ import {
 } from "@/types";
 import { ipcMain } from "electron";
 import log from "electron-log";
-import { BackupAPI, HTMLExporterAPI } from "../api/backup.electron";
+import {
+  BackupAPI,
+  BackupApiBridge,
+  HTMLExporterAPI,
+} from "../api/backup.electron";
 import { DesktopIntegration } from "../lib/desktop-integration";
 import {
   hasOnboarded,
@@ -18,26 +22,14 @@ import {
 } from "../lib/onboarding-state";
 import { Updater } from "../lib/update";
 import { NoteApiBridge } from "../note/note.handler";
-import { ElectronEmbedAPI } from "./embed.handler";
 import { ElectronSettingsAPI } from "./settings.handler";
 import { ElectronThemeAPI } from "./theme.handler";
 import { WorkspacesApiBridge } from "../workspace/workspace.handler";
+import { EmbedApiBridge } from "@/embed/embed.handler";
 
 export const DarkwriteElectronAPI = {
   note: NoteApiBridge,
-  embed: {
-    createFromLocalFile: new IPCHandler(
-      false,
-      ElectronEmbedAPI.createFromLocalFile,
-    ),
-    createFromArrayBuffer: new IPCHandler(
-      false,
-      ElectronEmbedAPI.createFromArrayBuffer,
-    ),
-    getById: new IPCHandler(false, ElectronEmbedAPI.getById),
-    getEncoded: new IPCHandler(false, ElectronEmbedAPI.getEncoded),
-    download: new IPCHandler(false, ElectronEmbedAPI.download),
-  },
+  embed: EmbedApiBridge,
   workspace: WorkspacesApiBridge,
   settings: {
     getUserSettings: new IPCHandler(false, ElectronSettingsAPI.getUserSettings),
@@ -65,14 +57,7 @@ export const DarkwriteElectronAPI = {
     getClientInfo: new IPCHandler(false, DesktopIntegration.getClientInfo),
   },
   checkUpdate: new IPCHandler(false, Updater.checkUpdate),
-  backup: {
-    initCache: new IPCHandler(false, HTMLExporterAPI.initializeExporterCache),
-    pushFile: new IPCHandler(false, HTMLExporterAPI.pushToExporterCache),
-    finishExport: new IPCHandler(false, HTMLExporterAPI.finishExport),
-    chooseArchive: new IPCHandler(false, BackupAPI.openArchive),
-    performBackup: new IPCHandler(false, BackupAPI.backup),
-    restoreBackup: new IPCHandler(false, BackupAPI.restore),
-  },
+  backup: BackupApiBridge,
 } satisfies DarkwriteAPI;
 export type DarkwritePreloadAPI = InferPreloadAPI<typeof DarkwriteElectronAPI>;
 
