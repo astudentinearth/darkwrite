@@ -7,15 +7,17 @@ import { drizzle } from "drizzle-orm/libsql/node";
 
 const dbPath = DB_PATH;
 
+const getDatabaseUrl = () => process.env["NODE_ENV"] === "test" ? ":memory:" : dbPath
+
 export const AppDataSource = new DataSource({
   type: "better-sqlite3",
-  database: process.env["NODE_ENV"] === "test" ? ":memory:" : dbPath,
+  database: getDatabaseUrl(),
   entities,
   synchronize: true, // FIXME: ~~REMOVE BEFORE RELEASE~~ lol i'm removing typeorm
 });
 
 export const drizzleDb = drizzle({
   connection: {
-    url: ":memory:",
-  },
+    url: getDatabaseUrl(),
+  }
 });

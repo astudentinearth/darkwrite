@@ -54,3 +54,15 @@ export const embed = sqliteTable("embed", {
   uploadedAt: numeric().notNull(),
   workspaceId: text().references(() => workspace.id, { onDelete: "set null" }),
 });
+
+export type Workspace = typeof workspace.$inferSelect;
+export type NewWorkspace = typeof workspace.$inferInsert;
+
+export type Note = typeof note.$inferSelect;
+export type NewNote = typeof note.$inferInsert;
+
+export type Database = typeof database.$inferSelect;
+export type NewDatabase = typeof database.$inferInsert;
+
+export type Embed = typeof embed.$inferSelect;
+export type NewEmbed = typeof embed.$inferInsert;
