@@ -49,3 +49,7 @@ export type Optional<T, E extends Error = Error> =
 export type DeepPartial<T> = {
   [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P];
 };
+
+export function isNotUndefined<T>(value: T | undefined): value is T {
+  return value !== undefined;
+}

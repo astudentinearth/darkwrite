@@ -3,20 +3,20 @@ import { NoteContent } from "@/note-content";
 export interface NoteDTO {
   id: string;
   title: string;
-  icon?: string | null;
+  icon: string | null;
   parentId: string | null;
   createdAt: string;
   modifiedAt: string;
-  trashedAt?: string | null;
+  trashedAt: string | null;
   orderHint: string;
   favoriteOrderHint: string;
-  isFavorite?: boolean | null;
-  isTrashed?: boolean | null;
+  isFavorite: boolean | null;
+  isTrashed: boolean | null;
 
   propertyValues?: Record<string, string> | null;
 
-  userId?: string | null; // Owner of the note
-  databaseId?: string | null; // ID of the database this note belongs to
+  userId: string | null; // Owner of the note
+  databaseId: string | null; // ID of the database this note belongs to
   workspaceId: string; // ID of the workspace this note belongs to
 }
 

@@ -16,8 +16,15 @@ export const AppDataSource = new DataSource({
   synchronize: true, // FIXME: ~~REMOVE BEFORE RELEASE~~ lol i'm removing typeorm
 });
 
-export const drizzleDb = drizzle({
+export const db = drizzle({
   connection: {
     url: getDatabaseUrl(),
   }
 });
+db.transaction(async tx => {
+  tx
+})
+
+export type DatabaseType = typeof db;
+export type Transaction = Parameters<Parameters<DatabaseType["transaction"]>[0]>[0];
+

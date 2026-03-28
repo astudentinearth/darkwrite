@@ -4,6 +4,7 @@ import { Workspace } from "./workspace.entity";
 import { NoteDTO } from "@darkwrite/common";
 
 @Entity("note")
+/** @deprecated */
 export class Note {
   @PrimaryColumn({ type: "varchar", generated: "uuid" })
   id: string;
