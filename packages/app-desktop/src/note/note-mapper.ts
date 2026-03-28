@@ -23,6 +23,6 @@ export function dtoToNote(dto: NoteDTO): Note {
     propertyValues: propertyValues,
     trashedAt: trashedAt ? new Date(trashedAt) : null,
     userId: rest.userId,
-    icon: rest.icon 
+    icon: rest.icon,
   };
 }

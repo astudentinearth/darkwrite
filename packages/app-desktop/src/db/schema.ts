@@ -53,7 +53,9 @@ export const note = sqliteTable("note", {
   favoriteOrderHint: text().notNull(),
   orderHint: text().notNull(),
   databaseId: text().references(() => database.id),
-  workspaceId: text().references(() => workspace.id, { onDelete: "cascade" }).notNull(),
+  workspaceId: text()
+    .references(() => workspace.id, { onDelete: "cascade" })
+    .notNull(),
 });
 
 export const embed = sqliteTable("embed", {

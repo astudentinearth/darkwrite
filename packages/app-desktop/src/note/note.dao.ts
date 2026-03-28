@@ -1,10 +1,10 @@
 import { NewNote, Note, note as notesTable, PatchNote } from "@/db/schema";
 import {
-    isDescendantAsync,
-    isNotUndefined,
-    NotFoundError,
-    ParentId,
-    Rank,
+  isDescendantAsync,
+  isNotUndefined,
+  NotFoundError,
+  ParentId,
+  Rank,
 } from "@darkwrite/common";
 import { and, asc, desc, eq, isNull, like, ne } from "drizzle-orm";
 import { DatabaseType, db, Transaction } from "../db";
@@ -234,9 +234,12 @@ export class NoteDAO {
   }
 
   async getRecentlyModifiedNotes(workspaceId: string, limit: number) {
-    return this.tx.select().from(notesTable).where(and(
-      inWorkspace(workspaceId), notTrashed()
-    )).orderBy(desc(notesTable.modifiedAt)).limit(limit);
+    return this.tx
+      .select()
+      .from(notesTable)
+      .where(and(inWorkspace(workspaceId), notTrashed()))
+      .orderBy(desc(notesTable.modifiedAt))
+      .limit(limit);
   }
 
   async resolveParentTree(noteId: string): Promise<Note[]> {

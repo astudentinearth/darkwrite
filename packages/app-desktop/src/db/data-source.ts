@@ -7,7 +7,8 @@ import { drizzle } from "drizzle-orm/libsql/node";
 
 const dbPath = DB_PATH;
 
-const getDatabaseUrl = () => process.env["NODE_ENV"] === "test" ? ":memory:" : dbPath
+const getDatabaseUrl = () =>
+  process.env["NODE_ENV"] === "test" ? ":memory:" : dbPath;
 
 export const AppDataSource = new DataSource({
   type: "better-sqlite3",
@@ -19,12 +20,13 @@ export const AppDataSource = new DataSource({
 export const db = drizzle({
   connection: {
     url: getDatabaseUrl(),
-  }
+  },
 });
-db.transaction(async tx => {
-  tx
-})
+db.transaction(async (tx) => {
+  tx;
+});
 
 export type DatabaseType = typeof db;
-export type Transaction = Parameters<Parameters<DatabaseType["transaction"]>[0]>[0];
-
+export type Transaction = Parameters<
+  Parameters<DatabaseType["transaction"]>[0]
+>[0];
