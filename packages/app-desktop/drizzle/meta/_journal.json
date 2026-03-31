@@ -8,6 +8,13 @@
       "when": 1773307015732,
       "tag": "0000_clumsy_miss_america",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1774897074577,
+      "tag": "0001_moaning_grey_gargoyle",
+      "breakpoints": true
     }
   ]
 }

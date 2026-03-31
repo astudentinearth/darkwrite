@@ -8,11 +8,11 @@ import { ParentId } from "@darkwrite/common";
 import { Rank } from "@darkwrite/common";
 import { DatabaseDAO } from "../database/database.dao";
 import { AppDataSource } from "../db";
-import { Note } from "../entity";
 import { DocumentService } from "../service/document.service";
-import { WorkspaceDAO } from "../workspace/workspace.dao";
+import { _WorkspaceDAO } from "../workspace/workspace.dao";
 import { NoteDAO } from "./note.dao";
 import { IllegalArgumentError, NotFoundError } from "@darkwrite/common";
+import {NewNote, Note} from "@/db/schema"
 
 const noteDAO = new NoteDAO();
 
@@ -20,32 +20,30 @@ export const NoteService = {
   async create(dto: CreateNoteDTO) {
     const { title, workspaceId, databaseId, icon, parentId } = dto;
 
-    const workspace = await WorkspaceDAO.findByIdOrThrow(workspaceId);
-    if (!workspace) {
-      throw new NotFoundError("Workspace", workspaceId);
-    }
-
-    const database = databaseId
-      ? await DatabaseDAO.findByIdOrThrow(databaseId)
-      : undefined;
-
+    const workspace = await _WorkspaceDAO.findByIdOrThrow(workspaceId);
     const orderKeys = await noteDAO.computeOrderKeysForLayer(
       workspaceId,
       parentId,
     );
 
-    let note = new Note();
-    note.title = title;
-    note.workspace = workspace;
-    note.orderHint = orderKeys.end;
+    const note: NewNote = {
+      title,
+      workspaceId,
+      orderHint: orderKeys.end,
+      databaseId,
+      icon,
+      parentId,
+      favoriteOrderHint: "",
+      createdAt: new Date(),
+      modifiedAt: new Date(),
+    };
 
-    note.database = database;
-    note.icon = icon;
-    note.parentId = parentId;
-    note.favoriteOrderHint = "";
-
-    note = await noteDAO.save(note);
-    await new DocumentService().setNoteContent(note.id, "{}");
+    const result = await noteDAO.create(note);
+    if(!result) {
+      throw new Error("Failed to create note");
+    }
+    
+    await new DocumentService().setNoteContent(result.id, "{}");
     return note;
   },
 
@@ -65,8 +63,8 @@ export const NoteService = {
     if ("databaseId" in dto && dto.databaseId === undefined)
       note.database = undefined;
 
-    note.modified();
-    return await noteDAO.save(note);
+    note.modifiedAt = new Date();
+    return await noteDAO.update(note);
   },
 
   async move(dto: MoveNoteDTO) {

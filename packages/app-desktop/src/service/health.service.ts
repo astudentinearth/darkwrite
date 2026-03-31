@@ -2,12 +2,12 @@ import { AppDataSource } from "../db";
 import { Note } from "../entity";
 import { NoteDAO } from "../note/note.dao";
 import { Rank } from "@darkwrite/common";
-import { WorkspaceDAO } from "../workspace/workspace.dao";
+import { _WorkspaceDAO } from "../workspace/workspace.dao";
 
 export class HealthService {
   constructor(
     private _db = AppDataSource,
-    private workspaceRepository = WorkspaceDAO,
+    private workspaceRepository = _WorkspaceDAO,
     private noteRepository = new NoteDAO(),
   ) {}
 

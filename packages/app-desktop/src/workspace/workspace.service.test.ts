@@ -2,12 +2,12 @@ import { getDefaultWorkspaceConfiguration } from "@darkwrite/common";
 import { AppDataSource } from "../db";
 import { Workspace } from "../entity";
 import { WorkspaceService } from "./workspace.service";
-import { WorkspaceDAO } from "./workspace.dao";
+import { _WorkspaceDAO } from "./workspace.dao";
 
 const workspaceService = new WorkspaceService();
 
 const MockDAO = {
-  ...WorkspaceDAO,
+  ..._WorkspaceDAO,
   async findAll() {
     return [];
   },

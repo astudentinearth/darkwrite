@@ -1,13 +1,13 @@
 import { CreateWorkspaceDTO, UpdateWorkspaceDTO } from "@darkwrite/common";
 import { Workspace } from "../entity";
-import { WorkspaceDAO } from "./workspace.dao";
+import { _WorkspaceDAO } from "./workspace.dao";
 import {
   NotFoundError,
   getDefaultWorkspaceConfiguration,
 } from "@darkwrite/common";
 
 export class WorkspaceService {
-  constructor(private workspaceDAO = WorkspaceDAO) {}
+  constructor(private workspaceDAO = _WorkspaceDAO) {}
 
   async createWorkspace(dto: CreateWorkspaceDTO): Promise<Workspace> {
     const { config, name, icon_url } = dto;

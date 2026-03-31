@@ -31,7 +31,7 @@ export class NoteDAO {
   }
 
   async create(note: NewNote) {
-    return this.tx.insert(notesTable).values(note).returning();
+    return (await this.tx.insert(notesTable).values(note).returning())[0];
   }
 
   async update(note: PatchNote) {
