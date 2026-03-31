@@ -1,7 +1,12 @@
 import { isNotUndefined, NotFoundError } from "@darkwrite/common";
 import { AppDataSource, DatabaseType, db, Transaction } from "../db";
 import { Workspace as legacyWorkspace } from "../entity";
-import { NewWorkspace, PatchWorkspace, Workspace, workspace as workspaceTable } from "@/db/schema";
+import {
+  NewWorkspace,
+  PatchWorkspace,
+  Workspace,
+  workspace as workspaceTable,
+} from "@/db/schema";
 import { eq } from "drizzle-orm";
 
 const repo = AppDataSource.getRepository(legacyWorkspace);
@@ -20,28 +25,47 @@ export const _WorkspaceDAO = {
 
   findAll: async () => repo.find(),
   deleteById: async (id: string) => repo.delete({ id }),
-  delete: async (workspace: legacyWorkspace) => repo.delete({ id: workspace.id }),
+  delete: async (workspace: legacyWorkspace) =>
+    repo.delete({ id: workspace.id }),
 };
 
 export class WorkspaceDAO {
-  constructor(private tx: Transaction | DatabaseType = db){}
+  constructor(private tx: Transaction | DatabaseType = db) {}
 
   async create(workspace: NewWorkspace): Promise<Workspace> {
-    return (await this.tx.insert(workspaceTable).values(workspace).returning())[0];
+    return (
+      await this.tx.insert(workspaceTable).values(workspace).returning()
+    )[0];
   }
 
   async update(workspace: PatchWorkspace) {
-    return (await this.tx.update(workspaceTable).set(workspace).where(eq(workspaceTable.id, workspace.id)).returning()).at(0);
+    return (
+      await this.tx
+        .update(workspaceTable)
+        .set(workspace)
+        .where(eq(workspaceTable.id, workspace.id))
+        .returning()
+    ).at(0);
   }
 
   /** Update multiple workspaces.
-  * @returns the affected workspaces **in no particular order.** */
+   * @returns the affected workspaces **in no particular order.** */
   async updateAll(workspaces: PatchWorkspace[]): Promise<Workspace[]> {
-    return (await Promise.all(workspaces.map(w => this.update(w)))).filter(isNotUndefined);
+    return (await Promise.all(workspaces.map((w) => this.update(w)))).filter(
+      isNotUndefined,
+    );
   }
 
   async findById(id: string): Promise<Workspace | null> {
-    return (await this.tx.select().from(workspaceTable).where(eq(workspaceTable.id, id)).limit(1)).at(0) ?? null;
+    return (
+      (
+        await this.tx
+          .select()
+          .from(workspaceTable)
+          .where(eq(workspaceTable.id, id))
+          .limit(1)
+      ).at(0) ?? null
+    );
   }
 
   async findByIdOrThrow(id: string): Promise<Workspace> {
@@ -61,5 +85,4 @@ export class WorkspaceDAO {
   async delete(value: Workspace) {
     this.deleteById(value.id);
   }
-
 }

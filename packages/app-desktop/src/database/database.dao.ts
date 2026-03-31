@@ -1,21 +1,63 @@
-import { NotFoundError } from "@darkwrite/common";
-import { AppDataSource } from "../db";
-import { Database } from "../entity";
+import { isNotUndefined, NotFoundError } from "@darkwrite/common";
+import { AppDataSource, DatabaseType, Transaction, db } from "@/db";
+import {
+  Database,
+  database as databaseTable,
+  NewDatabase,
+  PatchDatabase,
+} from "@/db/schema";
+import { eq } from "drizzle-orm";
 
-const repo = AppDataSource.getRepository(Database);
+export class DatabaseDAO {
+  constructor(private tx: DatabaseType | Transaction = db) {}
 
-export const DatabaseDAO = {
-  save: async (database: Database) => repo.save(database),
-  saveAll: async (databases: Database[]) => repo.save(databases),
-  findById: async (id: string) => repo.findOne({ where: { id } }),
+  async create(database: NewDatabase) {
+    return (
+      await this.tx.insert(databaseTable).values(database).returning()
+    )[0];
+  }
 
-  findByIdOrThrow: async (id: string) => {
-    const database = await repo.findOne({ where: { id } });
-    if (!database) throw new NotFoundError("Database", id);
-    return database;
-  },
+  async update(database: PatchDatabase) {
+    return (
+      await this.tx
+        .update(databaseTable)
+        .set(database)
+        .where(eq(databaseTable.id, database.id))
+        .returning()
+    ).at(0);
+  }
 
-  findAll: async () => repo.find(),
-  deleteById: async (id: string) => repo.delete({ id }),
-  delete: async (database: Database) => repo.delete({ id: database.id }),
-};
+  async updateAll(databases: PatchDatabase[]) {
+    return (await Promise.all(databases.map((d) => this.update(d)))).filter(
+      isNotUndefined,
+    );
+  }
+
+  async findById(id: string) {
+    return (
+      await this.tx
+        .select()
+        .from(databaseTable)
+        .where(eq(databaseTable.id, id))
+        .limit(1)
+    ).at(0);
+  }
+
+  async findByIdOrThrow(id: string) {
+    const result = await this.findById(id);
+    if (!result) throw new NotFoundError("Database", id);
+    return result;
+  }
+
+  async findAll() {
+    return await this.tx.select().from(databaseTable);
+  }
+
+  async deleteById(id: string) {
+    await this.tx.delete(databaseTable).where(eq(databaseTable.id, id));
+  }
+
+  async delete(database: Database) {
+    await this.deleteById(database.id);
+  }
+}

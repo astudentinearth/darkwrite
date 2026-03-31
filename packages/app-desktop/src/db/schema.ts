@@ -17,7 +17,8 @@ const generatedUuid = () =>
     .$defaultFn(() => randomUUID());
 
 const bool = () => integer({ mode: "boolean" });
-const timestamp = (name?: string) => name ? integer(name, {mode: "timestamp"}) : integer({ mode: "timestamp" });
+const timestamp = (name?: string) =>
+  name ? integer(name, { mode: "timestamp" }) : integer({ mode: "timestamp" });
 const json = () => text({ mode: "json" });
 
 export const database = sqliteTable("database", {

@@ -12,7 +12,7 @@ import { DocumentService } from "../service/document.service";
 import { _WorkspaceDAO } from "../workspace/workspace.dao";
 import { NoteDAO } from "./note.dao";
 import { IllegalArgumentError, NotFoundError } from "@darkwrite/common";
-import {NewNote, Note} from "@/db/schema"
+import { NewNote, Note } from "@/db/schema";
 
 const noteDAO = new NoteDAO();
 
@@ -39,10 +39,10 @@ export const NoteService = {
     };
 
     const result = await noteDAO.create(note);
-    if(!result) {
+    if (!result) {
       throw new Error("Failed to create note");
     }
-    
+
     await new DocumentService().setNoteContent(result.id, "{}");
     return note;
   },
