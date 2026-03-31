@@ -4,9 +4,9 @@ import * as entities from "@/entity";
 import * as relations from "./relations";
 import * as tables from "./schema";
 
-//import Database from "better-sqlite3";
 import { drizzle } from "drizzle-orm/libsql/node";
 import { migrate } from "drizzle-orm/libsql/migrator";
+import { is } from "@electron-toolkit/utils";
 
 const dbPath = DB_PATH;
 
@@ -20,14 +20,23 @@ export const AppDataSource = new DataSource({
   synchronize: true, // FIXME: ~~REMOVE BEFORE RELEASE~~ lol i'm removing typeorm
 });
 
-export const db = drizzle({
-  connection: {
-    url: getDatabaseUrl(),
-  },
-  schema: { ...tables, ...relations },
-});
+export function createDatabase(url: string = getDatabaseUrl()) {
+  return drizzle({
+    connection: {
+      url,
+    },
+    schema: { ...tables, ...relations },
+  });
+}
 
-export type DatabaseType = typeof db;
+export type DatabaseType = ReturnType<typeof createDatabase>;
 export type Transaction = Parameters<
   Parameters<DatabaseType["transaction"]>[0]
 >[0];
+
+export async function migrateDatabase(db: DatabaseType): Promise<DatabaseType> {
+  await migrate(db, { migrationsFolder: is.dev ? "drizzle" : "../drizzle" });
+  return db;
+}
+
+export const db: DatabaseType = createDatabase();

@@ -8,7 +8,7 @@ CREATE TABLE `__new_workspace` (
 	`config` text
 );
 --> statement-breakpoint
-INSERT INTO `__new_workspace`("id", "owner_id", "name", "icon_url", "createdAt", "config") SELECT "id", "owner_id", "name", "icon_url", "createdAt", "config" FROM `workspace`;--> statement-breakpoint
+INSERT INTO `__new_workspace`("id", "owner_id", "name", "icon_url", "createdAt", "config") SELECT "id", "owner_id", "name", "icon_url", "created_at", "config" FROM `workspace`;--> statement-breakpoint
 DROP TABLE `workspace`;--> statement-breakpoint
 ALTER TABLE `__new_workspace` RENAME TO `workspace`;--> statement-breakpoint
 PRAGMA foreign_keys=ON;--> statement-breakpoint

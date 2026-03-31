@@ -11,24 +11,6 @@ import { eq } from "drizzle-orm";
 
 const repo = AppDataSource.getRepository(legacyWorkspace);
 
-/** @deprecated */
-export const _WorkspaceDAO = {
-  save: async (workspace: legacyWorkspace) => repo.save(workspace),
-  saveAll: async (workspaces: legacyWorkspace[]) => repo.save(workspaces),
-  findById: async (id: string) => repo.findOne({ where: { id } }),
-
-  findByIdOrThrow: async (id: string) => {
-    const workspace = await repo.findOne({ where: { id } });
-    if (!workspace) throw new NotFoundError("Workspace", id);
-    return workspace;
-  },
-
-  findAll: async () => repo.find(),
-  deleteById: async (id: string) => repo.delete({ id }),
-  delete: async (workspace: legacyWorkspace) =>
-    repo.delete({ id: workspace.id }),
-};
-
 export class WorkspaceDAO {
   constructor(private tx: Transaction | DatabaseType = db) {}
 
