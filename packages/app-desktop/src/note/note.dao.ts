@@ -113,6 +113,7 @@ export class NoteDAO {
     );
   }
 
+  /** @deprecated will be removed */
   async findLastNoteInOrder(workspaceId: string) {
     const query = this.tx
       .select()
