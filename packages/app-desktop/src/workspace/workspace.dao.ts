@@ -1,6 +1,5 @@
 import { isNotUndefined, NotFoundError } from "@darkwrite/common";
-import { AppDataSource, DatabaseType, db, Transaction } from "../db";
-import { Workspace as legacyWorkspace } from "../entity";
+import { DatabaseType, db, Transaction } from "../db";
 import {
   NewWorkspace,
   PatchWorkspace,
@@ -8,8 +7,6 @@ import {
   workspace as workspaceTable,
 } from "@/db/schema";
 import { eq } from "drizzle-orm";
-
-const repo = AppDataSource.getRepository(legacyWorkspace);
 
 export class WorkspaceDAO {
   constructor(private tx: Transaction | DatabaseType = db) {}
