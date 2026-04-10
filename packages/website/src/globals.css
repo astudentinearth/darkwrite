@@ -5,21 +5,23 @@
   --background: hsl(0 0% 3%);
   --card: hsl(228 14% 7%);
   --secondary: hsl(230 12% 10%);
-  --primary: hsl(214 64% 44%);
+  --primary: hsl(215 35% 30%);
   --border: hsl(0 0% 26%);
-  --highlight: hsl(214 71.3% 56.3%);
-  --highlight-transparent: hsl(214 71.3% 56.3% / 0.2);
+  --highlight: hsl(215 28% 50%);
+  --highlight-transparent: hsl(215 28% 50% / 0.5);
+  --muted-foreground: oklch(92.2% 0 0 / 0.7);
 }
 
 @theme inline {
   --color-background: hsl(0 0% 3%);
   --color-card: hsl(228 14% 7%);
   --color-secondary: hsl(230 12% 10%);
-  --color-primary: hsl(214 64% 44%);
-  --color-primary-text: hsl(214 56% 69%);
-  --color-border: hsl(0 0% 26%);
+  --color-primary: var(--primary);
+  --color-primary-text: var(--highlight);
+  --color-border: var(--border);
   --color-highlight: var(--highlight);
   --color-highlight-transparent: var(--highlight-transparent);
+  --color-muted-foreground: var(--muted-foreground);
 }
 
 * {
@@ -29,8 +31,17 @@
 body {
   @apply w-full h-full absolute left-0 top-0 m-0 p-0 bg-background text-xl md:text-2xl;
   box-sizing: border-box;
-  font-family: "Karla", "Inter", sans-serif;
+  font-family: "Inter", sans-serif;
   color: white;
+}
+
+@utility type-h1 {
+  @apply font-medium text-5xl leading-12 md:text-[4rem] tracking-tighter md:leading-18;
+}
+
+@utility top-highlight-* {
+  box-shadow: 0 -0.5px 0 0 --value(--color-*);
+  box-shadow: 0 -0.5px 0 0 --value([color]);
 }
 
 a:not(.text-white) {

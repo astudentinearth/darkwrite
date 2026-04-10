@@ -8,7 +8,8 @@ interface Props extends ClassProp {}
 <a
   href="/downloads"
   class={cn(
-    "bg-primary  text-white cursor-pointer hover:brightness-110 flex items-center gap-2 transition-[filter] duration-75 px-8 py-4 drop-shadow-md hover:drop-shadow-lg drop-shadow-primary/20 rounded-2xl",
+  // the cursed paddings are for visual balance
+    "bg-primary text-white text-xl leading-8 tracking-[-0.04em] cursor-pointer hover:brightness-110 flex items-center gap-2 transition-[filter] duration-75 pl-[19px] py-3 pr-5 drop-shadow-md hover:drop-shadow-lg drop-shadow-primary/20 rounded-2xl top-highlight-highlight",
     Astro.props.class,
   )}
 >
