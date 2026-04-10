@@ -1,12 +1,12 @@
-import { describe, it, expect, beforeAll, afterAll, beforeEach } from "vitest";
-import { NoteDAO } from "./note.dao";
-import { createDatabase, DatabaseType, migrateDatabase } from "@/db";
-import { NewNote, note as notesTable, Note, Workspace } from "@/db/schema";
-import { ParentId, Rank } from "@darkwrite/common";
+import { createTestDatabase, DatabaseType, migrateDatabase } from "@/db";
+import { NewNote, Note, note as notesTable, Workspace } from "@/db/schema";
 import { WorkspaceDAO } from "@/workspace/workspace.dao";
+import { ParentId, Rank } from "@darkwrite/common";
 import { randomUUID } from "crypto";
+import { beforeAll, beforeEach, describe, expect, it } from "vitest";
+import { NoteDAO } from "./note.dao";
 
-let db: DatabaseType = createDatabase(":memory:");
+let db: DatabaseType = createTestDatabase();
 
 describe("NoteDAO", () => {
   let noteDao: NoteDAO;
@@ -90,7 +90,7 @@ describe("NoteDAO", () => {
     it("should not create a note on id conflict", async () => {
       const id = randomUUID();
       await createNote(id);
-      expect(createNote(id)).rejects.toThrow();
+      await expect(createNote(id)).rejects.toThrow();
     });
   });
 

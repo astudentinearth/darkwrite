@@ -11,6 +11,14 @@ import { eq } from "drizzle-orm";
 export class DatabaseDAO {
   constructor(private tx: DatabaseType | Transaction = db) {}
 
+  static transactional(tx: Transaction) {
+    return new DatabaseDAO(tx);
+  }
+
+  transactional(tx: Transaction) {
+    return DatabaseDAO.transactional(tx);
+  }
+
   async create(database: NewDatabase) {
     return (
       await this.tx.insert(databaseTable).values(database).returning()

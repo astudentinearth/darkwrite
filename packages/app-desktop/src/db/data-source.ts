@@ -29,6 +29,10 @@ export function createDatabase(url: string = getDatabaseUrl()) {
   });
 }
 
+export function createTestDatabase() {
+  return createDatabase(":memory:");
+}
+
 export type DatabaseType = ReturnType<typeof createDatabase>;
 export type Transaction = Parameters<
   Parameters<DatabaseType["transaction"]>[0]

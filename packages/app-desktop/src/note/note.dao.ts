@@ -30,6 +30,10 @@ export class NoteDAO {
     return new NoteDAO(tx);
   }
 
+  transactional(tx: Transaction) {
+    return NoteDAO.transactional(tx);
+  }
+
   async create(note: NewNote) {
     return (await this.tx.insert(notesTable).values(note).returning())[0];
   }

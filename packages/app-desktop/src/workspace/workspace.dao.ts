@@ -17,6 +17,14 @@ export class WorkspaceDAO {
     )[0];
   }
 
+  static transactional(tx: Transaction) {
+    return new WorkspaceDAO(tx);
+  }
+
+  transactional(tx: Transaction) {
+    return WorkspaceDAO.transactional(tx);
+  }
+
   async update(workspace: PatchWorkspace) {
     return (
       await this.tx

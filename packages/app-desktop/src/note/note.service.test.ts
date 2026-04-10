@@ -1,16 +1,19 @@
 import { describe, expect, it, beforeAll, afterAll, beforeEach } from "vitest";
 import { NoteService } from "./note.service";
-import { AppDataSource } from "../db";
-import { Note, Workspace } from "../entity";
+import { createDatabase, type DatabaseType, migrateDatabase, createTestDatabase } from "../db";
 import { Rank } from "@darkwrite/common";
+import {Workspace, Note} from "@/db/schema";
 import { NoteDAO } from "./note.dao";
+import { WorkspaceDAO } from "@/workspace/workspace.dao";
+
+let db: DatabaseType = createTestDatabase();
 
 describe("note service tests", () => {
   let workspace: Workspace;
   const noteDAO = new NoteDAO();
 
   beforeAll(async () => {
-    await AppDataSource.initialize();
+    await migrateDatabase(db);
     const workspaceRepo = AppDataSource.getRepository(Workspace);
     workspace = new Workspace();
     workspace.name = "Test Workspace";
