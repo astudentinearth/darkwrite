@@ -29,7 +29,7 @@
 }
 
 body {
-  @apply w-full h-full absolute left-0 top-0 m-0 p-0 bg-background text-xl md:text-2xl;
+  @apply w-full h-full absolute left-0 top-0 m-0 p-0 bg-background text-xl md:text-2xl type-body;
   box-sizing: border-box;
   font-family: "Inter", sans-serif;
   color: white;
@@ -37,6 +37,29 @@ body {
 
 @utility type-h1 {
   @apply font-medium text-5xl leading-12 md:text-[4rem] tracking-tighter md:leading-18;
+}
+
+@utility type-h2 {
+  @apply font-medium text-[2rem] leading-8 tracking-tighter;
+}
+
+@utility type-body-lg {
+  @apply font-normal text-2xl leading-8 tracking-tighter;
+  strong {
+    @apply font-medium;
+  }
+}
+
+@utility type-body {
+  @apply font-normal text-[1rem] leading-5 tracking-tighter;
+}
+
+h2 {
+  @apply type-h2;
+}
+
+h1 {
+  @apply type-h1;
 }
 
 @utility top-highlight-* {
@@ -79,3 +102,10 @@ header a:not(.logo):not(.download-btn) {
 .chip[data-state="active"] {
   @apply bg-primary border-highlight;
 }
+
+hr {
+  @apply border-border w-full;
+}
+
+
+

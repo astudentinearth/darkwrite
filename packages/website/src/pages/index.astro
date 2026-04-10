@@ -5,12 +5,15 @@ import BottomCTA from "../sections/BottomCTA.astro";
 import Cards from "../sections/Cards.astro";
 import Hero from "../sections/Hero.astro";
 import Sections from "../sections/Sections.astro";
+import AfterHero from "../sections/AfterHero.astro";
 ---
 
 <DefaultLayout>
   <Meta title="Darkwrite | A notebook that is truly yours" />
-  <div class="w-full flex flex-col items-center">
+  <div class="w-full flex flex-col items-center overflow-x-hidden">
     <Hero />
+    <hr class="mt-24 md:mt-48 mb-18 md:mb-32"/>
+    <AfterHero />
     <Sections />
     <Cards />
     <BottomCTA />
