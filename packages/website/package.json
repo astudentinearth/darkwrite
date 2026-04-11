@@ -13,6 +13,7 @@
     "typecheck": "tsc --noEmit --project tsconfig.json"
   },
   "dependencies": {
+    "@astrojs/sitemap": "^3.7.2",
     "@fontsource/inter": "^5.2.8",
     "@fontsource/karla": "^5.2.8",
     "@lucide/astro": "^0.546.0",

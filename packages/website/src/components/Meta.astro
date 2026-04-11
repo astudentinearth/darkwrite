@@ -77,6 +77,6 @@ const canonicalHref = canonical ?? url;
   <meta name="twitter:title" content={title} />
   {description && <meta name="twitter:description" content={description} />}
   {ogImage && <meta name="twitter:image" content={ogImage} />}
-
+  <link rel="sitemap" href="/sitemap-index.xml" />
   <slot />
 </>
