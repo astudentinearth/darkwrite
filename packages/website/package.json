@@ -13,6 +13,8 @@
     "typecheck": "tsc --noEmit --project tsconfig.json"
   },
   "dependencies": {
+    "@astrojs/sitemap": "^3.7.2",
+    "@fontsource/inter": "^5.2.8",
     "@fontsource/karla": "^5.2.8",
     "@lucide/astro": "^0.546.0",
     "astro": "^5.14.4",
@@ -22,6 +24,7 @@
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.1.14",
+    "prettier-plugin-astro": "^0.14.1",
     "tailwindcss": "catalog:"
   },
   "trustedDependencies": [

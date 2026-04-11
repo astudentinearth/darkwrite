@@ -1,0 +1,14 @@
+---
+interface Props {
+href: string;
+}
+---
+
+<a href={Astro.props.href} class="flex text-muted-foreground! hover:no-underline! hover:brightness-120 hover:top-highlight-reflection-hover px-4 py-3 flex-col gap-2 rounded-lg bg-view-1 top-highlight-reflection cursor-pointer">
+  <div class="flex gap-2 text-foreground! items-center">
+    <slot name="icon" />
+    <span class="font-medium"><slot name="title" /></span>
+  </div>
+  <slot name="description" />
+</a>
+

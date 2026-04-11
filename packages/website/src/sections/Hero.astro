@@ -4,34 +4,58 @@ import DownloadButton from "../components/DownloadButton.astro";
 import { GIT_REPO_URL } from "../lib/resources";
 ---
 
-<div class="max-w-320 w-full mt-48 flex flex-col items-center gap-2 px-4">
-  <h1 class="text-5xl md:text-[64px] font-bold text-center">
-    A notebook that is <span
-      class="bg-clip-text bg-linear-to-r text-transparent from-[#338BFF] to-[#79A3DB]"
-      >truly yours.</span
-    >
-  </h1>
-  <p class="text-center inline-block max-w-180 mt-4">
-    The personal workspace that respects you. <span class="text-primary-text"
-      >Feature packed, customizable and open source.</span
-    >
+<div
+  class="max-w-320 w-full mt-30 md:mt-42 flex flex-col md:items-center gap-2 px-4"
+>
+  <h1 class="type-h1 md:text-center">Write without distractions.</h1>
+  <p
+    class="md:text-center inline-block max-w-180 mt-4 text-muted-foreground text-2xl leading-8 md:leading-10 md:text-[2rem] tracking-tighter font-light"
+  >
+    Notes as it should have been. Built for people who just want to write,
+    without nonsense.
   </p>
-  <DownloadButton class="mt-8" />
+  <DownloadButton class="mt-8 w-fit" />
   <div
     class="text-white/70 flex items-center gap-2 text-sm sm:text-lg mt-2 *:flex *:gap-1 *:items-center"
   >
     <a class="text-white/70!" href={GIT_REPO_URL}
-      ><Star size={18} /> 200+ stars on GitHub</a
+      ><Star size={18} /> 250+ stars on GitHub</a
     >
   </div>
   <!-- <a
     class="text-white/70 flex mt-2 text-[18px] hover:underline"
     href="/downloads">Other downloads</a
   > -->
-  <div class="w-fit px-4">
-    <img
-      src="/hero.webp"
-      class="border rounded-lg max-w-400 mt-16 drop-shadow-2xl w-full"
-    />
-  </div>
 </div>
+<div class="w-fit px-4 relative">
+  <div class="hero-glow-1"></div>
+  <div class="hero-glow-2"></div>
+  <img
+    src="/hero_screenshot.webp"
+    class="max-w-336 mt-16 drop-shadow-2xl w-full hero-screenshot"
+  />
+</div>
+
+<style>
+  .hero-screenshot {
+    filter: drop-shadow(0 0 1px var(--border));
+  }
+
+  .hero-glow-1 {
+    position: absolute;
+    inset: 5%;
+    background: oklch(57.4% 0.073436 257.6);
+    filter: blur(128px);
+    opacity: 0.15;
+    z-index: -1;
+  }
+  .hero-glow-2 {
+    position: absolute;
+    inset: 0;
+    background: oklch(39.4% 0.059704 257);
+    filter: blur(128px);
+    transform: translateY(64px);
+    opacity: 0.15;
+    z-index: -1;
+  }
+</style>

@@ -1,12 +1,13 @@
 ---
 import Header from "../components/Header.astro";
 import "../globals.css";
-import "@fontsource/karla";
-import "@fontsource/karla/400";
-import "@fontsource/karla/500";
-import "@fontsource/karla/600";
-import "@fontsource/karla/700";
-import "@fontsource/karla/800";
+import "@fontsource/inter";
+import "@fontsource/inter/300";
+import "@fontsource/inter/400";
+import "@fontsource/inter/500";
+import "@fontsource/inter/600";
+import "@fontsource/inter/700";
+import "@fontsource/inter/800";
 import Footer from "../components/Footer.astro";
 interface Props {
   title?: string;
@@ -22,10 +23,6 @@ interface Props {
     <slot name="head" />
   </head>
   <body>
-    <div
-      class="absolute w-3/4 sm:w-1/2 h-72 rounded-full opacity-30 bg-primary -z-10 left-1/2 -translate-y-1/2 -translate-x-1/2 blur-[120px]"
-    >
-    </div>
     <Header />
     <slot />
     <Footer />

@@ -5,14 +5,22 @@ import BottomCTA from "../sections/BottomCTA.astro";
 import Cards from "../sections/Cards.astro";
 import Hero from "../sections/Hero.astro";
 import Sections from "../sections/Sections.astro";
+import AfterHero from "../sections/AfterHero.astro";
+import Features from "../sections/Features.astro";
+import OpenSource from "../sections/OpenSource.astro";
+import Roadmap from "../sections/Roadmap.astro";
 ---
 
 <DefaultLayout>
   <Meta title="Darkwrite | A notebook that is truly yours" />
-  <div class="w-full flex flex-col items-center">
+  <div class="w-full flex flex-col items-center overflow-x-hidden">
     <Hero />
-    <Sections />
-    <Cards />
+    <hr class="mt-24 md:mt-48 mb-18 md:mb-32"/>
+    <AfterHero />
+    <hr class="mt-18 md:mt-32 mb-18 md:mb-24"/>
+    <Features />
+    <OpenSource />
+    <Roadmap />
     <BottomCTA />
     <div class="h-12"></div>
   </div>
@@ -24,7 +32,7 @@ import Sections from "../sections/Sections.astro";
       const buttons = document.querySelectorAll(".hero-download-button");
       buttons.forEach((btn) => {
         if (btn instanceof HTMLElement)
-          btn.innerText = `Get Darkwrite for ${os}`;
+          btn.innerText = `Download for ${os}`;
       });
     }
   </script>

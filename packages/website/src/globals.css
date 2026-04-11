@@ -3,23 +3,33 @@
 
 :root {
   --background: hsl(0 0% 3%);
+  --view-1: oklch(18.2% 0 0);
   --card: hsl(228 14% 7%);
   --secondary: hsl(230 12% 10%);
-  --primary: hsl(214 64% 44%);
+  --primary: hsl(215 35% 30%);
   --border: hsl(0 0% 26%);
-  --highlight: hsl(214 71.3% 56.3%);
-  --highlight-transparent: hsl(214 71.3% 56.3% / 0.2);
+  --highlight: hsl(215 28% 50%);
+  --highlight-transparent: hsl(215 28% 50% / 0.5);
+  --muted-foreground: oklch(92.2% 0 0 / 0.7);
+  --foreground: oklch(92.3% 0 0);
+  --widget: oklch(28% 0 0);
 }
 
 @theme inline {
   --color-background: hsl(0 0% 3%);
+  --color-view-1: var(--view-1);
   --color-card: hsl(228 14% 7%);
   --color-secondary: hsl(230 12% 10%);
-  --color-primary: hsl(214 64% 44%);
-  --color-primary-text: hsl(214 56% 69%);
-  --color-border: hsl(0 0% 26%);
+  --color-primary: var(--primary);
+  --color-primary-text: var(--highlight);
+  --color-border: var(--border);
   --color-highlight: var(--highlight);
   --color-highlight-transparent: var(--highlight-transparent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-reflection: hsl(0 0% 100% / 0.15);
+  --color-reflection-hover: hsl(0 0% 100% / 0.25);
+  --color-foreground: var(--foreground);
+  --color-widget: var(--widget);
 }
 
 * {
@@ -27,14 +37,41 @@
 }
 
 body {
-  @apply w-full h-full absolute left-0 top-0 m-0 p-0 bg-background text-xl md:text-2xl;
+  @apply w-full h-full absolute left-0 top-0 m-0 p-0 bg-background text-foreground type-body;
   box-sizing: border-box;
-  font-family: "Karla", "Inter", sans-serif;
-  color: white;
+  font-family: "Inter", sans-serif;
 }
 
-a:not(.text-white) {
-  @apply text-primary-text hover:underline;
+@utility type-h1 {
+  @apply font-medium text-5xl leading-12 md:text-[4rem] tracking-tighter md:leading-18;
+}
+
+@utility type-h2 {
+  @apply font-medium text-[2rem] leading-8 tracking-tighter;
+}
+
+@utility type-body-lg {
+  @apply font-normal text-2xl leading-8 tracking-tighter;
+  strong {
+    @apply font-medium;
+  }
+}
+
+@utility type-body {
+  @apply font-normal text-[1rem] leading-6 tracking-[-0.01em];
+}
+
+h2 {
+  @apply type-h2;
+}
+
+h1 {
+  @apply type-h1;
+}
+
+@utility top-highlight-* {
+  box-shadow: 0 -0.5px 0 0 --value(--color-*);
+  box-shadow: 0 -0.5px 0 0 --value([color]);
 }
 
 code {
@@ -52,11 +89,11 @@ header {
 }
 
 header a:not(.logo):not(.download-btn) {
-  @apply text-white hidden sm:flex text-xl px-3 py-2 cursor-pointer hover:bg-white/5 hover:no-underline rounded-lg shrink-0;
+  @apply text-muted-foreground type-body hidden sm:flex px-3 py-2 cursor-pointer hover:bg-white/5 hover:no-underline rounded-lg shrink-0 font-light;
 }
 
 .docs-sidebar a {
-  @apply px-3 py-2 rounded-lg hover:bg-white/5 text-white;
+  @apply px-3 py-2 rounded-lg hover:bg-white/5 text-foreground;
 }
 
 .chip {
@@ -67,4 +104,13 @@ header a:not(.logo):not(.download-btn) {
 
 .chip[data-state="active"] {
   @apply bg-primary border-highlight;
+}
+
+hr {
+  @apply border-border w-full;
+}
+
+
+html {
+  scroll-behavior: smooth;
 }

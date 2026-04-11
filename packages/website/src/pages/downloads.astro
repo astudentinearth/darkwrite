@@ -13,38 +13,53 @@ import {
   UBUNTU_LATEST_RELEASE,
 } from "../lib/resources";
 import Darkwrite from "../components/Darkwrite.astro";
+import DownloadButton from "../components/DownloadButton.astro";
 import Meta from "../components/Meta.astro";
 ---
 
 <DefaultLayout>
   <Meta title="Downloads | Darkwrite" />
-  <main class="mt-40 pb-12 w-full flex flex-col items-center">
+  <main class="mt-40 pb-12 w-full flex flex-col items-center text-foreground">
     <div
       class="max-w-320 w-full px-4 flex flex-col gap-4 [&_h2]:font-semibold [&_h2]:text-3xl [&_h2]:md:text-4xl"
-    >
-      <Darkwrite class="size-20 md:size-28" />
-      <h1 class="text-3xl md:text-5xl font-bold">Download Darkwrite</h1>
-      <div
-        class="grid-cols-1 md:grid-cols-[1fr_1fr] grid gap-2 mt-4 [&>div]:hover:brightness-125"
       >
-        <div class="p-4 bg-card border rounded-xl flex flex-col gap-3">
+      <div class="flex flex-col items-center gap-6">
+        <div class="logo">
+          <Darkwrite class="size-20 md:size-28" />
+          </div>
+      <h1 class="text-3xl md:text-5xl font-bold">Get started</h1>
+      </div>
+      <div class="h-4"></div>
+      <div
+        class="flex flex-col md:flex-row gap-4 mt-4 [&>div>div]:hover:brightness-125"
+        >
+        <div class="w-full flex flex-col gap-4">
+        <div class="p-4 bg-view-1 top-highlight-reflection rounded-xl flex flex-col gap-3">
           <h2 class="flex items-center gap-2"><Grid2x2 size={32} />Windows</h2>
           <a href={WINDOWS_LATEST_RELEASE}>Download the installer</a>
           <hr />
-          <p>
+          <p class="text-muted-foreground">
             If you see a Windows Defender/SmartScreen warning when you run the
             installer, choose <strong>&apos;More info&apos;</strong>, then <strong
               >&apos;Run Anyway&apos;.</strong
             > The warning is present because we can&apos;t sign our builds yet.
           </p>
+        </div> 
+        <div class="p-4 bg-view-1 top-highlight-reflection rounded-xl flex flex-col gap-3">
+          <h2 class="flex items-center gap-2"><Apple /> macOS</h2>
+          <a href={MACOS_LATEST_RELEASE}>Download the installer (DMG)</a>
+          Once you have the installer downloaded, just drag Darkwrite to your Applications folder.
         </div>
-        <div class="p-4 bg-card border rounded-xl flex flex-col gap-3">
+        </div>
+        <div class="w-full flex flex-col gap-4">
+        <div class="p-4 bg-view-1 top-highlight-reflection rounded-xl flex flex-col gap-3">
           <h2 class="flex items-center gap-2"><Linux /> Linux</h2><a
             href={LINUX_LATEST_RELEASE}>Download the AppImage</a
           >
           <hr />
           <h3 class="font-semibold">Ubuntu</h3>
           <a href={UBUNTU_LATEST_RELEASE}>Download the .deb package</a>
+          <hr/>
           <h3 class="font-semibold">Arch-based distributions</h3>
           <p>
             You can use the unofficial <a href={AUR_PACKAGE_URL}>AUR package.</a
@@ -52,29 +67,35 @@ import Meta from "../components/Meta.astro";
           </p>
           <code>yay -Syu darkwrite-bin</code>
         </div>
-        <div class="p-4 bg-card border rounded-xl flex flex-col gap-3">
-          <h2 class="flex items-center gap-2"><Apple /> macOS</h2>
-          <p>
-            macOS builds are not notarized, therefore <strong
-              >you need to run a simple command to allow Darkwrite to run on
-              your Mac. (we hope to resolve this issue soon)</strong
-            >
-          </p>
-          <a href={MACOS_LATEST_RELEASE}>Download the installer (DMG)</a>
-          Once you have the installer downloaded, open a terminal and paste this command:
-          <code>xattr -cr ~/Downloads/Darkwrite-Installer.dmg</code>
-          After dragging Darkwrite to your Applications folder, paste this command
-          as well:
-          <code>xattr -cr /Applications/Darkwrite.app</code>
-        </div>
-        <div class="p-4 bg-card border rounded-xl flex flex-col gap-3 h-fit">
+
+        <div class="p-4 bg-view-1 top-highlight-reflection rounded-xl flex flex-col gap-3 h-fit">
           <h2 class="flex items-center gap-2">
             <Code size={32} class="shrink-0" /> Source code and other releases
           </h2>
           <a href={GIT_REPO_URL}>Git repository</a>
           <a href={RELEASE_PAGE_URL}>All releases on GitHub</a>
         </div>
+        </div>
       </div>
     </div>
   </main>
 </DefaultLayout>
+
+<style>
+  a {
+    color: var(--primary);
+    filter: brightness(200%);
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+
+  .logo {
+    filter: drop-shadow(0 2px 12px oklch(39.4% 0.059704 257 / 0.5));
+    transition: filter, transform 0.2s ease-in-out;
+  }
+  .logo:hover {
+    filter: drop-shadow(0 2px 12px oklch(39.4% 0.059704 257 / 0.6));
+    transform:scale(1.02);
+  }
+</style>

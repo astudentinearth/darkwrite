@@ -1,9 +1,9 @@
 This file contains the licenses for various projects that made the
 Darkwrite website possible.
 
-====================================
-License for Karla font
-Copyright 2019 The Karla Project Authors (https://github.com/googlefonts/karla) Karla-Italic[wght].ttf: Copyright 2019 The Karla Project Authors (https://github.com/googlefonts/karla)
+License for Inter font
+
+Copyright 2016 The Inter Project Authors (https://github.com/rsms/inter) Inter-Italic[opsz,wght].ttf: Copyright 2016 The Inter Project Authors (https://github.com/rsms/inter)
 
 This Font Software is licensed under the SIL Open Font License, Version 1.1.
 This license is copied below, and is also available with a FAQ at:
