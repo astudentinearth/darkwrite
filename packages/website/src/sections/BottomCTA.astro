@@ -1,19 +1,18 @@
 ---
 import DownloadButton from "../components/DownloadButton.astro";
+import Button from "../components/Button.astro";
 ---
 
-<section class="max-w-320 w-full mt-3 flex flex-col items-center gap-24 px-6">
+<section
+  class="max-w-360 w-full mt-18 lg:mt-32 flex flex-col items-center gap-24"
+>
   <div
-    class="flex flex-col w-full items-center text-center gap-4 bg-card [&_p]:text-xl hover:brightness-120 border rounded-3xl drop-shadow-xl p-6 pt-24 pb-18"
+    class="flex flex-col w-full items-center text-center gap-16 bg-view-1 [&_p]:text-xl hover:brightness-120 border rounded-2xl lg:rounded-4xl drop-shadow-xl p-6 lg:py-48"
   >
-    <h1 class="text-4xl md:text-[64px] font-bold">
-      Get started and make it yours.
-    </h1>
-    <p class="text-white/80 max-w-96 text-2xl">
-      Download the app for free and start writing in peace - without
-      disruptions.
-    </p>
-    <div class="h-4"></div>
-    <DownloadButton />
+    <h1 class="type-h1">Ready to write in peace?</h1>
+    <div class="flex gap-4 flex-col md:flex-row">
+      <DownloadButton />
+      <Button href="/downloads"> See all downloads </Button>
+    </div>
   </div>
 </section>

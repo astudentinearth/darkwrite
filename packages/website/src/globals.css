@@ -12,6 +12,7 @@
   --highlight-transparent: hsl(215 28% 50% / 0.5);
   --muted-foreground: oklch(92.2% 0 0 / 0.7);
   --foreground: oklch(92.3% 0 0);
+  --widget: oklch(28% 0 0);
 }
 
 @theme inline {
@@ -28,6 +29,7 @@
   --color-reflection: hsl(0 0% 100% / 0.15);
   --color-reflection-hover: hsl(0 0% 100% / 0.25);
   --color-foreground: var(--foreground);
+  --color-widget: var(--widget);
 }
 
 * {

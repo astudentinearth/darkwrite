@@ -1,0 +1,16 @@
+---
+import { cn } from "../lib/utils";
+interface Props {
+  class?: string;
+  href?: string;
+}
+---
+
+<a
+  href={Astro.props.href}
+  class={cn(
+    "bg-widget flex gap-3 text-foreground! top-highlight-reflection-hover hover:brightness-110 transition-all text-body px-7 py-4 rounded-2xl drop-shadow-sm text-xl",
+  )}
+>
+  <slot />
+</a>
