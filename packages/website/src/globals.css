@@ -3,6 +3,7 @@
 
 :root {
   --background: hsl(0 0% 3%);
+  --view-1: oklch(18.2% 0 0);
   --card: hsl(228 14% 7%);
   --secondary: hsl(230 12% 10%);
   --primary: hsl(215 35% 30%);
@@ -10,10 +11,12 @@
   --highlight: hsl(215 28% 50%);
   --highlight-transparent: hsl(215 28% 50% / 0.5);
   --muted-foreground: oklch(92.2% 0 0 / 0.7);
+  --foreground: oklch(92.3% 0 0);
 }
 
 @theme inline {
   --color-background: hsl(0 0% 3%);
+  --color-view-1: var(--view-1);
   --color-card: hsl(228 14% 7%);
   --color-secondary: hsl(230 12% 10%);
   --color-primary: var(--primary);
@@ -22,6 +25,9 @@
   --color-highlight: var(--highlight);
   --color-highlight-transparent: var(--highlight-transparent);
   --color-muted-foreground: var(--muted-foreground);
+  --color-reflection: hsl(0 0% 100% / 0.15);
+  --color-reflection-hover: hsl(0 0% 100% / 0.25);
+  --color-foreground: var(--foreground);
 }
 
 * {
@@ -29,10 +35,9 @@
 }
 
 body {
-  @apply w-full h-full absolute left-0 top-0 m-0 p-0 bg-background text-xl md:text-2xl type-body;
+  @apply w-full h-full absolute left-0 top-0 m-0 p-0 bg-background text-xl text-foreground md:text-2xl type-body;
   box-sizing: border-box;
   font-family: "Inter", sans-serif;
-  color: white;
 }
 
 @utility type-h1 {

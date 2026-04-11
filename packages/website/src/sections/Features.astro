@@ -1,0 +1,43 @@
+---
+const features = [
+  {
+    title: 'Easy-to-use editor',
+    description: 'Everything you’d expect to create beautiful docs, ready at your disposal.',
+    image: '/editor.webp',
+    alt: 'Screenshot of core editor features',
+  },
+  {
+    title: 'Infinitely customizable',
+    description: 'From individual notes to the entire UI, tweak the look and feel to your vibe.',
+    image: '/colors.webp',
+    alt: 'Screenshot of note styling features',
+  },
+  {
+    title: 'One-click backups',
+    description: 'Pack everything up into a archive, restore with one click on a new device.',
+    image: '/backup.webp',
+    alt: 'Backup feature buttons',
+  },
+  {
+    title: 'Themes and fonts',
+    description:
+      'Use one of the included themes or make your own. Export PDFs with custom fonts and colors, without hassle.',
+    image: '/themes.webp',
+    alt: 'Screenshot of theme chooser UI',
+  },
+]
+---
+
+<h1 class="w-full text-center">A fresh coat of paint for your notes.</h1>
+<div class="h-12 md:h-18"></div>
+<div class="max-w-360 xl:px-24 px-6 w-full grid grid-cols-1 lg:grid-cols-2 gap-8 [&_p]:mt-4 [&>div]:hover:brightness-110">
+  {features.map((feature) => (
+    <div class="card bg-view-1 h-fit hover:top-highlight-reflection-hover transition-all top-highlight-reflection p-2 rounded-2xl">
+      <div class="p-2 md:p-4">
+        <h2>{feature.title}</h2>
+        <p class="type-body-lg text-muted-foreground">{feature.description}</p>
+      </div>
+      <img src={feature.image} alt={feature.alt} class="rounded-lg">
+    </div>
+  ))}
+</div>
