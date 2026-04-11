@@ -58,7 +58,7 @@ body {
 }
 
 @utility type-body {
-  @apply font-normal text-[1rem] leading-5 tracking-tighter;
+  @apply font-normal text-[1rem] leading-6 tracking-tighter;
 }
 
 h2 {
@@ -72,10 +72,6 @@ h1 {
 @utility top-highlight-* {
   box-shadow: 0 -0.5px 0 0 --value(--color-*);
   box-shadow: 0 -0.5px 0 0 --value([color]);
-}
-
-a:not(.text-white) {
-  @apply text-primary-text hover:underline;
 }
 
 code {
@@ -97,7 +93,7 @@ header a:not(.logo):not(.download-btn) {
 }
 
 .docs-sidebar a {
-  @apply px-3 py-2 rounded-lg hover:bg-white/5 text-white;
+  @apply px-3 py-2 rounded-lg hover:bg-white/5 text-foreground;
 }
 
 .chip {

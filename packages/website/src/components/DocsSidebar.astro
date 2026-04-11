@@ -1,13 +1,44 @@
 ---
-import { BookOpen } from "@lucide/astro";
+import { BookOpen, Undo2 } from "@lucide/astro";
+import Darkwrite from "./Darkwrite.astro";
 ---
 
 <div
-  class="bg-card border docs-sidebar rounded-xl p-2 h-fit drop-shadow-xl flex flex-col gap-2 w-full md:w-80 shrink-0"
+  class="bg-view-1/50 border-border/25 border-r docs-sidebar type-body pt-4 pb-2 drop-shadow-xl flex flex-col w-full h-fit md:h-full shrink-0"
 >
-  <span class="px-3 py-2 font-semibold text-2xl flex items-center gap-2"
-    ><BookOpen /> User guide</span
+  <span class="font-medium text-2xl flex items-center gap-2 mb-4 px-4"
+    ><Darkwrite class="size-8" />Docs</span
   >
-  <hr />
-  <a href="/docs">Welcome</a>
+  <div class="flex flex-col px-1.5 sidebar-links md:h-full">
+    <a href="/docs">Welcome</a>
+    <a href="/docs/installation">Installation</a>
+    <div class="grow"></div>
+    <a class="flex gap-2 items-center" href="/">
+      <Undo2 class="size-4" />
+      Back to main site
+    </a>
+  </div>
 </div>
+
+<script>
+  const sidebarLinks = document.querySelector(".sidebar-links");
+  const links = sidebarLinks?.querySelectorAll("a");
+
+  function setActiveLink() {
+    const currentPath = window.location.pathname;
+    links?.forEach((link) => {
+      if (link.getAttribute("href") === currentPath) {
+        link.classList.add("active");
+      } else {
+        link.classList.remove("active");
+      }
+    });
+  }
+  setActiveLink();
+</script>
+
+<style>
+  .sidebar-links a.active {
+    background-color: var(--widget);
+  }
+</style>
