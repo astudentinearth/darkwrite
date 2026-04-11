@@ -4,18 +4,58 @@ import Darkwrite from "./Darkwrite.astro";
 ---
 
 <footer
-  class="flex flex-col md:flex-row px-4 py-3 bg-card/50 border-t text-lg gap-5 md:items-center"
+  class="grid grid-cols-2 md:grid-cols-4 bg-view-1 top-highlight-reflection w-full p-6 md:p-10"
 >
-  <a href="/">
+  <a href="/" class="col-span-2 md:col-span-1 mb-6 flex items-center md:items-start gap-3">
     <Darkwrite class="size-12" />
+    <span class="font-medium text-xl md:hidden">Darkwrite</span>
   </a>
-  <a href="/downloads">Downloads</a>
-  <a href="/docs">User guide</a>
-  <a href={GIT_REPO_URL}>Source code</a>
-  <a href="/privacy">Privacy</a>
-  <div class="hidden md:block grow"></div>
-  <span>
-    built with ☕ by
-    <a href="https://yeniceri.dev">burak</a>
-  </span>
+  <div class="hidden md:flex flex-col gap-5">
+    <a href="/">Home</a>
+    <a href="/#roadmap">Roadmap</a>
+    <a href="/downloads">Downloads</a>
+    <a href="/docs">Docs</a>
+  </div>
+  <div class="flex flex-col gap-5 md:hidden">
+    <a href="/">Home</a>
+    <a href="/#roadmap">Roadmap</a>
+    <a href="/downloads">Downloads</a>
+    <a href="/docs">Docs</a>
+  </div>
+  <div class="flex flex-col gap-5 md:hidden">
+    <a href={GIT_REPO_URL}>Source code</a>
+    <a href={GIT_REPO_URL + "/issues"}>Report bugs</a>
+    <a href={GIT_REPO_URL + "/blob/dev/CHANGES.md"}>Changelog</a>
+    <a href="/privacy">Privacy</a>
+    <a href="https://www.gnu.org/licenses/agpl-3.0.en.html#license-text"
+      >License</a
+    >
+    <a href="/licenses.txt">Acknowledgements</a>
+    <span>
+      built with ☕ by
+      <a href="https://yeniceri.dev">burak</a>
+    </span>
+  </div>
+  <div class="md:flex flex-col gap-5 hidden">
+    <a href={GIT_REPO_URL}>Source code</a>
+    <a href={GIT_REPO_URL + "/issues"}>Report bugs</a>
+    <a href={GIT_REPO_URL + "/blob/dev/CHANGES.md"}>Changelog</a>
+  </div>
+  <div class="md:flex flex-col gap-5 hidden">
+    <a href="/privacy">Privacy</a>
+    <a href="https://www.gnu.org/licenses/agpl-3.0.en.html#license-text"
+      >License</a
+    >
+    <a href="/licenses.txt">Acknowledgements</a>
+    <span>
+      built with ☕ by
+      <a href="https://yeniceri.dev">burak</a>
+    </span>
+  </div>
 </footer>
+
+<style>
+  a:hover {
+    text-decoration: underline;
+  }
+</style>

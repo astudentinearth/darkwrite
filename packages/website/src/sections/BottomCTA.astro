@@ -4,15 +4,14 @@ import Button from "../components/Button.astro";
 ---
 
 <section
-  class="max-w-360 w-full mt-18 lg:mt-32 flex flex-col items-center gap-24"
+  class="max-w-360 w-full mt-18 lg:mt-32 flex flex-col items-center gap-24 px-6"
 >
   <div
-    class="flex flex-col w-full items-center text-center gap-16 bg-view-1 [&_p]:text-xl hover:brightness-120 border rounded-2xl lg:rounded-4xl drop-shadow-xl p-6 lg:py-48"
+    class="flex flex-col w-full items-center text-center gap-16 bg-view-1 [&_p]:text-xl hover:brightness-120 border rounded-2xl lg:rounded-4xl drop-shadow-xl px-8 py-12 lg:py-48"
   >
     <h1 class="type-h1">Ready to write in peace?</h1>
     <div class="flex gap-4 flex-col md:flex-row">
       <DownloadButton />
-      <Button href="/downloads"> See all downloads </Button>
     </div>
   </div>
 </section>
