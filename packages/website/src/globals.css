@@ -37,7 +37,7 @@
 }
 
 body {
-  @apply w-full h-full absolute left-0 top-0 m-0 p-0 bg-background text-xl text-foreground md:text-2xl type-body;
+  @apply w-full h-full absolute left-0 top-0 m-0 p-0 bg-background text-foreground type-body;
   box-sizing: border-box;
   font-family: "Inter", sans-serif;
 }
@@ -58,7 +58,7 @@ body {
 }
 
 @utility type-body {
-  @apply font-normal text-[1rem] leading-6 tracking-tighter;
+  @apply font-normal text-[1rem] leading-6 tracking-[-0.01em];
 }
 
 h2 {
@@ -89,7 +89,7 @@ header {
 }
 
 header a:not(.logo):not(.download-btn) {
-  @apply text-white hidden sm:flex text-xl px-3 py-2 cursor-pointer hover:bg-white/5 hover:no-underline rounded-lg shrink-0;
+  @apply text-muted-foreground type-body hidden sm:flex px-3 py-2 cursor-pointer hover:bg-white/5 hover:no-underline rounded-lg shrink-0 font-light;
 }
 
 .docs-sidebar a {

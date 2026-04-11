@@ -4,18 +4,16 @@ import Darkwrite from "./Darkwrite.astro";
 ---
 
 <header
-  class="fixed left-0 right-0 h-18 p-4 z-50 backdrop-blur-md flex gap-2 items-center text-xl"
+  class="fixed left-0 right-0 h-18 p-4 z-50 backdrop-blur-md flex type-body text-muted-foreground justify-center items-center text-xl"
 >
-  <a class="flex logo shrink-0" href="/">
-    <Darkwrite class="size-10" />
-  </a>
-  <div></div>
-  <a href="/docs">User guide</a>
-  <a href={GIT_REPO_URL}>Source code</a>
-  <div class="grow"></div>
-  <a
-    href="/downloads"
-    class="px-5 py-2 flex download-btn rounded-xl bg-primary hover:brightness-120 text-white! z-20"
-    >Get started</a
-  >
+  <div class="max-w-360 w-full lg:px-12 flex items-center">
+    <a class="flex logo shrink-0 items-center gap-3" href="/">
+      <Darkwrite class="size-10" />
+      <span class="font-medium text-xl text-foreground">Darkwrite</span>
+    </a>
+    <div class="grow"></div>
+    <a href="/docs">Docs</a>
+    <a href={GIT_REPO_URL}>GitHub</a>
+    <a href="/downloads">Get started</a>
+  </div>
 </header>
