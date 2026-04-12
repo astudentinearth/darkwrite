@@ -1,7 +1,11 @@
 import { describe, it, expect, beforeAll, afterAll, beforeEach } from "vitest";
 import { createDatabase, DatabaseType, migrateDatabase } from "@/db";
 import { WorkspaceDAO } from "./workspace.dao";
-import { NewWorkspace, workspace as workspaceTable, Workspace } from "@/db/schema";
+import {
+  NewWorkspace,
+  workspace as workspaceTable,
+  Workspace,
+} from "@/db/schema";
 
 let db: DatabaseType;
 let dao: WorkspaceDAO;
@@ -15,9 +19,11 @@ describe("WorkspaceDAO", () => {
 
   beforeEach(async () => {
     await db.delete(workspaceTable);
-  })
+  });
 
-  const createTestWorkspace = async (name: string = "Test Workspace"): Promise<Workspace> => {
+  const createTestWorkspace = async (
+    name: string = "Test Workspace",
+  ): Promise<Workspace> => {
     const draft: NewWorkspace = {
       createdAt: new Date(),
       name,
@@ -87,7 +93,10 @@ describe("WorkspaceDAO", () => {
       ]);
 
       expect(results).toHaveLength(2);
-      expect(results.map((w) => w.name).sort()).toEqual(["Updated 1", "Updated 2"]);
+      expect(results.map((w) => w.name).sort()).toEqual([
+        "Updated 1",
+        "Updated 2",
+      ]);
     });
 
     it("should filter out undefined results for non-existent workspaces", async () => {

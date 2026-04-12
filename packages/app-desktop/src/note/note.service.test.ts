@@ -8,7 +8,6 @@ import { NoteService } from "./note.service";
 import { DocumentService } from "@/service/document.service";
 import { MockDocumentStore } from "@/test/mocks/document-store.mock";
 
-
 describe("note service tests", () => {
   let db: DatabaseType = createTestDatabase();
   let workspace: Workspace;
@@ -18,7 +17,10 @@ describe("note service tests", () => {
   beforeAll(async () => {
     await migrateDatabase(db);
     noteDAO = new NoteDAO(db);
-    noteService = new NoteService(db, new DocumentService(new MockDocumentStore()));
+    noteService = new NoteService(
+      db,
+      new DocumentService(new MockDocumentStore()),
+    );
     workspace = await new WorkspaceDAO(db).create({
       name: "Test Workspace",
       createdAt: new Date(),
@@ -143,7 +145,7 @@ describe("note service tests", () => {
       // Assert
       const updatedSource = await noteDAO.findByIdOrThrow(source.id);
       expect(updatedSource.parentId).toBe(parent.id);
-      console.log(updatedSource.orderHint, child1.orderHint)
+      console.log(updatedSource.orderHint, child1.orderHint);
       expect(updatedSource.orderHint > child1.orderHint).toBe(true);
     });
 

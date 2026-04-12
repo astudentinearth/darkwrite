@@ -233,11 +233,9 @@ export class NoteService {
         }
       }
 
-      const newOrderHints = (
-        await noteRepository.computeOrderKeysForLayer(
-          sourceNote.workspaceId,
-          destinationNoteId,
-        )
+      const newOrderHints = await noteRepository.computeOrderKeysForLayer(
+        sourceNote.workspaceId,
+        destinationNoteId,
       );
       console.log("New order hints for layer:", newOrderHints);
 
@@ -285,13 +283,6 @@ export class NoteService {
         tx.rollback();
       }
     });
-  }
-
-  /** @deprecated */
-  async setModificationDate(id: string, date: Date) {
-    // const note = await noteDAO.findByIdOrThrow(id);
-    // note.modifiedAt = date;
-    // await noteDAO.save(note);
   }
 
   async moveToTrash(id: string) {

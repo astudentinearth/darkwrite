@@ -118,16 +118,6 @@ export class NoteDAO {
     );
   }
 
-  /** @deprecated will be removed */
-  async findLastNoteInOrder(workspaceId: string) {
-    const query = this.tx
-      .select()
-      .from(notesTable)
-      .where(and(notTrashed(), inWorkspace(workspaceId)))
-      .limit(1);
-    return (await query).at(0);
-  }
-
   async findFirstNoteInLayer(workspaceId: string, parentId: ParentId) {
     console.log(workspaceId, parentId);
     console.log(await this.findAllByWorkspaceId(workspaceId));
@@ -137,7 +127,7 @@ export class NoteDAO {
       .where(and(inWorkspace(workspaceId), withParent(parentId), notTrashed()))
       .orderBy(asc(notesTable.orderHint));
     const result = await query;
-    return (result).at(0);
+    return result.at(0);
   }
 
   async findLastNoteInLayer(workspaceId: string, parentId: ParentId) {
