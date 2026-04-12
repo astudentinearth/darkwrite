@@ -94,8 +94,6 @@ export async function init() {
   } else {
     await ElectronPrefsModel.initialize();
     await new WorkspaceService().initializeDefaultWorkspace();
-    const healthService = new HealthService();
-    await healthService.fixCollidingOrderKeys();
   }
   log.initialize();
   log.transports.file.level = is.dev ? "debug" : "info";

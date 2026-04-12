@@ -1,19 +1,27 @@
+import { db as defaultDb } from "@/db";
+import { Embed, NewEmbed } from "@/db/schema";
+import { EmbedDAO } from "@/embed/embed.dao";
+import { WorkspaceDAO } from "@/workspace/workspace.dao";
+import { NotFoundError } from "@darkwrite/common";
 import { randomUUID } from "crypto";
-import { Embed } from "../entity";
+import log from "electron-log";
+import { readFile } from "fs/promises";
 import { EmbedFileStore, IEmbedStore } from "../lib/blob-store";
 import { getFileInfo } from "../lib/fs";
-import { EmbedRepository } from "../repository/embed.repository";
-import { WorkspaceRepository } from "../repository/workspace.repository";
-import { readFile } from "fs/promises";
-import log from "electron-log";
-import { NotFoundError } from "@darkwrite/common";
 
 export class EmbedService {
+  private embedRepository: EmbedDAO;
+  private workspaceRepository: WorkspaceDAO;
+
   constructor(
-    private embedRepository: EmbedRepository = new EmbedRepository(),
-    private workspaceRepository: WorkspaceRepository = new WorkspaceRepository(),
+    private db = defaultDb,
+    embedRepository?: EmbedDAO,
+    workspaceRepository?: WorkspaceDAO,
     private blobStore: IEmbedStore = new EmbedFileStore(),
-  ) {}
+  ) {
+    this.embedRepository = embedRepository ?? new EmbedDAO(this.db);
+    this.workspaceRepository = workspaceRepository ?? new WorkspaceDAO(this.db);
+  }
 
   // For easier mocking
   private async read(filePath: string) {
@@ -38,30 +46,31 @@ export class EmbedService {
 
   async initializeEmbedWithFileData(filePath: string): Promise<Embed> {
     const file = await getFileInfo(filePath);
-    const embed = new Embed();
 
-    embed.id = randomUUID();
-    embed.displayName = file.basename;
-    embed.fileSize = file.size;
-    embed.fileType = file.extension.replace(".", "");
-    embed.fileName = file.basename;
-
-    return embed;
+    return {
+      id: randomUUID(),
+      displayName: file.basename,
+      fileName: file.basename,
+      fileType: file.extension.replace(".", ""),
+      fileSize: file.size,
+      ownerId: null,
+      uploadedAt: new Date(),
+      workspaceId: null,
+    };
   }
 
   async createFromFilePath(filePath: string, workspaceId: string) {
-    const workspace = await this.workspaceRepository.findById(workspaceId);
-    if (!workspace) throw new NotFoundError("Workspace", workspaceId);
+    const workspace =
+      await this.workspaceRepository.findByIdOrThrow(workspaceId);
+
     let embed = await this.initializeEmbedWithFileData(filePath);
-    embed.id = randomUUID();
-    embed.uploadedAt = new Date();
-    embed.workspace = workspace;
+    embed.workspaceId = workspace.id;
 
     const buffer = await this.read(filePath);
     const existingEmbed = await this.findFirstDuplicate(embed.fileSize, buffer);
     if (existingEmbed) return existingEmbed;
 
-    embed = await this.embedRepository.save(embed);
+    embed = await this.embedRepository.create(embed);
     await this.blobStore.put(embed.id, buffer);
     return embed;
   }
@@ -70,26 +79,28 @@ export class EmbedService {
     buffer: ArrayBuffer,
     fileType: string,
     workspaceId: string,
-  ) {
-    const workspace = await this.workspaceRepository.findById(workspaceId);
-    if (!workspace) throw new NotFoundError("Workspace", workspaceId);
+  ): Promise<Embed> {
+    const workspace =
+      await this.workspaceRepository.findByIdOrThrow(workspaceId);
 
-    let embed = new Embed();
-    embed.fileSize = buffer.byteLength;
-    embed.fileType = fileType.replace(".", "");
-    embed.id = randomUUID();
-    embed.workspace = workspace;
-    embed.uploadedAt = new Date();
-    embed.displayName = Date.now().toString();
-    embed.fileName = `${embed.id}`;
+    const id = randomUUID();
+    let embed: NewEmbed = {
+      fileSize: buffer.byteLength,
+      fileType: fileType.replace(".", ""),
+      id,
+      workspaceId: workspace.id,
+      uploadedAt: new Date(),
+      displayName: Date.now().toString(),
+      fileName: `${id}`,
+    };
     const buf = Buffer.from(new Uint8Array(buffer));
 
     const existingEmbed = await this.findFirstDuplicate(embed.fileSize, buf);
     if (existingEmbed) return existingEmbed;
 
-    embed = await this.embedRepository.save(embed);
-    await this.blobStore.put(embed.fileName, buf);
-    return embed;
+    const saved = await this.embedRepository.create(embed);
+    await this.blobStore.put(saved.fileName, buf);
+    return saved;
   }
 
   async getEmbedById(id: string) {

@@ -1,19 +1,28 @@
-import { AppDataSource } from "../db";
-import { Note } from "../entity";
+import { PatchNote } from "@/db/schema";
 import { NoteDAO } from "../note/note.dao";
 import { Rank } from "@darkwrite/common";
-import { _WorkspaceDAO } from "../workspace/workspace.dao";
+import { db } from "@/db";
+import { WorkspaceDAO } from "@/workspace/workspace.dao";
 
 export class HealthService {
-  constructor(
-    private _db = AppDataSource,
-    private workspaceRepository = _WorkspaceDAO,
-    private noteRepository = new NoteDAO(),
-  ) {}
+  private workspaceRepository: WorkspaceDAO;
+  private noteRepository: NoteDAO;
 
+  constructor(
+    private _db = db,
+    workspaceRepository?: WorkspaceDAO,
+    noteRepository?: NoteDAO,
+  ) {
+    this.workspaceRepository =
+      workspaceRepository ?? new WorkspaceDAO(this._db);
+    this.noteRepository = noteRepository ?? new NoteDAO(this._db);
+  }
+
+  // FIXME: This method is likely unreliable and should not be called anymore.
+  /** @deprecated */
   async fixCollidingOrderKeys() {
     const workspaces = await this.workspaceRepository.findAll();
-    const changes: Partial<Note>[] = [];
+    const changes: PatchNote[] = [];
     for (const workspace of workspaces) {
       const notes = await this.noteRepository.findAllByWorkspaceId(
         workspace.id,
@@ -49,6 +58,6 @@ export class HealthService {
         changes.push(..._changes);
       }
     }
-    await this._db.getRepository(Note).save(changes);
+    await this.noteRepository.updateAll(changes);
   }
 }

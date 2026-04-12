@@ -8,7 +8,7 @@ const hasFileSize = (fileSize: number) => eq(embedTable.fileSize, fileSize);
 export class EmbedDAO {
   constructor(private tx: DatabaseType | Transaction = db) {}
 
-  async create(embed: NewEmbed) {
+  async create(embed: NewEmbed): Promise<Embed> {
     return (await this.tx.insert(embedTable).values(embed).returning())[0];
   }
 

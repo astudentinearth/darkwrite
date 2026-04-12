@@ -4,6 +4,7 @@ import { NotFoundError } from "@darkwrite/common";
 import { dialog, net } from "electron";
 import { writeFile } from "fs/promises";
 import { EmbedService } from "../service/embed.service";
+import { embedToDto } from "./embed-mapper";
 
 const embedService = new EmbedService();
 
@@ -17,7 +18,7 @@ export const ElectronEmbedAPI: DesktopEmbedAPI = {
   async createFromLocalFile(filePath: string, workspaceId: string) {
     const embed = await embedService.createFromFilePath(filePath, workspaceId);
     const url = await embedService.getEmbedUrl(embed.id);
-    return { embed: embed.mapToDTO(url) } satisfies EmbedResponseDTO;
+    return { embed: embedToDto(embed, url) } satisfies EmbedResponseDTO;
   },
 
   async createFromArrayBuffer(
@@ -31,14 +32,14 @@ export const ElectronEmbedAPI: DesktopEmbedAPI = {
       workspaceId,
     );
     const url = await embedService.getEmbedUrl(embed.id);
-    return { embed: embed.mapToDTO(url) } satisfies EmbedResponseDTO;
+    return { embed: embedToDto(embed, url) } satisfies EmbedResponseDTO;
   },
 
   async getById(id: string) {
     const embed = await embedService.getEmbedById(id);
     if (!embed) return { embed: null } satisfies EmbedResponseDTO;
     const url = await embedService.getEmbedUrl(id);
-    return { embed: embed.mapToDTO(url) } satisfies EmbedResponseDTO;
+    return { embed: embedToDto(embed,url) } satisfies EmbedResponseDTO;
   },
 
   async getEncoded(ids: string[]) {
