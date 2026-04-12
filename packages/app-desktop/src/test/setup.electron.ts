@@ -1,4 +1,4 @@
-import { mkdirSync, readdirSync, rmSync, unlinkSync } from "node:fs";
+import { mkdirSync, readdirSync, unlinkSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 

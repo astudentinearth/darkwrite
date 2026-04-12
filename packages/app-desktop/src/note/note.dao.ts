@@ -6,7 +6,7 @@ import {
   ParentId,
   Rank,
 } from "@darkwrite/common";
-import { and, asc, desc, eq, isNull, like, ne, not, or } from "drizzle-orm";
+import { and, asc, desc, eq, isNull, like, ne, or } from "drizzle-orm";
 import { DatabaseType, db, Transaction } from "../db";
 import { noteToDto } from "./note-mapper";
 
@@ -119,8 +119,6 @@ export class NoteDAO {
   }
 
   async findFirstNoteInLayer(workspaceId: string, parentId: ParentId) {
-    console.log(workspaceId, parentId);
-    console.log(await this.findAllByWorkspaceId(workspaceId));
     const query = this.tx
       .select()
       .from(notesTable)

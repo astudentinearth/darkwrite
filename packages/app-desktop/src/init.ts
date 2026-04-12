@@ -12,16 +12,15 @@ import { Paths } from "./lib/paths";
 import { initAppMenu } from "./menu";
 import { webcontentsUrl } from "./metadata.json";
 import { ElectronPrefsModel } from "./prefs";
-import { HealthService } from "./service/health.service";
-import { WorkspaceService } from "./workspace/workspace.service";
 import {
-  constructWindow,
-  setupWindowEvents as setupBrowserWindowEvents,
+    constructWindow,
+    setupWindowEvents as setupBrowserWindowEvents,
 } from "./window";
+import { WorkspaceService } from "./workspace/workspace.service";
 
 import installExtension, {
-  REACT_DEVELOPER_TOOLS,
-  REDUX_DEVTOOLS,
+    REACT_DEVELOPER_TOOLS,
+    REDUX_DEVTOOLS,
 } from "electron-devtools-installer";
 import { setupCsp } from "./csp";
 import { db, migrateDatabase } from "./db";

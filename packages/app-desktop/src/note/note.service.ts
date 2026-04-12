@@ -1,5 +1,5 @@
 import { DatabaseDAO } from "@/database/database.dao";
-import { DatabaseType, db as defaultDb } from "@/db";
+import { DatabaseType } from "@/db";
 import { NewNote } from "@/db/schema";
 import { logError } from "@/lib/log";
 import { DocumentService } from "@/service/document.service";
@@ -241,7 +241,6 @@ export class NoteService {
         sourceNote.workspaceId,
         destinationNoteId,
       );
-      console.log("New order hints for layer:", newOrderHints);
 
       sourceNote.parentId = destinationNoteId;
       sourceNote.orderHint = newOrderHints[placement];
@@ -308,7 +307,6 @@ export class NoteService {
   async setModificationDate(id: string, date: Date) {
     return await this.db.transaction(async (tx) => {
       const dao = this.noteDAO.transactional(tx);
-      const note = await dao.findByIdOrThrow(id);
       const result = await dao.update({
         id,
         modifiedAt: date,

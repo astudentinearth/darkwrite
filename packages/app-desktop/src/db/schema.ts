@@ -1,12 +1,8 @@
 import {
-  sqliteTable,
-  AnySQLiteColumn,
-  text,
-  numeric,
-  foreignKey,
-  integer,
+    integer,
+    sqliteTable,
+    text
 } from "drizzle-orm/sqlite-core";
-import { sql } from "drizzle-orm";
 import { randomUUID } from "node:crypto";
 import { PatchPartial } from "./sql";
 

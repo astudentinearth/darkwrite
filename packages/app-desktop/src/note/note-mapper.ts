@@ -1,5 +1,4 @@
 import { Note } from "@/db/schema";
-import { JSONTransformer } from "@/lib/json-transformer";
 import { NoteDTO } from "@darkwrite/common";
 
 export function noteToDto(note: Note): NoteDTO {

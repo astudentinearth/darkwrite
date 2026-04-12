@@ -37,7 +37,6 @@ export type Transaction = Parameters<
 
 export async function migrateDatabase(db: DatabaseType): Promise<DatabaseType> {
   await migrate(db, { migrationsFolder: is.dev ? "drizzle" : "../drizzle" });
-  console.log("Database migrated successfully");
   return db;
 }
 

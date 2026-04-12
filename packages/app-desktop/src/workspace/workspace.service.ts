@@ -1,8 +1,5 @@
 import { CreateWorkspaceDTO, UpdateWorkspaceDTO } from "@darkwrite/common";
-import {
-  NotFoundError,
-  getDefaultWorkspaceConfiguration,
-} from "@darkwrite/common";
+import { getDefaultWorkspaceConfiguration } from "@darkwrite/common";
 import { WorkspaceDAO } from "./workspace.dao";
 import { Workspace } from "@/db/schema";
 import { DatabaseType, db as defaultDb } from "@/db";

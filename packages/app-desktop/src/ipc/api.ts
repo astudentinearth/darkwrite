@@ -9,11 +9,7 @@ import {
 } from "@/types";
 import { ipcMain } from "electron";
 import log from "electron-log";
-import {
-  BackupAPI,
-  BackupApiBridge,
-  HTMLExporterAPI,
-} from "../api/backup.electron";
+import { BackupApiBridge } from "../api/backup.electron";
 import { DesktopIntegration } from "../lib/desktop-integration";
 import {
   hasOnboarded,

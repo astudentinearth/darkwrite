@@ -1,15 +1,15 @@
 import { DatabaseDAO } from "@/database/database.dao";
-import { DatabaseType, db } from "@/db";
+import { db, type DatabaseType } from "@/db";
 import { NotFoundError } from "@darkwrite/common";
 
 export class DatabaseService {
   private databaseDao: DatabaseDAO;
 
   constructor(
-    private db: DatabaseType = db,
+    private _db: DatabaseType = db,
     databaseDao?: DatabaseDAO,
   ) {
-    this.databaseDao = databaseDao ?? new DatabaseDAO(this.db);
+    this.databaseDao = databaseDao ?? new DatabaseDAO(this._db);
   }
 
   async findDatabaseOrThrow(id: string) {
