@@ -10,16 +10,19 @@ import { IPCHandler } from "../types/ipc-handler";
 import { NoteQueryService } from "./note-query.service";
 import { mapNotesToDTO } from "./note-util";
 import { NoteService } from "./note.service";
+import { db } from "@/db";
+import { noteToDto } from "./note-mapper";
 
 const documentService = new DocumentService();
+const noteService = new NoteService(db);
 
 export const ElectronNoteAPI: INoteAPI = {
   async create(dto) {
-    const note = await NoteService.create(CreateNoteDTOSchema.parse(dto));
-    return { note: note.mapToDTO() };
+    const note = await noteService.create(CreateNoteDTOSchema.parse(dto));
+    return { note: noteToDto(note) };
   },
 
-  delete: NoteService.deleteById,
+  delete: (id)=>noteService.deleteById(id),
 
   async getAllByWorkspaceId(workspaceId) {
     const notes = await NoteQueryService.getAllByWorkspaceId(workspaceId);
@@ -34,12 +37,12 @@ export const ElectronNoteAPI: INoteAPI = {
   },
 
   async favorite(noteId: string, aboveNoteId?: string | null) {
-    const note = (await NoteService.favorite(noteId, aboveNoteId)).mapToDTO();
+    const note = noteToDto((await noteService.favorite(noteId, aboveNoteId)));
     return { note };
   },
 
   async unfavorite(noteId: string) {
-    const note = (await NoteService.unfavorite(noteId)).mapToDTO();
+    const note = noteToDto((await noteService.unfavorite(noteId)));
     return { note };
   },
 
@@ -56,12 +59,12 @@ export const ElectronNoteAPI: INoteAPI = {
   },
 
   async moveToTrash(noteId: string) {
-    const note = (await NoteService.moveToTrash(noteId)).mapToDTO();
+    const note = noteToDto(await noteService.moveToTrash(noteId));
     return { note };
   },
 
   async restoreFromTrash(noteId: string) {
-    const note = (await NoteService.restoreFromTrash(noteId)).mapToDTO();
+    const note = noteToDto(await noteService.restoreFromTrash(noteId));
     return { note };
   },
 
@@ -79,22 +82,23 @@ export const ElectronNoteAPI: INoteAPI = {
 
   async getById(id) {
     const note = await NoteQueryService.getById(id);
-    return { note: note ? note.mapToDTO() : null };
+    return { note: note ? noteToDto(note) : null };
   },
 
   async update(id, dto) {
-    const updated = await NoteService.update(
+    const updated = await noteService.update(
       id,
       UpdateNoteDTOSchema.parse(dto),
     );
-    const _dto = updated.mapToDTO();
+    if(!updated) throw new Error("Failed to update note");
+    const _dto = noteToDto(updated)
     return { note: _dto };
   },
 
   async move(dto) {
-    await NoteService.move(dto);
+    await noteService.move(dto);
     const note = await NoteQueryService.getById(dto.sourceId);
-    return { note: note ? note.mapToDTO() : null };
+    return { note: note ? noteToDto(note) : null };
   },
 
   async getDocument(id) {
@@ -104,19 +108,19 @@ export const ElectronNoteAPI: INoteAPI = {
 
   async setDocument(id, serializedDocument) {
     documentService.setNoteContent(id, serializedDocument);
-    NoteService.setModificationDate(id, new Date());
+    noteService.setModificationDate(id, new Date());
   },
 
   async duplicate(id: string) {
-    const note = await NoteService.duplicate(id);
+    const note = await noteService.duplicate(id);
     if (!note) throw new Error("Failed to duplicate note");
-    return { note: note.mapToDTO() };
+    return { note: noteToDto(note) };
   },
 
   async getParentTree(id: string) {
     const tree = await NoteQueryService.getParentTree(id);
     return {
-      parents: tree.map((note) => note.mapToDTO()),
+      parents: tree.map((note) => noteToDto(note)),
     };
   },
 

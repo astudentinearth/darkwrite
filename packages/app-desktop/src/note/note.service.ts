@@ -180,7 +180,9 @@ export class NoteService {
       note.isFavorite = true;
       note.favoriteOrderHint = newFavoriteOrderHint;
 
-      return await dao.update(note);
+      const result = await dao.update(note);
+      if(!result) throw new Error("Failed to favorite note");
+      return result;
     });
   }
 
@@ -188,11 +190,13 @@ export class NoteService {
     return await this.db.transaction(async (tx) => {
       const dao = this.noteDAO.transactional(tx);
       const note = await dao.findByIdOrThrow(noteId);
-      return await dao.update({
+      const result = await dao.update({
         id: note.id,
         isFavorite: false,
         favoriteOrderHint: "",
       });
+      if(!result) throw new Error("Failed to unfavorite note");
+      return result;
     });
   }
 
@@ -270,6 +274,7 @@ export class NoteService {
       const saved = await this.noteDAO.transactional(tx).create(newNote);
       const doc = await this.documentService.getNoteContent(id);
       await this.documentService.setNoteContent(saved.id, JSON.stringify(doc));
+      return saved;
     });
   }
 
@@ -288,14 +293,30 @@ export class NoteService {
   async moveToTrash(id: string) {
     return await this.db.transaction(async (tx) => {
       const dao = this.noteDAO.transactional(tx);
-      return dao.update({
+      const result = await dao.update({
         id,
         isTrashed: true,
         orderHint: "",
         favoriteOrderHint: "",
         isFavorite: false,
       });
+      if(!result) throw new Error("Failed to move note to trash");
+      return result;
     });
+  }
+
+  async setModificationDate(id: string, date: Date) {
+    return await this.db.transaction(async (tx) => {
+      const dao = this.noteDAO.transactional(tx);
+      const note = await dao.findByIdOrThrow(id);
+      const result = await dao.update({
+        id,
+        modifiedAt: date,
+      });
+      if(!result) throw new Error("Failed to update note modification date");
+      return result;
+    }
+    );
   }
 
   async restoreFromTrash(id: string) {
@@ -314,7 +335,9 @@ export class NoteService {
       );
 
       note.orderHint = orderKeys.end;
-      return await noteDAO.update(note);
+      const result = await noteDAO.update(note);
+      if(!result) throw new Error("Failed to restore note from trash.");
+      return result;
     });
   }
 }
