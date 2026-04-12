@@ -1,49 +1,58 @@
-import { describe, expect, it, beforeAll, afterAll, beforeEach } from "vitest";
-import { NoteService } from "./note.service";
-import { createDatabase, type DatabaseType, migrateDatabase, createTestDatabase } from "../db";
-import { Rank } from "@darkwrite/common";
-import {Workspace, Note} from "@/db/schema";
-import { NoteDAO } from "./note.dao";
+import { NewNote, Note, note as notesTable, Workspace } from "@/db/schema";
 import { WorkspaceDAO } from "@/workspace/workspace.dao";
+import { ParentId, Rank } from "@darkwrite/common";
+import { beforeAll, beforeEach, describe, expect, it } from "vitest";
+import { createTestDatabase, DatabaseType, migrateDatabase } from "../db";
+import { NoteDAO } from "./note.dao";
+import { NoteService } from "./note.service";
+import { DocumentService } from "@/service/document.service";
+import { MockDocumentStore } from "@/test/mocks/document-store.mock";
 
-let db: DatabaseType = createTestDatabase();
 
 describe("note service tests", () => {
+  let db: DatabaseType = createTestDatabase();
   let workspace: Workspace;
-  const noteDAO = new NoteDAO();
+  let noteDAO: NoteDAO;
+  let noteService: NoteService;
 
   beforeAll(async () => {
     await migrateDatabase(db);
-    const workspaceRepo = AppDataSource.getRepository(Workspace);
-    workspace = new Workspace();
-    workspace.name = "Test Workspace";
-    workspace.created_at = new Date();
-    workspace = await workspaceRepo.save(workspace);
+    noteDAO = new NoteDAO(db);
+    noteService = new NoteService(db, new DocumentService(new MockDocumentStore()));
+    await db.transaction(async tx => {
+      console.log("is dao alive?", await noteDAO.transactional(tx).findAll());
+    })
+    console.log("creating workspace")
+    workspace = await new WorkspaceDAO(db).create({
+      name: "Test Workspace",
+      createdAt: new Date(),
+    });
+    console.log("creating")
+    console.log("create? ", await noteService.create({
+      title: "asd", 
+      parentId: null,
+      workspaceId: workspace.id
+    }))
   });
-
-  afterAll(async () => {
-    if (AppDataSource.isInitialized) {
-      await AppDataSource.destroy();
-    }
-  });
-
   beforeEach(async () => {
-    const noteRepo = AppDataSource.getRepository(Note);
-    await noteRepo.clear();
+    await db.delete(notesTable);
   });
 
   async function createNote(
     title: string,
     orderHint: string,
-    parentId: string | null = null,
-  ) {
-    const note = new Note();
-    note.title = title;
-    note.workspace = workspace;
-    note.orderHint = orderHint;
-    note.favoriteOrderHint = "";
-    note.parentId = parentId;
-    return await noteDAO.save(note);
+    parentId: ParentId = null,
+  ): Promise<Note> {
+    const note: NewNote = {
+      title,
+      workspaceId: workspace.id,
+      orderHint,
+      favoriteOrderHint: "",
+      parentId,
+      createdAt: new Date(),
+      modifiedAt: new Date(),
+    };
+    return await noteDAO.create(note);
   }
 
   describe("moveInto and moveBelow tests", () => {
@@ -61,7 +70,7 @@ describe("note service tests", () => {
       const source = await createNote("Source", rankX, null);
 
       // Act: Move Source below Note A
-      await NoteService.moveBelow(source.id, noteA.id);
+      await noteService.moveBelow(source.id, noteA.id);
 
       // Assert
       const updatedSource = await noteDAO.findByIdOrThrow(source.id);
@@ -80,7 +89,7 @@ describe("note service tests", () => {
       const source = await createNote("Source", rankX, null);
 
       // Act
-      await NoteService.moveBelow(source.id, noteA.id);
+      await noteService.moveBelow(source.id, noteA.id);
 
       // Assert
       const updatedSource = await noteDAO.findByIdOrThrow(source.id);
@@ -100,7 +109,7 @@ describe("note service tests", () => {
       const source = await createNote("Source", rankX, null);
 
       // Act
-      await NoteService.moveInto(source.id, parent.id, "start");
+      await noteService.moveInto(source.id, parent.id, "start");
 
       // Assert
       const updatedSource = await noteDAO.findByIdOrThrow(source.id);
@@ -117,7 +126,7 @@ describe("note service tests", () => {
       const source = await createNote("Source", rankX, null);
 
       // Act
-      await NoteService.moveInto(source.id, parent.id, "start");
+      await noteService.moveInto(source.id, parent.id, "start");
 
       // Assert
       const updatedSource = await noteDAO.findByIdOrThrow(source.id);
@@ -139,7 +148,7 @@ describe("note service tests", () => {
       const source = await createNote("Source", rankX, null);
 
       // Act
-      await NoteService.moveInto(source.id, parent.id, "end");
+      await noteService.moveInto(source.id, parent.id, "end");
 
       // Assert
       const updatedSource = await noteDAO.findByIdOrThrow(source.id);
@@ -156,7 +165,7 @@ describe("note service tests", () => {
       const source = await createNote("Source", rankX, null);
 
       // Act
-      await NoteService.moveInto(source.id, parent.id, "end");
+      await noteService.moveInto(source.id, parent.id, "end");
 
       // Assert
       const updatedSource = await noteDAO.findByIdOrThrow(source.id);
@@ -173,7 +182,7 @@ describe("note service tests", () => {
       const source = await createNote("Source", rankX, "some-other-id");
 
       // Act
-      await NoteService.moveInto(source.id, null, "end"); // Move to root
+      await noteService.moveInto(source.id, null, "end"); // Move to root
 
       // Assert
       const updatedSource = await noteDAO.findByIdOrThrow(source.id);

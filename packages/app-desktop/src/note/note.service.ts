@@ -5,22 +5,30 @@ import { logError } from "@/lib/log";
 import { DocumentService } from "@/service/document.service";
 import { WorkspaceDAO } from "@/workspace/workspace.dao";
 import {
-    CreateNoteDTO,
-    IllegalArgumentError,
-    MoveNoteDTO,
-    ParentId,
-    Rank,
-    UpdateNoteDTO
+  CreateNoteDTO,
+  IllegalArgumentError,
+  MoveNoteDTO,
+  ParentId,
+  Rank,
+  UpdateNoteDTO,
 } from "@darkwrite/common";
 import { NoteDAO } from "./note.dao";
 
 export class NoteService {
+  private noteDAO: NoteDAO;
+  private workspaceDAO: WorkspaceDAO;
+  private databaseDAO: DatabaseDAO;
   constructor(
-    private db: DatabaseType = defaultDb,
-    private noteDAO = new NoteDAO(this.db),
-    private workspaceDAO = new WorkspaceDAO(this.db),
-    private databaseDAO = new DatabaseDAO(this.db),
-  ) {}
+    private db: DatabaseType,
+    private documentService = new DocumentService(),
+    noteDAO?: NoteDAO,
+    workspaceDAO?: WorkspaceDAO,
+    databaseDAO?: DatabaseDAO,
+  ) {
+    this.noteDAO = noteDAO ?? new NoteDAO(db);
+    this.workspaceDAO = workspaceDAO ?? new WorkspaceDAO(db);
+    this.databaseDAO = databaseDAO ?? new DatabaseDAO(db);
+  }
 
   async create(dto: CreateNoteDTO) {
     const { title, workspaceId, databaseId, icon, parentId } = dto;
@@ -51,7 +59,7 @@ export class NoteService {
       if (!result) {
         throw new Error("Failed to create note");
       }
-      await new DocumentService().setNoteContent(result.id, "{}");
+      await this.documentService.setNoteContent(result.id, "{}");
       return result;
     });
   }
@@ -243,26 +251,26 @@ export class NoteService {
   async duplicate(id: string) {
     const { icon, title, databaseId, workspaceId, propertyValues, parentId } =
       await this.noteDAO.findByIdOrThrow(id);
+
     const newNote: NewNote = {
-      title: `${note.title} (copy)`,
+      title: `${title} (copy)`,
       icon,
       databaseId,
       workspaceId,
       propertyValues,
       parentId,
       orderHint: (
-        await this.noteDAO.computeOrderKeysForLayer(
-          note.workspace.id,
-          note.parentId,
-        )
+        await this.noteDAO.computeOrderKeysForLayer(workspaceId, parentId)
       ).end,
       favoriteOrderHint: "",
+      createdAt: new Date(),
+      modifiedAt: new Date(),
     };
 
     return await this.db.transaction(async (tx) => {
       const saved = await this.noteDAO.transactional(tx).create(newNote);
-      const doc = await new DocumentService().getNoteContent(id);
-      await new DocumentService().setNoteContent(saved.id, JSON.stringify(doc));
+      const doc = await this.documentService.getNoteContent(id);
+      await this.documentService.setNoteContent(saved.id, JSON.stringify(doc));
     });
   }
 
@@ -270,7 +278,7 @@ export class NoteService {
     this.db.transaction(async (tx) => {
       await this.noteDAO.transactional(tx).deleteById(id);
       try {
-        await new DocumentService().deleteNoteContent(id);
+        await this.documentService.deleteNoteContent(id);
       } catch (e: unknown) {
         logError(e);
         tx.rollback();
@@ -314,6 +322,7 @@ export class NoteService {
       );
 
       note.orderHint = orderKeys.end;
+      return await noteDAO.update(note);
     });
   }
 }
