@@ -181,7 +181,7 @@ export class NoteService {
       note.favoriteOrderHint = newFavoriteOrderHint;
 
       const result = await dao.update(note);
-      if(!result) throw new Error("Failed to favorite note");
+      if (!result) throw new Error("Failed to favorite note");
       return result;
     });
   }
@@ -195,7 +195,7 @@ export class NoteService {
         isFavorite: false,
         favoriteOrderHint: "",
       });
-      if(!result) throw new Error("Failed to unfavorite note");
+      if (!result) throw new Error("Failed to unfavorite note");
       return result;
     });
   }
@@ -300,7 +300,7 @@ export class NoteService {
         favoriteOrderHint: "",
         isFavorite: false,
       });
-      if(!result) throw new Error("Failed to move note to trash");
+      if (!result) throw new Error("Failed to move note to trash");
       return result;
     });
   }
@@ -313,10 +313,9 @@ export class NoteService {
         id,
         modifiedAt: date,
       });
-      if(!result) throw new Error("Failed to update note modification date");
+      if (!result) throw new Error("Failed to update note modification date");
       return result;
-    }
-    );
+    });
   }
 
   async restoreFromTrash(id: string) {
@@ -336,7 +335,7 @@ export class NoteService {
 
       note.orderHint = orderKeys.end;
       const result = await noteDAO.update(note);
-      if(!result) throw new Error("Failed to restore note from trash.");
+      if (!result) throw new Error("Failed to restore note from trash.");
       return result;
     });
   }

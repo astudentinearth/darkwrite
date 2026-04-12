@@ -1,5 +1,10 @@
 import { getDefaultWorkspaceConfiguration } from "@darkwrite/common";
-import { AppDataSource, createTestDatabase, DatabaseType, migrateDatabase } from "../db";
+import {
+  AppDataSource,
+  createTestDatabase,
+  DatabaseType,
+  migrateDatabase,
+} from "../db";
 import { Workspace } from "../entity";
 import { WorkspaceService } from "./workspace.service";
 

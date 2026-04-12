@@ -1,11 +1,11 @@
+import { WorkspaceDAO } from "@/workspace/workspace.dao";
 import { ElectronPrefsModel } from "../prefs";
-import { _WorkspaceDAO } from "../workspace/workspace.dao";
 
 export async function setDefaultWorkspaceName(name: string) {
-  const workspace = (await _WorkspaceDAO.findAll()).at(0);
+  const workspaceDao = new WorkspaceDAO();
+  const workspace = (await workspaceDao.findAll()).at(0);
   if (!workspace) return;
-  workspace.name = name;
-  await _WorkspaceDAO.save(workspace);
+  await workspaceDao.update({ id: workspace.id, name });
 }
 
 export async function setLanguage(lang: string) {

@@ -4,7 +4,6 @@ import { app, BrowserWindow, protocol, shell } from "electron";
 import log from "electron-log/main.js";
 import path, { join } from "path";
 import { fileURLToPath } from "url";
-import { AppDataSource } from "./db";
 import { initDevtools } from "./debug/server";
 import { InitializeElectronAPI } from "./ipc/api";
 import { embedProtocolHandler } from "./ipc/embed-protocol-handler";
@@ -25,6 +24,7 @@ import installExtension, {
   REDUX_DEVTOOLS,
 } from "electron-devtools-installer";
 import { setupCsp } from "./csp";
+import { db, migrateDatabase } from "./db";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -87,12 +87,12 @@ export async function init() {
     await installExtension([REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS]);
   }
   await Paths.initialize();
-  if (!(await isNewUser())) {
+  await migrateDatabase(db);
+  if (await isNewUser()) {
     // settings will be persisted after the onboarding
     ElectronPrefsModel.override(SettingsModel.getDefaults());
   } else {
     await ElectronPrefsModel.initialize();
-    await AppDataSource.initialize();
     await new WorkspaceService().initializeDefaultWorkspace();
     const healthService = new HealthService();
     await healthService.fixCollidingOrderKeys();

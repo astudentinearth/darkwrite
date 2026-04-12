@@ -22,7 +22,7 @@ export const ElectronNoteAPI: INoteAPI = {
     return { note: noteToDto(note) };
   },
 
-  delete: (id)=>noteService.deleteById(id),
+  delete: (id) => noteService.deleteById(id),
 
   async getAllByWorkspaceId(workspaceId) {
     const notes = await NoteQueryService.getAllByWorkspaceId(workspaceId);
@@ -37,12 +37,12 @@ export const ElectronNoteAPI: INoteAPI = {
   },
 
   async favorite(noteId: string, aboveNoteId?: string | null) {
-    const note = noteToDto((await noteService.favorite(noteId, aboveNoteId)));
+    const note = noteToDto(await noteService.favorite(noteId, aboveNoteId));
     return { note };
   },
 
   async unfavorite(noteId: string) {
-    const note = noteToDto((await noteService.unfavorite(noteId)));
+    const note = noteToDto(await noteService.unfavorite(noteId));
     return { note };
   },
 
@@ -90,8 +90,8 @@ export const ElectronNoteAPI: INoteAPI = {
       id,
       UpdateNoteDTOSchema.parse(dto),
     );
-    if(!updated) throw new Error("Failed to update note");
-    const _dto = noteToDto(updated)
+    if (!updated) throw new Error("Failed to update note");
+    const _dto = noteToDto(updated);
     return { note: _dto };
   },
 

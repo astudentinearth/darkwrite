@@ -9,7 +9,10 @@ import { DatabaseType, db as defaultDb } from "@/db";
 
 export class WorkspaceService {
   private workspaceDAO: WorkspaceDAO;
-  constructor(private db: DatabaseType = defaultDb, workspaceDAO?: WorkspaceDAO) {
+  constructor(
+    private db: DatabaseType = defaultDb,
+    workspaceDAO?: WorkspaceDAO,
+  ) {
     this.workspaceDAO = workspaceDAO ?? new WorkspaceDAO(this.db);
   }
 
@@ -19,7 +22,7 @@ export class WorkspaceService {
       createdAt: new Date(),
       name,
       iconUrl: icon_url,
-      config
+      config,
     });
   }
 
@@ -42,6 +45,6 @@ export class WorkspaceService {
   }
 
   async update(id: string, dto: UpdateWorkspaceDTO) {
-    return await this.workspaceDAO.update({id, ...dto});
+    return await this.workspaceDAO.update({ id, ...dto });
   }
 }

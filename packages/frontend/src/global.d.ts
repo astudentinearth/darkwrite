@@ -2,7 +2,7 @@
 /// <reference types="vitest/globals" />
 /// <reference types="./electron/preload/types.d.ts"/>
 
-import { DarkwriteIPCBridge, ElectronWebUtils} from "@darkwrite/common";
+import { DarkwriteIPCBridge, ElectronWebUtils } from "@darkwrite/common";
 
 /**
  * Type definition for WindowControlsOverlay API

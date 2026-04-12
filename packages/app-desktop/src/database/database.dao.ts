@@ -1,11 +1,11 @@
-import { isNotUndefined, NotFoundError } from "@darkwrite/common";
-import { AppDataSource, DatabaseType, Transaction, db } from "@/db";
+import { DatabaseType, db, Transaction } from "@/db";
 import {
   Database,
   database as databaseTable,
   NewDatabase,
   PatchDatabase,
 } from "@/db/schema";
+import { isNotUndefined, NotFoundError } from "@darkwrite/common";
 import { eq } from "drizzle-orm";
 
 export class DatabaseDAO {

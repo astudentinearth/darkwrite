@@ -1,6 +1,4 @@
-import { DataSource } from "typeorm";
 import { DB_PATH } from "../lib/paths";
-import * as entities from "@/entity";
 import * as relations from "./relations";
 import * as tables from "./schema";
 
@@ -15,13 +13,6 @@ const dbPath = DB_PATH;
 
 const getDatabaseUrl = () =>
   process.env["NODE_ENV"] === "test" ? ":memory:" : dbPath;
-
-export const AppDataSource = new DataSource({
-  type: "better-sqlite3",
-  database: getDatabaseUrl(),
-  entities,
-  synchronize: true, // FIXME: ~~REMOVE BEFORE RELEASE~~ lol i'm removing typeorm
-});
 
 export function createDatabase(url: string = getDatabaseUrl()) {
   return drizzle({
