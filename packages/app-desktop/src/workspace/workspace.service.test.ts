@@ -1,24 +1,13 @@
 import { getDefaultWorkspaceConfiguration } from "@darkwrite/common";
-import { AppDataSource } from "../db";
+import { AppDataSource, createTestDatabase, DatabaseType, migrateDatabase } from "../db";
 import { Workspace } from "../entity";
 import { WorkspaceService } from "./workspace.service";
-import { _WorkspaceDAO } from "./workspace.dao";
 
-const workspaceService = new WorkspaceService();
-
-const MockDAO = {
-  ..._WorkspaceDAO,
-  async findAll() {
-    return [];
-  },
-
-  async save() {
-    return new Workspace();
-  },
-};
+let _db: DatabaseType = createTestDatabase();
+const workspaceService = new WorkspaceService(_db);
 
 beforeAll(async () => {
-  if (!AppDataSource.isInitialized) await AppDataSource.initialize();
+  await migrateDatabase(_db);
 });
 
 it("should create a workspace", async () => {
@@ -44,7 +33,7 @@ it("should get workspaces", async () => {
 });
 
 it("should initialize default workspace", async () => {
-  const mockedService = new WorkspaceService(MockDAO);
+  const mockedService = new WorkspaceService(_db);
   const result = await mockedService.initializeDefaultWorkspace();
-  expect(result).toBeInstanceOf(Workspace);
+  expect(result).toBeTruthy();
 });

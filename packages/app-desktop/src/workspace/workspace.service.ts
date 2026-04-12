@@ -1,22 +1,26 @@
 import { CreateWorkspaceDTO, UpdateWorkspaceDTO } from "@darkwrite/common";
-import { Workspace } from "../entity";
-import { _WorkspaceDAO } from "./workspace.dao";
 import {
   NotFoundError,
   getDefaultWorkspaceConfiguration,
 } from "@darkwrite/common";
+import { WorkspaceDAO } from "./workspace.dao";
+import { Workspace } from "@/db/schema";
+import { DatabaseType, db as defaultDb } from "@/db";
 
 export class WorkspaceService {
-  constructor(private workspaceDAO = _WorkspaceDAO) {}
+  private workspaceDAO: WorkspaceDAO;
+  constructor(private db: DatabaseType = defaultDb, workspaceDAO?: WorkspaceDAO) {
+    this.workspaceDAO = workspaceDAO ?? new WorkspaceDAO(this.db);
+  }
 
   async createWorkspace(dto: CreateWorkspaceDTO): Promise<Workspace> {
     const { config, name, icon_url } = dto;
-    const workspace = new Workspace();
-    workspace.config = config;
-    workspace.name = name;
-    workspace.icon_url = icon_url;
-    workspace.created_at = new Date();
-    return this.workspaceDAO.save(workspace);
+    return await this.workspaceDAO.create({
+      createdAt: new Date(),
+      name,
+      iconUrl: icon_url,
+      config
+    });
   }
 
   async initializeDefaultWorkspace() {
@@ -30,11 +34,7 @@ export class WorkspaceService {
   }
 
   async findWorkspaceOrThrow(id: string): Promise<Workspace> {
-    const result = await this.workspaceDAO.findById(id);
-    if (result == null) {
-      throw new NotFoundError("Workspace", id);
-    }
-    return result;
+    return await this.workspaceDAO.findByIdOrThrow(id);
   }
 
   async getWorkspaces(): Promise<Workspace[]> {
@@ -42,8 +42,6 @@ export class WorkspaceService {
   }
 
   async update(id: string, dto: UpdateWorkspaceDTO) {
-    const workspace = await this.findWorkspaceOrThrow(id);
-    Object.assign(workspace, dto);
-    return await this.workspaceDAO.save(workspace);
+    return await this.workspaceDAO.update({id, ...dto});
   }
 }
