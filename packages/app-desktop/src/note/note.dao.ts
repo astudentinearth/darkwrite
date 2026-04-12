@@ -6,7 +6,7 @@ import {
   ParentId,
   Rank,
 } from "@darkwrite/common";
-import { and, asc, desc, eq, isNull, like, ne } from "drizzle-orm";
+import { and, asc, desc, eq, isNull, like, ne, not, or } from "drizzle-orm";
 import { DatabaseType, db, Transaction } from "../db";
 import { noteToDto } from "./note-mapper";
 
@@ -15,7 +15,8 @@ const withParent = (parentId: ParentId) =>
     ? isNull(notesTable.parentId)
     : eq(notesTable.parentId, parentId);
 
-const notTrashed = () => ne(notesTable.isTrashed, true);
+const notTrashed = () =>
+  or(isNull(notesTable.isTrashed), ne(notesTable.isTrashed, true));
 const isTrashed = () => eq(notesTable.isTrashed, true);
 const isFavorite = () => eq(notesTable.isFavorite, true);
 const inWorkspace = (workspaceId: string) =>
@@ -128,14 +129,15 @@ export class NoteDAO {
   }
 
   async findFirstNoteInLayer(workspaceId: string, parentId: ParentId) {
+    console.log(workspaceId, parentId);
+    console.log(await this.findAllByWorkspaceId(workspaceId));
     const query = this.tx
       .select()
       .from(notesTable)
       .where(and(inWorkspace(workspaceId), withParent(parentId), notTrashed()))
-      .orderBy(asc(notesTable.orderHint))
-      .limit(1);
-
-    return (await query).at(0);
+      .orderBy(asc(notesTable.orderHint));
+    const result = await query;
+    return (result).at(0);
   }
 
   async findLastNoteInLayer(workspaceId: string, parentId: ParentId) {

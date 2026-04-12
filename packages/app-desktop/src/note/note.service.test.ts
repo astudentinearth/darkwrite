@@ -19,20 +19,10 @@ describe("note service tests", () => {
     await migrateDatabase(db);
     noteDAO = new NoteDAO(db);
     noteService = new NoteService(db, new DocumentService(new MockDocumentStore()));
-    await db.transaction(async tx => {
-      console.log("is dao alive?", await noteDAO.transactional(tx).findAll());
-    })
-    console.log("creating workspace")
     workspace = await new WorkspaceDAO(db).create({
       name: "Test Workspace",
       createdAt: new Date(),
     });
-    console.log("creating")
-    console.log("create? ", await noteService.create({
-      title: "asd", 
-      parentId: null,
-      workspaceId: workspace.id
-    }))
   });
   beforeEach(async () => {
     await db.delete(notesTable);
@@ -153,6 +143,7 @@ describe("note service tests", () => {
       // Assert
       const updatedSource = await noteDAO.findByIdOrThrow(source.id);
       expect(updatedSource.parentId).toBe(parent.id);
+      console.log(updatedSource.orderHint, child1.orderHint)
       expect(updatedSource.orderHint > child1.orderHint).toBe(true);
     });
 

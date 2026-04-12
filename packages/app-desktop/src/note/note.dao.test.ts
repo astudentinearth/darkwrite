@@ -47,7 +47,7 @@ describe("NoteDAO", () => {
       databaseId: null,
       icon: null,
       isFavorite: false,
-      isTrashed: false,
+      isTrashed: null,
       trashedAt: null,
     };
   };

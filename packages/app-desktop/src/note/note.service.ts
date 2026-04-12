@@ -233,15 +233,16 @@ export class NoteService {
         }
       }
 
-      const newOrderHint: string = (
+      const newOrderHints = (
         await noteRepository.computeOrderKeysForLayer(
           sourceNote.workspaceId,
           destinationNoteId,
         )
-      )[placement];
+      );
+      console.log("New order hints for layer:", newOrderHints);
 
       sourceNote.parentId = destinationNoteId;
-      sourceNote.orderHint = newOrderHint;
+      sourceNote.orderHint = newOrderHints[placement];
       sourceNote.modifiedAt = new Date();
 
       return await noteRepository.update(sourceNote);
