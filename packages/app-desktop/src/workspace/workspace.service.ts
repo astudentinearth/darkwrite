@@ -14,11 +14,11 @@ export class WorkspaceService {
   }
 
   async createWorkspace(dto: CreateWorkspaceDTO): Promise<Workspace> {
-    const { config, name, icon_url } = dto;
+    const { config, name, iconUrl } = dto;
     return await this.workspaceDAO.create({
       createdAt: new Date(),
       name,
-      iconUrl: icon_url,
+      iconUrl,
       config,
     });
   }
@@ -44,7 +44,6 @@ export class WorkspaceService {
   }
 
   async update(id: string, dto: UpdateWorkspaceDTO) {
-    const { name, icon_url, config } = dto;
-    return await this.workspaceDAO.update({ id, name, iconUrl: icon_url, config });
+    return await this.workspaceDAO.update({ id, ...dto });
   }
 }

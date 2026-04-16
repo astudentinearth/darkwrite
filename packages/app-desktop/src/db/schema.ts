@@ -28,9 +28,9 @@ export const database = sqliteTable("database", {
 
 export const workspace = sqliteTable("workspace", {
   id: generatedUuid(),
-  ownerId: text("owner_id"),
+  ownerId: text(),
   name: text().notNull(),
-  iconUrl: text("icon_url"),
+  iconUrl: text(),
   createdAt: timestamp().notNull(),
   config: json(),
 });

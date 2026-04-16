@@ -5,9 +5,9 @@ export function workspaceToDto(workspace: Workspace): WorkspaceDTO {
   const {id, ownerId, name, config, iconUrl, createdAt} = workspace;
   const dto: WorkspaceDTO = {
     id,
-    icon_url: iconUrl,
-    created_at: createdAt.toISOString(),
-    ...(ownerId && {owner_id: ownerId}),
+    iconUrl,
+    createdAt: createdAt.toISOString(),
+    ...(ownerId && {ownerId}),
     config: config as WorkspaceConfig,
     name
   }

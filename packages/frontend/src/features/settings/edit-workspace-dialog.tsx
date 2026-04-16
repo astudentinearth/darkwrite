@@ -33,14 +33,14 @@ export default function EditWorkspaceDialog(props: EditWorkspaceDialogProps) {
   const store = useAppStore();
   const { getCurrentWorkspaceId } = getWorkspaceActions(store);
   const [imageUrl, setImageUrl] = useState<string | undefined | null>(
-    workspace.icon_url,
+    workspace.iconUrl,
   );
   const nameRef = useRef<HTMLInputElement | null>(null);
   const { t } = useTranslation();
   const handleSave = async () => {
     const updated = produce(workspace, (draft) => {
       draft.name = name;
-      draft.icon_url = imageUrl;
+      draft.iconUrl = imageUrl;
     });
     props.onSave(updated);
   };
