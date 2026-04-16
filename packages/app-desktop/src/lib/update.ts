@@ -35,7 +35,6 @@ async function checkUpdateFromGithub() {
 }
 
 async function checkUpdate() {
-   
   //url: string = "http://localhost:3000/api/latest-release",
   // const res = await (await fetch(url)).json();
   const res = await checkUpdateFromGithub();

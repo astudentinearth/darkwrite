@@ -1,8 +1,4 @@
-import {
-    integer,
-    sqliteTable,
-    text
-} from "drizzle-orm/sqlite-core";
+import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { randomUUID } from "node:crypto";
 import { PatchPartial } from "./sql";
 

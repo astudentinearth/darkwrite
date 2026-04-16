@@ -8,26 +8,22 @@ import { initDevtools } from "./debug/server";
 import { InitializeElectronAPI } from "./ipc/api";
 import { embedProtocolHandler } from "./ipc/embed-protocol-handler";
 import {
-    CURRENT_VERSION,
-    isNewUser,
-    markVersionMigrated,
+  CURRENT_VERSION,
+  isNewUser,
+  markVersionMigrated,
 } from "./lib/onboarding-state";
 import { Paths } from "./lib/paths";
 import { initAppMenu } from "./menu";
 import { webcontentsUrl } from "./metadata.json";
 import { ElectronPrefsModel } from "./prefs";
 import {
-    constructWindow,
-    setupWindowEvents as setupBrowserWindowEvents,
+  constructWindow,
+  setupWindowEvents as setupBrowserWindowEvents,
 } from "./window";
 import { WorkspaceService } from "./workspace/workspace.service";
 
 import { setupCsp } from "./csp";
-import {
-    db,
-    migrateDatabaseWithBackup,
-    MigrationError
-} from "./db";
+import { db, migrateDatabaseWithBackup, MigrationError } from "./db";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

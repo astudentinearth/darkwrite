@@ -18,13 +18,15 @@ export const ElectronWorkspaceAPI: IWorkspaceAPI = {
     //TODO: implement
   },
   async getAll() {
-    const workspaces = (await service.getWorkspaces()).map(w => workspaceToDto(w));
+    const workspaces = (await service.getWorkspaces()).map((w) =>
+      workspaceToDto(w),
+    );
     return { workspaces };
   },
   async update(id: string, dto: UpdateWorkspaceDTO) {
     const sanitizedDto = UpdateWorkspaceDTOSchema.parse(dto);
     const workspace = await service.update(id, sanitizedDto);
-    if(!workspace) throw new NotFoundError("Workspace", id);
+    if (!workspace) throw new NotFoundError("Workspace", id);
     return { workspace: workspaceToDto(workspace) };
   },
 };

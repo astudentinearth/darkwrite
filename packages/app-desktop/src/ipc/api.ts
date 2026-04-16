@@ -11,10 +11,7 @@ import { ipcMain } from "electron";
 import log from "electron-log";
 import { BackupApiBridge } from "../api/backup.electron";
 import { DesktopIntegration } from "../lib/desktop-integration";
-import {
-  isNewUser,
-  markOnboardingCompleted,
-} from "../lib/onboarding-state";
+import { isNewUser, markOnboardingCompleted } from "../lib/onboarding-state";
 import { Updater } from "../lib/update";
 import { NoteApiBridge } from "../note/note.handler";
 import { ElectronSettingsAPI } from "./settings.handler";

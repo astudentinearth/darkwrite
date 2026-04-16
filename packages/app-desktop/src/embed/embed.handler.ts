@@ -39,7 +39,7 @@ export const ElectronEmbedAPI: DesktopEmbedAPI = {
     const embed = await embedService.getEmbedById(id);
     if (!embed) return { embed: null } satisfies EmbedResponseDTO;
     const url = await embedService.getEmbedUrl(id);
-    return { embed: embedToDto(embed,url) } satisfies EmbedResponseDTO;
+    return { embed: embedToDto(embed, url) } satisfies EmbedResponseDTO;
   },
 
   async getEncoded(ids: string[]) {

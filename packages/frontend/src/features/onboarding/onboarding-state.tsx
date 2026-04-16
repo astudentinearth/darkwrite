@@ -8,14 +8,14 @@ import OnboardingFinish from "./finish";
 import { DarkwriteAPIClient } from "@/api/api-client";
 import { ReactRootContainer } from "@/react-root-helper";
 import App from "@/App";
-import { correctWorkspaceState, initializeUserPrefs, InitialUserSettings } from "@/init";
+import {
+  correctWorkspaceState,
+  initializeUserPrefs,
+  InitialUserSettings,
+} from "@/init";
 import store from "@/store";
 
-export type OnboardingPage =
-  | "language"
-  | "workspace-name"
-  | "theme"
-  | "finish"
+export type OnboardingPage = "language" | "workspace-name" | "theme" | "finish";
 
 export interface IOnboardingState {
   currentPage: OnboardingPage;
@@ -42,7 +42,6 @@ export function getOnboardingPage(key: OnboardingPage) {
 
     case "finish":
       return <OnboardingFinish />;
-
   }
 }
 
@@ -107,4 +106,3 @@ export async function finishOnboarding() {
   correctWorkspaceState(store);
   ReactRootContainer.root.render(<App store={store} />);
 }
-

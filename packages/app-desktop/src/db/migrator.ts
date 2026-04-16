@@ -38,8 +38,8 @@ export class MigrationError extends ClientError {
 async function backupDatabase(): Promise<string | null> {
   log.info("Creating database backup...");
   const filename = Paths.inData(`snapshot-${Date.now()}.db`);
-  
-  if(!(await pathExists(DB_PATH))) return null;
+
+  if (!(await pathExists(DB_PATH))) return null;
 
   await copy(DB_PATH, filename, { overwrite: true });
   log.info(`Database backup created at ${filename}`);
@@ -54,7 +54,7 @@ export async function migrateDatabaseWithBackup(
   const backupPath = await backupDatabase();
   try {
     const migratedDb = await applySqlMigrations(db);
-    if(backupPath) await remove(backupPath);
+    if (backupPath) await remove(backupPath);
     return migratedDb;
   } catch (error) {
     log.error("Database migration failed:", error);

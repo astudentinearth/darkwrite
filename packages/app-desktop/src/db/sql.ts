@@ -1,6 +1,4 @@
-import {
-    sql
-} from "drizzle-orm";
+import { sql } from "drizzle-orm";
 
 /** Helper to deal with column names in onConflict handlers */
 export const excluded = (name: string) => sql`excluded.${sql.identifier(name)}`;

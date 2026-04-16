@@ -7,3 +7,6 @@ node_modules
 resources
 dist
 dist-electron
+
+# drizzle snapshots
+drizzle
