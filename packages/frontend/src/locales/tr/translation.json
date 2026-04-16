@@ -183,6 +183,7 @@
       "h2": "Başlık 2",
       "h3": "Başlık 3",
       "h4": "Başlık 4",
+      "clearHeading": "Başlığı kaldır",
       "removeLink": "Bağlantıyı kaldır",
       "saveLink": "Bağlantıyı kaydet",
       "bulletList": "Madde işaretli liste",

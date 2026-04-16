@@ -1,3 +1,18 @@
+# 1.2.0-beta.1
+
+## 💥 Breaking changes
+- This update includes database related changes. This is a safe operation, however creating a backup from the settings screen is advised just in case.
+- Code to migrate data from alpha versions has been removed. **If you are updating from an alpha, update to [1.1.0-beta.1](https://github.com/astudentinearth/darkwrite/releases/tag/v1.1.0-beta.1) first, go through the onboarding process, then update to this release. You will not be able to view your notes otherwise.** (They won't get deleted, but you will need help.)
+
+## 🌟 Features
+- Add bubble menu option to convert a heading to a plain paragraph
+
+## ✨ Improvements and fixes
+- Fix bubble menu not correctly reacting to the selected heading or list type
+
+## 🛠️ Technical changes
+- Drop TypeORM and better-sqlite3, switch to drizzle-orm and libsql
+
 # 1.1.0-beta.1
 
 ## 🌟 Features

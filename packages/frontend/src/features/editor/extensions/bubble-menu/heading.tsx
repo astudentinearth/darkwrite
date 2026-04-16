@@ -12,43 +12,65 @@ import {
   Heading2,
   Heading3,
   Heading4,
+  Pilcrow,
 } from "lucide-react";
-import { ReactNode, useState } from "react";
+import { ReactNode, useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import EditorUtil from "../../editor-util";
+import { HeadingLevel } from "../../types";
+
+const headingIcons: Record<HeadingLevel, ReactNode> = {
+  1: <Heading1 />,
+  2: <Heading2 />,
+  3: <Heading3 />,
+  4: <Heading4 />,
+};
 
 export function HeadingSelector() {
   const { editor } = useCurrentEditor();
   const { t } = useTranslation(undefined, { keyPrefix: "editor.bubble" });
-  const [open, setOpen] = useState(false);
-  const h1Active = editor?.isActive("heading", { level: 1 });
-  const h2Active = editor?.isActive("heading", { level: 2 });
-  const h3Active = editor?.isActive("heading", { level: 3 });
-  const h4Active = editor?.isActive("heading", { level: 4 });
-  let icon = <Heading1 />;
-  if (h1Active) icon = <Heading1 />;
-  else if (h2Active) icon = <Heading2 />;
-  else if (h3Active) icon = <Heading3 />;
-  else if (h4Active) icon = <Heading4 />;
 
-  const item = (icon: ReactNode, text: string, callback: () => void) => {
-    return (
-      <Button
-        variant={"ghost"}
-        className="px-1 pr-2 py-0"
-        onClick={() => {
-          setOpen(false);
-          callback();
-        }}
-      >
-        <div className="flex gap-2 items-center">
-          <div className="p-1 border-border border bg-secondary/25 rounded-md">
-            {icon}
+  const [open, setOpen] = useState(false);
+  const [activeHeading, setActiveHeading] = useState<HeadingLevel | null>(null);
+
+  const updateActiveHeading = useCallback(() => {
+    if (!editor) return;
+    setActiveHeading(EditorUtil(editor).getActiveHeading());
+  }, [editor]);
+
+  useEffect(() => {
+    if (!editor) return;
+    editor.on("selectionUpdate", updateActiveHeading);
+    editor.on("update", updateActiveHeading);
+    return () => {
+      editor.off("selectionUpdate", updateActiveHeading);
+      editor.off("update", updateActiveHeading);
+    };
+  }, [editor, updateActiveHeading]);
+
+  const icon = activeHeading ? headingIcons[activeHeading] : <Heading1 />;
+  const item = useCallback(
+    (icon: ReactNode, text: string, callback: () => void) => {
+      return (
+        <Button
+          variant={"ghost"}
+          className="px-1 pr-2 py-0 justify-start"
+          onClick={() => {
+            setOpen(false);
+            callback();
+          }}
+        >
+          <div className="flex gap-2 items-center">
+            <div className="p-1 border-border border bg-secondary/25 rounded-md">
+              {icon}
+            </div>
+            <span>{text}</span>
           </div>
-          <span>{text}</span>
-        </div>
-      </Button>
-    );
-  };
+        </Button>
+      );
+    },
+    [],
+  );
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -76,6 +98,9 @@ export function HeadingSelector() {
         })}
         {item(<Heading4 />, t("h4"), () => {
           editor?.chain().toggleHeading({ level: 4 }).run();
+        })}
+        {item(<Pilcrow />, t("clearHeading"), () => {
+          editor?.chain().focus().setParagraph().run();
         })}
       </PopoverContent>
     </Popover>

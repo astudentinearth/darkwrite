@@ -2,6 +2,7 @@ import { Editor } from "@tiptap/core";
 import { UtilityNodes } from "./node-types";
 import { useCurrentEditor } from "@tiptap/react";
 import { MarkdownConverter } from "@darkwrite/common";
+import { HeadingLevel, ListType } from "./types";
 
 export default function EditorUtil(editor: Editor) {
   return {
@@ -13,15 +14,19 @@ export default function EditorUtil(editor: Editor) {
       return editor.getHTML();
     },
 
-    getActiveHeading() {
+    getActiveHeading(): HeadingLevel | null {
       for (let i = 1; i < 5; i++) {
-        if (editor.isActive("heading", { level: i })) return i;
+        if (editor.isActive("heading", { level: i })) return i as HeadingLevel;
       }
       return null;
     },
 
-    getActiveList() {
-      const lists = ["bulletList", "toDoList", "numberedList"];
+    getActiveList(): ListType | null {
+      const lists: ListType[] = [
+        ListType.Bullet,
+        ListType.Ordered,
+        ListType.Task,
+      ];
       for (const list of lists) if (editor.isActive(list)) return list;
       return null;
     },

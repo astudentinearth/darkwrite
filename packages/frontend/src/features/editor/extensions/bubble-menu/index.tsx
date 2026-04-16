@@ -44,12 +44,12 @@ export default function Bubble() {
               bg-view-2/80 backdrop-blur-lg shadow-xl p-1 slide-in-from-top-1 transition-[opacity,transform,translate,scale,rotate]"
       >
         <FormattingButtons />
-        <div className="w-[1px] bg-border"></div>
+        <div className="w-px bg-border"></div>
         <BubbleLink />
-        <div className="w-[1px] bg-border"></div>
+        <div className="w-px bg-border"></div>
         <HeadingSelector />
         <ListSelector />
-        <div className="w-[1px] bg-border"></div>
+        <div className="w-px bg-border"></div>
         <TextColorSelector />
         <HighlightColorSelector />
       </div>

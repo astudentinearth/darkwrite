@@ -10,4 +10,12 @@ export interface SlashCommandItem {
   command: (args: { editor: Editor; range: Range }) => void;
 }
 
+export enum ListType {
+  Bullet = "bulletList",
+  Ordered = "orderedList",
+  Task = "taskList",
+}
+
+export type HeadingLevel = 1 | 2 | 3 | 4;
+
 export type { Editor, Range };
