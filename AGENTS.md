@@ -109,6 +109,10 @@ pnpm test:run src/lib/some.test.ts
 - Frontend: `@/` maps to `src/`
 - Always check if reusable components exist in `src/components` before creating new ones
 
+### SQLite migrations in the main process
+- When reviewing migration SQL, always explicitly check for column names when a table copy is applicable.
+- Always make sure the SQL statements have `--> statement-breakpoint` comments between individual statements. **Without these comments, only the first statement will actually be applied.**
+
 ### Error Handling
 - Never silently swallow errors
 - Use proper error boundaries in React components

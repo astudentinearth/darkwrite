@@ -10,7 +10,7 @@ import { tmpdir } from "os";
 const dbPath = DB_PATH;
 
 const getDatabaseUrl = () =>
-  process.env["NODE_ENV"] === "test" ? ":memory:" : dbPath;
+  process.env["NODE_ENV"] === "test" ? ":memory:" : `file://${dbPath}`;
 
 export function createDatabase(url: string = getDatabaseUrl()) {
   return drizzle({
