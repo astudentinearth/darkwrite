@@ -1,3 +1,5 @@
+import { IPCHandler } from "@/types";
+import { InvalidBackupError } from "@darkwrite/common";
 import { app, dialog } from "electron";
 import log from "electron-log";
 import extract from "extract-zip";
@@ -5,8 +7,9 @@ import fse from "fs-extra";
 import { join } from "node:path";
 import os from "os";
 import { zip } from "zip-a-folder";
-import { AppDataSource as DB } from "../db";
+import { db as DB } from "../db";
 import { rmIfExists } from "../lib/fs";
+import { logError } from "../lib/log";
 import {
   BACKUP_CACHE_DIR,
   DATA_DIR,
@@ -15,8 +18,6 @@ import {
   RESTORE_CACHE_DIR,
 } from "../lib/paths";
 import { openFile, saveFile } from "./dialog";
-import { logError } from "../lib/log";
-import { InvalidBackupError } from "@darkwrite/common";
 
 /**
  * APIs to perform a complete workspace export.
@@ -87,7 +88,7 @@ export const BackupAPI = {
   },
   async restore(archivePath: string) {
     let didRename = false;
-    await DB.destroy();
+    DB.$client.close();
     try {
       await rmIfExists(RESTORE_CACHE_DIR);
       await extract(archivePath, { dir: RESTORE_CACHE_DIR });
@@ -127,7 +128,7 @@ export const BackupAPI = {
           overwrite: true,
         });
       }
-      await DB.initialize();
+      DB.$client.reconnect();
       dialog.showMessageBoxSync({
         type: "error",
         message:
@@ -145,4 +146,13 @@ export const BackupAPI = {
     if (result.canceled) return null;
     else return result.filePaths[0];
   },
+};
+
+export const BackupApiBridge = {
+  initCache: new IPCHandler(false, HTMLExporterAPI.initializeExporterCache),
+  pushFile: new IPCHandler(false, HTMLExporterAPI.pushToExporterCache),
+  finishExport: new IPCHandler(false, HTMLExporterAPI.finishExport),
+  chooseArchive: new IPCHandler(false, BackupAPI.openArchive),
+  performBackup: new IPCHandler(false, BackupAPI.backup),
+  restoreBackup: new IPCHandler(false, BackupAPI.restore),
 };

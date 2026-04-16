@@ -30,14 +30,13 @@ const preloadConfig: InlineConfig = {
   },
 };
 
-
 export default defineConfig({
   plugins: [
     {
       name: "build-preload",
       async buildStart() {
-        await build(preloadConfig)
-      }
+        await build(preloadConfig);
+      },
     },
     electron([
       {
@@ -47,7 +46,12 @@ export default defineConfig({
           build: {
             outDir: path.resolve(DISTDIR),
             rollupOptions: {
-              external: ["typeorm"],
+              external: [
+                "typeorm",
+                "better-sqlite3",
+                "@libsql/client",
+                /^@libsql\/.*/,
+              ],
             },
             license: {
               fileName: "thirdparty.main.md",
@@ -55,7 +59,6 @@ export default defineConfig({
           },
         },
       },
-      
     ]),
   ],
   build: {

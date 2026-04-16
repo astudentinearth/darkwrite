@@ -3,10 +3,6 @@ import semver from "semver";
 import log from "electron-log";
 import { UpdateServerResponse } from "@darkwrite/common";
 
-interface UpdateStatus extends UpdateServerResponse {
-  updateAvailable: boolean;
-}
-
 async function checkUpdateFromGithub() {
   // return {
   //   name: "v0.6.0-alpha.1",
@@ -38,18 +34,16 @@ async function checkUpdateFromGithub() {
   };
 }
 
-async function checkUpdate(
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  url: string = "http://localhost:3000/api/latest-release",
-) {
+async function checkUpdate() {
+   
+  //url: string = "http://localhost:3000/api/latest-release",
   // const res = await (await fetch(url)).json();
   const res = await checkUpdateFromGithub();
   if (!res || !("latest" in res || "release_page" in res)) return undefined;
-  const info = <UpdateServerResponse>res;
   return {
-    ...info,
-    updateAvailable: semver.gt(info.latest, app.getVersion()),
-  } satisfies UpdateStatus;
+    ...res,
+    updateAvailable: semver.gt(res.latest, app.getVersion()),
+  } satisfies UpdateServerResponse;
 }
 
 export const Updater = {

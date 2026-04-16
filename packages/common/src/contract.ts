@@ -2,7 +2,7 @@
 // Electron-side handlers should implement these directly and expose it via the API bridge.
 // Clients talking to a cloud instance shall make the appropriate network requests instead.
 // Cloud-specific code should be kept separate from Electron to ensure browser portability.
-import { DarkwriteDesktopClientInfo } from "./client";
+import { DarkwriteDesktopClientInfo, UpdateServerResponse } from "./client";
 import {
   CreateNoteDTO,
   MoveNoteDTO,
@@ -17,7 +17,7 @@ import {
   CreateWorkspaceDTO,
   UpdateWorkspaceDTO,
 } from "./dto/request/workspace.request";
-import { EmbedResponseDTO } from "./dto/response/embed.response";
+import { EmbedDTO, EmbedResponseDTO } from "./dto/response/embed.response";
 import { ThemesResponseDTO } from "./dto/response/theme.response";
 import {
   WorkspaceResponseDTO,
@@ -148,3 +148,48 @@ export interface IDesktopAPI {
   getSystemAccentColor: () => Promise<string>;
   getClientInfo: () => Promise<DarkwriteDesktopClientInfo>;
 }
+
+export interface IBackupAPI {
+  performBackup: () => Promise<void>;
+  pushFile: (filename: string, content: string) => Promise<void>;
+  finishExport: () => Promise<void>;
+  chooseArchive: () => Promise<string | null>;
+  restoreBackup: (archivePath: string) => Promise<void>;
+  initCache: () => Promise<void>;
+}
+
+export type CheckUpdateFn = () => Promise<UpdateServerResponse | undefined>;
+
+export interface IOnboardingAPI {
+  isNewUser: () => Promise<boolean>;
+  markFinished: () => Promise<void>;
+}
+
+/** Desktop specific bridge. This is decorated with IEmbedAPI on the frontend */
+export interface DesktopEmbedAPI {
+  createFromLocalFile: (
+    filePath: string,
+    workspaceId: string,
+  ) => Promise<{ embed: EmbedDTO }>;
+  createFromArrayBuffer: (
+    buffer: ArrayBuffer,
+    filetype: string,
+    workspaceId: string,
+  ) => Promise<{ embed: EmbedDTO }>;
+  getById: (id: string) => Promise<EmbedResponseDTO>;
+  getEncoded: (ids: string[]) => Promise<Record<string, string>>;
+  download: (id: string) => Promise<void>;
+}
+
+export type DarkwriteIPCBridge = {
+  note: INoteAPI;
+  workspace: IWorkspaceAPI;
+  embed: DesktopEmbedAPI;
+  settings: ISettingsAPI;
+  theme: IThemeAPI;
+  desktop: IDesktopAPI;
+  backup: IBackupAPI;
+  onboarding: IOnboardingAPI;
+  checkUpdate: CheckUpdateFn;
+  showAppMenu: () => Promise<void>;
+};

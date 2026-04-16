@@ -10,9 +10,9 @@ export default function WorkspaceIcon(props: {
   return (
     <>
       {" "}
-      {workspace.icon_url ? (
+      {workspace.iconUrl ? (
         <img
-          src={workspace.icon_url}
+          src={workspace.iconUrl}
           className={cn("object-contain rounded-md", className)}
         />
       ) : (

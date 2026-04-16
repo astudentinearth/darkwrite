@@ -38,3 +38,4 @@ export * from "./themes/index";
 export * from "./themes/darkwrite-default";
 export * from "./event/bus";
 export * from "./field";
+export * from "./webutils";

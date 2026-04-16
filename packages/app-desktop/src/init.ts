@@ -1,30 +1,33 @@
 import { SettingsModel } from "@darkwrite/common";
 import { is } from "@electron-toolkit/utils";
-import { app, BrowserWindow, protocol, shell } from "electron";
+import { app, BrowserWindow, dialog, protocol, shell } from "electron";
 import log from "electron-log/main.js";
 import path, { join } from "path";
 import { fileURLToPath } from "url";
-import { AppDataSource } from "./db";
 import { initDevtools } from "./debug/server";
 import { InitializeElectronAPI } from "./ipc/api";
 import { embedProtocolHandler } from "./ipc/embed-protocol-handler";
-import { isAlphaMigrationPerformed, isNewUser } from "./lib/onboarding-state";
+import {
+    CURRENT_VERSION,
+    isNewUser,
+    markVersionMigrated,
+} from "./lib/onboarding-state";
 import { Paths } from "./lib/paths";
 import { initAppMenu } from "./menu";
 import { webcontentsUrl } from "./metadata.json";
 import { ElectronPrefsModel } from "./prefs";
-import { HealthService } from "./service/health.service";
-import { WorkspaceService } from "./workspace/workspace.service";
 import {
-  constructWindow,
-  setupWindowEvents as setupBrowserWindowEvents,
+    constructWindow,
+    setupWindowEvents as setupBrowserWindowEvents,
 } from "./window";
+import { WorkspaceService } from "./workspace/workspace.service";
 
-import installExtension, {
-  REACT_DEVELOPER_TOOLS,
-  REDUX_DEVTOOLS,
-} from "electron-devtools-installer";
 import { setupCsp } from "./csp";
+import {
+    db,
+    migrateDatabaseWithBackup,
+    MigrationError
+} from "./db";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -82,21 +85,28 @@ function setupWindowEvents() {
 }
 
 export async function init() {
-  if (is.dev) {
-    await installExtension([REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS]);
-    await installExtension([REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS]);
-  }
   await Paths.initialize();
-  const migrationsPerformed = await isAlphaMigrationPerformed();
-  if (!migrationsPerformed && !(await isNewUser())) {
+  try {
+    await migrateDatabaseWithBackup(db);
+    await markVersionMigrated(CURRENT_VERSION);
+  } catch (error) {
+    if (error instanceof MigrationError) {
+      log.error("Migration failed with error:", error.error);
+      log.error(`Migration log can be found at ${error.logFilePath}`);
+      dialog.showErrorBox(
+        "Database Migration Failed",
+        `An error occurred while migrating the database. A backup of your data was created at ${error.snapshotPath}. Please check the migration log at ${error.logFilePath} for details. Create an issue at https://github.com/astudentinearth/darkwrite to help us resolve this issue.`,
+      );
+    }
+    app.quit();
+    return;
+  }
+  await new WorkspaceService().initializeDefaultWorkspace();
+  if (await isNewUser()) {
     // settings will be persisted after the onboarding
     ElectronPrefsModel.override(SettingsModel.getDefaults());
   } else {
     await ElectronPrefsModel.initialize();
-    await AppDataSource.initialize();
-    await new WorkspaceService().initializeDefaultWorkspace();
-    const healthService = new HealthService();
-    await healthService.fixCollidingOrderKeys();
   }
   log.initialize();
   log.transports.file.level = is.dev ? "debug" : "info";

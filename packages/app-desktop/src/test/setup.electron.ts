@@ -1,7 +1,12 @@
-import { rmSync } from "fs";
+import { mkdirSync, readdirSync, unlinkSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 
-vi.mock("node:fs");
-vi.mock("node:fs/promises");
+// Clean up any test databases after tests run
+const tmp = tmpdir();
+readdirSync(tmp)
+  .filter((f) => f.startsWith(".dwtest-"))
+  .forEach((f) => unlinkSync(join(tmp, f)));
 
 vi.mock("@electron-toolkit/utils", () => ({
   is: {
@@ -12,9 +17,9 @@ vi.mock("@electron-toolkit/utils", () => ({
 vi.mock("electron", () => ({
   app: {
     getPath: (pathType: string) => {
-      return `/${pathType}/`;
+      const p = join(tmpdir(), `darkwrite-test-${pathType}`);
+      mkdirSync(p, { recursive: true });
+      return p;
     },
   },
 }));
-
-rmSync("_test.db");

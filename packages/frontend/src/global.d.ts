@@ -2,9 +2,7 @@
 /// <reference types="vitest/globals" />
 /// <reference types="./electron/preload/types.d.ts"/>
 
-import { type WebUtils } from "electron";
-import type { DarkwriteElectronAPI as NewAPI } from "./electron/ipc/api";
-import { type InferPreloadAPI } from "./electron/types/ipc-handler";
+import { DarkwriteIPCBridge, ElectronWebUtils } from "@darkwrite/common";
 
 /**
  * Type definition for WindowControlsOverlay API
@@ -28,12 +26,12 @@ declare global {
      * Interface with the Electron main process.
      * @platform electron
      */
-    api: APIType;
+    api: DarkwriteIPCBridge;
     /**
      * Utility to get full paths of File objects in Electron windows.
      * @platform electron
      */
-    webUtils: WebUtils;
+    webUtils: ElectronWebUtils;
     initPreload: PreloadInitFunction;
     /**
      * This field will exist and be set to `true` if the application

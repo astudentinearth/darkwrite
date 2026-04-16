@@ -1,24 +1,17 @@
 import { getDefaultWorkspaceConfiguration } from "@darkwrite/common";
-import { AppDataSource } from "../db";
-import { Workspace } from "../entity";
+import { createTestDatabase, DatabaseType, applySqlMigrations } from "../db";
 import { WorkspaceService } from "./workspace.service";
-import { WorkspaceDAO } from "./workspace.dao";
+import { workspace } from "@/db/schema";
 
-const workspaceService = new WorkspaceService();
-
-const MockDAO = {
-  ...WorkspaceDAO,
-  async findAll() {
-    return [];
-  },
-
-  async save() {
-    return new Workspace();
-  },
-};
+let _db: DatabaseType = createTestDatabase();
+const workspaceService = new WorkspaceService(_db);
 
 beforeAll(async () => {
-  if (!AppDataSource.isInitialized) await AppDataSource.initialize();
+  await applySqlMigrations(_db);
+});
+
+beforeEach(async () => {
+  await _db.delete(workspace);
 });
 
 it("should create a workspace", async () => {
@@ -39,12 +32,12 @@ it("should get workspaces", async () => {
     config: getDefaultWorkspaceConfiguration(),
   });
   const result = await workspaceService.getWorkspaces();
-  expect(result.map((w) => w.name).includes(w1.name));
-  expect(result.map((w) => w.name).includes(w2.name));
+  expect(result.map((w) => w.name).includes(w1.name)).toBe(true);
+  expect(result.map((w) => w.name).includes(w2.name)).toBe(true);
 });
 
 it("should initialize default workspace", async () => {
-  const mockedService = new WorkspaceService(MockDAO);
+  const mockedService = new WorkspaceService(_db);
   const result = await mockedService.initializeDefaultWorkspace();
-  expect(result).toBeInstanceOf(Workspace);
+  expect(result).toBeTruthy();
 });

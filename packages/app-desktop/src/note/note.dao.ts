@@ -1,156 +1,169 @@
+import { NewNote, Note, note as notesTable, PatchNote } from "@/db/schema";
 import {
   isDescendantAsync,
+  isNotUndefined,
   NotFoundError,
   ParentId,
   Rank,
 } from "@darkwrite/common";
-import { EntityManager, IsNull, Like, Repository } from "typeorm";
-import { AppDataSource } from "../db";
-import { Note } from "../entity";
+import { and, asc, desc, eq, isNull, like, ne, or } from "drizzle-orm";
+import { DatabaseType, db, Transaction } from "../db";
+import { noteToDto } from "./note-mapper";
+
+const withParent = (parentId: ParentId) =>
+  parentId === null
+    ? isNull(notesTable.parentId)
+    : eq(notesTable.parentId, parentId);
+
+const notTrashed = () =>
+  or(isNull(notesTable.isTrashed), ne(notesTable.isTrashed, true));
+const isTrashed = () => eq(notesTable.isTrashed, true);
+const isFavorite = () => eq(notesTable.isFavorite, true);
+const inWorkspace = (workspaceId: string) =>
+  eq(notesTable.workspaceId, workspaceId);
+const inDatabase = (databaseId: string) =>
+  eq(notesTable.databaseId, databaseId);
 
 export class NoteDAO {
-  constructor(
-    private repo: Repository<Note> = AppDataSource.getRepository(Note),
-  ) {}
+  constructor(private tx: Transaction | DatabaseType = db) {}
 
-  async save(note: Note) {
-    return this.repo.save(note);
+  static transactional(tx: Transaction) {
+    return new NoteDAO(tx);
   }
 
-  static transactional(manager: EntityManager) {
-    return new NoteDAO(manager.getRepository(Note));
+  transactional(tx: Transaction) {
+    return NoteDAO.transactional(tx);
   }
 
-  async saveAll(notes: Note[]) {
-    return this.repo.save(notes);
+  async create(note: NewNote) {
+    return (await this.tx.insert(notesTable).values(note).returning())[0];
+  }
+
+  async update(note: PatchNote) {
+    return (
+      await this.tx
+        .update(notesTable)
+        .set(note)
+        .where(eq(notesTable.id, note.id))
+        .returning()
+    ).at(0);
+  }
+
+  async updateAll(notes: PatchNote[]): Promise<Note[]> {
+    return (await Promise.all(notes.map((n) => this.update(n)))).filter(
+      isNotUndefined,
+    );
   }
 
   async findById(id: string) {
-    return this.repo.findOne({ where: { id } });
+    return (
+      await this.tx
+        .select()
+        .from(notesTable)
+        .where(eq(notesTable.id, id))
+        .limit(1)
+    ).at(0);
   }
 
   async findByIdOrThrow(id: string) {
-    const note = await this.repo.findOne({ where: { id } });
-    if (!note) throw new NotFoundError("Note", id);
-    return note;
+    const result = await this.findById(id);
+    if (!result) throw new NotFoundError("Note", id);
+    return result;
   }
 
   async findAll() {
-    return this.repo.find();
+    return this.tx.select().from(notesTable);
   }
 
   async findAllByWorkspaceId(workspaceId: string) {
-    return this.repo.findBy({ workspace: { id: workspaceId } });
+    return this.tx.select().from(notesTable).where(inWorkspace(workspaceId));
   }
 
   async findAllByDatabaseId(databaseId: string) {
-    return this.repo.findBy({ database: { id: databaseId } });
+    return this.tx.select().from(notesTable).where(inDatabase(databaseId));
   }
 
   async findAllByParentId(workspaceId: string, parentId: string | null) {
-    return this.repo.findBy({
-      workspace: { id: workspaceId },
-      parentId: parentId === null ? IsNull() : parentId,
-    });
+    return this.tx
+      .select()
+      .from(notesTable)
+      .where(and(inWorkspace(workspaceId), withParent(parentId)));
   }
 
   async findAllByParentIdSortAsc(workspaceId: string, parentId: ParentId) {
-    return this.repo.find({
-      where: {
-        workspace: { id: workspaceId },
-        parentId: parentId === null ? IsNull() : parentId,
-      },
-      order: {
-        orderHint: "ASC",
-      },
-    });
+    return this.tx
+      .select()
+      .from(notesTable)
+      .where(and(inWorkspace(workspaceId), withParent(parentId)))
+      .orderBy(asc(notesTable.orderHint));
   }
 
   async deleteById(id: string) {
-    return this.repo.delete({ id });
+    return this.tx.delete(notesTable).where(eq(notesTable.id, id));
   }
 
   async delete(note: Note) {
-    return this.repo.delete({ id: note.id });
+    return this.tx.delete(notesTable).where(eq(notesTable.id, note.id));
   }
 
   async exists(id: string) {
-    return await this.repo.exists({ where: { id } });
-  }
-
-  async findLastNoteInOrder(workspaceId: string) {
-    const result = await this.repo.findOne({
-      order: {
-        orderHint: "DESC",
-      },
-      where: { workspace: { id: workspaceId }, isTrashed: false },
-    });
-    return result;
+    return (
+      (
+        await this.tx
+          .select()
+          .from(notesTable)
+          .where(eq(notesTable.id, id))
+          .limit(1)
+      ).length > 0
+    );
   }
 
   async findFirstNoteInLayer(workspaceId: string, parentId: ParentId) {
-    const result = await this.repo.findOne({
-      order: {
-        orderHint: "ASC",
-      },
-      where: {
-        workspace: { id: workspaceId },
-        parentId: parentId === null ? IsNull() : parentId,
-        isTrashed: false,
-      },
-    });
-    return result;
+    const query = this.tx
+      .select()
+      .from(notesTable)
+      .where(and(inWorkspace(workspaceId), withParent(parentId), notTrashed()))
+      .orderBy(asc(notesTable.orderHint));
+    const result = await query;
+    return result.at(0);
   }
 
   async findLastNoteInLayer(workspaceId: string, parentId: ParentId) {
-    const result = await this.repo.findOne({
-      order: {
-        orderHint: "DESC",
-      },
-      where: {
-        workspace: { id: workspaceId },
-        parentId: parentId === null ? IsNull() : parentId,
-        isTrashed: false,
-      },
-    });
-    return result;
+    const query = this.tx
+      .select()
+      .from(notesTable)
+      .where(and(inWorkspace(workspaceId), withParent(parentId), notTrashed()))
+      .orderBy(desc(notesTable.orderHint))
+      .limit(1);
+
+    return (await query).at(0);
   }
 
   async findAllFavorites(workspaceId: string) {
-    return this.repo.find({
-      where: {
-        workspace: { id: workspaceId },
-        isFavorite: true,
-        isTrashed: false,
-      },
-      order: {
-        favoriteOrderHint: "ASC",
-      },
-    });
+    return this.tx
+      .select()
+      .from(notesTable)
+      .where(and(inWorkspace(workspaceId), notTrashed(), isFavorite()))
+      .orderBy(asc(notesTable.favoriteOrderHint));
   }
 
   async findAllTrashed(workspaceId: string) {
-    return this.repo.find({
-      where: {
-        workspace: { id: workspaceId },
-        isTrashed: true,
-      },
-      order: {
-        trashedAt: "ASC",
-      },
-    });
+    return this.tx
+      .select()
+      .from(notesTable)
+      .where(and(inWorkspace(workspaceId), isTrashed()))
+      .orderBy(asc(notesTable.trashedAt));
   }
 
   async findLastNoteInFavorites(workspaceId: string) {
-    const result = await this.repo.findOne({
-      order: { favoriteOrderHint: "DESC" },
-      where: {
-        workspace: { id: workspaceId },
-        isFavorite: true,
-        isTrashed: false,
-      },
-    });
-    return result;
+    const query = this.tx
+      .select()
+      .from(notesTable)
+      .where(and(inWorkspace(workspaceId), isFavorite(), notTrashed()))
+      .orderBy(desc(notesTable.favoriteOrderHint))
+      .limit(1);
+
+    return (await query).at(0);
   }
 
   /**
@@ -165,11 +178,11 @@ export class NoteDAO {
   ): Promise<boolean | "CIRCULAR"> {
     if (potentialParentId == null) return false;
     if (potentialChildId == null) return false;
-    return await isDescendantAsync(
-      potentialChildId,
-      potentialParentId,
-      async (id: string) => (await this.findById(id))?.mapToDTO(),
-    );
+    const getter = async (id: string) => {
+      const result = await this.findById(id);
+      return result ? noteToDto(result) : null;
+    };
+    return await isDescendantAsync(potentialChildId, potentialParentId, getter);
   }
 
   async computeOrderKeysForLayer(workspaceId: string, parentId: ParentId) {
@@ -203,26 +216,25 @@ export class NoteDAO {
   }
 
   async searchByTitle(workspaceId: string, query: string) {
-    return this.repo.find({
-      where: {
-        title: Like(`%${query}%`),
-        workspace: { id: workspaceId },
-        isTrashed: false,
-      },
-    });
+    return this.tx
+      .select()
+      .from(notesTable)
+      .where(
+        and(
+          like(notesTable.title, `%${query}%`),
+          inWorkspace(workspaceId),
+          notTrashed(),
+        ),
+      );
   }
 
   async getRecentlyModifiedNotes(workspaceId: string, limit: number) {
-    return this.repo.find({
-      where: {
-        workspace: { id: workspaceId },
-        isTrashed: false,
-      },
-      order: {
-        modifiedAt: "DESC",
-      },
-      take: limit,
-    });
+    return this.tx
+      .select()
+      .from(notesTable)
+      .where(and(inWorkspace(workspaceId), notTrashed()))
+      .orderBy(desc(notesTable.modifiedAt))
+      .limit(limit);
   }
 
   async resolveParentTree(noteId: string): Promise<Note[]> {
