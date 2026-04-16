@@ -145,7 +145,6 @@ describe("note service tests", () => {
       // Assert
       const updatedSource = await noteDAO.findByIdOrThrow(source.id);
       expect(updatedSource.parentId).toBe(parent.id);
-      console.log(updatedSource.orderHint, child1.orderHint);
       expect(updatedSource.orderHint > child1.orderHint).toBe(true);
     });
 

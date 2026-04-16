@@ -44,6 +44,7 @@ export class WorkspaceService {
   }
 
   async update(id: string, dto: UpdateWorkspaceDTO) {
-    return await this.workspaceDAO.update({ id, ...dto });
+    const { name, icon_url, config } = dto;
+    return await this.workspaceDAO.update({ id, name, iconUrl: icon_url, config });
   }
 }

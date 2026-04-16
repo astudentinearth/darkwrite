@@ -3,7 +3,7 @@ import { ClientError } from "@darkwrite/common";
 import { is } from "@electron-toolkit/utils";
 import { migrate } from "drizzle-orm/libsql/migrator";
 import { default as _log } from "electron-log";
-import { copy, remove } from "fs-extra";
+import { copy, exists, remove } from "fs-extra";
 import { DatabaseType } from "./data-source";
 
 const log = _log.create({ logId: "migrations" });
@@ -25,7 +25,7 @@ export class MigrationError extends ClientError {
   constructor(
     public error: unknown,
     public logFilePath: string,
-    public snapshotPath: string,
+    public snapshotPath: string | null,
   ) {
     super(
       String(error),
@@ -35,9 +35,12 @@ export class MigrationError extends ClientError {
 }
 
 /** Create a shadow copy of the database at the given path. The copy will be used to restore the database in case of corruption. */
-async function backupDatabase(): Promise<string> {
+async function backupDatabase(): Promise<string | null> {
   log.info("Creating database backup...");
   const filename = Paths.inData(`snapshot-${Date.now()}.db`);
+  
+  if(!(await exists(DB_PATH))) return null;
+
   await copy(DB_PATH, filename, { overwrite: true });
   log.info(`Database backup created at ${filename}`);
   return filename;
@@ -51,7 +54,7 @@ export async function migrateDatabaseWithBackup(
   const backupPath = await backupDatabase();
   try {
     const migratedDb = await applySqlMigrations(db);
-    await remove(backupPath);
+    if(backupPath) await remove(backupPath);
     return migratedDb;
   } catch (error) {
     log.error("Database migration failed:", error);

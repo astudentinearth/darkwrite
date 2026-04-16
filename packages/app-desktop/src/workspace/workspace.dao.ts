@@ -70,6 +70,6 @@ export class WorkspaceDAO {
   }
 
   async delete(value: Workspace) {
-    this.deleteById(value.id);
+    await this.deleteById(value.id);
   }
 }

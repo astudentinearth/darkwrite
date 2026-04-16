@@ -8,9 +8,9 @@ import { initDevtools } from "./debug/server";
 import { InitializeElectronAPI } from "./ipc/api";
 import { embedProtocolHandler } from "./ipc/embed-protocol-handler";
 import {
-  isNewUser,
-  markVersionMigrated,
-  CURRENT_VERSION,
+    CURRENT_VERSION,
+    isNewUser,
+    markVersionMigrated,
 } from "./lib/onboarding-state";
 import { Paths } from "./lib/paths";
 import { initAppMenu } from "./menu";
@@ -22,10 +22,6 @@ import {
 } from "./window";
 import { WorkspaceService } from "./workspace/workspace.service";
 
-import installExtension, {
-    REACT_DEVELOPER_TOOLS,
-    REDUX_DEVTOOLS,
-} from "electron-devtools-installer";
 import { setupCsp } from "./csp";
 import {
     db,
@@ -89,10 +85,6 @@ function setupWindowEvents() {
 }
 
 export async function init() {
-  if (is.dev) {
-    await installExtension([REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS]);
-    await installExtension([REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS]);
-  }
   await Paths.initialize();
   try {
     await migrateDatabaseWithBackup(db);
@@ -107,6 +99,7 @@ export async function init() {
       );
     }
     app.quit();
+    return;
   }
   await new WorkspaceService().initializeDefaultWorkspace();
   if (await isNewUser()) {

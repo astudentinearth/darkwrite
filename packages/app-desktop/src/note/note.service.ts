@@ -278,7 +278,7 @@ export class NoteService {
   }
 
   async deleteById(id: string) {
-    this.db.transaction(async (tx) => {
+    return await this.db.transaction(async (tx) => {
       await this.noteDAO.transactional(tx).deleteById(id);
       try {
         await this.documentService.deleteNoteContent(id);

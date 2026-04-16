@@ -107,8 +107,8 @@ export const ElectronNoteAPI: INoteAPI = {
   },
 
   async setDocument(id, serializedDocument) {
-    documentService.setNoteContent(id, serializedDocument);
-    noteService.setModificationDate(id, new Date());
+    await documentService.setNoteContent(id, serializedDocument);
+    await noteService.setModificationDate(id, new Date());
   },
 
   async duplicate(id: string) {

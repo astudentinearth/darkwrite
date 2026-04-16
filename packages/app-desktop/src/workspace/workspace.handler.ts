@@ -1,4 +1,4 @@
-import { IWorkspaceAPI } from "@darkwrite/common";
+import { IWorkspaceAPI, NotFoundError } from "@darkwrite/common";
 import {
   UpdateWorkspaceDTO,
   UpdateWorkspaceDTOSchema,
@@ -24,7 +24,7 @@ export const ElectronWorkspaceAPI: IWorkspaceAPI = {
   async update(id: string, dto: UpdateWorkspaceDTO) {
     const sanitizedDto = UpdateWorkspaceDTOSchema.parse(dto);
     const workspace = await service.update(id, sanitizedDto);
-    if(!workspace) throw new Error("Failed to retrieve updated workspace");
+    if(!workspace) throw new NotFoundError("Workspace", id);
     return { workspace: workspaceToDto(workspace) };
   },
 };
