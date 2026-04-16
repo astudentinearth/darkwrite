@@ -13,8 +13,8 @@ catalog:
   tailwindcss: ^4.1.14
   tsx: ^4.21.0
   typescript: ^5.9.3
-  vite: ^7.1.9
-  vitest: ^3.2.4
+  vite: ^8.0
+  vitest: ^4
 
 onlyBuiltDependencies:
   - '@swc/core'
@@ -61,8 +61,4 @@ overrides:
   tar@<=7.5.2: '>=7.5.3'
   tar@<=7.5.3: '>=7.5.4'
   tar@<=7.5.9: '>=7.5.10'
-  vite@<=6.4.1: '>=6.4.2'
-  vite@>=6.0.0 <=6.4.1: '>=6.4.2'
-  vite@>=7.0.0 <=7.3.1: '>=7.3.2'
-  vite@>=7.1.0 <=7.3.1: '>=7.3.2'
   yaml@>=2.0.0 <2.8.3: '>=2.8.3'

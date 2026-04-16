@@ -14,11 +14,8 @@ const electronConfig: TestProjectConfiguration = {
     setupFiles: ["src/test/setup.electron.ts"],
     globals: true,
     pool: "forks",
-    poolOptions: {
-      forks: {
-        singleFork: true,
-      },
-    },
+    maxWorkers: 1,
+    isolate: false,
   },
   resolve: {
     alias: appAliases,
@@ -27,7 +24,7 @@ const electronConfig: TestProjectConfiguration = {
 
 export default defineConfig({
   test: {
-    workspace: [electronConfig],
+    projects: [electronConfig],
     env: {
       NODE_ENV: "test",
     },

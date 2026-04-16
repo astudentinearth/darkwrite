@@ -2,14 +2,14 @@ import path from "node:path";
 import { defineConfig } from "vite";
 import dts from "vite-plugin-dts";
 
-const resolve = {
+export const resolveAliases = {
   alias: {
     "@": path.resolve("src/"),
   },
 };
 
 export default defineConfig({
-  resolve,
+  resolve: resolveAliases,
   build: {
     lib: {
       entry: [path.resolve("src/index.ts")],
@@ -23,7 +23,4 @@ export default defineConfig({
     outDir: path.resolve("dist"),
   },
   plugins: [dts({ rollupTypes: true })],
-  test: {
-    globals: true,
-  },
 });

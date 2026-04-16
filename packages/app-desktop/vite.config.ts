@@ -1,5 +1,5 @@
 import path from "path";
-import { defineConfig, build, type InlineConfig } from "vite";
+import { build, defineConfig, type InlineConfig } from "vite";
 import electron from "vite-plugin-electron";
 
 const resolve = {
@@ -46,7 +46,10 @@ export default defineConfig({
           build: {
             outDir: path.resolve(DISTDIR),
             rollupOptions: {
+              platform: "node",
               external: [
+                "electron",
+                /^node:/,
                 "typeorm",
                 "better-sqlite3",
                 "@libsql/client",
