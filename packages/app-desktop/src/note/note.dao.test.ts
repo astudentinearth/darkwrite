@@ -1,4 +1,4 @@
-import { createTestDatabase, DatabaseType, migrateDatabase } from "@/db";
+import { createTestDatabase, DatabaseType, applySqlMigrations } from "@/db";
 import { NewNote, Note, note as notesTable, Workspace } from "@/db/schema";
 import { WorkspaceDAO } from "@/workspace/workspace.dao";
 import { ParentId, Rank } from "@darkwrite/common";
@@ -13,7 +13,7 @@ describe("NoteDAO", () => {
   let workspaceId = "";
 
   beforeAll(async () => {
-    await migrateDatabase(db);
+    await applySqlMigrations(db);
     noteDao = new NoteDAO(db);
 
     const workspace: Workspace = await new WorkspaceDAO(db).create({

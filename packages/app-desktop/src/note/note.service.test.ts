@@ -2,7 +2,7 @@ import { NewNote, Note, note as notesTable, Workspace } from "@/db/schema";
 import { WorkspaceDAO } from "@/workspace/workspace.dao";
 import { ParentId, Rank } from "@darkwrite/common";
 import { beforeAll, beforeEach, describe, expect, it } from "vitest";
-import { createTestDatabase, DatabaseType, migrateDatabase } from "../db";
+import { createTestDatabase, DatabaseType, applySqlMigrations } from "../db";
 import { NoteDAO } from "./note.dao";
 import { NoteService } from "./note.service";
 import { DocumentService } from "@/service/document.service";
@@ -15,7 +15,7 @@ describe("note service tests", () => {
   let noteService: NoteService;
 
   beforeAll(async () => {
-    await migrateDatabase(db);
+    await applySqlMigrations(db);
     noteDAO = new NoteDAO(db);
     noteService = new NoteService(
       db,

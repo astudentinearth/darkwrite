@@ -1,12 +1,12 @@
 import { getDefaultWorkspaceConfiguration } from "@darkwrite/common";
-import { createTestDatabase, DatabaseType, migrateDatabase } from "../db";
+import { createTestDatabase, DatabaseType, applySqlMigrations } from "../db";
 import { WorkspaceService } from "./workspace.service";
 
 let _db: DatabaseType = createTestDatabase();
 const workspaceService = new WorkspaceService(_db);
 
 beforeAll(async () => {
-  await migrateDatabase(_db);
+  await applySqlMigrations(_db);
 });
 
 it("should create a workspace", async () => {

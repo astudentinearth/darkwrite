@@ -1,6 +1,6 @@
 import { SettingsModel } from "@darkwrite/common";
 import { is } from "@electron-toolkit/utils";
-import { app, BrowserWindow, protocol, shell } from "electron";
+import { app, BrowserWindow, protocol, shell, dialog } from "electron";
 import log from "electron-log/main.js";
 import path, { join } from "path";
 import { fileURLToPath } from "url";
@@ -13,17 +13,22 @@ import { initAppMenu } from "./menu";
 import { webcontentsUrl } from "./metadata.json";
 import { ElectronPrefsModel } from "./prefs";
 import {
-    constructWindow,
-    setupWindowEvents as setupBrowserWindowEvents,
+  constructWindow,
+  setupWindowEvents as setupBrowserWindowEvents,
 } from "./window";
 import { WorkspaceService } from "./workspace/workspace.service";
 
 import installExtension, {
-    REACT_DEVELOPER_TOOLS,
-    REDUX_DEVTOOLS,
+  REACT_DEVELOPER_TOOLS,
+  REDUX_DEVTOOLS,
 } from "electron-devtools-installer";
 import { setupCsp } from "./csp";
-import { db, migrateDatabase } from "./db";
+import {
+  db,
+  applySqlMigrations,
+  migrateDatabaseWithBackup,
+  MigrationError,
+} from "./db";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -86,7 +91,19 @@ export async function init() {
     await installExtension([REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS]);
   }
   await Paths.initialize();
-  await migrateDatabase(db);
+  try {
+    await migrateDatabaseWithBackup(db);
+  } catch (error) {
+    if (error instanceof MigrationError) {
+      log.error("Migration failed with error:", error.error);
+      log.error(`Migration log can be found at ${error.logFilePath}`);
+      dialog.showErrorBox(
+        "Database Migration Failed",
+        `An error occurred while migrating the database. A backup of your data was created at ${error.snapshotPath}. Please check the migration log at ${error.logFilePath} for details. Create an issue at https://github.com/astudentinearth/darkwrite to help us resolve this issue.`,
+      );
+    }
+    app.quit();
+  }
   if (await isNewUser()) {
     // settings will be persisted after the onboarding
     ElectronPrefsModel.override(SettingsModel.getDefaults());

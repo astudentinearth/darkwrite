@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeAll, beforeEach } from "vitest";
-import { createDatabase, DatabaseType, migrateDatabase } from "@/db";
+import { createDatabase, DatabaseType, applySqlMigrations } from "@/db";
 import { WorkspaceDAO } from "./workspace.dao";
 import {
   NewWorkspace,
@@ -13,7 +13,7 @@ let dao: WorkspaceDAO;
 describe("WorkspaceDAO", () => {
   beforeAll(async () => {
     db = createDatabase();
-    db = await migrateDatabase(db);
+    db = await applySqlMigrations(db);
     dao = new WorkspaceDAO(db);
   });
 
