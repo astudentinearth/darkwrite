@@ -1,12 +1,17 @@
 import { getDefaultWorkspaceConfiguration } from "@darkwrite/common";
 import { createTestDatabase, DatabaseType, applySqlMigrations } from "../db";
 import { WorkspaceService } from "./workspace.service";
+import { workspace } from "@/db/schema";
 
 let _db: DatabaseType = createTestDatabase();
 const workspaceService = new WorkspaceService(_db);
 
 beforeAll(async () => {
   await applySqlMigrations(_db);
+});
+
+beforeEach(async () => {
+  await _db.delete(workspace);
 });
 
 it("should create a workspace", async () => {
@@ -27,8 +32,8 @@ it("should get workspaces", async () => {
     config: getDefaultWorkspaceConfiguration(),
   });
   const result = await workspaceService.getWorkspaces();
-  expect(result.map((w) => w.name).includes(w1.name));
-  expect(result.map((w) => w.name).includes(w2.name));
+  expect(result.map((w) => w.name).includes(w1.name)).toBe(true);
+  expect(result.map((w) => w.name).includes(w2.name)).toBe(true);
 });
 
 it("should initialize default workspace", async () => {
