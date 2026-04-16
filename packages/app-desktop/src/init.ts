@@ -1,33 +1,36 @@
 import { SettingsModel } from "@darkwrite/common";
 import { is } from "@electron-toolkit/utils";
-import { app, BrowserWindow, protocol, shell, dialog } from "electron";
+import { app, BrowserWindow, dialog, protocol, shell } from "electron";
 import log from "electron-log/main.js";
 import path, { join } from "path";
 import { fileURLToPath } from "url";
 import { initDevtools } from "./debug/server";
 import { InitializeElectronAPI } from "./ipc/api";
 import { embedProtocolHandler } from "./ipc/embed-protocol-handler";
-import { isNewUser } from "./lib/onboarding-state";
+import {
+  isNewUser,
+  markVersionMigrated,
+  CURRENT_VERSION,
+} from "./lib/onboarding-state";
 import { Paths } from "./lib/paths";
 import { initAppMenu } from "./menu";
 import { webcontentsUrl } from "./metadata.json";
 import { ElectronPrefsModel } from "./prefs";
 import {
-  constructWindow,
-  setupWindowEvents as setupBrowserWindowEvents,
+    constructWindow,
+    setupWindowEvents as setupBrowserWindowEvents,
 } from "./window";
 import { WorkspaceService } from "./workspace/workspace.service";
 
 import installExtension, {
-  REACT_DEVELOPER_TOOLS,
-  REDUX_DEVTOOLS,
+    REACT_DEVELOPER_TOOLS,
+    REDUX_DEVTOOLS,
 } from "electron-devtools-installer";
 import { setupCsp } from "./csp";
 import {
-  db,
-  applySqlMigrations,
-  migrateDatabaseWithBackup,
-  MigrationError,
+    db,
+    migrateDatabaseWithBackup,
+    MigrationError
 } from "./db";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -93,6 +96,7 @@ export async function init() {
   await Paths.initialize();
   try {
     await migrateDatabaseWithBackup(db);
+    await markVersionMigrated(CURRENT_VERSION);
   } catch (error) {
     if (error instanceof MigrationError) {
       log.error("Migration failed with error:", error.error);

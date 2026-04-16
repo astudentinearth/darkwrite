@@ -12,7 +12,6 @@ import log from "electron-log";
 import { BackupApiBridge } from "../api/backup.electron";
 import { DesktopIntegration } from "../lib/desktop-integration";
 import {
-  hasOnboarded,
   isNewUser,
   markOnboardingCompleted,
 } from "../lib/onboarding-state";
@@ -39,9 +38,8 @@ export const DarkwriteElectronAPI = {
     importTheme: new IPCHandler(false, ElectronThemeAPI.importTheme),
   },
   onboarding: {
-    isCompleted: new IPCHandler(false, hasOnboarded),
-    markFinished: new IPCHandler(false, markOnboardingCompleted),
     isNewUser: new IPCHandler(false, isNewUser),
+    markFinished: new IPCHandler(false, markOnboardingCompleted),
   },
   showAppMenu: new IPCHandler(false, showAppMenu),
   desktop: {

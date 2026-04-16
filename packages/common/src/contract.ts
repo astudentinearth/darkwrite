@@ -161,9 +161,8 @@ export interface IBackupAPI {
 export type CheckUpdateFn = () => Promise<UpdateServerResponse | undefined>;
 
 export interface IOnboardingAPI {
-  isCompleted: () => Promise<boolean>;
-  markFinished: () => Promise<void>;
   isNewUser: () => Promise<boolean>;
+  markFinished: () => Promise<void>;
 }
 
 /** Desktop specific bridge. This is decorated with IEmbedAPI on the frontend */

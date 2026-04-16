@@ -9,9 +9,6 @@ import { DarkwriteAPIClient } from "@/api/api-client";
 import { ReactRootContainer } from "@/react-root-helper";
 import App from "@/App";
 import { correctWorkspaceState, InitialUserSettings } from "@/init";
-import WorkspaceNameMigratorStep from "./workspace-name-migrator";
-import MigrationFinish from "./finish-migrator";
-import MigrationError from "./migration-error";
 import store from "@/store";
 
 export type OnboardingPage =
@@ -19,9 +16,6 @@ export type OnboardingPage =
   | "workspace-name"
   | "theme"
   | "finish"
-  | "workspace-name-migrator"
-  | "finish-migrator"
-  | "migration-error";
 
 export interface IOnboardingState {
   currentPage: OnboardingPage;
@@ -49,14 +43,6 @@ export function getOnboardingPage(key: OnboardingPage) {
     case "finish":
       return <OnboardingFinish />;
 
-    case "workspace-name-migrator":
-      return <WorkspaceNameMigratorStep />;
-
-    case "finish-migrator":
-      return <MigrationFinish />;
-
-    case "migration-error":
-      return <MigrationError />;
   }
 }
 
@@ -121,19 +107,3 @@ export async function finishOnboarding() {
   ReactRootContainer.root.render(<App store={store} />);
 }
 
-export async function migrateAndFinishOnboarding() {
-  const state = useOnboardingState.getState();
-  try {
-    await DarkwriteAPIClient.onboarding.migrateToV1();
-    const { workspaces } = await DarkwriteAPIClient.workspace.getAll();
-    const defaultWorkspace = workspaces[0];
-    await DarkwriteAPIClient.workspace.update(defaultWorkspace.id, {
-      name: state.workspaceName,
-    });
-    await DarkwriteAPIClient.onboarding.markFinished();
-    correctWorkspaceState(store);
-    ReactRootContainer.root.render(<App store={store} />);
-  } catch {
-    useOnboardingState.setState({ currentPage: "migration-error" });
-  }
-}
