@@ -9,6 +9,7 @@
 
 ## ✨ Improvements and fixes
 - Fix bubble menu not correctly reacting to the selected heading or list type
+- Bubble menu now slides smoothly instead of suddenly teleporting
 
 ## 🛠️ Technical changes
 - Drop TypeORM and better-sqlite3, switch to drizzle-orm and libsql

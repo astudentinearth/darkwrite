@@ -14,6 +14,7 @@ export default function Bubble() {
   return (
     <BubbleMenu
       pluginKey={"bubbleMenu"}
+      className="bubble-menu-wrapper"
       shouldShow={({ editor, state }) => {
         if (state.selection instanceof CellSelection) return false;
         if (editor.isActive("dwimage") || editor.isActive("linkToPage"))
@@ -29,10 +30,31 @@ export default function Bubble() {
           document
             .querySelector(".bubble-menu")
             ?.setAttribute("data-state", "visible");
+
+          const root = document.querySelector(
+            ".bubble-menu-wrapper",
+          )?.parentElement;
+          root?.classList.remove("bubble-settled");
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              root?.classList.add("bubble-settled");
+            });
+          });
+
+          document
+            .querySelector(".bubble-menu-wrapper")
+            ?.setAttribute("data-state", "visible");
         },
         onHide() {
           document
             .querySelector(".bubble-menu")
+            ?.setAttribute("data-state", "hidden");
+          const root = document.querySelector(
+            ".bubble-menu-wrapper",
+          )?.parentElement;
+          root?.classList.remove("bubble-settled");
+          document
+            .querySelector(".bubble-menu-wrapper")
             ?.setAttribute("data-state", "hidden");
         },
       }}

@@ -148,3 +148,13 @@ hr.ProseMirror-selectednode {
   pointer-events: none;
   @apply bg-primary/20;
 }
+
+div:has(> .bubble-menu-wrapper) {
+  /* no transition — newly appeared or hidden */
+}
+
+div.bubble-settled:has(> .bubble-menu-wrapper) {
+  transition-property: left, top;
+  transition-duration: 0.075s;
+  transition-timing-function: ease-in-out;
+}
