@@ -8,7 +8,7 @@ import OnboardingFinish from "./finish";
 import { DarkwriteAPIClient } from "@/api/api-client";
 import { ReactRootContainer } from "@/react-root-helper";
 import App from "@/App";
-import { correctWorkspaceState, InitialUserSettings } from "@/init";
+import { correctWorkspaceState, initializeUserPrefs, InitialUserSettings } from "@/init";
 import store from "@/store";
 
 export type OnboardingPage =
@@ -103,6 +103,7 @@ export async function finishOnboarding() {
 
   await DarkwriteAPIClient.onboarding.markFinished();
   InitialUserSettings.settings = prefs;
+  await initializeUserPrefs(store);
   correctWorkspaceState(store);
   ReactRootContainer.root.render(<App store={store} />);
 }

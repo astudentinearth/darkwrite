@@ -23,6 +23,8 @@ export class WorkspaceService {
     });
   }
 
+  /** Initializes a default workspace if no workspaces exist. Returns true if a workspace already exists, false if a new workspace was created.
+  * This method is idempotent, and calling it again is harmless. */
   async initializeDefaultWorkspace() {
     const workspaces = await this.workspaceDAO.findAll();
     if (workspaces.length > 0) return true;

@@ -108,12 +108,12 @@ export async function init() {
     }
     app.quit();
   }
+  await new WorkspaceService().initializeDefaultWorkspace();
   if (await isNewUser()) {
     // settings will be persisted after the onboarding
     ElectronPrefsModel.override(SettingsModel.getDefaults());
   } else {
     await ElectronPrefsModel.initialize();
-    await new WorkspaceService().initializeDefaultWorkspace();
   }
   log.initialize();
   log.transports.file.level = is.dev ? "debug" : "info";
