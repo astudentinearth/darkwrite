@@ -8,6 +8,7 @@
 - Add bubble menu option to convert a heading to a plain paragraph
 
 ## ✨ Improvements and fixes
+- Fix code blocks breaking when all content is deleted with ⌘+⌫ ⌘+Del, Ctrl+⌫ or Ctrl+Del
 - Fix bubble menu not correctly reacting to the selected heading or list type
 - Fix bubble menu not correctly displaying bold, italic, strike, quote, code or link state
 - Bubble menu now slides smoothly instead of suddenly teleporting
