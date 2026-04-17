@@ -23,7 +23,10 @@ function createImageNode(
     const tr = view.state.tr;
     if (!pendingId) return;
     tr.doc.descendants((node, pos) => {
-      if (node.type.name === Block.Image && node.attrs.pendingId === pendingId) {
+      if (
+        node.type.name === Block.Image &&
+        node.attrs.pendingId === pendingId
+      ) {
         tr.setNodeAttribute(pos, "src", `embed://${embedId}`);
         tr.setNodeAttribute(pos, "embedId", embedId);
         tr.setNodeAttribute(pos, "pendingId", "");

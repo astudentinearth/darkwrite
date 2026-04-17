@@ -31,7 +31,7 @@ export enum Block {
   CodeBlock = "codeBlock",
   Image = "dwimage",
   HorizontalRule = "horizontalRule",
-  LinkToPage = "linkToPage"
+  LinkToPage = "linkToPage",
 }
 
 export type HeadingLevel = 1 | 2 | 3 | 4;

@@ -39,7 +39,8 @@ export default function CodeBlockNodeView(props: NodeViewProps) {
           </Button>
         </div>
         <pre spellCheck={false} className={`language-${language}`}>
-          <NodeViewContent />
+          {/* @ts-expect-error this is required to protect the `<code>` tag */}
+          <NodeViewContent as="code" />
         </pre>
       </div>
     </NodeViewWrapper>
