@@ -124,6 +124,10 @@ export const ElectronNoteAPI: INoteAPI = {
     };
   },
 
+  async clearTrash(workspaceId) {
+    await noteService.emptyTrash(workspaceId);
+  },
+
   async export(
     fileContent: string,
     fileType: NoteExportFormat,
@@ -200,6 +204,7 @@ export const NoteApiBridge = {
     false,
     ElectronNoteAPI.getAllByWorkspaceId,
   ),
+  clearTrash: new IPCHandler(false, ElectronNoteAPI.clearTrash),
   favorite: new IPCHandler(false, ElectronNoteAPI.favorite),
   unfavorite: new IPCHandler(false, ElectronNoteAPI.unfavorite),
   getFavorites: new IPCHandler(false, ElectronNoteAPI.getFavorites),

@@ -337,4 +337,18 @@ export class NoteService {
       return result;
     });
   }
+
+  /** **Permanently** deletes all notes in the trash of the given workspace. */
+  async emptyTrash(workspaceId: string) {
+    return await this.db.transaction(async (tx) => {
+      const noteDAO = this.noteDAO.transactional(tx);
+      const trashedNotes = await noteDAO.findAllTrashed(workspaceId);
+      await Promise.all(
+        trashedNotes.map((note) =>
+          this.documentService.deleteNoteContent(note.id),
+        ),
+      );
+      await noteDAO.deleteMany(trashedNotes.map((n) => n.id));
+    });
+  }
 }

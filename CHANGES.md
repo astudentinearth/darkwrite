@@ -5,6 +5,7 @@
 - Code to migrate data from alpha versions has been removed. **If you are updating from an alpha, update to [1.1.0-beta.1](https://github.com/astudentinearth/darkwrite/releases/tag/v1.1.0-beta.1) first, go through the onboarding process, then update to this release. You will not be able to view your notes otherwise.** (They won't get deleted, but you will need help.)
 
 ## 🌟 Features
+- Add option to clear the trash at once (#25)
 - Add bubble menu option to convert a heading to a plain paragraph
 - Add "system default" font option to font settings (`windows`, `linux`)
 

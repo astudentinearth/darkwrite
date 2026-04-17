@@ -32,6 +32,6 @@ export class DocumentService {
   }
 
   async deleteNoteContent(noteId: string) {
-    this.documentStore.delete(noteId);
+    await this.documentStore.delete(noteId);
   }
 }

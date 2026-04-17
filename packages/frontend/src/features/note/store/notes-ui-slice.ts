@@ -39,7 +39,6 @@ export const notesUiSlice = createSlice({
       state.moveNoteDialog.noteId = null;
     },
     showClearTrashDialog(state) {
-      console.log("showing clear trash dialog");
       state.trashDialog.open = true;
     },
     closeClearTrashDialog(state) {

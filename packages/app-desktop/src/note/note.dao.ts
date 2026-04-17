@@ -6,7 +6,7 @@ import {
   ParentId,
   Rank,
 } from "@darkwrite/common";
-import { and, asc, desc, eq, isNull, like, ne, or } from "drizzle-orm";
+import { and, asc, desc, eq, isNull, like, ne, or, inArray } from "drizzle-orm";
 import { DatabaseType, db, Transaction } from "../db";
 import { noteToDto } from "./note-mapper";
 
@@ -96,6 +96,10 @@ export class NoteDAO {
       .from(notesTable)
       .where(and(inWorkspace(workspaceId), withParent(parentId)))
       .orderBy(asc(notesTable.orderHint));
+  }
+
+  async deleteMany(ids: string[]) {
+    await this.tx.delete(notesTable).where(inArray(notesTable.id, ids));
   }
 
   async deleteById(id: string) {

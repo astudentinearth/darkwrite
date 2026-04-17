@@ -13,14 +13,12 @@ describe("note service tests", () => {
   let workspace: Workspace;
   let noteDAO: NoteDAO;
   let noteService: NoteService;
+  let documentStore = new MockDocumentStore();
 
   beforeAll(async () => {
     await applySqlMigrations(db);
     noteDAO = new NoteDAO(db);
-    noteService = new NoteService(
-      db,
-      new DocumentService(new MockDocumentStore()),
-    );
+    noteService = new NoteService(db, new DocumentService(documentStore));
     workspace = await new WorkspaceDAO(db).create({
       name: "Test Workspace",
       createdAt: new Date(),
@@ -28,6 +26,9 @@ describe("note service tests", () => {
   });
   beforeEach(async () => {
     await db.delete(notesTable);
+    await Promise.all(
+      (await documentStore.ls()).map((docId) => documentStore.delete(docId)),
+    );
   });
 
   async function createNote(
@@ -46,6 +47,86 @@ describe("note service tests", () => {
     };
     return await noteDAO.create(note);
   }
+
+  describe("clear trash tests", () => {
+    it("should clear all trashed notes in the workspace", async () => {
+      const rankA = Rank.default().get();
+      const rankB = new Rank(rankA).next().get();
+
+      const note1 = await createNote("Trashed 1", rankA);
+      const note2 = await createNote("Trashed 2", rankB);
+
+      await noteService.moveToTrash(note1.id);
+      await noteService.moveToTrash(note2.id);
+
+      await noteService.emptyTrash(workspace.id);
+
+      expect(await noteDAO.findById(note1.id)).toBeUndefined();
+      expect(await noteDAO.findById(note2.id)).toBeUndefined();
+    });
+
+    it("should not touch notes in a different workspace", async () => {
+      const otherWorkspace = await new WorkspaceDAO(db).create({
+        name: "Other Workspace",
+        createdAt: new Date(),
+      });
+
+      const rankA = Rank.default().get();
+      const trashedInOther: NewNote = {
+        title: "Trashed in other",
+        workspaceId: otherWorkspace.id,
+        orderHint: "",
+        favoriteOrderHint: "",
+        parentId: null,
+        createdAt: new Date(),
+        modifiedAt: new Date(),
+        isTrashed: true,
+        trashedAt: new Date(),
+      };
+      const saved = await noteDAO.create(trashedInOther);
+
+      const localNote = await createNote("Local trashed", rankA);
+      await noteService.moveToTrash(localNote.id);
+
+      await noteService.emptyTrash(workspace.id);
+
+      expect(await noteDAO.findById(saved.id)).not.toBeUndefined();
+      expect(await noteDAO.findById(localNote.id)).toBeUndefined();
+    });
+
+    it("should not touch notes that are not trashed", async () => {
+      const rankA = Rank.default().get();
+      const rankB = new Rank(rankA).next().get();
+
+      const alive = await createNote("Alive", rankA);
+      const trashed = await createNote("Trashed", rankB);
+      await noteService.moveToTrash(trashed.id);
+
+      await noteService.emptyTrash(workspace.id);
+
+      expect(await noteDAO.findById(alive.id)).not.toBeUndefined();
+      expect(await noteDAO.findById(trashed.id)).toBeUndefined();
+    });
+
+    it("should delete document content for trashed notes", async () => {
+      const note = await noteService.create({
+        title: "With content",
+        workspaceId: workspace.id,
+        parentId: null,
+      });
+
+      expect(await documentStore.exists(note.id)).toBe(true);
+
+      await noteService.moveToTrash(note.id);
+      await noteService.emptyTrash(workspace.id);
+
+      expect(await documentStore.exists(note.id)).toBe(false);
+    });
+
+    it("should handle empty trash gracefully", async () => {
+      await expect(noteService.emptyTrash(workspace.id)).resolves.not.toThrow();
+    });
+  });
 
   describe("moveInto and moveBelow tests", () => {
     it("moveBelow should move source note below target note and update rank", async () => {

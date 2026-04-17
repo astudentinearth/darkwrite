@@ -13,9 +13,10 @@ export function useClearTrashDialog() {
   const { hideClearTrashDialog, showClearTrashDialog } =
     ClearTrashDialogPortal(dispatch);
 
-  const clearTrash = () => {
+  const clearTrash = async () => {
     if (!workspaceId) return;
-    trigger(workspaceId);
+    await trigger(workspaceId).unwrap();
+    hideClearTrashDialog();
   };
 
   return {

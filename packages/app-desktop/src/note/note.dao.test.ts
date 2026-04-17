@@ -465,6 +465,57 @@ describe("NoteDAO", () => {
     });
   });
 
+  describe("deleteMany", () => {
+    it("should delete multiple notes by their ids", async () => {
+      const id1 = randomUUID();
+      const id2 = randomUUID();
+      const id3 = randomUUID();
+
+      await createNote(id1);
+      await createNote(id2);
+      await createNote(id3);
+
+      await noteDao.deleteMany([id1, id2]);
+
+      expect(await noteDao.exists(id1)).toBe(false);
+      expect(await noteDao.exists(id2)).toBe(false);
+      expect(await noteDao.exists(id3)).toBe(true);
+    });
+
+    it("should not throw when deleting non-existent ids", async () => {
+      const existingId = randomUUID();
+      await createNote(existingId);
+
+      await expect(
+        noteDao.deleteMany([randomUUID(), randomUUID()]),
+      ).resolves.not.toThrow();
+
+      expect(await noteDao.exists(existingId)).toBe(true);
+    });
+
+    it("should handle a mix of existing and non-existent ids", async () => {
+      const existingId = randomUUID();
+      const survivorId = randomUUID();
+
+      await createNote(existingId);
+      await createNote(survivorId);
+
+      await noteDao.deleteMany([existingId, randomUUID()]);
+
+      expect(await noteDao.exists(existingId)).toBe(false);
+      expect(await noteDao.exists(survivorId)).toBe(true);
+    });
+
+    it("should handle an empty array", async () => {
+      const existingId = randomUUID();
+      await createNote(existingId);
+
+      await expect(noteDao.deleteMany([])).resolves.not.toThrow();
+
+      expect(await noteDao.exists(existingId)).toBe(true);
+    });
+  });
+
   describe("isDescendant", () => {
     it("should return 'CIRCULAR' when target is the parent (self-descendant check)", async () => {
       // Logic: if (targetId === potentialParentId) return true;
