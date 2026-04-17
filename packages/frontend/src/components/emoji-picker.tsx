@@ -20,7 +20,8 @@ export function EmojiPicker(props: {
   const [open, setOpen] = useState(false);
 
   // convert our hex color to rgb to force on the picker
-  const accent = useAppearanceSettings().accentColor;
+  const { accentColor: accent, themeMode } = useAppearanceSettings();
+
   const rgb = hex.rgb(accent);
   const accentVar = `${rgb[0]}, ${rgb[1]}, ${rgb[2]}`;
 
@@ -35,21 +36,24 @@ export function EmojiPicker(props: {
       <DropdownMenuTrigger asChild>
         <Button
           variant={"ghost"}
-          className={cn(
-            "w-20 h-20 text-6xl hover:bg-secondary/50",
-            props.className,
-          )}
+          className={cn("w-20 h-20 text-6xl", props.className)}
         >
           {props.show}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent
-        style={{ "--rgb-accent": accentVar } as CSSProperties}
+        style={
+          {
+            "--rgb-accent": accentVar,
+            color: "var(--foreground) !important",
+          } as CSSProperties
+        }
         sticky="always"
         className="bg-view-2/80 p-0 rounded-xl top-highlight"
       >
         <Picker
           previewPosition="none"
+          theme={themeMode}
           onEmojiSelect={(e: { unified: string }) => {
             props.onSelect?.call(null, e.unified);
             if (props.closeOnSelect) setOpen(false);

@@ -10,6 +10,9 @@
 ## ✨ Improvements and fixes
 - Fix bubble menu not correctly reacting to the selected heading or list type
 - Bubble menu now slides smoothly instead of suddenly teleporting
+- Fix illegible emoji picker when system theme mode is different than app theme mode
+- Improved hover colors on light mode
+- Fix trash sliding down the screen when many notes are visible on the sidebar
 
 ## 🛠️ Technical changes
 - Drop TypeORM and better-sqlite3, switch to drizzle-orm and libsql

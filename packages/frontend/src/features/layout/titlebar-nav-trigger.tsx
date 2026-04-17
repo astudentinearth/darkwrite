@@ -10,7 +10,10 @@ export default function TitlebarNavTrigger({
     <Button
       variant={"ghost"}
       {...props}
-      className={cn("h-fit justify-start px-2 py-2", className)}
+      className={cn(
+        "h-fit justify-start px-2 py-2 hover:bg-secondary/50",
+        className,
+      )}
     >
       {children}
     </Button>

@@ -61,19 +61,24 @@ export default function FontSelect(props: {
     <Popover modal open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
-          variant={"outline"}
-          className={cn("w-fit h-fit", props.className)}
+          variant={"ghost"}
+          className={cn(
+            "w-fit h-fit outline-none outline-primary/50 py-medium pl-large pr-medium bg-secondary! dark:bg-secondary/50! border-border/50 top-highlight",
+            open && "outline outline-solid outline-primary/50",
+            props.className,
+          )}
         >
           {props.value?.replaceAll('"', "") ?? t("placeholder")}{" "}
-          <ChevronDown size={16} />
+          <ChevronDown className="opacity-50" size={16} />
         </Button>
       </PopoverTrigger>
       <PopoverContent
         align="start"
-        className="overflow-hidden p-1 w-80 flex flex-col gap-2"
+        className="overflow-hidden rounded-lg p-1 w-80 flex flex-col gap-2"
       >
         <Input
           placeholder={t("search")}
+          className="bg-secondary/50 top-highlight"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
         />
