@@ -21,6 +21,7 @@ export type NavigationEvents = {
 export const NavigationEventBus = new EventBus<NavigationEvents>();
 
 export function navigateToNote(noteId: string) {
+  if (getCurrentNoteIdFromPath() === noteId) return;
   NavigationEventBus.emit("onRouteChanged", `/page/${noteId}`);
   NavigationEventBus.emit("note", { type: NavigationEventType.NOTE, noteId });
 }

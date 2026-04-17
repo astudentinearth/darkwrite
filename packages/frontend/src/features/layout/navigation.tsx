@@ -10,6 +10,7 @@ export function HistoryNavigation() {
   const [canGoForward, setCanGoForward] = useState(false);
   const [canGoBack, setCanGoBack] = useState(false);
   useEffect(() => {
+    console.log(window.history);
     setCanGoForward(window.history.length > window.history.state.idx + 1);
     setCanGoBack(0 < window.history.state.idx && window.history.length > 0);
   }, [location]);

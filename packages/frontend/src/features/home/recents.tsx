@@ -16,7 +16,7 @@ export default function RecentNotes() {
       {recents.map((note) => (
         <NoteContextMenuContainer key={note.id} noteId={note.id}>
           <Button
-            className="justify-start gap-2 rounded-lg"
+            className="justify-start gap-2 rounded-lg active:pushdown-99%"
             key={note.id}
             onClick={() => navigateToNote(note.id)}
             variant={"ghost"}

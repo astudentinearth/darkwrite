@@ -9,11 +9,12 @@ import { cn } from "@/lib/utils";
 export function SidebarNavigation() {
   const { t } = useTranslation(undefined, { keyPrefix: "sidebar.button" });
   const route = useLocation();
+  const isHome = route.pathname == "/";
   return (
     <div className="flex flex-col gap-0.5">
       <SidebarItem
-        onClick={() => navigateHome()}
-        className={cn(route.pathname == "/" && "bg-secondary/20")}
+        onClick={() => !isHome && navigateHome()}
+        className={cn(isHome && "bg-secondary/20")}
       >
         <Home size={16} />
         <span>{t("home")}</span>
