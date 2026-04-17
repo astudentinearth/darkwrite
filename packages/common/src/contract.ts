@@ -102,6 +102,7 @@ export interface INoteAPI {
   getDocument: (id: string) => Promise<NoteContentResponseDTO>;
   setDocument: (id: string, serializedDocument: string) => Promise<void>;
   duplicate: (id: string) => Promise<NoteResponseDTO>;
+  clearTrash: (workspaceId: string) => Promise<void>;
   export: (
     fileContent: string,
     fileType: NoteExportFormat,

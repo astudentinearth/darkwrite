@@ -7,14 +7,22 @@ export type MoveNoteDialogState = {
   noteId: string | null;
 };
 
+export type ClearTrashDialogState = {
+  open: boolean;
+};
+
 export type NotesUiState = {
   moveNoteDialog: MoveNoteDialogState;
+  trashDialog: ClearTrashDialogState;
 };
 
 export const initialNotesUiState: NotesUiState = {
   moveNoteDialog: {
     open: false,
     noteId: null,
+  },
+  trashDialog: {
+    open: false,
   },
 };
 
@@ -29,6 +37,13 @@ export const notesUiSlice = createSlice({
     closeMoveNoteDialog(state) {
       state.moveNoteDialog.open = false;
       state.moveNoteDialog.noteId = null;
+    },
+    showClearTrashDialog(state) {
+      console.log("showing clear trash dialog");
+      state.trashDialog.open = true;
+    },
+    closeClearTrashDialog(state) {
+      state.trashDialog.open = false;
     },
   },
 });

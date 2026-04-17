@@ -16,3 +16,15 @@ export function MoveNoteDialogPortal(dispatch: AppDispatch) {
 
   return { showMoveNoteDialog, hideMoveNoteDialog };
 }
+
+export function ClearTrashDialogPortal(dispatch: AppDispatch) {
+  function showClearTrashDialog() {
+    dispatch(notesUiSlice.actions.showClearTrashDialog());
+  }
+
+  function hideClearTrashDialog() {
+    dispatch(notesUiSlice.actions.closeClearTrashDialog());
+  }
+
+  return { showClearTrashDialog, hideClearTrashDialog };
+}

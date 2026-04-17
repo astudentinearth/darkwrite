@@ -14,6 +14,7 @@ import { useTranslation } from "react-i18next";
 import { useNoteById } from "../hooks/use-note-by-id";
 import { useTrash } from "../hooks/use-trash";
 import { useNoteActions } from "../store/note-actions";
+import { TrashMenu } from "./trash-menu";
 
 type TrashItemProps = {
   noteId: string;
@@ -57,7 +58,7 @@ const TrashItem = memo(function ({ noteId, className }: TrashItemProps) {
           permanentlyDeleteNote(noteId);
         }}
         variant={"destructive"}
-        className="w-8 h-8 p-0 text-destructive hover:bg-destructive/25 border-none"
+        className="w-8 h-8 p-0 bg-transparent text-destructive hover:bg-destructive/25 border-none"
       >
         <Trash className="size-4" />
       </Button>
@@ -86,13 +87,14 @@ export function TrashWidget() {
         sticky="always"
         className="w-80 ml-2 grid grid-rows-[auto_1fr] bg-view-2/80 top-highlight max-h-[60vh] p-0 mb-2"
       >
-        <div className="p-2">
+        <div className="p-2 flex gap-1">
           <Input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder={t("sidebar.trash.search")}
             className="bg-secondary/50 top-highlight border-border/25"
           />
+          <TrashMenu />
         </div>
         <div className="h-full overflow-y-auto flex flex-col scroll-view pl-2 pr-1 gutter-stable pt-0 pb-2 w-full">
           {items.length > 0 ? (

@@ -1,7 +1,6 @@
 import { DarkwriteAPIClient } from "@/api/api-client";
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -73,15 +72,15 @@ export function RestoreDataDialog() {
           <AlertDialogCancel disabled={pending}>
             {t("restoreDialog.cancel")}
           </AlertDialogCancel>
-          <AlertDialogAction
+          <Button
             disabled={pending || path == null}
+            variant={"destructive"}
             onClick={() => {
               if (path) restore();
             }}
-            className="bg-transparent border-destructive border text-foreground hover:bg-destructive hover:text-destructive-foreground"
           >
             {t("restoreDialog.restore")}
-          </AlertDialogAction>
+          </Button>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

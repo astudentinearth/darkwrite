@@ -25,7 +25,8 @@
       "title": "Çöp kutusu",
       "restore": "Geri yükle",
       "delete": "Kalıcı olarak sil",
-      "search": "Çöpte ara"
+      "search": "Çöpte ara",
+      "empty": "Çöp kutusunu boşalt"
     },
     "notes": {
       "contextmenu": {
@@ -264,6 +265,12 @@
     },
     "moveToDialog": {
       "title": "<0></0> sayfasını şuraya taşı:"
+    },
+    "clearTrashDialog": {
+      "title": "Çöp kutusunu boşalt",
+      "description": "Çöp kutusunu boşaltmak istediğinizden emin misiniz? Bu işlem geri alınamaz ve çöp kutusundaki tüm sayfalar kalıcı olarak silinir.",
+      "cancel": "Vazgeç",
+      "clear": "Çöp kutusunu boşalt"
     }
   }
 }

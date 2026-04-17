@@ -25,7 +25,8 @@
       "title": "Trash",
       "restore": "Restore",
       "delete": "Delete permanently",
-      "search": "Search in trash"
+      "search": "Search in trash",
+      "empty": "Clear trash"
     },
     "notes": {
       "contextmenu": {
@@ -264,6 +265,12 @@
     },
     "moveToDialog": {
       "title": "Move <0></0> to:"
+    },
+    "clearTrashDialog": {
+      "title": "Clear trash",
+      "description": "Are you sure you want to permanently delete all notes in the trash? This action cannot be undone.",
+      "cancel": "Cancel",
+      "clear": "Clear trash"
     }
   }
 }

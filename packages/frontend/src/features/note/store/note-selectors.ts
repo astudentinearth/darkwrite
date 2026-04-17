@@ -133,3 +133,11 @@ export const selectNotesToMoveInto = createSelector(
       .map((n) => n.id);
   },
 );
+
+export const selectNoteIdsInTrash = createSelector(
+  [selectAllNotes, (_state: RootState, workspaceId: string) => workspaceId],
+  (allNotes, workspaceId) =>
+    allNotes
+      .filter((n) => n.workspaceId === workspaceId && n.isTrashed)
+      .map((n) => n.id),
+);

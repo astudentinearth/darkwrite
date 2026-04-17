@@ -1,9 +1,10 @@
 import { DarkwriteAPIClient } from "@/api/api-client";
 import { _tryFetch, NOTES_TAG_TYPE, notesApi } from "./notes-api";
-import { removeNote, updateNote, upsertNotes } from "./note-slice";
+import { removeNote, removeNotes, updateNote, upsertNotes } from "./note-slice";
 import { NoteDTO } from "@darkwrite/common";
 import { MutationError } from "@darkwrite/common";
 import { RootState } from "@/features/store/types";
+import { selectNoteIdsInTrash } from "./note-selectors";
 
 export function trashedByWorkspaceIdTag(workspaceId: string) {
   return `TRASHED_BY_WORKSPACE_ID_${workspaceId}` as const;
@@ -28,6 +29,15 @@ export const _restoreFromTrashMutationFn = async (noteId: string) => {
     const { note } = await DarkwriteAPIClient.note.restoreFromTrash(noteId);
     if (!note) throw new MutationError("Note not found");
     return { data: note };
+  } catch (error) {
+    return { error: error as Error };
+  }
+};
+
+export const _clearTrashMutationFn = async (workspaceId: string) => {
+  try {
+    await DarkwriteAPIClient.note.clearTrash(workspaceId);
+    return { data: true as const };
   } catch (error) {
     return { error: error as Error };
   }
@@ -131,6 +141,26 @@ export const trashApi = notesApi.injectEndpoints({
         }
       },
     }),
+
+    clearTrash: builder.mutation<true, string>({
+      queryFn: _clearTrashMutationFn,
+      onQueryStarted: async (
+        workspaceId,
+        { dispatch, queryFulfilled, getState },
+      ) => {
+        try {
+          const state = getState() as RootState;
+          const notes = selectNoteIdsInTrash(state, workspaceId);
+          await queryFulfilled;
+          dispatch(removeNotes(notes));
+        } catch {
+          /* empty */
+        }
+      },
+      invalidatesTags: (_result, _error, workspaceId) => [
+        { type: NOTES_TAG_TYPE, id: trashedByWorkspaceIdTag(workspaceId) },
+      ],
+    }),
   }),
 });
 
@@ -139,4 +169,5 @@ export const {
   useDeleteMutation,
   useMoveToTrashMutation,
   useRestoreFromTrashMutation,
+  useClearTrashMutation,
 } = trashApi;
