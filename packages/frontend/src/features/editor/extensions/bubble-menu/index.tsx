@@ -18,7 +18,11 @@ export default function Bubble() {
       className="bubble-menu-wrapper"
       shouldShow={({ editor, state }) => {
         if (state.selection instanceof CellSelection) return false;
-        if (editor.isActive(Block.Image) || editor.isActive(Block.LinkToPage))
+        if (
+          editor.isActive(Block.Image) ||
+          editor.isActive(Block.LinkToPage) ||
+          editor.isActive(Block.HorizontalRule)
+        )
           return false;
         return !editor.isEmpty && editor.state.selection?.empty === false;
       }}
