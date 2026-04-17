@@ -54,7 +54,7 @@ export function useNoteItem(id: string) {
     e?.preventDefault();
     e?.stopPropagation();
     if (!workspaceId) return;
-    createNote({ parentId: id, workspaceId });
+    createNote({ parentId: id, workspaceId, navigateAfter: true });
   };
 
   return { note, isActive, createChild };

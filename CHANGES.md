@@ -18,6 +18,7 @@
 - Fix trash sliding down the screen when many notes are visible on the sidebar
 - Some UI elements now push into the screen on press and/or react better to active states
 - Favorites now always fetched to ensure they appear in search
+- Creating a subpage now navigates to the new page and expands its parent
 
 ## 🛠️ Technical changes
 - Drop TypeORM and better-sqlite3, switch to drizzle-orm and libsql

@@ -26,27 +26,27 @@ export default function FavoritesContainer() {
   const { setFavoritesViewOpen } = useSessionActions();
   return (
     <>
-    <PrefetchFavorites />
-    <Collapsible open={open} onOpenChange={setFavoritesViewOpen}>
-      <CollapsibleTrigger asChild>
-        <Button
-          className="text-xs p-1 gap-1 h-fit w-full text-foreground/80 hover:text-foreground justify-start"
-          variant={"ghost"}
-        >
-          <ChevronRight
-            size={16}
-            className={cn(
-              "transition-transform duration-100",
-              open && "rotate-90",
-            )}
-          />
-          {t("title.favorites")}
-        </Button>
-      </CollapsibleTrigger>
-      <CollapsibleContent>
-        <FavoritesView />
-      </CollapsibleContent>
-    </Collapsible>
+      <PrefetchFavorites />
+      <Collapsible open={open} onOpenChange={setFavoritesViewOpen}>
+        <CollapsibleTrigger asChild>
+          <Button
+            className="text-xs p-1 gap-1 h-fit w-full text-foreground/80 hover:text-foreground justify-start"
+            variant={"ghost"}
+          >
+            <ChevronRight
+              size={16}
+              className={cn(
+                "transition-transform duration-100",
+                open && "rotate-90",
+              )}
+            />
+            {t("title.favorites")}
+          </Button>
+        </CollapsibleTrigger>
+        <CollapsibleContent>
+          <FavoritesView />
+        </CollapsibleContent>
+      </Collapsible>
     </>
   );
 }
