@@ -11,10 +11,10 @@ export const DEFAULT_THEME_SETTINGS = {
   useSystemWindowFrame: false as boolean,
   useSystemAccentColor: false as boolean,
   fonts: {
-    sans: "Inter, Helvetica, Arial, sans-serif" as string,
-    serif: "Times New Roman, serif" as string,
-    code: "JetBrains Mono, Cascadia Code, Noto Mono, monospace" as string,
-    ui: "BlinkMacSystemFont, Helvetica Neue, Karla, Inter, Segoe UI, Noto Sans, Cantarell, system-ui" as string,
+    sans: "system-ui" as string,
+    serif: "ui-serif" as string,
+    code: "ui-monospace" as string,
+    ui: "system-ui" as string,
   },
   experimental: {
     /** @deprecated no longer used */

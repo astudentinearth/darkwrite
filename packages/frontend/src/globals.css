@@ -189,7 +189,11 @@
   }
 
   .darkwrite-mono {
-    font-family: var(--darkwrite-mono);
+    /* ui-monospace isn't always properly mapped on linux */
+    font-family:
+      var(--darkwrite-mono),
+      DejaVu Sans Mono,
+      monospace;
   }
 
   .darkwrite-custom-font {

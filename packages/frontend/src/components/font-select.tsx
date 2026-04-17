@@ -1,43 +1,45 @@
 import useFonts from "@/features/themes/hooks/use-fonts";
-import { useMemo, useRef, useState } from "react";
+import { getOperatingSystem } from "@/lib/platform";
+import { cn } from "@/lib/utils";
+import { OS } from "@darkwrite/common";
+import { ChevronDown } from "lucide-react";
+import { useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
-import { ChevronDown } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { getOperatingSystem } from "@/lib/platform";
-import { OS } from "@darkwrite/common";
-import { useTranslation } from "react-i18next";
 
 export default function FontSelect(props: {
   value?: string;
   onValueChange?: (val: string) => void;
   className?: string;
+  systemDefault?: string;
 }) {
   const fonts = useFonts();
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null!);
   const { t } = useTranslation("translation", { keyPrefix: "ui.font" });
-  const items = useMemo(
-    () =>
-      fonts
-        .filter((f) => f.family.toLowerCase().includes(query.toLowerCase()))
-        .map((f) => (
-          <Button
-            variant={"ghost"}
-            key={`item-${f.family}`}
-            onClick={() => {
-              props.onValueChange?.call(undefined, f.family);
-              setOpen(false);
-            }}
-            className="py-2 h-fit px-3 rounded-lg hover:bg-secondary flex items-center justify-start w-full"
-          >
-            {f.family.replace(/"/g, "")}
-          </Button>
-        )),
-    [fonts, props.onValueChange, query],
+  const { t: _t } = useTranslation("translation");
+
+  const FontItem = ({ family }: { family: string }) => (
+    <Button
+      variant={"ghost"}
+      onClick={() => {
+        props.onValueChange?.call(undefined, family);
+        setOpen(false);
+      }}
+      className="py-1.5 h-fit px-3 rounded-md hover:bg-secondary flex items-center justify-start w-full"
+    >
+      {family === props.systemDefault
+        ? _t("settings.fonts.systemDefault")
+        : family.replace(/"/g, "")}
+    </Button>
   );
+
+  const items = fonts
+    .filter((f) => f.family.toLowerCase().includes(query.toLowerCase()))
+    .map((f) => <FontItem family={f.family} key={`item-${f.family}`} />);
 
   const saveOnTextInput = (value: string) => {
     props.onValueChange?.call(undefined, value);
@@ -69,7 +71,9 @@ export default function FontSelect(props: {
           )}
         >
           <span className="w-full flex text-ellipsis whitespace-nowrap overflow-hidden">
-            {props.value?.replaceAll('"', "") ?? t("placeholder")}{" "}
+            {props.value === props.systemDefault
+              ? _t("settings.fonts.systemDefault")
+              : (props.value?.replaceAll('"', "") ?? t("placeholder"))}{" "}
           </span>
           <ChevronDown className="opacity-50" size={16} />
         </Button>
@@ -85,7 +89,7 @@ export default function FontSelect(props: {
           onChange={(e) => setQuery(e.target.value)}
         />
         <div className="scroll-view overflow-y-auto h-72 grow select-none">
-          {" "}
+          {props.systemDefault && <FontItem family={props.systemDefault} />}
           {items}
         </div>
       </PopoverContent>

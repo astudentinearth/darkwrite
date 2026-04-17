@@ -18,6 +18,7 @@ export default function FontSettings() {
         <FontSelect
           className="bg-view-1/50"
           value={ui}
+          systemDefault="system-ui"
           onValueChange={(val) => setFont("ui", val)}
         />
       </div>
@@ -27,6 +28,7 @@ export default function FontSettings() {
         <FontSelect
           className="bg-view-1/50"
           value={sans}
+          systemDefault="system-ui"
           onValueChange={(val) => setFont("sans", val)}
         />
       </div>
@@ -37,6 +39,7 @@ export default function FontSettings() {
         <FontSelect
           className="bg-view-1/50"
           value={serif}
+          systemDefault="ui-serif"
           onValueChange={(val) => setFont("serif", val)}
         />
       </div>
@@ -47,6 +50,7 @@ export default function FontSettings() {
         <FontSelect
           className="bg-view-1/50"
           value={code}
+          systemDefault="ui-monospace"
           onValueChange={(val) => setFont("code", val)}
         />
       </div>
