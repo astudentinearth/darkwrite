@@ -8,8 +8,10 @@ import {
 import { cn } from "@/lib/utils";
 import { useCurrentEditor } from "@tiptap/react";
 import { Check, Link, Trash } from "lucide-react";
-import { KeyboardEvent, useRef, useState } from "react";
+import { KeyboardEvent, use, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { DarkwriteEditorContext } from "../../context";
+import { useFormattingState } from "../../hooks/use-formatting-state";
 
 export function BubbleLink() {
   const { editor } = useCurrentEditor();
@@ -17,6 +19,8 @@ export function BubbleLink() {
   const url = editor?.getAttributes("link").href;
   const urlRef = useRef<HTMLInputElement>(null);
   const { t } = useTranslation(undefined, { keyPrefix: "editor.bubble" });
+  const { noteId } = use(DarkwriteEditorContext);
+  const { isLink } = useFormattingState(noteId);
 
   const setLink = () => {
     if (!urlRef.current) return;
@@ -35,6 +39,7 @@ export function BubbleLink() {
           className={cn(
             "rounded-lg gap-1 px-2 text-foreground shrink-0 size-9 active:pushdown-98%",
             open && "bg-secondary/80",
+            isLink && "text-primary-text",
           )}
         >
           <Link size={18} />

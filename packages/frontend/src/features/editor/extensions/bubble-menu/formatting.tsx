@@ -8,14 +8,20 @@ import {
   Underline,
 } from "lucide-react";
 import { BubbleButton } from "./bubble-button";
+import { useFormattingState } from "../../hooks/use-formatting-state";
+import { use } from "react";
+import { DarkwriteEditorContext } from "../../context";
 
 export function FormattingButtons() {
   const { editor } = useCurrentEditor();
+  const { noteId } = use(DarkwriteEditorContext);
+  const { isBold, isItalic, isCode, isStrikethrough, isUnderline, isQuote } =
+    useFormattingState(noteId);
   if (!editor) return null;
   return (
     <div className="flex h-9">
       <BubbleButton
-        isActive={(e) => e.editor?.isActive("bold") ?? false}
+        isActive={isBold}
         name="bold"
         icon={Bold}
         editor={{ editor }}
@@ -24,7 +30,7 @@ export function FormattingButtons() {
         }}
       />
       <BubbleButton
-        isActive={(e) => e.editor?.isActive("italic") ?? false}
+        isActive={isItalic}
         name="italic"
         icon={Italic}
         editor={{ editor }}
@@ -33,7 +39,7 @@ export function FormattingButtons() {
         }}
       />
       <BubbleButton
-        isActive={(e) => e.editor?.isActive("underline") ?? false}
+        isActive={isUnderline}
         name="underline"
         icon={Underline}
         editor={{ editor }}
@@ -42,7 +48,7 @@ export function FormattingButtons() {
         }}
       />
       <BubbleButton
-        isActive={(e) => e.editor?.isActive("strike") ?? false}
+        isActive={isStrikethrough}
         name="strike"
         icon={Strikethrough}
         editor={{ editor }}
@@ -51,7 +57,7 @@ export function FormattingButtons() {
         }}
       />
       <BubbleButton
-        isActive={(e) => e.editor?.isActive("code") ?? false}
+        isActive={isCode}
         name="code"
         icon={Code}
         editor={{ editor }}
@@ -60,7 +66,7 @@ export function FormattingButtons() {
         }}
       />
       <BubbleButton
-        isActive={(e) => e.editor?.isActive("blockquote") ?? false}
+        isActive={isQuote}
         name="blockquote"
         icon={Quote}
         editor={{ editor }}

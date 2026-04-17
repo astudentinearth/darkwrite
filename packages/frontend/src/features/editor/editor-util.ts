@@ -2,7 +2,8 @@ import { Editor } from "@tiptap/core";
 import { UtilityNodes } from "./node-types";
 import { useCurrentEditor } from "@tiptap/react";
 import { MarkdownConverter } from "@darkwrite/common";
-import { HeadingLevel, ListType } from "./types";
+import { HeadingLevel, ListType, TextFormat } from "./types";
+import { FormattingState } from "./store/editor-slice";
 
 export default function EditorUtil(editor: Editor) {
   return {
@@ -141,6 +142,18 @@ export default function EditorUtil(editor: Editor) {
         .focus()
         .insertContentAt(editor.state.doc.content.size, html)
         .run();
+    },
+
+    getFormattingState(): FormattingState {
+      return {
+        isBold: editor.isActive(TextFormat.Bold),
+        isItalic: editor.isActive(TextFormat.Italic),
+        isUnderline: editor.isActive(TextFormat.Underline),
+        isStrikethrough: editor.isActive(TextFormat.Strike),
+        isCode: editor.isActive(TextFormat.Code),
+        isQuote: editor.isActive(TextFormat.Quote),
+        isLink: editor.isActive(TextFormat.Link),
+      };
     },
   };
 }

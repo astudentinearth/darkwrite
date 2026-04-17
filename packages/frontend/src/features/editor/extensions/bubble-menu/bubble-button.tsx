@@ -8,7 +8,7 @@ export type BubbleButtonProps = {
   icon: FunctionComponent<React.SVGProps<SVGSVGElement>>;
   name: string;
   command: (editor: Editor) => void;
-  isActive: (editor: ReturnType<typeof useCurrentEditor>) => boolean;
+  isActive: boolean;
   editor: ReturnType<typeof useCurrentEditor>;
   className?: string;
   title?: string;
@@ -32,7 +32,7 @@ export function BubbleButton(props: BubbleButtonProps) {
         style={{ width: "20px", height: "20px" }}
         className={cn(
           "text-foreground",
-          props.isActive(editorContext) && "text-primary-text",
+          props.isActive && "text-primary-text",
         )}
       />
     </Button>

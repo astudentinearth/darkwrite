@@ -60,15 +60,6 @@ export function useEditorView(noteId: string, rootView: boolean = false) {
     return draft;
   }, [customizations, rootView]);
 
-  //  useEffect(() => {
-  //    return () => {
-  //      if (rootView) {
-  //        document.documentElement.style.removeProperty("--dw-editor-background");
-  //        document.documentElement.style.removeProperty("--dw-editor-foreground");
-  //      }
-  //    };
-  //  }, [rootView]);
-
   return { style, editorWidth };
 }
 

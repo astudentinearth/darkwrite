@@ -9,6 +9,7 @@
 
 ## ✨ Improvements and fixes
 - Fix bubble menu not correctly reacting to the selected heading or list type
+- Fix bubble menu not correctly displaying bold, italic, strike, quote, code or link state
 - Bubble menu now slides smoothly instead of suddenly teleporting
 - Fix illegible emoji picker when system theme mode is different than app theme mode
 - Improved hover colors on light mode

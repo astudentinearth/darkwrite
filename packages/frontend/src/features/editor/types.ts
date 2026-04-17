@@ -16,6 +16,16 @@ export enum ListType {
   Task = "taskList",
 }
 
+export enum TextFormat {
+  Bold = "bold",
+  Italic = "italic",
+  Underline = "underline",
+  Strike = "strike",
+  Code = "code",
+  Link = "link",
+  Quote = "blockquote",
+}
+
 export type HeadingLevel = 1 | 2 | 3 | 4;
 
 export type { Editor, Range };

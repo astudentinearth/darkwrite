@@ -23,3 +23,8 @@ export const selectCanUndo = (state: RootState, noteId: string) =>
 
 export const selectCanRedo = (state: RootState, noteId: string) =>
   state.editor.canRedo[noteId] ?? false;
+
+export const selectFormattingState = (state: RootState, noteId: string) =>
+  state.editor.formattingState[noteId] ?? null;
+
+

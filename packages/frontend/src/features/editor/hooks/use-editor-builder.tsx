@@ -9,6 +9,7 @@ import slashCommandExtension from "../extensions/slash-command/slash-command-ext
 import Bubble from "../extensions/bubble-menu";
 import TableMenu from "../extensions/table/table-menu";
 import { EventHelper } from "../components/event-helper";
+import { FormattingHelper } from "../components/formatting-helper";
 
 export default function useEditorBuilder() {
   const { imageUploadConfig, codeBlockIndentSize, commandItems } = use(
@@ -32,6 +33,7 @@ export default function useEditorBuilder() {
     () => (
       <>
         <EventHelper />
+        <FormattingHelper />
         <Bubble />
         <TableMenu />
       </>

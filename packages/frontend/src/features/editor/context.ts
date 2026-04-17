@@ -14,6 +14,7 @@ export interface IDarkwriteEditorContext {
   codeBlockIndentSize: number;
   embedSourceResolver: (id: string) => Promise<string>;
   imageUploadConfig: ImageExtensionConfig;
+  noteId: string;
 }
 
 export const DarkwriteEditorContext = createContext<IDarkwriteEditorContext>({
@@ -22,4 +23,5 @@ export const DarkwriteEditorContext = createContext<IDarkwriteEditorContext>({
   codeBlockIndentSize: 4,
   embedSourceResolver: () => new Promise(() => ""),
   imageUploadConfig: {} as ImageExtensionConfig,
+  noteId: "",
 });

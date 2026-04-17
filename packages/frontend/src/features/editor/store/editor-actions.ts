@@ -1,5 +1,5 @@
 import { NoteCustomization } from "@darkwrite/common";
-import { editorSlice } from "./editor-slice";
+import { editorSlice, FormattingState } from "./editor-slice";
 import { EditorContent } from "../types";
 import { AppDispatch } from "@/features/store/types";
 import { useAppDispatch } from "@/features/store/hooks";
@@ -59,6 +59,15 @@ export const getEditorActions = (dispatch: AppDispatch) => ({
       editorSlice.actions.setCanRedo({
         noteId,
         canRedo,
+      }),
+    );
+  },
+
+  setFormattingState(noteId: string, formattingState: FormattingState) {
+    dispatch(
+      editorSlice.actions.setFormattingState({
+        noteId,
+        formattingState,
       }),
     );
   },

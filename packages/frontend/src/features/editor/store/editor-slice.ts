@@ -6,12 +6,23 @@ import _ from "lodash";
 
 export const EDITOR_SLICE_NAME = "editor";
 
+export interface FormattingState {
+  isBold: boolean;
+  isItalic: boolean;
+  isUnderline: boolean;
+  isStrikethrough: boolean;
+  isCode: boolean;
+  isQuote: boolean;
+  isLink: boolean;
+}
+
 export interface EditorState {
   docs: Record<string, NoteContent | undefined>;
   wordCount: Record<string, number>;
   characterCount: Record<string, number>;
   canUndo: Record<string, boolean>;
   canRedo: Record<string, boolean>;
+  formattingState: Record<string, FormattingState>;
 }
 
 const initialState: EditorState = {
@@ -20,6 +31,7 @@ const initialState: EditorState = {
   wordCount: {},
   canRedo: {},
   canUndo: {},
+  formattingState: {},
 };
 
 export const editorSlice = createSlice({
@@ -93,6 +105,17 @@ export const editorSlice = createSlice({
     ) => {
       const { noteId, canRedo } = action.payload;
       state.canRedo[noteId] = canRedo;
+    },
+
+    setFormattingState: (
+      state,
+      action: PayloadAction<{
+        noteId: string;
+        formattingState: FormattingState;
+      }>,
+    ) => {
+      const { noteId, formattingState } = action.payload;
+      state.formattingState[noteId] = formattingState;
     },
   },
   initialState,

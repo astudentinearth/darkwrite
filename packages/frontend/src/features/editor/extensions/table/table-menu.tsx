@@ -81,7 +81,7 @@ export default function TableMenu() {
                     bg-view-2/80 top-highlight backdrop-blur-lg shadow-xl p-1 slide-in-from-top-1 transition-[opacity,transform,translate,scale,rotate]"
       >
         <BubbleButton
-          isActive={() => false}
+          isActive={false}
           editor={{ editor }}
           command={(e) => e.chain().focus().addColumnBefore().run()}
           icon={PanelRightOpen}
@@ -89,7 +89,7 @@ export default function TableMenu() {
           title={t("addColBefore")}
         ></BubbleButton>
         <BubbleButton
-          isActive={() => false}
+          isActive={false}
           editor={{ editor }}
           command={(e) => e.chain().focus().addColumnAfter().run()}
           icon={PanelRightClose}
@@ -97,16 +97,16 @@ export default function TableMenu() {
           title={t("addColAfter")}
         ></BubbleButton>
         <BubbleButton
-          isActive={() => false}
+          isActive={false}
           editor={{ editor }}
           command={(e) => e.chain().focus().deleteColumn().run()}
           icon={DeleteColumn}
           name="delete-column"
           title={t("deleteCol")}
         ></BubbleButton>
-        <div className="w-[1px] bg-border"></div>
+        <div className="w-px bg-border"></div>
         <BubbleButton
-          isActive={() => false}
+          isActive={false}
           editor={{ editor }}
           command={(e) => e.chain().focus().addRowBefore().run()}
           icon={PanelTopClose}
@@ -114,7 +114,7 @@ export default function TableMenu() {
           title={t("addRowBefore")}
         ></BubbleButton>
         <BubbleButton
-          isActive={() => false}
+          isActive={false}
           editor={{ editor }}
           command={(e) => e.chain().focus().addRowAfter().run()}
           icon={PanelBottomClose}
@@ -122,16 +122,16 @@ export default function TableMenu() {
           title={t("addRowAfter")}
         ></BubbleButton>
         <BubbleButton
-          isActive={() => false}
+          isActive={false}
           editor={{ editor }}
           command={(e) => e.chain().focus().deleteRow().run()}
           icon={DeleteRow}
           name="delete-row"
           title={t("deleteRow")}
         ></BubbleButton>
-        <div className="w-[1px] bg-border"></div>
+        <div className="w-px bg-border"></div>
         <BubbleButton
-          isActive={() => false}
+          isActive={false}
           editor={{ editor }}
           command={(e) => e.chain().focus().toggleHeaderRow().run()}
           icon={Sheet}
@@ -139,7 +139,7 @@ export default function TableMenu() {
           title={t("headerRow")}
         ></BubbleButton>
         <BubbleButton
-          isActive={() => false}
+          isActive={false}
           editor={{ editor }}
           command={(e) => e.chain().focus().toggleHeaderColumn().run()}
           icon={Sheet}
@@ -147,11 +147,11 @@ export default function TableMenu() {
           className="-rotate-90"
           title={t("headerCol")}
         ></BubbleButton>
-        <div className="w-[1px] bg-border"></div>
+        <div className="w-px bg-border"></div>
         <TableBackgroundPicker />
-        <div className="w-[1px] bg-border"></div>
+        <div className="w-px bg-border"></div>
         <BubbleButton
-          isActive={() => false}
+          isActive={false}
           editor={{ editor }}
           command={(e) => e.chain().focus().deleteTable().run()}
           icon={Trash}

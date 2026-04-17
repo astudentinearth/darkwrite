@@ -45,6 +45,7 @@ function EditorViewport() {
     <ConstrainedWidth fill={customizations?.widePage}>
       <DarkwriteEditor
         content={content}
+        noteId={noteId}
         commandItems={items}
         onContentChange={options.handleContentChange}
         onUpdate={options.onUpdate}
