@@ -25,7 +25,7 @@ export function HighlightColorSelector() {
         <Button
           variant="ghost"
           className={cn(
-            "rounded-lg w-fit gap-1 px-2 text-foreground h-9",
+            "rounded-lg w-fit gap-1 px-2 text-foreground h-9 active:pushdown-98%",
             open && "bg-secondary/80",
           )}
         >
@@ -39,7 +39,7 @@ export function HighlightColorSelector() {
             style={{ backgroundColor: `var(${color})` }}
             variant={"ghost"}
             key={color}
-            className="w-8 h-8 hover:outline-2 hover:outline-primary"
+            className="w-8 h-8 outline-primary hover:outline-2 hover:outline-solid"
             onClick={() =>
               editor
                 ?.chain()
@@ -51,7 +51,7 @@ export function HighlightColorSelector() {
         ))}
         <Button
           variant={"outline"}
-          className="w-8 h-8 hover:outline-2 hover:outline-primary p-0 justify-center items-center text-center"
+          className="w-8 h-8 hover:outline-2 outline-primary p-0 justify-center items-center text-center"
           onClick={() => editor?.chain().focus().unsetHighlight().run()}
         >
           <Eraser
@@ -62,7 +62,7 @@ export function HighlightColorSelector() {
         <ColorPicker
           defaultValue={activeHighlightColor}
           value={customColorValue}
-          className="data-[state=closed]:animate-none! bg-secondary! hover:outline-2 hover:outline-primary"
+          className="data-[state=closed]:animate-none! outline-primary bg-secondary! hover:outline-2"
           onChange={(val) => {
             setCustomColorValue(val);
             let payload = val;

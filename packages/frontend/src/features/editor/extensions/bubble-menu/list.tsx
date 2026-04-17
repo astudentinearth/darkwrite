@@ -69,7 +69,7 @@ export function ListSelector() {
         <Button
           variant="ghost"
           className={cn(
-            "rounded-lg w-fit h-9 gap-1 px-2 text-foreground",
+            "rounded-lg w-fit h-9 gap-1 px-2 text-foreground active:pushdown-98%",
             open && "bg-secondary/80",
           )}
         >

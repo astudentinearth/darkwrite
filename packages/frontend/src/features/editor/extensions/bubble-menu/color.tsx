@@ -24,7 +24,7 @@ export function TextColorSelector() {
         <Button
           variant="ghost"
           className={cn(
-            "rounded-lg w-fit gap-1 px-2 text-foreground h-9",
+            "rounded-lg w-fit gap-1 px-2 text-foreground h-9 active:pushdown-98%",
             open && "bg-secondary/80",
           )}
         >
@@ -37,7 +37,7 @@ export function TextColorSelector() {
           <Button
             style={{ backgroundColor: `var(${color})` }}
             variant={"ghost"}
-            className="w-8 h-8 hover:outline-2 hover:outline-primary"
+            className="w-8 h-8 outline-primary outline-2 outline-none hover:outline-solid hover:outline-2 hover:outline-primary"
             onClick={() =>
               editor?.chain().focus().setColor(`var(${color})`).run()
             }
@@ -45,7 +45,7 @@ export function TextColorSelector() {
         ))}
         <Button
           variant={"outline"}
-          className="w-8 h-8 hover:outline-2 hover:outline-primary p-0 justify-center items-center text-center"
+          className="w-8 h-8 outline-primary outline-2 outline-none hover:outline-solid hover:outline-2 hover:outline-primary "
           onClick={() => editor?.chain().focus().unsetColor().run()}
         >
           <Eraser
@@ -56,7 +56,7 @@ export function TextColorSelector() {
         <ColorPicker
           defaultValue={activeTextColor}
           value={customColorValue}
-          className="data-[state=closed]:animate-none! bg-secondary! hover:outline-2 hover:outline-primary"
+          className="data-[state=closed]:animate-none! bg-secondary! outline-primary hover:outline-2 hover:outline-primary"
           onChange={(val) => {
             setCustomColorValue(val);
             editor?.chain().setColor(val).run();

@@ -366,3 +366,16 @@ body,
 @utility top-highlight {
   box-shadow: 0 -0.5px 0 0 rgba(255, 255, 255, 0.15);
 }
+
+@utility pushdown-* {
+  transition: transform 0.15s ease-in-out;
+  transform: scale(--value(percentage));
+}
+
+@utility context-menu-item-global {
+  @apply dark:focus:bg-secondary/90 focus:bg-background/50 dark:active:bg-secondary/70 active:bg-background/90 focus:text-secondary-foreground active:scale-[99%] transition-transform items-center gap-2 rounded-md px-2 py-1 text-sm outline-hidden select-none;
+}
+
+@utility dropdown-menu-item-global {
+  @apply dark:focus:bg-secondary/70 focus:bg-background/50 dark:active:bg-secondary/50 active:bg-background/90 active:scale-[99%] transition-transform duration-100 focus:text-foreground relative flex cursor-default items-center gap-2 rounded-md text-sm outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4;
+}

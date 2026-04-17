@@ -13,6 +13,7 @@
 - Fix illegible emoji picker when system theme mode is different than app theme mode
 - Improved hover colors on light mode
 - Fix trash sliding down the screen when many notes are visible on the sidebar
+- Some UI elements now push into the screen on press and/or react better to active states
 
 ## 🛠️ Technical changes
 - Drop TypeORM and better-sqlite3, switch to drizzle-orm and libsql

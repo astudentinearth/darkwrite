@@ -63,12 +63,14 @@ export default function FontSelect(props: {
         <Button
           variant={"ghost"}
           className={cn(
-            "w-fit h-fit outline-none outline-primary/50 py-medium pl-large pr-medium bg-secondary! dark:bg-secondary/50! border-border/50 top-highlight",
+            "w-fit max-w-1/2 h-fit outline-none outline-primary/50 py-medium pl-large pr-medium bg-secondary! dark:bg-secondary/50! border-border/50 top-highlight",
             open && "outline outline-solid outline-primary/50",
             props.className,
           )}
         >
-          {props.value?.replaceAll('"', "") ?? t("placeholder")}{" "}
+          <span className="w-full flex text-ellipsis whitespace-nowrap overflow-hidden">
+            {props.value?.replaceAll('"', "") ?? t("placeholder")}{" "}
+          </span>
           <ChevronDown className="opacity-50" size={16} />
         </Button>
       </PopoverTrigger>

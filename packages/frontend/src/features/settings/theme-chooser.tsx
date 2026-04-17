@@ -28,7 +28,7 @@ export function ThemeDropdown(props: {
       <SelectTrigger
         className={cn(
           props.className,
-          "max-w-fit dark:bg-secondary/50 bg-secondary border-none top-highlight",
+          "max-w-fit dark:bg-secondary/50 bg-secondary",
         )}
       >
         {themes[props.value].name}

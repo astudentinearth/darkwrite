@@ -24,7 +24,7 @@ export function BubbleButton(props: BubbleButtonProps) {
         if (editorContext.editor) props.command(editorContext.editor);
       }}
       className={cn(
-        "rounded-lg size-9 p-0 m-0 flex justify-center items-center *:shrink-0",
+        "rounded-lg size-9 p-0 m-0 flex justify-center items-center *:shrink-0 active:pushdown-98%",
         props.className,
       )}
     >

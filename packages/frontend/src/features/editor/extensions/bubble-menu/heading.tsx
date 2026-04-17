@@ -78,7 +78,7 @@ export function HeadingSelector() {
         <Button
           variant="ghost"
           className={cn(
-            "rounded-lg w-fit gap-1 px-2 text-foreground h-9",
+            "rounded-lg w-fit gap-1 px-2 text-foreground h-9 active:pushdown-98%",
             open && "bg-secondary/80",
           )}
         >
