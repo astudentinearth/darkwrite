@@ -17,6 +17,7 @@
 - Improved hover colors on light mode
 - Fix trash sliding down the screen when many notes are visible on the sidebar
 - Some UI elements now push into the screen on press and/or react better to active states
+- Favorites now always fetched to ensure they appear in search
 
 ## 🛠️ Technical changes
 - Drop TypeORM and better-sqlite3, switch to drizzle-orm and libsql

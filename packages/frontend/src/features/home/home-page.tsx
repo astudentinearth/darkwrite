@@ -1,10 +1,10 @@
-import { useTranslation } from "react-i18next";
-import ConstrainedWidth from "../editor/constrained-width";
-import RecentNotes from "./recents";
 import { Button } from "@/components/ui";
 import { SquarePen } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import ConstrainedWidth from "../editor/constrained-width";
 import { useNoteActions } from "../note/store/note-actions";
 import { useCurrentWorkspaceId } from "../workspaces/hooks/use-workspace";
+import RecentNotes from "./recents";
 
 export default function HomePage() {
   const { t } = useTranslation();
