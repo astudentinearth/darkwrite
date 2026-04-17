@@ -3,13 +3,14 @@ import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import { ReactNodeViewRenderer } from "@tiptap/react";
 import lowlight from "../../lowlight";
 import CodeBlockNodeView from "./code-block-wrapper";
+import { Block } from "../../types";
 
 export const CodeBlockExtension = (indentSizeCallback: () => number) =>
   CodeBlockLowlight.extend({
     addKeyboardShortcuts() {
       return {
         Tab: () => {
-          if (this.editor.isActive("codeBlock")) {
+          if (this.editor.isActive(Block.CodeBlock)) {
             return this.editor.commands.insertContent(
               new Array<string>(indentSizeCallback()).fill(" ").join(""),
             );
@@ -34,6 +35,6 @@ export const CodeBlockExtension = (indentSizeCallback: () => number) =>
     HTMLAttributes: {
       class: cn("border-none darkwrite-mono font-medium"),
     },
-    exitOnTripleEnter: true,
+    exitOnTripleEnter: false,
     lowlight,
   });

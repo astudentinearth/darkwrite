@@ -1,4 +1,4 @@
-import { EditorContent } from "./types";
+import { Block, EditorContent } from "./types";
 import { generateHTML as tiptapHTML } from "@tiptap/html";
 import { DefaultEditorExtensions } from "./extensions/default";
 import { CodeBlockExtension } from "./extensions";
@@ -20,7 +20,7 @@ export async function hydrateImages(content: EditorContent) {
   function traverse(nodes: EditorContent) {
     if (!nodes.content || nodes.content.length == 0) return;
     for (const node of nodes.content) {
-      if (node.type === "dwimage" && node.attrs?.embedId) {
+      if (node.type === Block.Image && node.attrs?.embedId) {
         imageNodes.push(node);
         continue;
       }

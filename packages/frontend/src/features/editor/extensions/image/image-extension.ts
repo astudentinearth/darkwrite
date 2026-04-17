@@ -6,10 +6,11 @@ import { ImageExtensionConfig } from "./image-config";
 import { ReactNodeViewRenderer } from "@tiptap/react";
 import { DarkwriteImageView } from "./image-view";
 import { cn } from "@/lib/utils";
+import { Block } from "../../types";
 
 export const ImageExtension = (config: ImageExtensionConfig) =>
   Image.extend({
-    name: "dwimage",
+    name: Block.Image,
     addAttributes() {
       return { ...this.parent?.(), ...ImageAttributes };
     },

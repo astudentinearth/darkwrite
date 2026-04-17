@@ -24,6 +24,7 @@ import {
   DRAG_DATA_TYPE,
   extractNoteIdFromDragData,
 } from "@/features/dnd/datatransfer";
+import { Block } from "../types";
 
 const LinkResult = memo(function ({
   id,
@@ -126,7 +127,7 @@ const LinkComponent = ({ node, updateAttributes, selected }: any) => {
 };
 
 export const LinkToPage = Node.create({
-  name: "linkToPage",
+  name: Block.LinkToPage,
   priority: 101,
   group: "block",
   atom: true,
@@ -144,13 +145,13 @@ export const LinkToPage = Node.create({
   renderHTML({ HTMLAttributes }) {
     return [
       "div",
-      mergeAttributes(HTMLAttributes, { "data-type": "linkToPage" }),
+      mergeAttributes(HTMLAttributes, { "data-type": Block.LinkToPage }),
     ];
   },
   parseHTML() {
     return [
       {
-        tag: 'div[data-type="linkToPage"]',
+        tag: `div[data-type="${Block.LinkToPage}"]`,
       },
     ];
   },

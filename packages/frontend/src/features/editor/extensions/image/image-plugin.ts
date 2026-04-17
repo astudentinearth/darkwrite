@@ -1,6 +1,7 @@
 import { Plugin } from "@tiptap/pm/state";
 import { ImageExtensionConfig } from "./image-config";
 import { createImageNode } from "./image-upload-transaction";
+import { Block } from "../../types";
 
 const ImagePlugin = (config: ImageExtensionConfig) =>
   new Plugin({
@@ -15,7 +16,7 @@ const ImagePlugin = (config: ImageExtensionConfig) =>
           if (!file) return;
           config.saveArrayBuffer(file, filetype).then((id) => {
             const tr = view.state.tr;
-            const node = view.state.schema.nodes.dwimage.create({
+            const node = view.state.schema.nodes[Block.Image].create({
               src: `embed://${id}`,
               embedId: id,
             });

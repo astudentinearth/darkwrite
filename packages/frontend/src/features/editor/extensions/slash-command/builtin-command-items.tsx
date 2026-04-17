@@ -1,4 +1,4 @@
-import { SlashCommandItem } from "../../types";
+import { Block, SlashCommandItem } from "../../types";
 import {
   CheckSquare,
   Code,
@@ -211,7 +211,7 @@ export const useSlashCommand = (
             .chain()
             .focus()
             .deleteRange(range)
-            .insertContent({ type: "linkToPage", attrs: { id: "" } })
+            .insertContent({ type: Block.LinkToPage, attrs: { id: "" } })
             .run();
         },
       },

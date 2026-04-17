@@ -7,6 +7,7 @@ import { ListSelector } from "./list";
 import { TextColorSelector } from "./color";
 import { HighlightColorSelector } from "./highlight";
 import { CellSelection } from "@tiptap/pm/tables";
+import { Block } from "../../types";
 
 export default function Bubble() {
   const { editor } = useCurrentEditor();
@@ -17,7 +18,7 @@ export default function Bubble() {
       className="bubble-menu-wrapper"
       shouldShow={({ editor, state }) => {
         if (state.selection instanceof CellSelection) return false;
-        if (editor.isActive("dwimage") || editor.isActive("linkToPage"))
+        if (editor.isActive(Block.Image) || editor.isActive(Block.LinkToPage))
           return false;
         return !editor.isEmpty && editor.state.selection?.empty === false;
       }}

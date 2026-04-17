@@ -26,6 +26,14 @@ export enum TextFormat {
   Quote = "blockquote",
 }
 
+export enum Block {
+  Blockquote = TextFormat.Quote, // shim to text format value
+  CodeBlock = "codeBlock",
+  Image = "dwimage",
+  HorizontalRule = "horizontalRule",
+  LinkToPage = "linkToPage"
+}
+
 export type HeadingLevel = 1 | 2 | 3 | 4;
 
 export type { Editor, Range };

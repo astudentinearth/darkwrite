@@ -17,6 +17,7 @@ import Color from "@tiptap/extension-color";
 import Highlight from "@tiptap/extension-highlight";
 import { CharacterCount } from "@tiptap/extensions";
 import TableExtensions from "./table/table-extension";
+import { Block } from "../types";
 
 export const starterKit = StarterKit.configure({
   bulletList: {
@@ -99,7 +100,7 @@ export const codeBlock = (indentSize: number) =>
     addKeyboardShortcuts() {
       return {
         Tab: () => {
-          if (this.editor.isActive("codeBlock")) {
+          if (this.editor.isActive(Block.CodeBlock)) {
             return this.editor.commands.insertContent(
               new Array<string>(indentSize).fill(" ").join(""),
             );
