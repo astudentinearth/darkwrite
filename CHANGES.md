@@ -21,6 +21,7 @@
 - Favorites now always fetched to ensure they appear in search
 - Creating a subpage now navigates to the new page and expands its parent
 - Bubble menu no longer shows up when the only selection is a horizontal rule
+- Hide scrollbars when the view is not hovered on
 
 ## 🛠️ Technical changes
 - Drop TypeORM and better-sqlite3, switch to drizzle-orm and libsql

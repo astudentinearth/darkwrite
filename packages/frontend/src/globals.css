@@ -280,41 +280,14 @@ body,
   @apply bg-primary/20;
 }
 
-.main-view::-webkit-scrollbar {
-  width: 6px;
-  background: var(--dw-editor-background) !important;
-}
-
-.main-view::-webkit-scrollbar-track {
-  overflow: hidden;
-  background: var(--dw-editor-background) !important;
-}
-
-.main-view::-webkit-scrollbar-thumb {
-  @apply bg-secondary/75;
-  border-radius: 0.3em;
-}
-
-.main-view::-webkit-scrollbar-thumb:hover {
-  @apply bg-secondary;
-}
-
 @layer utilities {
-  .scroll-view::-webkit-scrollbar {
-    width: 6px;
+  .scroll-view {
+    scrollbar-width: thin;
+    scrollbar-color: transparent transparent;
   }
 
-  .scroll-view::-webkit-scrollbar-track {
-    overflow: hidden;
-  }
-
-  .scroll-view::-webkit-scrollbar-thumb {
-    @apply bg-secondary/75;
-    border-radius: 0.3em;
-  }
-
-  .scroll-view::-webkit-scrollbar-thumb:hover {
-    @apply bg-secondary;
+  .scroll-view:hover {
+    scrollbar-color: var(--secondary) transparent;
   }
 }
 
