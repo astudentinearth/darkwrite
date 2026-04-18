@@ -24,7 +24,7 @@ export default function HomePage() {
             }}
             variant="secondary"
             // y offset is for optical balance with the welcome text
-            className="bg-view-2 h-fit translate-y-0.5"
+            className="bg-view-2 h-fit translate-y-0.5 active:pushdown-98%"
           >
             <SquarePen size={16} />
             {t("sidebar.button.newPage")}

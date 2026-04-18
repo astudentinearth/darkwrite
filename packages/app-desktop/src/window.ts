@@ -3,7 +3,11 @@ import { type BrowserWindowConstructorOptions } from "electron";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import metadata from "./metadata.json";
-import { DarkwriteUserSettings } from "@darkwrite/common";
+import {
+  DarkwriteUserSettings,
+  NativeContextMenuData,
+} from "@darkwrite/common";
+import { WindowEvent } from "./types/window-events";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -51,10 +55,29 @@ export function constructWindow(
 
 export function setupWindowEvents(window: Electron.BrowserWindow) {
   window.on("enter-full-screen", () => {
-    window.webContents.send("enter-full-screen");
+    window.webContents.send(WindowEvent.ENTER_FULLSCREEN);
   });
 
   window.on("leave-full-screen", () => {
-    window.webContents.send("exit-full-screen");
+    window.webContents.send(WindowEvent.EXIT_FULLSCREEN);
+  });
+
+  window.webContents.on("context-menu", (_event, params) => {
+    const data: NativeContextMenuData = {
+      editable: params.isEditable,
+      editActions: {
+        cut: params.editFlags.canCut,
+        copy: params.editFlags.canCopy,
+        paste: params.editFlags.canPaste,
+        pasteWithoutFormatting: params.editFlags.canPaste,
+        selectAll: params.editFlags.canSelectAll,
+        delete: params.editFlags.canDelete,
+      },
+      x: params.x,
+      y: params.y,
+      spellingSuggestions: params.dictionarySuggestions,
+    };
+
+    window.webContents.send(WindowEvent.CONTEXT_MENU, data);
   });
 }

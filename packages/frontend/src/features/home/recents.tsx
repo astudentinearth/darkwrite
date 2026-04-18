@@ -22,7 +22,9 @@ export default function RecentNotes() {
             variant={"ghost"}
           >
             <span>{getNoteIcon(note.icon)}</span>
-            <span>{note.title}</span>
+            <span className="w-full overflow-hidden text-ellipsis whitespace-nowrap text-start">
+              {note.title}
+            </span>
           </Button>
         </NoteContextMenuContainer>
       ))}

@@ -1,4 +1,10 @@
-import { deepAssign, recursiveKeys } from "@darkwrite/common";
+import { WindowEvent } from "@/types/window-events";
+import {
+  deepAssign,
+  NativeContextMenuData,
+  recursiveKeys,
+  WindowEvents,
+} from "@darkwrite/common";
 import { contextBridge, ipcRenderer, webUtils } from "electron";
 // import { DarkwriteElectronAPI } from "../ipc/api";
 // import { DarkwriteAPI, IPCHandler } from "../ipc/handler";
@@ -46,9 +52,13 @@ contextBridge.exposeInMainWorld("webUtils", webUtils);
 contextBridge.exposeInMainWorld("initPreload", initalizeAPI);
 contextBridge.exposeInMainWorld("isElectron", true);
 
-contextBridge.exposeInMainWorld("events", {
+const events: WindowEvents = {
   onEnterFullScreen: (callback: () => void) =>
-    ipcRenderer.on("enter-full-screen", () => callback()),
+    ipcRenderer.on(WindowEvent.ENTER_FULLSCREEN, () => callback()),
   onExitFullScreen: (callback: () => void) =>
-    ipcRenderer.on("exit-full-screen", () => callback()),
-});
+    ipcRenderer.on(WindowEvent.EXIT_FULLSCREEN, () => callback()),
+  onContextMenu: (callback: (data: NativeContextMenuData) => void) =>
+    ipcRenderer.on(WindowEvent.CONTEXT_MENU, (_, data) => callback(data)),
+};
+
+contextBridge.exposeInMainWorld("events", events);

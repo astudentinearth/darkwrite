@@ -3,6 +3,7 @@
 // Clients talking to a cloud instance shall make the appropriate network requests instead.
 // Cloud-specific code should be kept separate from Electron to ensure browser portability.
 import { DarkwriteDesktopClientInfo, UpdateServerResponse } from "./client";
+import { NativeContextMenuData } from "./context-menu";
 import {
   CreateNoteDTO,
   MoveNoteDTO,
@@ -194,3 +195,9 @@ export type DarkwriteIPCBridge = {
   checkUpdate: CheckUpdateFn;
   showAppMenu: () => Promise<void>;
 };
+
+export interface WindowEvents {
+  onEnterFullScreen: (callback: () => void) => void;
+  onExitFullScreen: (callback: () => void) => void;
+  onContextMenu: (callback: (data: NativeContextMenuData) => void) => void;
+}
