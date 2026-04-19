@@ -2,10 +2,10 @@ import { DB_PATH } from "../lib/paths";
 import * as relations from "./relations";
 import * as tables from "./schema";
 
-import { drizzle } from "drizzle-orm/libsql/node";
 import { randomUUID } from "crypto";
-import { join } from "path";
+import { drizzle } from "drizzle-orm/libsql/node";
 import { tmpdir } from "os";
+import { join } from "path";
 
 const dbPath = DB_PATH;
 

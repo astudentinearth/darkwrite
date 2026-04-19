@@ -8,7 +8,7 @@
     output: "release/${version}",
     buildResources: "resources",
   },
-  files: ["dist-electron", "dist"],
+  files: ["dist-electron", "dist", "drizzle"],
   extraResources: [
     {
       from: "resources/icon512.png",
