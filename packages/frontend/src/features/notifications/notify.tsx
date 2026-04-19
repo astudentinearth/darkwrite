@@ -18,9 +18,14 @@ function error(content: ReactNode | ReactNode[]) {
   ));
 }
 
+function custom(toast: ReactNode) {
+  return sonner.custom((id) => <Toast id={id}>{toast}</Toast>);
+}
+
 const notify = {
   success,
   error,
+  custom,
 };
 
 export default notify;

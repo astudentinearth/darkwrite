@@ -250,6 +250,10 @@
     "trashPage": {
       "success": "Page moved to trash.",
       "error": "Failed to move page to trash."
+    },
+    "exportPage": {
+      "success": "Page exported.",
+      "error": "Could not export page."
     }
   },
   "titlebar": {
@@ -291,6 +295,7 @@
       "selectAll": "Select all",
       "pasteWithoutFormatting": "Paste without formatting",
       "fixSpelling": "Fix spelling"
-    }
+    },
+    "showInFolder": "Reval in file manager"
   }
 }

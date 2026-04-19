@@ -104,16 +104,18 @@ export interface INoteAPI {
   setDocument: (id: string, serializedDocument: string) => Promise<void>;
   duplicate: (id: string) => Promise<NoteResponseDTO>;
   clearTrash: (workspaceId: string) => Promise<void>;
+  /** @returns the file path of the exported PDF, or undefined if the export was cancelled. */
   export: (
     fileContent: string,
     fileType: NoteExportFormat,
     title?: string,
-  ) => Promise<void>;
+  ) => Promise<string | undefined>;
+  /** @returns the file path of the exported PDF, or undefined if the export was cancelled. */
   exportPdf: (
     html: string,
     title?: string,
     pageSize?: PageSize,
-  ) => Promise<void>;
+  ) => Promise<string | undefined>;
   import: () => Promise<NoteImportResult>;
 }
 
@@ -157,11 +159,16 @@ export interface IContextMenuAPI {
   changeSpelling: (suggestion: string) => Promise<void>;
 }
 
+export interface IShellAPI {
+  showItemInFolder: (filePath: string) => Promise<void>;
+}
+
 export interface IDesktopAPI {
   getFontList: () => Promise<Font[]>;
   getSystemAccentColor: () => Promise<string>;
   getClientInfo: () => Promise<DarkwriteDesktopClientInfo>;
   contextMenu: IContextMenuAPI;
+  shell: IShellAPI;
 }
 
 export interface IBackupAPI {

@@ -9,6 +9,7 @@
 - Add bubble menu option to convert a heading to a plain paragraph
 - Add "system default" font option to font settings (`windows`, `linux`)
 - Added global context menu actions with spellchecking support (#21)
+- Add a button to reveal an exported note in the system file manager
 
 ## ✨ Improvements and fixes
 - Fix code blocks breaking when all content is deleted with ⌘+⌫ ⌘+Del, Ctrl+⌫ or Ctrl+Del

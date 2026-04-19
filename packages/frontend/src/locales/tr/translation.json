@@ -249,6 +249,10 @@
     "trashPage": {
       "success": "Sayfa çöp kutusuna taşındı.",
       "error": "Sayfayı çöp kutusuna taşıyamadık."
+    },
+    "exportPage": {
+      "success": "Sayfa dışa aktarıldı.",
+      "error": "Sayfayı dışa aktaramadık."
     }
   },
   "titlebar": {
@@ -290,6 +294,7 @@
       "selectAll": "Tümünü seç",
       "pasteWithoutFormatting": "Biçendirmeden yapıştır",
       "fixSpelling": "Yazım hatasını düzelt"
-    }
+    },
+    "showInFolder": "Klasörde göster"
   }
 }

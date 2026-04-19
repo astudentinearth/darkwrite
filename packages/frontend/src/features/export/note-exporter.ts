@@ -10,6 +10,7 @@ import { useAppStore } from "../store/hooks";
 import { getSettingsActions } from "../settings/store/settings-actions";
 import { ThemeSettings } from "@darkwrite/common";
 import { AppStore } from "../store/types";
+import { showExportToast } from "./export-toast";
 
 export async function documentBodyToHTML(
   content: EditorContent,
@@ -66,13 +67,23 @@ export function getNoteExporter(store: AppStore) {
   async function exportJSON(noteId: string) {
     const jsonString = await noteToJSON(noteId);
     const note = await resolveNote(noteId, store);
-    await DarkwriteAPIClient.note.export(jsonString, "json", note?.title);
+    const path = await DarkwriteAPIClient.note.export(
+      jsonString,
+      "json",
+      note?.title,
+    );
+    if (path) showExportToast(path);
   }
 
   async function exportHTML(noteId: string) {
     const html = await noteToHTML(noteId);
     const note = await resolveNote(noteId, store);
-    await DarkwriteAPIClient.note.export(html, "html", note?.title);
+    const path = await DarkwriteAPIClient.note.export(
+      html,
+      "html",
+      note?.title,
+    );
+    if (path) showExportToast(path);
   }
 
   async function exportPDF(
@@ -81,7 +92,12 @@ export function getNoteExporter(store: AppStore) {
   ) {
     const html = await noteToHTML(noteId);
     const note = await resolveNote(noteId, store);
-    await DarkwriteAPIClient.note.exportPdf(html, note?.title, pageSize);
+    const path = await DarkwriteAPIClient.note.exportPdf(
+      html,
+      note?.title,
+      pageSize,
+    );
+    if (path) showExportToast(path);
   }
 
   return {
