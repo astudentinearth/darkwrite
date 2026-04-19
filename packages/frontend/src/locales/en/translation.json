@@ -234,6 +234,10 @@
     "movePage": {
       "success": "Page moved successfully",
       "error": "Failed to move page"
+    },
+    "clearTrash": {
+      "success": "Trash cleared successfully",
+      "error": "Failed to clear trash"
     }
   },
   "titlebar": {

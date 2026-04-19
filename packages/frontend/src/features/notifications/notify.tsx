@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import { toast as sonner } from "sonner";
-import { SuccessToast, Toast } from "./components/base-toast";
+import { ErrorToast, SuccessToast, Toast } from "./components/base-toast";
 
 function success(content: ReactNode | ReactNode[]) {
   return sonner.custom((id) => (
@@ -10,8 +10,17 @@ function success(content: ReactNode | ReactNode[]) {
   ));
 }
 
+function error(content: ReactNode | ReactNode[]) {
+  return sonner.custom((id) => (
+    <Toast id={id}>
+      <ErrorToast>{content}</ErrorToast>
+    </Toast>
+  ));
+}
+
 const notify = {
   success,
+  error,
 };
 
 export default notify;

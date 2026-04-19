@@ -233,6 +233,10 @@
     "movePage": {
       "success": "Sayfa taşındı.",
       "error": "Sayfayı taşıyamadık."
+    },
+    "clearTrash": {
+      "success": "Çöp kutusu boşaltıldı.",
+      "error": "Çöp kutusunu boşaltamadık."
     }
   },
   "titlebar": {

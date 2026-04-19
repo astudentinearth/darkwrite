@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { CheckCircle, X } from "lucide-react";
+import { CheckCircle, X, XCircle } from "lucide-react";
 import React, { ReactNode, use } from "react";
 import { toast as sonner } from "sonner";
 
@@ -62,6 +62,18 @@ export function SuccessToast({ children, className }: SuccessToastProps) {
       <CheckCircle size={16} />
       <div className="w-2"></div>
       <div className="-translate-y-px flex">{children}</div>
+      <div className="w-4"></div>
+      <ToastClose />
+    </ToastContainer>
+  );
+}
+
+export function ErrorToast({ children, className }: SuccessToastProps) {
+  return (
+    <ToastContainer className={cn("items-center", className)}>
+      <XCircle className="text-destructive" size={16} />
+      <div className="w-2"></div>
+      <div className="-translate-y-px flex text-destructive">{children}</div>
       <div className="w-4"></div>
       <ToastClose />
     </ToastContainer>
