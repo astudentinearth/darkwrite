@@ -20,32 +20,34 @@ export function Layout() {
 
   useShortcuts();
   return (
-    <div
-      className={cn(
-        "flex [&>div]:shrink-0 w-full h-full bg-background overflow-hidden [--slide-distance:32px]",
-        isSidebarCollapsed && "bg-(--dw-editor-background)",
-      )}
-    >
-      <ThemeHandler />
-      <NativeContextMenuProvider />
-      <NavigationHelper />
-      <Sidebar></Sidebar>
-      <SidebarResizeHandle />
-      <div className="h-full flex flex-col grow overflow-hidden">
-        <Titlebar></Titlebar>
-        <div
-          className={cn(
-            "bg-view-1 h-full overflow-x-hidden scroll-view transition-[margin] duration-150 border-border/25 ml-0 mb-1.5 mr-1.5 rounded-md rounded-br-sm border",
-            isSidebarCollapsed && "m-0 rounded-none border-0",
-          )}
-        >
-          <SearchDialog />
-          <MoveNoteDialog />
-          <ClearTrashDialog />
-          <Toaster />
-          <Outlet />
+    <>
+      <div
+        className={cn(
+          "flex [&>div]:shrink-0 w-full h-full bg-background overflow-hidden [--slide-distance:32px]",
+          isSidebarCollapsed && "bg-(--dw-editor-background)",
+        )}
+      >
+        <ThemeHandler />
+        <NativeContextMenuProvider />
+        <NavigationHelper />
+        <Sidebar></Sidebar>
+        <SidebarResizeHandle />
+        <div className="h-full flex flex-col grow overflow-hidden">
+          <Titlebar></Titlebar>
+          <div
+            className={cn(
+              "bg-view-1 h-full overflow-x-hidden scroll-view transition-[margin] duration-150 border-border/25 ml-0 mb-1.5 mr-1.5 rounded-md rounded-br-sm border",
+              isSidebarCollapsed && "m-0 rounded-none border-0",
+            )}
+          >
+            <SearchDialog />
+            <MoveNoteDialog />
+            <ClearTrashDialog />
+            <Outlet />
+          </div>
         </div>
       </div>
-    </div>
+      <Toaster />
+    </>
   );
 }
