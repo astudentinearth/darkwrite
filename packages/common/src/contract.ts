@@ -145,10 +145,23 @@ export interface IThemeAPI {
   importTheme: () => Promise<void>;
 }
 
+/** APIs for triggering native context menu actions. These are only relevant in the Electron environment, but defining them here allows us to keep the frontend code that interacts with it platform-agnostic. In the browser, these should not be implemented, and the browser's own context menu should be used. */
+export interface IContextMenuAPI {
+  copy: () => Promise<void>;
+  cut: () => Promise<void>;
+  paste: () => Promise<void>;
+  /** May be referred as "paste and match style" in some platforms. */
+  pasteWithoutFormatting: () => Promise<void>;
+  selectAll: () => Promise<void>;
+  delete: () => Promise<void>;
+  changeSpelling: (suggestion: string) => Promise<void>;
+}
+
 export interface IDesktopAPI {
   getFontList: () => Promise<Font[]>;
   getSystemAccentColor: () => Promise<string>;
   getClientInfo: () => Promise<DarkwriteDesktopClientInfo>;
+  contextMenu: IContextMenuAPI;
 }
 
 export interface IBackupAPI {

@@ -52,7 +52,7 @@ export const DarkwriteImageView = (props: DarkwriteImageViewProps) => {
                   DarkwriteAPIClient.embed.download(embedId);
                 }}
               >
-                <Download size={18} /> {t("editor.contextmenu.downloadImage")}
+                <Download size={18} /> {t("ui.contextmenu.downloadImage")}
               </ContextMenuItem>
             </ContextMenuContent>
           </ContextMenu>

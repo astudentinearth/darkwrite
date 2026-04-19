@@ -142,13 +142,7 @@
       "jsonExport": "Darkwrite document (JSON)",
       "htmlExport": "HTML (plain)"
     },
-    "contextmenu": {
-      "copy": "Copy",
-      "cut": "Cut",
-      "paste": "Paste",
-      "delete": "Delete",
-      "downloadImage": "Download image"
-    },
+
     "slashCommand": {
       "text": "Text",
       "textDescription": "Express it in plain text.",
@@ -271,6 +265,16 @@
       "description": "Are you sure you want to permanently delete all notes in the trash? This action cannot be undone.",
       "cancel": "Cancel",
       "clear": "Clear trash"
+    },
+    "contextmenu": {
+      "copy": "Copy",
+      "cut": "Cut",
+      "paste": "Paste",
+      "delete": "Delete",
+      "downloadImage": "Download image",
+      "selectAll": "Select all",
+      "pasteWithoutFormatting": "Paste without formatting",
+      "fixSpelling": "Fix spelling"
     }
   }
 }

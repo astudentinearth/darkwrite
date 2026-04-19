@@ -19,7 +19,7 @@ export default function CodeBlockNodeView(props: NodeViewProps) {
   const updateLanguage = (language: string) => {
     props.updateAttributes({ language });
   };
-  const { t } = useTranslation(undefined, { keyPrefix: "editor.contextmenu" });
+  const { t } = useTranslation(undefined, { keyPrefix: "ui.contextmenu" });
   return (
     <NodeViewWrapper>
       <div className="flex flex-col group top-highlight [&>pre]:m-0 [&>pre]:pb-3 [&>pre]:px-3 [&>pre]:pt-0 [&>pre]:bg-transparent rounded-xl bg-view-2/75 border">

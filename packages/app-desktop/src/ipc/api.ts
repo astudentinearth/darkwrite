@@ -18,6 +18,7 @@ import { ElectronSettingsAPI } from "./settings.handler";
 import { ElectronThemeAPI } from "./theme.handler";
 import { WorkspacesApiBridge } from "../workspace/workspace.handler";
 import { EmbedApiBridge } from "@/embed/embed.handler";
+import { ContextMenuApiBridge } from "@/desktop-integration/context-menu.handler";
 
 export const DarkwriteElectronAPI = {
   note: NoteApiBridge,
@@ -46,6 +47,7 @@ export const DarkwriteElectronAPI = {
       DesktopIntegration.getSystemAccentColor,
     ),
     getClientInfo: new IPCHandler(false, DesktopIntegration.getClientInfo),
+    contextMenu: ContextMenuApiBridge,
   },
   checkUpdate: new IPCHandler(false, Updater.checkUpdate),
   backup: BackupApiBridge,

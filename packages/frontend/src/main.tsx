@@ -22,9 +22,6 @@ const renderOnboarding = () => {
 const initialize = async () => {
   if (window.isElectron) {
     await window.initPreload();
-    window.events.onContextMenu((d) => {
-      console.log(d);
-    });
   }
   DarkwriteAPIClient.initialize(APIClientMode.LOCAL);
   init({ data });
