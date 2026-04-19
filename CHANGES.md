@@ -8,6 +8,7 @@
 - Add option to clear the trash at once (#25)
 - Add bubble menu option to convert a heading to a plain paragraph
 - Add "system default" font option to font settings (`windows`, `linux`)
+- Added global context menu actions with spellchecking support (#21)
 
 ## ✨ Improvements and fixes
 - Fix code blocks breaking when all content is deleted with ⌘+⌫ ⌘+Del, Ctrl+⌫ or Ctrl+Del
@@ -22,6 +23,7 @@
 - Creating a subpage now navigates to the new page and expands its parent
 - Bubble menu no longer shows up when the only selection is a horizontal rule
 - Hide scrollbars when the view is not hovered on
+- Added notification feedback to various actions (trash, restore, delete etc.)
 
 ## 🛠️ Technical changes
 - Drop TypeORM and better-sqlite3, switch to drizzle-orm and libsql

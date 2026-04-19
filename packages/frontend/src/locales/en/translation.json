@@ -232,12 +232,24 @@
       "upToDate": "Darkwrite is up to date."
     },
     "movePage": {
-      "success": "Page moved successfully",
-      "error": "Failed to move page"
+      "success": "Page moved successfully.",
+      "error": "Failed to move page."
     },
     "clearTrash": {
       "success": "Trash cleared successfully",
-      "error": "Failed to clear trash"
+      "error": "Failed to clear trash."
+    },
+    "restorePage": {
+      "success": "Page restored from trash.",
+      "error": "Failed to restore page."
+    },
+    "deletePage": {
+      "success": "Page deleted.",
+      "error": "Failed to delete page"
+    },
+    "trashPage": {
+      "success": "Page moved to trash.",
+      "error": "Failed to move page to trash."
     }
   },
   "titlebar": {

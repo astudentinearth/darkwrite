@@ -237,6 +237,18 @@
     "clearTrash": {
       "success": "Çöp kutusu boşaltıldı.",
       "error": "Çöp kutusunu boşaltamadık."
+    },
+    "restorePage": {
+      "success": "Sayfa çöpten çıkarıldı.",
+      "error": "Sayfayı çöpten çıkaramadık."
+    },
+    "deletePage": {
+      "success": "Sayfa kalıcı olarak silindi.",
+      "error": "Sayfayı kalıcı olarak silemedik."
+    },
+    "trashPage": {
+      "success": "Sayfa çöp kutusuna taşındı.",
+      "error": "Sayfayı çöp kutusuna taşıyamadık."
     }
   },
   "titlebar": {

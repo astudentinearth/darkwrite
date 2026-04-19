@@ -6,11 +6,11 @@ import { FavoriteNoteArgs, favoritesApi } from "./favorites-api";
 import { navigateToNote } from "@/features/navigation/navigator";
 import { trashApi } from "./trash-api";
 import { moveNoteApi } from "./move-note";
-import { toast } from "sonner";
 import { t } from "i18next";
 import type { AppDispatch } from "@/features/store/types";
 import { useAppDispatch } from "@/features/store/hooks";
 import { useMemo } from "react";
+import notify from "@/features/notifications/notify";
 
 export const getNoteActions = (dispatch: AppDispatch) => ({
   async createNote(args: CreateNoteArgs) {
@@ -34,15 +34,21 @@ export const getNoteActions = (dispatch: AppDispatch) => ({
   },
 
   async moveToTrash(noteId: string) {
-    dispatch(trashApi.endpoints.moveToTrash.initiate(noteId));
+    dispatch(trashApi.endpoints.moveToTrash.initiate(noteId)).then(() => {
+      notify.success(t("toast.trashPage.success"));
+    });
   },
 
   async restoreFromTrash(noteId: string) {
-    dispatch(trashApi.endpoints.restoreFromTrash.initiate(noteId));
+    dispatch(trashApi.endpoints.restoreFromTrash.initiate(noteId)).then(() => {
+      notify.success(t("toast.restorePage.success"));
+    });
   },
 
   permanentlyDeleteNote(noteId: string) {
-    dispatch(trashApi.endpoints.delete.initiate(noteId));
+    dispatch(trashApi.endpoints.delete.initiate(noteId)).then(() => {
+      notify.success(t("toast.deletePage.success"));
+    });
   },
 
   async moveInto(noteId: string, destinationNoteId: string, showToast = true) {
@@ -55,10 +61,10 @@ export const getNoteActions = (dispatch: AppDispatch) => ({
     ).unwrap();
     try {
       await result;
-      if (showToast) toast.success(t("toast.movePage.success"));
+      if (showToast) notify.success(t("toast.movePage.success"));
     } catch (error) {
       if (showToast) {
-        toast.error(t("toast.movePage.error"));
+        notify.error(t("toast.movePage.error"));
       }
       console.error("Failed to move note:", error);
     }
