@@ -16,7 +16,7 @@ export type BubbleButtonProps = {
 
 export function BubbleButton(props: BubbleButtonProps) {
   const { editor: editorContext } = props;
-  return (
+  const button = (
     <Button
       variant="ghost"
       title={props.title}
@@ -34,4 +34,5 @@ export function BubbleButton(props: BubbleButtonProps) {
       />
     </Button>
   );
+  return button;
 }

@@ -29,6 +29,8 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { PageSizeChooser } from "../export/page-size-chooser";
 import useEditorMenu from "./hooks/use-editor-menu";
+import { Tooltip, TooltipContent } from "@/components/ui/tooltip";
+import { TooltipTrigger } from "@radix-ui/react-tooltip";
 
 function EditorMenuContent({ noteId }: { noteId: string }) {
   const spellcheck = useLocalStore((s) => s.useSpellcheck);
@@ -116,15 +118,21 @@ function EditorMenuContent({ noteId }: { noteId: string }) {
 export default function EditorMenu() {
   const [open, setOpen] = useState(false);
   const noteId = useNoteFromURL();
+  const { t } = useTranslation();
   if (!noteId) return <></>;
 
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
-      <DropdownMenuTrigger asChild>
-        <HeaderbarButton className={cn(open && "bg-secondary/50")}>
-          <Menu size={20} />
-        </HeaderbarButton>
-      </DropdownMenuTrigger>
+      <Tooltip>
+        <DropdownMenuTrigger asChild>
+          <TooltipTrigger>
+            <HeaderbarButton className={cn(open && "bg-secondary/50")}>
+              <Menu size={20} />
+            </HeaderbarButton>
+          </TooltipTrigger>
+        </DropdownMenuTrigger>
+        <TooltipContent>{t("editor.menu.tooltip")}</TooltipContent>
+      </Tooltip>
       <EditorMenuContent noteId={noteId} />
     </DropdownMenu>
   );

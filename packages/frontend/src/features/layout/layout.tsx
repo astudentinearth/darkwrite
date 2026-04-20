@@ -12,6 +12,7 @@ import { Titlebar } from "./titlebar";
 import MoveNoteDialog from "../note/components/move-note-dialog";
 import { ClearTrashDialog } from "../trash/components/clear-trash-dialog";
 import { NativeContextMenuProvider } from "../context-menu/native-context-menu";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 //import { useStartup } from "@/hooks/use-startup";
 
@@ -27,25 +28,27 @@ export function Layout() {
           isSidebarCollapsed && "bg-(--dw-editor-background)",
         )}
       >
-        <ThemeHandler />
-        <NativeContextMenuProvider />
-        <NavigationHelper />
-        <Sidebar></Sidebar>
-        <SidebarResizeHandle />
-        <div className="h-full flex flex-col grow overflow-hidden">
-          <Titlebar></Titlebar>
-          <div
-            className={cn(
-              "bg-view-1 h-full overflow-x-hidden scroll-view transition-[margin] duration-150 border-border/25 ml-0 mb-1.5 mr-1.5 rounded-md rounded-br-sm border",
-              isSidebarCollapsed && "m-0 rounded-none border-0",
-            )}
-          >
-            <SearchDialog />
-            <MoveNoteDialog />
-            <ClearTrashDialog />
-            <Outlet />
+        <TooltipProvider>
+          <ThemeHandler />
+          <NativeContextMenuProvider />
+          <NavigationHelper />
+          <Sidebar></Sidebar>
+          <SidebarResizeHandle />
+          <div className="h-full flex flex-col grow overflow-hidden">
+            <Titlebar></Titlebar>
+            <div
+              className={cn(
+                "bg-view-1 h-full overflow-x-hidden scroll-view transition-[margin] duration-150 border-border/25 ml-0 mb-1.5 mr-1.5 rounded-md rounded-br-sm border",
+                isSidebarCollapsed && "m-0 rounded-none border-0",
+              )}
+            >
+              <SearchDialog />
+              <MoveNoteDialog />
+              <ClearTrashDialog />
+              <Outlet />
+            </div>
           </div>
-        </div>
+        </TooltipProvider>
       </div>
       <Toaster />
     </>

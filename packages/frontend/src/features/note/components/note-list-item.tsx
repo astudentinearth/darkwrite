@@ -13,6 +13,8 @@ import {
   useNoteItemDrag,
 } from "../hooks/use-note-item";
 import { NoteContextMenuContainer } from "../note-context-menu";
+import { TextTooltip } from "@/components/ui/tooltip";
+import { useTranslation } from "react-i18next";
 
 export const NoteListItem = memo(function ({
   id,
@@ -38,6 +40,7 @@ export function NoteItem({
 }) {
   const [open, setOpen] = useState(false);
   const { note, isActive, createChild } = useNoteItem(id);
+  const { t } = useTranslation();
   const { isDragging, onDrag, onDragEnter, onDragLeave, onDrop, onDragOver } =
     useNoteItemDrag(id);
 
@@ -82,18 +85,20 @@ export function NoteItem({
           <span className="flex-1 truncate text-left select-none opacity-75 group-hover:opacity-100">
             {note.title || "Untitled"}
           </span>
-          <button
-            onClick={(e) => {
-              createChild(e);
-              setOpen(true);
-            }}
-            className={cn(
-              "hover:bg-secondary/50 size-5 group-hover:opacity-100 rounded-[6px] group-hover:flex hidden justify-center items-center",
-              isDragging && "hidden",
-            )}
-          >
-            <Plus className="size-4" />
-          </button>
+          <TextTooltip text={t("sidebar.notes.contextmenu.newSubpage")}>
+            <button
+              onClick={(e) => {
+                createChild(e);
+                setOpen(true);
+              }}
+              className={cn(
+                "hover:bg-secondary/50 size-5 group-hover:opacity-100 rounded-[6px] group-hover:flex hidden justify-center items-center",
+                isDragging && "hidden",
+              )}
+            >
+              <Plus className="size-4" />
+            </button>
+          </TextTooltip>
         </div>
       </NoteContextMenuContainer>
       <CollapsibleContent className="pl-1.5">{children}</CollapsibleContent>

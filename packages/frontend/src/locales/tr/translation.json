@@ -6,6 +6,8 @@
       "settings": "Ayarlar",
       "trash": "Çöp kutusu",
       "hideSidebar": "Kenar çubuğunu gizle",
+      "showSidebar": "Kenar çubuğunu göster",
+      "editSidebar": "Kenar çubuğunu düzenle",
       "search": "Ara",
       "menu": "Menü"
     },
@@ -150,7 +152,8 @@
       "redo": "Yinele",
       "imageWarning": "Resimleri şu anlık dahil edemiyoruz.",
       "jsonExport": "Darkwrite belgesi (JSON)",
-      "htmlExport": "HTML (düz)"
+      "htmlExport": "HTML (düz)",
+      "tooltip": "Diğer seçenekler"
     },
     "slashCommand": {
       "text": "Metin",
@@ -214,7 +217,8 @@
       "backgroundColorText": "Arka plan rengi",
       "foregroundColorText": "Varsayılan metin rengi",
       "customFontNamePlaceholer": "Özel yazı tipi",
-      "widePage": "Geniş düzen"
+      "widePage": "Geniş düzen",
+      "tooltip": "Sayfa görünümünü özelleştirin"
     },
     "blocks": {
       "linkToPage": {
@@ -306,6 +310,10 @@
       "pasteWithoutFormatting": "Biçendirmeden yapıştır",
       "fixSpelling": "Yazım hatasını düzelt"
     },
-    "showInFolder": "Klasörde göster"
+    "showInFolder": "Klasörde göster",
+    "history": {
+      "back": "Geri",
+      "forward": "İleri"
+    }
   }
 }

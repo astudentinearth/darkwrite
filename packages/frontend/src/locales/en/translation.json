@@ -6,6 +6,8 @@
       "settings": "Settings",
       "trash": "Trash",
       "hideSidebar": "Hide sidebar",
+      "showSidebar": "Show sidebar",
+      "editSidebar": "Edit sidebar",
       "search": "Search",
       "menu": "Menu"
     },
@@ -150,9 +152,9 @@
       "redo": "Redo",
       "imageWarning": "We cannot include images for now.",
       "jsonExport": "Darkwrite document (JSON)",
-      "htmlExport": "HTML (plain)"
+      "htmlExport": "HTML (plain)",
+      "tooltip": "Other options"
     },
-
     "slashCommand": {
       "text": "Text",
       "textDescription": "Express it in plain text.",
@@ -215,7 +217,8 @@
       "backgroundColorText": "Background color",
       "foregroundColorText": "Default text color",
       "customFontNamePlaceholer": "Custom font name",
-      "widePage": "Fill width"
+      "widePage": "Fill width",
+      "tooltip": "Customize page appearance"
     },
     "blocks": {
       "linkToPage": {
@@ -307,6 +310,10 @@
       "pasteWithoutFormatting": "Paste without formatting",
       "fixSpelling": "Fix spelling"
     },
-    "showInFolder": "Reval in file manager"
+    "showInFolder": "Reval in file manager",
+    "history": {
+      "back": "Geri",
+      "forward": "İleri"
+    }
   }
 }

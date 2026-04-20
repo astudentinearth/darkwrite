@@ -34,13 +34,13 @@ export function useLinkOptions() {
 
   const setLink = () => {
     if (!urlRef.current) return;
-    if(!isValidLinkUrl(urlRef.current.value)) return;
+    if (!isValidLinkUrl(urlRef.current.value)) return;
     editor?.chain().focus().setLink({ href: urlRef.current.value }).run();
     setOpen(false);
   };
 
   const setLinkToNote = (noteId: string) => {
-    const url = resourceRefToUrl({type: DarkwriteResource.Note, id: noteId});
+    const url = resourceRefToUrl({ type: DarkwriteResource.Note, id: noteId });
     editor?.chain().focus().setLink({ href: url }).run();
     setOpen(false);
   };

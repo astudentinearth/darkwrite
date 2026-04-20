@@ -1,8 +1,10 @@
 import { showAppMenu } from "@/api/appmenu";
 import { OS } from "@darkwrite/common";
 import { HeaderbarButton } from "@/components/headerbar-button";
+import { TextTooltip } from "@/components/ui/tooltip";
 import { InitialUserSettings } from "@/init";
 import { getOperatingSystem } from "@/lib/platform";
+import { useTranslation } from "react-i18next";
 
 function shouldShow() {
   if (InitialUserSettings.settings.appearance.useSystemWindowFrame) return true;
@@ -11,19 +13,22 @@ function shouldShow() {
 }
 
 export default function AppMenu() {
+  const { t } = useTranslation();
   if (!shouldShow()) {
     return <></>;
   }
   return (
-    <HeaderbarButton
-      onClick={() => {
-        showAppMenu();
-      }}
-      data-testid="button-darkwrite"
-      className="opacity-90"
-      title="Menu"
-    >
-      <img src="darkwrite_icon.png" className="shrink-0 w-5 h-5"></img>
-    </HeaderbarButton>
+    <TextTooltip text={t("sidebar.button.menu")}>
+      <HeaderbarButton
+        onClick={() => {
+          showAppMenu();
+        }}
+        data-testid="button-darkwrite"
+        className="opacity-90"
+        aria-label={t("sidebar.button.menu")}
+      >
+        <img src="darkwrite_icon.png" className="shrink-0 w-5 h-5"></img>
+      </HeaderbarButton>
+    </TextTooltip>
   );
 }

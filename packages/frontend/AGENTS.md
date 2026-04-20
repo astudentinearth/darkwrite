@@ -56,6 +56,10 @@ feature-name
 ## Component usage
 Always check if a component already exists in `src/components` or `src/features` before creating a new one. If a component is reusable across multiple features, it should be placed in `src/components`. If it is specific to a feature, it should be placed in the respective feature directory.
 
+### A note on tooltips
+If a tooltip is going to be added for a popover trigger or dropdown menu trigger, ordering matters otherwise either the tooltip or the menu will break.
+Component order MUST be Menu > Tooltip > MenuTrigger > (the actual trigger)
+
 ## API access
 Use the DarkwriteAPIClient class in @/api/api-client.ts when you need to call APIs from the frontend code. **DO NOT USE `window.api` directly.**
 

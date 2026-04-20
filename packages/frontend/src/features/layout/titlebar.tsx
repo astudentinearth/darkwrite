@@ -1,7 +1,9 @@
 import { HeaderbarButton } from "@/components/headerbar-button";
+import { TextTooltip } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import { PanelRightClose } from "lucide-react";
 import { useRef } from "react";
+import { useTranslation } from "react-i18next";
 import { HistoryNavigation } from "./navigation";
 import PageTitle from "./page-title";
 import Toolbar from "./toolbar";
@@ -13,6 +15,7 @@ import { useNoteFromURL } from "@/features/note/hooks/use-note-from-url";
 export function Titlebar() {
   const headerRef = useRef<HTMLDivElement>(null);
   const isSidebarCollapsed = useLocalStore((s) => s.isSidebarCollapsed);
+  const { t } = useTranslation();
   const expandCallback = () => {
     useLocalStore.setState({ isSidebarCollapsed: false });
   };
@@ -30,14 +33,16 @@ export function Titlebar() {
       )}
     >
       <TrafficLightsPlaceholder />
-      <HeaderbarButton
-        data-testid="button-expand-sidebar"
-        className={cn(!isSidebarCollapsed && "hidden")}
-        onClick={expandCallback}
-        title="Show sidebar"
-      >
-        <PanelRightClose width={20} height={20}></PanelRightClose>
-      </HeaderbarButton>
+      <TextTooltip text={t("sidebar.button.showSidebar")}>
+        <HeaderbarButton
+          data-testid="button-expand-sidebar"
+          className={cn(!isSidebarCollapsed && "hidden")}
+          onClick={expandCallback}
+          aria-label={t("sidebar.button.showSidebar")}
+        >
+          <PanelRightClose width={20} height={20}></PanelRightClose>
+        </HeaderbarButton>
+      </TextTooltip>
       <HistoryNavigation />
       <PageTitle />
       <div className="grow"></div>
