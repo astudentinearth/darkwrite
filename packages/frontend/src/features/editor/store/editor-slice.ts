@@ -14,6 +14,7 @@ export interface FormattingState {
   isCode: boolean;
   isQuote: boolean;
   isLink: boolean;
+  currentLinkUrl?: string;
 }
 
 export interface EditorState {

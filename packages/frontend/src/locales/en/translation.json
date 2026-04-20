@@ -191,6 +191,7 @@
       "clearHeading": "Clear heading",
       "removeLink": "Remove link",
       "saveLink": "Save link",
+      "linkPlaceholder": "Paste URL or search",
       "bulletList": "Bullet list",
       "numberedList": "Numbered list",
       "toDoList": "To-do list"

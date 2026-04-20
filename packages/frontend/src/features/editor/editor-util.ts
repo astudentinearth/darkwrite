@@ -153,6 +153,7 @@ export default function EditorUtil(editor: Editor) {
         isCode: editor.isActive(TextFormat.Code),
         isQuote: editor.isActive(TextFormat.Quote),
         isLink: editor.isActive(TextFormat.Link),
+        currentLinkUrl: editor.getAttributes(TextFormat.Link).href,
       };
     },
   };

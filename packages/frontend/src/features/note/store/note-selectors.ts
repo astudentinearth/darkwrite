@@ -103,7 +103,7 @@ export const selectByWorkspaceAndSearchTerm = createSelector(
       .filter(
         (n) =>
           n.workspaceId === workspaceId &&
-          n.title.toLowerCase().includes(query.toLowerCase()) &&
+          (n.title ?? "").toLowerCase().includes(query.toLowerCase()) &&
           !n.isTrashed,
       )
       .toSorted((a, b) => Rank.sorter(a.orderHint, b.orderHint))

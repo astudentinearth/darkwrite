@@ -91,6 +91,7 @@ const link = Link.configure({
       "text-muted-foreground underline underline-offset-[3px] hover:text-primary transition-colors cursor-pointer",
     ),
   },
+  protocols: ["http", "https", "mailto", "tel", "darkwrite"],
 });
 
 const underline = Underline.configure();

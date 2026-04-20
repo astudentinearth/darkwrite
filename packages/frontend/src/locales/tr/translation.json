@@ -190,6 +190,7 @@
       "clearHeading": "Başlığı kaldır",
       "removeLink": "Bağlantıyı kaldır",
       "saveLink": "Bağlantıyı kaydet",
+      "linkPlaceholder": "Ara veya URL yapıştır",
       "bulletList": "Madde işaretli liste",
       "numberedList": "Numaralı liste",
       "toDoList": "Yapılacaklar listesi"
