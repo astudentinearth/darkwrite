@@ -14,8 +14,8 @@ export const ElectronWorkspaceAPI: IWorkspaceAPI = {
     const workspace = await service.createWorkspace(dto);
     return { workspace: workspaceToDto(workspace) };
   },
-  async delete() {
-    //TODO: implement
+  async delete(workspaceId: string) {
+    await service.delete(workspaceId);
   },
   async getAll() {
     const workspaces = (await service.getWorkspaces()).map((w) =>

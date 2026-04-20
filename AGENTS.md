@@ -46,6 +46,9 @@ pnpm test:run -- path  # Run single test file
 pnpm typecheck         # TypeScript check
 ```
 
+> [!TIP]
+> Read @packages/frontend/AGENTS.md for additional context when working on the frontend package. If you are not going to touch frontend code, do not read this file.
+
 ### App Desktop (packages/app-desktop)
 ```bash
 cd packages/app-desktop

@@ -23,17 +23,6 @@ src
 - lib -> non-specific frontend modules
 - locales -> i18n translations
 - test -> vitest setup code and mocks
-- electron -> main process code
-  - note, database, workspace -> main process modules for specific features
-  - db -> typeorm data source
-  - entity -> sqlite entities
-  - ipc -> API bridge and handlers
-  - lib -> non-specific main process modules
-  - migrator -> code to handle migrations
-    - alpha-to-v1.ts -> this migrates from the alpha version of darkwrite to v1, DO NOT TOUCH UNDER ANY CIRCUMSTANCES
-  - preload -> preload script code
-  - init.ts -> app init code
-  - main.ts -> main process entry point
 
 # Frontend architecture
 Darkwrite follows a feature-based architecture for the frontend code. Each feature has its own directory under `src/features`, which contains all the components, hooks, state management, and other related code for that feature. This helps to keep the code organized and makes it easier to maintain and scale the application.
@@ -71,15 +60,13 @@ Always check if a component already exists in `src/components` or `src/features`
 Use the DarkwriteAPIClient class in @/api/api-client.ts when you need to call APIs from the frontend code. **DO NOT USE `window.api` directly.**
 
 ## API contract
-The API is strictly typed. The type definitions are available in `@/common/contract.ts`
+The API is strictly typed. The type definitions are available in `@darkwrite/common` package, exported as interfaces prefixed by the letter I, such as INoteAPI.
+All interface definitions are available in @packages/common/contract.ts, from the repository root.
 If existing APIs cannot solve the problem, DO NOT create a new API without asking the user for specifications.
 
-# Main process architecture
-The main process code is located under `src/electron`. It is responsible for managing the application lifecycle, handling IPC communication, and interacting with the SQLite database via TypeORM.
-
-The main process code is organized into feature-specific modules under `src/electron/note`, `src/electron/database`, and `src/electron/workspace`. Each module contains the necessary code to handle its respective feature.
-
-IPC communication between the renderer and main process is handled via the `src/electron/ipc` directory, which contains the API bridge and handlers. The types are checked automatically on compile time, and the IPC handlers are exposed automatically from a single router object.
+## Event-driven patterns
+Some parts of the codebase communicate using the EventBus class that can be found in the `@darkwrite/common` package. This custom implementation is fully type-safe and can define multiple channels, with support for source identification and timestamped messages.
+Notable examples for this pattern can be found in the editor, context menu and navigation features. If custom events are required, custom EventBus singletons should be preferred over event listeners on the document/window objects.
 
 # Translations
 Translations are managed using i18next. All translation files are located under `src/locales`. Each language has its own JSON file containing the translations for that language.
@@ -102,11 +89,8 @@ If a new dependency is absolutely required to solve a problem, ask the user befo
 # File naming convention
 - Use kebab-case for file names.
 - TypeScript files should indicate their type in the filename if they fall into one of these categories:
-  - Tests: .test.ts or .test.tsx (or append .test to the filename, like .dao.test.ts)
-  - TypeORM entities: .entity.ts
-  - Main process services: .service.ts
-  - Main process DAOs: .dao.ts (or .repository.ts, however .dao.ts is the new convention)
-  - Main process IPC handlers: .handler.ts
+  - Tests: .test.ts or .test.tsx (or append .test to the filename, like .something.test.ts)
+  - Files for React hooks must be prefixed with use- (like, use-something.ts)
 
 # Code quality
 - NEVER use casts like `as unknown as Type`
