@@ -1,8 +1,12 @@
 import { DarkwriteAPIClient } from "@/api/api-client";
-import { WorkspaceDTO } from "@darkwrite/common";
+import { selectAllNoteIdsByWorkspaceIdUnfiltered } from "@/features/note/store/note-selectors";
+import { removeNotes } from "@/features/note/store/note-slice";
+import { appSessionSlice } from "@/features/session/session-slice";
+import { RootState } from "@/features/store/types";
+import { CreateWorkspaceDTO, WorkspaceDTO } from "@darkwrite/common";
 import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
+import { selectAllWorkspaces } from "./workspace-selectors";
 import { UpdateWorkspaceArg, workspaceSlice } from "./workspace-slice";
-import { CreateWorkspaceDTO } from "@darkwrite/common";
 
 export async function _getWorkspacesQueryFn() {
   try {
@@ -30,6 +34,16 @@ export async function _createWorkspaceMutationFn(arg: CreateWorkspaceDTO) {
     return { data: response.workspace };
   } catch (error) {
     console.error("Error creating workspace:", error);
+    return { error: error as Error };
+  }
+}
+
+export async function _deleteWorkspaceMutationFn(workspaceId: string) {
+  try {
+    await DarkwriteAPIClient.workspace.delete(workspaceId);
+    return { data: undefined };
+  } catch (error) {
+    console.error("Error deleting workspace:", error);
     return { error: error as Error };
   }
 }
@@ -75,6 +89,40 @@ export const workspaceApi = createApi({
           dispatch(workspaceSlice.actions.addWorkspace(data));
         } catch (error) {
           console.error("Error in onQueryStarted for updateWorkspace:", error);
+        }
+      },
+      invalidatesTags: () => [{ type: WORKSPACE_TAG_TYPE, id: "ALL" }],
+    }),
+
+    deleteWorkspace: builder.mutation<void, string>({
+      queryFn: _deleteWorkspaceMutationFn,
+      async onQueryStarted(
+        workspaceId,
+        { queryFulfilled, dispatch, getState },
+      ) {
+        try {
+          let state = getState() as RootState;
+          await queryFulfilled;
+          dispatch(workspaceSlice.actions.removeWorkspace(workspaceId));
+          const associatedNoteIds = selectAllNoteIdsByWorkspaceIdUnfiltered(
+            state,
+            workspaceId,
+          );
+          dispatch(removeNotes(associatedNoteIds));
+          state = getState() as RootState; // re-query state after dispatching workspace removal
+          const anyOtherWorkspace = selectAllWorkspaces(state).find(
+            (w) => w.id !== workspaceId,
+          );
+          if (!anyOtherWorkspace) {
+            // It's harder to recover from this state. Let the init routine clean things up
+            window.location.reload();
+            return;
+          }
+          dispatch(
+            appSessionSlice.actions.switchWorkspace(anyOtherWorkspace.id),
+          );
+        } catch (error) {
+          console.error("Error in onQueryStarted for deleteWorkspace:", error);
         }
       },
       invalidatesTags: () => [{ type: WORKSPACE_TAG_TYPE, id: "ALL" }],

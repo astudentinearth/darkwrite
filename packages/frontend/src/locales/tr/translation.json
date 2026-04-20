@@ -75,6 +75,16 @@
         "openLastPage": "Kaldığım yerden devam et",
         "openSpecificPage": "Belirli bir sayfayı aç"
       },
+      "deleteWorkspace": "Çalışma alanını sil",
+      "deleteWorkspaceDialog": {
+        "title": "Çalışma alanını sil",
+        "description": "Bu işlem kalıcıdır ve geri alınamaz. Bu çalışma alanındaki tüm notlar kalıcı olarak silinecektir.",
+        "confirmLabel": "Onaylamak için \"{{name}}\" yazın:",
+        "cancel": "Vazgeç",
+        "delete": "Çalışma alanını sil",
+        "successMessage": "Çalışma alanı silindi.",
+        "errorMessage": "Çalışma alanını silerken bir hata oluştu."
+      },
       "editWorkspace": "Çalışma alanını düzenle",
       "editWorkspaceDialog": {
         "title": "Çalışma alanını düzenle",

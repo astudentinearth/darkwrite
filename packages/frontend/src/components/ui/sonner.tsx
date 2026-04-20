@@ -16,7 +16,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
   return (
     <Sonner
       theme={theme as ToasterProps["theme"]}
-      className="toaster group flex justify-center"
+      className="toaster group flex justify-center z-9999"
       position="top-center"
       offset={64}
       icons={{
@@ -32,7 +32,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
           "--normal-text": "var(--popover-foreground)",
           "--normal-border": "var(--border)",
           "--border-radius": "0.75rem",
-          zIndex: "9999",
+          zIndex: "99999",
         } as React.CSSProperties
       }
       {...props}

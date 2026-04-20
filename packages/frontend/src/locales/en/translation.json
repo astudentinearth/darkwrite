@@ -75,6 +75,16 @@
         "openLastPage": "Continue where I left off",
         "openSpecificPage": "Open a specific page"
       },
+      "deleteWorkspace": "Delete workspace",
+      "deleteWorkspaceDialog": {
+        "title": "Delete workspace",
+        "description": "This action is permanent and cannot be undone. All notes in this workspace will be permanently deleted.",
+        "confirmLabel": "Type \"{{name}}\" to confirm:",
+        "cancel": "Cancel",
+        "delete": "Delete workspace",
+        "successMessage": "Workspace deleted successfully.",
+        "errorMessage": "Failed to delete workspace."
+      },
       "editWorkspace": "Edit workspace",
       "editWorkspaceDialog": {
         "title": "Edit workspace",

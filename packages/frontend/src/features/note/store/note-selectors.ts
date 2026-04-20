@@ -34,6 +34,13 @@ export const selectNotesByParentId = createSelector(
   },
 );
 
+/** This selector returns any and all notes associated with given workspace. */
+export const selectAllNoteIdsByWorkspaceIdUnfiltered = createSelector(
+  [selectAllNotes, (_state: RootState, workspaceId: string) => workspaceId],
+  (allNotes, workspaceId) =>
+    allNotes.filter((n) => n.workspaceId === workspaceId).map((n) => n.id),
+);
+
 export const selectRecentNotes = createSelector(
   [selectAllNotes, (_state: RootState, workspaceId: string) => workspaceId],
   (allNotes, workspaceId) => {
