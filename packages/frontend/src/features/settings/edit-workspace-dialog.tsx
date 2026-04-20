@@ -63,7 +63,7 @@ export default function EditWorkspaceDialog(props: EditWorkspaceDialogProps) {
       ) : (
         <AlertDialogTrigger>Edit workspace</AlertDialogTrigger>
       )}
-      <AlertDialogContent className={cn(className, "flex flex-col")}>
+      <AlertDialogContent className={cn(className, "flex flex-col max-w-md!")}>
         <AlertDialogTitle>
           {t("settings.workspace.editWorkspaceDialog.title")}
         </AlertDialogTitle>
@@ -83,11 +83,15 @@ export default function EditWorkspaceDialog(props: EditWorkspaceDialogProps) {
             )}
           </Button>
           <div className="flex gap-2">
-            <Button variant={"outline"} onClick={updateImage} className="h-fit">
+            <Button
+              variant={"secondary"}
+              onClick={updateImage}
+              className="h-fit"
+            >
               {t("settings.workspace.editWorkspaceDialog.changeIcon")}
             </Button>
             <Button
-              variant={"outline"}
+              variant={"secondary"}
               onClick={() => setImageUrl(null)}
               className="h-fit"
             >
@@ -108,13 +112,17 @@ export default function EditWorkspaceDialog(props: EditWorkspaceDialogProps) {
           )}
         />
         <div className="w-full grid grid-cols-[1fr_1fr] gap-2">
-          <Button variant={"secondary"} onClick={handleSave}>
-            <Check size={18} />
-            {t("settings.workspace.editWorkspaceDialog.save")}
-          </Button>
-          <Button onClick={cancel} variant={"ghost"}>
+          <Button onClick={cancel} variant={"secondary"}>
             <X size={18} />
             {t("settings.workspace.editWorkspaceDialog.cancel")}
+          </Button>
+          <Button
+            variant={"default"}
+            onClick={handleSave}
+            className="top-highlight"
+          >
+            <Check size={18} />
+            {t("settings.workspace.editWorkspaceDialog.save")}
           </Button>
         </div>
       </AlertDialogContent>
