@@ -3,6 +3,16 @@ import { useCurrentEditor } from "@tiptap/react";
 import { use, useRef, useState } from "react";
 import { DarkwriteEditorContext } from "../context";
 import { useFormattingState } from "./use-formatting-state";
+import { DarkwriteResource, resourceRefToUrl } from "@darkwrite/common";
+
+export function isValidLinkUrl(str: string) {
+  try {
+    const url = new URL(str.includes("://") ? str : "http://" + str);
+    return ["http:", "https:"].includes(url.protocol);
+  } catch {
+    return false;
+  }
+}
 
 export function useLinkOptions() {
   const { editor } = useCurrentEditor();
@@ -24,13 +34,13 @@ export function useLinkOptions() {
 
   const setLink = () => {
     if (!urlRef.current) return;
+    if(!isValidLinkUrl(urlRef.current.value)) return;
     editor?.chain().focus().setLink({ href: urlRef.current.value }).run();
     setOpen(false);
   };
 
   const setLinkToNote = (noteId: string) => {
-    //TODO: Move URL logic to @darkwrite/common, then come back here
-    const url = `darkwrite://note/${noteId}`;
+    const url = resourceRefToUrl({type: DarkwriteResource.Note, id: noteId});
     editor?.chain().focus().setLink({ href: url }).run();
     setOpen(false);
   };

@@ -13,7 +13,7 @@ import { useNoteById } from "@/features/note/hooks/use-note-by-id";
 import { cn, getNoteIcon } from "@/lib/utils";
 import { Link, Trash } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { useLinkOptions } from "../../hooks/use-link-options";
+import { isValidLinkUrl, useLinkOptions } from "../../hooks/use-link-options";
 
 function NoteItem({
   noteId,
@@ -33,16 +33,6 @@ function NoteItem({
       <span>{note.title}</span>
     </CommandItem>
   );
-}
-
-//TODO: Move to @darkwrite/common
-function isValidLinkUrl(str: string) {
-  try {
-    const url = new URL(str.includes("://") ? str : "http://" + str);
-    return ["http:", "https:"].includes(url.protocol);
-  } catch {
-    return false;
-  }
 }
 
 export function BubbleLink() {
