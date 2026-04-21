@@ -1,23 +1,22 @@
 import { cn } from "@/lib/utils";
+import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
+import Highlight from "@tiptap/extension-highlight";
 import HorizontalRule from "@tiptap/extension-horizontal-rule";
 import { Link } from "@tiptap/extension-link";
 import { Placeholder } from "@tiptap/extension-placeholder";
 import { TaskItem } from "@tiptap/extension-task-item";
 import { TaskList } from "@tiptap/extension-task-list";
+import { TextStyleKit } from "@tiptap/extension-text-style";
 import { Underline } from "@tiptap/extension-underline";
+import { CharacterCount } from "@tiptap/extensions";
 import { StarterKit } from "@tiptap/starter-kit";
 import AutoJoiner from "tiptap-extension-auto-joiner";
 import GlobalDragHandle from "tiptap-extension-global-drag-handle";
-import { LinkToPage } from "./link-to-page";
-import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import lowlight from "../lowlight";
-import { KeymapFixer } from "./keymap-patcher";
-import { TextStyleKit } from "@tiptap/extension-text-style";
-import Color from "@tiptap/extension-color";
-import Highlight from "@tiptap/extension-highlight";
-import { CharacterCount } from "@tiptap/extensions";
-import TableExtensions from "./table/table-extension";
 import { Block } from "../types";
+import { KeymapFixer } from "./keymap-patcher";
+import { LinkToPage } from "./link-to-page";
+import TableExtensions from "./table/table-extension";
 
 export const starterKit = StarterKit.configure({
   bulletList: {
@@ -58,6 +57,8 @@ export const starterKit = StarterKit.configure({
     class: "rounded-md",
   },
   gapcursor: false,
+  link: false,
+  underline: false,
 });
 
 export const taskList = TaskList.configure({
@@ -129,7 +130,6 @@ export const codeBlock = (indentSize: number) =>
   });
 
 const textStyle = TextStyleKit.configure({ color: { types: ["textStyle"] } });
-const color = Color.configure();
 const hightlight = Highlight.configure({ multicolor: true });
 const characterCount = CharacterCount.configure({});
 
@@ -146,7 +146,6 @@ export const DefaultEditorExtensions = [
   underline,
   KeymapFixer,
   textStyle,
-  color,
   hightlight,
   characterCount,
   ...TableExtensions,
