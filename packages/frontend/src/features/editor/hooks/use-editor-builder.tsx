@@ -1,4 +1,4 @@
-import { use, useMemo } from "react";
+import { use, useMemo, useRef } from "react";
 import { DarkwriteEditorContext } from "../context";
 import {
   CodeBlockExtension,
@@ -16,6 +16,9 @@ export default function useEditorBuilder() {
   const { imageUploadConfig, codeBlockIndentSize, commandItems } = use(
     DarkwriteEditorContext,
   );
+
+  const isDragging = useRef(false);
+
   const extensions = useMemo(
     () => [
       ...DefaultEditorExtensions,
@@ -35,8 +38,8 @@ export default function useEditorBuilder() {
       <>
         <EventHelper />
         <FormattingHelper />
-        <Bubble />
-        <DragHandleExtension />
+        <Bubble isDragging={isDragging} />
+        <DragHandleExtension isDragging={isDragging} />
         <TableMenu />
       </>
     ),

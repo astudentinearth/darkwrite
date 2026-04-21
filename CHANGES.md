@@ -27,6 +27,7 @@
 - Bubble menu no longer shows up when the only selection is a horizontal rule
 - Hide scrollbars when the view is not hovered on
 - Added notification feedback to various actions (trash, restore, delete etc.)
+- Change drag handle extension (now using tiptap's official one)
 
 ## 🛠️ Technical changes
 - Drop TypeORM and better-sqlite3, switch to drizzle-orm and libsql

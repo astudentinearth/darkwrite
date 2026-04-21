@@ -8,8 +8,13 @@ import { TextColorSelector } from "./color";
 import { HighlightColorSelector } from "./highlight";
 import { CellSelection } from "@tiptap/pm/tables";
 import { Block } from "../../types";
+import { RefObject } from "react";
 
-export default function Bubble() {
+export type BubbleMenuProps = {
+  isDragging: RefObject<boolean>;
+};
+
+export default function Bubble({ isDragging }: BubbleMenuProps) {
   const { editor } = useCurrentEditor();
   if (!editor) return <></>;
   return (
@@ -17,6 +22,7 @@ export default function Bubble() {
       pluginKey={"bubbleMenu"}
       className="bubble-menu-wrapper"
       shouldShow={({ editor, state }) => {
+        if (isDragging.current) return false;
         if (state.selection instanceof CellSelection) return false;
         if (
           editor.isActive(Block.Image) ||
