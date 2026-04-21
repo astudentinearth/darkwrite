@@ -34,6 +34,12 @@ export enum Block {
   LinkToPage = "linkToPage",
 }
 
+export enum TextDirection {
+  LeftToRight = "ltr",
+  Auto = "auto",
+  RightToLeft = "rtl",
+}
+
 export type HeadingLevel = 1 | 2 | 3 | 4;
 
 export type { Editor, Range };

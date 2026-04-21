@@ -98,7 +98,8 @@
       },
       "alwaysShowWordCount": "Kelime sayısını her zaman göster",
       "codeBlockIndentSize": "Kod bloklarındaki girinti genişliği",
-      "codeBlockIndentSizeDescription": "Tab tuşuna basıldığında kod bloklarına eklenecek boşluk sayısını belirleyin."
+      "codeBlockIndentSizeDescription": "Tab⇥ tuşuna basıldığında kod bloklarına eklenecek boşluk sayısını belirleyin.",
+      "showRtlControls": "Düzenleyicide metin yönü kontrollerini göster"
     },
     "appearance": {
       "title": "Görünüm",
@@ -202,7 +203,13 @@
       "underline": "Altı çizili",
       "strike": "Üstü çizili",
       "code": "Satır içi kod",
-      "blockquote": "Alıntı"
+      "blockquote": "Alıntı",
+      "textDirection": {
+        "label": "Metin yönü",
+        "ltr": "Soldan sağa",
+        "rtl": "Sağdan sola",
+        "auto": "Otomatik"
+      }
     },
     "table": {
       "addColBefore": "Sola sütun ekle",

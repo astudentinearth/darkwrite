@@ -15,6 +15,7 @@ export interface IDarkwriteEditorContext {
   embedSourceResolver: (id: string) => Promise<string>;
   imageUploadConfig: ImageExtensionConfig;
   noteId: string;
+  showTextDirectionControls?: boolean;
 }
 
 export const DarkwriteEditorContext = createContext<IDarkwriteEditorContext>({

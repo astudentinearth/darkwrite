@@ -42,7 +42,11 @@ export function useLinkOptions() {
   const setLink = () => {
     if (!urlRef.current) return;
     if (!isValidLinkUrl(urlRef.current.value)) return;
-    editor?.chain().focus().setLink({ href: normalizetoHttpUrl(urlRef.current.value) }).run();
+    editor
+      ?.chain()
+      .focus()
+      .setLink({ href: normalizetoHttpUrl(urlRef.current.value) })
+      .run();
     setOpen(false);
   };
 

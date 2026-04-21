@@ -72,6 +72,13 @@ If existing APIs cannot solve the problem, DO NOT create a new API without askin
 Some parts of the codebase communicate using the EventBus class that can be found in the `@darkwrite/common` package. This custom implementation is fully type-safe and can define multiple channels, with support for source identification and timestamped messages.
 Notable examples for this pattern can be found in the editor, context menu and navigation features. If custom events are required, custom EventBus singletons should be preferred over event listeners on the document/window objects.
 
+## `<Tiptap>` IS NOT A MISTAKE
+This is the modern declarative API that was introduced in recent Tiptap releases. See https://tiptap.dev/docs/guides/react-composable-api if you have issues with this. TLDR:
+- <Tiptap> replaces <EditorProvider>
+- Most <EditorProvider> options are passed into useEditor()
+- <Tiptap.Content> replaces <EditorContent>
+- useTiptap() and useCurrentEditor() are both valid, however useTiptap() is the modern one and should be preferred as it gives access to ready state and provides a non-null editor.
+
 # Translations
 Translations are managed using i18next. All translation files are located under `src/locales`. Each language has its own JSON file containing the translations for that language.
 

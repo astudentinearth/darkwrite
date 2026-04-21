@@ -29,6 +29,7 @@ export const DEFAULT_EDITOR_SETTINGS = {
   wordCountHudEnabled: false as boolean,
   disabledCommandItems: [] as string[],
   preferredPageSize: "A4" as PageSize,
+  showTextDirectionControls: false as boolean,
 };
 
 export const DEFAULT_CLIENT_SETTINGS = {

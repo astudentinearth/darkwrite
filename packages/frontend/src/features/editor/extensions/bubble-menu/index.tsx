@@ -9,6 +9,7 @@ import { HighlightColorSelector } from "./highlight";
 import { CellSelection } from "@tiptap/pm/tables";
 import { Block } from "../../types";
 import { RefObject } from "react";
+import { TextDirectionMenu } from "./text-direction";
 
 export type BubbleMenuProps = {
   isDragging: RefObject<boolean>;
@@ -78,6 +79,7 @@ export default function Bubble({ isDragging }: BubbleMenuProps) {
         <HeadingSelector />
         <ListSelector />
         <div className="w-px bg-border"></div>
+        <TextDirectionMenu />
         <TextColorSelector />
         <HighlightColorSelector />
       </div>

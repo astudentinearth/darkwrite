@@ -3,6 +3,7 @@ import { NoteCustomization } from "@darkwrite/common";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { JSONContent } from "@tiptap/core";
 import _ from "lodash";
+import { TextDirection } from "../types";
 
 export const EDITOR_SLICE_NAME = "editor";
 
@@ -14,6 +15,7 @@ export interface FormattingState {
   isCode: boolean;
   isQuote: boolean;
   isLink: boolean;
+  textDirection?: TextDirection;
   currentLinkUrl?: string;
 }
 

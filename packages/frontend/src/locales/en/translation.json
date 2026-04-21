@@ -98,7 +98,8 @@
       },
       "alwaysShowWordCount": "Always show word count",
       "codeBlockIndentSize": "Indent size in code blocks",
-      "codeBlockIndentSizeDescription": "Number of spaces to be inserted when you hit the tab key."
+      "codeBlockIndentSizeDescription": "Number of spaces to be inserted when you hit the Tab⇥ key.",
+      "showRtlControls": "Show text direction controls in the editor toolbar"
     },
     "appearance": {
       "title": "Appearance",
@@ -202,7 +203,13 @@
       "underline": "Underline",
       "strike": "Strikethrough",
       "code": "Inline code",
-      "blockquote": "Quote"
+      "blockquote": "Quote",
+      "textDirection": {
+        "label": "Text direction",
+        "ltr": "Left to right",
+        "rtl": "Right to left",
+        "auto": "Auto"
+      }
     },
     "table": {
       "addColBefore": "Add column to the left",

@@ -50,6 +50,10 @@ export default function WorkspaceSettings() {
     updateSettings({ editor: { codeIndentSize: val } });
   };
 
+  const toggleTextDirectionControls = (val: boolean) => {
+    updateSettings({ editor: { showTextDirectionControls: val } });
+  };
+
   return (
     <div className="w-full flex flex-col items-center pt-3 gap-4">
       {currentWorkspace && (
@@ -153,6 +157,17 @@ export default function WorkspaceSettings() {
               }
             }}
             value={settings.editor.codeIndentSize}
+          />
+        </div>
+        <hr />
+        <div className="flex justify-between items-center">
+          <Label htmlFor="rtl-switch">
+            {t("settings.workspace.showRtlControls")}
+          </Label>
+          <Switch
+            id="rtl-switch"
+            checked={settings.editor.showTextDirectionControls}
+            onCheckedChange={toggleTextDirectionControls}
           />
         </div>
       </SettingsCard>
