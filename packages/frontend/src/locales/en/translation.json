@@ -196,7 +196,13 @@
       "linkPlaceholder": "Paste URL or search",
       "bulletList": "Bullet list",
       "numberedList": "Numbered list",
-      "toDoList": "To-do list"
+      "toDoList": "To-do list",
+      "bold": "Bold",
+      "italic": "Italic",
+      "underline": "Underline",
+      "strike": "Strikethrough",
+      "code": "Inline code",
+      "blockquote": "Quote"
     },
     "table": {
       "addColBefore": "Add column to the left",

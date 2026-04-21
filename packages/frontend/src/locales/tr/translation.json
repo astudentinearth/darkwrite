@@ -196,7 +196,13 @@
       "linkPlaceholder": "Ara veya URL yapıştır",
       "bulletList": "Madde işaretli liste",
       "numberedList": "Numaralı liste",
-      "toDoList": "Yapılacaklar listesi"
+      "toDoList": "Yapılacaklar listesi",
+      "bold": "Kalın",
+      "italic": "İtalik",
+      "underline": "Altı çizili",
+      "strike": "Üstü çizili",
+      "code": "Satır içi kod",
+      "blockquote": "Alıntı"
     },
     "table": {
       "addColBefore": "Sola sütun ekle",
