@@ -14,6 +14,13 @@ export function isValidLinkUrl(str: string) {
   }
 }
 
+function normalizetoHttpUrl(str: string) {
+  if (str.startsWith("http://") || str.startsWith("https://")) {
+    return str;
+  }
+  return "https://" + str;
+}
+
 export function useLinkOptions() {
   const { editor } = useCurrentEditor();
   const { noteId } = use(DarkwriteEditorContext);
@@ -35,7 +42,7 @@ export function useLinkOptions() {
   const setLink = () => {
     if (!urlRef.current) return;
     if (!isValidLinkUrl(urlRef.current.value)) return;
-    editor?.chain().focus().setLink({ href: urlRef.current.value }).run();
+    editor?.chain().focus().setLink({ href: normalizetoHttpUrl(urlRef.current.value) }).run();
     setOpen(false);
   };
 
