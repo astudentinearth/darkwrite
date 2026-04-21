@@ -1,8 +1,8 @@
-import { EditorContent, SlashCommandItem } from "./types";
+import { NoteDTO } from "@darkwrite/common";
 import { Editor } from "@tiptap/core";
 import { createContext } from "react";
-import { NoteDTO } from "@darkwrite/common";
 import { ImageExtensionConfig } from "./extensions/image/image-config";
+import { EditorContent, SlashCommandItem } from "./types";
 
 export interface IDarkwriteEditorContext {
   notes?: NoteDTO[];
