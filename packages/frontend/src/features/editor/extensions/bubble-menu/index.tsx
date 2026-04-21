@@ -36,16 +36,13 @@ export default function Bubble() {
             .querySelector(".bubble-menu")
             ?.setAttribute("data-state", "visible");
 
-          const root = document.querySelector(
-            ".bubble-menu-wrapper",
-          )?.parentElement;
+          const root = document.querySelector(".bubble-menu-wrapper");
           root?.classList.remove("bubble-settled");
           requestAnimationFrame(() => {
             requestAnimationFrame(() => {
               root?.classList.add("bubble-settled");
             });
           });
-
           document
             .querySelector(".bubble-menu-wrapper")
             ?.setAttribute("data-state", "visible");
@@ -54,9 +51,7 @@ export default function Bubble() {
           document
             .querySelector(".bubble-menu")
             ?.setAttribute("data-state", "hidden");
-          const root = document.querySelector(
-            ".bubble-menu-wrapper",
-          )?.parentElement;
+          const root = document.querySelector(".bubble-menu-wrapper");
           root?.classList.remove("bubble-settled");
           document
             .querySelector(".bubble-menu-wrapper")

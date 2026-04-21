@@ -11,7 +11,6 @@ import { Underline } from "@tiptap/extension-underline";
 import { CharacterCount } from "@tiptap/extensions";
 import { StarterKit } from "@tiptap/starter-kit";
 import AutoJoiner from "tiptap-extension-auto-joiner";
-import GlobalDragHandle from "tiptap-extension-global-drag-handle";
 import lowlight from "../lowlight";
 import { Block } from "../types";
 import { KeymapFixer } from "./keymap-patcher";
@@ -138,7 +137,6 @@ export const DefaultEditorExtensions = [
   taskItem,
   taskList,
   AutoJoiner,
-  GlobalDragHandle,
   placeholder,
   horizontalRule,
   link,

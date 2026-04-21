@@ -10,6 +10,7 @@ import Bubble from "../extensions/bubble-menu";
 import TableMenu from "../extensions/table/table-menu";
 import { EventHelper } from "../components/event-helper";
 import { FormattingHelper } from "../components/formatting-helper";
+import { DragHandleExtension } from "../extensions/drag-handle";
 
 export default function useEditorBuilder() {
   const { imageUploadConfig, codeBlockIndentSize, commandItems } = use(
@@ -35,6 +36,7 @@ export default function useEditorBuilder() {
         <EventHelper />
         <FormattingHelper />
         <Bubble />
+        <DragHandleExtension />
         <TableMenu />
       </>
     ),
