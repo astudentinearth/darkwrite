@@ -16,6 +16,8 @@ import { Block } from "../types";
 import { KeymapFixer } from "./keymap-patcher";
 import { LinkToPage } from "./link-to-page";
 import TableExtensions from "./table/table-extension";
+import { ReactMarkViewRenderer } from "@tiptap/react";
+import { LinkView } from "../components/link-view";
 
 export const starterKit = StarterKit.configure({
   bulletList: {
@@ -85,7 +87,12 @@ const horizontalRule = HorizontalRule.configure({
   },
 });
 
-const link = Link.configure({
+const link = Link.extend({
+  inclusive: false,
+  addMarkView() {
+    return ReactMarkViewRenderer(LinkView);
+  },
+}).configure({
   HTMLAttributes: {
     class: cn(
       "text-muted-foreground underline underline-offset-[3px] hover:text-primary transition-colors cursor-pointer",

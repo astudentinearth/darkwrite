@@ -15,6 +15,8 @@
 - Add support for RTL languages and manual text direction (#26)
   - The button can be turned on/off from settings
 - Reworked menu bar, add "Create Note" to `File` menu
+- Inline links can now link to other notes directly
+- Added hover tooltips to inline links
 
 ## ✨ Improvements and fixes
 - Fix code blocks breaking when all content is deleted with ⌘+⌫ ⌘+Del, Ctrl+⌫ or Ctrl+Del
@@ -38,6 +40,7 @@
 - Long lines in code blocks are now properly wrapped in HTML and PDF exports
 - Notes with no title now display "Untitled" placeholders correctly, with localization
 - Notes no longer get created with the title "Untitled" (or its localized variant). The default title is now empty (`""`)
+- Typing next to a link doesn't annoyingly add text to the link
 
 ## 🛠️ Technical changes
 - Drop TypeORM and better-sqlite3, switch to drizzle-orm and libsql
