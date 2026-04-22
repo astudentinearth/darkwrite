@@ -2,7 +2,6 @@ import { ParentId } from "@darkwrite/common";
 import { noteByParentIdTag, NOTES_TAG_TYPE, notesApi } from "./notes-api";
 import { NoteDTO } from "@darkwrite/common";
 import { DarkwriteAPIClient } from "@/api/api-client";
-import i18n from "@/i18n";
 import { upsertNotes } from "./note-slice";
 import { navigateToNote } from "@/features/navigation/navigator";
 
@@ -14,7 +13,7 @@ export interface CreateNoteArgs {
 
 async function _createNoteQueryFn(args: CreateNoteArgs) {
   try {
-    const title = i18n.t("defaults.pageTitle");
+    const title = "";
     const { parentId, workspaceId } = args;
     const { note } = await DarkwriteAPIClient.note.create({
       parentId: parentId ?? null,
