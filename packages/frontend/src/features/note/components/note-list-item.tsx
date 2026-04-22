@@ -83,7 +83,11 @@ export function NoteItem({
             </button>
           </CollapsibleTrigger>
           <span className="flex-1 truncate text-left select-none opacity-75 group-hover:opacity-100">
-            {note.title || "Untitled"}
+            {note.title || (
+              <span className="text-muted-foreground">
+                {t("defaults.pageTitle")}
+              </span>
+            )}
           </span>
           <TextTooltip text={t("sidebar.notes.contextmenu.newSubpage")}>
             <button

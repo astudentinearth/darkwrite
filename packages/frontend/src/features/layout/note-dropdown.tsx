@@ -46,7 +46,7 @@ export default function NoteDropdown() {
         <TitlebarNavTrigger className="max-w-64 overflow-hidden">
           <span>{getNoteIcon(currentNote.icon)}</span>
           <span className="overflow-hidden w-full text-ellipsis whitespace-nowrap wrap-break-word">
-            {currentNote.title}
+            {currentNote.title || t("defaults.pageTitle")}
           </span>
         </TitlebarNavTrigger>
       </DropdownMenuTrigger>

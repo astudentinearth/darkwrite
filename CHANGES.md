@@ -36,6 +36,7 @@
 - Add missing backgrounds to code blocks in HTML and PDF exports
 - Code blocks in exports now correctly follow your monospace font choice
 - Long lines in code blocks are now properly wrapped in HTML and PDF exports
+- Notes with no title now display "Untitled" placeholders correctly, with localization
 
 ## 🛠️ Technical changes
 - Drop TypeORM and better-sqlite3, switch to drizzle-orm and libsql

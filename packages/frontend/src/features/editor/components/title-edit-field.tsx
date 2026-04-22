@@ -8,17 +8,20 @@ import { use } from "react";
 import { emitEditorEvent } from "../event/editor-bus";
 import { EditorEventType } from "../event/types";
 import { UtilityNodes } from "../node-types";
+import { useTranslation } from "react-i18next";
 
 export function TitleEditField() {
   const { noteId } = use(EditorContext);
   const titleUpdater = useTitleUpdater(noteId);
   const title = useAppSelector((s) => selectNoteTitle(s, noteId));
+  const { t } = useTranslation();
 
   return (
     <DynamicTextarea
       className="text-4xl font-semibold box-border h-auto overflow-hidden resize-none grow outline-hidden block"
       defaultValue={title}
       preventNewline
+      placeholder={t("defaults.pageTitle")}
       autoFocus
       onKeyDown={(e) => {
         if (e.key === "Enter") {
