@@ -9,3 +9,8 @@ export const WindowEvent = {
   EXIT_FULLSCREEN: "exit-full-screen",
   CONTEXT_MENU: "context-menu",
 } as const;
+
+export const AppMenuEvent = {
+  OPEN_SETTINGS: "menu:open-settings",
+  CREATE_NEW_NOTE: "menu:create-new-note",
+} as const;

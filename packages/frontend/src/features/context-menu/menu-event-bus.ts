@@ -6,8 +6,10 @@ export type ContextMenuEventMap = {
 
 export const ContextMenuEventBus = new EventBus<ContextMenuEventMap>();
 
-if (window.events) {
-  window.events.onContextMenu((data) => {
-    ContextMenuEventBus.emit("onShow", data);
-  });
+export function setupContextMenuEvents() {
+  if (window.events) {
+    window.events.onContextMenu((data) => {
+      ContextMenuEventBus.emit("onShow", data);
+    });
+  }
 }

@@ -1,4 +1,4 @@
-import { WindowEvent } from "@/types/window-events";
+import { AppMenuEvent, WindowEvent } from "@/types/window-events";
 import {
   deepAssign,
   NativeContextMenuData,
@@ -59,6 +59,10 @@ const events: WindowEvents = {
     ipcRenderer.on(WindowEvent.EXIT_FULLSCREEN, () => callback()),
   onContextMenu: (callback: (data: NativeContextMenuData) => void) =>
     ipcRenderer.on(WindowEvent.CONTEXT_MENU, (_, data) => callback(data)),
+  menu: {
+    onCreateNote: (callback: () => void) =>
+      ipcRenderer.on(AppMenuEvent.CREATE_NEW_NOTE, () => callback()),
+  },
 };
 
 contextBridge.exposeInMainWorld("events", events);

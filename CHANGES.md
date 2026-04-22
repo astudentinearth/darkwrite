@@ -14,6 +14,7 @@
 - Add tooltips
 - Add support for RTL languages and manual text direction (#26)
   - The button can be turned on/off from settings
+- Reworked menu bar, add "Create Note" to `File` menu
 
 ## ✨ Improvements and fixes
 - Fix code blocks breaking when all content is deleted with ⌘+⌫ ⌘+Del, Ctrl+⌫ or Ctrl+Del
@@ -30,6 +31,8 @@
 - Hide scrollbars when the view is not hovered on
 - Added notification feedback to various actions (trash, restore, delete etc.)
 - Change drag handle extension (now using tiptap's official one)
+- ⌘N works again
+- Changed back/forward navigation to follow platform conventions
 
 ## 🛠️ Technical changes
 - Drop TypeORM and better-sqlite3, switch to drizzle-orm and libsql

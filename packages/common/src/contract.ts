@@ -220,4 +220,7 @@ export interface WindowEvents {
   onEnterFullScreen: (callback: () => void) => void;
   onExitFullScreen: (callback: () => void) => void;
   onContextMenu: (callback: (data: NativeContextMenuData) => void) => void;
+  menu: {
+    onCreateNote: (callback: () => void) => void;
+  };
 }

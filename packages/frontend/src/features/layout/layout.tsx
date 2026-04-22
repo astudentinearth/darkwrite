@@ -13,6 +13,7 @@ import MoveNoteDialog from "../note/components/move-note-dialog";
 import { ClearTrashDialog } from "../trash/components/clear-trash-dialog";
 import { NativeContextMenuProvider } from "../context-menu/native-context-menu";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { AppMenuHandler } from "../app-menu/app-menu-handler";
 
 //import { useStartup } from "@/hooks/use-startup";
 
@@ -31,6 +32,7 @@ export function Layout() {
         <TooltipProvider>
           <ThemeHandler />
           <NativeContextMenuProvider />
+          <AppMenuHandler />
           <NavigationHelper />
           <Sidebar></Sidebar>
           <SidebarResizeHandle />

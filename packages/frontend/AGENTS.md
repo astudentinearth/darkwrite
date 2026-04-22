@@ -77,7 +77,7 @@ This is the modern declarative API that was introduced in recent Tiptap releases
 - <Tiptap> replaces <EditorProvider>
 - Most <EditorProvider> options are passed into useEditor()
 - <Tiptap.Content> replaces <EditorContent>
-- useTiptap() and useCurrentEditor() are both valid, however useTiptap() is the modern one and should be preferred as it gives access to ready state and provides a non-null editor.
+- useTiptap() and useCurrentEditor() are both valid, but useCurrentEditor() is preferred for now
 
 # Translations
 Translations are managed using i18next. All translation files are located under `src/locales`. Each language has its own JSON file containing the translations for that language.

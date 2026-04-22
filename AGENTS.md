@@ -93,6 +93,8 @@ pnpm test:run src/lib/some.test.ts
 - **Line length**: Keep under 80 characters
 - **Naming**: camelCase for variables/functions, PascalCase for React components
 
+When asked to perform a review, do NOT check for any inconsistencies that can be solved with a code formatter, indentation and line length in particular. Don't check for trailing whitespaces either, they will get removed by formatting tools
+
 ### File Naming Conventions
 - Use **kebab-case** for file names
 - Suffix files by type:
