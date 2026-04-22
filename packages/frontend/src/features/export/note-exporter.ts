@@ -17,9 +17,15 @@ export async function documentBodyToHTML(
   font: string,
   title?: string,
   icon?: string | null,
+  monospaceFont?: string,
 ) {
   const builder = await new HtmlDocumentBuilder(content).embedImages();
-  return builder.font(font).title(title).icon(icon).build();
+  return builder
+    .font(font)
+    .monospaceFont(monospaceFont)
+    .title(title)
+    .icon(icon)
+    .build();
 }
 
 export function getNoteExporter(store: AppStore) {
@@ -54,6 +60,7 @@ export function getNoteExporter(store: AppStore) {
       font,
       note.title,
       note.icon,
+      getSettings().appearance.fonts.code,
     );
     return html;
   }

@@ -33,6 +33,9 @@
 - Change drag handle extension (now using tiptap's official one)
 - ⌘N works again
 - Changed back/forward navigation to follow platform conventions
+- Add missing backgrounds to code blocks in HTML and PDF exports
+- Code blocks in exports now correctly follow your monospace font choice
+- Long lines in code blocks are now properly wrapped in HTML and PDF exports
 
 ## 🛠️ Technical changes
 - Drop TypeORM and better-sqlite3, switch to drizzle-orm and libsql
