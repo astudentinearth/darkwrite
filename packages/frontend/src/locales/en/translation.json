@@ -245,7 +245,8 @@
       "removeIcon": "Remove icon",
       "addCover": "Add cover",
       "trashWarning": "This page is currently in the trash."
-    }
+    },
+    "placeholder": "Press '/' for commands"
   },
   "search": {
     "placeholder": "Search your notes",

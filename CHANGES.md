@@ -41,6 +41,7 @@
 - Notes with no title now display "Untitled" placeholders correctly, with localization
 - Notes no longer get created with the title "Untitled" (or its localized variant). The default title is now empty (`""`)
 - Typing next to a link doesn't annoyingly add text to the link
+- "Press '/' for commands" placeholder is now localized
 
 ## 🛠️ Technical changes
 - Drop TypeORM and better-sqlite3, switch to drizzle-orm and libsql

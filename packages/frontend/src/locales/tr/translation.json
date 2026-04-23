@@ -245,7 +245,8 @@
       "removeIcon": "Simgeyi kaldır",
       "addCover": "Kapak resmi ekle",
       "trashWarning": "Bu sayfa şu anda çöp kutusunda."
-    }
+    },
+    "placeholder": "Komutlar için '/' yazın"
   },
   "search": {
     "placeholder": "Notlarınızı arayın",

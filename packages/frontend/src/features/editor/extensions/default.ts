@@ -3,7 +3,6 @@ import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import Highlight from "@tiptap/extension-highlight";
 import HorizontalRule from "@tiptap/extension-horizontal-rule";
 import { Link } from "@tiptap/extension-link";
-import { Placeholder } from "@tiptap/extension-placeholder";
 import { TaskItem } from "@tiptap/extension-task-item";
 import { TaskList } from "@tiptap/extension-task-list";
 import { TextStyleKit } from "@tiptap/extension-text-style";
@@ -75,13 +74,7 @@ export const taskItem = TaskItem.configure({
   nested: true,
 });
 
-export const placeholder = Placeholder.configure({
-  includeChildren: true,
-  placeholder: "Press '/' for commands",
-  showOnlyCurrent: true,
-});
-
-const horizontalRule = HorizontalRule.configure({
+export const horizontalRule = HorizontalRule.configure({
   HTMLAttributes: {
     class: cn("mt-4 mb-6 border-t border-muted-foreground"),
   },
@@ -144,7 +137,6 @@ export const DefaultEditorExtensions = [
   taskItem,
   taskList,
   AutoJoiner,
-  placeholder,
   horizontalRule,
   link,
   LinkToPage,
