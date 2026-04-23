@@ -17,6 +17,7 @@
 - Reworked menu bar, add "Create Note" to `File` menu
 - Inline links can now link to other notes directly
 - Added hover tooltips to inline links
+- Links can now be copied
 
 ## ✨ Improvements and fixes
 - Fix code blocks breaking when all content is deleted with ⌘+⌫ ⌘+Del, Ctrl+⌫ or Ctrl+Del

@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui";
 import {
   Tooltip,
   TooltipContent,
@@ -11,7 +12,8 @@ import { getNoteIcon } from "@/lib/utils";
 import { DarkwriteResource, getResourceRefFromUrl } from "@darkwrite/common";
 import { MarkViewRendererProps } from "@tiptap/core";
 import { MarkViewContent } from "@tiptap/react";
-import { Link } from "lucide-react";
+import { Check, Copy, Link } from "lucide-react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 function NotePreview(props: { noteId: string }) {
@@ -34,16 +36,36 @@ function NotePreview(props: { noteId: string }) {
 }
 
 function ExternalLinkPreview(props: { url: string }) {
+  const [copied, setCopied] = useState(false);
   return (
     <TooltipContent
       sideOffset={-2}
       side="bottom"
-      className="flex gap-2 bg-view-2/85 hover:bg-view-2/75 cursor-pointer"
+      align="start"
+      className="flex gap-2 bg-view-2/85 hover:bg-view-2/75 items-center overflow-x-hidden p-1 pl-2 cursor-pointer *:shrink-0"
     >
       <Link size={16} />
-      <a target="_blank" rel="noopener" href={props.url}>
+      <a
+        target="_blank"
+        rel="noopener"
+        className="max-w-48 w-full hover:underline cursor-pointer overflow-x-hidden text-ellipsis whitespace-nowrap flex"
+        href={props.url}
+      >
         {props.url}
       </a>
+      <Button
+        variant="ghost"
+        className="p-0 rounded-full w-6 h-6"
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          setCopied(true);
+          navigator.clipboard.writeText(props.url);
+          setTimeout(() => setCopied(false), 2000);
+        }}
+      >
+        {copied ? <Check size={16} /> : <Copy size={16} />}
+      </Button>
     </TooltipContent>
   );
 }
