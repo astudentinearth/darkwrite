@@ -10,9 +10,10 @@ import {
   ContextMenuTrigger,
 } from "@/components/ui";
 import { useTranslation } from "react-i18next";
-import { useState, MouseEvent } from "react";
+import { use, useState, MouseEvent } from "react";
 import { DarkwriteAPIClient } from "@/api/api-client";
 import { FileIcon } from "@/components/file-icon";
+import { DarkwriteEditorContext } from "../context";
 
 const filename = (fullPath: string) => {
   const parts = fullPath.split(/[/\\]/);
@@ -24,6 +25,7 @@ export function FileLinkNode(props: ReactNodeViewProps) {
   const { linkId } = props.node.attrs as FileLinkAttributesType;
   const { fileLink } = useFileLink(linkId);
   const { t } = useTranslation();
+  const { openFilesOnDoubleClick } = use(DarkwriteEditorContext);
 
   const openFile = () => {
     if (!fileLink) return;
@@ -37,11 +39,17 @@ export function FileLinkNode(props: ReactNodeViewProps) {
     props.updateAttributes({ linkId: id });
   };
 
-  const handleClick = async (e: MouseEvent) => {
+  const handleClick = (e: MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     if (!fileLink) changeFile();
-    else openFile();
+    else if (!openFilesOnDoubleClick) openFile();
+  };
+
+  const handleDoubleClick = (e: MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (openFilesOnDoubleClick && fileLink) openFile();
   };
 
   return (
@@ -51,6 +59,7 @@ export function FileLinkNode(props: ReactNodeViewProps) {
           <div
             tabIndex={0}
             onClick={handleClick}
+            onDoubleClick={handleDoubleClick}
             className={cn(
               "bg-transparent hover:bg-secondary/75 font-semibold text-(--dw-editor-foreground) cursor-pointer flex gap-2 rounded-md items-center px-1 py-0.5 my-2",
               (props.selected || contextMenuOpen) && "bg-primary/20",

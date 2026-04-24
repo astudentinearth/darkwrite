@@ -99,7 +99,8 @@
       "alwaysShowWordCount": "Always show word count",
       "codeBlockIndentSize": "Indent size in code blocks",
       "codeBlockIndentSizeDescription": "Number of spaces to be inserted when you hit the Tab⇥ key.",
-      "showRtlControls": "Show text direction controls in the editor toolbar"
+      "showRtlControls": "Show text direction controls in the editor toolbar",
+      "openFilesOnDoubleClick": "Open linked files on double click"
     },
     "appearance": {
       "title": "Appearance",

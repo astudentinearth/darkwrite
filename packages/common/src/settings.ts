@@ -30,6 +30,7 @@ export const DEFAULT_EDITOR_SETTINGS = {
   disabledCommandItems: [] as string[],
   preferredPageSize: "A4" as PageSize,
   showTextDirectionControls: false as boolean,
+  openFilesOnDoubleClick: false as boolean,
 };
 
 export const DEFAULT_CLIENT_SETTINGS = {

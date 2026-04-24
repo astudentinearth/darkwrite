@@ -16,6 +16,7 @@ export interface IDarkwriteEditorContext {
   imageUploadConfig: ImageExtensionConfig;
   noteId: string;
   showTextDirectionControls?: boolean;
+  openFilesOnDoubleClick?: boolean;
 }
 
 export const DarkwriteEditorContext = createContext<IDarkwriteEditorContext>({

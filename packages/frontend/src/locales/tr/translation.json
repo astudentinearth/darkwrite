@@ -99,7 +99,8 @@
       "alwaysShowWordCount": "Kelime sayısını her zaman göster",
       "codeBlockIndentSize": "Kod bloklarındaki girinti genişliği",
       "codeBlockIndentSizeDescription": "Tab⇥ tuşuna basıldığında kod bloklarına eklenecek boşluk sayısını belirleyin.",
-      "showRtlControls": "Düzenleyicide metin yönü kontrollerini göster"
+      "showRtlControls": "Düzenleyicide metin yönü kontrollerini göster",
+      "openFilesOnDoubleClick": "Bağlı dosyaları çift tıklamayla aç"
     },
     "appearance": {
       "title": "Görünüm",

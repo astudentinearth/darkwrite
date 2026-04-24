@@ -54,6 +54,10 @@ export default function WorkspaceSettings() {
     updateSettings({ editor: { showTextDirectionControls: val } });
   };
 
+  const toggleOpenFilesOnDoubleClick = (val: boolean) => {
+    updateSettings({ editor: { openFilesOnDoubleClick: val } });
+  };
+
   return (
     <div className="w-full flex flex-col items-center pt-3 gap-4">
       {currentWorkspace && (
@@ -168,6 +172,17 @@ export default function WorkspaceSettings() {
             id="rtl-switch"
             checked={settings.editor.showTextDirectionControls}
             onCheckedChange={toggleTextDirectionControls}
+          />
+        </div>
+        <hr />
+        <div className="flex justify-between items-center">
+          <Label htmlFor="double-click-files-switch">
+            {t("settings.workspace.openFilesOnDoubleClick")}
+          </Label>
+          <Switch
+            id="double-click-files-switch"
+            checked={settings.editor.openFilesOnDoubleClick}
+            onCheckedChange={toggleOpenFilesOnDoubleClick}
           />
         </div>
       </SettingsCard>

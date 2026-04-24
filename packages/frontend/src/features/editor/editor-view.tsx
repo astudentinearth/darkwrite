@@ -52,6 +52,7 @@ function EditorViewport() {
         onCreate={options.onCreate}
         imageUploadConfig={options.imageConfig}
         showTextDirectionControls={settings.showTextDirectionControls}
+        openFilesOnDoubleClick={settings.openFilesOnDoubleClick}
         codeBlockIndentSize={settings.codeIndentSize}
         embedSourceResolver={async (id) =>
           (await DarkwriteAPIClient.embed.getById(id)).embed?.url ?? ""
