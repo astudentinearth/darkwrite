@@ -238,7 +238,8 @@
     },
     "blocks": {
       "linkToPage": {
-        "placeholder": "Select a note"
+        "placeholder": "Select a note",
+        "turnIntoInlineLink": "Turn into inline link"
       },
       "fileLink": {
         "placeholder": "Choose a file for quick access",

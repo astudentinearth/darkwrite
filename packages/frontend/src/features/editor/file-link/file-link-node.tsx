@@ -14,10 +14,22 @@ import { use, useState, MouseEvent } from "react";
 import { DarkwriteAPIClient } from "@/api/api-client";
 import { FileIcon } from "@/components/file-icon";
 import { DarkwriteEditorContext } from "../context";
+import { AppWindow } from "lucide-react";
 
 const filename = (fullPath: string) => {
   const parts = fullPath.split(/[/\\]/);
   return parts[parts.length - 1];
+};
+
+const isApplication = (filePath: string) => {
+  const ext = filePath.split(".").pop()?.toLowerCase();
+  return (
+    ext === "exe" ||
+    ext === "app" ||
+    ext === "bat" ||
+    ext === "cmd" ||
+    ext === "sh"
+  );
 };
 
 export function FileLinkNode(props: ReactNodeViewProps) {
@@ -67,10 +79,14 @@ export function FileLinkNode(props: ReactNodeViewProps) {
           >
             {fileLink && (
               <>
-                <FileIcon
-                  mimeType={fileLink.mimeType}
-                  className="size-5 shrink-0"
-                />
+                {isApplication(fileLink.filePath) ? (
+                  <AppWindow className="size-5 shrink-0" />
+                ) : (
+                  <FileIcon
+                    mimeType={fileLink.mimeType}
+                    className="size-5 shrink-0"
+                  />
+                )}
                 <span>{filename(fileLink.filePath)}</span>
               </>
             )}

@@ -30,7 +30,9 @@ function NotePreview(props: { noteId: string }) {
       className="flex gap-2 bg-view-2/85 hover:bg-view-2/75 cursor-pointer"
     >
       <span>{getNoteIcon(note?.icon)}</span>
-      <a>{note?.title || t("defaults.pageTitle")}</a>
+      <a className="max-w-48 w-full hover:underline cursor-pointer overflow-x-hidden text-ellipsis whitespace-nowrap flex">
+        {note?.title || t("defaults.pageTitle")}
+      </a>
     </TooltipContent>
   );
 }
@@ -78,7 +80,10 @@ export function LinkView(props: MarkViewRendererProps) {
   return (
     <TooltipProvider delayDuration={300}>
       <Tooltip>
-        <TooltipTrigger asChild={false}>
+        <TooltipTrigger
+          asChild={false}
+          className="[&_a]:cursor-pointer [&_a]:hover:text-primary-text [&_a]:text-(--dw-editor-foreground)"
+        >
           <MarkViewContent
             as="a"
             onClick={(e) => {

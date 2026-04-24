@@ -20,6 +20,8 @@
 - Links can now be copied
 - Add ability to link local files directly from notes (#24)
   - You can opt into double clicking in settings if you prefer
+  - You can launch apps with this block, though I don't know why you would want to do that
+- "Link to page" blocks can now be turned into inline links from the context menu (#22)
 
 ## ✨ Improvements and fixes
 - Fix code blocks breaking when all content is deleted with ⌘+⌫ ⌘+Del, Ctrl+⌫ or Ctrl+Del

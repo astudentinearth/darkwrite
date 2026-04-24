@@ -33,6 +33,7 @@ export enum Block {
   HorizontalRule = "horizontalRule",
   LinkToPage = "linkToPage",
   LinkToLocalFile = "fileLink",
+  Paragraph = "paragraph",
 }
 
 export enum TextDirection {

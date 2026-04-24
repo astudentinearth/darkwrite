@@ -238,7 +238,8 @@
     },
     "blocks": {
       "linkToPage": {
-        "placeholder": "Bir not seçin"
+        "placeholder": "Bir not seçin",
+        "turnIntoInlineLink": "Satır içi bağlantıya dönüştür"
       },
       "fileLink": {
         "placeholder": "Hızlı erişim için bir dosya seçin",
