@@ -32,6 +32,7 @@ export enum Block {
   Image = "dwimage",
   HorizontalRule = "horizontalRule",
   LinkToPage = "linkToPage",
+  LinkToLocalFile = "fileLink",
 }
 
 export enum TextDirection {

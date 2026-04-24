@@ -132,6 +132,7 @@ When asked to perform a review, do NOT check for any inconsistencies that can be
 - Use `DarkwriteAPIClient` from `@/api/api-client.ts`
 - **DO NOT** use `window.api` directly
 - API types are defined in `@darkwrite/common` package, in src/contract.ts
+- Do not call Data Access Object (DAO) methods in IPC handler methods. Always use the corresponding service method instead.
 
 ### Testing
 - Test files use Vitest with `@testing-library`

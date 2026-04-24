@@ -18,6 +18,7 @@
 - Inline links can now link to other notes directly
 - Added hover tooltips to inline links
 - Links can now be copied
+- Add ability to link local files directly from notes (#24)
 
 ## ✨ Improvements and fixes
 - Fix code blocks breaking when all content is deleted with ⌘+⌫ ⌘+Del, Ctrl+⌫ or Ctrl+Del

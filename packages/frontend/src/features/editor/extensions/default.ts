@@ -17,6 +17,7 @@ import { LinkToPage } from "./link-to-page";
 import TableExtensions from "./table/table-extension";
 import { ReactMarkViewRenderer } from "@tiptap/react";
 import { LinkView } from "../components/link-view";
+import { FileLinkExtension } from "../file-link/file-link-extension";
 
 export const starterKit = StarterKit.configure({
   bulletList: {
@@ -131,6 +132,7 @@ export const codeBlock = (indentSize: number) =>
 const textStyle = TextStyleKit.configure({ color: { types: ["textStyle"] } });
 const hightlight = Highlight.configure({ multicolor: true });
 const characterCount = CharacterCount.configure({});
+const fileLink = FileLinkExtension.configure();
 
 export const DefaultEditorExtensions = [
   starterKit,
@@ -145,5 +147,6 @@ export const DefaultEditorExtensions = [
   textStyle,
   hightlight,
   characterCount,
+  fileLink,
   ...TableExtensions,
 ];

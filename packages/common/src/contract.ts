@@ -25,6 +25,7 @@ import {
   WorkspacesResponseDTO,
 } from "./dto/response/workspace.response";
 import { Font } from "./font";
+import { FileLinkMetadata } from "./link";
 import { NoteExportFormat, NoteImportResult, ParentId } from "./note";
 import { PageSize } from "./pdf";
 import { DarkwriteUserSettings } from "./settings";
@@ -187,6 +188,16 @@ export interface IOnboardingAPI {
   markFinished: () => Promise<void>;
 }
 
+export interface IFileLinkAPI {
+  /** Opens a file picker, creates a linked file record, and returns its metadata. Returns null if the dialog was cancelled. */
+  pickAndCreate: () => Promise<FileLinkMetadata | null>;
+  /** Creates a linked file record from the given absolute file path. */
+  createFromPath: (filePath: string) => Promise<FileLinkMetadata>;
+  getById: (id: string) => Promise<FileLinkMetadata>;
+  /** Opens the linked file in the OS default application. */
+  openById: (id: string) => Promise<void>;
+}
+
 /** Desktop specific bridge. This is decorated with IEmbedAPI on the frontend */
 export interface DesktopEmbedAPI {
   createFromLocalFile: (
@@ -212,6 +223,7 @@ export type DarkwriteIPCBridge = {
   desktop: IDesktopAPI;
   backup: IBackupAPI;
   onboarding: IOnboardingAPI;
+  fileLink: IFileLinkAPI;
   checkUpdate: CheckUpdateFn;
   showAppMenu: () => Promise<void>;
 };

@@ -184,7 +184,9 @@
       "image": "Image",
       "imageDescription": "Embed an image.",
       "table": "Table",
-      "tableDescription": "Add a good old table"
+      "tableDescription": "Add a good old table",
+      "fileLink": "File link",
+      "fileLinkDescription": "Link a local file for quick access."
     },
     "bubble": {
       "h1": "Heading 1",
@@ -236,6 +238,13 @@
     "blocks": {
       "linkToPage": {
         "placeholder": "Select a note"
+      },
+      "fileLink": {
+        "placeholder": "Choose a file for quick access",
+        "open": "Open",
+        "copyPath": "Copy full path",
+        "revealInFolder": "Reveal in folder",
+        "changeFile": "Change file"
       }
     },
     "cover": {

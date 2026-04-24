@@ -28,7 +28,8 @@ export default function Bubble({ isDragging }: BubbleMenuProps) {
         if (
           editor.isActive(Block.Image) ||
           editor.isActive(Block.LinkToPage) ||
-          editor.isActive(Block.HorizontalRule)
+          editor.isActive(Block.HorizontalRule) ||
+          editor.isActive(Block.LinkToLocalFile)
         )
           return false;
         return !editor.isEmpty && editor.state.selection?.empty === false;

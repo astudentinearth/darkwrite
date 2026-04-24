@@ -184,7 +184,9 @@
       "linkToPageDescription": "Başka bir sayfaya tıklanabilir bir bağlantı oluştur.",
       "imageDescription": "Doğrudan bir resim ekle.",
       "table": "Tablo",
-      "tableDescription": "Sade bir tablo ekle."
+      "tableDescription": "Sade bir tablo ekle.",
+      "fileLink": "Dosya bağlantısı",
+      "fileLinkDescription": "Hızlı erişim için yerel bir dosya bağlayın."
     },
     "bubble": {
       "h1": "Başlık 1",
@@ -236,6 +238,13 @@
     "blocks": {
       "linkToPage": {
         "placeholder": "Bir not seçin"
+      },
+      "fileLink": {
+        "placeholder": "Hızlı erişim için bir dosya seçin",
+        "open": "Aç",
+        "copyPath": "Tam yolu kopyala",
+        "revealInFolder": "Klasörde göster",
+        "changeFile": "Dosyayı değiştir"
       }
     },
     "cover": {
