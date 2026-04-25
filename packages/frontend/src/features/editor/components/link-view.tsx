@@ -41,16 +41,16 @@ function ExternalLinkPreview(props: { url: string }) {
   const [copied, setCopied] = useState(false);
   return (
     <TooltipContent
-      sideOffset={-2}
+      sideOffset={0}
       side="bottom"
       align="start"
-      className="flex gap-2 bg-view-2/85 hover:bg-view-2/75 items-center overflow-x-hidden p-1 pl-2 cursor-pointer *:shrink-0"
+      className="flex gap-1 bg-view-2/85 hover:bg-view-2/75 items-center overflow-x-hidden p-1 pl-2 cursor-pointer *:shrink-0 w-fit drop-shadow-xl border-border"
     >
       <Link size={16} />
       <a
         target="_blank"
         rel="noopener"
-        className="max-w-48 w-full hover:underline cursor-pointer overflow-x-hidden text-ellipsis whitespace-nowrap flex"
+        className="max-w-48 ml-2 hover:underline cursor-pointer overflow-x-hidden text-ellipsis whitespace-nowrap flex"
         href={props.url}
       >
         {props.url}
@@ -80,19 +80,18 @@ export function LinkView(props: MarkViewRendererProps) {
   return (
     <TooltipProvider delayDuration={300}>
       <Tooltip>
-        <TooltipTrigger
-          asChild={false}
-          className="[&_a]:cursor-pointer [&_a]:hover:text-primary-text [&_a]:text-(--dw-editor-foreground)"
-        >
-          <MarkViewContent
-            as="a"
-            onClick={(e) => {
-              if (resource?.type === DarkwriteResource.Note) {
-                e.preventDefault();
-                navigateToNote(resource.id);
-              }
-            }}
-          />
+        <TooltipTrigger asChild>
+          <span className="[&_a]:cursor-pointer [&_a]:hover:text-primary-text [&_span]:items-start text-start [&_span]:justify-start [&_a]:text-(--dw-editor-foreground)">
+            <MarkViewContent
+              as="a"
+              onClick={(e) => {
+                if (resource?.type === DarkwriteResource.Note) {
+                  e.preventDefault();
+                  navigateToNote(resource.id);
+                }
+              }}
+            />
+          </span>
         </TooltipTrigger>
         <TooltipPortal container={document.body}>
           {resource?.type === DarkwriteResource.Note ? (

@@ -74,7 +74,7 @@ export function BubbleLink() {
               debouncedSearch(value);
             }}
             ref={urlRef}
-            className="bg-view-2 h-9 top-highlight w-full"
+            className="bg-transparent h-9 w-full"
             placeholder={t("linkPlaceholder")}
           />
           <hr className="mt-1" />
