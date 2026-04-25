@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import {
   Collapsible,
   CollapsibleContent,
@@ -10,6 +9,7 @@ import { useTranslation } from "react-i18next";
 import NoteList from "./components/note-list";
 import { useAllNotesViewOpen } from "../session/session-hooks";
 import { useSessionActions } from "../session/session-actions";
+import { SidebarItem } from "../sidebar/sidebar-item";
 
 export default function NoteListRoot() {
   const { t } = useTranslation("translation", { keyPrefix: "sidebar" });
@@ -18,10 +18,8 @@ export default function NoteListRoot() {
   return (
     <Collapsible open={open} onOpenChange={setOpen}>
       <CollapsibleTrigger asChild>
-        <Button
-          className="text-xs p-1 gap-1 h-fit w-full text-foreground/80 hover:text-foreground justify-start"
-          variant={"ghost"}
-        >
+        <SidebarItem className="w-full gap-1">
+          {t("title.allNotes")}
           <ChevronRight
             size={16}
             className={cn(
@@ -29,8 +27,7 @@ export default function NoteListRoot() {
               open && "rotate-90",
             )}
           />
-          {t("title.allNotes")}
-        </Button>
+        </SidebarItem>
       </CollapsibleTrigger>
       <CollapsibleContent>
         <NoteList parentId={null} />

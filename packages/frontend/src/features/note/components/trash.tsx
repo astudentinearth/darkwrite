@@ -9,7 +9,7 @@ import { TextTooltip } from "@/components/ui/tooltip";
 import { navigateToNote } from "@/features/navigation/navigator";
 import { SidebarItem } from "@/features/sidebar/sidebar-item";
 import { cn, getNoteIcon } from "@/lib/utils";
-import { Trash, Undo2 } from "lucide-react";
+import { Trash, Trash2, Undo2 } from "lucide-react";
 import { memo, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNoteById } from "../hooks/use-note-by-id";
@@ -83,7 +83,7 @@ export function TrashWidget() {
     <Popover>
       <PopoverTrigger asChild>
         <SidebarItem>
-          <Trash size={18} />
+          <Trash2 size={16} />
           <span>{t("sidebar.button.trash")}</span>
         </SidebarItem>
       </PopoverTrigger>

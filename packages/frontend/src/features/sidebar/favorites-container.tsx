@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import {
   Collapsible,
   CollapsibleContent,
@@ -13,6 +12,7 @@ import { useFavoritesViewOpen } from "../session/session-hooks";
 import { useGetFavoritesByWorkspaceIdQuery } from "../note/store/notes-api";
 import { useCurrentWorkspaceId } from "../workspaces/hooks/use-workspace";
 import { skipToken } from "@reduxjs/toolkit/query";
+import { SidebarItem } from "./sidebar-item";
 
 function PrefetchFavorites() {
   const workspaceId = useCurrentWorkspaceId();
@@ -29,10 +29,8 @@ export default function FavoritesContainer() {
       <PrefetchFavorites />
       <Collapsible open={open} onOpenChange={setFavoritesViewOpen}>
         <CollapsibleTrigger asChild>
-          <Button
-            className="text-xs p-1 gap-1 h-fit w-full text-foreground/80 hover:text-foreground justify-start"
-            variant={"ghost"}
-          >
+          <SidebarItem className="w-full gap-1">
+            {t("title.favorites")}
             <ChevronRight
               size={16}
               className={cn(
@@ -40,8 +38,7 @@ export default function FavoritesContainer() {
                 open && "rotate-90",
               )}
             />
-            {t("title.favorites")}
-          </Button>
+          </SidebarItem>
         </CollapsibleTrigger>
         <CollapsibleContent>
           <FavoritesView />

@@ -59,7 +59,7 @@ export function NoteItem({
           onDrop={onDrop}
           className={cn(
             `group grid grid-cols-[20px_1fr] active:pushdown-99% hover:grid-cols-[20px_1fr_20px] w-full
-          items-center gap-2 rounded-lg px-1.5 py-1.5 text-sm hover:bg-secondary/50`,
+          items-center gap-2 rounded-md px-1.5 py-1.5 text-sm hover:bg-secondary/50`,
             isActive && "bg-secondary/20 font-medium",
             isDragging && "bg-primary/25",
           )}
