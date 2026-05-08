@@ -3,10 +3,11 @@
   "scripts": {
     "prepare": "husky",
     "precommit": "prettier --check app",
-    "test": "pnpm -r --no-bail test",
-    "lint": "pnpm -r --no-bail lint",
-    "format": "pnpm -r --no-bail format",
-    "typecheck": "pnpm -r --no-bail typecheck",
+    "test": "turbo run test",
+    "lint": "turbo run lint",
+    "format": "turbo run format",
+    "typecheck": "turbo run typecheck",
+    "dev": "turbo run dev",
     "build": "tsx tools/darkwrite-builder.js",
     "build:common": "pnpm --filter=@darkwrite/common build",
     "bundle:desktop": "pnpm --filter=@darkwrite/app-desktop build:pre",
@@ -32,6 +33,7 @@
     "tsx": "catalog:",
     "typescript": "catalog:",
     "vite": "catalog:",
+    "turbo": "catalog:",
     "vitest": "catalog:"
   }
 }

@@ -8,6 +8,7 @@ on:
       - "packages/*/package.json"
       - "pnpm-lock.yaml"
       - "package.json"
+      - "turbo.json"
       - "!*.md"
       - "!./**/*.md"
       - ".github/workflows/test-unit.yml"
@@ -16,6 +17,7 @@ on:
 env:
   CI: false
   ELECTRON_SKIP_BINARY_DOWNLOAD: 1
+  TURBO_TELEMETRY_DISABLED: 1
 
 jobs:
   test:
@@ -36,9 +38,6 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install
-
-      - name: Build @darkwrite/common
-        run: pnpm build:common
 
       - name: Ensure better-sqlite3 is built
         run: pnpm --filter=@darkwrite/app-desktop rebuild better-sqlite3

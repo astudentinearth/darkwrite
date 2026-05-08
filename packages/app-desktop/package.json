@@ -25,6 +25,7 @@
     "test:run": "vitest run",
     "test:watch": "vitest watch",
     "coverage": "vitest run --coverage",
+    "build": "vite build",
     "build:pre": "vite build",
     "build:win": "electron-builder --win",
     "build:mac": "electron-builder --mac",
