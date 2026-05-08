@@ -2,6 +2,9 @@
   "name": "website",
   "type": "module",
   "version": "0.0.1",
+  "lint-staged": {
+    "*.{ts,astro,css}": ["prettier --write"]
+  },
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",

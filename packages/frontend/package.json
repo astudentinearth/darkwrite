@@ -12,7 +12,8 @@
     "typecheck": "tsc --noEmit --project tsconfig.json"
   },
   "lint-staged": {
-    "*.{ts,tsx,css,md}": "prettier --check"
+    "*.{ts,tsx}": ["prettier --write", "eslint --fix --max-warnings 0"],
+    "*.css": ["prettier --write"]
   },
   "dependencies": {
     "@darkwrite/common": "workspace:",

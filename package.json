@@ -2,7 +2,6 @@
   "name": "darkwrite",
   "scripts": {
     "prepare": "husky",
-    "precommit": "prettier --check app",
     "test": "turbo run test",
     "lint": "turbo run lint",
     "format": "turbo run format",

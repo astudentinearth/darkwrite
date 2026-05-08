@@ -1,0 +1,1 @@
+pnpm -r exec lint-staged --allow-empty

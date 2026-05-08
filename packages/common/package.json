@@ -9,6 +9,9 @@
       "types": "./dist/index.d.ts"
     }
   },
+  "lint-staged": {
+    "*.ts": ["prettier --write", "eslint --fix --max-warnings 0"]
+  },
   "scripts": {
     "format": "prettier --check --write .",
     "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
