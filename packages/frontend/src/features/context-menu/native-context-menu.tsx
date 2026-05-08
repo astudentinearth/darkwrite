@@ -28,7 +28,7 @@ function SpellingOptions({ suggestions, callback }: SpellingOptionsProps) {
 
   return (
     <>
-      <span className="text-sm flex items-center gap-2">
+      <span className="text-sm flex items-center gap-2 pl-1.5 pt-1 opacity-70">
         <SpellCheck size={16} />
         {t("fixSpelling")}
       </span>

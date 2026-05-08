@@ -47,7 +47,19 @@ main {
 
 pre,
 code {
-  font-family: "JetBrains Mono", monospace;
+  font-family: var(--monospace), "JetBrains Mono", monospace;
+}
+
+pre {
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+pre,
+code:not(pre code) {
+  background-color: var(--th-bg);
+  border-radius: 8px;
+  padding: 4px;
 }
 
 ul[data-type="taskList"] li > label input[type="checkbox"] {

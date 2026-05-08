@@ -143,6 +143,7 @@ export const ElectronNoteAPI: INoteAPI = {
     if (value.canceled) return;
     const path = value.filePath;
     await writeFile(path, fileContent, "utf8");
+    return path;
   },
 
   async exportPdf(html, title, pageSize = "A4") {
@@ -158,6 +159,7 @@ export const ElectronNoteAPI: INoteAPI = {
     if (value.canceled) return;
     const path = value.filePath;
     await writeFile(path, Buffer.from(buffer.buffer));
+    return path;
   },
 
   async import() {

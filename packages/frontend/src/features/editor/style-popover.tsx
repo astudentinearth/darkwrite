@@ -1,5 +1,5 @@
-import { FontStyle, NoteCustomization } from "@darkwrite/common";
 import FontSelect from "@/components/font-select";
+import { HeaderbarButton } from "@/components/headerbar-button";
 import { Switch } from "@/components/ui";
 import { Button } from "@/components/ui/button";
 import { ColorPicker } from "@/components/ui/color-picker";
@@ -8,24 +8,39 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { useNoteFromURL } from "@/features/note/hooks/use-note-from-url";
-import { RotateCcw } from "lucide-react";
-import { ReactNode } from "react";
+import { cn } from "@/lib/utils";
+import { FontStyle, NoteCustomization } from "@darkwrite/common";
+import { Brush, RotateCcw } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import useStylePopover from "./use-style-popover";
 import { useAppSelector } from "../store/hooks";
 import { selectEditorCustomizations } from "./store/editor-selectors";
+import useStylePopover from "./use-style-popover";
 
-export default function StylePopover({ children }: { children: ReactNode }) {
+export default function StylePopover() {
   const id = useNoteFromURL();
   const customizations = useAppSelector((s) =>
     selectEditorCustomizations(s, id ?? ""),
   );
+  const { t } = useTranslation();
   if (!id || !customizations) return;
   return (
     <Popover>
-      <PopoverTrigger asChild>{children}</PopoverTrigger>
+      <Tooltip>
+        <PopoverTrigger asChild>
+          <TooltipTrigger>
+            <HeaderbarButton>
+              <Brush size={20} />
+            </HeaderbarButton>
+          </TooltipTrigger>
+        </PopoverTrigger>
+        <TooltipContent>{t("editor.customizations.tooltip")}</TooltipContent>
+      </Tooltip>
       <PopoverContent className="w-fit h-fit p-2 mr-2 bg-view-2/80 top-highlight">
         <StyleUI customizations={customizations} noteId={id} />
       </PopoverContent>

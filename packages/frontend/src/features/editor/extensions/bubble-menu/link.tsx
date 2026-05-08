@@ -1,35 +1,55 @@
 import {
   Button,
+  Command,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
   Popover,
   PopoverContent,
   PopoverTrigger,
-  Input,
 } from "@/components/ui";
-import { cn } from "@/lib/utils";
-import { useCurrentEditor } from "@tiptap/react";
-import { Check, Link, Trash } from "lucide-react";
-import { KeyboardEvent, use, useRef, useState } from "react";
+import { useNoteById } from "@/features/note/hooks/use-note-by-id";
+import { cn, getNoteIcon } from "@/lib/utils";
+import { Link, Trash } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { DarkwriteEditorContext } from "../../context";
-import { useFormattingState } from "../../hooks/use-formatting-state";
+import { isValidLinkUrl, useLinkOptions } from "../../hooks/use-link-options";
+
+function NoteItem({
+  noteId,
+  onSelect,
+}: {
+  noteId: string;
+  onSelect: () => void;
+}) {
+  const { note } = useNoteById(noteId);
+  if (!note) return null;
+  return (
+    <CommandItem
+      className="px-2 py-1.5 flex items-center gap-2"
+      onSelect={onSelect}
+    >
+      <span>{getNoteIcon(note.icon)}</span>
+      <span>{note.title}</span>
+    </CommandItem>
+  );
+}
 
 export function BubbleLink() {
-  const { editor } = useCurrentEditor();
-  const [open, setOpen] = useState(false);
-  const url = editor?.getAttributes("link").href;
-  const urlRef = useRef<HTMLInputElement>(null);
   const { t } = useTranslation(undefined, { keyPrefix: "editor.bubble" });
-  const { noteId } = use(DarkwriteEditorContext);
-  const { isLink } = useFormattingState(noteId);
-
-  const setLink = () => {
-    if (!urlRef.current) return;
-    editor?.chain().focus().setLink({ href: urlRef.current.value }).run();
-    setOpen(false);
-  };
-
-  const keydown = (e: KeyboardEvent<HTMLInputElement>) =>
-    e.key == "Enter" && setLink();
+  const {
+    open,
+    setOpen,
+    urlRef,
+    isLink,
+    query,
+    setQuery,
+    results,
+    debouncedSearch,
+    setLink,
+    setLinkToNote,
+    removeLink,
+  } = useLinkOptions();
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -45,28 +65,51 @@ export function BubbleLink() {
           <Link size={18} />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="bg-popover/80 backdrop-blur-lg rounded-2xl flex flex-col gap-2 p-2 data-[state=closed]:animate-none! w-fit">
-        <Input
-          onKeyDown={keydown}
-          defaultValue={url}
-          ref={urlRef}
-          className="bg-view-2"
-          placeholder="URL"
-        />
-
+      <PopoverContent className="bg-view-2/80 mt-2 backdrop-blur-lg w-80 rounded-xl flex flex-col gap-2 p-2 data-[state=closed]:animate-none! px-1 py-1">
+        <Command shouldFilter={false} className="w-full px-0">
+          <CommandInput
+            value={query}
+            onValueChange={(value) => {
+              setQuery(value);
+              debouncedSearch(value);
+            }}
+            ref={urlRef}
+            className="bg-view-2 h-9 top-highlight w-full"
+            placeholder={t("linkPlaceholder")}
+          />
+          <hr className="mt-1" />
+          <CommandList className="scroll-view max-h-48 w-full px-0">
+            {isValidLinkUrl(query) && (
+              <>
+                <CommandItem
+                  onSelect={setLink}
+                  className="px-2 py-1.5 my-1 flex items-center gap-2"
+                >
+                  <Link size={18} />
+                  <span>{query}</span>
+                </CommandItem>
+                <hr />
+              </>
+            )}
+            <CommandGroup className="px-0">
+              {results.map((noteId) => (
+                <NoteItem
+                  key={noteId}
+                  noteId={noteId}
+                  onSelect={() => setLinkToNote(noteId)}
+                />
+              ))}
+            </CommandGroup>
+          </CommandList>
+        </Command>
+        <hr />
         <div className="flex flex-col items-center gap-1 w-full [&>button]:w-full [&>button]:justify-start [&>button]:pl-2">
-          <Button variant={"ghost"} onClick={setLink}>
-            <Check />
-            {t("saveLink")}
-          </Button>
           <Button
             variant={"ghost"}
-            onClick={() => {
-              editor?.chain().focus().unsetLink().run();
-              setOpen(false);
-            }}
+            className="h-fit py-1.5"
+            onClick={removeLink}
           >
-            <Trash />
+            <Trash size={18} />
             {t("removeLink")}
           </Button>
         </div>

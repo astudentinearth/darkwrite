@@ -2,7 +2,7 @@ import { Editor } from "@tiptap/core";
 import { UtilityNodes } from "./node-types";
 import { useCurrentEditor } from "@tiptap/react";
 import { MarkdownConverter } from "@darkwrite/common";
-import { HeadingLevel, ListType, TextFormat } from "./types";
+import { HeadingLevel, ListType, TextDirection, TextFormat } from "./types";
 import { FormattingState } from "./store/editor-slice";
 
 export default function EditorUtil(editor: Editor) {
@@ -153,6 +153,9 @@ export default function EditorUtil(editor: Editor) {
         isCode: editor.isActive(TextFormat.Code),
         isQuote: editor.isActive(TextFormat.Quote),
         isLink: editor.isActive(TextFormat.Link),
+        currentLinkUrl: editor.getAttributes(TextFormat.Link).href,
+        textDirection:
+          editor.getAttributes("paragraph").dir || TextDirection.Auto,
       };
     },
   };

@@ -40,3 +40,5 @@ export * from "./event/bus";
 export * from "./field";
 export * from "./webutils";
 export * from "./context-menu";
+export * from "./url";
+export * from "./link";

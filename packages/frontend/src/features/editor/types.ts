@@ -32,6 +32,14 @@ export enum Block {
   Image = "dwimage",
   HorizontalRule = "horizontalRule",
   LinkToPage = "linkToPage",
+  LinkToLocalFile = "fileLink",
+  Paragraph = "paragraph",
+}
+
+export enum TextDirection {
+  LeftToRight = "ltr",
+  Auto = "auto",
+  RightToLeft = "rtl",
 }
 
 export type HeadingLevel = 1 | 2 | 3 | 4;

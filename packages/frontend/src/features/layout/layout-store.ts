@@ -12,12 +12,14 @@ export const setIsFullscreen = (isFullscreen: boolean) => {
   useLayoutStore.setState({ isFullscreen });
 };
 
-if (window.events) {
-  window.events.onEnterFullScreen(() => {
-    setIsFullscreen(true);
-  });
+export function setupLayoutEvents() {
+  if (window.events) {
+    window.events.onEnterFullScreen(() => {
+      setIsFullscreen(true);
+    });
 
-  window.events.onExitFullScreen(() => {
-    setIsFullscreen(false);
-  });
+    window.events.onExitFullScreen(() => {
+      setIsFullscreen(false);
+    });
+  }
 }

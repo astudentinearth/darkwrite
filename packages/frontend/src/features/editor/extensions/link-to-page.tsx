@@ -7,12 +7,17 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
+  Button,
 } from "@/components/ui";
 //FIXME: This will be moved to @/components/ui
 //import { getNoteIcon } from "@renderer/lib/utils";
 import { mergeAttributes, Node } from "@tiptap/core";
-import { NodeViewWrapper, ReactNodeViewRenderer } from "@tiptap/react";
-import { File } from "lucide-react";
+import {
+  NodeViewWrapper,
+  ReactNodeViewProps,
+  ReactNodeViewRenderer,
+} from "@tiptap/react";
+import { ArrowLeftRight, File } from "lucide-react";
 import { Plugin } from "@tiptap/pm/state";
 import { memo, MouseEvent, use, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -25,6 +30,7 @@ import {
   extractNoteIdFromDragData,
 } from "@/features/dnd/datatransfer";
 import { Block } from "../types";
+import { DarkwriteResource, resourceRefToUrl } from "@darkwrite/common";
 
 const LinkResult = memo(function ({
   id,
@@ -48,8 +54,13 @@ const LinkResult = memo(function ({
 });
 
 // TODO: make this type safe
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const LinkComponent = ({ node, updateAttributes, selected }: any) => {
+const LinkComponent = ({
+  node,
+  updateAttributes,
+  selected,
+  editor,
+  getPos,
+}: ReactNodeViewProps) => {
   const id = node.attrs.noteID;
   const context = use(DarkwriteEditorContext);
   const { note } = useNoteById(id);
@@ -63,6 +74,26 @@ const LinkComponent = ({ node, updateAttributes, selected }: any) => {
     e.preventDefault();
     setOpen(true);
   };
+
+  const turnIntoInlineLink = () => {
+    if (!note) return;
+    const icon = getNoteIcon(note.icon);
+    const linkContent = `${typeof icon === "string" ? `${icon} ` : ""}${note.title}`;
+    const pos = getPos();
+    const url = resourceRefToUrl({ type: DarkwriteResource.Note, id: note.id });
+    if (typeof pos !== "number") return;
+    editor
+      .chain()
+      .focus()
+      .deleteRange({ from: pos, to: pos + node.nodeSize })
+      .insertContentAt(pos, {
+        type: "text",
+        text: linkContent,
+        marks: [{ type: "link", attrs: { href: url } }],
+      })
+      .run();
+  };
+
   return (
     <NodeViewWrapper className="linkToPage">
       <Popover modal open={open} onOpenChange={setOpen}>
@@ -95,8 +126,25 @@ const LinkComponent = ({ node, updateAttributes, selected }: any) => {
         <PopoverContent
           sticky="always"
           align={"center"}
-          className="p-0 max-h-[30vh] overflow-clip border-border top-highlight bg-view-2/80 backdrop-blur-lg"
+          className="p-0 max-h-[30vh] overflow-clip border-border rounded-lg top-highlight bg-view-2/80 backdrop-blur-lg"
         >
+          {note && (
+            <>
+              <div className="p-1 w-full flex">
+                <Button
+                  variant="ghost"
+                  onClick={turnIntoInlineLink}
+                  className="h-fit px-2 py-1.5 w-full justify-start"
+                >
+                  <ArrowLeftRight size={16} />
+                  <span>
+                    {t("editor.blocks.linkToPage.turnIntoInlineLink")}
+                  </span>
+                </Button>
+              </div>
+              <hr />
+            </>
+          )}
           <Command className="h-full max-h-[30vh]">
             <CommandInput
               value={search}
@@ -106,7 +154,7 @@ const LinkComponent = ({ node, updateAttributes, selected }: any) => {
               }}
               placeholder={t("search.chooserPlaceholder")}
             />
-            <CommandList className="scrollbar p-1 ">
+            <CommandList className="p-1 scroll-view">
               <CommandEmpty>{t("search.noResult")}</CommandEmpty>
               {results.map((n) => (
                 <LinkResult

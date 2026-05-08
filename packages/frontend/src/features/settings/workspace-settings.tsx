@@ -20,10 +20,15 @@ import { useSettingsActions } from "./store/settings-actions";
 import { useCurrentWorkspace } from "../workspaces/hooks/use-workspace";
 import { useUpdateWorkspaceMutation } from "../workspaces/store/workspace-api";
 import { useSettings } from "./hooks/use-settings";
+import { DeleteWorkspaceDialog } from "./delete-workspace-dialog";
+import { useAppSelector } from "../store/hooks";
+import { selectWorkspaceCount } from "../workspaces/store/workspace-selectors";
 
 export default function WorkspaceSettings() {
   const currentWorkspace = useCurrentWorkspace();
+  const workspaceCount = useAppSelector((state) => selectWorkspaceCount(state));
   const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [update] = useUpdateWorkspaceMutation();
   const { t: tW } = useTranslation("translation", {
     keyPrefix: "sidebar.workspace",
@@ -43,6 +48,14 @@ export default function WorkspaceSettings() {
 
   const setIndentSize = (val: number) => {
     updateSettings({ editor: { codeIndentSize: val } });
+  };
+
+  const toggleTextDirectionControls = (val: boolean) => {
+    updateSettings({ editor: { showTextDirectionControls: val } });
+  };
+
+  const toggleOpenFilesOnDoubleClick = (val: boolean) => {
+    updateSettings({ editor: { openFilesOnDoubleClick: val } });
   };
 
   return (
@@ -66,17 +79,32 @@ export default function WorkspaceSettings() {
               </span>
             </div>
           </div>
-          <EditWorkspaceDialog
-            open={editDialogOpen}
-            onOpenChange={setEditDialogOpen}
-            workspace={currentWorkspace}
-            onSave={save}
-          >
-            <Button variant={"secondary"} className="w-fit">
-              <PenLine size={18} />
-              {t("settings.workspace.editWorkspace")}
-            </Button>
-          </EditWorkspaceDialog>
+          <div className="flex gap-2">
+            <EditWorkspaceDialog
+              open={editDialogOpen}
+              onOpenChange={setEditDialogOpen}
+              workspace={currentWorkspace}
+              onSave={save}
+            >
+              <Button variant={"secondary"} className="w-fit">
+                <PenLine size={18} />
+                {t("settings.workspace.editWorkspace")}
+              </Button>
+            </EditWorkspaceDialog>
+            <DeleteWorkspaceDialog
+              open={deleteDialogOpen}
+              onOpenChange={setDeleteDialogOpen}
+              workspace={currentWorkspace}
+            >
+              <Button
+                variant={"destructive"}
+                disabled={workspaceCount <= 1}
+                className="w-fit bg-transparent"
+              >
+                {t("settings.workspace.deleteWorkspace")}
+              </Button>
+            </DeleteWorkspaceDialog>
+          </div>
         </SettingsCard>
       )}
       <SettingsCard>
@@ -133,6 +161,28 @@ export default function WorkspaceSettings() {
               }
             }}
             value={settings.editor.codeIndentSize}
+          />
+        </div>
+        <hr />
+        <div className="flex justify-between items-center">
+          <Label htmlFor="rtl-switch">
+            {t("settings.workspace.showRtlControls")}
+          </Label>
+          <Switch
+            id="rtl-switch"
+            checked={settings.editor.showTextDirectionControls}
+            onCheckedChange={toggleTextDirectionControls}
+          />
+        </div>
+        <hr />
+        <div className="flex justify-between items-center">
+          <Label htmlFor="double-click-files-switch">
+            {t("settings.workspace.openFilesOnDoubleClick")}
+          </Label>
+          <Switch
+            id="double-click-files-switch"
+            checked={settings.editor.openFilesOnDoubleClick}
+            onCheckedChange={toggleOpenFilesOnDoubleClick}
           />
         </div>
       </SettingsCard>

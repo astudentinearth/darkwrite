@@ -1,9 +1,6 @@
-import { toast } from "sonner";
 import UpdateToast from "./update-toast";
+import notify from "./notify";
 
 export default function showUpdateToast(version: string, href: string) {
-  toast(<UpdateToast version={version} href={href} />, {
-    id: "updater-notification",
-    className: "z-999",
-  });
+  notify.custom(<UpdateToast version={version} href={href} />);
 }

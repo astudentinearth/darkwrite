@@ -5,9 +5,23 @@
 - Code to migrate data from alpha versions has been removed. **If you are updating from an alpha, update to [1.1.0-beta.1](https://github.com/astudentinearth/darkwrite/releases/tag/v1.1.0-beta.1) first, go through the onboarding process, then update to this release. You will not be able to view your notes otherwise.** (They won't get deleted, but you will need help.)
 
 ## 🌟 Features
+- You can now delete workspaces
 - Add option to clear the trash at once (#25)
 - Add bubble menu option to convert a heading to a plain paragraph
 - Add "system default" font option to font settings (`windows`, `linux`)
+- Added global context menu actions with spellchecking support (#21)
+- Add a button to reveal an exported note in the system file manager
+- Add tooltips
+- Add support for RTL languages and manual text direction (#26)
+  - The button can be turned on/off from settings
+- Reworked menu bar, add "Create Note" to `File` menu
+- Inline links can now link to other notes directly
+- Added hover tooltips to inline links
+- Links can now be copied
+- Add ability to link local files directly from notes (#24)
+  - You can opt into double clicking in settings if you prefer
+  - You can launch apps with this block, though I don't know why you would want to do that
+- "Link to page" blocks can now be turned into inline links from the context menu (#22)
 
 ## ✨ Improvements and fixes
 - Fix code blocks breaking when all content is deleted with ⌘+⌫ ⌘+Del, Ctrl+⌫ or Ctrl+Del
@@ -22,6 +36,17 @@
 - Creating a subpage now navigates to the new page and expands its parent
 - Bubble menu no longer shows up when the only selection is a horizontal rule
 - Hide scrollbars when the view is not hovered on
+- Added notification feedback to various actions (trash, restore, delete etc.)
+- Change drag handle extension (now using tiptap's official one)
+- ⌘N works again
+- Changed back/forward navigation to follow platform conventions
+- Add missing backgrounds to code blocks in HTML and PDF exports
+- Code blocks in exports now correctly follow your monospace font choice
+- Long lines in code blocks are now properly wrapped in HTML and PDF exports
+- Notes with no title now display "Untitled" placeholders correctly, with localization
+- Notes no longer get created with the title "Untitled" (or its localized variant). The default title is now empty (`""`)
+- Typing next to a link doesn't annoyingly add text to the link
+- "Press '/' for commands" placeholder is now localized
 
 ## 🛠️ Technical changes
 - Drop TypeORM and better-sqlite3, switch to drizzle-orm and libsql

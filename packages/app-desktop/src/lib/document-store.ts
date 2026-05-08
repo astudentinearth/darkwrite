@@ -52,6 +52,7 @@ export class DocumentFileStore implements IDocumentStore {
   }
 
   async delete(id: string) {
-    rm(this.getPath(id));
+    // use force option to avoid throwing if the database record was orphaned
+    rm(this.getPath(id), { force: true });
   }
 }

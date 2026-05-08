@@ -18,6 +18,7 @@ import { workspaceSlice } from "../workspaces/store/workspace-slice";
 import { workspaceApi } from "../workspaces/store/workspace-api";
 import { clientInfoApi } from "../settings/store/client-info-api";
 import { notesUiSlice } from "../note/store/notes-ui-slice";
+import { fileLinkApi } from "../editor/file-link/file-link-api";
 
 export function createAppStore() {
   return configureStore({
@@ -34,6 +35,7 @@ export function createAppStore() {
       [workspaceApi.reducerPath]: workspaceApi.reducer,
       [clientInfoApi.reducerPath]: clientInfoApi.reducer,
       [notesUiSlice.name]: notesUiSlice.reducer,
+      [fileLinkApi.reducerPath]: fileLinkApi.reducer,
     },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware()
@@ -46,6 +48,7 @@ export function createAppStore() {
           updateApi.middleware,
           workspaceApi.middleware,
           clientInfoApi.middleware,
+          fileLinkApi.middleware,
         ),
     preloadedState: {
       [appSessionSlice.name]: loadSessionState() || DEFAULT_SESSION_STATE,

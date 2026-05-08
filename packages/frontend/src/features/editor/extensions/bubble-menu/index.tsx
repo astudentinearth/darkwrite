@@ -8,8 +8,14 @@ import { TextColorSelector } from "./color";
 import { HighlightColorSelector } from "./highlight";
 import { CellSelection } from "@tiptap/pm/tables";
 import { Block } from "../../types";
+import { RefObject } from "react";
+import { TextDirectionMenu } from "./text-direction";
 
-export default function Bubble() {
+export type BubbleMenuProps = {
+  isDragging: RefObject<boolean>;
+};
+
+export default function Bubble({ isDragging }: BubbleMenuProps) {
   const { editor } = useCurrentEditor();
   if (!editor) return <></>;
   return (
@@ -17,11 +23,13 @@ export default function Bubble() {
       pluginKey={"bubbleMenu"}
       className="bubble-menu-wrapper"
       shouldShow={({ editor, state }) => {
+        if (isDragging.current) return false;
         if (state.selection instanceof CellSelection) return false;
         if (
           editor.isActive(Block.Image) ||
           editor.isActive(Block.LinkToPage) ||
-          editor.isActive(Block.HorizontalRule)
+          editor.isActive(Block.HorizontalRule) ||
+          editor.isActive(Block.LinkToLocalFile)
         )
           return false;
         return !editor.isEmpty && editor.state.selection?.empty === false;
@@ -36,16 +44,13 @@ export default function Bubble() {
             .querySelector(".bubble-menu")
             ?.setAttribute("data-state", "visible");
 
-          const root = document.querySelector(
-            ".bubble-menu-wrapper",
-          )?.parentElement;
+          const root = document.querySelector(".bubble-menu-wrapper");
           root?.classList.remove("bubble-settled");
           requestAnimationFrame(() => {
             requestAnimationFrame(() => {
               root?.classList.add("bubble-settled");
             });
           });
-
           document
             .querySelector(".bubble-menu-wrapper")
             ?.setAttribute("data-state", "visible");
@@ -54,9 +59,7 @@ export default function Bubble() {
           document
             .querySelector(".bubble-menu")
             ?.setAttribute("data-state", "hidden");
-          const root = document.querySelector(
-            ".bubble-menu-wrapper",
-          )?.parentElement;
+          const root = document.querySelector(".bubble-menu-wrapper");
           root?.classList.remove("bubble-settled");
           document
             .querySelector(".bubble-menu-wrapper")
@@ -77,6 +80,7 @@ export default function Bubble() {
         <HeadingSelector />
         <ListSelector />
         <div className="w-px bg-border"></div>
+        <TextDirectionMenu />
         <TextColorSelector />
         <HighlightColorSelector />
       </div>

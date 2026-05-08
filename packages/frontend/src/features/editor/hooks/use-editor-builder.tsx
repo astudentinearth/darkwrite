@@ -1,4 +1,4 @@
-import { use, useMemo } from "react";
+import { use, useMemo, useRef } from "react";
 import { DarkwriteEditorContext } from "../context";
 import {
   CodeBlockExtension,
@@ -10,11 +10,23 @@ import Bubble from "../extensions/bubble-menu";
 import TableMenu from "../extensions/table/table-menu";
 import { EventHelper } from "../components/event-helper";
 import { FormattingHelper } from "../components/formatting-helper";
+import { DragHandleExtension } from "../extensions/drag-handle";
+import { Placeholder } from "@tiptap/extensions";
+import { useTranslation } from "react-i18next";
 
 export default function useEditorBuilder() {
   const { imageUploadConfig, codeBlockIndentSize, commandItems } = use(
     DarkwriteEditorContext,
   );
+  const { t } = useTranslation();
+  const isDragging = useRef(false);
+
+  const placeholder = Placeholder.configure({
+    includeChildren: true,
+    placeholder: () => t("editor.placeholder"),
+    showOnlyCurrent: true,
+  });
+
   const extensions = useMemo(
     () => [
       ...DefaultEditorExtensions,
@@ -25,8 +37,9 @@ export default function useEditorBuilder() {
           items: () => commandItems,
         },
       }),
+      placeholder,
     ],
-    [codeBlockIndentSize, imageUploadConfig, commandItems],
+    [imageUploadConfig, placeholder, codeBlockIndentSize, commandItems],
   );
 
   const children = useMemo(
@@ -34,7 +47,8 @@ export default function useEditorBuilder() {
       <>
         <EventHelper />
         <FormattingHelper />
-        <Bubble />
+        <Bubble isDragging={isDragging} />
+        <DragHandleExtension isDragging={isDragging} />
         <TableMenu />
       </>
     ),

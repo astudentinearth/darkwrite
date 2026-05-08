@@ -55,6 +55,8 @@ export class WorkspaceDAO {
     );
   }
 
+  /** Finds a workspace by id, or throws if it doesn't exist.
+   * @throws `NotFoundError` if the workspace does not exist. */
   async findByIdOrThrow(id: string): Promise<Workspace> {
     const result = await this.findById(id);
     if (!result) throw new NotFoundError("Workspace", id);

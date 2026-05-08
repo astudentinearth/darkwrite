@@ -5,8 +5,30 @@ import {
   MenuItemConstructorOptions,
   shell,
 } from "electron";
+import { AppMenuEvent } from "./types/window-events";
+
+const HistoryAccelerators = {
+  back: process.platform === "darwin" ? "Cmd+[" : "Alt+Left",
+  forward: process.platform === "darwin" ? "Cmd+]" : "Alt+Right",
+};
 
 const template: Array<MenuItemConstructorOptions> = [
+  {
+    role: "fileMenu",
+    submenu: [
+      {
+        type: "normal",
+        label: "New Note",
+        click(_menuItem, window) {
+          if (window instanceof BrowserWindow) {
+            window.webContents.send(AppMenuEvent.CREATE_NEW_NOTE);
+          }
+        },
+        accelerator: "CmdOrCtrl+N",
+      },
+      { role: "close" },
+    ],
+  },
   { role: "editMenu" },
   {
     label: "Tools",
@@ -21,9 +43,6 @@ const template: Array<MenuItemConstructorOptions> = [
         checked: false,
         type: "checkbox",
       },
-      { role: "toggleDevTools" },
-      { role: "reload" },
-      { role: "forceReload" },
       {
         label: "Open data directory",
         id: "opendatadirectory",
@@ -34,37 +53,26 @@ const template: Array<MenuItemConstructorOptions> = [
     ],
   },
   {
-    label: "View",
+    role: "viewMenu",
+  },
+  {
+    label: "History",
     submenu: [
       {
-        label: "Reset zoom",
-        id: "resetzoom",
-        click(menuItem, browserWindow) {
-          if (browserWindow instanceof BrowserWindow)
-            browserWindow.webContents.setZoomFactor(1.0);
+        label: "Back",
+        click(_menuItem, window) {
+          if (window instanceof BrowserWindow)
+            window.webContents.navigationHistory.goBack();
         },
+        accelerator: HistoryAccelerators.back,
       },
-
       {
-        label: "Zoom in",
-        id: "resetzoom",
-        click(menuItem, browserWindow) {
-          if (browserWindow instanceof BrowserWindow)
-            browserWindow.webContents.setZoomFactor(
-              browserWindow.webContents.getZoomFactor() + 0.1,
-            );
+        label: "Forward",
+        click(_menuItem, window) {
+          if (window instanceof BrowserWindow)
+            window.webContents.navigationHistory.goForward();
         },
-      },
-
-      {
-        label: "Zoom out",
-        id: "resetzoom",
-        click(menuItem, browserWindow) {
-          if (browserWindow instanceof BrowserWindow) {
-            const level = browserWindow.webContents.getZoomFactor() - 0.1;
-            browserWindow.webContents.setZoomFactor(level < 0 ? 0.1 : level);
-          }
-        },
+        accelerator: HistoryAccelerators.forward,
       },
     ],
   },

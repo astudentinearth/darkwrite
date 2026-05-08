@@ -19,6 +19,8 @@ import { ElectronThemeAPI } from "./theme.handler";
 import { WorkspacesApiBridge } from "../workspace/workspace.handler";
 import { EmbedApiBridge } from "@/embed/embed.handler";
 import { ContextMenuApiBridge } from "@/desktop-integration/context-menu.handler";
+import { ShellApiBridge } from "@/desktop-integration/shell.handler";
+import { FileLinkApiBridge } from "@/link/file-link.handler";
 
 export const DarkwriteElectronAPI = {
   note: NoteApiBridge,
@@ -48,7 +50,9 @@ export const DarkwriteElectronAPI = {
     ),
     getClientInfo: new IPCHandler(false, DesktopIntegration.getClientInfo),
     contextMenu: ContextMenuApiBridge,
+    shell: ShellApiBridge,
   },
+  fileLink: FileLinkApiBridge,
   checkUpdate: new IPCHandler(false, Updater.checkUpdate),
   backup: BackupApiBridge,
 } satisfies DarkwriteAPI;

@@ -46,6 +46,9 @@ pnpm test:run -- path  # Run single test file
 pnpm typecheck         # TypeScript check
 ```
 
+> [!TIP]
+> Read @packages/frontend/AGENTS.md for additional context when working on the frontend package. If you are not going to touch frontend code, do not read this file.
+
 ### App Desktop (packages/app-desktop)
 ```bash
 cd packages/app-desktop
@@ -90,6 +93,8 @@ pnpm test:run src/lib/some.test.ts
 - **Line length**: Keep under 80 characters
 - **Naming**: camelCase for variables/functions, PascalCase for React components
 
+When asked to perform a review, do NOT check for any inconsistencies that can be solved with a code formatter, indentation and line length in particular. Don't check for trailing whitespaces either, they will get removed by formatting tools
+
 ### File Naming Conventions
 - Use **kebab-case** for file names
 - Suffix files by type:
@@ -127,6 +132,7 @@ pnpm test:run src/lib/some.test.ts
 - Use `DarkwriteAPIClient` from `@/api/api-client.ts`
 - **DO NOT** use `window.api` directly
 - API types are defined in `@darkwrite/common` package, in src/contract.ts
+- Do not call Data Access Object (DAO) methods in IPC handler methods. Always use the corresponding service method instead.
 
 ### Testing
 - Test files use Vitest with `@testing-library`

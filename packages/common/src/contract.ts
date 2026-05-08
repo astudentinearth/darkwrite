@@ -25,6 +25,7 @@ import {
   WorkspacesResponseDTO,
 } from "./dto/response/workspace.response";
 import { Font } from "./font";
+import { FileLinkMetadata } from "./link";
 import { NoteExportFormat, NoteImportResult, ParentId } from "./note";
 import { PageSize } from "./pdf";
 import { DarkwriteUserSettings } from "./settings";
@@ -104,16 +105,18 @@ export interface INoteAPI {
   setDocument: (id: string, serializedDocument: string) => Promise<void>;
   duplicate: (id: string) => Promise<NoteResponseDTO>;
   clearTrash: (workspaceId: string) => Promise<void>;
+  /** @returns the file path of the exported PDF, or undefined if the export was cancelled. */
   export: (
     fileContent: string,
     fileType: NoteExportFormat,
     title?: string,
-  ) => Promise<void>;
+  ) => Promise<string | undefined>;
+  /** @returns the file path of the exported PDF, or undefined if the export was cancelled. */
   exportPdf: (
     html: string,
     title?: string,
     pageSize?: PageSize,
-  ) => Promise<void>;
+  ) => Promise<string | undefined>;
   import: () => Promise<NoteImportResult>;
 }
 
@@ -157,11 +160,16 @@ export interface IContextMenuAPI {
   changeSpelling: (suggestion: string) => Promise<void>;
 }
 
+export interface IShellAPI {
+  showItemInFolder: (filePath: string) => Promise<void>;
+}
+
 export interface IDesktopAPI {
   getFontList: () => Promise<Font[]>;
   getSystemAccentColor: () => Promise<string>;
   getClientInfo: () => Promise<DarkwriteDesktopClientInfo>;
   contextMenu: IContextMenuAPI;
+  shell: IShellAPI;
 }
 
 export interface IBackupAPI {
@@ -178,6 +186,16 @@ export type CheckUpdateFn = () => Promise<UpdateServerResponse | undefined>;
 export interface IOnboardingAPI {
   isNewUser: () => Promise<boolean>;
   markFinished: () => Promise<void>;
+}
+
+export interface IFileLinkAPI {
+  /** Opens a file picker, creates a linked file record, and returns its metadata. Returns null if the dialog was cancelled. */
+  pickAndCreate: () => Promise<FileLinkMetadata | null>;
+  /** Creates a linked file record from the given absolute file path. */
+  createFromPath: (filePath: string) => Promise<FileLinkMetadata>;
+  getById: (id: string) => Promise<FileLinkMetadata>;
+  /** Opens the linked file in the OS default application. */
+  openById: (id: string) => Promise<void>;
 }
 
 /** Desktop specific bridge. This is decorated with IEmbedAPI on the frontend */
@@ -205,6 +223,7 @@ export type DarkwriteIPCBridge = {
   desktop: IDesktopAPI;
   backup: IBackupAPI;
   onboarding: IOnboardingAPI;
+  fileLink: IFileLinkAPI;
   checkUpdate: CheckUpdateFn;
   showAppMenu: () => Promise<void>;
 };
@@ -213,4 +232,7 @@ export interface WindowEvents {
   onEnterFullScreen: (callback: () => void) => void;
   onExitFullScreen: (callback: () => void) => void;
   onContextMenu: (callback: (data: NativeContextMenuData) => void) => void;
+  menu: {
+    onCreateNote: (callback: () => void) => void;
+  };
 }

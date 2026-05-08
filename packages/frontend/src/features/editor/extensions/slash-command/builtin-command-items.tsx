@@ -10,6 +10,7 @@ import {
   Link,
   List,
   ListOrdered,
+  Paperclip,
   SquareMinus,
   Table,
   Text,
@@ -247,6 +248,24 @@ export const useSlashCommand = (
             .focus()
             .deleteRange(range)
             .insertTable({ rows: 3, cols: 3, withHeaderRow: false })
+            .run();
+        },
+      },
+      {
+        id: "builtin.filelink",
+        title: t("fileLink"),
+        description: t("fileLinkDescription"),
+        keywords: [t("fileLink"), "file", "link", "local", "attachment"],
+        icon: <Paperclip size={18} />,
+        command({ editor, range }) {
+          editor
+            .chain()
+            .focus()
+            .deleteRange(range)
+            .insertContent({
+              type: Block.LinkToLocalFile,
+              attrs: { linkId: null },
+            })
             .run();
         },
       },

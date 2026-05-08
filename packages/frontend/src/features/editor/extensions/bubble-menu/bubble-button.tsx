@@ -3,6 +3,12 @@ import { Button } from "@/components/ui";
 import { Editor } from "@tiptap/core";
 import { useCurrentEditor } from "@tiptap/react";
 import { FunctionComponent } from "react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipPortal,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export type BubbleButtonProps = {
   icon: FunctionComponent<React.SVGProps<SVGSVGElement>>;
@@ -16,10 +22,10 @@ export type BubbleButtonProps = {
 
 export function BubbleButton(props: BubbleButtonProps) {
   const { editor: editorContext } = props;
-  return (
+  const button = (
     <Button
       variant="ghost"
-      title={props.title}
+      aria-label={props.title}
       onClick={() => {
         if (editorContext.editor) props.command(editorContext.editor);
       }}
@@ -33,5 +39,16 @@ export function BubbleButton(props: BubbleButtonProps) {
         className={cn("text-foreground", props.isActive && "text-primary-text")}
       />
     </Button>
+  );
+  if (!props.title) return button;
+  return (
+    <Tooltip>
+      <TooltipTrigger asChild>{button}</TooltipTrigger>
+      <TooltipPortal container={document.body}>
+        <TooltipContent side="bottom" sideOffset={8}>
+          {props.title}
+        </TooltipContent>
+      </TooltipPortal>
+    </Tooltip>
   );
 }

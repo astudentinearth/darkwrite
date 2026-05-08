@@ -62,6 +62,11 @@ export const embed = sqliteTable("embed", {
   workspaceId: text().references(() => workspace.id, { onDelete: "set null" }),
 });
 
+export const linkedFile = sqliteTable("linked_file", {
+  id: generatedUuid(),
+  filePath: text().notNull(),
+});
+
 export type Workspace = typeof workspace.$inferSelect;
 export type NewWorkspace = typeof workspace.$inferInsert;
 export type PatchWorkspace = PatchPartial<Workspace, "id">;
@@ -77,3 +82,6 @@ export type PatchDatabase = PatchPartial<Database, "id">;
 export type Embed = typeof embed.$inferSelect;
 export type NewEmbed = typeof embed.$inferInsert;
 export type PatchEmbed = PatchPartial<Embed, "id">;
+
+export type LinkedFile = typeof linkedFile.$inferSelect;
+export type NewLinkedFile = typeof linkedFile.$inferInsert;

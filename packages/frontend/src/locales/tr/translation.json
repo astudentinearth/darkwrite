@@ -6,6 +6,8 @@
       "settings": "Ayarlar",
       "trash": "Çöp kutusu",
       "hideSidebar": "Kenar çubuğunu gizle",
+      "showSidebar": "Kenar çubuğunu göster",
+      "editSidebar": "Kenar çubuğunu düzenle",
       "search": "Ara",
       "menu": "Menü"
     },
@@ -75,6 +77,16 @@
         "openLastPage": "Kaldığım yerden devam et",
         "openSpecificPage": "Belirli bir sayfayı aç"
       },
+      "deleteWorkspace": "Çalışma alanını sil",
+      "deleteWorkspaceDialog": {
+        "title": "Çalışma alanını sil",
+        "description": "Bu işlem kalıcıdır ve geri alınamaz. Bu çalışma alanındaki tüm notlar kalıcı olarak silinecektir.",
+        "confirmLabel": "Onaylamak için \"{{name}}\" yazın:",
+        "cancel": "Vazgeç",
+        "delete": "Çalışma alanını sil",
+        "successMessage": "Çalışma alanı silindi.",
+        "errorMessage": "Çalışma alanını silerken bir hata oluştu."
+      },
       "editWorkspace": "Çalışma alanını düzenle",
       "editWorkspaceDialog": {
         "title": "Çalışma alanını düzenle",
@@ -86,7 +98,9 @@
       },
       "alwaysShowWordCount": "Kelime sayısını her zaman göster",
       "codeBlockIndentSize": "Kod bloklarındaki girinti genişliği",
-      "codeBlockIndentSizeDescription": "Tab tuşuna basıldığında kod bloklarına eklenecek boşluk sayısını belirleyin."
+      "codeBlockIndentSizeDescription": "Tab⇥ tuşuna basıldığında kod bloklarına eklenecek boşluk sayısını belirleyin.",
+      "showRtlControls": "Düzenleyicide metin yönü kontrollerini göster",
+      "openFilesOnDoubleClick": "Bağlı dosyaları çift tıklamayla aç"
     },
     "appearance": {
       "title": "Görünüm",
@@ -140,7 +154,8 @@
       "redo": "Yinele",
       "imageWarning": "Resimleri şu anlık dahil edemiyoruz.",
       "jsonExport": "Darkwrite belgesi (JSON)",
-      "htmlExport": "HTML (düz)"
+      "htmlExport": "HTML (düz)",
+      "tooltip": "Diğer seçenekler"
     },
     "slashCommand": {
       "text": "Metin",
@@ -170,7 +185,9 @@
       "linkToPageDescription": "Başka bir sayfaya tıklanabilir bir bağlantı oluştur.",
       "imageDescription": "Doğrudan bir resim ekle.",
       "table": "Tablo",
-      "tableDescription": "Sade bir tablo ekle."
+      "tableDescription": "Sade bir tablo ekle.",
+      "fileLink": "Dosya bağlantısı",
+      "fileLinkDescription": "Hızlı erişim için yerel bir dosya bağlayın."
     },
     "bubble": {
       "h1": "Başlık 1",
@@ -180,9 +197,22 @@
       "clearHeading": "Başlığı kaldır",
       "removeLink": "Bağlantıyı kaldır",
       "saveLink": "Bağlantıyı kaydet",
+      "linkPlaceholder": "Ara veya URL yapıştır",
       "bulletList": "Madde işaretli liste",
       "numberedList": "Numaralı liste",
-      "toDoList": "Yapılacaklar listesi"
+      "toDoList": "Yapılacaklar listesi",
+      "bold": "Kalın",
+      "italic": "İtalik",
+      "underline": "Altı çizili",
+      "strike": "Üstü çizili",
+      "code": "Satır içi kod",
+      "blockquote": "Alıntı",
+      "textDirection": {
+        "label": "Metin yönü",
+        "ltr": "Soldan sağa",
+        "rtl": "Sağdan sola",
+        "auto": "Otomatik"
+      }
     },
     "table": {
       "addColBefore": "Sola sütun ekle",
@@ -203,11 +233,20 @@
       "backgroundColorText": "Arka plan rengi",
       "foregroundColorText": "Varsayılan metin rengi",
       "customFontNamePlaceholer": "Özel yazı tipi",
-      "widePage": "Geniş düzen"
+      "widePage": "Geniş düzen",
+      "tooltip": "Sayfa görünümünü özelleştirin"
     },
     "blocks": {
       "linkToPage": {
-        "placeholder": "Bir not seçin"
+        "placeholder": "Bir not seçin",
+        "turnIntoInlineLink": "Satır içi bağlantıya dönüştür"
+      },
+      "fileLink": {
+        "placeholder": "Hızlı erişim için bir dosya seçin",
+        "open": "Aç",
+        "copyPath": "Tam yolu kopyala",
+        "revealInFolder": "Klasörde göster",
+        "changeFile": "Dosyayı değiştir"
       }
     },
     "cover": {
@@ -217,7 +256,8 @@
       "removeIcon": "Simgeyi kaldır",
       "addCover": "Kapak resmi ekle",
       "trashWarning": "Bu sayfa şu anda çöp kutusunda."
-    }
+    },
+    "placeholder": "Komutlar için '/' yazın"
   },
   "search": {
     "placeholder": "Notlarınızı arayın",
@@ -233,6 +273,26 @@
     "movePage": {
       "success": "Sayfa taşındı.",
       "error": "Sayfayı taşıyamadık."
+    },
+    "clearTrash": {
+      "success": "Çöp kutusu boşaltıldı.",
+      "error": "Çöp kutusunu boşaltamadık."
+    },
+    "restorePage": {
+      "success": "Sayfa çöpten çıkarıldı.",
+      "error": "Sayfayı çöpten çıkaramadık."
+    },
+    "deletePage": {
+      "success": "Sayfa kalıcı olarak silindi.",
+      "error": "Sayfayı kalıcı olarak silemedik."
+    },
+    "trashPage": {
+      "success": "Sayfa çöp kutusuna taşındı.",
+      "error": "Sayfayı çöp kutusuna taşıyamadık."
+    },
+    "exportPage": {
+      "success": "Sayfa dışa aktarıldı.",
+      "error": "Sayfayı dışa aktaramadık."
     }
   },
   "titlebar": {
@@ -274,6 +334,11 @@
       "selectAll": "Tümünü seç",
       "pasteWithoutFormatting": "Biçendirmeden yapıştır",
       "fixSpelling": "Yazım hatasını düzelt"
+    },
+    "showInFolder": "Klasörde göster",
+    "history": {
+      "back": "Geri",
+      "forward": "İleri"
     }
   }
 }

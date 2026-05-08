@@ -1,6 +1,11 @@
 import { ClientError } from "./client-error";
 
-export type EntityType = "Note" | "Workspace" | "Embed" | "Database";
+export type EntityType =
+  | "Note"
+  | "Workspace"
+  | "Embed"
+  | "Database"
+  | "FileLink";
 
 export function _buildNotFoundMessage(entityName: string, entityId: string) {
   return `${entityName} with id ${entityId} not found.`;

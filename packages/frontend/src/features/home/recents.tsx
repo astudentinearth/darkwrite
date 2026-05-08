@@ -23,7 +23,7 @@ export default function RecentNotes() {
           >
             <span>{getNoteIcon(note.icon)}</span>
             <span className="w-full overflow-hidden text-ellipsis whitespace-nowrap text-start">
-              {note.title}
+              {note.title || t("defaults.pageTitle")}
             </span>
           </Button>
         </NoteContextMenuContainer>

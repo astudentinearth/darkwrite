@@ -39,5 +39,9 @@ export const workspaceSlice = createSlice({
       const workspace = action.payload;
       state.workspaces[workspace.id] = workspace;
     },
+    removeWorkspace(state, action: PayloadAction<string>) {
+      const workspaceId = action.payload;
+      delete state.workspaces[workspaceId];
+    },
   },
 });

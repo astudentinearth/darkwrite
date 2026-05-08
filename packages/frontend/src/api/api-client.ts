@@ -1,6 +1,7 @@
 import {
   IDesktopAPI,
   IEmbedAPI,
+  IFileLinkAPI,
   INoteAPI,
   ISettingsAPI,
   IThemeAPI,
@@ -22,6 +23,7 @@ export class DarkwriteAPIClient {
   static desktop: IDesktopAPI;
   static onboarding: typeof window.api.onboarding;
   static backup: typeof window.api.backup;
+  static fileLink: IFileLinkAPI;
 
   private static initializeLocalAPIs() {
     this.note = window.api.note;
@@ -32,6 +34,7 @@ export class DarkwriteAPIClient {
     this.desktop = window.api.desktop;
     this.onboarding = window.api.onboarding;
     this.backup = window.api.backup;
+    this.fileLink = window.api.fileLink;
   }
 
   private static initializeCloudAPIs() {

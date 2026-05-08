@@ -9,14 +9,17 @@ import {
 } from "lucide-react";
 import { useTheme } from "next-themes";
 import { Toaster as Sonner, type ToasterProps } from "sonner";
+import { createPortal } from "react-dom";
 
 const Toaster = ({ ...props }: ToasterProps) => {
   const { theme = "system" } = useTheme();
 
-  return (
+  const jsx = (
     <Sonner
       theme={theme as ToasterProps["theme"]}
-      className="toaster group"
+      className="toaster group flex justify-center z-9999"
+      position="top-center"
+      offset={32}
       icons={{
         success: <CircleCheckIcon className="size-4" />,
         info: <InfoIcon className="size-4" />,
@@ -30,12 +33,14 @@ const Toaster = ({ ...props }: ToasterProps) => {
           "--normal-text": "var(--popover-foreground)",
           "--normal-border": "var(--border)",
           "--border-radius": "0.75rem",
-          zIndex: "9999",
+          zIndex: "99999",
         } as React.CSSProperties
       }
       {...props}
     />
   );
+
+  return createPortal(jsx, document.body);
 };
 
 export { Toaster };

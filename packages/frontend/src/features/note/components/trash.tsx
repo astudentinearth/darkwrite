@@ -5,6 +5,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui";
+import { TextTooltip } from "@/components/ui/tooltip";
 import { navigateToNote } from "@/features/navigation/navigator";
 import { SidebarItem } from "@/features/sidebar/sidebar-item";
 import { cn, getNoteIcon } from "@/lib/utils";
@@ -40,28 +41,32 @@ const TrashItem = memo(function ({ noteId, className }: TrashItemProps) {
       <span className="whitespace-nowrap text-ellipsis overflow-hidden text-start">
         {note.title}
       </span>
-      <Button
-        title={t("sidebar.trash.restore")}
-        onClick={(e) => {
-          e.stopPropagation();
-          restoreFromTrash(noteId);
-        }}
-        variant={"ghost"}
-        className="w-8 h-8 p-0"
-      >
-        <Undo2 className="size-4" />
-      </Button>
-      <Button
-        title={t("sidebar.trash.delete")}
-        onClick={(e) => {
-          e.stopPropagation();
-          permanentlyDeleteNote(noteId);
-        }}
-        variant={"destructive"}
-        className="w-8 h-8 p-0 bg-transparent text-destructive hover:bg-destructive/25 border-none"
-      >
-        <Trash className="size-4" />
-      </Button>
+      <TextTooltip text={t("sidebar.trash.restore")}>
+        <Button
+          aria-label={t("sidebar.trash.restore")}
+          onClick={(e) => {
+            e.stopPropagation();
+            restoreFromTrash(noteId);
+          }}
+          variant={"ghost"}
+          className="w-8 h-8 p-0"
+        >
+          <Undo2 className="size-4" />
+        </Button>
+      </TextTooltip>
+      <TextTooltip text={t("sidebar.trash.delete")}>
+        <Button
+          aria-label={t("sidebar.trash.delete")}
+          onClick={(e) => {
+            e.stopPropagation();
+            permanentlyDeleteNote(noteId);
+          }}
+          variant={"destructive"}
+          className="w-8 h-8 p-0 bg-transparent text-destructive hover:bg-destructive/25 border-none"
+        >
+          <Trash className="size-4" />
+        </Button>
+      </TextTooltip>
     </div>
   );
 });
@@ -87,7 +92,7 @@ export function TrashWidget() {
         sticky="always"
         className="w-80 ml-2 grid grid-rows-[auto_1fr] bg-view-2/80 top-highlight max-h-[60vh] p-0 mb-2"
       >
-        <div className="p-2 flex gap-1">
+        <div className="p-2 flex gap-2">
           <Input
             value={query}
             onChange={(e) => setQuery(e.target.value)}

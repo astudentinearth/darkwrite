@@ -33,12 +33,19 @@ export function getWorkspaceActions(store: AppStore) {
     return store.getState().session.workspaceId;
   }
 
+  async function deleteWorkspace(workspaceId: string) {
+    return store
+      .dispatch(workspaceApi.endpoints.deleteWorkspace.initiate(workspaceId))
+      .unwrap();
+  }
+
   return {
     fetchWorkspaces,
     updateWorkspace,
     _putWorkspace,
     createWorkspace,
     getCurrentWorkspaceId,
+    deleteWorkspace,
   };
 }
 
