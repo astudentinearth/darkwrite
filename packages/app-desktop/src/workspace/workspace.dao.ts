@@ -1,5 +1,5 @@
 import { isNotUndefined, NotFoundError } from "@darkwrite/common";
-import { DatabaseType, db, Transaction } from "../db";
+import { Transaction } from "../db";
 import {
   NewWorkspace,
   PatchWorkspace,
@@ -7,20 +7,21 @@ import {
   workspace as workspaceTable,
 } from "@/db/schema";
 import { eq } from "drizzle-orm";
+import { TransactionalDAO } from "@/db/transactional";
 
-export class WorkspaceDAO {
-  constructor(private tx: Transaction | DatabaseType = db) {}
-
+export class WorkspaceDAO extends TransactionalDAO {
   async create(workspace: NewWorkspace): Promise<Workspace> {
     return (
       await this.tx.insert(workspaceTable).values(workspace).returning()
     )[0];
   }
 
+  /** @deprecated */
   static transactional(tx: Transaction) {
     return new WorkspaceDAO(tx);
   }
 
+  /** @deprecated */
   transactional(tx: Transaction) {
     return WorkspaceDAO.transactional(tx);
   }

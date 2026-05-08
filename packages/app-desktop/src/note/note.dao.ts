@@ -7,8 +7,9 @@ import {
   Rank,
 } from "@darkwrite/common";
 import { and, asc, desc, eq, isNull, like, ne, or, inArray } from "drizzle-orm";
-import { DatabaseType, db, Transaction } from "../db";
+import { Transaction } from "../db";
 import { noteToDto } from "./note-mapper";
+import { TransactionalDAO } from "@/db/transactional";
 
 const withParent = (parentId: ParentId) =>
   parentId === null
@@ -24,13 +25,13 @@ const inWorkspace = (workspaceId: string) =>
 const inDatabase = (databaseId: string) =>
   eq(notesTable.databaseId, databaseId);
 
-export class NoteDAO {
-  constructor(private tx: Transaction | DatabaseType = db) {}
-
+export class NoteDAO extends TransactionalDAO {
+  /** @deprecated */
   static transactional(tx: Transaction) {
     return new NoteDAO(tx);
   }
 
+  /** @deprecated */
   transactional(tx: Transaction) {
     return NoteDAO.transactional(tx);
   }

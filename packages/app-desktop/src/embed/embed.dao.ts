@@ -1,13 +1,11 @@
 import { Embed, NewEmbed, PatchEmbed, embed as embedTable } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { isNotUndefined } from "@darkwrite/common";
-import { DatabaseType, db, Transaction } from "@/db";
+import { TransactionalDAO } from "@/db/transactional";
 
 const hasFileSize = (fileSize: number) => eq(embedTable.fileSize, fileSize);
 
-export class EmbedDAO {
-  constructor(private tx: DatabaseType | Transaction = db) {}
-
+export class EmbedDAO extends TransactionalDAO {
   async create(embed: NewEmbed): Promise<Embed> {
     return (await this.tx.insert(embedTable).values(embed).returning())[0];
   }

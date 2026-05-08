@@ -1,20 +1,21 @@
-import { DatabaseType, db, Transaction } from "@/db";
+import { Transaction } from "@/db";
 import {
   Database,
   database as databaseTable,
   NewDatabase,
   PatchDatabase,
 } from "@/db/schema";
+import { TransactionalDAO } from "@/db/transactional";
 import { isNotUndefined, NotFoundError } from "@darkwrite/common";
 import { eq } from "drizzle-orm";
 
-export class DatabaseDAO {
-  constructor(private tx: DatabaseType | Transaction = db) {}
-
+export class DatabaseDAO extends TransactionalDAO {
+  /** @deprecated */
   static transactional(tx: Transaction) {
     return new DatabaseDAO(tx);
   }
 
+  /** @deprecated */
   transactional(tx: Transaction) {
     return DatabaseDAO.transactional(tx);
   }
