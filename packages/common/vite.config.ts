@@ -13,7 +13,7 @@ export default defineConfig({
   build: {
     lib: {
       entry: [path.resolve("src/index.ts")],
-      formats: ["es"],
+      formats: ["es", "cjs"],
       name: "@darkwrite/common",
     },
     target: "esnext",
