@@ -1,20 +1,14 @@
 import { errAsync, okAsync, ResultAsync } from "neverthrow";
 import { createTestDatabase } from "./data-source";
 import {
+  resolveTx,
   DbError,
   getActiveTransaction,
   transactional,
-  TransactionalDAO,
   txContext,
 } from "./transactional";
 import { sql } from "drizzle-orm";
 import { panic } from "@darkwrite/common";
-
-class TestImpl extends TransactionalDAO {
-  getTx() {
-    return this.tx;
-  }
-}
 
 const db = createTestDatabase();
 const db2 = createTestDatabase();
@@ -117,39 +111,33 @@ describe("transaction context tests", () => {
 
 describe("transactional dao tests", () => {
   it("should panic if no db or transaction exists", () => {
-    const dao = new TestImpl();
-    expect(() => dao.getTx()).toThrow();
+    expect(() => resolveTx()).toThrow();
   });
 
   it("should prefer the database instance outside contexts", () => {
-    const dao = new TestImpl(db);
-    expect(dao.getTx()).toBe(db);
+    expect(resolveTx(db)).toBe(db);
   });
 
   it("should prefer active transaction inside contexts", async () => {
-    const dao = new TestImpl(db);
-    const implicitDao = new TestImpl();
-
     const result = await transactional(() => {
       const tx = getActiveTransaction();
       return okAsync({
-        dao: tx === dao.getTx(),
-        implicitDao: tx === implicitDao.getTx(),
+        withDb: tx === resolveTx(db),
+        implicit: tx === resolveTx(),
       });
     }, db);
 
     expect(result._unsafeUnwrap()).toMatchObject({
-      dao: true,
-      implicitDao: true,
+      withDb: true,
+      implicit: true,
     });
   });
 
   it("should prefer an explicitly passed transaction regardless of context", async () => {
     const result = (
       await db2.transaction(async (tx) => {
-        const dao = new TestImpl(tx);
         return await transactional(() => {
-          return okAsync(dao.getTx() === tx);
+          return okAsync(resolveTx(tx) === tx);
         }, db);
       })
     )._unsafeUnwrap();

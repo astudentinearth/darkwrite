@@ -7,9 +7,8 @@ import {
   Rank,
 } from "@darkwrite/common";
 import { and, asc, desc, eq, isNull, like, ne, or, inArray } from "drizzle-orm";
-import { Transaction } from "../db";
 import { noteToDto } from "./note-mapper";
-import { DbError, TransactionalDAO } from "@/db/transactional";
+import { DbError, TxResolver } from "@/db/transactional";
 import { dbResult } from "@/db/db-result";
 import { err, ok, ResultAsync } from "neverthrow";
 
@@ -30,21 +29,10 @@ const inDatabase = (databaseId: string) =>
 export type NoteDaoResult<T> = ResultAsync<T, DbError | NoteError>;
 type OrderKeyDto = { start: string; end: string };
 
-export class NoteDAO extends TransactionalDAO {
-  /** @deprecated */
-  static transactional(tx: Transaction) {
-    return new NoteDAO(tx);
-  }
-
-  /** @deprecated */
-  transactional(tx: Transaction) {
-    return NoteDAO.transactional(tx);
-  }
-
-  create(note: NewNote): NoteDaoResult<Note> {
+export function NoteDAO(tx: TxResolver) {
+  function create(note: NewNote): NoteDaoResult<Note> {
     return dbResult(
-      async () =>
-        (await this.tx.insert(notesTable).values(note).returning())[0],
+      async () => (await tx().insert(notesTable).values(note).returning())[0],
     ).andThen((row) =>
       row
         ? ok(row)
@@ -52,10 +40,10 @@ export class NoteDAO extends TransactionalDAO {
     );
   }
 
-  update(note: PatchNote): NoteDaoResult<Note> {
+  function update(note: PatchNote): NoteDaoResult<Note> {
     return dbResult(async () =>
       (
-        await this.tx
+        await tx()
           .update(notesTable)
           .set(note)
           .where(eq(notesTable.id, note.id))
@@ -68,14 +56,14 @@ export class NoteDAO extends TransactionalDAO {
     );
   }
 
-  updateAll(notes: PatchNote[]): NoteDaoResult<Note[]> {
-    return ResultAsync.combine(notes.map((n) => this.update(n)));
+  function updateAll(notes: PatchNote[]): NoteDaoResult<Note[]> {
+    return ResultAsync.combine(notes.map((n) => update(n)));
   }
 
-  findById(id: string): NoteDaoResult<Note> {
+  function findById(id: string): NoteDaoResult<Note> {
     return dbResult(
       async () =>
-        await this.tx
+        await tx()
           .select()
           .from(notesTable)
           .where(eq(notesTable.id, id))
@@ -87,47 +75,47 @@ export class NoteDAO extends TransactionalDAO {
   }
 
   /** @deprecated use result chaining instead */
-  async findByIdOrThrow(id: string) {
-    const result = await this.findById(id);
+  async function findByIdOrThrow(id: string) {
+    const result = await findById(id);
     if (result.isErr()) throw new NotFoundError("Note", id);
     return result.value;
   }
 
-  findAll(): NoteDaoResult<Note[]> {
-    return dbResult(async () => this.tx.select().from(notesTable));
+  function findAll(): NoteDaoResult<Note[]> {
+    return dbResult(async () => tx().select().from(notesTable));
   }
 
-  findAllByWorkspaceId(workspaceId: string): NoteDaoResult<Note[]> {
+  function findAllByWorkspaceId(workspaceId: string): NoteDaoResult<Note[]> {
     return dbResult(
       async () =>
-        await this.tx.select().from(notesTable).where(inWorkspace(workspaceId)),
+        await tx().select().from(notesTable).where(inWorkspace(workspaceId)),
     );
   }
 
-  findAllByDatabaseId(databaseId: string): NoteDaoResult<Note[]> {
+  function findAllByDatabaseId(databaseId: string): NoteDaoResult<Note[]> {
     return dbResult(async () =>
-      this.tx.select().from(notesTable).where(inDatabase(databaseId)),
+      tx().select().from(notesTable).where(inDatabase(databaseId)),
     );
   }
 
-  findAllByParentId(
+  function findAllByParentId(
     workspaceId: string,
     parentId: string | null,
   ): NoteDaoResult<Note[]> {
     return dbResult(async () =>
-      this.tx
+      tx()
         .select()
         .from(notesTable)
         .where(and(inWorkspace(workspaceId), withParent(parentId))),
     );
   }
 
-  findAllByParentIdSortAsc(
+  function findAllByParentIdSortAsc(
     workspaceId: string,
     parentId: ParentId,
   ): NoteDaoResult<Note[]> {
     return dbResult(async () =>
-      this.tx
+      tx()
         .select()
         .from(notesTable)
         .where(and(inWorkspace(workspaceId), withParent(parentId)))
@@ -135,29 +123,29 @@ export class NoteDAO extends TransactionalDAO {
     );
   }
 
-  deleteMany(ids: string[]): NoteDaoResult<void> {
+  function deleteMany(ids: string[]): NoteDaoResult<void> {
     return dbResult(async () => {
-      await this.tx.delete(notesTable).where(inArray(notesTable.id, ids));
+      await tx().delete(notesTable).where(inArray(notesTable.id, ids));
     });
   }
 
-  deleteById(id: string): NoteDaoResult<void> {
+  function deleteById(id: string): NoteDaoResult<void> {
     return dbResult(async () => {
-      await this.tx.delete(notesTable).where(eq(notesTable.id, id));
+      await tx().delete(notesTable).where(eq(notesTable.id, id));
     });
   }
 
-  delete(note: Note): NoteDaoResult<void> {
+  function deleteNote(note: Note): NoteDaoResult<void> {
     return dbResult(async () => {
-      await this.tx.delete(notesTable).where(eq(notesTable.id, note.id));
+      await tx().delete(notesTable).where(eq(notesTable.id, note.id));
     });
   }
 
-  exists(id: string): NoteDaoResult<boolean> {
+  function exists(id: string): NoteDaoResult<boolean> {
     return dbResult(
       async () =>
         (
-          await this.tx
+          await tx()
             .select()
             .from(notesTable)
             .where(eq(notesTable.id, id))
@@ -166,12 +154,12 @@ export class NoteDAO extends TransactionalDAO {
     );
   }
 
-  findFirstNoteInLayer(
+  function findFirstNoteInLayer(
     workspaceId: string,
     parentId: ParentId,
   ): NoteDaoResult<Note | undefined> {
     return dbResult(async () => {
-      const result = await this.tx
+      const result = await tx()
         .select()
         .from(notesTable)
         .where(
@@ -182,12 +170,12 @@ export class NoteDAO extends TransactionalDAO {
     });
   }
 
-  findLastNoteInLayer(
+  function findLastNoteInLayer(
     workspaceId: string,
     parentId: ParentId,
   ): NoteDaoResult<Note | undefined> {
     return dbResult(async () => {
-      const result = await this.tx
+      const result = await tx()
         .select()
         .from(notesTable)
         .where(
@@ -199,9 +187,9 @@ export class NoteDAO extends TransactionalDAO {
     });
   }
 
-  findAllFavorites(workspaceId: string): NoteDaoResult<Note[]> {
+  function findAllFavorites(workspaceId: string): NoteDaoResult<Note[]> {
     return dbResult(async () =>
-      this.tx
+      tx()
         .select()
         .from(notesTable)
         .where(and(inWorkspace(workspaceId), notTrashed(), isFavorite()))
@@ -209,9 +197,9 @@ export class NoteDAO extends TransactionalDAO {
     );
   }
 
-  findAllTrashed(workspaceId: string): NoteDaoResult<Note[]> {
+  function findAllTrashed(workspaceId: string): NoteDaoResult<Note[]> {
     return dbResult(async () =>
-      this.tx
+      tx()
         .select()
         .from(notesTable)
         .where(and(inWorkspace(workspaceId), isTrashed()))
@@ -219,11 +207,11 @@ export class NoteDAO extends TransactionalDAO {
     );
   }
 
-  findLastNoteInFavorites(
+  function findLastNoteInFavorites(
     workspaceId: string,
   ): NoteDaoResult<Note | undefined> {
     return dbResult(async () => {
-      const result = await this.tx
+      const result = await tx()
         .select()
         .from(notesTable)
         .where(and(inWorkspace(workspaceId), isFavorite(), notTrashed()))
@@ -233,13 +221,7 @@ export class NoteDAO extends TransactionalDAO {
     });
   }
 
-  /**
-   * Is
-   * @param potentialChildId inside
-   * @param potentialParentId ?
-   * @returns
-   */
-  isDescendant(
+  function isDescendant(
     potentialChildId: ParentId,
     potentialParentId: ParentId,
   ): NoteDaoResult<boolean | "CIRCULAR"> {
@@ -247,7 +229,7 @@ export class NoteDAO extends TransactionalDAO {
       if (potentialParentId == null) return false;
       if (potentialChildId == null) return false;
       const getter = async (id: string) => {
-        const result = (await this.findById(id)).unwrapOr(null);
+        const result = (await findById(id)).unwrapOr(null);
         return result ? noteToDto(result) : null;
       };
       return await isDescendantAsync(
@@ -258,28 +240,27 @@ export class NoteDAO extends TransactionalDAO {
     });
   }
 
-  computeOrderKeysForLayer(
+  function computeOrderKeysForLayer(
     workspaceId: string,
     parentId: ParentId,
   ): NoteDaoResult<OrderKeyDto> {
-    return this.findFirstNoteInLayer(workspaceId, parentId).andThen(
-      (firstInLayer) =>
-        this.findLastNoteInLayer(workspaceId, parentId).map((lastInLayer) => {
-          const start = firstInLayer
-            ? new Rank(firstInLayer.orderHint).prev().toString()
-            : Rank.default().toString();
-          const end = lastInLayer
-            ? new Rank(lastInLayer.orderHint).next().toString()
-            : Rank.default().toString();
-          return { start, end };
-        }),
+    return findFirstNoteInLayer(workspaceId, parentId).andThen((firstInLayer) =>
+      findLastNoteInLayer(workspaceId, parentId).map((lastInLayer) => {
+        const start = firstInLayer
+          ? new Rank(firstInLayer.orderHint).prev().toString()
+          : Rank.default().toString();
+        const end = lastInLayer
+          ? new Rank(lastInLayer.orderHint).next().toString()
+          : Rank.default().toString();
+        return { start, end };
+      }),
     );
   }
 
-  computeOrderKeysForFavorites(
+  function computeOrderKeysForFavorites(
     workspaceId: string,
   ): NoteDaoResult<OrderKeyDto> {
-    return this.findAllFavorites(workspaceId).map((favorites) => {
+    return findAllFavorites(workspaceId).map((favorites) => {
       const start = favorites.length
         ? new Rank(favorites[0].favoriteOrderHint).prev().toString()
         : Rank.default().toString();
@@ -292,9 +273,12 @@ export class NoteDAO extends TransactionalDAO {
     });
   }
 
-  searchByTitle(workspaceId: string, query: string): NoteDaoResult<Note[]> {
+  function searchByTitle(
+    workspaceId: string,
+    query: string,
+  ): NoteDaoResult<Note[]> {
     return dbResult(async () =>
-      this.tx
+      tx()
         .select()
         .from(notesTable)
         .where(
@@ -307,12 +291,12 @@ export class NoteDAO extends TransactionalDAO {
     );
   }
 
-  getRecentlyModifiedNotes(
+  function getRecentlyModifiedNotes(
     workspaceId: string,
     limit: number,
   ): NoteDaoResult<Note[]> {
     return dbResult(async () =>
-      this.tx
+      tx()
         .select()
         .from(notesTable)
         .where(and(inWorkspace(workspaceId), notTrashed()))
@@ -321,14 +305,12 @@ export class NoteDAO extends TransactionalDAO {
     );
   }
 
-  resolveParentTree(noteId: string): NoteDaoResult<Note[]> {
+  function resolveParentTree(noteId: string): NoteDaoResult<Note[]> {
     return dbResult(async () => {
       const tree: Note[] = [];
       let currentId: string | null = noteId;
       while (currentId) {
-        const note: Note | null = (await this.findById(currentId)).unwrapOr(
-          null,
-        );
+        const note: Note | null = (await findById(currentId)).unwrapOr(null);
         if (!note) break;
         tree.push(note);
         currentId = note.parentId;
@@ -336,4 +318,34 @@ export class NoteDAO extends TransactionalDAO {
       return tree.reverse();
     });
   }
+
+  return {
+    create,
+    update,
+    updateAll,
+    findById,
+    findByIdOrThrow,
+    findAll,
+    findAllByWorkspaceId,
+    findAllByDatabaseId,
+    findAllByParentId,
+    findAllByParentIdSortAsc,
+    deleteMany,
+    deleteById,
+    delete: deleteNote,
+    exists,
+    findFirstNoteInLayer,
+    findLastNoteInLayer,
+    findAllFavorites,
+    findAllTrashed,
+    findLastNoteInFavorites,
+    isDescendant,
+    computeOrderKeysForLayer,
+    computeOrderKeysForFavorites,
+    searchByTitle,
+    getRecentlyModifiedNotes,
+    resolveParentTree,
+  };
 }
+
+export type NoteDAOInstance = ReturnType<typeof NoteDAO>;

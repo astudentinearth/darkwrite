@@ -16,6 +16,30 @@ export function getActiveDb(): DatabaseType | Transaction {
 
 export type DbError = { type: "db-error"; cause: unknown };
 
+export type TxResolver = () => Transaction | DatabaseType;
+
+/** Resolves the correct transaction context to be used. The priority is:
+ * - If a Transaction is explicitly passed, then it will be preferred and returned back.
+ * - If a data source instance is passed, the active transaction will be preferred. When there
+ *   is no transaction, the data source will be returned as fallback.
+ * - If nothing is passed, and there is an active transaction, the transaction will win.
+ * - If nothing is passed, and there are no transactions, **I will panic.**
+ */
+export function resolveTx(
+  dbOrTransaction?: DatabaseType | Transaction,
+): Transaction | DatabaseType {
+  if (dbOrTransaction && !isDataSource(dbOrTransaction)) {
+    return dbOrTransaction;
+  }
+  const resolved = txContext.getStore() ?? dbOrTransaction;
+  if (!resolved) {
+    panic(
+      "No database or transaction available. Either inject one or call within a transactional() context.",
+    );
+  }
+  return resolved;
+}
+
 const TX_ROLLBACK_SENTINEL = Symbol("drizzle-tx-rollback");
 
 interface TxRollbackBox<E> {
@@ -31,10 +55,10 @@ function isTxRollbackBox(x: unknown): x is TxRollbackBox<unknown> {
   );
 }
 
-/** Runs the passed callback within a transaction context. Initiates a new transaction if one isn't already ongoing. */
+/** Runs the passed callback within a transaction context. Initiates a new transaction if one isn't already ongoing. Does not support nested transactions, nested calls will always join the same transaction. */
 export function transactional<T, E>(
   fn: () => ResultAsync<T, E>,
-  _db: DatabaseType = db,
+  _db: DatabaseType,
 ): ResultAsync<T, E | DbError> {
   // don't create a new transaction if one is already running
   if (txContext.getStore()) return fn();
@@ -61,22 +85,11 @@ export function transactional<T, E>(
   );
 }
 
+/** @deprecated */
 export abstract class TransactionalDAO {
   constructor(private _dbOrTransaction?: DatabaseType | Transaction) {}
 
   protected get tx(): Transaction | DatabaseType {
-    if (this._dbOrTransaction && !isDataSource(this._dbOrTransaction)) {
-      return this._dbOrTransaction;
-    }
-
-    const resolved = txContext.getStore() ?? this._dbOrTransaction;
-
-    if (!resolved) {
-      // this is a programming error, throw.
-      panic(
-        `${this.constructor.name}: no database or transaction available. Either inject one or call within a transactional() context.`,
-      );
-    }
-    return resolved;
+    return resolveTx(this._dbOrTransaction);
   }
 }

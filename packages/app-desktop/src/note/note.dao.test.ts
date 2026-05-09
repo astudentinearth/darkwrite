@@ -1,25 +1,28 @@
 import { createTestDatabase, DatabaseType, applySqlMigrations } from "@/db";
 import { NewNote, Note, note as notesTable, Workspace } from "@/db/schema";
+import { resolveTx } from "@/db/transactional";
 import { WorkspaceDAO } from "@/workspace/workspace.dao";
 import { ParentId, Rank } from "@darkwrite/common";
 import { randomUUID } from "crypto";
 import { beforeAll, beforeEach, describe, expect, it } from "vitest";
-import { NoteDAO } from "./note.dao";
+import { NoteDAO, NoteDAOInstance } from "./note.dao";
 
 let db: DatabaseType = createTestDatabase();
 
 describe("NoteDAO", () => {
-  let noteDao: NoteDAO;
+  let noteDao: NoteDAOInstance;
   let workspaceId = "";
 
   beforeAll(async () => {
     await applySqlMigrations(db);
-    noteDao = new NoteDAO(db);
+    noteDao = NoteDAO(() => resolveTx(db));
 
-    const workspace: Workspace = await new WorkspaceDAO(db).create({
-      name: "Test Workspace",
-      createdAt: new Date(),
-    });
+    const workspace: Workspace = (
+      await WorkspaceDAO(() => resolveTx(db)).create({
+        name: "Test Workspace",
+        createdAt: new Date(),
+      })
+    )._unsafeUnwrap();
 
     workspaceId = workspace.id;
   });
@@ -163,10 +166,12 @@ describe("NoteDAO", () => {
     });
 
     it("findAll should return notes from all workspaces", async () => {
-      const anotherWorkspace = await new WorkspaceDAO(db).create({
-        name: "Another Workspace",
-        createdAt: new Date(),
-      });
+      const anotherWorkspace = (
+        await WorkspaceDAO(() => resolveTx(db)).create({
+          name: "Another Workspace",
+          createdAt: new Date(),
+        })
+      )._unsafeUnwrap();
       const noteInCurrentWorkspaceId = randomUUID();
       const noteInAnotherWorkspaceId = randomUUID();
 
@@ -183,10 +188,12 @@ describe("NoteDAO", () => {
     });
 
     it("findAllByWorkspaceId should return only notes from the given workspace", async () => {
-      const anotherWorkspace = await new WorkspaceDAO(db).create({
-        name: "Third Workspace",
-        createdAt: new Date(),
-      });
+      const anotherWorkspace = (
+        await WorkspaceDAO(() => resolveTx(db)).create({
+          name: "Third Workspace",
+          createdAt: new Date(),
+        })
+      )._unsafeUnwrap();
       const inTargetWorkspaceId = randomUUID();
       const outsideTargetWorkspaceId = randomUUID();
 
