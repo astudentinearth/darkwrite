@@ -1,5 +1,5 @@
 import { AsyncLocalStorage } from "async_hooks";
-import { DatabaseType, db, Transaction } from "./data-source";
+import { DatabaseType, db, isDataSource, Transaction } from "./data-source";
 import { ResultAsync } from "neverthrow";
 import { panic } from "@darkwrite/common";
 
@@ -65,7 +65,12 @@ export abstract class TransactionalDAO {
   constructor(private _dbOrTransaction?: DatabaseType | Transaction) {}
 
   protected get tx(): Transaction | DatabaseType {
-    const resolved = this._dbOrTransaction ?? getActiveTransaction();
+    if (this._dbOrTransaction && !isDataSource(this._dbOrTransaction)) {
+      return this._dbOrTransaction;
+    }
+
+    const resolved = txContext.getStore() ?? this._dbOrTransaction;
+
     if (!resolved) {
       // this is a programming error, throw.
       panic(

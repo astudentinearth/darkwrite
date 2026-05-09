@@ -15,20 +15,13 @@ import {
 import { NoteDAO } from "./note.dao";
 
 export class NoteService {
-  private noteDAO: NoteDAO;
-  private workspaceDAO: WorkspaceDAO;
-  private databaseDAO: DatabaseDAO;
+  private noteDAO: NoteDAO = new NoteDAO();
+  private workspaceDAO: WorkspaceDAO = new WorkspaceDAO();
+  private databaseDAO: DatabaseDAO = new DatabaseDAO();
   constructor(
     private db: DatabaseType,
     private documentService = new DocumentService(),
-    noteDAO?: NoteDAO,
-    workspaceDAO?: WorkspaceDAO,
-    databaseDAO?: DatabaseDAO,
-  ) {
-    this.noteDAO = noteDAO ?? new NoteDAO(db);
-    this.workspaceDAO = workspaceDAO ?? new WorkspaceDAO(db);
-    this.databaseDAO = databaseDAO ?? new DatabaseDAO(db);
-  }
+  ) {}
 
   async create(dto: CreateNoteDTO) {
     const { title, workspaceId, databaseId, icon, parentId } = dto;
