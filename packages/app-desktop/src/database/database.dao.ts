@@ -1,72 +1,67 @@
-import { Transaction } from "@/db";
+import { dbResult } from "@/db/db-result";
 import {
   Database,
   database as databaseTable,
   NewDatabase,
   PatchDatabase,
 } from "@/db/schema";
-import { TransactionalDAO } from "@/db/transactional";
-import { isNotUndefined, NotFoundError } from "@darkwrite/common";
+import { DbError, TxResolver } from "@/db/transactional";
+import {
+  DatabaseError,
+  errOnUndefined,
+  firstOrErr,
+  okVoid,
+} from "@darkwrite/common";
 import { eq } from "drizzle-orm";
+import { ResultAsync } from "neverthrow";
 
-export class DatabaseDAO extends TransactionalDAO {
-  /** @deprecated */
-  static transactional(tx: Transaction) {
-    return new DatabaseDAO(tx);
-  }
+type DatabaseDaoResult<T> = ResultAsync<T, DatabaseError | DbError>;
 
-  /** @deprecated */
-  transactional(tx: Transaction) {
-    return DatabaseDAO.transactional(tx);
-  }
-
-  async create(database: NewDatabase) {
-    return (
-      await this.tx.insert(databaseTable).values(database).returning()
-    )[0];
-  }
-
-  async update(database: PatchDatabase) {
-    return (
-      await this.tx
-        .update(databaseTable)
-        .set(database)
-        .where(eq(databaseTable.id, database.id))
-        .returning()
-    ).at(0);
-  }
-
-  async updateAll(databases: PatchDatabase[]) {
-    return (await Promise.all(databases.map((d) => this.update(d)))).filter(
-      isNotUndefined,
+export function DatabaseDAO(tx: TxResolver) {
+  function create(database: NewDatabase): DatabaseDaoResult<Database> {
+    return dbResult(() =>
+      tx().insert(databaseTable).values(database).returning().get(),
     );
   }
 
-  async findById(id: string) {
-    return (
-      await this.tx
-        .select()
-        .from(databaseTable)
-        .where(eq(databaseTable.id, id))
-        .limit(1)
-    ).at(0);
+  function update(database: PatchDatabase): DatabaseDaoResult<Database> {
+    return dbResult(() =>
+      tx()
+        .update(databaseTable)
+        .set(database)
+        .where(eq(databaseTable.id, database.id))
+        .returning(),
+    ).andThen(
+      firstOrErr<DatabaseError>({
+        type: "database-not-found",
+        id: database.id,
+      }),
+    );
   }
 
-  async findByIdOrThrow(id: string) {
-    const result = await this.findById(id);
-    if (!result) throw new NotFoundError("Database", id);
-    return result;
+  function findById(id: string): DatabaseDaoResult<Database> {
+    return dbResult(() =>
+      tx().select().from(databaseTable).where(eq(databaseTable.id, id)).get(),
+    ).andThen(
+      errOnUndefined<DatabaseError>({ type: "database-not-found", id }),
+    );
   }
 
-  async findAll() {
-    return await this.tx.select().from(databaseTable);
+  function findAll(): DatabaseDaoResult<Database[]> {
+    return dbResult(() => tx().select().from(databaseTable));
   }
 
-  async deleteById(id: string) {
-    await this.tx.delete(databaseTable).where(eq(databaseTable.id, id));
+  function deleteById(id: string): DatabaseDaoResult<void> {
+    return dbResult(() =>
+      tx().delete(databaseTable).where(eq(databaseTable.id, id)),
+    ).andThen(okVoid);
   }
 
-  async delete(database: Database) {
-    await this.deleteById(database.id);
-  }
+  return {
+    create,
+    update,
+    findById,
+    findAll,
+    deleteById,
+  };
 }

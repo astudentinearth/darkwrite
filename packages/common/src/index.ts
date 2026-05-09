@@ -43,3 +43,4 @@ export * from "./context-menu";
 export * from "./url";
 export * from "./link";
 export * from "./error/panic";
+export * from "./result";

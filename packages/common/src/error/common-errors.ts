@@ -82,3 +82,5 @@ export type EmbedError = { type: "embed-not-found"; id: string };
 export type FileLinkError =
   | { type: "file-link-not-found"; id: string }
   | { type: "file-link-target-missing"; id: string };
+
+export type DatabaseError = { type: "database-not-found"; id: string };
