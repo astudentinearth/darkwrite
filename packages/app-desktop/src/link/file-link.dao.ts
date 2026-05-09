@@ -1,23 +1,39 @@
+import { dbResult } from "@/db/db-result";
 import {
   LinkedFile,
   NewLinkedFile,
   linkedFile as linkedFileTable,
 } from "@/db/schema";
-import { TransactionalDAO } from "@/db/transactional";
+import { DbError, TxResolver } from "@/db/transactional";
+import { FileLinkError } from "@darkwrite/common";
 import { eq } from "drizzle-orm";
+import { ResultAsync, ok, err } from "neverthrow";
 
-export class FileLinkDAO extends TransactionalDAO {
-  async create(link: NewLinkedFile): Promise<LinkedFile> {
-    return (await this.tx.insert(linkedFileTable).values(link).returning())[0];
+type FileLinkDaoResult<T> = ResultAsync<T, FileLinkError | DbError>;
+
+export function FileLinkDAO(tx: TxResolver) {
+  function create(link: NewLinkedFile): FileLinkDaoResult<LinkedFile> {
+    return dbResult(() =>
+      tx().insert(linkedFileTable).values(link).returning().get(),
+    );
   }
 
-  async findById(id: string): Promise<LinkedFile | undefined> {
-    return (
-      await this.tx
+  function findById(id: string): FileLinkDaoResult<LinkedFile> {
+    return dbResult(() =>
+      tx()
         .select()
         .from(linkedFileTable)
         .where(eq(linkedFileTable.id, id))
-        .limit(1)
-    ).at(0);
+        .get(),
+    ).andThen((row) =>
+      row
+        ? ok(row)
+        : err({ type: "file-link-not-found", id } satisfies FileLinkError),
+    );
   }
+
+  return {
+    create,
+    findById,
+  };
 }

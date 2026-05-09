@@ -1,54 +1,70 @@
+import { dbResult } from "@/db/db-result";
 import { Embed, NewEmbed, PatchEmbed, embed as embedTable } from "@/db/schema";
+import { DbError, TxResolver } from "@/db/transactional";
+import { EmbedError } from "@darkwrite/common";
 import { eq } from "drizzle-orm";
-import { isNotUndefined } from "@darkwrite/common";
-import { TransactionalDAO } from "@/db/transactional";
+import { ResultAsync, err, ok } from "neverthrow";
 
 const hasFileSize = (fileSize: number) => eq(embedTable.fileSize, fileSize);
 
-export class EmbedDAO extends TransactionalDAO {
-  async create(embed: NewEmbed): Promise<Embed> {
-    return (await this.tx.insert(embedTable).values(embed).returning())[0];
-  }
+type EmbedDaoResult<T> = ResultAsync<T, EmbedError | DbError>;
 
-  async update(embed: PatchEmbed) {
-    return (
-      await this.tx
-        .update(embedTable)
-        .set(embed)
-        .where(eq(embedTable.id, embed.id))
-        .returning()
-    ).at(0);
-  }
-
-  async updateAll(embeds: PatchEmbed[]): Promise<Embed[]> {
-    return (await Promise.all(embeds.map((e) => this.update(e)))).filter(
-      isNotUndefined,
+export function EmbedDAO(tx: TxResolver) {
+  function create(embed: NewEmbed): EmbedDaoResult<Embed> {
+    return dbResult(() =>
+      tx().insert(embedTable).values(embed).returning().get(),
     );
   }
 
-  async findById(id: string) {
-    return (
-      await this.tx
-        .select()
-        .from(embedTable)
-        .where(eq(embedTable.id, id))
-        .limit(1)
-    ).at(0);
+  function update(embed: PatchEmbed): EmbedDaoResult<Embed> {
+    return dbResult(() =>
+      tx()
+        .update(embedTable)
+        .set(embed)
+        .where(eq(embedTable.id, embed.id))
+        .returning(),
+    ).andThen((rows) =>
+      rows.at(0)
+        ? ok(rows[0])
+        : err({ type: "embed-not-found", id: embed.id } satisfies EmbedError),
+    );
   }
 
-  async findAll() {
-    return await this.tx.select().from(embedTable);
+  function findById(id: string): EmbedDaoResult<Embed> {
+    return dbResult(() =>
+      tx().select().from(embedTable).where(eq(embedTable.id, id)).get(),
+    ).andThen((row) =>
+      row ? ok(row) : err({ type: "embed-not-found", id } satisfies EmbedError),
+    );
   }
 
-  async deleteById(id: string) {
-    await this.tx.delete(embedTable).where(eq(embedTable.id, id));
+  function findAll(): EmbedDaoResult<Embed[]> {
+    return dbResult(() => tx().select().from(embedTable));
   }
 
-  async delete(embed: Embed) {
-    await this.deleteById(embed.id);
+  function deleteById(id: string): EmbedDaoResult<void> {
+    return dbResult(() =>
+      tx().delete(embedTable).where(eq(embedTable.id, id)),
+    ).andThen(() => ok());
   }
 
-  async findAllByFileSize(fileSize: number) {
-    return await this.tx.select().from(embedTable).where(hasFileSize(fileSize));
+  function deleteEmbed(embed: Embed): EmbedDaoResult<void> {
+    return deleteById(embed.id);
   }
+
+  function findAllByFileSize(fileSize: number): EmbedDaoResult<Embed[]> {
+    return dbResult(() =>
+      tx().select().from(embedTable).where(hasFileSize(fileSize)),
+    );
+  }
+
+  return {
+    create,
+    update,
+    findById,
+    findAll,
+    findAllByFileSize,
+    delete: deleteEmbed,
+    deleteById,
+  };
 }

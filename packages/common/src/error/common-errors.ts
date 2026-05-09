@@ -76,3 +76,9 @@ export type WorkspaceError =
   | { type: "workspace-failed-to-delete"; cause?: unknown };
 
 export type WorkspaceErrorType = WorkspaceError["type"];
+
+export type EmbedError = { type: "embed-not-found"; id: string };
+
+export type FileLinkError =
+  | { type: "file-link-not-found"; id: string }
+  | { type: "file-link-target-missing"; id: string };
