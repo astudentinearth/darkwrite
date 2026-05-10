@@ -6,7 +6,18 @@ import {
   ParentId,
   Rank,
 } from "@darkwrite/common";
-import { and, asc, desc, eq, isNull, like, ne, or, inArray } from "drizzle-orm";
+import {
+  and,
+  asc,
+  desc,
+  eq,
+  isNull,
+  like,
+  ne,
+  or,
+  inArray,
+  gt,
+} from "drizzle-orm";
 import { noteToDto } from "./note-mapper";
 import { DbError, TxResolver } from "@/db/transactional";
 import { dbResult } from "@/db/db-result";
@@ -27,7 +38,7 @@ const inDatabase = (databaseId: string) =>
   eq(notesTable.databaseId, databaseId);
 
 export type NoteDaoResult<T> = ResultAsync<T, DbError | NoteError>;
-type OrderKeyDto = { start: string; end: string };
+export type OrderKeyDto = { start: string; end: string };
 
 export function NoteDAO(tx: TxResolver) {
   function create(note: NewNote): NoteDaoResult<Note> {
@@ -319,6 +330,31 @@ export function NoteDAO(tx: TxResolver) {
     });
   }
 
+  function noteRightAfter(
+    targetId: string,
+    workspaceId: string,
+    sortBy: "orderHint" | "favoriteOrderHint" = "orderHint",
+  ): NoteDaoResult<Note | undefined> {
+    const target = tx()
+      .select({ [sortBy]: notesTable[sortBy] })
+      .from(notesTable)
+      .where(and(eq(notesTable.id, targetId), inWorkspace(workspaceId)));
+    return dbResult(() =>
+      tx()
+        .select()
+        .from(notesTable)
+        .where(
+          and(
+            gt(notesTable[sortBy], target),
+            notTrashed(),
+            inWorkspace(workspaceId),
+          ),
+        )
+        .orderBy(asc(notesTable[sortBy]))
+        .limit(1),
+    ).map((n) => n.at(0));
+  }
+
   return {
     create,
     update,
@@ -345,6 +381,7 @@ export function NoteDAO(tx: TxResolver) {
     searchByTitle,
     getRecentlyModifiedNotes,
     resolveParentTree,
+    noteRightAfter,
   };
 }
 

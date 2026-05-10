@@ -1,347 +1,354 @@
 import { DatabaseDAO } from "@/database/database.dao";
 import { DatabaseType } from "@/db";
-import { NewNote } from "@/db/schema";
-import { logError } from "@/lib/log";
-import { DocumentService } from "@/service/document.service";
+import { NewNote, Note } from "@/db/schema";
+import { resolveTx, transactional } from "@/db/transactional";
+import { IDocumentService } from "@/service/document.service";
 import { WorkspaceDAO } from "@/workspace/workspace.dao";
 import {
   CreateNoteDTO,
-  IllegalArgumentError,
   MoveNoteDTO,
-  ParentId,
+  NoteError,
   Rank,
   UpdateNoteDTO,
 } from "@darkwrite/common";
-import { NoteDAO } from "./note.dao";
+import { err, errAsync, ok, okAsync, Result, ResultAsync } from "neverthrow";
+import { NoteDAO, OrderKeyDto } from "./note.dao";
 
-export class NoteService {
-  private noteDAO: NoteDAO = new NoteDAO();
-  private workspaceDAO: WorkspaceDAO = new WorkspaceDAO();
-  private databaseDAO: DatabaseDAO = new DatabaseDAO();
-  constructor(
-    private db: DatabaseType,
-    private documentService = new DocumentService(),
-  ) {}
-
-  async create(dto: CreateNoteDTO) {
-    const { title, workspaceId, databaseId, icon, parentId } = dto;
-
-    return await this.db.transaction(async (tx) => {
-      const noteDao = this.noteDAO.transactional(tx);
-      const workspaceDao = this.workspaceDAO.transactional(tx);
-
-      const workspace = await workspaceDao.findByIdOrThrow(workspaceId);
-      const orderKeys = await noteDao.computeOrderKeysForLayer(
-        workspace.id,
-        parentId,
-      );
-
-      const note: NewNote = {
-        title,
-        workspaceId,
-        orderHint: orderKeys.end,
-        databaseId,
-        icon,
-        parentId,
-        favoriteOrderHint: "",
-        createdAt: new Date(),
-        modifiedAt: new Date(),
-      };
-
-      const result = await noteDao.create(note);
-      if (!result) {
-        throw new Error("Failed to create note");
-      }
-      await this.documentService.setNoteContent(result.id, "{}");
-      return result;
-    });
-  }
-
-  async update(id: string, dto: UpdateNoteDTO) {
-    const { databaseId, ...rest } = dto;
-
-    return await this.db.transaction(async (tx) => {
-      const databaseDao = this.databaseDAO.transactional(tx);
-      const noteDao = this.noteDAO.transactional(tx);
-
-      const database = databaseId
-        ? await databaseDao.findByIdOrThrow(databaseId)
-        : undefined;
-
-      const note = await noteDao.findByIdOrThrow(id);
-
-      Object.assign(note, rest);
-      if (database) note.databaseId = database.id;
-
-      note.modifiedAt = new Date();
-
-      return await noteDao.update(note);
-    });
-  }
-
-  async move(dto: MoveNoteDTO) {
-    if (dto.placement === "below") {
-      if (!dto.destinationId)
-        throw new IllegalArgumentError(
-          "Destination ID cannot be null when placement is 'below'.",
-        );
-      return await this.moveBelow(dto.sourceId, dto.destinationId);
-    } else {
-      return await this.moveInto(
-        dto.sourceId,
-        dto.destinationId,
-        dto.placement === "inside-start" ? "start" : "end",
-      );
-    }
-  }
-
-  async moveBelow(sourceNoteNoteId: string, aboveNoteId: string) {
-    /*
-      Edge cases:
-      - Moving below a trashed note (not allowed)
-      - Moving to the end of the list (no next note)
-      - Rank collision (re-rank the entire layer) //TODO
-    */
-
-    return await this.db.transaction(async (tx) => {
-      const noteRepository = this.noteDAO.transactional(tx);
-
-      const sourceNote = await noteRepository.findByIdOrThrow(sourceNoteNoteId);
-      const aboveNote = await noteRepository.findByIdOrThrow(aboveNoteId);
-
-      if (aboveNote.isTrashed || sourceNote.isTrashed) {
-        throw new IllegalArgumentError("Cannot move (below) a trashed note.");
-      }
-
-      const siblings = await noteRepository.findAllByParentIdSortAsc(
-        sourceNote.workspaceId,
-        aboveNote.parentId,
-      );
-      const aboveIndex = siblings.findIndex((n) => n.id === aboveNote.id);
-      const nextNote = siblings[aboveIndex + 1];
-
-      let newOrderHint: string;
-      if (nextNote) {
-        try {
-          const rank = new Rank(aboveNote.orderHint).between(
-            new Rank(nextNote.orderHint),
-          );
-          newOrderHint = rank.get();
-        } catch {
-          const lastNote = siblings[siblings.length - 1];
-          const rank = new Rank(lastNote.orderHint).next();
-          newOrderHint = rank.get();
-        }
-      } else {
-        const rank = new Rank(aboveNote.orderHint).next();
-        newOrderHint = rank.get();
-      }
-
-      sourceNote.parentId = aboveNote.parentId;
-      sourceNote.orderHint = newOrderHint;
-      sourceNote.modifiedAt = new Date();
-
-      return await noteRepository.update(sourceNote);
-    });
-  }
-
-  async favorite(noteId: string, aboveNoteId?: string | null) {
-    return this.db.transaction(async (tx) => {
-      const dao = this.noteDAO.transactional(tx);
-      const note = await dao.findByIdOrThrow(noteId);
-
-      const indices = await dao.computeOrderKeysForFavorites(note.workspaceId);
-
-      let newFavoriteOrderHint: string;
-      if (!aboveNoteId) {
-        newFavoriteOrderHint =
-          aboveNoteId === null ? indices.start : indices.end;
-      } else {
-        const favorites = await dao.findAllFavorites(note.workspaceId);
-        const aboveIndex = favorites.findIndex((n) => n.id === aboveNoteId);
-        if (aboveIndex === -1 || aboveIndex + 1 >= favorites.length) {
-          newFavoriteOrderHint = indices.end;
-        } else {
-          const aboveFavorite = favorites[aboveIndex];
-          const belowFavorite = favorites[aboveIndex + 1];
-          const rank = new Rank(aboveFavorite.favoriteOrderHint).between(
-            new Rank(belowFavorite.favoriteOrderHint),
-          );
-          newFavoriteOrderHint = rank.get();
-        }
-      }
-      note.isFavorite = true;
-      note.favoriteOrderHint = newFavoriteOrderHint;
-
-      const result = await dao.update(note);
-      if (!result) throw new Error("Failed to favorite note");
-      return result;
-    });
-  }
-
-  async unfavorite(noteId: string) {
-    return await this.db.transaction(async (tx) => {
-      const dao = this.noteDAO.transactional(tx);
-      const note = await dao.findByIdOrThrow(noteId);
-      const result = await dao.update({
-        id: note.id,
-        isFavorite: false,
-        favoriteOrderHint: "",
-      });
-      if (!result) throw new Error("Failed to unfavorite note");
-      return result;
-    });
-  }
-
-  /** Moves a note into another note with given placement order. The destination note must not be a child of the source note, and the neither notes can be trashed.
-   * @param sourceNoteId the note that moves
-   * @param destinationNoteId the note that receives the child
-   * @param [placement="end"] whether to move at the start or end of the layer (default: `"end"`)
-   */
-  async moveInto(
-    sourceNoteId: string,
-    destinationNoteId: ParentId,
-    placement: "start" | "end" = "end",
-  ) {
-    return await this.db.transaction(async (tx) => {
-      const noteRepository = this.noteDAO.transactional(tx);
-
-      const sourceNote = await noteRepository.findByIdOrThrow(sourceNoteId);
-
-      if (sourceNote.isTrashed) {
-        throw new IllegalArgumentError("Cannot move a trashed note.");
-      }
-
-      const isCircular = destinationNoteId
-        ? await noteRepository.isDescendant(destinationNoteId, sourceNoteId)
-        : false;
-      if (isCircular) {
-        throw new IllegalArgumentError(
-          "Cannot move a note into its own descendant.",
-        );
-      }
-
-      if (destinationNoteId) {
-        const dest = await noteRepository.findByIdOrThrow(destinationNoteId);
-        if (dest.isTrashed) {
-          throw new IllegalArgumentError(
-            "Cannot move a note into a trashed note.",
-          );
-        }
-      }
-
-      const newOrderHints = await noteRepository.computeOrderKeysForLayer(
-        sourceNote.workspaceId,
-        destinationNoteId,
-      );
-
-      sourceNote.parentId = destinationNoteId;
-      sourceNote.orderHint = newOrderHints[placement];
-      sourceNote.modifiedAt = new Date();
-
-      return await noteRepository.update(sourceNote);
-    });
-  }
-
-  async duplicate(id: string) {
-    const { icon, title, databaseId, workspaceId, propertyValues, parentId } =
-      await this.noteDAO.findByIdOrThrow(id);
-
-    const newNote: NewNote = {
-      title: `${title} (copy)`,
-      icon,
-      databaseId,
-      workspaceId,
-      propertyValues,
-      parentId,
-      orderHint: (
-        await this.noteDAO.computeOrderKeysForLayer(workspaceId, parentId)
-      ).end,
-      favoriteOrderHint: "",
-      createdAt: new Date(),
-      modifiedAt: new Date(),
-    };
-
-    return await this.db.transaction(async (tx) => {
-      const saved = await this.noteDAO.transactional(tx).create(newNote);
-      const doc = await this.documentService.getNoteContent(id);
-      await this.documentService.setNoteContent(saved.id, JSON.stringify(doc));
-      return saved;
-    });
-  }
-
-  async deleteById(id: string) {
-    return await this.db.transaction(async (tx) => {
-      await this.noteDAO.transactional(tx).deleteById(id);
-      try {
-        await this.documentService.deleteNoteContent(id);
-      } catch (e: unknown) {
-        logError(e);
-        tx.rollback();
-      }
-    });
-  }
-
-  async moveToTrash(id: string) {
-    return await this.db.transaction(async (tx) => {
-      const dao = this.noteDAO.transactional(tx);
-      const result = await dao.update({
-        id,
-        isTrashed: true,
-        orderHint: "",
-        favoriteOrderHint: "",
-        isFavorite: false,
-      });
-      if (!result) throw new Error("Failed to move note to trash");
-      return result;
-    });
-  }
-
-  async setModificationDate(id: string, date: Date) {
-    return await this.db.transaction(async (tx) => {
-      const dao = this.noteDAO.transactional(tx);
-      const result = await dao.update({
-        id,
-        modifiedAt: date,
-      });
-      if (!result) throw new Error("Failed to update note modification date");
-      return result;
-    });
-  }
-
-  async restoreFromTrash(id: string) {
-    return await this.db.transaction(async (tx) => {
-      const noteDAO = this.noteDAO.transactional(tx);
-      const note = await noteDAO.findByIdOrThrow(id);
-      note.isTrashed = false;
-
-      if (note.parentId && !(await noteDAO.exists(note.parentId))) {
-        note.parentId = null;
-      }
-
-      const orderKeys = await noteDAO.computeOrderKeysForLayer(
-        note.workspaceId,
-        note.parentId,
-      );
-
-      note.orderHint = orderKeys.end;
-      const result = await noteDAO.update(note);
-      if (!result) throw new Error("Failed to restore note from trash.");
-      return result;
-    });
-  }
-
-  /** **Permanently** deletes all notes in the trash of the given workspace. */
-  async emptyTrash(workspaceId: string) {
-    return await this.db.transaction(async (tx) => {
-      const noteDAO = this.noteDAO.transactional(tx);
-      const trashedNotes = await noteDAO.findAllTrashed(workspaceId);
-      await Promise.all(
-        trashedNotes.map((note) =>
-          this.documentService.deleteNoteContent(note.id),
-        ),
-      );
-      await noteDAO.deleteMany(trashedNotes.map((n) => n.id));
-    });
-  }
+function buildNewNote(dto: CreateNoteDTO, { end }: OrderKeyDto): NewNote {
+  const { title, workspaceId, databaseId, icon, parentId } = dto;
+  return {
+    title,
+    workspaceId,
+    databaseId,
+    icon,
+    parentId,
+    favoriteOrderHint: "",
+    createdAt: new Date(),
+    modifiedAt: new Date(),
+    orderHint: end,
+  };
 }
+
+function buildDuplicate({
+  title,
+  icon,
+  databaseId,
+  workspaceId,
+  propertyValues,
+  parentId,
+}: Note): NewNote {
+  return {
+    title: `${title} (copy)`,
+    icon,
+    databaseId,
+    workspaceId,
+    propertyValues,
+    parentId,
+    orderHint: "",
+    favoriteOrderHint: "",
+    createdAt: new Date(),
+    modifiedAt: new Date(),
+  };
+}
+
+function validateMoveDto(dto: MoveNoteDTO): Result<void, NoteError> {
+  if (dto.placement !== "below") return ok();
+  if (!dto.destinationId)
+    return err({
+      type: "note-failed-to-move",
+      cause: "cannot-move-below-null",
+    } satisfies NoteError);
+  return ok();
+}
+
+type RankCollisionErr = { type: "rank-collision" };
+
+export function NoteService(
+  db: DatabaseType,
+  documentService: IDocumentService,
+) {
+  const noteDAO = NoteDAO(() => resolveTx(db));
+  const workspaceDAO = WorkspaceDAO(() => resolveTx(db));
+  const databaseDAO = DatabaseDAO(() => resolveTx(db));
+
+  const assertNotDescendant = (result: boolean | "CIRCULAR") =>
+    result === "CIRCULAR" || result === true
+      ? err<void, NoteError>({
+          type: "note-failed-to-move",
+          cause: "circular-reference",
+        })
+      : ok();
+
+  /** @internal */
+  function canMoveBelow(source: Note, dest: Note) {
+    if (source.isTrashed || dest.isTrashed)
+      return errAsync<void, NoteError>({
+        type: "note-failed-to-move",
+        cause: "trashed",
+      });
+
+    return noteDAO
+      .isDescendant(dest.id, source.id)
+      .andThen(assertNotDescendant);
+  }
+
+  /** @internal */
+  function canMoveInto(source: Note, dest: Note | null) {
+    if (!dest) return okAsync();
+    if (source.isTrashed || dest.isTrashed)
+      return errAsync<void, NoteError>({
+        type: "note-failed-to-move",
+        cause: "trashed",
+      });
+    else
+      return noteDAO
+        .isDescendant(dest?.id, source.id)
+        .andThen(assertNotDescendant);
+  }
+
+  /** @internal */
+  function computeBelowRank(dest: Note) {
+    return noteDAO
+      .noteRightAfter(dest.id, dest.workspaceId, "orderHint")
+      .andThen((nextNote) => {
+        if (nextNote) {
+          try {
+            const rank = new Rank(dest.orderHint).between(
+              new Rank(nextNote.orderHint),
+            );
+            return ok(rank.get());
+          } catch {
+            return err({ type: "rank-collision" } satisfies RankCollisionErr);
+          }
+        } else {
+          return ok(new Rank(dest.orderHint).next().get());
+        }
+      })
+      .orElse((error) => {
+        if (error.type !== "rank-collision") return err(error);
+        return noteDAO
+          .findLastNoteInLayer(dest.workspaceId, dest.parentId)
+          .map((note) =>
+            note ? new Rank(note.orderHint).next().get() : Rank.default().get(),
+          );
+      });
+  }
+
+  /** @internal */
+  function computeFavoriteRank(workspaceId: string, aboveId?: string | null) {
+    return aboveId == null
+      ? noteDAO
+          .computeOrderKeysForFavorites(workspaceId)
+          .map((keys) => (aboveId === undefined ? keys.end : keys.start))
+      : ResultAsync.combine([
+          noteDAO.findById(aboveId),
+          noteDAO.noteRightAfter(aboveId, workspaceId, "favoriteOrderHint"),
+        ]).map(([above, below]) =>
+          below
+            ? new Rank(above.favoriteOrderHint)
+                .between(below.favoriteOrderHint)
+                .get()
+            : new Rank(above.favoriteOrderHint).next().get(),
+        );
+  }
+
+  function create(dto: CreateNoteDTO) {
+    return transactional(
+      () =>
+        workspaceDAO
+          .findById(dto.workspaceId)
+          .andThen((w) => noteDAO.computeOrderKeysForLayer(w.id, dto.parentId))
+          .map((keys) => buildNewNote(dto, keys))
+          .andThen(noteDAO.create)
+          .andThen((note) =>
+            documentService.setNoteContent(note.id, "{}").map(() => note),
+          ),
+      db,
+    );
+  }
+
+  const move = (dto: MoveNoteDTO) =>
+    transactional(
+      () =>
+        validateMoveDto(dto)
+          .asyncAndThen(() =>
+            ResultAsync.combine([
+              noteDAO.findById(dto.sourceId),
+              dto.destinationId
+                ? noteDAO.findById(dto.destinationId)
+                : okAsync(null),
+            ]),
+          )
+          .andThen(([source, destination]) =>
+            dto.placement === "below"
+              ? moveBelow(source, destination!) // we validated dto shape previously
+              : moveInto(source, destination, dto.placement),
+          ),
+      db,
+    );
+
+  const moveBelow = (source: Note, destination: Note) =>
+    transactional(
+      () =>
+        canMoveBelow(source, destination)
+          .andThen(() => computeBelowRank(destination))
+          .andThen((orderHint) =>
+            noteDAO.update({
+              id: source.id,
+              orderHint,
+              parentId: destination.parentId,
+            }),
+          ),
+      db,
+    );
+
+  const moveInto = (
+    source: Note,
+    destination: Note | null,
+    placement: "inside-start" | "inside-end",
+  ) =>
+    transactional(
+      () =>
+        canMoveInto(source, destination)
+          .andThen(() =>
+            noteDAO.computeOrderKeysForLayer(
+              source.workspaceId,
+              destination?.id ?? null,
+            ),
+          )
+          .andThen(({ start, end }) =>
+            noteDAO.update({
+              id: source.id,
+              orderHint: placement === "inside-start" ? start : end,
+              parentId: destination?.id ?? null,
+            }),
+          ),
+      db,
+    );
+
+  const update = (id: string, dto: UpdateNoteDTO) =>
+    transactional(
+      () =>
+        (dto.databaseId
+          ? databaseDAO.findById(dto.databaseId).andThen(() => okAsync())
+          : okAsync()
+        ).andThen(() => noteDAO.update({ id, modifiedAt: new Date(), ...dto })),
+      db,
+    );
+
+  const favorite = (targetId: string, aboveNoteId?: string | null) =>
+    transactional(
+      () =>
+        noteDAO
+          .findById(targetId)
+          .andThen((note) =>
+            note.isTrashed
+              ? err({ type: "cannot-favorite-in-trash" } satisfies NoteError)
+              : ok(note),
+          )
+          .andThen((note) => computeFavoriteRank(note.workspaceId, aboveNoteId))
+          .andThen((rank) =>
+            noteDAO.update({
+              id: targetId,
+              isFavorite: true,
+              favoriteOrderHint: rank,
+            }),
+          ),
+      db,
+    );
+
+  const unfavorite = (id: string) =>
+    noteDAO.update({ id, isFavorite: false, favoriteOrderHint: "" });
+
+  const duplicate = (id: string) =>
+    transactional(
+      () =>
+        noteDAO
+          .findById(id)
+          .andThen((note) =>
+            ResultAsync.combine([
+              okAsync(buildDuplicate(note)),
+              noteDAO.computeOrderKeysForLayer(note.workspaceId, note.parentId),
+            ]),
+          )
+          .map(
+            ([duplicate, keys]) =>
+              ({ ...duplicate, orderHint: keys.end }) satisfies NewNote,
+          )
+          .andThen(noteDAO.create)
+          .andThen((n) =>
+            ResultAsync.combine([
+              okAsync(n),
+              documentService.getNoteContent(id),
+            ]),
+          )
+          .andThen(([note, content]) =>
+            documentService
+              .setNoteContent(note.id, JSON.stringify(content))
+              .map(() => note),
+          ),
+      db,
+    );
+
+  const deleteById = (id: string) =>
+    noteDAO.deleteById(id).andThen(() => documentService.deleteNoteContent(id));
+
+  const moveToTrash = (id: string) =>
+    noteDAO.update({
+      id,
+      isTrashed: true,
+      orderHint: "",
+      favoriteOrderHint: "",
+      isFavorite: false,
+    });
+
+  const setModificationDate = (id: string, date: Date) =>
+    noteDAO.update({ id, modifiedAt: date });
+
+  const restoreFromTrash = (id: string) =>
+    transactional(
+      () =>
+        noteDAO
+          .findById(id)
+          .andThen((note) =>
+            noteDAO
+              .computeOrderKeysForLayer(note.workspaceId, note.parentId)
+              .map((keys) => keys.end),
+          )
+          .andThen((orderHint) =>
+            noteDAO.update({ id, isTrashed: false, orderHint }),
+          ),
+      db,
+    );
+
+  const emptyTrash = (workspaceId: string) =>
+    transactional(
+      () =>
+        noteDAO
+          .findAllTrashed(workspaceId)
+          .map((notes) => notes.map((n) => n.id))
+          .andThen((notes) => noteDAO.deleteMany(notes).map(() => notes)),
+      db,
+    ).andThen(
+      (notes) =>
+        ResultAsync.combine(
+          notes.map((id) => documentService.deleteNoteContent(id)),
+        ).orElse(() => okAsync()), // we don't care if files remain orphaned
+    );
+
+  return {
+    create,
+    update,
+    move,
+    favorite,
+    unfavorite,
+    duplicate,
+    deleteById,
+    moveToTrash,
+    setModificationDate,
+    restoreFromTrash,
+    emptyTrash,
+  };
+}
+
+export type INoteService = ReturnType<typeof NoteService>;

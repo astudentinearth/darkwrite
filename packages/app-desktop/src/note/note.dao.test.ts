@@ -521,6 +521,170 @@ describe("NoteDAO", () => {
     });
   });
 
+  describe("noteRightAfter", () => {
+    it("should return the note with the next greater orderHint", async () => {
+      const firstRank = Rank.default();
+      const secondRank = firstRank.next();
+      const thirdRank = secondRank.next();
+
+      const firstId = randomUUID();
+      const secondId = randomUUID();
+      const thirdId = randomUUID();
+
+      await saveNote({
+        ...(await buildNote(firstId)),
+        orderHint: firstRank.get(),
+      });
+      await saveNote({
+        ...(await buildNote(secondId)),
+        orderHint: secondRank.get(),
+      });
+      await saveNote({
+        ...(await buildNote(thirdId)),
+        orderHint: thirdRank.get(),
+      });
+
+      const result = (
+        await noteDao.noteRightAfter(firstId, workspaceId)
+      )._unsafeUnwrap();
+
+      expect(result).not.toBeUndefined();
+      expect(result?.id).toBe(secondId);
+    });
+
+    it("should return only the immediately next note, not all subsequent ones", async () => {
+      const firstRank = Rank.default();
+      const secondRank = firstRank.next();
+      const thirdRank = secondRank.next();
+
+      const firstId = randomUUID();
+      const secondId = randomUUID();
+      const thirdId = randomUUID();
+
+      await saveNote({
+        ...(await buildNote(firstId)),
+        orderHint: firstRank.get(),
+      });
+      await saveNote({
+        ...(await buildNote(secondId)),
+        orderHint: secondRank.get(),
+      });
+      await saveNote({
+        ...(await buildNote(thirdId)),
+        orderHint: thirdRank.get(),
+      });
+
+      const result = (
+        await noteDao.noteRightAfter(firstId, workspaceId)
+      )._unsafeUnwrap();
+
+      expect(result?.id).toBe(secondId);
+      expect(result?.id).not.toBe(thirdId);
+    });
+
+    it("should return undefined when the target is the last note", async () => {
+      const firstRank = Rank.default();
+      const secondRank = firstRank.next();
+
+      const firstId = randomUUID();
+      const lastId = randomUUID();
+
+      await saveNote({
+        ...(await buildNote(firstId)),
+        orderHint: firstRank.get(),
+      });
+      await saveNote({
+        ...(await buildNote(lastId)),
+        orderHint: secondRank.get(),
+      });
+
+      const result = (
+        await noteDao.noteRightAfter(lastId, workspaceId)
+      )._unsafeUnwrap();
+
+      expect(result).toBeUndefined();
+    });
+
+    it("should return undefined when the target does not exist", async () => {
+      const someId = randomUUID();
+      await saveNote({
+        ...(await buildNote(randomUUID())),
+        orderHint: Rank.default().get(),
+      });
+
+      const result = (
+        await noteDao.noteRightAfter(someId, workspaceId)
+      )._unsafeUnwrap();
+
+      expect(result).toBeUndefined();
+    });
+
+    it("should use favoriteOrderHint when specified", async () => {
+      const firstRank = Rank.default();
+      const secondRank = firstRank.next();
+      const thirdRank = secondRank.next();
+
+      const firstId = randomUUID();
+      const secondId = randomUUID();
+      const thirdId = randomUUID();
+
+      await saveNote({
+        ...(await buildNote(firstId)),
+        favoriteOrderHint: firstRank.get(),
+        orderHint: thirdRank.get(),
+      });
+      await saveNote({
+        ...(await buildNote(secondId)),
+        favoriteOrderHint: secondRank.get(),
+        orderHint: secondRank.get(),
+      });
+      await saveNote({
+        ...(await buildNote(thirdId)),
+        favoriteOrderHint: thirdRank.get(),
+        orderHint: firstRank.get(),
+      });
+
+      const result = (
+        await noteDao.noteRightAfter(firstId, workspaceId, "favoriteOrderHint")
+      )._unsafeUnwrap();
+
+      expect(result).not.toBeUndefined();
+      expect(result?.id).toBe(secondId);
+    });
+
+    it("should not return notes from another workspace", async () => {
+      const otherWorkspace = (
+        await WorkspaceDAO(() => resolveTx(db)).create({
+          name: "Other Workspace",
+          createdAt: new Date(),
+        })
+      )._unsafeUnwrap();
+
+      const firstRank = Rank.default();
+      const secondRank = firstRank.next();
+
+      const targetId = randomUUID();
+      const otherWorkspaceNoteId = randomUUID();
+
+      await saveNote({
+        ...(await buildNote(targetId)),
+        orderHint: firstRank.get(),
+      });
+      // A note in another workspace with a higher orderHint
+      await saveNote({
+        ...(await buildNote(otherWorkspaceNoteId)),
+        workspaceId: otherWorkspace.id,
+        orderHint: secondRank.get(),
+      });
+
+      const result = (
+        await noteDao.noteRightAfter(targetId, workspaceId)
+      )._unsafeUnwrap();
+
+      expect(result).toBeUndefined();
+    });
+  });
+
   describe("isDescendant", () => {
     it("should return 'CIRCULAR' when target is the parent (self-descendant check)", async () => {
       // Logic: if (targetId === potentialParentId) return true;

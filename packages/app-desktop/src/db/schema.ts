@@ -34,7 +34,7 @@ export const workspace = sqliteTable("workspace", {
 export const note = sqliteTable("note", {
   id: generatedUuid(),
   userId: text(),
-  parentId: text(),
+  parentId: text(), // FIXME: on delete set null here please
   propertyValues: json(),
   title: text().notNull(),
   icon: text(),

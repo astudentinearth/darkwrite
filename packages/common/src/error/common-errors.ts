@@ -65,8 +65,12 @@ export type NoteError =
   | { type: "note-not-found"; id: string }
   | { type: "note-failed-to-create"; cause?: unknown }
   | { type: "note-failed-to-update"; cause?: unknown }
-  | { type: "note-failed-to-move"; cause?: "trashed" }
-  | { type: "note-failed-to-delete"; cause?: unknown };
+  | {
+      type: "note-failed-to-move";
+      cause?: "trashed" | "cannot-move-below-null" | "circular-reference";
+    }
+  | { type: "note-failed-to-delete"; cause?: unknown }
+  | { type: "cannot-favorite-in-trash" };
 
 export type NoteErrorType = NoteError["type"];
 
