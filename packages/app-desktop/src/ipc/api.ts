@@ -1,4 +1,10 @@
-import { deepAssign, find, recursiveKeys } from "@darkwrite/common";
+ 
+import {
+  deepAssign,
+  find,
+  recursiveKeys,
+  serializeResult,
+} from "@darkwrite/common";
 import { showAppMenu } from "@/menu";
 import {
   DarkwriteAPI,
@@ -66,10 +72,14 @@ const register = (
 ) => {
   try {
     if (withEvent) {
-      _ipcMain.handle(channel, listener);
+      _ipcMain.handle(channel, async (event, ...args) => {
+        return serializeResult(await listener(event, ...args));
+      });
     } else {
-      _ipcMain.handle(channel, (_event, ...args) => {
-        return (<IPCMainListenerWithoutEvent>listener)(...args);
+      _ipcMain.handle(channel, async (_event, ...args) => {
+        return serializeResult(
+          await (listener as IPCMainListenerWithoutEvent)(...args),
+        );
       });
     }
   } catch {

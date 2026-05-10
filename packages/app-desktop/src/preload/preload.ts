@@ -1,8 +1,10 @@
 import { AppMenuEvent, WindowEvent } from "@/types/window-events";
 import {
   deepAssign,
+  hydrateResultAsync,
   NativeContextMenuData,
   recursiveKeys,
+  SerializedResult,
   WindowEvents,
 } from "@darkwrite/common";
 import { contextBridge, ipcRenderer, webUtils } from "electron";
@@ -16,8 +18,11 @@ import { contextBridge, ipcRenderer, webUtils } from "electron";
  * @param args Every other parameter which will be passed into ipcRenderer.invoke()
  * @returns
  */
-const invoke = <T = void>(channel: string, ...args: unknown[]): Promise<T> =>
-  <Promise<T>>ipcRenderer.invoke(channel, ...args);
+const invoke = <T = void, E = unknown>(
+  channel: string,
+  ...args: unknown[]
+): Promise<SerializedResult<T, E>> =>
+  <Promise<SerializedResult<T, E>>>ipcRenderer.invoke(channel, ...args);
 
 let initialized = false;
 
@@ -37,8 +42,8 @@ export const initalizeAPI = async () => {
   for (const keyPath of handlerKeys) {
     const channel = "api".concat(".").concat(keyPath.join("."));
     const handlerFunc = async (...args: unknown[]) => {
-      const result = await invoke<unknown>(channel, ...args);
-      return result;
+      const result = invoke<unknown>(channel, ...args);
+      return hydrateResultAsync(result);
     };
     // replace each `true` with a wrapper to ipcRenderer.invoke
     deepAssign(obj, keyPath, handlerFunc);
