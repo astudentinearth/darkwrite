@@ -24,6 +24,10 @@ import { WorkspaceService } from "./workspace/workspace.service";
 
 import { setupCsp } from "./csp";
 import { db, migrateDatabaseWithBackup, MigrationError } from "./db";
+import { DocumentService } from "./service/document.service";
+import { DocumentFileStore } from "./lib/document-store";
+import { EmbedService } from "./service/embed.service";
+import { EmbedFileStore } from "./lib/blob-store";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -97,7 +101,14 @@ export async function init() {
     app.quit();
     return;
   }
-  await new WorkspaceService().initializeDefaultWorkspace();
+
+  const documentStore = DocumentFileStore(Paths.NOTE_CONTENTS_DIR);
+  const documentService = DocumentService(documentStore);
+  const blobStore = EmbedFileStore();
+  const embedService = EmbedService(db, blobStore);
+  const workspaceService = WorkspaceService(db, documentService);
+
+  await workspaceService.initializeDefaultWorkspace();
   if (await isNewUser()) {
     // settings will be persisted after the onboarding
     ElectronPrefsModel.override(SettingsModel.getDefaults());
@@ -109,7 +120,7 @@ export async function init() {
   // We change the session data directory to avoid polluting user data any further
   app.setPath("sessionData", Paths.SESSION_DATA_DIR);
   setupWindowEvents();
-  protocol.handle("embed", embedProtocolHandler);
+  protocol.handle("embed", embedProtocolHandler(embedService));
 
   createWindow();
   if (is.dev) initDevtools(1200);

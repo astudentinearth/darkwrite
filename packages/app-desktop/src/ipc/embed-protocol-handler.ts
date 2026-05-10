@@ -1,12 +1,15 @@
+import { IEmbedService } from "@/service/embed.service";
 import { net } from "electron";
-import { ServiceContainer } from "../service-container";
+import { okAsync } from "neverthrow";
 
-export async function embedProtocolHandler(req: Request) {
-  const id = req.url.slice("embed://".length);
-  try {
-    const url = await ServiceContainer.embedService.getEmbedFileUrl(id);
-    return net.fetch(url.href);
-  } catch {
-    return Response.json({ error: "Embed not found" }, { status: 404 });
-  }
+export function embedProtocolHandler(embedService: IEmbedService) {
+  return async function (req: Request) {
+    const id = req.url.slice("embed://".length);
+    const result = await embedService
+      .getEmbedFileUrl(id)
+      .andThen((url) => okAsync(net.fetch(url.href)));
+
+    if (result.isOk()) return result.value;
+    else return Response.json({ error: "Embed not found" }, { status: 404 });
+  };
 }

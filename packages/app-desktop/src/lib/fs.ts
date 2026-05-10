@@ -12,12 +12,14 @@ export async function rmIfExists(path: string) {
   }
 }
 
-export async function getFileInfo(filePath: string) {
+export function getFileInfo(filePath: string) {
   const basename = path.basename(filePath);
-  const stats = await fse.stat(filePath);
-  const size = stats.size;
   const extension = path.extname(filePath);
-  return { basename, size, extension };
+  return fsResult(fse.stat(filePath)).map((stat) => ({
+    size: stat.size,
+    extension,
+    basename,
+  }));
 }
 
 /** @deprecated */
