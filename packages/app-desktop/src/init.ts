@@ -6,7 +6,7 @@ import path, { join } from "path";
 import { fileURLToPath } from "url";
 import { initDevtools } from "./debug/server";
 import { InitializeElectronAPI } from "./ipc/api";
-import { embedProtocolHandler } from "./ipc/embed-protocol-handler";
+import { embedProtocolHandler } from "@/embed/embed-protocol-handler";
 import {
   CURRENT_VERSION,
   isNewUser,
@@ -26,7 +26,7 @@ import { setupCsp } from "./csp";
 import { db, migrateDatabaseWithBackup, MigrationError } from "./db";
 import { DocumentService } from "./service/document.service";
 import { DocumentFileStore } from "./lib/document-store";
-import { EmbedService } from "./service/embed.service";
+import { EmbedService } from "./embed/embed.service";
 import { EmbedFileStore } from "./lib/blob-store";
 
 const __filename = fileURLToPath(import.meta.url);

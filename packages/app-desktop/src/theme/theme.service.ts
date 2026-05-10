@@ -81,3 +81,5 @@ export function ThemeService(themeStore: IDocumentStore) {
     getById,
   };
 }
+
+export type IThemeService = ReturnType<typeof ThemeService>;

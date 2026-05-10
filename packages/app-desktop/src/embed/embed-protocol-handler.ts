@@ -1,4 +1,4 @@
-import { IEmbedService } from "@/service/embed.service";
+import { IEmbedService } from "./embed.service";
 import { net } from "electron";
 import { okAsync } from "neverthrow";
 
