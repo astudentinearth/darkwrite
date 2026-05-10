@@ -1,5 +1,4 @@
 import { app } from "electron";
-import "reflect-metadata";
 import { init } from "./init";
 
 const lock = app.requestSingleInstanceLock();
