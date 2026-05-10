@@ -1,76 +1,83 @@
+import { fsResult } from "@/lib/fs";
 import {
   DEFAULT_THEMES,
-  InvalidThemeError,
   isTheme,
+  parseJson,
   Theme,
-  tryParse,
+  ThemeError,
 } from "@darkwrite/common";
 import log from "electron-log";
 import { readFile } from "fs-extra";
 import _ from "lodash";
-import { DocumentFileStore, IDocumentStore } from "../lib/document-store";
-import { THEME_DIR } from "../lib/paths";
+import { err, ok, okAsync, Result, ResultAsync } from "neverthrow";
+import { IDocumentStore } from "../lib/document-store";
 
-export class ThemeService {
-  constructor(
-    private themeStore: IDocumentStore = new DocumentFileStore(THEME_DIR),
-  ) {}
+const logInvalidTheme = (id?: string, message?: string) =>
+  log.error(`Theme ${id} is invalid.`, message);
 
-  async logInvalidTheme(id?: string, message?: string) {
-    log.error(`Theme ${id} is invalid.`, message);
-  }
+const assertValidTheme = (obj: unknown): Result<Theme, ThemeError> =>
+  isTheme(obj) ? ok(obj) : err({ type: "invalid-theme" });
 
-  parseTheme(themeString: string, id?: string) {
-    const jsonParseResult = tryParse(themeString);
-    if (jsonParseResult.error) {
-      this.logInvalidTheme(id, jsonParseResult.error.message);
-      return null;
-    }
+function parseTheme(themeString: string, id?: string) {
+  return parseJson(themeString)
+    .andThen(assertValidTheme)
+    .orTee((err) => {
+      if (err.type === "invalid-json-string")
+        logInvalidTheme(id, "Invalid JSON object.");
+      else logInvalidTheme(id, "Invalid theme structure.");
+    });
+}
 
-    const jsonObject = jsonParseResult.result;
-    const isValidTheme = isTheme(jsonObject);
-    if (!isValidTheme) {
-      this.logInvalidTheme(
-        id,
-        "The theme does not have the correct structure.",
-      );
-      return null;
-    }
+function mapThemes(themes: Theme[]) {
+  const map: Record<string, Theme> = _.cloneDeep(DEFAULT_THEMES);
+  for (const t of themes) map[t.id] = t;
+  return map;
+}
 
-    return jsonObject;
-  }
+export function ThemeService(themeStore: IDocumentStore) {
+  const importTheme = (filePath: string) =>
+    fsResult(readFile(filePath, "utf-8"))
+      .andThen(parseTheme)
+      .andThen((json) => themeStore.write(json.id, JSON.stringify(json)));
 
-  async importTheme(path: string) {
-    const themeString = await readFile(path, "utf-8");
-    const theme = this.parseTheme(themeString);
-    if (!theme) throw new InvalidThemeError(path);
-    await this.themeStore.write(theme.id, themeString);
-  }
+  const getById = (id: string) => {
+    const builtinVariant = DEFAULT_THEMES[id];
+    if (builtinVariant) return okAsync(_.cloneDeep(builtinVariant));
+    return themeStore
+      .read(id)
+      .andThen(parseTheme)
+      .mapErr((err) =>
+        err.type === "document-not-found"
+          ? ({ type: "theme-not-found", id } satisfies ThemeError)
+          : err,
+      )
+      .orTee((err) => {
+        switch (err.type) {
+          case "path-error":
+          case "fs-error":
+            log.error("Filesystem error while fetching theme");
+            break;
+        }
+      });
+  };
 
-  async getById(id: string) {
-    const defaultTheme = DEFAULT_THEMES[id];
-    if (defaultTheme) return _.cloneDeep(defaultTheme);
+  const getThemes = () =>
+    themeStore
+      .ls()
+      .andThen((ids) =>
+        ResultAsync.combine(ids.map((id) => themeStore.read(id))),
+      )
+      .andThen((themeStrings) =>
+        Result.combine(
+          themeStrings.map((str) => parseTheme(str).orElse(() => ok(null))),
+        ),
+      )
+      .map((themes) => themes.filter((t) => t != null))
+      .map(mapThemes);
 
-    try {
-      const themeString = await this.themeStore.read(id);
-      const theme = this.parseTheme(themeString, id);
-      return theme;
-    } catch (error) {
-      log.error(`Failed to get theme ${id}.`, error);
-      return null;
-    }
-  }
-
-  async getThemes() {
-    const ids = await this.themeStore.ls();
-    const themes: Record<string, Theme> = _.cloneDeep(DEFAULT_THEMES);
-    for (const id of ids) {
-      const themeString = await this.themeStore.read(id);
-      const theme = this.parseTheme(themeString, id);
-      if (!theme) continue;
-      themes[id] = theme;
-    }
-
-    return themes;
-  }
+  return {
+    getThemes,
+    importTheme,
+    getById,
+  };
 }

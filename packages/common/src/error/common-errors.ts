@@ -88,3 +88,10 @@ export type FileLinkError =
   | { type: "file-link-target-missing"; id: string };
 
 export type DatabaseError = { type: "database-not-found"; id: string };
+
+export type ThemeError =
+  | { type: "invalid-theme" }
+  | { type: "theme-not-found"; id: string };
+
+// filesystem errors, database errors etc. should get narrowed down to this before its sent to the frontend
+export type InternalError = { type: "internal-error"; message: string };
