@@ -61,6 +61,19 @@ export class MutationError extends ClientError {
 
 // everything above is deprecated
 
+export type TaggedError = { type: string };
+
+export function isTaggedError<T>(
+  maybeError: T | TaggedError,
+): maybeError is TaggedError {
+  return (
+    typeof maybeError === "object" &&
+    maybeError != null &&
+    "type" in maybeError &&
+    typeof maybeError.type === "string"
+  );
+}
+
 export type NoteError =
   | { type: "note-not-found"; id: string }
   | { type: "note-failed-to-create"; cause?: unknown }
@@ -92,6 +105,10 @@ export type DatabaseError = { type: "database-not-found"; id: string };
 export type ThemeError =
   | { type: "invalid-theme" }
   | { type: "theme-not-found"; id: string };
+
+export type BackupError =
+  | { type: "html-exporter-cache-not-ready" }
+  | { type: "invalid-backup-archive" };
 
 // filesystem errors, database errors etc. should get narrowed down to this before its sent to the frontend
 export type InternalError = { type: "internal-error"; message: string };

@@ -1,9 +1,10 @@
-import { IPCHandler } from "@/types";
-import { InvalidBackupError } from "@darkwrite/common";
+import { handler, HandlerImplements } from "@/types";
+import { BackupError, IBackupAPI, InvalidBackupError } from "@darkwrite/common";
 import { app, dialog } from "electron";
 import log from "electron-log";
 import extract from "extract-zip";
 import fse from "fs-extra";
+import { okAsync, ResultAsync } from "neverthrow";
 import { join } from "node:path";
 import os from "os";
 import { zip } from "zip-a-folder";
@@ -17,7 +18,7 @@ import {
   EXPORTER_CACHE_DIR,
   RESTORE_CACHE_DIR,
 } from "../lib/paths";
-import { openFile, saveFile } from "./dialog";
+import { saveFile } from "./dialog";
 
 /**
  * APIs to perform a complete workspace export.
@@ -36,14 +37,10 @@ export const HTMLExporterAPI = {
     }
   },
   async pushToExporterCache(filename: string, content: string) {
-    try {
-      if (!(await fse.pathExists(EXPORTER_CACHE_DIR))) {
-        throw new Error("Export cache was not initialized.");
-      }
-      await fse.writeFile(join(EXPORTER_CACHE_DIR, filename), content);
-    } catch (error) {
-      logError(error);
+    if (!(await fse.pathExists(EXPORTER_CACHE_DIR))) {
+      throw new Error("Export cache was not initialized.");
     }
+    await fse.writeFile(join(EXPORTER_CACHE_DIR, filename), content);
   },
   async finishExport() {
     try {
@@ -137,22 +134,49 @@ export const BackupAPI = {
       });
     }
   },
-  async openArchive() {
-    const result = await openFile({
-      title: "Choose a backup",
-      filters: [{ extensions: ["zip"], name: "Zip archive" }],
-      properties: ["openFile", "dontAddToRecent"],
-    });
-    if (result.canceled) return null;
-    else return result.filePaths[0];
-  },
 };
 
-export const BackupApiBridge = {
-  initCache: new IPCHandler(false, HTMLExporterAPI.initializeExporterCache),
-  pushFile: new IPCHandler(false, HTMLExporterAPI.pushToExporterCache),
-  finishExport: new IPCHandler(false, HTMLExporterAPI.finishExport),
-  chooseArchive: new IPCHandler(false, BackupAPI.openArchive),
-  performBackup: new IPCHandler(false, BackupAPI.backup),
-  restoreBackup: new IPCHandler(false, BackupAPI.restore),
+function beginHtmlExport() {
+  return ResultAsync.fromSafePromise(HTMLExporterAPI.initializeExporterCache());
+}
+
+function addHtml(
+  filename: string,
+  content: string,
+): ResultAsync<void, BackupError> {
+  return ResultAsync.fromPromise(
+    HTMLExporterAPI.pushToExporterCache(filename, content),
+    () => ({ type: "html-exporter-cache-not-ready" }) satisfies BackupError,
+  );
+}
+
+function finishHtmlExport() {
+  return ResultAsync.fromSafePromise(HTMLExporterAPI.finishExport());
+}
+
+function createBackup() {
+  return ResultAsync.fromSafePromise(BackupAPI.backup());
+}
+
+function restoreBackup(archivePath: string) {
+  return ResultAsync.fromSafePromise(BackupAPI.restore(archivePath));
+}
+
+function chooseBackupArchive() {
+  const result = dialog.showOpenDialogSync({
+    title: "Choose a backup",
+    filters: [{ extensions: ["zip"], name: "Zip archive" }],
+    properties: ["openFile", "dontAddToRecent"],
+  });
+  if (!result) return okAsync(null);
+  else return okAsync(result[0]);
+}
+
+export const BackupApiBridge: HandlerImplements<IBackupAPI> = {
+  initCache: handler(beginHtmlExport),
+  pushFile: handler(addHtml),
+  finishExport: handler(finishHtmlExport),
+  chooseArchive: handler(chooseBackupArchive),
+  performBackup: handler(createBackup),
+  restoreBackup: handler(restoreBackup),
 };

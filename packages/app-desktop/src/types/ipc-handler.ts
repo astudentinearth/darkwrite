@@ -77,15 +77,26 @@ export function handler<T extends IPCMainListenerUnion>(
   return new IPCHandler(withEvent, fn);
 }
 
+export type AddSyncResult<T> =
+  T extends ResultAsync<infer V, infer E>
+    ? T | Result<V, E>
+    : // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      T extends Result<infer _V, infer _E>
+      ? T
+      : never;
+
 export type HandlerForFn<T extends (...args: any[]) => any> =
-  | IPCHandler<false, T>
+  | IPCHandler<false, (...args: Parameters<T>) => AddSyncResult<ReturnType<T>>>
   | IPCHandler<
       true,
-      (event: IpcMainInvokeEvent, ...args: Parameters<T>) => ReturnType<T>
+      (
+        event: IpcMainInvokeEvent,
+        ...args: Parameters<T>
+      ) => AddSyncResult<ReturnType<T>>
     >;
 
 export type HandlerImplements<T> = {
   [K in keyof T]: T[K] extends (...args: any[]) => any
     ? HandlerForFn<T[K]>
-    : never;
+    : HandlerImplements<T[K]>;
 };

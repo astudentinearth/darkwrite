@@ -1,51 +1,80 @@
-import { IPCHandler } from "@/types";
-import { FileLinkMetadata, NotFoundError } from "@darkwrite/common";
-import { dialog, shell } from "electron";
-import { db } from "@/db";
-import { FileLinkService } from "./file-link.service";
-import { FileLinkPreviewer } from "./file-link-preview";
+import { showOpenDialog, whenDialogCancelled } from "@/api/dialog";
+import { DbError } from "@/db/transactional";
+import { handler, HandlerImplements } from "@/types";
+import {
+  FileLinkError,
+  FileLinkMetadata,
+  IFileLinkAPI,
+  InternalError,
+} from "@darkwrite/common";
+import { shell } from "electron";
+import { ok } from "neverthrow";
+import { previewFileLink } from "./file-link-preview";
+import { IFileLinkService } from "./file-link.service";
 
-const service = new FileLinkService(db);
-const previewer = new FileLinkPreviewer();
-
-async function resolveMetadata(
-  id: string,
-  filePath: string,
-): Promise<FileLinkMetadata> {
-  const preview = await previewer.previewFileLink(filePath);
-  return { id, ...preview };
+/** @internal */
+function resolveMetadata(id: string, filePath: string) {
+  return previewFileLink(filePath)
+    .map((p) => ({ ...p, id }) satisfies FileLinkMetadata)
+    .mapErr((err) =>
+      err.type === "file-not-found"
+        ? ({ type: "file-link-target-missing", id } satisfies FileLinkError)
+        : (err as never),
+    );
 }
 
-export const ElectronFileLinkAPI = {
-  async pickAndCreate(): Promise<FileLinkMetadata | null> {
-    const result = await dialog.showOpenDialog({ properties: ["openFile"] });
-    if (result.canceled || result.filePaths.length === 0) return null;
-    const [filePath] = result.filePaths;
-    const link = await service.createFileLink(filePath);
-    return resolveMetadata(link.id, link.filePath);
-  },
+/** @internal */
+function mapErrors(
+  error: DbError | FileLinkError | InternalError,
+): FileLinkError | InternalError {
+  switch (error.type) {
+    case "db-error":
+      return { type: "internal-error", message: "Database error" };
 
-  async getById(id: string): Promise<FileLinkMetadata> {
-    const link = await service.getFileLinkById(id);
-    if (!link) throw new NotFoundError("FileLink", id);
-    return resolveMetadata(link.id, link.filePath);
-  },
+    default:
+      return error;
+  }
+}
 
-  async createFromPath(filePath: string): Promise<FileLinkMetadata> {
-    const link = await service.createFileLink(filePath);
-    return resolveMetadata(link.id, link.filePath);
-  },
+export function FileLinkAPI(
+  fileLinkService: IFileLinkService,
+): HandlerImplements<IFileLinkAPI> {
+  const pickAndCreate = handler(() =>
+    showOpenDialog({ properties: ["openFile"] })
+      .andThen(([filepath]) => fileLinkService.createFileLink(filepath))
+      .andThen((link) => resolveMetadata(link.id, link.filePath))
+      .orElse(whenDialogCancelled(null))
+      .mapErr(mapErrors),
+  );
 
-  async openById(id: string): Promise<void> {
-    const link = await service.getFileLinkById(id);
-    if (!link) throw new NotFoundError("FileLink", id);
-    await shell.openPath(link.filePath);
-  },
-};
+  const getById = handler((id: string) =>
+    fileLinkService
+      .getFileLinkById(id)
+      .andThen(({ filePath }) => resolveMetadata(id, filePath))
+      .mapErr(mapErrors),
+  );
 
-export const FileLinkApiBridge = {
-  pickAndCreate: new IPCHandler(false, ElectronFileLinkAPI.pickAndCreate),
-  createFromPath: new IPCHandler(false, ElectronFileLinkAPI.createFromPath),
-  getById: new IPCHandler(false, ElectronFileLinkAPI.getById),
-  openById: new IPCHandler(false, ElectronFileLinkAPI.openById),
-};
+  const createFromPath = handler((filePath: string) =>
+    fileLinkService
+      .createFileLink(filePath)
+      .andThen((link) => resolveMetadata(link.id, link.filePath))
+      .mapErr(mapErrors),
+  );
+
+  const openById = handler((id: string) =>
+    fileLinkService
+      .getFileLinkById(id)
+      .andThen((link) => {
+        shell.openPath(link.filePath);
+        return ok();
+      })
+      .orElse(() => ok()),
+  );
+
+  return {
+    getById,
+    createFromPath,
+    openById,
+    pickAndCreate,
+  };
+}

@@ -10,3 +10,5 @@ export function FileLinkService(db: DatabaseType) {
 
   return { createFileLink, getFileLinkById };
 }
+
+export type IFileLinkService = ReturnType<typeof FileLinkService>;

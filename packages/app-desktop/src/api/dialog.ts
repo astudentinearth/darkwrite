@@ -1,4 +1,6 @@
+import { isTaggedError } from "@darkwrite/common";
 import { dialog, OpenDialogOptions } from "electron";
+import { err, ok, Result, ResultAsync } from "neverthrow";
 
 /** @deprecated useless abstraction */
 export type SaveFileDialogOptions = {
@@ -31,4 +33,24 @@ export async function saveFile(opts: SaveFileDialogOptions) {
 export async function openFile(opts: OpenDialogOptions) {
   const result = await dialog.showOpenDialog(opts);
   return result;
+}
+
+export type DialogCancelError = { type: "_internal-dialog-cancelled" };
+
+export function showOpenDialog(options: OpenDialogOptions) {
+  return ResultAsync.fromSafePromise(dialog.showOpenDialog(options)).andThen(
+    (result) =>
+      result.canceled
+        ? err({
+            type: "_internal-dialog-cancelled",
+          } satisfies DialogCancelError)
+        : ok(result.filePaths),
+  );
+}
+
+export function whenDialogCancelled<T>(value: T) {
+  return <E>(error: E): Result<T, Exclude<E, DialogCancelError>> =>
+    ((isTaggedError(error) && error.type) ?? "_internal-dialog-cancelled")
+      ? ok(value)
+      : err(error as Exclude<E, DialogCancelError>);
 }

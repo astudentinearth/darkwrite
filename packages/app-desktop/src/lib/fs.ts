@@ -1,6 +1,6 @@
 /* eslint-disable no-redeclare */
 import fse from "fs-extra";
-import { ResultAsync } from "neverthrow";
+import { err, ok, ResultAsync } from "neverthrow";
 import path from "path";
 
 export async function rmIfExists(path: string) {
@@ -58,7 +58,9 @@ export class FileNotFoundError extends Error {
 
 // new result API
 
-export type FsError = { type: "fs-error"; cause: NodeJS.ErrnoException };
+export type FsError =
+  | { type: "fs-error"; cause: NodeJS.ErrnoException }
+  | { type: "file-not-found"; filepath: string };
 
 const fsError = (e: unknown): FsError => ({
   type: "fs-error",
@@ -83,4 +85,13 @@ export function stripExt(files: string | string[]) {
   if (typeof files === "string")
     return path.basename(files, path.extname(files));
   else return files.map((f) => stripExt(f));
+}
+
+export function assertExists(filepath: string) {
+  return ResultAsync.fromSafePromise(fse.pathExists(filepath)).andThen(
+    (exists) =>
+      exists
+        ? ok()
+        : err({ type: "file-not-found", filepath } satisfies FsError),
+  );
 }

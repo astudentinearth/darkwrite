@@ -1,12 +1,15 @@
-import { IPCHandler } from "@/types";
+import { handler, HandlerImplements } from "@/types";
+import { IShellAPI } from "@darkwrite/common";
 import { shell } from "electron";
+import { ok } from "neverthrow";
 
 export const ShellHandler = {
-  showItemInFolder: async (path: string) => {
+  showItemInFolder: (path: string) => {
     shell.showItemInFolder(path);
+    return ok();
   },
 };
 
-export const ShellApiBridge = {
-  showItemInFolder: new IPCHandler(false, ShellHandler.showItemInFolder),
+export const ShellApiBridge: HandlerImplements<IShellAPI> = {
+  showItemInFolder: handler(ShellHandler.showItemInFolder),
 };

@@ -2,6 +2,7 @@
 // Electron-side handlers should implement these directly and expose it via the API bridge.
 // Clients talking to a cloud instance shall make the appropriate network requests instead.
 // Cloud-specific code should be kept separate from Electron to ensure browser portability.
+import { ResultAsync } from "neverthrow";
 import { DarkwriteDesktopClientInfo, UpdateServerResponse } from "./client";
 import { NativeContextMenuData } from "./context-menu";
 import {
@@ -29,6 +30,10 @@ import { FileLinkMetadata } from "./link";
 import { NoteExportFormat, NoteImportResult, ParentId } from "./note";
 import { PageSize } from "./pdf";
 import { DarkwriteUserSettings } from "./settings";
+import { BackupError, FileLinkError, InternalError, ThemeError } from "./error";
+
+export type ApiResult<T, E> = ResultAsync<T, E | InternalError>;
+export type VoidR = ResultAsync<void, never>;
 
 export interface INoteAPI {
   create: (dto: CreateNoteDTO) => Promise<NoteResponseDTO>;
@@ -144,58 +149,60 @@ export interface ISettingsAPI {
 }
 
 export interface IThemeAPI {
-  getThemes: () => Promise<ThemesResponseDTO>;
-  importTheme: () => Promise<void>;
+  getThemes: () => ApiResult<ThemesResponseDTO, ThemeError>;
+  importTheme: () => ApiResult<void, ThemeError>;
 }
 
 /** APIs for triggering native context menu actions. These are only relevant in the Electron environment, but defining them here allows us to keep the frontend code that interacts with it platform-agnostic. In the browser, these should not be implemented, and the browser's own context menu should be used. */
 export interface IContextMenuAPI {
-  copy: () => Promise<void>;
-  cut: () => Promise<void>;
-  paste: () => Promise<void>;
+  copy: () => VoidR;
+  cut: () => VoidR;
+  paste: () => VoidR;
   /** May be referred as "paste and match style" in some platforms. */
-  pasteWithoutFormatting: () => Promise<void>;
-  selectAll: () => Promise<void>;
-  delete: () => Promise<void>;
-  changeSpelling: (suggestion: string) => Promise<void>;
+  pasteWithoutFormatting: () => VoidR;
+  selectAll: () => VoidR;
+  delete: () => VoidR;
+  changeSpelling: (suggestion: string) => VoidR;
 }
 
 export interface IShellAPI {
-  showItemInFolder: (filePath: string) => Promise<void>;
+  showItemInFolder: (filePath: string) => VoidR;
 }
 
 export interface IDesktopAPI {
-  getFontList: () => Promise<Font[]>;
-  getSystemAccentColor: () => Promise<string>;
-  getClientInfo: () => Promise<DarkwriteDesktopClientInfo>;
+  getFontList: () => ApiResult<Font[], never>;
+  getSystemAccentColor: () => ApiResult<string, never>;
+  getClientInfo: () => ApiResult<DarkwriteDesktopClientInfo, never>;
   contextMenu: IContextMenuAPI;
   shell: IShellAPI;
 }
 
 export interface IBackupAPI {
-  performBackup: () => Promise<void>;
-  pushFile: (filename: string, content: string) => Promise<void>;
-  finishExport: () => Promise<void>;
-  chooseArchive: () => Promise<string | null>;
-  restoreBackup: (archivePath: string) => Promise<void>;
-  initCache: () => Promise<void>;
+  performBackup: () => ApiResult<void, BackupError>;
+  pushFile: (filename: string, content: string) => ApiResult<void, BackupError>;
+  finishExport: () => ApiResult<void, BackupError>;
+  chooseArchive: () => ResultAsync<string | null, never>;
+  restoreBackup: (archivePath: string) => ApiResult<void, BackupError>;
+  initCache: () => VoidR;
 }
 
 export type CheckUpdateFn = () => Promise<UpdateServerResponse | undefined>;
 
 export interface IOnboardingAPI {
-  isNewUser: () => Promise<boolean>;
-  markFinished: () => Promise<void>;
+  isNewUser: () => ApiResult<boolean, never>;
+  markFinished: () => ApiResult<void, never>;
 }
 
 export interface IFileLinkAPI {
   /** Opens a file picker, creates a linked file record, and returns its metadata. Returns null if the dialog was cancelled. */
-  pickAndCreate: () => Promise<FileLinkMetadata | null>;
+  pickAndCreate: () => ApiResult<FileLinkMetadata | null, FileLinkError>;
   /** Creates a linked file record from the given absolute file path. */
-  createFromPath: (filePath: string) => Promise<FileLinkMetadata>;
-  getById: (id: string) => Promise<FileLinkMetadata>;
+  createFromPath: (
+    filePath: string,
+  ) => ApiResult<FileLinkMetadata, FileLinkError>;
+  getById: (id: string) => ApiResult<FileLinkMetadata, FileLinkError>;
   /** Opens the linked file in the OS default application. */
-  openById: (id: string) => Promise<void>;
+  openById: (id: string) => VoidR;
 }
 
 /** Desktop specific bridge. This is decorated with IEmbedAPI on the frontend */
