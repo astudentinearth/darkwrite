@@ -8,7 +8,6 @@ import {
   type InferHandler,
   type IPCPreloadHandler,
   IPCHandler,
-  DarkwriteAPI,
   InferPreloadAPI,
   HandlerImplements,
 } from "./ipc-handler";

@@ -1,12 +1,12 @@
-import { SettingsModel } from "@darkwrite/common";
+import { embedProtocolHandler } from "@/embed/embed-protocol-handler";
+import { DarkwriteIPCBridge, DarkwriteUserSettings } from "@darkwrite/common";
 import { is } from "@electron-toolkit/utils";
 import { app, BrowserWindow, dialog, protocol, shell } from "electron";
 import log from "electron-log/main.js";
 import path, { join } from "path";
 import { fileURLToPath } from "url";
 import { initDevtools } from "./debug/server";
-import { InitializeElectronAPI } from "./ipc/api";
-import { embedProtocolHandler } from "@/embed/embed-protocol-handler";
+import { setupAPI } from "./ipc/api";
 import {
   CURRENT_VERSION,
   isNewUser,
@@ -15,19 +15,27 @@ import {
 import { Paths } from "./lib/paths";
 import { initAppMenu } from "./menu";
 import { webcontentsUrl } from "./metadata.json";
-import { ElectronPrefsModel } from "./prefs";
 import {
   constructWindow,
   setupWindowEvents as setupBrowserWindowEvents,
 } from "./window";
 import { WorkspaceService } from "./workspace/workspace.service";
 
+import { BackupApiBridge } from "./api/backup.electron";
 import { setupCsp } from "./csp";
 import { db, migrateDatabaseWithBackup, MigrationError } from "./db";
-import { DocumentService } from "./service/document.service";
-import { DocumentFileStore } from "./lib/document-store";
 import { EmbedService } from "./embed/embed.service";
+import { SettingsAPI } from "./ipc/settings.handler";
 import { EmbedFileStore } from "./lib/blob-store";
+import { DesktopApiBridge } from "./lib/desktop-integration";
+import { DocumentFileStore } from "./lib/document-store";
+import { FileLinkAPI } from "./link/file-link.handler";
+import { FileLinkService } from "./link/file-link.service";
+import { DocumentService } from "./service/document.service";
+import { SettingsService } from "./service/settings.service";
+import { ThemeAPI } from "./theme/theme.handler";
+import { ThemeService } from "./theme/theme.service";
+import { HandlerImplements } from "./types";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -37,14 +45,11 @@ const DEV_SERVER_URL =
 
 let win: BrowserWindow | null;
 
-async function createWindow() {
-  InitializeElectronAPI();
-  win = new BrowserWindow(
-    constructWindow(
-      ElectronPrefsModel.get(),
-      ElectronPrefsModel.getDefaultWindowBackground(),
-    ),
-  );
+async function showMainWindow(
+  settings: DarkwriteUserSettings,
+  background: string,
+) {
+  win = new BrowserWindow(constructWindow(settings, background));
 
   setupBrowserWindowEvents(win);
 
@@ -69,10 +74,6 @@ function setupWindowEvents() {
       app.quit();
       win = null;
     }
-  });
-
-  app.on("activate", () => {
-    if (BrowserWindow.getAllWindows().length === 0) createWindow();
   });
 
   app.on("second-instance", () => {
@@ -107,14 +108,31 @@ export async function init() {
   const blobStore = EmbedFileStore();
   const embedService = EmbedService(db, blobStore);
   const workspaceService = WorkspaceService(db, documentService);
+  const themeStore = DocumentFileStore(Paths.THEME_DIR);
+  const settingsService = SettingsService(Paths.SETTINGS_PATH);
+  const themeService = ThemeService(themeStore, settingsService.getSettings);
+  const fileLinkService = FileLinkService(db);
 
-  await workspaceService.initializeDefaultWorkspace();
-  if (await isNewUser()) {
-    // settings will be persisted after the onboarding
-    ElectronPrefsModel.override(SettingsModel.getDefaults());
-  } else {
-    await ElectronPrefsModel.initialize();
+  const apiBridge: HandlerImplements<DarkwriteIPCBridge> = {
+    theme: ThemeAPI(themeService),
+    desktop: DesktopApiBridge,
+    fileLink: FileLinkAPI(fileLinkService),
+    backup: BackupApiBridge,
+    settings: SettingsAPI(settingsService),
+  };
+
+  setupAPI(apiBridge);
+
+  const workspaceResult = await workspaceService.initializeDefaultWorkspace();
+
+  if (workspaceResult.isErr()) {
+    app.quit();
+    return;
   }
+
+  // if loading fails then we are stuck with defaults
+  if (!(await isNewUser())) await settingsService.loadFromFile();
+
   log.initialize();
   log.transports.file.level = is.dev ? "debug" : "info";
   // We change the session data directory to avoid polluting user data any further
@@ -122,6 +140,17 @@ export async function init() {
   setupWindowEvents();
   protocol.handle("embed", embedProtocolHandler(embedService));
 
-  createWindow();
+  showMainWindow(
+    settingsService.getSettings(),
+    themeService.getDefaultWindowBackground(),
+  );
   if (is.dev) initDevtools(1200);
+
+  app.on("activate", () => {
+    if (BrowserWindow.getAllWindows().length === 0)
+      showMainWindow(
+        settingsService.getSettings(),
+        themeService.getDefaultWindowBackground(),
+      );
+  });
 }

@@ -48,9 +48,6 @@ export class IPCHandler<
   }
 }
 
-export interface DarkwriteAPI {
-  [Key: string]: IPCHandler<boolean> | DarkwriteAPI;
-}
 export type InferHandler<Listener extends IPCHandler<boolean>> =
   IPCPreloadHandler<Listener["listener"]>;
 

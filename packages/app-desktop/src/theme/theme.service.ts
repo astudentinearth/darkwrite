@@ -1,5 +1,6 @@
 import { fsResult } from "@/lib/fs";
 import {
+  DarkwriteUserSettings,
   DEFAULT_THEMES,
   isTheme,
   parseJson,
@@ -11,6 +12,7 @@ import { readFile } from "fs-extra";
 import _ from "lodash";
 import { err, ok, okAsync, Result, ResultAsync } from "neverthrow";
 import { IDocumentStore } from "../lib/document-store";
+import { nativeTheme } from "electron";
 
 const logInvalidTheme = (id?: string, message?: string) =>
   log.error(`Theme ${id} is invalid.`, message);
@@ -34,7 +36,10 @@ function mapThemes(themes: Theme[]) {
   return map;
 }
 
-export function ThemeService(themeStore: IDocumentStore) {
+export function ThemeService(
+  themeStore: IDocumentStore,
+  getSettings: () => DarkwriteUserSettings,
+) {
   const importTheme = (filePath: string) =>
     fsResult(readFile(filePath, "utf-8"))
       .andThen(parseTheme)
@@ -75,10 +80,22 @@ export function ThemeService(themeStore: IDocumentStore) {
       .map((themes) => themes.filter((t) => t != null))
       .map(mapThemes);
 
+  const getDefaultWindowBackground = () => {
+    const settings = getSettings().appearance;
+    const themeMode =
+      settings.themeMode === "system"
+        ? nativeTheme.shouldUseDarkColors
+          ? "dark"
+          : "light"
+        : settings.themeMode;
+    return themeMode === "dark" ? "#080808" : "#ffffff";
+  };
+
   return {
     getThemes,
     importTheme,
     getById,
+    getDefaultWindowBackground,
   };
 }
 

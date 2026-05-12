@@ -144,8 +144,8 @@ export interface IEmbedAPI {
 }
 
 export interface ISettingsAPI {
-  getUserSettings: () => Promise<DarkwriteUserSettings>;
-  saveUserSettings: (settings: DarkwriteUserSettings) => Promise<void>;
+  getUserSettings: () => ApiResult<DarkwriteUserSettings, never>;
+  saveUserSettings: (settings: DarkwriteUserSettings) => VoidR;
 }
 
 export interface IThemeAPI {
