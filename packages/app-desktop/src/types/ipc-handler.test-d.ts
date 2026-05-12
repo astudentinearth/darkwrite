@@ -11,6 +11,7 @@ import {
   InferPreloadAPI,
   HandlerImplements,
 } from "./ipc-handler";
+import { NestedApiBridge } from "@/ipc/api";
 
 type ipcWithoutEvent = (value: string, count: number) => Result<number, string>;
 type ipcWithoutEvent2 = (value: string) => ResultAsync<number, string>;
@@ -129,7 +130,7 @@ const api = {
     create: new IPCHandler(false, createNote),
   },
   exit: new IPCHandler(true, exit),
-} satisfies DarkwriteAPI;
+} satisfies NestedApiBridge;
 
 type PreloadAPI = InferPreloadAPI<typeof api>;
 

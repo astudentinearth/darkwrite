@@ -10,7 +10,7 @@ export interface EmbedDTO {
 }
 
 export interface EmbedResponseDTO {
-  embed: EmbedDTO | null;
+  embed: EmbedDTO;
 }
 
 export interface EmbedsResponseDTO {

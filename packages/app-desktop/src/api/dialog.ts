@@ -1,5 +1,5 @@
 import { isTaggedError } from "@darkwrite/common";
-import { dialog, OpenDialogOptions } from "electron";
+import { dialog, OpenDialogOptions, SaveDialogOptions } from "electron";
 import { err, ok, Result, ResultAsync } from "neverthrow";
 
 /** @deprecated useless abstraction */
@@ -45,6 +45,17 @@ export function showOpenDialog(options: OpenDialogOptions) {
             type: "_internal-dialog-cancelled",
           } satisfies DialogCancelError)
         : ok(result.filePaths),
+  );
+}
+
+export function showSaveDialog(options: SaveDialogOptions) {
+  return ResultAsync.fromSafePromise(dialog.showSaveDialog(options)).andThen(
+    (result) =>
+      result.canceled
+        ? err({
+            type: "_internal-dialog-cancelled",
+          } satisfies DialogCancelError)
+        : ok(result.filePath),
   );
 }
 

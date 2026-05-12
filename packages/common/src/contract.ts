@@ -19,7 +19,7 @@ import {
   CreateWorkspaceDTO,
   UpdateWorkspaceDTO,
 } from "./dto/request/workspace.request";
-import { EmbedDTO, EmbedResponseDTO } from "./dto/response/embed.response";
+import { EmbedResponseDTO } from "./dto/response/embed.response";
 import { ThemesResponseDTO } from "./dto/response/theme.response";
 import {
   WorkspaceResponseDTO,
@@ -30,7 +30,14 @@ import { FileLinkMetadata } from "./link";
 import { NoteExportFormat, NoteImportResult, ParentId } from "./note";
 import { PageSize } from "./pdf";
 import { DarkwriteUserSettings } from "./settings";
-import { BackupError, FileLinkError, InternalError, ThemeError } from "./error";
+import {
+  BackupError,
+  EmbedError,
+  FileLinkError,
+  InternalError,
+  ThemeError,
+  WorkspaceError,
+} from "./error";
 
 export type ApiResult<T, E> = ResultAsync<T, E | InternalError>;
 export type VoidR = ResultAsync<void, never>;
@@ -210,15 +217,15 @@ export interface DesktopEmbedAPI {
   createFromLocalFile: (
     filePath: string,
     workspaceId: string,
-  ) => Promise<{ embed: EmbedDTO }>;
+  ) => ApiResult<EmbedResponseDTO, EmbedError | WorkspaceError>;
   createFromArrayBuffer: (
     buffer: ArrayBuffer,
     filetype: string,
     workspaceId: string,
-  ) => Promise<{ embed: EmbedDTO }>;
-  getById: (id: string) => Promise<EmbedResponseDTO>;
-  getEncoded: (ids: string[]) => Promise<Record<string, string>>;
-  download: (id: string) => Promise<void>;
+  ) => ApiResult<EmbedResponseDTO, EmbedError | WorkspaceError>;
+  getById: (id: string) => ApiResult<EmbedResponseDTO, EmbedError>;
+  getEncoded: (ids: string[]) => ApiResult<Record<string, string>, never>;
+  download: (id: string) => VoidR;
 }
 
 export type DarkwriteIPCBridge = {

@@ -105,7 +105,9 @@ export function EmbedService(db: DatabaseType, blobStore: IEmbedStore) {
           .andThen(({ e, duplicate }) =>
             duplicate
               ? okAsync(duplicate)
-              : embedDao.create(e).andThen((e) => blobStore.put(e.id, buf)),
+              : embedDao
+                  .create(e)
+                  .andThen((e) => blobStore.put(e.id, buf).map(() => e)),
           ),
       db,
     );
