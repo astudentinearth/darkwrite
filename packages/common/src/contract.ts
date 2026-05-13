@@ -133,13 +133,15 @@ export interface INoteAPI {
 }
 
 export interface IWorkspaceAPI {
-  create: (dto: CreateWorkspaceDTO) => Promise<WorkspaceResponseDTO>;
+  create: (
+    dto: CreateWorkspaceDTO,
+  ) => ApiResult<WorkspaceResponseDTO, WorkspaceError>;
   update: (
     id: string,
     dto: UpdateWorkspaceDTO,
-  ) => Promise<WorkspaceResponseDTO>;
-  getAll: () => Promise<WorkspacesResponseDTO>;
-  delete: (id: string) => Promise<void>;
+  ) => ApiResult<WorkspaceResponseDTO, WorkspaceError>;
+  getAll: () => ApiResult<WorkspacesResponseDTO, WorkspaceError>;
+  delete: (id: string) => ApiResult<void, WorkspaceError>;
 }
 
 export interface IEmbedAPI {

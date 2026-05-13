@@ -1,12 +1,12 @@
 import { showSaveDialog } from "@/api/dialog";
 import { DbError } from "@/db/transactional";
 import { FsError, fsResult } from "@/lib/fs";
-import { handler, HandlerImplements, IPCHandler } from "@/types";
+import { handler, HandlerImplements } from "@/types";
 import {
-  DesktopEmbedAPI,
-  EmbedError,
-  InternalError,
-  WorkspaceError,
+    DesktopEmbedAPI,
+    EmbedError,
+    InternalError,
+    WorkspaceError,
 } from "@darkwrite/common";
 import { net } from "electron";
 import { writeFile } from "fs/promises";
@@ -172,16 +172,3 @@ export function EmbedAPI(
   };
 }
 
-export const EmbedApiBridge = {
-  createFromLocalFile: new IPCHandler(
-    false,
-    ElectronEmbedAPI.createFromLocalFile,
-  ),
-  createFromArrayBuffer: new IPCHandler(
-    false,
-    ElectronEmbedAPI.createFromArrayBuffer,
-  ),
-  getById: new IPCHandler(false, ElectronEmbedAPI.getById),
-  getEncoded: new IPCHandler(false, ElectronEmbedAPI.getEncoded),
-  download: new IPCHandler(false, ElectronEmbedAPI.download),
-};

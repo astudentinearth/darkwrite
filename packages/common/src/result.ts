@@ -1,4 +1,5 @@
 import { err, ok, Result, ResultAsync } from "neverthrow";
+import z from "zod";
 
 export function errOnUndefined<E>(error: E) {
   return <T>(predicate: T | undefined) =>
@@ -58,3 +59,11 @@ export function hydrateResultAsync<T, E>(
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type ExtractResultTypes<F extends (...args: any[]) => any> =
   Awaited<ReturnType<F>> extends Result<infer T, infer E> ? [T, E] : never;
+
+export function validateSchema<T extends z.ZodType>(schema: T) {
+  return (data: unknown) => {
+    const result = schema.safeParse(data);
+    if (result.data) return ok(data);
+    else return;
+  };
+}

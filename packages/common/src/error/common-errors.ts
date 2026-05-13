@@ -112,3 +112,5 @@ export type BackupError =
 
 // filesystem errors, database errors etc. should get narrowed down to this before its sent to the frontend
 export type InternalError = { type: "internal-error"; message: string };
+
+export type ValidationError = { type: "validation-error"; message: string };
