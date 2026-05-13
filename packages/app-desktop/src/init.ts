@@ -23,7 +23,7 @@ import {
 import { WorkspaceService } from "./workspace/workspace.service";
 
 import { setupCsp } from "./csp";
-import { db, migrateDatabaseWithBackup, MigrationError } from "./db";
+import { db, initDatabase, migrateDatabaseWithBackup, MigrationError } from "./db";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -82,6 +82,7 @@ function setupWindowEvents() {
 
 export async function init() {
   await Paths.initialize();
+  initDatabase();
   try {
     await migrateDatabaseWithBackup(db);
     await markVersionMigrated(CURRENT_VERSION);
