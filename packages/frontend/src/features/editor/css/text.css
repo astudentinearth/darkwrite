@@ -42,7 +42,7 @@ strong {
         @apply text-foreground/70;
       }
 
-      font-family: var(--darkwrite-mono), ui-monospace;
+      font-family: var(--darkwrite-mono), ui-monospace, monospace;
 
       .hljs-variable,
       .hljs-template-variable,
