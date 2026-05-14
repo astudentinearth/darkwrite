@@ -102,8 +102,7 @@ export function StyleUI(props: {
           )}
         >
           <span
-            style={{ fontFamily: "var(--darkwrite-mono) !important" }}
-            className="darkwrite-mono! text-3xl"
+            className="darkwrite-mono text-3xl"
           >
             Aa
           </span>
