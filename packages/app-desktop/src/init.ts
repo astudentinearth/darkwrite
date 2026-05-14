@@ -24,6 +24,11 @@ import { WorkspaceService } from "./workspace/workspace.service";
 
 import { setupCsp } from "./csp";
 import { db, initDatabase, migrateDatabaseWithBackup, MigrationError } from "./db";
+import { initializeWorkspaceAPI } from "./workspace/workspace.handler";
+import { initializeNoteAPI } from "./note/note.handler";
+import { initializeEmbedAPI } from "./embed/embed.handler";
+import { initializeFileLinkAPI } from "./link/file-link.handler";
+import { ServiceContainer } from "./service-container";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -83,6 +88,11 @@ function setupWindowEvents() {
 export async function init() {
   await Paths.initialize();
   initDatabase();
+  initializeWorkspaceAPI();
+  initializeNoteAPI();
+  initializeEmbedAPI();
+  initializeFileLinkAPI();
+  ServiceContainer.init();
   try {
     await migrateDatabaseWithBackup(db);
     await markVersionMigrated(CURRENT_VERSION);

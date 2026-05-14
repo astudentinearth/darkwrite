@@ -7,14 +7,22 @@ import { extname } from "path";
 import printToPdf from "../lib/print-to-pdf";
 import { DocumentService } from "../service/document.service";
 import { IPCHandler } from "../types/ipc-handler";
-import { NoteQueryService } from "./note-query.service";
+import { getNoteQueryService } from "./note-query.service";
 import { mapNotesToDTO } from "./note-util";
 import { NoteService } from "./note.service";
 import { db } from "@/db";
 import { noteToDto } from "./note-mapper";
 
-const documentService = new DocumentService();
-const noteService = new NoteService(db);
+let documentService: DocumentService;
+let noteService: NoteService;
+
+let NoteQueryService: ReturnType<typeof getNoteQueryService>;
+
+export function initializeNoteAPI() {
+  documentService = new DocumentService();
+  noteService = new NoteService(db);
+  NoteQueryService = getNoteQueryService();
+}
 
 export const ElectronNoteAPI: INoteAPI = {
   async create(dto) {

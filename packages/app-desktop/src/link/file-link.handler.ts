@@ -5,8 +5,13 @@ import { db } from "@/db";
 import { FileLinkService } from "./file-link.service";
 import { FileLinkPreviewer } from "./file-link-preview";
 
-const service = new FileLinkService(db);
-const previewer = new FileLinkPreviewer();
+let service: FileLinkService;
+let previewer:FileLinkPreviewer;
+
+export function initializeFileLinkAPI() {
+  service = new FileLinkService(db);
+  previewer = new FileLinkPreviewer();
+}
 
 async function resolveMetadata(
   id: string,

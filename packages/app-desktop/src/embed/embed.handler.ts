@@ -6,7 +6,11 @@ import { writeFile } from "fs/promises";
 import { EmbedService } from "../service/embed.service";
 import { embedToDto } from "./embed-mapper";
 
-const embedService = new EmbedService();
+let embedService: EmbedService;
+
+export function initializeEmbedAPI() {
+  embedService = new EmbedService();
+}
 
 // The default contract will not be implemented here.
 // Frontend code will implement an adapter to pass

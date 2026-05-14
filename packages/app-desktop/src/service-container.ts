@@ -6,9 +6,17 @@ import { WorkspaceService } from "./workspace/workspace.service";
 
 /** @deprecated */
 export class ServiceContainer {
-  static workspaceService: WorkspaceService = new WorkspaceService();
-  static databaseService: DatabaseService = new DatabaseService();
-  static embedService: EmbedService = new EmbedService();
-  static documentService: DocumentService = new DocumentService();
-  static themeService: ThemeService = new ThemeService();
+  static workspaceService: WorkspaceService;
+  static databaseService: DatabaseService;
+  static embedService: EmbedService;
+  static documentService: DocumentService;
+  static themeService: ThemeService;
+
+  static init() {
+    ServiceContainer.databaseService = new DatabaseService();
+    ServiceContainer.workspaceService = new WorkspaceService();
+    ServiceContainer.embedService = new EmbedService();
+    ServiceContainer.documentService = new DocumentService();
+    ServiceContainer.themeService = new ThemeService();
+  }
 }
