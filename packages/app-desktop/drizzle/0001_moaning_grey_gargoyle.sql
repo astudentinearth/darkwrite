@@ -1,4 +1,3 @@
-PRAGMA foreign_keys=OFF;--> statement-breakpoint
 CREATE TABLE `__new_workspace` (
 	`id` text PRIMARY KEY NOT NULL,
 	`owner_id` text,
@@ -11,7 +10,6 @@ CREATE TABLE `__new_workspace` (
 INSERT INTO `__new_workspace`("id", "owner_id", "name", "icon_url", "createdAt", "config") SELECT "id", "owner_id", "name", "icon_url", "created_at", "config" FROM `workspace`;--> statement-breakpoint
 DROP TABLE `workspace`;--> statement-breakpoint
 ALTER TABLE `__new_workspace` RENAME TO `workspace`;--> statement-breakpoint
-PRAGMA foreign_keys=ON;--> statement-breakpoint
 CREATE TABLE `__new_database` (
 	`id` text PRIMARY KEY NOT NULL,
 	`userId` text,
