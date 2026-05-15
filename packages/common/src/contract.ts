@@ -30,22 +30,15 @@ import { FileLinkMetadata } from "./link";
 import { NoteExportFormat, NoteImportResult, ParentId } from "./note";
 import { PageSize } from "./pdf";
 import { DarkwriteUserSettings } from "./settings";
-import {
-  BackupError,
-  EmbedError,
-  FileLinkError,
-  InternalError,
-  ThemeError,
-  WorkspaceError,
-} from "./error";
+import { DwError } from "./result";
 
-export type ApiResult<T, E> = ResultAsync<T, E | InternalError>;
-export type VoidR = ResultAsync<void, never>;
+export type ApiResult<T> = ResultAsync<T, DwError>;
+export type NoReturn = ResultAsync<void, never>;
 
 export interface INoteAPI {
-  create: (dto: CreateNoteDTO) => Promise<NoteResponseDTO>;
-  update: (id: string, dto: UpdateNoteDTO) => Promise<NoteResponseDTO>;
-  move: (dto: MoveNoteDTO) => Promise<NoteResponseDTO>;
+  create: (dto: CreateNoteDTO) => ApiResult<NoteResponseDTO>;
+  update: (id: string, dto: UpdateNoteDTO) => ApiResult<NoteResponseDTO>;
+  move: (dto: MoveNoteDTO) => ApiResult<NoteResponseDTO>;
 
   /**
    * **PERMANENTLY** deletes a note. This is **NOT** the same as moving to trash. If you
@@ -54,14 +47,14 @@ export interface INoteAPI {
    * @param id
    * @returns
    */
-  delete: (id: string) => Promise<void>;
+  delete: (id: string) => ApiResult<void>;
 
   /**
    * @deprecated This API is way too broad and should be avoided in favor of more specific queries. This can be removed in future releases.
    * @param workspaceId
    * @returns
    */
-  getAllByWorkspaceId: (workspaceId: string) => Promise<NotesResponseDTO>;
+  getAllByWorkspaceId: (workspaceId: string) => ApiResult<NotesResponseDTO>;
 
   /**
    * @param workspaceId
@@ -71,30 +64,30 @@ export interface INoteAPI {
   getByParentId: (
     workspaceId: string,
     parentId: ParentId,
-  ) => Promise<NotesResponseDTO>;
+  ) => ApiResult<NotesResponseDTO>;
 
   /**
    * @param workspaceId
    * @param parentId
    * @returns favorites in the given workspace, provided they are not trashed.
    */
-  getFavorites: (workspaceId: string) => Promise<NotesResponseDTO>;
+  getFavorites: (workspaceId: string) => ApiResult<NotesResponseDTO>;
 
   /**
    * Returns notes that are in the trash for the given workspace.
    * @param workspaceId
    */
-  getTrashed: (workspaceId: string) => Promise<NotesResponseDTO>;
+  getTrashed: (workspaceId: string) => ApiResult<NotesResponseDTO>;
 
   /**
    *
    * @param noteId
    * @returns the parent tree of the note in sorted order.
    */
-  getParentTree: (noteId: string) => Promise<ParentTreeResponseDTO>;
+  getParentTree: (noteId: string) => ApiResult<ParentTreeResponseDTO>;
 
-  moveToTrash: (noteId: string) => Promise<NoteResponseDTO>;
-  restoreFromTrash: (noteId: string) => Promise<NoteResponseDTO>;
+  moveToTrash: (noteId: string) => ApiResult<NoteResponseDTO>;
+  restoreFromTrash: (noteId: string) => ApiResult<NoteResponseDTO>;
 
   /**
    * Favorites a note.
@@ -105,113 +98,109 @@ export interface INoteAPI {
   favorite: (
     noteId: string,
     aboveNoteId?: string | null,
-  ) => Promise<NoteResponseDTO>;
+  ) => ApiResult<NoteResponseDTO>;
 
-  unfavorite: (noteId: string) => Promise<NoteResponseDTO>;
+  unfavorite: (noteId: string) => ApiResult<NoteResponseDTO>;
 
-  search: (workspaceId: string, query: string) => Promise<NotesResponseDTO>;
-  getRecents: (workspaceId: string) => Promise<NotesResponseDTO>;
+  search: (workspaceId: string, query: string) => ApiResult<NotesResponseDTO>;
+  getRecents: (workspaceId: string) => ApiResult<NotesResponseDTO>;
 
-  getById: (id: string) => Promise<NoteResponseDTO>;
-  getDocument: (id: string) => Promise<NoteContentResponseDTO>;
-  setDocument: (id: string, serializedDocument: string) => Promise<void>;
-  duplicate: (id: string) => Promise<NoteResponseDTO>;
-  clearTrash: (workspaceId: string) => Promise<void>;
+  getById: (id: string) => ApiResult<NoteResponseDTO>;
+  getDocument: (id: string) => ApiResult<NoteContentResponseDTO>;
+  setDocument: (id: string, serializedDocument: string) => ApiResult<void>;
+  duplicate: (id: string) => ApiResult<NoteResponseDTO>;
+  clearTrash: (workspaceId: string) => ApiResult<void>;
   /** @returns the file path of the exported PDF, or undefined if the export was cancelled. */
   export: (
     fileContent: string,
     fileType: NoteExportFormat,
     title?: string,
-  ) => Promise<string | undefined>;
+  ) => ApiResult<string | undefined>;
   /** @returns the file path of the exported PDF, or undefined if the export was cancelled. */
   exportPdf: (
     html: string,
     title?: string,
     pageSize?: PageSize,
-  ) => Promise<string | undefined>;
-  import: () => Promise<NoteImportResult>;
+  ) => ApiResult<string | undefined>;
+  import: () => ApiResult<NoteImportResult>;
 }
 
 export interface IWorkspaceAPI {
-  create: (
-    dto: CreateWorkspaceDTO,
-  ) => ApiResult<WorkspaceResponseDTO, WorkspaceError>;
+  create: (dto: CreateWorkspaceDTO) => ApiResult<WorkspaceResponseDTO>;
   update: (
     id: string,
     dto: UpdateWorkspaceDTO,
-  ) => ApiResult<WorkspaceResponseDTO, WorkspaceError>;
-  getAll: () => ApiResult<WorkspacesResponseDTO, WorkspaceError>;
-  delete: (id: string) => ApiResult<void, WorkspaceError>;
+  ) => ApiResult<WorkspaceResponseDTO>;
+  getAll: () => ApiResult<WorkspacesResponseDTO>;
+  delete: (id: string) => ApiResult<void>;
 }
 
 export interface IEmbedAPI {
   // HTTP clients should build a multipart request using this DTO for compatibility
-  create: (dto: CreateEmbedDTO) => Promise<EmbedResponseDTO>;
-  getById: (id: string) => Promise<EmbedResponseDTO>;
-  getEncoded: (ids: string[]) => Promise<Record<string, string>>;
-  download: (id: string) => Promise<void>;
+  create: (dto: CreateEmbedDTO) => ApiResult<EmbedResponseDTO>;
+  getById: (id: string) => ApiResult<EmbedResponseDTO>;
+  getEncoded: (ids: string[]) => ApiResult<Record<string, string>>;
+  download: (id: string) => ApiResult<void>;
 }
 
 export interface ISettingsAPI {
-  getUserSettings: () => ApiResult<DarkwriteUserSettings, never>;
-  saveUserSettings: (settings: DarkwriteUserSettings) => VoidR;
+  getUserSettings: () => ApiResult<DarkwriteUserSettings>;
+  saveUserSettings: (settings: DarkwriteUserSettings) => NoReturn;
 }
 
 export interface IThemeAPI {
-  getThemes: () => ApiResult<ThemesResponseDTO, ThemeError>;
-  importTheme: () => ApiResult<void, ThemeError>;
+  getThemes: () => ApiResult<ThemesResponseDTO>;
+  importTheme: () => ApiResult<void>;
 }
 
 /** APIs for triggering native context menu actions. These are only relevant in the Electron environment, but defining them here allows us to keep the frontend code that interacts with it platform-agnostic. In the browser, these should not be implemented, and the browser's own context menu should be used. */
 export interface IContextMenuAPI {
-  copy: () => VoidR;
-  cut: () => VoidR;
-  paste: () => VoidR;
+  copy: () => NoReturn;
+  cut: () => NoReturn;
+  paste: () => NoReturn;
   /** May be referred as "paste and match style" in some platforms. */
-  pasteWithoutFormatting: () => VoidR;
-  selectAll: () => VoidR;
-  delete: () => VoidR;
-  changeSpelling: (suggestion: string) => VoidR;
+  pasteWithoutFormatting: () => NoReturn;
+  selectAll: () => NoReturn;
+  delete: () => NoReturn;
+  changeSpelling: (suggestion: string) => NoReturn;
 }
 
 export interface IShellAPI {
-  showItemInFolder: (filePath: string) => VoidR;
+  showItemInFolder: (filePath: string) => NoReturn;
 }
 
 export interface IDesktopAPI {
-  getFontList: () => ApiResult<Font[], never>;
-  getSystemAccentColor: () => ApiResult<string, never>;
-  getClientInfo: () => ApiResult<DarkwriteDesktopClientInfo, never>;
+  getFontList: () => ApiResult<Font[]>;
+  getSystemAccentColor: () => ApiResult<string>;
+  getClientInfo: () => ApiResult<DarkwriteDesktopClientInfo>;
   contextMenu: IContextMenuAPI;
   shell: IShellAPI;
 }
 
 export interface IBackupAPI {
-  performBackup: () => ApiResult<void, BackupError>;
-  pushFile: (filename: string, content: string) => ApiResult<void, BackupError>;
-  finishExport: () => ApiResult<void, BackupError>;
+  performBackup: () => ApiResult<void>;
+  pushFile: (filename: string, content: string) => ApiResult<void>;
+  finishExport: () => ApiResult<void>;
   chooseArchive: () => ResultAsync<string | null, never>;
-  restoreBackup: (archivePath: string) => ApiResult<void, BackupError>;
-  initCache: () => VoidR;
+  restoreBackup: (archivePath: string) => ApiResult<void>;
+  initCache: () => NoReturn;
 }
 
 export type CheckUpdateFn = () => Promise<UpdateServerResponse | undefined>;
 
 export interface IOnboardingAPI {
-  isNewUser: () => ApiResult<boolean, never>;
-  markFinished: () => ApiResult<void, never>;
+  isNewUser: () => ApiResult<boolean>;
+  markFinished: () => ApiResult<void>;
 }
 
 export interface IFileLinkAPI {
   /** Opens a file picker, creates a linked file record, and returns its metadata. Returns null if the dialog was cancelled. */
-  pickAndCreate: () => ApiResult<FileLinkMetadata | null, FileLinkError>;
+  pickAndCreate: () => ApiResult<FileLinkMetadata | null>;
   /** Creates a linked file record from the given absolute file path. */
-  createFromPath: (
-    filePath: string,
-  ) => ApiResult<FileLinkMetadata, FileLinkError>;
-  getById: (id: string) => ApiResult<FileLinkMetadata, FileLinkError>;
+  createFromPath: (filePath: string) => ApiResult<FileLinkMetadata>;
+  getById: (id: string) => ApiResult<FileLinkMetadata>;
   /** Opens the linked file in the OS default application. */
-  openById: (id: string) => VoidR;
+  openById: (id: string) => NoReturn;
 }
 
 /** Desktop specific bridge. This is decorated with IEmbedAPI on the frontend */
@@ -219,15 +208,15 @@ export interface DesktopEmbedAPI {
   createFromLocalFile: (
     filePath: string,
     workspaceId: string,
-  ) => ApiResult<EmbedResponseDTO, EmbedError | WorkspaceError>;
+  ) => ApiResult<EmbedResponseDTO>;
   createFromArrayBuffer: (
     buffer: ArrayBuffer,
     filetype: string,
     workspaceId: string,
-  ) => ApiResult<EmbedResponseDTO, EmbedError | WorkspaceError>;
-  getById: (id: string) => ApiResult<EmbedResponseDTO, EmbedError>;
-  getEncoded: (ids: string[]) => ApiResult<Record<string, string>, never>;
-  download: (id: string) => VoidR;
+  ) => ApiResult<EmbedResponseDTO>;
+  getById: (id: string) => ApiResult<EmbedResponseDTO>;
+  getEncoded: (ids: string[]) => ApiResult<Record<string, string>>;
+  download: (id: string) => NoReturn;
 }
 
 export type DarkwriteIPCBridge = {

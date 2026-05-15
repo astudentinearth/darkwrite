@@ -1,6 +1,14 @@
 import { err, ok, Result, ResultAsync } from "neverthrow";
 import z from "zod";
 
+export interface DwError {
+  message: string;
+  cause?: string;
+}
+
+export const dwError = (message: string, cause?: string) =>
+  ({ message, cause }) satisfies DwError;
+
 export function errOnUndefined<E>(error: E) {
   return <T>(predicate: T | undefined) =>
     predicate !== undefined ? ok(predicate) : err<T, E>(error);
@@ -63,7 +71,18 @@ export type ExtractResultTypes<F extends (...args: any[]) => any> =
 export function validateSchema<T extends z.ZodType>(schema: T) {
   return (data: unknown) => {
     const result = schema.safeParse(data);
-    if (result.data) return ok(data);
-    else return;
+    if (result.success) return ok(result.data);
+    else
+      return err(
+        dwError(
+          "Schema validation failed.",
+          result.error.issues.map((issue) => issue.message).join("\n"),
+        ),
+      );
   };
+}
+
+/** Use for irrecoverable programming errors. (eg. service got an undefined db instance) */
+export function panic(message: string): never {
+  throw new Error(`PANIC: ${message}`);
 }
