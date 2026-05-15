@@ -5,8 +5,12 @@
   "exports": {
     ".": {
       "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
       "types": "./dist/index.d.ts"
     }
+  },
+  "lint-staged": {
+    "*.ts": ["prettier --write", "eslint --fix --max-warnings 0"]
   },
   "scripts": {
     "format": "prettier --check --write .",

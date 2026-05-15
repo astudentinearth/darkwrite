@@ -1,17 +1,19 @@
+import { resolveTx } from "@/db/transactional";
 import { NoteDAO } from "./note.dao";
+import { db } from "@/db";
 
-const noteDAO = new NoteDAO();
+const noteDAO = NoteDAO(() => resolveTx(db));
 
 export const NoteQueryService = {
-  getAllByWorkspaceId: noteDAO.findAllByWorkspaceId.bind(noteDAO),
-  getByParentId: noteDAO.findAllByParentId.bind(noteDAO),
-  getById: noteDAO.findById.bind(noteDAO),
-  getFavorites: noteDAO.findAllFavorites.bind(noteDAO),
-  getTrashed: noteDAO.findAllTrashed.bind(noteDAO),
-  search: noteDAO.searchByTitle.bind(noteDAO),
+  getAllByWorkspaceId: noteDAO.findAllByWorkspaceId,
+  getByParentId: noteDAO.findAllByParentId,
+  getById: noteDAO.findById,
+  getFavorites: noteDAO.findAllFavorites,
+  getTrashed: noteDAO.findAllTrashed,
+  search: noteDAO.searchByTitle,
   getRecents(workspaceId: string) {
     const recents = noteDAO.getRecentlyModifiedNotes(workspaceId, 5);
     return recents;
   },
-  getParentTree: noteDAO.resolveParentTree.bind(noteDAO),
+  getParentTree: noteDAO.resolveParentTree,
 };

@@ -1,19 +1,20 @@
-import { IWorkspaceAPI, NotFoundError } from "@darkwrite/common";
+import {
+  CreateWorkspaceDTO,
+  IWorkspaceAPI,
+  NotFoundError,
+} from "@darkwrite/common";
 import {
   UpdateWorkspaceDTO,
   UpdateWorkspaceDTOSchema,
 } from "@darkwrite/common";
-import { WorkspaceService } from "./workspace.service";
-import { IPCHandler } from "../types/ipc-handler";
+import { IWorkspaceService, WorkspaceService } from "./workspace.service";
+import { handler, HandlerImplements, IPCHandler } from "../types/ipc-handler";
 import { workspaceToDto } from "./workspace-mapper";
+import { mapDbError } from "@/error";
 
 const service = new WorkspaceService();
 
 export const ElectronWorkspaceAPI: IWorkspaceAPI = {
-  async create(dto) {
-    const workspace = await service.createWorkspace(dto);
-    return { workspace: workspaceToDto(workspace) };
-  },
   async delete(workspaceId: string) {
     await service.delete(workspaceId);
   },
@@ -30,6 +31,21 @@ export const ElectronWorkspaceAPI: IWorkspaceAPI = {
     return { workspace: workspaceToDto(workspace) };
   },
 };
+
+export function WorkspaceAPI(workspaceService: IWorkspaceService): HandlerImplements<IWorkspaceAPI> {
+
+  const create = handler((dto: CreateWorkspaceDTO) =>
+    workspaceService
+      .createWorkspace(dto)
+      .mapErr(mapDbError)
+      .map(workspaceToDto)
+      .map((workspace) => ({ workspace })),
+  );
+
+    const deleteWorkspace = handler((id: string) => )
+
+  return { create }
+}
 
 export const WorkspacesApiBridge = {
   create: new IPCHandler(false, ElectronWorkspaceAPI.create),

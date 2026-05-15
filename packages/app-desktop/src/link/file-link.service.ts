@@ -1,20 +1,14 @@
 import { DatabaseType } from "@/db";
 import { FileLinkDAO } from "./file-link.dao";
+import { resolveTx } from "@/db/transactional";
 
-export class FileLinkService {
-  private fileLinkDao: FileLinkDAO;
-  constructor(
-    private db: DatabaseType,
-    fileLinkDao?: FileLinkDAO,
-  ) {
-    this.fileLinkDao = fileLinkDao ?? new FileLinkDAO(db);
-  }
+export function FileLinkService(db: DatabaseType) {
+  const fileLinkDao = FileLinkDAO(() => resolveTx(db));
 
-  async createFileLink(filePath: string) {
-    return await this.fileLinkDao.create({ filePath });
-  }
+  const createFileLink = (filePath: string) => fileLinkDao.create({ filePath });
+  const getFileLinkById = (id: string) => fileLinkDao.findById(id);
 
-  async getFileLinkById(id: string) {
-    return await this.fileLinkDao.findById(id);
-  }
+  return { createFileLink, getFileLinkById };
 }
+
+export type IFileLinkService = ReturnType<typeof FileLinkService>;

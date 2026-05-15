@@ -2,11 +2,11 @@
   "name": "darkwrite",
   "scripts": {
     "prepare": "husky",
-    "precommit": "prettier --check app",
-    "test": "pnpm -r --no-bail test",
-    "lint": "pnpm -r --parallel --stream --no-bail lint",
-    "format": "pnpm -r --parallel --stream --no-bail format",
-    "typecheck": "pnpm -r --parallel --stream --no-bail typecheck",
+    "test": "turbo run test",
+    "lint": "turbo run lint",
+    "format": "turbo run format",
+    "typecheck": "turbo run typecheck",
+    "dev": "turbo run dev",
     "build": "tsx tools/darkwrite-builder.js",
     "build:common": "pnpm --filter=@darkwrite/common build",
     "bundle:desktop": "pnpm --filter=@darkwrite/app-desktop build:pre",
@@ -22,6 +22,7 @@
     "@typescript-eslint/parser": "^8.56.1",
     "chalk": "^5.6.2",
     "eslint": "^10.0.3",
+    "eslint-plugin-neverthrow": "^1.1.4",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.26",
     "globals": "^15.15.0",
@@ -30,8 +31,12 @@
     "npm-run-all": "^4.1.5",
     "prettier": "^3.8.1",
     "tsx": "catalog:",
+    "turbo": "catalog:",
     "typescript": "catalog:",
     "vite": "catalog:",
     "vitest": "catalog:"
+  },
+  "dependencies": {
+    "neverthrow": "^8.2.0"
   }
 }

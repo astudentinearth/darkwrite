@@ -1,20 +1,56 @@
+import { assertExists, fsResult } from "@/lib/fs";
+import {
+  DarkwriteUserSettings,
+  migrateSettings,
+  parseJson,
+  SettingsModel,
+} from "@darkwrite/common";
 import { readFile, writeFile } from "fs/promises";
-import { exists } from "fs-extra";
-import { SETTINGS_PATH } from "../lib/paths";
-import { SettingsModel } from "@darkwrite/common";
+import _ from "lodash";
+import { err, ok } from "neverthrow";
 
-export class SettingsService {
-  async readSettingsFile() {
-    const fileExists = await exists(SETTINGS_PATH);
-    if (!fileExists) {
-      const defaults = JSON.stringify(SettingsModel.getDefaults());
-      await this.writeSettingsFile(defaults);
-      return defaults;
-    }
-    return readFile(SETTINGS_PATH, "utf8");
-  }
+const DEFAULT_SETTINGS_STR = JSON.stringify(SettingsModel.getDefaults());
 
-  async writeSettingsFile(contents: string) {
-    return writeFile(SETTINGS_PATH, contents);
-  }
+export function SettingsService(settingsFilePath: string) {
+  let currentSettings: DarkwriteUserSettings = SettingsModel.getDefaults();
+
+  /** @internal */
+  const _writeSettingsFile = (contents: string) =>
+    fsResult(writeFile(settingsFilePath, contents));
+
+  /** @internal */
+  const _readSettingsFile = () =>
+    assertExists(settingsFilePath)
+      .andThen(() => fsResult(readFile(settingsFilePath, "utf-8")))
+      .orElse((error) =>
+        error.type === "file-not-found"
+          ? _writeSettingsFile(DEFAULT_SETTINGS_STR).map(
+              () => DEFAULT_SETTINGS_STR,
+            )
+          : err(error),
+      );
+
+  const override = (settings: DarkwriteUserSettings) => {
+    currentSettings = _.cloneDeep(settings);
+    return ok();
+  };
+
+  const loadFromFile = () =>
+    _readSettingsFile()
+      .andThen(parseJson)
+      .map(migrateSettings)
+      .orElse(() => ok(SettingsModel.getDefaults()))
+      .andThen(override);
+
+  const getSettings = () => currentSettings;
+
+  const saveSettings = () =>
+    _writeSettingsFile(JSON.stringify(currentSettings));
+
+  const setSettings = (settings: DarkwriteUserSettings) =>
+    override(settings).asyncAndThen(() => saveSettings());
+
+  return { loadFromFile, getSettings, setSettings };
 }
+
+export type ISettingsService = ReturnType<typeof SettingsService>;

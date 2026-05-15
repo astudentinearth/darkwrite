@@ -1,12 +1,18 @@
-import { IPCHandler } from "@/types";
-import { DesktopEmbedAPI, EmbedResponseDTO } from "@darkwrite/common";
-import { NotFoundError } from "@darkwrite/common";
-import { dialog, net } from "electron";
+import { showSaveDialog } from "@/api/dialog";
+import { DbError } from "@/db/transactional";
+import { FsError, fsResult } from "@/lib/fs";
+import { handler, HandlerImplements } from "@/types";
+import {
+    DesktopEmbedAPI,
+    EmbedError,
+    InternalError,
+    WorkspaceError,
+} from "@darkwrite/common";
+import { net } from "electron";
 import { writeFile } from "fs/promises";
-import { EmbedService } from "../service/embed.service";
+import { okAsync, ResultAsync } from "neverthrow";
 import { embedToDto } from "./embed-mapper";
-
-const embedService = new EmbedService();
+import { IEmbedService } from "./embed.service";
 
 // The default contract will not be implemented here.
 // Frontend code will implement an adapter to pass
@@ -14,77 +20,155 @@ const embedService = new EmbedService();
 // are not directly serializable.
 // Similarly, cloud APIs will need to implement an
 // adapter of their own to build multipart requests.
-export const ElectronEmbedAPI: DesktopEmbedAPI = {
-  async createFromLocalFile(filePath: string, workspaceId: string) {
-    const embed = await embedService.createFromFilePath(filePath, workspaceId);
-    const url = await embedService.getEmbedUrl(embed.id);
-    return { embed: embedToDto(embed, url) } satisfies EmbedResponseDTO;
-  },
 
-  async createFromArrayBuffer(
-    buffer: ArrayBuffer,
-    fileType: string,
-    workspaceId: string,
-  ) {
-    const embed = await embedService.createFromArrayBuffer(
-      buffer,
-      fileType,
-      workspaceId,
-    );
-    const url = await embedService.getEmbedUrl(embed.id);
-    return { embed: embedToDto(embed, url) } satisfies EmbedResponseDTO;
-  },
+const fetchEmbed = (url: URL) =>
+  ResultAsync.fromPromise(
+    net.fetch(url.href).then((response) => response.arrayBuffer()),
+    () => ({ type: "_internal-fetch-error" }) as const,
+  );
 
-  async getById(id: string) {
-    const embed = await embedService.getEmbedById(id);
-    if (!embed) return { embed: null } satisfies EmbedResponseDTO;
-    const url = await embedService.getEmbedUrl(id);
-    return { embed: embedToDto(embed, url) } satisfies EmbedResponseDTO;
-  },
+const fetchAndEncode = (url: URL) =>
+  ResultAsync.fromPromise(
+    net
+      .fetch(url.href)
+      .then((response) =>
+        response.arrayBuffer().then((buf) => ({ response, buf })),
+      )
+      .then(
+        ({ response, buf }) =>
+          `data:${response.headers.get("Content-Type")};base64,${Buffer.from(buf).toString("base64")}`,
+      ),
+    () => ({ type: "_internal-fetch-error" }) as const,
+  );
 
-  async getEncoded(ids: string[]) {
-    const embeds: Record<string, string> = {};
-    for (const id of ids) {
-      const url = await embedService.getEmbedFileUrl(id);
-      const response = await net.fetch(url.href);
-      if (!response.ok) continue;
-      const arrayBuffer = await response.arrayBuffer();
-      const base64 = Buffer.from(arrayBuffer).toString("base64");
-      embeds[id] =
-        `data:${response.headers.get("Content-Type")};base64,${base64}`;
-    }
-    return embeds;
-  },
+const mapErrors = (
+  error: DbError | EmbedError | FsError | WorkspaceError,
+): EmbedError | WorkspaceError | InternalError => {
+  switch (error.type) {
+    case "db-error":
+      return {
+        type: "internal-error",
+        message: "Database error",
+      };
 
-  async download(id: string) {
-    const url = await embedService.getEmbedFileUrl(id);
-    const response = await net.fetch(url.href);
-    if (!response.ok) throw new NotFoundError("Embed", id);
+    case "file-not-found":
+    case "fs-error":
+      return {
+        type: "internal-error",
+        message: "File not found.",
+      } satisfies InternalError;
 
-    const embed = await embedService.getEmbedById(id);
-    if (!embed) throw new NotFoundError("Embed", id);
-
-    const arrayBuffer = await response.arrayBuffer();
-    const result = await dialog.showSaveDialog({
-      filters: [{ name: "All Files", extensions: ["*"] }],
-      defaultPath: `${embed.displayName ?? embed.fileName + embed.fileType.replace(".", "")}`,
-    });
-    if (result.canceled || !result.filePath) return;
-    const buffer = Buffer.from(arrayBuffer);
-    await writeFile(result.filePath, buffer);
-  },
+    case "workspace-failed-to-delete":
+    case "workspace-failed-to-create":
+    case "workspace-not-found":
+    case "embed-not-found":
+      return error;
+  }
 };
 
-export const EmbedApiBridge = {
-  createFromLocalFile: new IPCHandler(
-    false,
-    ElectronEmbedAPI.createFromLocalFile,
-  ),
-  createFromArrayBuffer: new IPCHandler(
-    false,
-    ElectronEmbedAPI.createFromArrayBuffer,
-  ),
-  getById: new IPCHandler(false, ElectronEmbedAPI.getById),
-  getEncoded: new IPCHandler(false, ElectronEmbedAPI.getEncoded),
-  download: new IPCHandler(false, ElectronEmbedAPI.download),
-};
+export function EmbedAPI(
+  embedService: IEmbedService,
+): HandlerImplements<DesktopEmbedAPI> {
+  const createFromLocalFile = handler((filePath: string, workspaceId: string) =>
+    embedService
+      .createFromFilePath(filePath, workspaceId)
+      .andThen((embed) =>
+        embedService.getEmbedUrl(embed.id).map((url) => embedToDto(embed, url)),
+      )
+      .mapErr(mapErrors)
+      .map((embed) => ({ embed })),
+  );
+
+  const createFromArrayBuffer = handler(
+    (buffer: ArrayBuffer, fileType: string, workspaceId: string) =>
+      embedService
+        .createFromArrayBuffer(buffer, fileType, workspaceId)
+        .andThen((embed) =>
+          embedService
+            .getEmbedUrl(embed.id)
+            .map((url) => embedToDto(embed, url)),
+        )
+        .map((embed) => ({ embed }))
+        .mapErr(mapErrors),
+  );
+
+  const getById = handler((id: string) =>
+    ResultAsync.combine([
+      embedService.getEmbedById(id),
+      embedService.getEmbedUrl(id),
+    ])
+      .map(([embed, url]) => ({ embed: embedToDto(embed, url) }))
+      .mapErr((error) =>
+        error.type === "db-error"
+          ? ({
+              type: "internal-error",
+              message: "Database error",
+            } satisfies InternalError)
+          : error,
+      ),
+  );
+
+  const download = handler((id: string) =>
+    embedService
+      .getEmbedFileUrl(id)
+      .andThen(fetchEmbed)
+      .andThen((buffer) =>
+        ResultAsync.combine([okAsync(buffer), embedService.getEmbedById(id)]),
+      )
+      .andThen(([buffer, embed]) =>
+        ResultAsync.combine([
+          okAsync(buffer),
+          showSaveDialog({
+            filters: [{ name: "All Files", extensions: ["*"] }],
+            defaultPath: `${embed.displayName ?? embed.fileName + embed.fileType.replace(".", "")}`,
+          }),
+        ]),
+      )
+      .andThen(([buffer, filepath]) =>
+        fsResult(writeFile(filepath, Buffer.from(buffer))),
+      )
+      .orElse(() => okAsync()),
+  );
+
+  const getEncoded = handler((ids: string[]) =>
+    ResultAsync.combine(
+      ids.map((id) =>
+        embedService.getEmbedFileUrl(id).map((url) => ({ id, url })),
+      ),
+    )
+      .andThen((items) =>
+        ResultAsync.combine(
+          items.flatMap((item) =>
+            fetchAndEncode(item.url)
+              .map((base64) => [{ id: item.id, base64 }])
+              .orElse(() => okAsync([] as { id: string; base64: string }[])),
+          ),
+        ),
+      )
+      .map((items) =>
+        items.flat().reduce(
+          (acc, current) => {
+            acc[current.id] = current.base64;
+            return acc;
+          },
+          {} as Record<string, string>,
+        ),
+      )
+      .mapErr(
+        () =>
+          ({
+            type: "internal-error",
+            message: "Something went wrong while encoding embeds.",
+          }) satisfies InternalError,
+      ),
+  );
+
+  return {
+    getById,
+    getEncoded,
+    download,
+    createFromArrayBuffer,
+    createFromLocalFile,
+  };
+}
+

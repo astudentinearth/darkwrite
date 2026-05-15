@@ -1,34 +1,40 @@
 import { NewNote, Note, note as notesTable, Workspace } from "@/db/schema";
+import { resolveTx } from "@/db/transactional";
+import { DocumentService } from "@/service/document.service";
+import { MockDocumentStore } from "@/test/mocks/document-store.mock";
 import { WorkspaceDAO } from "@/workspace/workspace.dao";
 import { ParentId, Rank } from "@darkwrite/common";
 import { beforeAll, beforeEach, describe, expect, it } from "vitest";
-import { createTestDatabase, DatabaseType, applySqlMigrations } from "../db";
-import { NoteDAO } from "./note.dao";
-import { NoteService } from "./note.service";
-import { DocumentService } from "@/service/document.service";
-import { MockDocumentStore } from "@/test/mocks/document-store.mock";
+import { applySqlMigrations, createTestDatabase, DatabaseType } from "../db";
+import { NoteDAO, NoteDAOInstance } from "./note.dao";
+import { INoteService, NoteService } from "./note.service";
+import { ResultAsync } from "neverthrow";
 
 describe("note service tests", () => {
   let db: DatabaseType = createTestDatabase();
   let workspace: Workspace;
-  let noteDAO: NoteDAO;
-  let noteService: NoteService;
-  let documentStore = new MockDocumentStore();
+  let noteDAO: NoteDAOInstance;
+  let noteService: INoteService;
+  let documentStore = MockDocumentStore();
 
   beforeAll(async () => {
     await applySqlMigrations(db);
-    noteDAO = new NoteDAO(db);
-    noteService = new NoteService(db, new DocumentService(documentStore));
-    workspace = await new WorkspaceDAO(db).create({
-      name: "Test Workspace",
-      createdAt: new Date(),
-    });
+    noteDAO = NoteDAO(() => resolveTx(db));
+    noteService = NoteService(db, DocumentService(documentStore));
+    workspace = (
+      await WorkspaceDAO(() => resolveTx(db)).create({
+        name: "Test Workspace",
+        createdAt: new Date(),
+      })
+    )._unsafeUnwrap();
   });
   beforeEach(async () => {
     await db.delete(notesTable);
-    await Promise.all(
-      (await documentStore.ls()).map((docId) => documentStore.delete(docId)),
-    );
+    await documentStore
+      .ls()
+      .andThen((docs) =>
+        ResultAsync.combine(docs.map((id) => documentStore.delete(id))),
+      );
   });
 
   async function createNote(
@@ -45,7 +51,7 @@ describe("note service tests", () => {
       createdAt: new Date(),
       modifiedAt: new Date(),
     };
-    return await noteDAO.create(note);
+    return (await noteDAO.create(note))._unsafeUnwrap();
   }
 
   describe("clear trash tests", () => {
@@ -61,15 +67,21 @@ describe("note service tests", () => {
 
       await noteService.emptyTrash(workspace.id);
 
-      expect(await noteDAO.findById(note1.id)).toBeUndefined();
-      expect(await noteDAO.findById(note2.id)).toBeUndefined();
+      expect(
+        (await noteDAO.findById(note1.id))._unsafeUnwrapErr(),
+      ).toMatchObject({ type: "note-not-found" });
+      expect(
+        (await noteDAO.findById(note2.id))._unsafeUnwrapErr(),
+      ).toMatchObject({ type: "note-not-found" });
     });
 
     it("should not touch notes in a different workspace", async () => {
-      const otherWorkspace = await new WorkspaceDAO(db).create({
-        name: "Other Workspace",
-        createdAt: new Date(),
-      });
+      const otherWorkspace = (
+        await WorkspaceDAO(() => resolveTx(db)).create({
+          name: "Other Workspace",
+          createdAt: new Date(),
+        })
+      )._unsafeUnwrap();
 
       const rankA = Rank.default().get();
       const trashedInOther: NewNote = {
@@ -83,15 +95,19 @@ describe("note service tests", () => {
         isTrashed: true,
         trashedAt: new Date(),
       };
-      const saved = await noteDAO.create(trashedInOther);
+      const saved = (await noteDAO.create(trashedInOther))._unsafeUnwrap();
 
       const localNote = await createNote("Local trashed", rankA);
       await noteService.moveToTrash(localNote.id);
 
       await noteService.emptyTrash(workspace.id);
 
-      expect(await noteDAO.findById(saved.id)).not.toBeUndefined();
-      expect(await noteDAO.findById(localNote.id)).toBeUndefined();
+      expect(
+        (await noteDAO.findById(saved.id))._unsafeUnwrap(),
+      ).not.toBeUndefined();
+      expect(
+        (await noteDAO.findById(localNote.id))._unsafeUnwrapErr(),
+      ).toMatchObject({ type: "note-not-found" });
     });
 
     it("should not touch notes that are not trashed", async () => {
@@ -104,23 +120,29 @@ describe("note service tests", () => {
 
       await noteService.emptyTrash(workspace.id);
 
-      expect(await noteDAO.findById(alive.id)).not.toBeUndefined();
-      expect(await noteDAO.findById(trashed.id)).toBeUndefined();
+      expect(
+        (await noteDAO.findById(alive.id))._unsafeUnwrap(),
+      ).not.toBeUndefined();
+      expect(
+        (await noteDAO.findById(trashed.id))._unsafeUnwrapErr(),
+      ).toMatchObject({ type: "note-not-found" });
     });
 
     it("should delete document content for trashed notes", async () => {
-      const note = await noteService.create({
-        title: "With content",
-        workspaceId: workspace.id,
-        parentId: null,
-      });
+      const note = (
+        await noteService.create({
+          title: "With content",
+          workspaceId: workspace.id,
+          parentId: null,
+        })
+      )._unsafeUnwrap();
 
-      expect(await documentStore.exists(note.id)).toBe(true);
+      expect((await documentStore.exists(note.id))._unsafeUnwrap()).toBe(true);
 
       await noteService.moveToTrash(note.id);
       await noteService.emptyTrash(workspace.id);
 
-      expect(await documentStore.exists(note.id)).toBe(false);
+      expect((await documentStore.exists(note.id))._unsafeUnwrap()).toBe(false);
     });
 
     it("should handle empty trash gracefully", async () => {
@@ -143,10 +165,14 @@ describe("note service tests", () => {
       const source = await createNote("Source", rankX, null);
 
       // Act: Move Source below Note A
-      await noteService.moveBelow(source.id, noteA.id);
+      await noteService.move({
+        destinationId: noteA.id,
+        sourceId: source.id,
+        placement: "below",
+      });
 
       // Assert
-      const updatedSource = await noteDAO.findByIdOrThrow(source.id);
+      const updatedSource = (await noteDAO.findById(source.id))._unsafeUnwrap();
       expect(updatedSource.parentId).toBe(parent.id);
       expect(updatedSource.orderHint > noteA.orderHint).toBe(true);
       expect(updatedSource.orderHint < noteC.orderHint).toBe(true);
@@ -162,10 +188,14 @@ describe("note service tests", () => {
       const source = await createNote("Source", rankX, null);
 
       // Act
-      await noteService.moveBelow(source.id, noteA.id);
+      await noteService.move({
+        sourceId: source.id,
+        destinationId: noteA.id,
+        placement: "below",
+      });
 
       // Assert
-      const updatedSource = await noteDAO.findByIdOrThrow(source.id);
+      const updatedSource = (await noteDAO.findById(source.id))._unsafeUnwrap();
       expect(updatedSource.parentId).toBe(parent.id);
       expect(updatedSource.orderHint > noteA.orderHint).toBe(true);
     });
@@ -182,10 +212,14 @@ describe("note service tests", () => {
       const source = await createNote("Source", rankX, null);
 
       // Act
-      await noteService.moveInto(source.id, parent.id, "start");
+      await noteService.move({
+        placement: "inside-start",
+        sourceId: source.id,
+        destinationId: parent.id,
+      });
 
       // Assert
-      const updatedSource = await noteDAO.findByIdOrThrow(source.id);
+      const updatedSource = (await noteDAO.findById(source.id))._unsafeUnwrap();
       expect(updatedSource.parentId).toBe(parent.id);
       expect(updatedSource.orderHint < child1.orderHint).toBe(true);
     });
@@ -199,10 +233,14 @@ describe("note service tests", () => {
       const source = await createNote("Source", rankX, null);
 
       // Act
-      await noteService.moveInto(source.id, parent.id, "start");
+      await noteService.move({
+        placement: "inside-start",
+        sourceId: source.id,
+        destinationId: parent.id,
+      });
 
       // Assert
-      const updatedSource = await noteDAO.findByIdOrThrow(source.id);
+      const updatedSource = (await noteDAO.findById(source.id))._unsafeUnwrap();
       expect(updatedSource.parentId).toBe(parent.id);
       // Should be roughly equal to default, or valid.
       // Rank.default().get() is what the service uses.
@@ -221,10 +259,14 @@ describe("note service tests", () => {
       const source = await createNote("Source", rankX, null);
 
       // Act
-      await noteService.moveInto(source.id, parent.id, "end");
+      await noteService.move({
+        placement: "inside-end",
+        sourceId: source.id,
+        destinationId: parent.id,
+      });
 
       // Assert
-      const updatedSource = await noteDAO.findByIdOrThrow(source.id);
+      const updatedSource = (await noteDAO.findById(source.id))._unsafeUnwrap();
       expect(updatedSource.parentId).toBe(parent.id);
       expect(updatedSource.orderHint > child1.orderHint).toBe(true);
     });
@@ -238,10 +280,14 @@ describe("note service tests", () => {
       const source = await createNote("Source", rankX, null);
 
       // Act
-      await noteService.moveInto(source.id, parent.id, "end");
+      await noteService.move({
+        placement: "inside-end",
+        sourceId: source.id,
+        destinationId: parent.id,
+      });
 
       // Assert
-      const updatedSource = await noteDAO.findByIdOrThrow(source.id);
+      const updatedSource = (await noteDAO.findById(source.id))._unsafeUnwrap();
       expect(updatedSource.parentId).toBe(parent.id);
       expect(updatedSource.orderHint).toBe(Rank.default().get());
     });
@@ -255,10 +301,14 @@ describe("note service tests", () => {
       const source = await createNote("Source", rankX, "some-other-id");
 
       // Act
-      await noteService.moveInto(source.id, null, "end"); // Move to root
+      await noteService.move({
+        placement: "inside-end",
+        sourceId: source.id,
+        destinationId: null,
+      }); // Move to root
 
       // Assert
-      const updatedSource = await noteDAO.findByIdOrThrow(source.id);
+      const updatedSource = (await noteDAO.findById(source.id))._unsafeUnwrap();
       expect(updatedSource.parentId).toBeNull();
       expect(updatedSource.orderHint > rootNote.orderHint).toBe(true);
     });

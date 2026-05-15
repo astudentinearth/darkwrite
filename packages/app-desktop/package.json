@@ -14,7 +14,10 @@
   "license": "AGPL-3.0-or-later",
   "main": "dist-electron/main.js",
   "lint-staged": {
-    "*.{ts,tsx,css,md}": "prettier --check"
+    "*.{ts,tsx}": [
+      "prettier --write",
+      "eslint --fix --max-warnings 0"
+    ]
   },
   "scripts": {
     "dev": "vite",
@@ -25,6 +28,7 @@
     "test:run": "vitest run",
     "test:watch": "vitest watch",
     "coverage": "vitest run --coverage",
+    "build": "vite build",
     "build:pre": "vite build",
     "build:win": "electron-builder --win",
     "build:mac": "electron-builder --mac",
@@ -43,7 +47,6 @@
     "fs-extra": "^11.3.2",
     "lodash": "catalog:",
     "mime": "^4.1.0",
-    "reflect-metadata": "^0.2.2",
     "semver": "^7.7.4",
     "zip-a-folder": "^3.1.9"
   },

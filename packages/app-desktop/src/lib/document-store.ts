@@ -1,58 +1,85 @@
-import { exists } from "fs-extra";
-import { readFile, writeFile, rm } from "fs/promises";
-import path from "node:path";
 import * as fslib from "@/lib/fs";
-import { IllegalArgumentError } from "@darkwrite/common";
+import { pathExists } from "fs-extra";
+import { readFile, rm, writeFile } from "fs/promises";
+import { err, ok, Result, ResultAsync } from "neverthrow";
+import path from "node:path";
+
+export type DocumentStoreErr =
+  | { type: "path-error" }
+  | { type: "document-not-found"; id: string }
+  | fslib.FsError;
 
 export interface IDocumentStore {
-  create: (id: string) => Promise<void>;
-  write: (id: string, content: string) => Promise<void>;
-  read: (id: string) => Promise<string>;
-  exists: (id: string) => Promise<boolean>;
-  ls: () => Promise<string[]>;
-  delete: (id: string) => Promise<void>;
+  create: (id: string) => ResultAsync<void, DocumentStoreErr>;
+  write: (id: string, content: string) => ResultAsync<void, DocumentStoreErr>;
+  read: (id: string) => ResultAsync<string, DocumentStoreErr>;
+  exists: (id: string) => ResultAsync<boolean, DocumentStoreErr>;
+  ls: () => ResultAsync<string[], DocumentStoreErr>;
+  delete: (id: string) => ResultAsync<void, DocumentStoreErr>;
 }
 
 /** Make a directory act as a JSON document store.
  *  All documents will follow <id>.json file name convention.
+ * @param directory Directory to store documents in
  */
-export class DocumentFileStore implements IDocumentStore {
-  /** @param directory Directory to store documents in */
-  constructor(private directory: string) {}
+export function DocumentFileStore(directory: string): IDocumentStore {
+  /**  */
 
-  private getPath(id: string) {
+  function getPath(id: string): Result<string, DocumentStoreErr> {
     if (id.includes("/") || id.includes("\\"))
-      throw new IllegalArgumentError(
-        "Invalid path passed into document store.",
-      );
-    return path.join(this.directory, `${id}.json`);
+      return err({ type: "path-error" } satisfies DocumentStoreErr);
+    return ok(path.join(directory, `${id}.json`));
   }
 
-  async create(id: string) {
-    await writeFile(this.getPath(id), "{}");
+  function create(id: string) {
+    return getPath(id).asyncAndThen((p) => fslib.fsResult(writeFile(p, "{}")));
   }
 
-  async write(id: string, content: string) {
-    await writeFile(this.getPath(id), content);
+  function write(id: string, content: string) {
+    return getPath(id).asyncAndThen((p) =>
+      fslib.fsResult(writeFile(p, content)),
+    );
   }
 
-  async read(id: string) {
-    return await readFile(this.getPath(id), "utf-8");
+  function read(id: string) {
+    return getPath(id)
+      .asyncAndThen((path) =>
+        exists(id).andThen((e) =>
+          e
+            ? ok(path)
+            : err({
+                type: "document-not-found",
+                id,
+              } satisfies DocumentStoreErr),
+        ),
+      )
+      .andThen((p) => fslib.fsResult(readFile(p, "utf-8")));
   }
 
-  async exists(id: string) {
-    return await exists(this.getPath(id));
+  function exists(id: string) {
+    return getPath(id).asyncAndThen((p) => fslib.fsResult(pathExists(p)));
   }
 
-  async ls() {
-    const files = await fslib.ls(this.directory);
-    // only keep .json files and strip the .json extension
-    const jsonFiles = files.filter((f) => f.endsWith(".json"));
-    return jsonFiles.map((f) => f.substring(0, f.length - 5));
+  function ls() {
+    return fslib
+      .ls(directory)
+      .map((files) => fslib.filterExt(files, ".json"))
+      .map(fslib.stripExt);
   }
 
-  async delete(id: string) {
+  function deleteDocument(id: string) {
     // use force option to avoid throwing if the database record was orphaned
-    rm(this.getPath(id), { force: true });
+    return getPath(id).asyncAndThen((p) =>
+      fslib.fsResult(rm(p, { force: true })),
+    );
   }
+
+  return {
+    create,
+    write,
+    read,
+    ls,
+    delete: deleteDocument,
+    exists,
+  };
 }

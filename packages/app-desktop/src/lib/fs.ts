@@ -1,4 +1,6 @@
+/* eslint-disable no-redeclare */
 import fse from "fs-extra";
+import { err, ok, ResultAsync } from "neverthrow";
 import path from "path";
 
 export async function rmIfExists(path: string) {
@@ -10,15 +12,18 @@ export async function rmIfExists(path: string) {
   }
 }
 
-export async function getFileInfo(filePath: string) {
+export function getFileInfo(filePath: string) {
   const basename = path.basename(filePath);
-  const stats = await fse.stat(filePath);
-  const size = stats.size;
   const extension = path.extname(filePath);
-  return { basename, size, extension };
+  return fsResult(fse.stat(filePath)).map((stat) => ({
+    size: stat.size,
+    extension,
+    basename,
+  }));
 }
 
-export async function ls(dir: string) {
+/** @deprecated */
+export async function ls_legacy(dir: string) {
   return await fse.readdir(dir);
 }
 
@@ -49,4 +54,44 @@ export class FileNotFoundError extends Error {
     super(`File not found: ${filePath}`);
     this.name = "FileNotFoundError";
   }
+}
+
+// new result API
+
+export type FsError =
+  | { type: "fs-error"; cause: NodeJS.ErrnoException }
+  | { type: "file-not-found"; filepath: string };
+
+const fsError = (e: unknown): FsError => ({
+  type: "fs-error",
+  cause: e as NodeJS.ErrnoException,
+});
+
+/** Automatically wrap Node FS promises with ResultAsync<T, FsError> */
+export const fsResult = <T>(promise: Promise<T>) =>
+  ResultAsync.fromPromise(promise, fsError);
+
+export function ls(dir: string) {
+  return fsResult(fse.readdir(dir));
+}
+
+export function filterExt(files: string[], ext: string) {
+  return files.filter((f) => path.extname(f) === ext);
+}
+
+export function stripExt(files: string): string;
+export function stripExt(files: string[]): string[];
+export function stripExt(files: string | string[]) {
+  if (typeof files === "string")
+    return path.basename(files, path.extname(files));
+  else return files.map((f) => stripExt(f));
+}
+
+export function assertExists(filepath: string) {
+  return ResultAsync.fromSafePromise(fse.pathExists(filepath)).andThen(
+    (exists) =>
+      exists
+        ? ok()
+        : err({ type: "file-not-found", filepath } satisfies FsError),
+  );
 }

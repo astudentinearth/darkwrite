@@ -1,25 +1,28 @@
 import { createTestDatabase, DatabaseType, applySqlMigrations } from "@/db";
 import { NewNote, Note, note as notesTable, Workspace } from "@/db/schema";
+import { resolveTx } from "@/db/transactional";
 import { WorkspaceDAO } from "@/workspace/workspace.dao";
 import { ParentId, Rank } from "@darkwrite/common";
 import { randomUUID } from "crypto";
 import { beforeAll, beforeEach, describe, expect, it } from "vitest";
-import { NoteDAO } from "./note.dao";
+import { NoteDAO, NoteDAOInstance } from "./note.dao";
 
 let db: DatabaseType = createTestDatabase();
 
 describe("NoteDAO", () => {
-  let noteDao: NoteDAO;
+  let noteDao: NoteDAOInstance;
   let workspaceId = "";
 
   beforeAll(async () => {
     await applySqlMigrations(db);
-    noteDao = new NoteDAO(db);
+    noteDao = NoteDAO(() => resolveTx(db));
 
-    const workspace: Workspace = await new WorkspaceDAO(db).create({
-      name: "Test Workspace",
-      createdAt: new Date(),
-    });
+    const workspace: Workspace = (
+      await WorkspaceDAO(() => resolveTx(db)).create({
+        name: "Test Workspace",
+        createdAt: new Date(),
+      })
+    )._unsafeUnwrap();
 
     workspaceId = workspace.id;
   });
@@ -54,11 +57,11 @@ describe("NoteDAO", () => {
 
   const saveNote = async (note: NewNote) => await noteDao.create(note);
   const createNote = async (id: string, parentId: ParentId = null) =>
-    await saveNote(await buildNote(id, parentId));
+    (await saveNote(await buildNote(id, parentId)))._unsafeUnwrap();
 
   describe("create", () => {
     it("should create notes without id", async () => {
-      const note = await noteDao.create({
+      const result = await noteDao.create({
         workspaceId,
         createdAt: new Date(),
         modifiedAt: new Date(),
@@ -66,6 +69,7 @@ describe("NoteDAO", () => {
         orderHint: "",
         title: "New note",
       });
+      const note = result._unsafeUnwrap();
       expect(note).not.toBeNull();
       expect(note.title).toBe("New note");
       expect(note.id).not.toBeNull();
@@ -73,7 +77,7 @@ describe("NoteDAO", () => {
 
     it("should create notes with id", async () => {
       const id = randomUUID();
-      const note = await noteDao.create({
+      const result = await noteDao.create({
         id,
         workspaceId,
         createdAt: new Date(),
@@ -82,6 +86,7 @@ describe("NoteDAO", () => {
         orderHint: "",
         title: "New note",
       });
+      const note = result._unsafeUnwrap();
       expect(note).not.toBeNull();
       expect(note.title).toBe("New note");
       expect(note.id).toBe(id);
@@ -97,10 +102,11 @@ describe("NoteDAO", () => {
   describe("update", () => {
     it("should update a note", async () => {
       const note = await createNote(randomUUID());
-      const updated = await noteDao.update({
+      const result = await noteDao.update({
         id: note.id,
         title: "Updated title",
       });
+      const updated = result._unsafeUnwrap();
       expect(note).not.toBeNull();
       expect(updated).not.toBeNull();
       expect(note.id).toBe(updated?.id);
@@ -112,17 +118,19 @@ describe("NoteDAO", () => {
         id: randomUUID(),
         title: "Hello world",
       });
-      expect(updated).toBeUndefined();
+      expect(updated._unsafeUnwrapErr().type).toBe("note-not-found");
     });
 
     it("should update multiple notes", async () => {
       const note1 = await createNote(randomUUID());
       const note2 = await createNote(randomUUID());
 
-      const updatedNotes = await noteDao.updateAll([
-        { id: note1.id, title: "trashed", isTrashed: true },
-        { id: note2.id, title: "favorite", isFavorite: true },
-      ]);
+      const updatedNotes = (
+        await noteDao.updateAll([
+          { id: note1.id, title: "trashed", isTrashed: true },
+          { id: note2.id, title: "favorite", isFavorite: true },
+        ])
+      )._unsafeUnwrap();
 
       const updated1 = updatedNotes.find((n) => n.id == note1.id);
       const updated2 = updatedNotes.find((n) => n.id == note2.id);
@@ -143,39 +151,27 @@ describe("NoteDAO", () => {
       const noteId = randomUUID();
       const saved = await createNote(noteId);
 
-      const found = await noteDao.findById(noteId);
+      const found = (await noteDao.findById(noteId))._unsafeUnwrap();
 
       expect(found).not.toBeUndefined();
       expect(found?.id).toBe(saved.id);
     });
 
-    it("findById should return undefined when note does not exist", async () => {
+    it("findById should err() when note does not exist", async () => {
       const missingId = randomUUID();
       const found = await noteDao.findById(missingId);
 
-      expect(found).toBeUndefined();
-    });
-
-    it("findByIdOrThrow should return the note when it exists", async () => {
-      const noteId = randomUUID();
-      const saved = await createNote(noteId);
-
-      const found = await noteDao.findByIdOrThrow(noteId);
-
-      expect(found.id).toBe(saved.id);
-    });
-
-    it("findByIdOrThrow should throw when note does not exist", async () => {
-      const missingId = randomUUID();
-
-      await expect(noteDao.findByIdOrThrow(missingId)).rejects.toThrow();
+      expect(found.isErr()).toBe(true);
+      expect(found._unsafeUnwrapErr().type).toBe("note-not-found");
     });
 
     it("findAll should return notes from all workspaces", async () => {
-      const anotherWorkspace = await new WorkspaceDAO(db).create({
-        name: "Another Workspace",
-        createdAt: new Date(),
-      });
+      const anotherWorkspace = (
+        await WorkspaceDAO(() => resolveTx(db)).create({
+          name: "Another Workspace",
+          createdAt: new Date(),
+        })
+      )._unsafeUnwrap();
       const noteInCurrentWorkspaceId = randomUUID();
       const noteInAnotherWorkspaceId = randomUUID();
 
@@ -185,18 +181,19 @@ describe("NoteDAO", () => {
         workspaceId: anotherWorkspace.id,
       });
 
-      const allNotes = await noteDao.findAll();
-      const allIds = allNotes.map((n) => n.id);
+      const allIds = (await noteDao.findAll())._unsafeUnwrap().map((n) => n.id);
 
       expect(allIds).toContain(noteInCurrentWorkspaceId);
       expect(allIds).toContain(noteInAnotherWorkspaceId);
     });
 
     it("findAllByWorkspaceId should return only notes from the given workspace", async () => {
-      const anotherWorkspace = await new WorkspaceDAO(db).create({
-        name: "Third Workspace",
-        createdAt: new Date(),
-      });
+      const anotherWorkspace = (
+        await WorkspaceDAO(() => resolveTx(db)).create({
+          name: "Third Workspace",
+          createdAt: new Date(),
+        })
+      )._unsafeUnwrap();
       const inTargetWorkspaceId = randomUUID();
       const outsideTargetWorkspaceId = randomUUID();
 
@@ -206,7 +203,9 @@ describe("NoteDAO", () => {
         workspaceId: anotherWorkspace.id,
       });
 
-      const notesInWorkspace = await noteDao.findAllByWorkspaceId(workspaceId);
+      const notesInWorkspace = (
+        await noteDao.findAllByWorkspaceId(workspaceId)
+      )._unsafeUnwrap();
       const noteIds = notesInWorkspace.map((n) => n.id);
 
       expect(noteIds).toContain(inTargetWorkspaceId);
@@ -218,8 +217,8 @@ describe("NoteDAO", () => {
       const missingId = randomUUID();
       await createNote(existingId);
 
-      const existingResult = await noteDao.exists(existingId);
-      const missingResult = await noteDao.exists(missingId);
+      const existingResult = (await noteDao.exists(existingId))._unsafeUnwrap();
+      const missingResult = (await noteDao.exists(missingId))._unsafeUnwrap();
 
       expect(existingResult).toBe(true);
       expect(missingResult).toBe(false);
@@ -239,7 +238,7 @@ describe("NoteDAO", () => {
       await createNote(siblingWithDifferentParentId);
 
       const children = await noteDao.findAllByParentId(workspaceId, parentId);
-      const childIds = children.map((n) => n.id);
+      const childIds = children._unsafeUnwrap().map((n) => n.id);
 
       expect(childIds).toContain(childAId);
       expect(childIds).toContain(childBId);
@@ -256,7 +255,7 @@ describe("NoteDAO", () => {
       await createNote(childId, parentId);
 
       const roots = await noteDao.findAllByParentId(workspaceId, null);
-      const rootIds = roots.map((n) => n.id);
+      const rootIds = roots._unsafeUnwrap().map((n) => n.id);
 
       expect(rootIds).toContain(rootId);
       expect(rootIds).toContain(parentId);
@@ -292,7 +291,7 @@ describe("NoteDAO", () => {
         workspaceId,
         parentId,
       );
-      const sortedIds = sorted.map((n) => n.id);
+      const sortedIds = sorted._unsafeUnwrap().map((n) => n.id);
       const expectedOrder = [firstId, secondId, thirdId];
 
       expect(sortedIds).toEqual(expectedOrder);
@@ -326,7 +325,9 @@ describe("NoteDAO", () => {
         orderHint: largestRank.get(),
       });
 
-      const first = await noteDao.findFirstNoteInLayer(workspaceId, parentId);
+      const first = (
+        await noteDao.findFirstNoteInLayer(workspaceId, parentId)
+      )._unsafeUnwrap();
 
       expect(first).not.toBeUndefined();
       expect(first?.id).toBe(firstExpectedId);
@@ -357,7 +358,9 @@ describe("NoteDAO", () => {
         isTrashed: true,
       });
 
-      const last = await noteDao.findLastNoteInLayer(workspaceId, parentId);
+      const last = (
+        await noteDao.findLastNoteInLayer(workspaceId, parentId)
+      )._unsafeUnwrap();
 
       expect(last).not.toBeUndefined();
       expect(last?.id).toBe(expectedLastId);
@@ -388,7 +391,9 @@ describe("NoteDAO", () => {
         favoriteOrderHint: thirdFavoriteRank.get(),
       });
 
-      const lastFavorite = await noteDao.findLastNoteInFavorites(workspaceId);
+      const lastFavorite = (
+        await noteDao.findLastNoteInFavorites(workspaceId)
+      )._unsafeUnwrap();
 
       expect(lastFavorite).not.toBeUndefined();
       expect(lastFavorite?.id).toBe(expectedId);
@@ -426,7 +431,7 @@ describe("NoteDAO", () => {
       });
 
       const favorites = await noteDao.findAllFavorites(workspaceId);
-      const favoriteIds = favorites.map((n) => n.id);
+      const favoriteIds = favorites._unsafeUnwrap().map((n) => n.id);
       const expectedOrder = [firstExpectedId, secondExpectedId];
 
       expect(favoriteIds).toEqual(expectedOrder);
@@ -457,7 +462,7 @@ describe("NoteDAO", () => {
       });
 
       const trashed = await noteDao.findAllTrashed(workspaceId);
-      const trashedIds = trashed.map((n) => n.id);
+      const trashedIds = trashed._unsafeUnwrap().map((n) => n.id);
       const expectedOrder = [firstExpectedId, secondExpectedId];
 
       expect(trashedIds).toEqual(expectedOrder);
@@ -477,9 +482,9 @@ describe("NoteDAO", () => {
 
       await noteDao.deleteMany([id1, id2]);
 
-      expect(await noteDao.exists(id1)).toBe(false);
-      expect(await noteDao.exists(id2)).toBe(false);
-      expect(await noteDao.exists(id3)).toBe(true);
+      expect((await noteDao.exists(id1))._unsafeUnwrap()).toBe(false);
+      expect((await noteDao.exists(id2))._unsafeUnwrap()).toBe(false);
+      expect((await noteDao.exists(id3))._unsafeUnwrap()).toBe(true);
     });
 
     it("should not throw when deleting non-existent ids", async () => {
@@ -490,7 +495,7 @@ describe("NoteDAO", () => {
         noteDao.deleteMany([randomUUID(), randomUUID()]),
       ).resolves.not.toThrow();
 
-      expect(await noteDao.exists(existingId)).toBe(true);
+      expect((await noteDao.exists(existingId))._unsafeUnwrap()).toBe(true);
     });
 
     it("should handle a mix of existing and non-existent ids", async () => {
@@ -502,8 +507,8 @@ describe("NoteDAO", () => {
 
       await noteDao.deleteMany([existingId, randomUUID()]);
 
-      expect(await noteDao.exists(existingId)).toBe(false);
-      expect(await noteDao.exists(survivorId)).toBe(true);
+      expect((await noteDao.exists(existingId))._unsafeUnwrap()).toBe(false);
+      expect((await noteDao.exists(survivorId))._unsafeUnwrap()).toBe(true);
     });
 
     it("should handle an empty array", async () => {
@@ -512,7 +517,171 @@ describe("NoteDAO", () => {
 
       await expect(noteDao.deleteMany([])).resolves.not.toThrow();
 
-      expect(await noteDao.exists(existingId)).toBe(true);
+      expect((await noteDao.exists(existingId))._unsafeUnwrap()).toBe(true);
+    });
+  });
+
+  describe("noteRightAfter", () => {
+    it("should return the note with the next greater orderHint", async () => {
+      const firstRank = Rank.default();
+      const secondRank = firstRank.next();
+      const thirdRank = secondRank.next();
+
+      const firstId = randomUUID();
+      const secondId = randomUUID();
+      const thirdId = randomUUID();
+
+      await saveNote({
+        ...(await buildNote(firstId)),
+        orderHint: firstRank.get(),
+      });
+      await saveNote({
+        ...(await buildNote(secondId)),
+        orderHint: secondRank.get(),
+      });
+      await saveNote({
+        ...(await buildNote(thirdId)),
+        orderHint: thirdRank.get(),
+      });
+
+      const result = (
+        await noteDao.noteRightAfter(firstId, workspaceId)
+      )._unsafeUnwrap();
+
+      expect(result).not.toBeUndefined();
+      expect(result?.id).toBe(secondId);
+    });
+
+    it("should return only the immediately next note, not all subsequent ones", async () => {
+      const firstRank = Rank.default();
+      const secondRank = firstRank.next();
+      const thirdRank = secondRank.next();
+
+      const firstId = randomUUID();
+      const secondId = randomUUID();
+      const thirdId = randomUUID();
+
+      await saveNote({
+        ...(await buildNote(firstId)),
+        orderHint: firstRank.get(),
+      });
+      await saveNote({
+        ...(await buildNote(secondId)),
+        orderHint: secondRank.get(),
+      });
+      await saveNote({
+        ...(await buildNote(thirdId)),
+        orderHint: thirdRank.get(),
+      });
+
+      const result = (
+        await noteDao.noteRightAfter(firstId, workspaceId)
+      )._unsafeUnwrap();
+
+      expect(result?.id).toBe(secondId);
+      expect(result?.id).not.toBe(thirdId);
+    });
+
+    it("should return undefined when the target is the last note", async () => {
+      const firstRank = Rank.default();
+      const secondRank = firstRank.next();
+
+      const firstId = randomUUID();
+      const lastId = randomUUID();
+
+      await saveNote({
+        ...(await buildNote(firstId)),
+        orderHint: firstRank.get(),
+      });
+      await saveNote({
+        ...(await buildNote(lastId)),
+        orderHint: secondRank.get(),
+      });
+
+      const result = (
+        await noteDao.noteRightAfter(lastId, workspaceId)
+      )._unsafeUnwrap();
+
+      expect(result).toBeUndefined();
+    });
+
+    it("should return undefined when the target does not exist", async () => {
+      const someId = randomUUID();
+      await saveNote({
+        ...(await buildNote(randomUUID())),
+        orderHint: Rank.default().get(),
+      });
+
+      const result = (
+        await noteDao.noteRightAfter(someId, workspaceId)
+      )._unsafeUnwrap();
+
+      expect(result).toBeUndefined();
+    });
+
+    it("should use favoriteOrderHint when specified", async () => {
+      const firstRank = Rank.default();
+      const secondRank = firstRank.next();
+      const thirdRank = secondRank.next();
+
+      const firstId = randomUUID();
+      const secondId = randomUUID();
+      const thirdId = randomUUID();
+
+      await saveNote({
+        ...(await buildNote(firstId)),
+        favoriteOrderHint: firstRank.get(),
+        orderHint: thirdRank.get(),
+      });
+      await saveNote({
+        ...(await buildNote(secondId)),
+        favoriteOrderHint: secondRank.get(),
+        orderHint: secondRank.get(),
+      });
+      await saveNote({
+        ...(await buildNote(thirdId)),
+        favoriteOrderHint: thirdRank.get(),
+        orderHint: firstRank.get(),
+      });
+
+      const result = (
+        await noteDao.noteRightAfter(firstId, workspaceId, "favoriteOrderHint")
+      )._unsafeUnwrap();
+
+      expect(result).not.toBeUndefined();
+      expect(result?.id).toBe(secondId);
+    });
+
+    it("should not return notes from another workspace", async () => {
+      const otherWorkspace = (
+        await WorkspaceDAO(() => resolveTx(db)).create({
+          name: "Other Workspace",
+          createdAt: new Date(),
+        })
+      )._unsafeUnwrap();
+
+      const firstRank = Rank.default();
+      const secondRank = firstRank.next();
+
+      const targetId = randomUUID();
+      const otherWorkspaceNoteId = randomUUID();
+
+      await saveNote({
+        ...(await buildNote(targetId)),
+        orderHint: firstRank.get(),
+      });
+      // A note in another workspace with a higher orderHint
+      await saveNote({
+        ...(await buildNote(otherWorkspaceNoteId)),
+        workspaceId: otherWorkspace.id,
+        orderHint: secondRank.get(),
+      });
+
+      const result = (
+        await noteDao.noteRightAfter(targetId, workspaceId)
+      )._unsafeUnwrap();
+
+      expect(result).toBeUndefined();
     });
   });
 
@@ -520,14 +689,14 @@ describe("NoteDAO", () => {
     it("should return 'CIRCULAR' when target is the parent (self-descendant check)", async () => {
       // Logic: if (targetId === potentialParentId) return true;
       const res = await noteDao.isDescendant("note1", "note1");
-      expect(res).toBe("CIRCULAR");
+      expect(res._unsafeUnwrap()).toBe("CIRCULAR");
     });
 
     it("should return true when target is a direct child", async () => {
       await createNote("parent");
       await createNote("child", "parent");
       const res = await noteDao.isDescendant("child", "parent");
-      expect(res).toBe(true);
+      expect(res._unsafeUnwrap()).toBe(true);
     });
 
     it("should return true when target is a grandchild", async () => {
@@ -535,14 +704,14 @@ describe("NoteDAO", () => {
       await createNote("child", "root");
       await createNote("grandchild", "child");
       const res = await noteDao.isDescendant("grandchild", "root");
-      expect(res).toBe(true);
+      expect(res._unsafeUnwrap()).toBe(true);
     });
 
     it("should return false when target is the parent of potentialParentId (ancestor)", async () => {
       await createNote("parent");
       await createNote("child", "parent");
       const res = await noteDao.isDescendant("parent", "child");
-      expect(res).toBe(false);
+      expect(res._unsafeUnwrap()).toBe(false);
     });
 
     it("should return false when notes are siblings", async () => {
@@ -550,20 +719,26 @@ describe("NoteDAO", () => {
       await createNote("child1", "root");
       await createNote("child2", "root");
       const res = await noteDao.isDescendant("child1", "child2");
-      expect(res).toBe(false);
+      expect(res._unsafeUnwrap()).toBe(false);
     });
 
     it("should return false when notes are unrelated", async () => {
       await createNote("note1");
       await createNote("note2");
       const res = await noteDao.isDescendant("note1", "note2");
-      expect(res).toBe(false);
+      expect(res._unsafeUnwrap()).toBe(false);
     });
 
     it("should return false when targetId or potentialParentId is null", async () => {
-      expect(await noteDao.isDescendant(null, "someId")).toBe(false);
-      expect(await noteDao.isDescendant("someId", null)).toBe(false);
-      expect(await noteDao.isDescendant(null, null)).toBe(false);
+      expect((await noteDao.isDescendant(null, "someId"))._unsafeUnwrap()).toBe(
+        false,
+      );
+      expect((await noteDao.isDescendant("someId", null))._unsafeUnwrap()).toBe(
+        false,
+      );
+      expect((await noteDao.isDescendant(null, null))._unsafeUnwrap()).toBe(
+        false,
+      );
     });
 
     it("should handle circular references gracefully", async () => {
@@ -571,15 +746,13 @@ describe("NoteDAO", () => {
       await createNote("A");
       await createNote("B", "A");
 
-      const noteA = await noteDao.findById("A");
-      if (noteA) {
-        await noteDao.update({ id: noteA.id, parentId: "B" });
-      }
+      const noteA = (await noteDao.findById("A"))._unsafeUnwrap();
+      await noteDao.update({ id: noteA.id, parentId: "B" });
 
       // Test checking against an unrelated node C
       await createNote("C");
       const res = await noteDao.isDescendant("A", "C");
-      expect(res).toBe(false);
+      expect(res._unsafeUnwrap()).toBe(false);
     });
   });
 });

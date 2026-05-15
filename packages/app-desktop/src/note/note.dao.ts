@@ -1,14 +1,27 @@
 import { NewNote, Note, note as notesTable, PatchNote } from "@/db/schema";
 import {
   isDescendantAsync,
-  isNotUndefined,
+  NoteError,
   NotFoundError,
   ParentId,
   Rank,
 } from "@darkwrite/common";
-import { and, asc, desc, eq, isNull, like, ne, or, inArray } from "drizzle-orm";
-import { DatabaseType, db, Transaction } from "../db";
+import {
+  and,
+  asc,
+  desc,
+  eq,
+  isNull,
+  like,
+  ne,
+  or,
+  inArray,
+  gt,
+} from "drizzle-orm";
 import { noteToDto } from "./note-mapper";
+import { DbError, TxResolver } from "@/db/transactional";
+import { dbResult } from "@/db/db-result";
+import { err, ok, ResultAsync } from "neverthrow";
 
 const withParent = (parentId: ParentId) =>
   parentId === null
@@ -24,231 +37,352 @@ const inWorkspace = (workspaceId: string) =>
 const inDatabase = (databaseId: string) =>
   eq(notesTable.databaseId, databaseId);
 
-export class NoteDAO {
-  constructor(private tx: Transaction | DatabaseType = db) {}
+export type NoteDaoResult<T> = ResultAsync<T, DbError | NoteError>;
+export type OrderKeyDto = { start: string; end: string };
 
-  static transactional(tx: Transaction) {
-    return new NoteDAO(tx);
-  }
-
-  transactional(tx: Transaction) {
-    return NoteDAO.transactional(tx);
-  }
-
-  async create(note: NewNote) {
-    return (await this.tx.insert(notesTable).values(note).returning())[0];
-  }
-
-  async update(note: PatchNote) {
-    return (
-      await this.tx
-        .update(notesTable)
-        .set(note)
-        .where(eq(notesTable.id, note.id))
-        .returning()
-    ).at(0);
-  }
-
-  async updateAll(notes: PatchNote[]): Promise<Note[]> {
-    return (await Promise.all(notes.map((n) => this.update(n)))).filter(
-      isNotUndefined,
+export function NoteDAO(tx: TxResolver) {
+  function create(note: NewNote): NoteDaoResult<Note> {
+    return dbResult(
+      async () => (await tx().insert(notesTable).values(note).returning())[0],
+    ).andThen((row) =>
+      row
+        ? ok(row)
+        : err({ type: "note-failed-to-create" } satisfies NoteError),
     );
   }
 
-  async findById(id: string) {
-    return (
-      await this.tx
-        .select()
-        .from(notesTable)
-        .where(eq(notesTable.id, id))
-        .limit(1)
-    ).at(0);
-  }
-
-  async findByIdOrThrow(id: string) {
-    const result = await this.findById(id);
-    if (!result) throw new NotFoundError("Note", id);
-    return result;
-  }
-
-  async findAll() {
-    return this.tx.select().from(notesTable);
-  }
-
-  async findAllByWorkspaceId(workspaceId: string) {
-    return this.tx.select().from(notesTable).where(inWorkspace(workspaceId));
-  }
-
-  async findAllByDatabaseId(databaseId: string) {
-    return this.tx.select().from(notesTable).where(inDatabase(databaseId));
-  }
-
-  async findAllByParentId(workspaceId: string, parentId: string | null) {
-    return this.tx
-      .select()
-      .from(notesTable)
-      .where(and(inWorkspace(workspaceId), withParent(parentId)));
-  }
-
-  async findAllByParentIdSortAsc(workspaceId: string, parentId: ParentId) {
-    return this.tx
-      .select()
-      .from(notesTable)
-      .where(and(inWorkspace(workspaceId), withParent(parentId)))
-      .orderBy(asc(notesTable.orderHint));
-  }
-
-  async deleteMany(ids: string[]) {
-    await this.tx.delete(notesTable).where(inArray(notesTable.id, ids));
-  }
-
-  async deleteById(id: string) {
-    return this.tx.delete(notesTable).where(eq(notesTable.id, id));
-  }
-
-  async delete(note: Note) {
-    return this.tx.delete(notesTable).where(eq(notesTable.id, note.id));
-  }
-
-  async exists(id: string) {
-    return (
+  function update(note: PatchNote): NoteDaoResult<Note> {
+    return dbResult(async () =>
       (
-        await this.tx
+        await tx()
+          .update(notesTable)
+          .set(note)
+          .where(eq(notesTable.id, note.id))
+          .returning()
+      ).at(0),
+    ).andThen((row) =>
+      row
+        ? ok(row)
+        : err({ type: "note-not-found", id: note.id } satisfies NoteError),
+    );
+  }
+
+  function updateAll(notes: PatchNote[]): NoteDaoResult<Note[]> {
+    return ResultAsync.combine(notes.map((n) => update(n)));
+  }
+
+  function findById(id: string): NoteDaoResult<Note> {
+    return dbResult(
+      async () =>
+        await tx()
           .select()
           .from(notesTable)
           .where(eq(notesTable.id, id))
           .limit(1)
-      ).length > 0
+          .get(),
+    ).andThen((row) =>
+      row ? ok(row) : err<Note, NoteError>({ type: "note-not-found", id }),
     );
   }
 
-  async findFirstNoteInLayer(workspaceId: string, parentId: ParentId) {
-    const query = this.tx
-      .select()
-      .from(notesTable)
-      .where(and(inWorkspace(workspaceId), withParent(parentId), notTrashed()))
-      .orderBy(asc(notesTable.orderHint));
-    const result = await query;
-    return result.at(0);
+  /** @deprecated use result chaining instead */
+  async function findByIdOrThrow(id: string) {
+    const result = await findById(id);
+    if (result.isErr()) throw new NotFoundError("Note", id);
+    return result.value;
   }
 
-  async findLastNoteInLayer(workspaceId: string, parentId: ParentId) {
-    const query = this.tx
-      .select()
-      .from(notesTable)
-      .where(and(inWorkspace(workspaceId), withParent(parentId), notTrashed()))
-      .orderBy(desc(notesTable.orderHint))
-      .limit(1);
-
-    return (await query).at(0);
+  function findAll(): NoteDaoResult<Note[]> {
+    return dbResult(async () => tx().select().from(notesTable));
   }
 
-  async findAllFavorites(workspaceId: string) {
-    return this.tx
-      .select()
-      .from(notesTable)
-      .where(and(inWorkspace(workspaceId), notTrashed(), isFavorite()))
-      .orderBy(asc(notesTable.favoriteOrderHint));
+  function findAllByWorkspaceId(workspaceId: string): NoteDaoResult<Note[]> {
+    return dbResult(
+      async () =>
+        await tx().select().from(notesTable).where(inWorkspace(workspaceId)),
+    );
   }
 
-  async findAllTrashed(workspaceId: string) {
-    return this.tx
-      .select()
-      .from(notesTable)
-      .where(and(inWorkspace(workspaceId), isTrashed()))
-      .orderBy(asc(notesTable.trashedAt));
+  function findAllByDatabaseId(databaseId: string): NoteDaoResult<Note[]> {
+    return dbResult(async () =>
+      tx().select().from(notesTable).where(inDatabase(databaseId)),
+    );
   }
 
-  async findLastNoteInFavorites(workspaceId: string) {
-    const query = this.tx
-      .select()
-      .from(notesTable)
-      .where(and(inWorkspace(workspaceId), isFavorite(), notTrashed()))
-      .orderBy(desc(notesTable.favoriteOrderHint))
-      .limit(1);
-
-    return (await query).at(0);
+  function findAllByParentId(
+    workspaceId: string,
+    parentId: string | null,
+  ): NoteDaoResult<Note[]> {
+    return dbResult(async () =>
+      tx()
+        .select()
+        .from(notesTable)
+        .where(and(inWorkspace(workspaceId), withParent(parentId))),
+    );
   }
 
-  /**
-   * Is
-   * @param potentialChildId inside
-   * @param potentialParentId ?
-   * @returns
-   */
-  async isDescendant(
+  function findAllByParentIdSortAsc(
+    workspaceId: string,
+    parentId: ParentId,
+  ): NoteDaoResult<Note[]> {
+    return dbResult(async () =>
+      tx()
+        .select()
+        .from(notesTable)
+        .where(and(inWorkspace(workspaceId), withParent(parentId)))
+        .orderBy(asc(notesTable.orderHint)),
+    );
+  }
+
+  function deleteMany(ids: string[]): NoteDaoResult<void> {
+    return dbResult(async () => {
+      await tx().delete(notesTable).where(inArray(notesTable.id, ids));
+    });
+  }
+
+  function deleteById(id: string): NoteDaoResult<void> {
+    return dbResult(async () => {
+      await tx().delete(notesTable).where(eq(notesTable.id, id));
+    });
+  }
+
+  function deleteNote(note: Note): NoteDaoResult<void> {
+    return dbResult(async () => {
+      await tx().delete(notesTable).where(eq(notesTable.id, note.id));
+    });
+  }
+
+  function exists(id: string): NoteDaoResult<boolean> {
+    return dbResult(
+      async () =>
+        (
+          await tx()
+            .select()
+            .from(notesTable)
+            .where(eq(notesTable.id, id))
+            .limit(1)
+        ).length > 0,
+    );
+  }
+
+  function findFirstNoteInLayer(
+    workspaceId: string,
+    parentId: ParentId,
+  ): NoteDaoResult<Note | undefined> {
+    return dbResult(async () => {
+      const result = await tx()
+        .select()
+        .from(notesTable)
+        .where(
+          and(inWorkspace(workspaceId), withParent(parentId), notTrashed()),
+        )
+        .orderBy(asc(notesTable.orderHint));
+      return result.at(0);
+    });
+  }
+
+  function findLastNoteInLayer(
+    workspaceId: string,
+    parentId: ParentId,
+  ): NoteDaoResult<Note | undefined> {
+    return dbResult(async () => {
+      const result = await tx()
+        .select()
+        .from(notesTable)
+        .where(
+          and(inWorkspace(workspaceId), withParent(parentId), notTrashed()),
+        )
+        .orderBy(desc(notesTable.orderHint))
+        .limit(1);
+      return result.at(0);
+    });
+  }
+
+  function findAllFavorites(workspaceId: string): NoteDaoResult<Note[]> {
+    return dbResult(async () =>
+      tx()
+        .select()
+        .from(notesTable)
+        .where(and(inWorkspace(workspaceId), notTrashed(), isFavorite()))
+        .orderBy(asc(notesTable.favoriteOrderHint)),
+    );
+  }
+
+  function findAllTrashed(workspaceId: string): NoteDaoResult<Note[]> {
+    return dbResult(async () =>
+      tx()
+        .select()
+        .from(notesTable)
+        .where(and(inWorkspace(workspaceId), isTrashed()))
+        .orderBy(asc(notesTable.trashedAt)),
+    );
+  }
+
+  function findLastNoteInFavorites(
+    workspaceId: string,
+  ): NoteDaoResult<Note | undefined> {
+    return dbResult(async () => {
+      const result = await tx()
+        .select()
+        .from(notesTable)
+        .where(and(inWorkspace(workspaceId), isFavorite(), notTrashed()))
+        .orderBy(desc(notesTable.favoriteOrderHint))
+        .limit(1);
+      return result.at(0);
+    });
+  }
+
+  function isDescendant(
     potentialChildId: ParentId,
     potentialParentId: ParentId,
-  ): Promise<boolean | "CIRCULAR"> {
-    if (potentialParentId == null) return false;
-    if (potentialChildId == null) return false;
-    const getter = async (id: string) => {
-      const result = await this.findById(id);
-      return result ? noteToDto(result) : null;
-    };
-    return await isDescendantAsync(potentialChildId, potentialParentId, getter);
-  }
-
-  async computeOrderKeysForLayer(workspaceId: string, parentId: ParentId) {
-    const firstInLayer = await this.findFirstNoteInLayer(workspaceId, parentId);
-    const lastInLayer = await this.findLastNoteInLayer(workspaceId, parentId);
-
-    const start = firstInLayer
-      ? new Rank(firstInLayer.orderHint).prev().toString()
-      : Rank.default().toString();
-
-    const end = lastInLayer
-      ? new Rank(lastInLayer.orderHint).next().toString()
-      : Rank.default().toString();
-
-    return { start, end };
-  }
-
-  async computeOrderKeysForFavorites(workspaceId: string) {
-    const favorites = await this.findAllFavorites(workspaceId);
-    const start = favorites.length
-      ? new Rank(favorites[0].favoriteOrderHint).prev().toString()
-      : Rank.default().toString();
-
-    const end = favorites.length
-      ? new Rank(favorites[favorites.length - 1].favoriteOrderHint)
-          .next()
-          .toString()
-      : Rank.default().toString();
-
-    return { start, end };
-  }
-
-  async searchByTitle(workspaceId: string, query: string) {
-    return this.tx
-      .select()
-      .from(notesTable)
-      .where(
-        and(
-          like(notesTable.title, `%${query}%`),
-          inWorkspace(workspaceId),
-          notTrashed(),
-        ),
+  ): NoteDaoResult<boolean | "CIRCULAR"> {
+    return dbResult(async () => {
+      if (potentialParentId == null) return false;
+      if (potentialChildId == null) return false;
+      const getter = async (id: string) => {
+        const result = (await findById(id)).unwrapOr(null);
+        return result ? noteToDto(result) : null;
+      };
+      return await isDescendantAsync(
+        potentialChildId,
+        potentialParentId,
+        getter,
       );
+    });
   }
 
-  async getRecentlyModifiedNotes(workspaceId: string, limit: number) {
-    return this.tx
-      .select()
+  function computeOrderKeysForLayer(
+    workspaceId: string,
+    parentId: ParentId,
+  ): NoteDaoResult<OrderKeyDto> {
+    return findFirstNoteInLayer(workspaceId, parentId).andThen((firstInLayer) =>
+      findLastNoteInLayer(workspaceId, parentId).map((lastInLayer) => {
+        const start = firstInLayer
+          ? new Rank(firstInLayer.orderHint).prev().toString()
+          : Rank.default().toString();
+        const end = lastInLayer
+          ? new Rank(lastInLayer.orderHint).next().toString()
+          : Rank.default().toString();
+        return { start, end };
+      }),
+    );
+  }
+
+  function computeOrderKeysForFavorites(
+    workspaceId: string,
+  ): NoteDaoResult<OrderKeyDto> {
+    return findAllFavorites(workspaceId).map((favorites) => {
+      const start = favorites.length
+        ? new Rank(favorites[0].favoriteOrderHint).prev().toString()
+        : Rank.default().toString();
+      const end = favorites.length
+        ? new Rank(favorites[favorites.length - 1].favoriteOrderHint)
+            .next()
+            .toString()
+        : Rank.default().toString();
+      return { start, end };
+    });
+  }
+
+  function searchByTitle(
+    workspaceId: string,
+    query: string,
+  ): NoteDaoResult<Note[]> {
+    return dbResult(async () =>
+      tx()
+        .select()
+        .from(notesTable)
+        .where(
+          and(
+            like(notesTable.title, `%${query}%`),
+            inWorkspace(workspaceId),
+            notTrashed(),
+          ),
+        ),
+    );
+  }
+
+  function getRecentlyModifiedNotes(
+    workspaceId: string,
+    limit: number,
+  ): NoteDaoResult<Note[]> {
+    return dbResult(async () =>
+      tx()
+        .select()
+        .from(notesTable)
+        .where(and(inWorkspace(workspaceId), notTrashed()))
+        .orderBy(desc(notesTable.modifiedAt))
+        .limit(limit),
+    );
+  }
+
+  function resolveParentTree(noteId: string): NoteDaoResult<Note[]> {
+    return dbResult(async () => {
+      const tree: Note[] = [];
+      let currentId: string | null = noteId;
+      while (currentId) {
+        const note: Note | null = (await findById(currentId)).unwrapOr(null);
+        if (!note) break;
+        tree.push(note);
+        currentId = note.parentId;
+      }
+      return tree.reverse();
+    });
+  }
+
+  function noteRightAfter(
+    targetId: string,
+    workspaceId: string,
+    sortBy: "orderHint" | "favoriteOrderHint" = "orderHint",
+  ): NoteDaoResult<Note | undefined> {
+    const target = tx()
+      .select({ [sortBy]: notesTable[sortBy] })
       .from(notesTable)
-      .where(and(inWorkspace(workspaceId), notTrashed()))
-      .orderBy(desc(notesTable.modifiedAt))
-      .limit(limit);
+      .where(and(eq(notesTable.id, targetId), inWorkspace(workspaceId)));
+    return dbResult(() =>
+      tx()
+        .select()
+        .from(notesTable)
+        .where(
+          and(
+            gt(notesTable[sortBy], target),
+            notTrashed(),
+            inWorkspace(workspaceId),
+          ),
+        )
+        .orderBy(asc(notesTable[sortBy]))
+        .limit(1),
+    ).map((n) => n.at(0));
   }
 
-  async resolveParentTree(noteId: string): Promise<Note[]> {
-    const tree: Note[] = [];
-    let currentNote = await this.findById(noteId);
-    while (currentNote) {
-      tree.push(currentNote);
-      if (!currentNote.parentId) break;
-      currentNote = await this.findById(currentNote.parentId);
-    }
-    return tree.reverse();
-  }
+  return {
+    create,
+    update,
+    updateAll,
+    findById,
+    findByIdOrThrow,
+    findAll,
+    findAllByWorkspaceId,
+    findAllByDatabaseId,
+    findAllByParentId,
+    findAllByParentIdSortAsc,
+    deleteMany,
+    deleteById,
+    delete: deleteNote,
+    exists,
+    findFirstNoteInLayer,
+    findLastNoteInLayer,
+    findAllFavorites,
+    findAllTrashed,
+    findLastNoteInFavorites,
+    isDescendant,
+    computeOrderKeysForLayer,
+    computeOrderKeysForFavorites,
+    searchByTitle,
+    getRecentlyModifiedNotes,
+    resolveParentTree,
+    noteRightAfter,
+  };
 }
+
+export type NoteDAOInstance = ReturnType<typeof NoteDAO>;

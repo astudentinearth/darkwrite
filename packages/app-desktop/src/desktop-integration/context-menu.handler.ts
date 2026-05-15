@@ -1,39 +1,48 @@
-import { IPCHandler } from "@/types";
+import { handler, HandlerImplements } from "@/types";
+import { IContextMenuAPI } from "@darkwrite/common";
 import { IpcMainInvokeEvent } from "electron";
+import { ok } from "neverthrow";
 
 export const ContextMenuHandler = {
-  async copy({ sender }: IpcMainInvokeEvent) {
+  copy({ sender }: IpcMainInvokeEvent) {
     sender.copy();
+    return ok();
   },
-  async cut({ sender }: IpcMainInvokeEvent) {
+  cut({ sender }: IpcMainInvokeEvent) {
     sender.cut();
+    return ok();
   },
-  async paste({ sender }: IpcMainInvokeEvent) {
+  paste({ sender }: IpcMainInvokeEvent) {
     sender.paste();
+    return ok();
   },
-  async pasteWithoutFormatting({ sender }: IpcMainInvokeEvent) {
+  pasteWithoutFormatting({ sender }: IpcMainInvokeEvent) {
     sender.pasteAndMatchStyle();
+    return ok();
   },
-  async selectAll({ sender }: IpcMainInvokeEvent) {
+  selectAll({ sender }: IpcMainInvokeEvent) {
     sender.selectAll();
+    return ok();
   },
-  async delete({ sender }: IpcMainInvokeEvent) {
+  delete({ sender }: IpcMainInvokeEvent) {
     sender.delete();
+    return ok();
   },
-  async changeSpelling({ sender }: IpcMainInvokeEvent, suggestion: string) {
+  changeSpelling({ sender }: IpcMainInvokeEvent, suggestion: string) {
     sender.replaceMisspelling(suggestion);
+    return ok();
   },
 };
 
-export const ContextMenuApiBridge = {
-  copy: new IPCHandler(true, ContextMenuHandler.copy),
-  cut: new IPCHandler(true, ContextMenuHandler.cut),
-  paste: new IPCHandler(true, ContextMenuHandler.paste),
-  pasteWithoutFormatting: new IPCHandler(
-    true,
+export const ContextMenuApiBridge: HandlerImplements<IContextMenuAPI> = {
+  copy: handler(ContextMenuHandler.copy, true),
+  cut: handler(ContextMenuHandler.cut, true),
+  paste: handler(ContextMenuHandler.paste, true),
+  pasteWithoutFormatting: handler(
     ContextMenuHandler.pasteWithoutFormatting,
+    true,
   ),
-  selectAll: new IPCHandler(true, ContextMenuHandler.selectAll),
-  delete: new IPCHandler(true, ContextMenuHandler.delete),
-  changeSpelling: new IPCHandler(true, ContextMenuHandler.changeSpelling),
+  selectAll: handler(ContextMenuHandler.selectAll, true),
+  delete: handler(ContextMenuHandler.delete, true),
+  changeSpelling: handler(ContextMenuHandler.changeSpelling, true),
 };

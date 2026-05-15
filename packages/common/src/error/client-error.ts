@@ -1,5 +1,6 @@
 export type LogLevel = "error" | "warn" | "info" | "debug";
 
+/** @deprecated */
 export class ClientError extends Error {
   constructor(
     public debugMessage: string,

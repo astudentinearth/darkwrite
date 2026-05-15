@@ -1,27 +1,32 @@
-import { deepAssign, find, recursiveKeys } from "@darkwrite/common";
+import { EmbedApiBridge } from "@/embed/embed.handler";
 import { showAppMenu } from "@/menu";
 import {
-  DarkwriteAPI,
   InferPreloadAPI,
   IPCHandler,
   IPCMainListenerUnion,
   IPCMainListenerWithoutEvent,
 } from "@/types";
+import {
+  deepAssign,
+  find,
+  recursiveKeys,
+  serializeResult,
+} from "@darkwrite/common";
 import { ipcMain } from "electron";
 import log from "electron-log";
-import { BackupApiBridge } from "../api/backup.electron";
-import { DesktopIntegration } from "../lib/desktop-integration";
 import { isNewUser, markOnboardingCompleted } from "../lib/onboarding-state";
 import { Updater } from "../lib/update";
 import { NoteApiBridge } from "../note/note.handler";
-import { ElectronSettingsAPI } from "./settings.handler";
-import { ElectronThemeAPI } from "./theme.handler";
 import { WorkspacesApiBridge } from "../workspace/workspace.handler";
-import { EmbedApiBridge } from "@/embed/embed.handler";
-import { ContextMenuApiBridge } from "@/desktop-integration/context-menu.handler";
-import { ShellApiBridge } from "@/desktop-integration/shell.handler";
-import { FileLinkApiBridge } from "@/link/file-link.handler";
+import { ElectronSettingsAPI } from "./settings.handler";
 
+export type NestedApiBridge = {
+  [key: string]: IPCHandler<boolean> | NestedApiBridge;
+};
+
+// remove handlers from this as they are migrated
+
+/** @deprecated construct the object at init instead */
 export const DarkwriteElectronAPI = {
   note: NoteApiBridge,
   embed: EmbedApiBridge,
@@ -33,32 +38,16 @@ export const DarkwriteElectronAPI = {
       ElectronSettingsAPI.saveUserSettings,
     ),
   },
-  theme: {
-    getThemes: new IPCHandler(false, ElectronThemeAPI.getThemes),
-    importTheme: new IPCHandler(false, ElectronThemeAPI.importTheme),
-  },
   onboarding: {
     isNewUser: new IPCHandler(false, isNewUser),
     markFinished: new IPCHandler(false, markOnboardingCompleted),
   },
   showAppMenu: new IPCHandler(false, showAppMenu),
-  desktop: {
-    getFontList: new IPCHandler(false, DesktopIntegration.getAvailableFonts),
-    getSystemAccentColor: new IPCHandler(
-      false,
-      DesktopIntegration.getSystemAccentColor,
-    ),
-    getClientInfo: new IPCHandler(false, DesktopIntegration.getClientInfo),
-    contextMenu: ContextMenuApiBridge,
-    shell: ShellApiBridge,
-  },
-  fileLink: FileLinkApiBridge,
   checkUpdate: new IPCHandler(false, Updater.checkUpdate),
-  backup: BackupApiBridge,
 } satisfies DarkwriteAPI;
 export type DarkwritePreloadAPI = InferPreloadAPI<typeof DarkwriteElectronAPI>;
 
-const register = (
+const registerHandler = (
   channel: string,
   withEvent: boolean,
   listener: IPCMainListenerUnion,
@@ -66,10 +55,14 @@ const register = (
 ) => {
   try {
     if (withEvent) {
-      _ipcMain.handle(channel, listener);
+      _ipcMain.handle(channel, async (event, ...args) => {
+        return serializeResult(await listener(event, ...args));
+      });
     } else {
-      _ipcMain.handle(channel, (_event, ...args) => {
-        return (<IPCMainListenerWithoutEvent>listener)(...args);
+      _ipcMain.handle(channel, async (_event, ...args) => {
+        return serializeResult(
+          await (listener as IPCMainListenerWithoutEvent)(...args),
+        );
       });
     }
   } catch {
@@ -77,24 +70,19 @@ const register = (
   }
 };
 
-const registerAPI = (
-  channelPrefix: string,
-  api: DarkwriteAPI = DarkwriteElectronAPI,
-) => {
+const registerBridge = (channelPrefix: string, api: DarkwriteAPI) => {
   const handlerKeys = recursiveKeys(api, (val) => val instanceof IPCHandler);
   for (const keyPath of handlerKeys) {
     const handler = find(api, keyPath) as IPCHandler<boolean>;
     const channel = channelPrefix.concat(".").concat(keyPath.join("."));
-    register(channel, handler.withEvent, handler.listener);
+    registerHandler(channel, handler.withEvent, handler.listener);
   }
 };
 
-export const buildPreloadObject = (
-  api: DarkwriteAPI = DarkwriteElectronAPI,
-) => {
+export const buildPreloadObject = (api: NestedApiBridge) => {
   const handlerKeys = recursiveKeys(api, (val) => val instanceof IPCHandler);
   const obj = {};
-  // strip everything with true to replace in the prelaod script later
+  // strip everything with true to replace in the preload script later
   for (const keyPath of handlerKeys) {
     deepAssign(obj, keyPath, true);
   }
@@ -103,11 +91,11 @@ export const buildPreloadObject = (
 
 let initialized = false;
 
-export const InitializeElectronAPI = () => {
+export function setupAPI(bridge: NestedApiBridge) {
   if (initialized) return;
-  ipcMain.handle("$darkwrite.build-preload-api-object", async () => {
-    return buildPreloadObject();
-  });
-  registerAPI("api");
+  ipcMain.handle("$darkwrite.build-preload-api-object", () =>
+    buildPreloadObject(bridge),
+  );
+  registerBridge("api", bridge);
   initialized = true;
-};
+}

@@ -1,13 +1,18 @@
-import { ISettingsAPI } from "@darkwrite/common";
-import { ElectronPrefsModel } from "../prefs";
+import { ISettingsService } from "@/service/settings.service";
+import { handler, HandlerImplements } from "@/types";
+import { DarkwriteUserSettings, ISettingsAPI } from "@darkwrite/common";
+import { ok } from "neverthrow";
 
-export const ElectronSettingsAPI: ISettingsAPI = {
-  async getUserSettings() {
-    return ElectronPrefsModel.get();
-  },
+export function SettingsAPI(
+  settingsService: ISettingsService,
+): HandlerImplements<ISettingsAPI> {
+  const getUserSettings = handler(() => ok(settingsService.getSettings()));
+  const saveUserSettings = handler((settings: DarkwriteUserSettings) =>
+    settingsService.setSettings(settings).orElse(() => ok()),
+  );
 
-  async saveUserSettings(settings) {
-    ElectronPrefsModel.override(settings);
-    ElectronPrefsModel.save();
-  },
-};
+  return {
+    getUserSettings,
+    saveUserSettings,
+  };
+}

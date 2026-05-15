@@ -1,11 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable no-redeclare */
+import { ExtractResultTypes, type OmitFirstParameter } from "@darkwrite/common";
 import { type IpcMainInvokeEvent } from "electron";
-import { Promisfy, type OmitFirstParameter } from "@darkwrite/common";
+import { Result, ResultAsync } from "neverthrow";
 
 export type IPCMainListener = (
   event: IpcMainInvokeEvent,
   ...args: any[]
-) => Promise<any> | any;
+) => ResultAsync<any, any> | Result<any, any>;
 
 export type IPCMainListenerWithoutEvent = OmitFirstParameter<IPCMainListener>;
 
@@ -25,7 +27,9 @@ export type GetMainHandlerParams<Handler extends IPCMainListenerUnion> =
     : [];
 
 export type GetPreloadReturnType<Handler extends IPCMainListenerUnion> =
-  Promisfy<ReturnType<Handler>>;
+  ExtractResultTypes<Handler> extends [infer T, infer E]
+    ? ResultAsync<T, E>
+    : never;
 
 export type IPCPreloadHandler<Handler extends IPCMainListenerUnion> = (
   ...args: GetMainHandlerParams<Handler>
@@ -44,9 +48,6 @@ export class IPCHandler<
   }
 }
 
-export interface DarkwriteAPI {
-  [Key: string]: IPCHandler<boolean> | DarkwriteAPI;
-}
 export type InferHandler<Listener extends IPCHandler<boolean>> =
   IPCPreloadHandler<Listener["listener"]>;
 
@@ -56,4 +57,43 @@ export type InferPreloadAPI<API> = {
     : API[Key] extends object
       ? InferPreloadAPI<API[Key]>
       : API[Key];
+};
+
+export function handler<T extends IPCListener<false>>(
+  fn: T,
+  withEvent?: false,
+): IPCHandler<false, T>;
+export function handler<T extends IPCListener<true>>(
+  fn: T,
+  withEvent: true,
+): IPCHandler<true, T>;
+export function handler<T extends IPCMainListenerUnion>(
+  fn: T,
+  withEvent: boolean = false,
+): IPCHandler<boolean, T> {
+  return new IPCHandler(withEvent, fn);
+}
+
+export type AddSyncResult<T> =
+  T extends ResultAsync<infer V, infer E>
+    ? T | Result<V, E>
+    : // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      T extends Result<infer _V, infer _E>
+      ? T
+      : never;
+
+export type HandlerForFn<T extends (...args: any[]) => any> =
+  | IPCHandler<false, (...args: Parameters<T>) => AddSyncResult<ReturnType<T>>>
+  | IPCHandler<
+      true,
+      (
+        event: IpcMainInvokeEvent,
+        ...args: Parameters<T>
+      ) => AddSyncResult<ReturnType<T>>
+    >;
+
+export type HandlerImplements<T> = {
+  [K in keyof T]: T[K] extends (...args: any[]) => any
+    ? HandlerForFn<T[K]>
+    : HandlerImplements<T[K]>;
 };

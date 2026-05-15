@@ -8,7 +8,7 @@ Darkwrite is a note-taking application and personal knowledge base built with:
 - **Frontend**: React 19, Redux Toolkit + RTK Query, Vite, TailwindCSS 4
 - **Desktop**: Electron (latest), TypeScript
 - **Database**: libsql with Drizzle ORM
-- **Monorepo**: pnpm workspaces
+- **Monorepo**: pnpm workspaces with Turbo
 
 ## Package Structure
 
@@ -108,6 +108,7 @@ When asked to perform a review, do NOT check for any inconsistencies that can be
 - **`any` type is forbidden** - ask user if you encounter this
 - Do not fix type errors outside your refactor scope
 - If you cannot resolve a TypeScript error without casting, ask for confirmation
+- `class` and `this` should not be used for new code under any circumstances unless there is a good reason for it. Factory methods and closures should be preferred instead with minimal dependencies.
 
 ### Imports
 - Use path aliases configured in tsconfig (e.g., `@/`, `@darkwrite/common`)
@@ -118,10 +119,18 @@ When asked to perform a review, do NOT check for any inconsistencies that can be
 - When reviewing migration SQL, always explicitly check for column names when a table copy is applicable.
 - Always make sure the SQL statements have `--> statement-breakpoint` comments between individual statements. **Without these comments, only the first statement will actually be applied.**
 
+### SQLite transactions
+- Transactions must be handled using our custom transaction manager defined in @packages/app-desktop/src/db/transactional.ts
+- `transactional(() => ResultAsync)` should be used in services where a transaction context is necessary. Subsequent calls to `transactional()` within the passed callback will join DAOs to the same transaction automatically. Use this pattern to make multiple services and DAOs share the same transaction.
+- `Result` and `ResultAsync` must be preferred over regular promises.
+- Do NOT use `db.transaction(async tx => ...)` or `tx.transaction(async tx => ...)` unless you ABSOLUTELY need that savepoint. More often than not, you don't.
+
 ### Error Handling
 - Never silently swallow errors
 - Use proper error boundaries in React components
 - Log errors with appropriate context
+- Error handling is augmented with the `neverthrow` library. Do NOT use `throw` statements outside of tests. If an error is truly unrecoverable from (i.e. programming errors), use `panic()` from `@darkwrite/common` instead, as a last resort.
+- `Result/ResultAsync._unsafeUnwrap` MUST NOT be used in production code unless you are trying to interact with something that cannot handle `Result`s. `_unsafeUnwrap()` and `_unsafeUnwrapErr()` are perfectly fine in tests (an incorrect unwrap should fail the test), and should be preferred to test the expected cases directly.
 
 ### Redux / State Management
 - Use pre-defined Redux slices and selectors

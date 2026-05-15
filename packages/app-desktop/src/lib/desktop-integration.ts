@@ -1,33 +1,30 @@
-import { app, BrowserWindow, nativeTheme, systemPreferences } from "electron";
-import _ from "lodash";
+import { ContextMenuApiBridge } from "@/desktop-integration/context-menu.handler";
+import { ShellApiBridge } from "@/desktop-integration/shell.handler";
+import {
+  DarkwriteDesktopClientInfo,
+  Font,
+  IDesktopAPI,
+  InternalError,
+  OS,
+  stripAlpha,
+} from "@darkwrite/common";
+import { app, systemPreferences } from "electron";
+import { ok, ResultAsync } from "neverthrow";
 import os from "os";
-import { ThemeMode } from "../types";
-import { Font, OS, stripAlpha } from "@darkwrite/common";
-import { DarkwriteDesktopClientInfo } from "@darkwrite/common";
+import { handler, HandlerImplements } from "../types";
 
-export class DesktopIntegration {
-  static get operatingSystem() {
-    return os.platform() as OS;
-  }
+const operatingSystem = os.platform() as OS;
 
-  static getSystemAccentColor() {
-    // TODO: Linux integration will be provided over D-Bus hopefully,
-    // unless Electron implements Linux support themselves.
-    if (DesktopIntegration.operatingSystem == OS.LINUX) return "0000ff";
-    const color = systemPreferences.getAccentColor();
-    return stripAlpha(color);
-  }
+function getSystemAccentColor() {
+  // TODO: Linux integration will be provided over D-Bus hopefully,
+  // unless Electron implements Linux support themselves.
+  if (operatingSystem == OS.LINUX) return ok("0000ff");
+  const color = systemPreferences.getAccentColor();
+  return ok(stripAlpha(color));
+}
 
-  static setThemeMode = (themeMode: ThemeMode) =>
-    (nativeTheme.themeSource = themeMode);
-
-  static setTitlebarSymbolColor(symbolColor: string) {
-    BrowserWindow.getAllWindows().forEach((w) => {
-      _.attempt(() => w.setTitleBarOverlay({ symbolColor }));
-    });
-  }
-
-  static async getAvailableFonts(): Promise<Font[]> {
+function getAvailableFonts(): ResultAsync<Font[], InternalError> {
+  async function _getFonts() {
     // FIXME: The font-list package implodes on macOS
     // due to some CJS issue. We'll fall back to text
     // fields on macOS until we figure out how to call
@@ -47,13 +44,26 @@ export class DesktopIntegration {
     return filtered;
   }
 
-  static async getClientInfo(): Promise<DarkwriteDesktopClientInfo> {
-    return {
-      electronVersion: process.versions.electron,
-      isPackaged: app.isPackaged,
-      nodeVersion: process.versions.node,
-      os: os.platform() as OS,
-      version: app.getVersion(),
-    };
-  }
+  return ResultAsync.fromPromise(_getFonts(), (err) => ({
+    type: "internal-error",
+    message: String(err),
+  }));
 }
+
+function getClientInfo(): DarkwriteDesktopClientInfo {
+  return {
+    electronVersion: process.versions.electron,
+    isPackaged: app.isPackaged,
+    nodeVersion: process.versions.node,
+    os: os.platform() as OS,
+    version: app.getVersion(),
+  };
+}
+
+export const DesktopApiBridge: HandlerImplements<IDesktopAPI> = {
+  getClientInfo: handler(() => ok(getClientInfo())),
+  getFontList: handler(getAvailableFonts),
+  getSystemAccentColor: handler(getSystemAccentColor),
+  contextMenu: ContextMenuApiBridge,
+  shell: ShellApiBridge,
+};

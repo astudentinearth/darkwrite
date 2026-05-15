@@ -1,85 +1,84 @@
-import { CreateWorkspaceDTO, UpdateWorkspaceDTO } from "@darkwrite/common";
-import { getDefaultWorkspaceConfiguration } from "@darkwrite/common";
-import { WorkspaceDAO } from "./workspace.dao";
-import { Workspace } from "@/db/schema";
-import { DatabaseType, db as defaultDb } from "@/db";
+import { DatabaseType } from "@/db";
+import { resolveTx, transactional } from "@/db/transactional";
 import { NoteDAO } from "@/note/note.dao";
-import { DocumentService } from "@/service/document.service";
+import { IDocumentService } from "@/service/document.service";
+import {
+  CreateWorkspaceDTO,
+  getDefaultWorkspaceConfiguration,
+  UpdateWorkspaceDTO,
+} from "@darkwrite/common";
 import log from "electron-log";
+import { okAsync, ResultAsync } from "neverthrow";
+import { WorkspaceDAO } from "./workspace.dao";
 
-export class WorkspaceService {
-  private workspaceDAO: WorkspaceDAO;
-  private noteDAO: NoteDAO;
-  private documentService: DocumentService;
-  constructor(
-    private db: DatabaseType = defaultDb,
-    workspaceDAO?: WorkspaceDAO,
-    noteDAO?: NoteDAO,
-    documentService?: DocumentService,
-  ) {
-    this.workspaceDAO = workspaceDAO ?? new WorkspaceDAO(this.db);
-    this.noteDAO = noteDAO ?? new NoteDAO(this.db);
-    this.documentService = documentService ?? new DocumentService();
-  }
+export function WorkspaceService(
+  db: DatabaseType,
+  documentService: IDocumentService,
+) {
+  const noteDAO = NoteDAO(() => resolveTx(db));
+  const workspaceDAO = WorkspaceDAO(() => resolveTx(db));
 
-  async createWorkspace(dto: CreateWorkspaceDTO): Promise<Workspace> {
-    const { config, name, iconUrl } = dto;
-    return await this.workspaceDAO.create({
-      createdAt: new Date(),
+  const createWorkspace = ({ config, name, iconUrl }: CreateWorkspaceDTO) =>
+    workspaceDAO.create({
+      config,
       name,
       iconUrl,
-      config,
+      createdAt: new Date(),
     });
-  }
 
   /** Initializes a default workspace if no workspaces exist. Returns true if a workspace already exists, or the newly created workspace if not.
    * This method is idempotent, and calling it again is harmless. */
-  async initializeDefaultWorkspace() {
-    const workspaces = await this.workspaceDAO.findAll();
-    if (workspaces.length > 0) return true;
-    else
-      return this.createWorkspace({
-        name: "My Workspace",
-        config: getDefaultWorkspaceConfiguration(),
-      });
-  }
-
-  async findWorkspaceOrThrow(id: string): Promise<Workspace> {
-    return await this.workspaceDAO.findByIdOrThrow(id);
-  }
-
-  async getWorkspaces(): Promise<Workspace[]> {
-    return await this.workspaceDAO.findAll();
-  }
-
-  async update(id: string, dto: UpdateWorkspaceDTO) {
-    return await this.workspaceDAO.update({ id, ...dto });
-  }
-
-  /** Deletes the workspace and all associated notes.
-   * @throws `NotFoundError` if the workspace does not exist. */
-  async delete(workspaceId: string) {
-    const targetNotes = await this.db.transaction(async (tx) => {
-      const noteTx = this.noteDAO.transactional(tx);
-      const workspaceTx = this.workspaceDAO.transactional(tx);
-
-      const workspace = await workspaceTx.findByIdOrThrow(workspaceId);
-      const notes = await noteTx.findAllByWorkspaceId(workspaceId);
-
-      await workspaceTx.delete(workspace);
-      return notes;
-    });
-
-    // clean up after transaction
-    try {
-      await Promise.all(
-        targetNotes.map((n) => this.documentService.deleteNoteContent(n.id)),
+  const initializeDefaultWorkspace = () =>
+    workspaceDAO
+      .findAll()
+      .map((w) => w.length)
+      .andThen((count) =>
+        count > 0
+          ? okAsync(true)
+          : createWorkspace({
+              name: "My Workspace",
+              config: getDefaultWorkspaceConfiguration(),
+            }),
       );
-    } catch (error) {
-      log.error(
-        "Failed to delete note contents from disk after workspace deletion. The notes have been removed from the database, but their contents may still exist on disk. Error:",
-        error,
-      );
-    }
-  }
+
+  const findById = (id: string) => workspaceDAO.findById(id);
+
+  const getWorkspaces = () => workspaceDAO.findAll();
+
+  const update = (id: string, dto: UpdateWorkspaceDTO) =>
+    workspaceDAO.update({ id, ...dto });
+
+  const deleteWorkspace = (id: string) =>
+    transactional(
+      () =>
+        workspaceDAO
+          .findById(id)
+          .andThen(() =>
+            noteDAO
+              .findAllByWorkspaceId(id)
+              .map((notes) => notes.map((n) => n.id)),
+          )
+          .andThen((ids) => workspaceDAO.deleteById(id).map(() => ids)),
+      db,
+    ).andThen((ids) =>
+      ResultAsync.combine(ids.map(documentService.deleteNoteContent))
+        .orTee((err) =>
+          log.error(
+            "Failed to delete note contents from disk after workspace deletion. The notes have been removed from the database, but their contents may still exist on disk. Error: ",
+            err,
+          ),
+        )
+        .orElse(() => okAsync()),
+    );
+
+  return {
+    createWorkspace,
+    initializeDefaultWorkspace,
+    findById,
+    deleteWorkspace,
+    update,
+    getWorkspaces,
+  };
 }
+
+export type IWorkspaceService = ReturnType<typeof WorkspaceService>;

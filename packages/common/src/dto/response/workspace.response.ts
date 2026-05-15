@@ -2,7 +2,7 @@ import { WorkspaceConfig } from "@/workspace-config";
 
 export interface WorkspaceDTO {
   id: string;
-  ownerId?: string;
+  ownerId: string | null;
   name: string;
   iconUrl?: string | null;
   createdAt: string;
