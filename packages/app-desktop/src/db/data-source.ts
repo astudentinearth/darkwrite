@@ -6,16 +6,17 @@ import { randomUUID } from "crypto";
 import { drizzle } from "drizzle-orm/libsql/node";
 import { tmpdir } from "os";
 import { join } from "path";
+import { pathToFileURL } from "url";
 
 const dbPath = DB_PATH;
 
 const getDatabaseUrl = () =>
-  process.env["NODE_ENV"] === "test" ? ":memory:" : `file://${dbPath}`;
+  process.env["NODE_ENV"] === "test" ? ":memory:" : pathToFileURL(dbPath).href;
 
 export function createDatabase(url: string = getDatabaseUrl()) {
   return drizzle({
     connection: {
-      url,
+      url
     },
     schema: { ...tables, ...relations },
   });
