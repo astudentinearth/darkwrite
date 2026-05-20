@@ -1,3 +1,7 @@
+# 1.2.1-beta.1
+## ✨ Improvements and fixes
+- Fix images reverting to a placeholder when Ctrl+Z is hit after adding an image
+
 # 1.2.0-beta.1
 
 ## 💥 Breaking changes

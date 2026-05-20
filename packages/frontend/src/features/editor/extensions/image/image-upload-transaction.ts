@@ -32,7 +32,7 @@ function createImageNode(
         tr.setNodeAttribute(pos, "pendingId", "");
       }
     });
-    if (tr.docChanged) view.dispatch(tr);
+    if (tr.docChanged) view.dispatch(tr.setMeta("addToHistory", false));
   });
 }
 
