@@ -4,6 +4,11 @@
 
 ## ✨ Improvements and fixes
 - Fix images reverting to a placeholder when Ctrl+Z is hit after adding an image
+- Fix iamges flickering when resizing tables
+- Remove excess vertical margins from images
+
+## 🛠️ Technical changes
+- Update to Electron 42
 
 # 1.2.0-beta.1
 

@@ -55,7 +55,7 @@ function EditorViewport() {
         openFilesOnDoubleClick={settings.openFilesOnDoubleClick}
         codeBlockIndentSize={settings.codeIndentSize}
         embedSourceResolver={async (id) =>
-          (await DarkwriteAPIClient.embed.getById(id)).embed?.url ?? ""
+          `embed://${id}` //TODO: band-aid for current circumstances. fix this with a proper cache when you can link remote images.
         }
         key={noteId}
         onNavigateToNote={navigateToNote}
