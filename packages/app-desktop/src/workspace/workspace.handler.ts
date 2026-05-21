@@ -14,6 +14,7 @@ import { mapDbError } from "@/error";
 
 const service = new WorkspaceService();
 
+
 export const ElectronWorkspaceAPI: IWorkspaceAPI = {
   async delete(workspaceId: string) {
     await service.delete(workspaceId);

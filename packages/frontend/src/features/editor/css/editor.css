@@ -134,6 +134,11 @@ hr.ProseMirror-selectednode {
   }
 }
 
+.node-dwimage {
+  display: flex;
+  justify-content: center;
+}
+
 .dwimage-selection-overlay {
   position: relative;
 }

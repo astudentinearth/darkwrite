@@ -17,7 +17,7 @@ const getDatabaseUrl = () =>
 function makeDrizzleDb(url: string) {
   return drizzle({
     connection: {
-      url
+      url,
     },
     schema: { ...tables, ...relations },
   });
@@ -48,4 +48,9 @@ export type Transaction = Parameters<
   Parameters<DatabaseType["transaction"]>[0]
 >[0];
 
-export const db: DatabaseType = createDatabase();
+
+export let db: DatabaseType;
+
+export function initDatabase() {
+  db = createDatabase();
+}

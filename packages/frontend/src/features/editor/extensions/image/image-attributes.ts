@@ -31,6 +31,9 @@ const ImageAttributes: Attributes = {
     default: null,
     isRequired: false,
   },
+  widthPercent: {
+    default: 100,
+  },
 };
 
 export default ImageAttributes;
