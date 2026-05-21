@@ -70,7 +70,7 @@ export const DarkwriteImageView = (props: DarkwriteImageViewProps) => {
           : percentChange);
 
       const finalWidth =
-        targetWidth > 100 ? 100 : targetWidth < 25 ? 25 : targetWidth;
+        targetWidth > 100 ? 100 : targetWidth < 5 ? 5 : targetWidth;
 
       applyWidth(finalWidth);
       initialX.current = e.clientX;
@@ -115,24 +115,25 @@ export const DarkwriteImageView = (props: DarkwriteImageViewProps) => {
   };
 
   return (
-    <NodeViewWrapper className="dwimage flex justify-center">
+    <NodeViewWrapper className="dwimage flex justify-center h-fit py-2">
       <div
         data-drag-handle=""
         ref={containerRef}
         contentEditable={false}
         className={cn(
-          "flex justify-center dwimage-container relative group",
-          (menuOpen || props.selected) && "bg-primary/20 rounded-md",
+          "flex justify-center dwimage-container relative group h-fit p-1",
+          (menuOpen || props.selected) && "bg-primary/20 rounded-sm",
         )}
       >
         {embedId == null || source === "" ? (
           <span className="opacity-50">Loading image...</span>
         ) : (
           <ContextMenu onOpenChange={setMenuOpen}>
-            <ContextMenuTrigger asChild>
+            <ContextMenuTrigger asChild className="h-fit">
               <img
                 ref={imageRef}
                 draggable={false}
+                className="h-auto p-0 my-0!"
                 onLoad={() => applyWidth(currentWidth.current)}
                 data-drag-handle=""
                 src={source}
