@@ -47,12 +47,19 @@ export const DarkwriteImageView = (props: DarkwriteImageViewProps) => {
   const applyWidth = (percent: number) => {
     if (!containerRef.current || !imageRef.current) return;
     const natural = imageRef.current.naturalWidth;
-    const outer = imageRef.current.closest(".node-dwimage");
-    if (!outer) return;
     const px = Math.min(natural * (percent / 100), maxWidth.current);
     currentWidth.current = percent;
     containerRef.current.style.setProperty("width", `${px}px`);
   };
+
+  const resize = (percent: number) => {
+    if (!containerRef.current || !imageRef.current) return;
+    const natural = imageRef.current.naturalWidth;
+    const px = Math.min(natural * (percent / 100), maxWidth.current);
+    const effectivePercent = (px / natural) * 100;
+    currentWidth.current = effectivePercent;
+    containerRef.current.style.setProperty("width", `${px}px`);
+  }
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -72,7 +79,7 @@ export const DarkwriteImageView = (props: DarkwriteImageViewProps) => {
       const finalWidth =
         targetWidth > 100 ? 100 : targetWidth < 5 ? 5 : targetWidth;
 
-      applyWidth(finalWidth);
+      resize(finalWidth);
       initialX.current = e.clientX;
     };
 
