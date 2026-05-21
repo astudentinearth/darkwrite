@@ -1,4 +1,3 @@
-import { DarkwriteAPIClient } from "@/api/api-client";
 import { useLocalStore } from "@/context/local-state";
 import { useEditorOptions, useEditorView } from "./hooks/use-editor-options";
 import { useNoteFromURL } from "@/features/note/hooks/use-note-from-url";
