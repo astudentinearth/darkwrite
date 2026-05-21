@@ -2,7 +2,7 @@
 @reference "../../../globals.css";
 
 .ProseMirror {
-  @apply px-4 pt-0 pb-0 min-h-96 text-foreground;
+  @apply px-4 pt-0 pb-4 min-h-96 text-foreground;
   .react-renderer {
     background: transparent !important;
   }
