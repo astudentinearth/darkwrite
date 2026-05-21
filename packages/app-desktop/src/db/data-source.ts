@@ -16,7 +16,7 @@ const getDatabaseUrl = () =>
 export function createDatabase(url: string = getDatabaseUrl()) {
   return drizzle({
     connection: {
-      url
+      url,
     },
     schema: { ...tables, ...relations },
   });
@@ -39,4 +39,3 @@ export let db: DatabaseType;
 export function initDatabase() {
   db = createDatabase();
 }
-

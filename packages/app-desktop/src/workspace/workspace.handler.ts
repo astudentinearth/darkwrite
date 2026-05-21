@@ -7,7 +7,7 @@ import { WorkspaceService } from "./workspace.service";
 import { IPCHandler } from "../types/ipc-handler";
 import { workspaceToDto } from "./workspace-mapper";
 
-let service:WorkspaceService;
+let service: WorkspaceService;
 
 export function initializeWorkspaceAPI() {
   service = new WorkspaceService();
@@ -41,6 +41,3 @@ export const WorkspacesApiBridge = {
   getAll: new IPCHandler(false, ElectronWorkspaceAPI.getAll),
   delete: new IPCHandler(false, ElectronWorkspaceAPI.delete),
 };
-
-
-

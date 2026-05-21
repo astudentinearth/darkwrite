@@ -6,7 +6,7 @@ import { FileLinkService } from "./file-link.service";
 import { FileLinkPreviewer } from "./file-link-preview";
 
 let service: FileLinkService;
-let previewer:FileLinkPreviewer;
+let previewer: FileLinkPreviewer;
 
 export function initializeFileLinkAPI() {
   service = new FileLinkService(db);

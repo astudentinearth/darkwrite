@@ -23,7 +23,12 @@ import {
 import { WorkspaceService } from "./workspace/workspace.service";
 
 import { setupCsp } from "./csp";
-import { db, initDatabase, migrateDatabaseWithBackup, MigrationError } from "./db";
+import {
+  db,
+  initDatabase,
+  migrateDatabaseWithBackup,
+  MigrationError,
+} from "./db";
 import { initializeWorkspaceAPI } from "./workspace/workspace.handler";
 import { initializeNoteAPI } from "./note/note.handler";
 import { initializeEmbedAPI } from "./embed/embed.handler";

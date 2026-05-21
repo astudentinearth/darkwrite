@@ -101,11 +101,7 @@ export function StyleUI(props: {
               "text-primary-text hover:text-primary-text",
           )}
         >
-          <span
-            className="darkwrite-mono text-3xl"
-          >
-            Aa
-          </span>
+          <span className="darkwrite-mono text-3xl">Aa</span>
           <span>{t("monoText")}</span>
         </Button>
         <Button
