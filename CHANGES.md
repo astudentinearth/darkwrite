@@ -1,10 +1,10 @@
 # 1.2.1-beta.1
 ## 🌟 Features
-- Add image resize (percantage based)
+- Add image resize (percentage based)
 
 ## ✨ Improvements and fixes
 - Fix images reverting to a placeholder when Ctrl+Z is hit after adding an image
-- Fix iamges flickering when resizing tables
+- Fix images flickering when resizing tables
 - Remove excess vertical margins from images
 - The editor now scrolls smoothly
 
