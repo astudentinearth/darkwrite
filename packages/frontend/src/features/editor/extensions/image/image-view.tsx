@@ -9,7 +9,7 @@ import {
 import { DarkwriteAPIClient } from "@/api/api-client";
 import { Download, RotateCcw } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 
 enum GrabHandleSide {
@@ -44,22 +44,22 @@ export const DarkwriteImageView = (props: DarkwriteImageViewProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
 
-  const applyWidth = (percent: number) => {
+  const applyWidth = useCallback((percent: number) => {
     if (!containerRef.current || !imageRef.current) return;
     const natural = imageRef.current.naturalWidth;
     const px = Math.min(natural * (percent / 100), maxWidth.current);
     currentWidth.current = percent;
     containerRef.current.style.setProperty("width", `${px}px`);
-  };
+  }, []);
 
-  const resize = (percent: number) => {
+  const resize = useCallback((percent: number) => {
     if (!containerRef.current || !imageRef.current) return;
     const natural = imageRef.current.naturalWidth;
     const px = Math.min(natural * (percent / 100), maxWidth.current);
     const effectivePercent = (px / natural) * 100;
     currentWidth.current = effectivePercent;
     containerRef.current.style.setProperty("width", `${px}px`);
-  }
+  }, []);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -96,7 +96,7 @@ export const DarkwriteImageView = (props: DarkwriteImageViewProps) => {
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseup", handleMouseUp);
     };
-  }, [applyWidth]);
+  }, [resize, props]);
 
   useEffect(() => {
     const outer = containerRef.current?.closest(".node-dwimage")?.parentElement;
@@ -151,6 +151,7 @@ export const DarkwriteImageView = (props: DarkwriteImageViewProps) => {
                 onSelect={() => {
                   currentWidth.current = 100;
                   props.updateAttributes({ widthPercent: 100 });
+                  applyWidth(100);
                 }}
               >
                 <RotateCcw size={18} /> {t("ui.contextmenu.resetImageSize")}
