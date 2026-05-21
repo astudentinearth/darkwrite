@@ -137,6 +137,8 @@ hr.ProseMirror-selectednode {
 .node-dwimage {
   display: flex;
   justify-content: center;
+  width:100%;
+  overflow:hidden;
 }
 
 .dwimage-selection-overlay {

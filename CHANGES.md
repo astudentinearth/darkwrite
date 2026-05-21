@@ -1,4 +1,7 @@
 # 1.2.1-beta.1
+## 🌟 Features
+- Add image resize (percantage based)
+
 ## ✨ Improvements and fixes
 - Fix images reverting to a placeholder when Ctrl+Z is hit after adding an image
 

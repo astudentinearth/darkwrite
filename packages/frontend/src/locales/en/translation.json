@@ -331,6 +331,7 @@
       "paste": "Paste",
       "delete": "Delete",
       "downloadImage": "Download image",
+      "resetImageSize": "Reset size",
       "selectAll": "Select all",
       "pasteWithoutFormatting": "Paste without formatting",
       "fixSpelling": "Fix spelling"

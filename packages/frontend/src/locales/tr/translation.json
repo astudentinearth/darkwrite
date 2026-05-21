@@ -331,6 +331,7 @@
       "paste": "Yapıştır",
       "delete": "Sil",
       "downloadImage": "Resmi indir",
+      "resetImageSize": "Boyutu sıfırla",
       "selectAll": "Tümünü seç",
       "pasteWithoutFormatting": "Biçendirmeden yapıştır",
       "fixSpelling": "Yazım hatasını düzelt"
