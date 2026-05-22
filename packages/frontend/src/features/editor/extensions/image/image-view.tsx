@@ -17,6 +17,9 @@ enum GrabHandleSide {
   RIGHT,
 }
 
+const MIN_WIDTH_PERCENT = 5;
+const MAX_WIDTH_PERCENT = 100;
+
 export type DarkwriteImageAttributes = {
   embedId: string | null;
   pendingId: string | null;
@@ -37,49 +40,49 @@ export const DarkwriteImageView = (props: DarkwriteImageViewProps) => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const initialX = useRef(0);
-  const maxWidth = useRef(0);
   const isResizing = useRef(false);
   const activeHandle = useRef(GrabHandleSide.LEFT);
   const currentWidth = useRef(props.node.attrs.widthPercent);
   const containerRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
 
-  const applyWidth = useCallback((percent: number) => {
-    if (!containerRef.current || !imageRef.current) return;
-    const natural = imageRef.current.naturalWidth;
-    const px = Math.min(natural * (percent / 100), maxWidth.current);
+  const setDisplayWidth = useCallback((percent: number) => {
+    const container = containerRef.current;
+    const image = imageRef.current;
+    if (!container || !image) return;
+    const natural = image.naturalWidth;
+    if (!natural) return; // not loaded yet — onLoad will re-apply
     currentWidth.current = percent;
-    containerRef.current.style.setProperty("width", `${px}px`);
+    const target = natural * (percent / 100);
+    container.style.setProperty("width", `min(${target}px, 100%)`);
   }, []);
 
-  const resize = useCallback((percent: number) => {
-    if (!containerRef.current || !imageRef.current) return;
-    const natural = imageRef.current.naturalWidth;
-    const px = Math.min(natural * (percent / 100), maxWidth.current);
-    const effectivePercent = (px / natural) * 100;
-    currentWidth.current = effectivePercent;
-    containerRef.current.style.setProperty("width", `${px}px`);
-  }, []);
+
+  useEffect(() => {
+    setDisplayWidth(props.node.attrs.widthPercent);
+  }, [props.node.attrs.widthPercent, source, setDisplayWidth]);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      if (!isResizing.current || !imageRef.current || !containerRef.current)
-        return;
-      const deltaX = e.clientX - initialX.current;
-      const outerContainer = imageRef.current.closest(".node-dwimage");
+      const image = imageRef.current;
+      if (!isResizing.current || !image) return;
+      const outerContainer = image.closest(".node-dwimage");
       if (!outerContainer) return;
+      const deltaX = e.clientX - initialX.current;
       const percentChange = (deltaX / outerContainer.clientWidth) * 100;
 
       const targetWidth =
         currentWidth.current +
-        (activeHandle.current == GrabHandleSide.LEFT
+        (activeHandle.current === GrabHandleSide.LEFT
           ? -percentChange
           : percentChange);
 
-      const finalWidth =
-        targetWidth > 100 ? 100 : targetWidth < 5 ? 5 : targetWidth;
+      const finalWidth = Math.min(
+        MAX_WIDTH_PERCENT,
+        Math.max(MIN_WIDTH_PERCENT, targetWidth),
+      );
 
-      resize(finalWidth);
+      setDisplayWidth(finalWidth);
       initialX.current = e.clientX;
     };
 
@@ -96,33 +99,24 @@ export const DarkwriteImageView = (props: DarkwriteImageViewProps) => {
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseup", handleMouseUp);
     };
-  }, [resize, props]);
-
-  useEffect(() => {
-    const outer = containerRef.current?.closest(".node-dwimage")?.parentElement;
-    if (!outer) return;
-
-    const observer = new ResizeObserver(([entry]) => {
-      maxWidth.current = entry.contentRect.width;
-      applyWidth(currentWidth.current);
-    });
-
-    observer.observe(outer);
-    return () => observer.disconnect();
-  }, [applyWidth]);
+  }, [setDisplayWidth, props]);
 
   const handleMouseDown = (
     e: React.MouseEvent<HTMLDivElement>,
     side: GrabHandleSide,
   ) => {
     e.preventDefault();
+    const image = imageRef.current;
+    if (image?.naturalWidth) {
+      currentWidth.current = (image.clientWidth / image.naturalWidth) * 100;
+    }
     isResizing.current = true;
     initialX.current = e.clientX;
     activeHandle.current = side;
   };
 
   return (
-    <NodeViewWrapper className="dwimage flex justify-center h-fit py-2">
+    <NodeViewWrapper className="dwimage flex justify-center h-fit py-2 w-full">
       <div
         data-drag-handle=""
         ref={containerRef}
@@ -141,7 +135,7 @@ export const DarkwriteImageView = (props: DarkwriteImageViewProps) => {
                 ref={imageRef}
                 draggable={false}
                 className="h-auto p-0 my-0!"
-                onLoad={() => applyWidth(currentWidth.current)}
+                onLoad={() => setDisplayWidth(currentWidth.current)}
                 data-drag-handle=""
                 src={source}
               />
@@ -149,9 +143,8 @@ export const DarkwriteImageView = (props: DarkwriteImageViewProps) => {
             <ContextMenuContent>
               <ContextMenuItem
                 onSelect={() => {
-                  currentWidth.current = 100;
+                  setDisplayWidth(100);
                   props.updateAttributes({ widthPercent: 100 });
-                  applyWidth(100);
                 }}
               >
                 <RotateCcw size={18} /> {t("ui.contextmenu.resetImageSize")}
