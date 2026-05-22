@@ -9,6 +9,7 @@ import { correctWorkspaceState, initializeUserPrefs } from "./init";
 import { ReactRootContainer } from "./react-root-helper";
 import { initalizePlatform } from "./lib/platform";
 import store from "./store";
+import { flushPendingEditorSaves } from "./features/editor/store/editor-middleware";
 
 const renderApp = async () => {
   await correctWorkspaceState(store);
@@ -24,6 +25,7 @@ const initialize = async () => {
     await window.initPreload();
   }
   DarkwriteAPIClient.initialize(APIClientMode.LOCAL);
+  window.addEventListener("beforeunload", flushPendingEditorSaves);
   init({ data });
   await initializeUserPrefs(store);
   await initalizePlatform();

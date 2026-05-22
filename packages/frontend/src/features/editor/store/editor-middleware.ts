@@ -10,6 +10,8 @@ const editorMiddleware = createListenerMiddleware();
 
 const debouncedSaves = new Map<string, DebouncedFunc<() => Promise<void>>>();
 
+export const flushPendingEditorSaves = () => debouncedSaves.values().forEach((save) => save.flush());
+
 editorMiddleware.startListening({
   matcher: isAnyOf(
     editorSlice.actions.updateDocumentContent,
@@ -31,8 +33,6 @@ editorMiddleware.startListening({
             JSON.stringify(document),
           );
         }
-
-        debouncedSaves.delete(noteId);
       }, AUTOSAVE_DEBOUNCE_MS);
 
       debouncedSaves.set(noteId, debouncedSave);

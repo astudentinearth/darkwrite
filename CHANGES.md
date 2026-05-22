@@ -1,3 +1,8 @@
+# 1.2.2-beta.1
+## ✨ Improvements and fixes
+- Fix the image regression introduced in 1.2.1-beta.1 (#30)
+- Pending note saves now get properly flushed before the UI unloads (no more lost updates)
+
 # 1.2.1-beta.1
 ## 🌟 Features
 - Add image resize (percentage based)
