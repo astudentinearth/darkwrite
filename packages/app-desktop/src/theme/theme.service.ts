@@ -1,32 +1,33 @@
 import { fsResult } from "@/lib/fs";
 import {
+  buildDwError,
   DarkwriteUserSettings,
   DEFAULT_THEMES,
+  dwErr,
+  DwResult,
   isTheme,
   parseJson,
   Theme,
-  ThemeError,
 } from "@darkwrite/common";
+import { nativeTheme } from "electron";
 import log from "electron-log";
 import { readFile } from "fs-extra";
 import _ from "lodash";
-import { err, ok, okAsync, Result, ResultAsync } from "neverthrow";
+import { ok, okAsync, Result, ResultAsync } from "neverthrow";
 import { IDocumentStore } from "../lib/document-store";
-import { nativeTheme } from "electron";
 
 const logInvalidTheme = (id?: string, message?: string) =>
   log.error(`Theme ${id} is invalid.`, message);
 
-const assertValidTheme = (obj: unknown): Result<Theme, ThemeError> =>
-  isTheme(obj) ? ok(obj) : err({ type: "invalid-theme" });
+const assertValidTheme = (obj: unknown): DwResult<Theme> =>
+  isTheme(obj) ? ok(obj) : dwErr("Invalid theme.");
 
 function parseTheme(themeString: string, id?: string) {
   return parseJson(themeString)
+    .mapErr(() => buildDwError("Invalid JSON object"))
     .andThen(assertValidTheme)
     .orTee((err) => {
-      if (err.type === "invalid-json-string")
-        logInvalidTheme(id, "Invalid JSON object.");
-      else logInvalidTheme(id, "Invalid theme structure.");
+      logInvalidTheme(id, err.message);
     });
 }
 
@@ -51,19 +52,7 @@ export function ThemeService(
     return themeStore
       .read(id)
       .andThen(parseTheme)
-      .mapErr((err) =>
-        err.type === "document-not-found"
-          ? ({ type: "theme-not-found", id } satisfies ThemeError)
-          : err,
-      )
-      .orTee((err) => {
-        switch (err.type) {
-          case "path-error":
-          case "fs-error":
-            log.error("Filesystem error while fetching theme");
-            break;
-        }
-      });
+      .orTee((err) => log.error(err.message, err.cause));
   };
 
   const getThemes = () =>

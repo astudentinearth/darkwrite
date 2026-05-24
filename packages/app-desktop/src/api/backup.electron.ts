@@ -1,5 +1,5 @@
 import { handler, HandlerImplements } from "@/types";
-import { BackupError, IBackupAPI, InvalidBackupError } from "@darkwrite/common";
+import { buildDwError, DwResultAsync, IBackupAPI } from "@darkwrite/common";
 import { app, dialog } from "electron";
 import log from "electron-log";
 import extract from "extract-zip";
@@ -91,10 +91,12 @@ export const BackupAPI = {
       await extract(archivePath, { dir: RESTORE_CACHE_DIR });
 
       const isValidBackup =
-        ((await fse.exists(join(RESTORE_CACHE_DIR, "darkwrite.db"))) ||
-          (await fse.exists(join(RESTORE_CACHE_DIR, "darkwrite.db")))) &&
+        (await fse.exists(join(RESTORE_CACHE_DIR, "darkwrite.db"))) &&
         (await fse.exists(join(RESTORE_CACHE_DIR, "settings.json")));
-      if (!isValidBackup) throw new InvalidBackupError();
+      if (!isValidBackup)
+        throw new Error(
+          "This file does not appear to be a valid backup archive.",
+        );
 
       // before we do anything else, we will rename the old directory so we can rollback if something goes wrong.
       try {
@@ -143,10 +145,10 @@ function beginHtmlExport() {
 function addHtml(
   filename: string,
   content: string,
-): ResultAsync<void, BackupError> {
+): DwResultAsync<void> {
   return ResultAsync.fromPromise(
     HTMLExporterAPI.pushToExporterCache(filename, content),
-    () => ({ type: "html-exporter-cache-not-ready" }) satisfies BackupError,
+    () => (buildDwError("Not ready to export HTML files.")),
   );
 }
 

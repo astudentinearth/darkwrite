@@ -1,17 +1,16 @@
+import { DwResultAsync } from "@darkwrite/common";
 import fse from "fs/promises";
+import { okAsync } from "neverthrow";
 import { join } from "path";
-import { Paths } from "./paths";
-import { FsError, fsResult, rmIfExists } from "./fs";
 import { pathToFileURL } from "url";
-import { okAsync, ResultAsync } from "neverthrow";
-
-export type EmbedStoreError = FsError;
+import { fsResult, rmIfExists } from "./fs";
+import { Paths } from "./paths";
 
 export interface IEmbedStore {
-  put: (fileName: string, buf: Buffer) => ResultAsync<void, EmbedStoreError>;
-  get: (fileName: string) => ResultAsync<Buffer, EmbedStoreError>;
-  getUrl: (fileName: string) => ResultAsync<URL, EmbedStoreError>;
-  delete: (fileName: string) => ResultAsync<void, EmbedStoreError>;
+  put: (fileName: string, buf: Buffer) => DwResultAsync<void>;
+  get: (fileName: string) => DwResultAsync<Buffer>;
+  getUrl: (fileName: string) => DwResultAsync<URL>;
+  delete: (fileName: string) => DwResultAsync<void>;
 }
 
 export function EmbedFileStore(): IEmbedStore {

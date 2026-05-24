@@ -1,4 +1,4 @@
-import { getDefaultWorkspaceConfiguration } from "@darkwrite/common";
+import { dwErrAsync, getDefaultWorkspaceConfiguration } from "@darkwrite/common";
 import { createTestDatabase, DatabaseType, applySqlMigrations } from "../db";
 import { WorkspaceService } from "./workspace.service";
 import { NewNote, workspace } from "@/db/schema";
@@ -8,7 +8,6 @@ import { DocumentService } from "@/service/document.service";
 import { MockDocumentStore } from "@/test/mocks/document-store.mock";
 import { IDocumentStore } from "@/lib/document-store";
 import { resolveTx } from "@/db/transactional";
-import { errAsync } from "neverthrow";
 
 let _db: DatabaseType = createTestDatabase();
 const workspaceDao = WorkspaceDAO(() => resolveTx(_db));
@@ -104,7 +103,7 @@ describe("delete workspace", () => {
       (
         await workspaceService.deleteWorkspace("non-existent-id")
       )._unsafeUnwrapErr(),
-    ).toMatchObject({ type: "workspace-not-found" });
+    ).not.toBeUndefined();
   });
 
   it("should not delete notes from other workspaces", async () => {
@@ -139,7 +138,7 @@ describe("delete workspace", () => {
   it("should not err if file deletion step fails", async () => {
     const failingStore: IDocumentStore = {
       ...MockDocumentStore(),
-      delete: () => errAsync({ type: "path-error" }),
+      delete: () => dwErrAsync("bla bla"),
     };
     const svc = WorkspaceService(_db, DocumentService(failingStore));
     const ws = await createWorkspace();
@@ -163,6 +162,6 @@ describe("delete workspace", () => {
 
     expect(
       (await workspaceService.deleteWorkspace(ws.id))._unsafeUnwrapErr(),
-    ).toMatchObject({ type: "workspace-not-found" });
+    ).not.toBeUndefined();
   });
 });

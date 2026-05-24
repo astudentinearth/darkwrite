@@ -4,32 +4,26 @@ import {
   NewLinkedFile,
   linkedFile as linkedFileTable,
 } from "@/db/schema";
-import { DbError, TxResolver } from "@/db/transactional";
-import { FileLinkError } from "@darkwrite/common";
+import { TxResolver } from "@/db/transactional";
+import { DwResultAsync, dwErr } from "@darkwrite/common";
 import { eq } from "drizzle-orm";
-import { ResultAsync, ok, err } from "neverthrow";
-
-type FileLinkDaoResult<T> = ResultAsync<T, FileLinkError | DbError>;
+import { ok } from "neverthrow";
 
 export function FileLinkDAO(tx: TxResolver) {
-  function create(link: NewLinkedFile): FileLinkDaoResult<LinkedFile> {
+  function create(link: NewLinkedFile): DwResultAsync<LinkedFile> {
     return dbResult(() =>
       tx().insert(linkedFileTable).values(link).returning().get(),
     );
   }
 
-  function findById(id: string): FileLinkDaoResult<LinkedFile> {
+  function findById(id: string): DwResultAsync<LinkedFile> {
     return dbResult(() =>
       tx()
         .select()
         .from(linkedFileTable)
         .where(eq(linkedFileTable.id, id))
         .get(),
-    ).andThen((row) =>
-      row
-        ? ok(row)
-        : err({ type: "file-link-not-found", id } satisfies FileLinkError),
-    );
+    ).andThen((row) => (row ? ok(row) : dwErr("File link not found.")));
   }
 
   return {

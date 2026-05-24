@@ -1,4 +1,4 @@
-import { err, ok, Result, ResultAsync } from "neverthrow";
+import { err, errAsync, ok, Result, ResultAsync } from "neverthrow";
 import z from "zod";
 
 export interface DwError {
@@ -6,8 +6,16 @@ export interface DwError {
   cause?: string;
 }
 
-export const dwError = (message: string, cause?: string) =>
+export const buildDwError = (message: string, cause?: string) =>
   ({ message, cause }) satisfies DwError;
+
+export const dwErr = <T = never>(message: string, cause?: string) =>
+  err<T, DwError>(buildDwError(message, cause));
+export const dwErrAsync = <T = never>(message: string, cause?: string) =>
+  errAsync<T, DwError>(buildDwError(message, cause));
+
+export type DwResult<T> = Result<T, DwError>;
+export type DwResultAsync<T> = ResultAsync<T, DwError>;
 
 export function errOnUndefined<E>(error: E) {
   return <T>(predicate: T | undefined) =>
@@ -73,11 +81,9 @@ export function validateSchema<T extends z.ZodType>(schema: T) {
     const result = schema.safeParse(data);
     if (result.success) return ok(result.data);
     else
-      return err(
-        dwError(
-          "Schema validation failed.",
-          result.error.issues.map((issue) => issue.message).join("\n"),
-        ),
+      return dwErr(
+        "Schema validation failed.",
+        result.error.issues.map((issue) => issue.message).join("\n"),
       );
   };
 }

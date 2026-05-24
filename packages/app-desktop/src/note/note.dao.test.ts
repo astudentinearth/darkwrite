@@ -118,7 +118,7 @@ describe("NoteDAO", () => {
         id: randomUUID(),
         title: "Hello world",
       });
-      expect(updated._unsafeUnwrapErr().type).toBe("note-not-found");
+      expect(updated._unsafeUnwrapErr()).not.toBeUndefined();
     });
 
     it("should update multiple notes", async () => {
@@ -162,7 +162,7 @@ describe("NoteDAO", () => {
       const found = await noteDao.findById(missingId);
 
       expect(found.isErr()).toBe(true);
-      expect(found._unsafeUnwrapErr().type).toBe("note-not-found");
+      expect(found._unsafeUnwrapErr()).not.toBeUndefined();
     });
 
     it("findAll should return notes from all workspaces", async () => {

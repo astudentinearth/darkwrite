@@ -1,7 +1,7 @@
 import { AsyncLocalStorage } from "async_hooks";
 import { DatabaseType, db, isDataSource, Transaction } from "./data-source";
 import { ResultAsync } from "neverthrow";
-import { panic } from "@darkwrite/common";
+import { buildDwError, DwError, panic } from "@darkwrite/common";
 
 export const txContext = new AsyncLocalStorage<Transaction>();
 
@@ -14,7 +14,6 @@ export function getActiveDb(): DatabaseType | Transaction {
   return txContext.getStore() ?? db;
 }
 
-export type DbError = { type: "db-error"; cause: unknown };
 
 export type TxResolver = () => Transaction | DatabaseType;
 
@@ -59,7 +58,7 @@ function isTxRollbackBox(x: unknown): x is TxRollbackBox<unknown> {
 export function transactional<T, E>(
   fn: () => ResultAsync<T, E>,
   _db: DatabaseType,
-): ResultAsync<T, E | DbError> {
+): ResultAsync<T, E | DwError> {
   // don't create a new transaction if one is already running
   if (txContext.getStore()) return fn();
 
@@ -78,9 +77,9 @@ export function transactional<T, E>(
         return result.value;
       }),
     ),
-    (thrown: unknown): E | DbError => {
+    (thrown: unknown): E | DwError => {
       if (isTxRollbackBox(thrown)) return thrown.errValue as E;
-      return { type: "db-error", cause: thrown };
+      return buildDwError("Database error", String(thrown));
     },
   );
 }

@@ -7,7 +7,8 @@ import {
 } from "@darkwrite/common";
 import { readFile, writeFile } from "fs/promises";
 import _ from "lodash";
-import { err, ok } from "neverthrow";
+import { ok } from "neverthrow";
+import log from "electron-log"
 
 const DEFAULT_SETTINGS_STR = JSON.stringify(SettingsModel.getDefaults());
 
@@ -22,13 +23,12 @@ export function SettingsService(settingsFilePath: string) {
   const _readSettingsFile = () =>
     assertExists(settingsFilePath)
       .andThen(() => fsResult(readFile(settingsFilePath, "utf-8")))
-      .orElse((error) =>
-        error.type === "file-not-found"
-          ? _writeSettingsFile(DEFAULT_SETTINGS_STR).map(
+      .orTee(error => log.error("Could not read settings file. Attempting to re-create it.", error))
+      .orElse(() =>
+           _writeSettingsFile(DEFAULT_SETTINGS_STR).map(
               () => DEFAULT_SETTINGS_STR,
             )
-          : err(error),
-      );
+      )
 
   const override = (settings: DarkwriteUserSettings) => {
     currentSettings = _.cloneDeep(settings);

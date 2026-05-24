@@ -1,4 +1,3 @@
-import { EmbedApiBridge } from "@/embed/embed.handler";
 import { showAppMenu } from "@/menu";
 import {
   InferPreloadAPI,
@@ -17,8 +16,6 @@ import log from "electron-log";
 import { isNewUser, markOnboardingCompleted } from "../lib/onboarding-state";
 import { Updater } from "../lib/update";
 import { NoteApiBridge } from "../note/note.handler";
-import { WorkspacesApiBridge } from "../workspace/workspace.handler";
-import { ElectronSettingsAPI } from "./settings.handler";
 
 export type NestedApiBridge = {
   [key: string]: IPCHandler<boolean> | NestedApiBridge;
@@ -29,15 +26,6 @@ export type NestedApiBridge = {
 /** @deprecated construct the object at init instead */
 export const DarkwriteElectronAPI = {
   note: NoteApiBridge,
-  embed: EmbedApiBridge,
-  workspace: WorkspacesApiBridge,
-  settings: {
-    getUserSettings: new IPCHandler(false, ElectronSettingsAPI.getUserSettings),
-    saveUserSettings: new IPCHandler(
-      false,
-      ElectronSettingsAPI.saveUserSettings,
-    ),
-  },
   onboarding: {
     isNewUser: new IPCHandler(false, isNewUser),
     markFinished: new IPCHandler(false, markOnboardingCompleted),

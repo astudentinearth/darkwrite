@@ -37,6 +37,7 @@ import { ThemeAPI } from "./theme/theme.handler";
 import { ThemeService } from "./theme/theme.service";
 import { HandlerImplements } from "./types";
 import { EmbedAPI } from "./embed/embed.handler";
+import { WorkspaceAPI } from "./workspace/workspace.handler";
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -122,6 +123,7 @@ export async function init() {
     backup: BackupApiBridge,
     settings: SettingsAPI(settingsService),
     embed: EmbedAPI(embedService),
+    workspace: WorkspaceAPI(workspaceService)
   };
 
   setupAPI(apiBridge);

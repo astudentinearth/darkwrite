@@ -6,12 +6,14 @@ import { IDocumentService } from "@/service/document.service";
 import { WorkspaceDAO } from "@/workspace/workspace.dao";
 import {
   CreateNoteDTO,
+  dwErr,
+  dwErrAsync,
+  DwError,
   MoveNoteDTO,
-  NoteError,
   Rank,
   UpdateNoteDTO,
 } from "@darkwrite/common";
-import { err, errAsync, ok, okAsync, Result, ResultAsync } from "neverthrow";
+import { err, ok, okAsync, Result, ResultAsync } from "neverthrow";
 import { NoteDAO, OrderKeyDto } from "./note.dao";
 
 function buildNewNote(dto: CreateNoteDTO, { end }: OrderKeyDto): NewNote {
@@ -51,13 +53,9 @@ function buildDuplicate({
   };
 }
 
-function validateMoveDto(dto: MoveNoteDTO): Result<void, NoteError> {
+function validateMoveDto(dto: MoveNoteDTO): Result<void, DwError> {
   if (dto.placement !== "below") return ok();
-  if (!dto.destinationId)
-    return err({
-      type: "note-failed-to-move",
-      cause: "cannot-move-below-null",
-    } satisfies NoteError);
+  if (!dto.destinationId) return dwErr("Cannot move a note below nothing.");
   return ok();
 }
 
@@ -73,19 +71,19 @@ export function NoteService(
 
   const assertNotDescendant = (result: boolean | "CIRCULAR") =>
     result === "CIRCULAR" || result === true
-      ? err<void, NoteError>({
-          type: "note-failed-to-move",
-          cause: "circular-reference",
-        })
+      ? dwErrAsync(
+          "Could not move note.",
+          "This movement would create a circular reference.",
+        )
       : ok();
 
   /** @internal */
   function canMoveBelow(source: Note, dest: Note) {
     if (source.isTrashed || dest.isTrashed)
-      return errAsync<void, NoteError>({
-        type: "note-failed-to-move",
-        cause: "trashed",
-      });
+      return dwErrAsync(
+        "Could not move note.",
+        "The target note is in trash. Take it out first.",
+      );
 
     return noteDAO
       .isDescendant(dest.id, source.id)
@@ -96,10 +94,10 @@ export function NoteService(
   function canMoveInto(source: Note, dest: Note | null) {
     if (!dest) return okAsync();
     if (source.isTrashed || dest.isTrashed)
-      return errAsync<void, NoteError>({
-        type: "note-failed-to-move",
-        cause: "trashed",
-      });
+      return dwErrAsync(
+        "Could not move note.",
+        "The target note is in trash. Take it out first.",
+      );
     else
       return noteDAO
         .isDescendant(dest?.id, source.id)
@@ -118,14 +116,17 @@ export function NoteService(
             );
             return ok(rank.get());
           } catch {
-            return err({ type: "rank-collision" } satisfies RankCollisionErr);
+            return err({ type: "rank-collision" as const });
           }
         } else {
           return ok(new Rank(dest.orderHint).next().get());
         }
       })
       .orElse((error) => {
-        if (error.type !== "rank-collision") return err(error);
+        if (!("type" in error) || error.type !== "rank-collision")
+          return err(
+            error as Exclude<typeof error, { type: "rank-collision" }>,
+          );
         return noteDAO
           .findLastNoteInLayer(dest.workspaceId, dest.parentId)
           .map((note) =>
@@ -243,7 +244,7 @@ export function NoteService(
           .findById(targetId)
           .andThen((note) =>
             note.isTrashed
-              ? err({ type: "cannot-favorite-in-trash" } satisfies NoteError)
+              ? dwErr("Cannot favorite a note in trash.")
               : ok(note),
           )
           .andThen((note) => computeFavoriteRank(note.workspaceId, aboveNoteId))

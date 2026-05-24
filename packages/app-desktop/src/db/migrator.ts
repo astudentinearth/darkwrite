@@ -1,5 +1,4 @@
 import { DB_PATH, Paths } from "@/lib/paths";
-import { ClientError } from "@darkwrite/common";
 import { is } from "@electron-toolkit/utils";
 import { migrate } from "drizzle-orm/libsql/migrator";
 import { default as _log } from "electron-log";
@@ -28,15 +27,14 @@ export async function applySqlMigrations(
   return db;
 }
 
-export class MigrationError extends ClientError {
+export class MigrationError extends Error {
   constructor(
     public error: unknown,
     public logFilePath: string,
     public snapshotPath: string | null,
   ) {
     super(
-      String(error),
-      `Database migration failed. A snapshot of your data was saved to ${snapshotPath}. Please check the migration log at ${logFilePath} for details.`,
+      `Database migration failed. A snapshot of your data was saved to ${snapshotPath}. Please check the migration log at ${logFilePath} for details.\n Cause: ${error}`,
     );
   }
 }
@@ -68,6 +66,7 @@ export async function migrateDatabaseWithBackup(
     log.error(
       `A snapshot of the database was created at ${backupPath} before the migration attempt.`,
     );
+
     throw new MigrationError(error, Paths.MIGRATION_LOG_FILE, backupPath);
   }
 }

@@ -7,9 +7,10 @@ export function workspaceToDto(workspace: Workspace): WorkspaceDTO {
     id,
     iconUrl,
     createdAt: createdAt.toISOString(),
-    ...(ownerId && { ownerId }),
+    ...(ownerId ? { ownerId } : { ownerId: null }),
     config: config as WorkspaceConfig,
     name,
   };
   return dto;
 }
+

@@ -81,7 +81,7 @@ describe("WorkspaceDAO", () => {
         name: "Should Fail",
       });
 
-      expect(updated._unsafeUnwrapErr().type).toBe("workspace-not-found");
+      expect(updated._unsafeUnwrapErr()).toBeDefined();
     });
   });
 
@@ -99,24 +99,7 @@ describe("WorkspaceDAO", () => {
     it("should return err for non-existent id", async () => {
       const result = await dao.findById("non-existent-id");
 
-      expect(result._unsafeUnwrapErr()).toMatchObject({
-        type: "workspace-not-found",
-      });
-    });
-  });
-
-  describe("findByIdOrThrow", () => {
-    it("should return workspace when found", async () => {
-      const workspace = await createTestWorkspace("Throw Test");
-
-      const result = await dao.findByIdOrThrow(workspace.id);
-
-      expect(result.id).toBe(workspace.id);
-      expect(result.name).toBe("Throw Test");
-    });
-
-    it("should throw NotFoundError when not found", async () => {
-      await expect(dao.findByIdOrThrow("non-existent-id")).rejects.toThrow();
+      expect(result._unsafeUnwrapErr()).not.toBeUndefined();
     });
   });
 
@@ -145,7 +128,7 @@ describe("WorkspaceDAO", () => {
       await dao.deleteById(workspace.id);
 
       const result = await dao.findById(workspace.id);
-      expect(result._unsafeUnwrapErr().type).toBe("workspace-not-found");
+      expect(result._unsafeUnwrapErr()).not.toBeUndefined();
     });
 
     it("should handle deleting non-existent workspace without error", async () => {
@@ -163,9 +146,7 @@ describe("WorkspaceDAO", () => {
       await dao.delete(workspace);
 
       const result = await dao.findById(workspace.id);
-      expect(result._unsafeUnwrapErr()).toMatchObject({
-        type: "workspace-not-found",
-      });
+      expect(result._unsafeUnwrapErr()).not.toBeUndefined();
     });
   });
 });

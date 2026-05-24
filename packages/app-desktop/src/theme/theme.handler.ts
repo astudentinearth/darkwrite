@@ -1,46 +1,19 @@
-import { BrowserWindow, dialog } from "electron";
-import { IThemeService } from "./theme.service";
-import { err, ok, Result } from "neverthrow";
-import { FsError } from "@/lib/fs";
-import {
-  InternalError,
-  IThemeAPI,
-  JsonParseError,
-  ThemeError,
-} from "@darkwrite/common";
-import { DocumentStoreErr } from "@/lib/document-store";
 import { handler, HandlerImplements } from "@/types";
+import { IThemeAPI } from "@darkwrite/common";
+import { BrowserWindow, dialog } from "electron";
+import { err, ok, Result } from "neverthrow";
+import { IThemeService } from "./theme.service";
 
-type CancelledErr = { type: "_internal-cancelled-action" };
+const _cancelledError = { type: "_internal-cancelled-action" as const };
+type CancelledErr = typeof _cancelledError;
 
 function pickThemeFile(): Result<string, CancelledErr> {
   const path = dialog.showOpenDialogSync(BrowserWindow.getAllWindows()[0], {
     filters: [{ name: "Darkwrite theme", extensions: ["json"] }],
     properties: ["dontAddToRecent"],
   });
-  if (!path) return err({ type: "_internal-cancelled-action" });
+  if (!path) return err(_cancelledError);
   return ok(path[0]);
-}
-
-function mapThemeErrors(
-  err: FsError | JsonParseError | ThemeError | DocumentStoreErr,
-): ThemeError | InternalError {
-  switch (err.type) {
-    case "fs-error":
-    case "file-not-found":
-    case "path-error":
-      return { type: "internal-error", message: "File system error." };
-
-    case "document-not-found":
-      return { type: "theme-not-found", id: err.id };
-
-    case "invalid-json-string":
-      return { type: "invalid-theme" };
-
-    case "theme-not-found":
-    case "invalid-theme":
-      return err;
-  }
 }
 
 export function ThemeAPI(
@@ -49,15 +22,15 @@ export function ThemeAPI(
   const importTheme = handler(() =>
     pickThemeFile()
       .asyncAndThen(themeService.importTheme)
-      .orElse((e) => (e.type === "_internal-cancelled-action" ? ok() : err(e)))
-      .mapErr(mapThemeErrors),
+      .orElse((e) =>
+        e === _cancelledError
+          ? ok()
+          : err(e as Exclude<typeof e, CancelledErr>),
+      ),
   );
 
   const getThemes = handler(() =>
-    themeService
-      .getThemes()
-      .mapErr(mapThemeErrors)
-      .map((themes) => ({ themes })),
+    themeService.getThemes().map((themes) => ({ themes })),
   );
 
   return {

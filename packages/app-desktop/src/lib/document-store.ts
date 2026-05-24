@@ -1,21 +1,17 @@
 import * as fslib from "@/lib/fs";
+import { dwErr, DwError } from "@darkwrite/common";
 import { pathExists } from "fs-extra";
 import { readFile, rm, writeFile } from "fs/promises";
-import { err, ok, Result, ResultAsync } from "neverthrow";
+import { ok, Result, ResultAsync } from "neverthrow";
 import path from "node:path";
 
-export type DocumentStoreErr =
-  | { type: "path-error" }
-  | { type: "document-not-found"; id: string }
-  | fslib.FsError;
-
 export interface IDocumentStore {
-  create: (id: string) => ResultAsync<void, DocumentStoreErr>;
-  write: (id: string, content: string) => ResultAsync<void, DocumentStoreErr>;
-  read: (id: string) => ResultAsync<string, DocumentStoreErr>;
-  exists: (id: string) => ResultAsync<boolean, DocumentStoreErr>;
-  ls: () => ResultAsync<string[], DocumentStoreErr>;
-  delete: (id: string) => ResultAsync<void, DocumentStoreErr>;
+  create: (id: string) => ResultAsync<void, DwError>;
+  write: (id: string, content: string) => ResultAsync<void, DwError>;
+  read: (id: string) => ResultAsync<string, DwError>;
+  exists: (id: string) => ResultAsync<boolean, DwError>;
+  ls: () => ResultAsync<string[], DwError>;
+  delete: (id: string) => ResultAsync<void, DwError>;
 }
 
 /** Make a directory act as a JSON document store.
@@ -25,9 +21,12 @@ export interface IDocumentStore {
 export function DocumentFileStore(directory: string): IDocumentStore {
   /**  */
 
-  function getPath(id: string): Result<string, DocumentStoreErr> {
+  function getPath(id: string): Result<string, DwError> {
     if (id.includes("/") || id.includes("\\"))
-      return err({ type: "path-error" } satisfies DocumentStoreErr);
+      return dwErr(
+        "Invalid document ID.",
+        "ID contains characters reserved for file paths.",
+      );
     return ok(path.join(directory, `${id}.json`));
   }
 
@@ -45,12 +44,7 @@ export function DocumentFileStore(directory: string): IDocumentStore {
     return getPath(id)
       .asyncAndThen((path) =>
         exists(id).andThen((e) =>
-          e
-            ? ok(path)
-            : err({
-                type: "document-not-found",
-                id,
-              } satisfies DocumentStoreErr),
+          e ? ok(path) : dwErr(`Document ${id} not found.`),
         ),
       )
       .andThen((p) => fslib.fsResult(readFile(p, "utf-8")));

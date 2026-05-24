@@ -2,13 +2,12 @@ import { errAsync, okAsync, ResultAsync } from "neverthrow";
 import { createTestDatabase } from "./data-source";
 import {
   resolveTx,
-  DbError,
   getActiveTransaction,
   transactional,
   txContext,
 } from "./transactional";
 import { sql } from "drizzle-orm";
-import { panic } from "@darkwrite/common";
+import { DwError, panic } from "@darkwrite/common";
 
 const db = createTestDatabase();
 const db2 = createTestDatabase();
@@ -48,7 +47,7 @@ describe("transaction context tests", () => {
       }, db)
     )._unsafeUnwrapErr();
 
-    expect(thrown).toMatchObject({ type: "db-error", cause: "oops" });
+    expect(thrown).toMatchObject({ cause: "oops" });
   });
 
   it("should be idempotent", async () => {
@@ -83,7 +82,7 @@ describe("transaction context tests", () => {
             );
             throw "oops";
           })(),
-          (e): DbError => ({ type: "db-error", cause: e }),
+          (e): DwError => ({ message: "db-error", cause: String(e) }),
         );
       }, db);
 
@@ -98,7 +97,7 @@ describe("transaction context tests", () => {
         if (!tx) panic("Transactionals are broken");
         return ResultAsync.fromPromise(
           tx!.run(sql`insert into _tx_rollback_test values ('written')`),
-          (e): DbError => ({ type: "db-error", cause: e }),
+          (e): DwError => ({ message: "db-error", cause: String(e) }),
         ).andThen(() => errAsync({ type: "test-error" } as const));
       }, db);
 

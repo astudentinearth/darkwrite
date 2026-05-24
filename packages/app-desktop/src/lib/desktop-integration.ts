@@ -1,10 +1,11 @@
 import { ContextMenuApiBridge } from "@/desktop-integration/context-menu.handler";
 import { ShellApiBridge } from "@/desktop-integration/shell.handler";
 import {
+  buildDwError,
   DarkwriteDesktopClientInfo,
+  DwResultAsync,
   Font,
   IDesktopAPI,
-  InternalError,
   OS,
   stripAlpha,
 } from "@darkwrite/common";
@@ -23,7 +24,7 @@ function getSystemAccentColor() {
   return ok(stripAlpha(color));
 }
 
-function getAvailableFonts(): ResultAsync<Font[], InternalError> {
+function getAvailableFonts(): DwResultAsync<Font[]> {
   async function _getFonts() {
     // FIXME: The font-list package implodes on macOS
     // due to some CJS issue. We'll fall back to text
@@ -44,10 +45,9 @@ function getAvailableFonts(): ResultAsync<Font[], InternalError> {
     return filtered;
   }
 
-  return ResultAsync.fromPromise(_getFonts(), (err) => ({
-    type: "internal-error",
-    message: String(err),
-  }));
+  return ResultAsync.fromPromise(_getFonts(), (err) =>
+    buildDwError("Failed to retrieve system font list.", String(err)),
+  );
 }
 
 function getClientInfo(): DarkwriteDesktopClientInfo {

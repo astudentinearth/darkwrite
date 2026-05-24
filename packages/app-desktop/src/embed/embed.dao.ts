@@ -1,22 +1,20 @@
 import { dbResult } from "@/db/db-result";
 import { Embed, NewEmbed, PatchEmbed, embed as embedTable } from "@/db/schema";
-import { DbError, TxResolver } from "@/db/transactional";
-import { EmbedError } from "@darkwrite/common";
+import { TxResolver } from "@/db/transactional";
+import { DwResultAsync, dwErr } from "@darkwrite/common";
 import { eq } from "drizzle-orm";
-import { ResultAsync, err, ok } from "neverthrow";
+import { ok } from "neverthrow";
 
 const hasFileSize = (fileSize: number) => eq(embedTable.fileSize, fileSize);
 
-type EmbedDaoResult<T> = ResultAsync<T, EmbedError | DbError>;
-
 export function EmbedDAO(tx: TxResolver) {
-  function create(embed: NewEmbed): EmbedDaoResult<Embed> {
+  function create(embed: NewEmbed): DwResultAsync<Embed> {
     return dbResult(() =>
       tx().insert(embedTable).values(embed).returning().get(),
     );
   }
 
-  function update(embed: PatchEmbed): EmbedDaoResult<Embed> {
+  function update(embed: PatchEmbed): DwResultAsync<Embed> {
     return dbResult(() =>
       tx()
         .update(embedTable)
@@ -26,33 +24,33 @@ export function EmbedDAO(tx: TxResolver) {
     ).andThen((rows) =>
       rows.at(0)
         ? ok(rows[0])
-        : err({ type: "embed-not-found", id: embed.id } satisfies EmbedError),
-    );
+        : dwErr("Embed not found")
+      );
   }
 
-  function findById(id: string): EmbedDaoResult<Embed> {
+  function findById(id: string): DwResultAsync<Embed> {
     return dbResult(() =>
       tx().select().from(embedTable).where(eq(embedTable.id, id)).get(),
     ).andThen((row) =>
-      row ? ok(row) : err({ type: "embed-not-found", id } satisfies EmbedError),
+      row ? ok(row) : dwErr("Embed not found.") 
     );
   }
 
-  function findAll(): EmbedDaoResult<Embed[]> {
+  function findAll(): DwResultAsync<Embed[]> {
     return dbResult(() => tx().select().from(embedTable));
   }
 
-  function deleteById(id: string): EmbedDaoResult<void> {
+  function deleteById(id: string): DwResultAsync<void> {
     return dbResult(() =>
       tx().delete(embedTable).where(eq(embedTable.id, id)),
     ).andThen(() => ok());
   }
 
-  function deleteEmbed(embed: Embed): EmbedDaoResult<void> {
+  function deleteEmbed(embed: Embed): DwResultAsync<void> {
     return deleteById(embed.id);
   }
 
-  function findAllByFileSize(fileSize: number): EmbedDaoResult<Embed[]> {
+  function findAllByFileSize(fileSize: number): DwResultAsync<Embed[]> {
     return dbResult(() =>
       tx().select().from(embedTable).where(hasFileSize(fileSize)),
     );

@@ -69,10 +69,10 @@ describe("note service tests", () => {
 
       expect(
         (await noteDAO.findById(note1.id))._unsafeUnwrapErr(),
-      ).toMatchObject({ type: "note-not-found" });
+      ).toBeDefined();
       expect(
         (await noteDAO.findById(note2.id))._unsafeUnwrapErr(),
-      ).toMatchObject({ type: "note-not-found" });
+      ).toBeDefined();
     });
 
     it("should not touch notes in a different workspace", async () => {
@@ -107,7 +107,7 @@ describe("note service tests", () => {
       ).not.toBeUndefined();
       expect(
         (await noteDAO.findById(localNote.id))._unsafeUnwrapErr(),
-      ).toMatchObject({ type: "note-not-found" });
+      ).toBeDefined()
     });
 
     it("should not touch notes that are not trashed", async () => {
@@ -125,7 +125,7 @@ describe("note service tests", () => {
       ).not.toBeUndefined();
       expect(
         (await noteDAO.findById(trashed.id))._unsafeUnwrapErr(),
-      ).toMatchObject({ type: "note-not-found" });
+      ).toBeDefined();
     });
 
     it("should delete document content for trashed notes", async () => {

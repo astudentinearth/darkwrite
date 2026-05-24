@@ -51,6 +51,6 @@ describe("FileLinkPreviewer", () => {
     const result = await previewFileLink(
       join(tmp, ".dwtest-preview-ghost.pdf"),
     );
-    expect(result._unsafeUnwrapErr()).toMatchObject({ type: "file-not-found" });
+    expect(result._unsafeUnwrapErr()).not.toBeUndefined();
   });
 });

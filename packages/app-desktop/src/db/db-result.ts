@@ -1,9 +1,6 @@
+import { buildDwError, DwResultAsync } from "@darkwrite/common";
 import { ResultAsync } from "neverthrow";
-import { DbError } from "./transactional";
 
-export function dbResult<T>(fn: () => Promise<T>): ResultAsync<T, DbError> {
-  return ResultAsync.fromPromise(fn(), (cause) => ({
-    type: "db-error",
-    cause,
-  }));
+export function dbResult<T>(fn: () => Promise<T>): DwResultAsync<T> {
+  return ResultAsync.fromPromise(fn(), (cause) => (buildDwError("Database error", String(cause))));
 }

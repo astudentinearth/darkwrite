@@ -1,6 +1,7 @@
 /* eslint-disable no-redeclare */
+import { buildDwError, dwErr, DwError } from "@darkwrite/common";
 import fse from "fs-extra";
-import { err, ok, ResultAsync } from "neverthrow";
+import { ok, ResultAsync } from "neverthrow";
 import path from "path";
 
 export async function rmIfExists(path: string) {
@@ -58,14 +59,9 @@ export class FileNotFoundError extends Error {
 
 // new result API
 
-export type FsError =
-  | { type: "fs-error"; cause: NodeJS.ErrnoException }
-  | { type: "file-not-found"; filepath: string };
-
-const fsError = (e: unknown): FsError => ({
-  type: "fs-error",
-  cause: e as NodeJS.ErrnoException,
-});
+const fsError = (e: unknown): DwError => {
+  return buildDwError("Filesystem error.", String(e));
+}
 
 /** Automatically wrap Node FS promises with ResultAsync<T, FsError> */
 export const fsResult = <T>(promise: Promise<T>) =>
@@ -92,6 +88,6 @@ export function assertExists(filepath: string) {
     (exists) =>
       exists
         ? ok()
-        : err({ type: "file-not-found", filepath } satisfies FsError),
+        : dwErr(`File ${filepath} not found.`),
   );
 }

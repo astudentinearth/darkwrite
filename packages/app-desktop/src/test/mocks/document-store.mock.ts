@@ -1,5 +1,6 @@
-import { DocumentStoreErr, IDocumentStore } from "@/lib/document-store";
-import { errAsync, okAsync } from "neverthrow";
+import { IDocumentStore } from "@/lib/document-store";
+import { dwErrAsync } from "@darkwrite/common";
+import { okAsync } from "neverthrow";
 
 export function MockDocumentStore(): IDocumentStore {
   const docs: Map<string, string> = new Map();
@@ -15,10 +16,7 @@ export function MockDocumentStore(): IDocumentStore {
   function read(noteId: string) {
     return docs.has(noteId)
       ? okAsync(docs.get(noteId) ?? "")
-      : errAsync({
-          type: "document-not-found",
-          id: noteId,
-        } satisfies DocumentStoreErr);
+      : dwErrAsync(`Document ${noteId} not found.`);
   }
 
   function write(noteId: string, content: string) {

@@ -5,21 +5,19 @@ import {
   Workspace,
   workspace as workspaceTable,
 } from "@/db/schema";
-import { DbError, TxResolver } from "@/db/transactional";
-import { NotFoundError, WorkspaceError } from "@darkwrite/common";
+import { TxResolver } from "@/db/transactional";
+import { dwErr, DwResultAsync } from "@darkwrite/common";
 import { eq } from "drizzle-orm";
-import { err, ok, ResultAsync } from "neverthrow";
-
-export type WorkspaceDaoResult<T> = ResultAsync<T, DbError | WorkspaceError>;
+import { ok } from "neverthrow";
 
 export function WorkspaceDAO(tx: TxResolver) {
-  function create(workspace: NewWorkspace): WorkspaceDaoResult<Workspace> {
+  function create(workspace: NewWorkspace): DwResultAsync<Workspace> {
     return dbResult(() =>
       tx().insert(workspaceTable).values(workspace).returning().get(),
     );
   }
 
-  function update(workspace: PatchWorkspace): WorkspaceDaoResult<Workspace> {
+  function update(workspace: PatchWorkspace): DwResultAsync<Workspace> {
     return dbResult(() =>
       tx()
         .update(workspaceTable)
@@ -27,46 +25,27 @@ export function WorkspaceDAO(tx: TxResolver) {
         .where(eq(workspaceTable.id, workspace.id))
         .returning(),
     ).andThen((rows) =>
-      rows.at(0)
-        ? ok(rows[0])
-        : err<Workspace, WorkspaceError>({
-            type: "workspace-not-found",
-            id: workspace.id,
-          }),
+      rows.at(0) ? ok(rows[0]) : dwErr("Workspace not found."),
     );
   }
 
-  function findById(id: string): WorkspaceDaoResult<Workspace> {
+  function findById(id: string): DwResultAsync<Workspace> {
     return dbResult(() =>
       tx().select().from(workspaceTable).where(eq(workspaceTable.id, id)).get(),
-    ).andThen((row) =>
-      row
-        ? ok(row)
-        : err({ type: "workspace-not-found", id } satisfies WorkspaceError),
-    );
+    ).andThen((row) => (row ? ok(row) : dwErr("Workspace not found.")));
   }
 
-  /** Finds a workspace by id, or throws if it doesn't exist.
-   * @throws `NotFoundError` if the workspace does not exist.
-   * @deprecated
-   * */
-  async function findByIdOrThrow(id: string): Promise<Workspace> {
-    const result = await findById(id);
-    if (result.isErr()) throw new NotFoundError("Workspace", id);
-    return result._unsafeUnwrap();
-  }
-
-  function findAll(): WorkspaceDaoResult<Workspace[]> {
+  function findAll(): DwResultAsync<Workspace[]> {
     return dbResult(() => tx().select().from(workspaceTable));
   }
 
-  function deleteById(id: string): WorkspaceDaoResult<void> {
+  function deleteById(id: string): DwResultAsync<void> {
     return dbResult(() =>
       tx().delete(workspaceTable).where(eq(workspaceTable.id, id)),
     ).andThen(() => ok());
   }
 
-  function deleteWorkspace(value: Workspace): WorkspaceDaoResult<void> {
+  function deleteWorkspace(value: Workspace): DwResultAsync<void> {
     return deleteById(value.id);
   }
 
@@ -76,7 +55,6 @@ export function WorkspaceDAO(tx: TxResolver) {
     delete: deleteWorkspace,
     deleteById,
     findAll,
-    findByIdOrThrow,
     findById,
   };
 }

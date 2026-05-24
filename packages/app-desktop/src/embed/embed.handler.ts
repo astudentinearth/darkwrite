@@ -1,25 +1,15 @@
 import { showSaveDialog } from "@/api/dialog";
-import { DbError } from "@/db/transactional";
-import { FsError, fsResult } from "@/lib/fs";
+import { fsResult } from "@/lib/fs";
 import { handler, HandlerImplements } from "@/types";
 import {
+    buildDwError,
     DesktopEmbedAPI,
-    EmbedError,
-    InternalError,
-    WorkspaceError,
 } from "@darkwrite/common";
 import { net } from "electron";
 import { writeFile } from "fs/promises";
 import { okAsync, ResultAsync } from "neverthrow";
 import { embedToDto } from "./embed-mapper";
 import { IEmbedService } from "./embed.service";
-
-// The default contract will not be implemented here.
-// Frontend code will implement an adapter to pass
-// array buffer and file paths here, as DOM objects
-// are not directly serializable.
-// Similarly, cloud APIs will need to implement an
-// adapter of their own to build multipart requests.
 
 const fetchEmbed = (url: URL) =>
   ResultAsync.fromPromise(
@@ -41,31 +31,6 @@ const fetchAndEncode = (url: URL) =>
     () => ({ type: "_internal-fetch-error" }) as const,
   );
 
-const mapErrors = (
-  error: DbError | EmbedError | FsError | WorkspaceError,
-): EmbedError | WorkspaceError | InternalError => {
-  switch (error.type) {
-    case "db-error":
-      return {
-        type: "internal-error",
-        message: "Database error",
-      };
-
-    case "file-not-found":
-    case "fs-error":
-      return {
-        type: "internal-error",
-        message: "File not found.",
-      } satisfies InternalError;
-
-    case "workspace-failed-to-delete":
-    case "workspace-failed-to-create":
-    case "workspace-not-found":
-    case "embed-not-found":
-      return error;
-  }
-};
-
 export function EmbedAPI(
   embedService: IEmbedService,
 ): HandlerImplements<DesktopEmbedAPI> {
@@ -75,7 +40,6 @@ export function EmbedAPI(
       .andThen((embed) =>
         embedService.getEmbedUrl(embed.id).map((url) => embedToDto(embed, url)),
       )
-      .mapErr(mapErrors)
       .map((embed) => ({ embed })),
   );
 
@@ -89,7 +53,6 @@ export function EmbedAPI(
             .map((url) => embedToDto(embed, url)),
         )
         .map((embed) => ({ embed }))
-        .mapErr(mapErrors),
   );
 
   const getById = handler((id: string) =>
@@ -98,14 +61,6 @@ export function EmbedAPI(
       embedService.getEmbedUrl(id),
     ])
       .map(([embed, url]) => ({ embed: embedToDto(embed, url) }))
-      .mapErr((error) =>
-        error.type === "db-error"
-          ? ({
-              type: "internal-error",
-              message: "Database error",
-            } satisfies InternalError)
-          : error,
-      ),
   );
 
   const download = handler((id: string) =>
@@ -155,11 +110,7 @@ export function EmbedAPI(
         ),
       )
       .mapErr(
-        () =>
-          ({
-            type: "internal-error",
-            message: "Something went wrong while encoding embeds.",
-          }) satisfies InternalError,
+        (cause) => buildDwError("Something went wrong while encoding embeds.", cause.message),
       ),
   );
 
