@@ -25,3 +25,16 @@ export function dtoToNote(dto: NoteDTO): Note {
     icon: rest.icon,
   };
 }
+
+export function notesToDto(notes: Note[]) {
+  return notes
+    .map((n) => noteToDto(n))
+    .reduce(
+      (acc, current) => {
+        acc[current.id] = current;
+        return acc;
+      },
+      {} as Record<string, NoteDTO>,
+    );
+}
+

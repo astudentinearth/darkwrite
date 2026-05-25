@@ -1,6 +1,6 @@
 /* eslint-disable no-redeclare */
 import { buildDwError, dwErr, DwError } from "@darkwrite/common";
-import fse from "fs-extra";
+import fse, { readFile, writeFile } from "fs-extra";
 import { ok, ResultAsync } from "neverthrow";
 import path from "path";
 
@@ -91,3 +91,8 @@ export function assertExists(filepath: string) {
         : dwErr(`File ${filepath} not found.`),
   );
 }
+
+export const readFileUtf8 = (filepath: string) => fsResult(readFile(filepath, "utf8"));
+export const writeFileUtf8 = (filepath: string, content: string) => fsResult(writeFile(filepath, content, "utf8"))
+export const writeBinaryFile = (filepath: string, buffer: Buffer | Uint8Array) => fsResult(writeFile(filepath, buffer))
+

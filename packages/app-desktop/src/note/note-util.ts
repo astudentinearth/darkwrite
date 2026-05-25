@@ -2,6 +2,7 @@ import { Note } from "@/db/schema";
 import { NoteDTO } from "@darkwrite/common";
 import { noteToDto } from "./note-mapper";
 
+/** @deprecated moved */
 export function mapNotesToDTO(notes: Note[]): Record<string, NoteDTO> {
   return notes
     .map((n) => noteToDto(n))
