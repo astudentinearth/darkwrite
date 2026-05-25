@@ -1,10 +1,9 @@
 import { is } from "@electron-toolkit/utils";
 import { app } from "electron";
 import { join } from "node:path";
-import fs from "node:fs";
-import fse from "fs-extra";
 import { pathConfig } from "../metadata.json";
 import log from "electron-log";
+import { assertAccessibleSync, ensureDirs } from "./fs";
 
 //TODO: Refactor all IO into separate classes and deprecate this override later.
 //TODO: Make this an actual option
@@ -73,36 +72,22 @@ export const SESSION_DATA_DIR = join(
     : pathConfig.dir.session.production,
 );
 
-function accessDataDirOrExit(root: string) {
-  try {
-    fs.accessSync(root, fse.constants.W_OK);
-  } catch (err) {
-    if (err == null)
-      throw new Error("Something went horribly wrong. Goodbye.", {
-        cause: err,
-      });
-    log.error(
-      `Darkwrite cannot access ${root} : Make sure the directory exists and you have write permissions for that directory.`,
-    );
-    if (process.env["DARKWRITE_ROOT_OVERRIDE"] != "")
-      log.error(
-        `You have set the "DARKWRITE_ROOT_OVERRIDE" environment variable to a directory Darkwrite does not have permissions for.
-          Please ensure you can write into that directory.`,
-      );
-    throw err;
-  }
+function getPathError() {
+  return `Darkwrite cannot access ${DATA_ROOT} : Make sure the directory exists and you have write permissions for that directory. ${
+    process.env["DARKWRITE_ROOT_OVERRIDE"]
+      ? `You have set the "DARKWRITE_ROOT_OVERRIDE" environment variable to a directory Darkwrite does not have permissions for.
+          Please ensure you can write into that directory.`
+      : ""
+  }`;
 }
 
-/** Ensures all data directories are ready. */
-const initialize = async () => {
-  accessDataDirOrExit(DATA_ROOT);
-
-  await fse.ensureDir(DATA_ROOT);
-  await fse.ensureDir(DATA_DIR);
-  await fse.ensureDir(NOTE_CONTENTS_DIR);
-  await fse.ensureDir(THEME_DIR);
-  await fse.ensureDir(EMBED_DIR);
-};
+const initialize = () =>
+  assertAccessibleSync(DATA_ROOT)
+    .orTee((error) => log.error(error.message, error.cause))
+    .mapErr(getPathError)
+    .asyncAndThen(() =>
+      ensureDirs(DATA_ROOT, DATA_DIR, NOTE_CONTENTS_DIR, THEME_DIR, EMBED_DIR),
+    );
 
 export const Paths = {
   DATA_DIR,

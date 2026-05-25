@@ -1,6 +1,4 @@
-import { showAppMenu } from "@/menu";
 import {
-  InferPreloadAPI,
   IPCHandler,
   IPCMainListenerUnion,
   IPCMainListenerWithoutEvent,
@@ -13,27 +11,10 @@ import {
 } from "@darkwrite/common";
 import { ipcMain } from "electron";
 import log from "electron-log";
-import { isNewUser, markOnboardingCompleted } from "../lib/onboarding-state";
-import { Updater } from "../lib/update";
-import { NoteApiBridge } from "../note/note.handler";
 
 export type NestedApiBridge = {
   [key: string]: IPCHandler<boolean> | NestedApiBridge;
 };
-
-// remove handlers from this as they are migrated
-
-/** @deprecated construct the object at init instead */
-export const DarkwriteElectronAPI = {
-  note: NoteApiBridge,
-  onboarding: {
-    isNewUser: new IPCHandler(false, isNewUser),
-    markFinished: new IPCHandler(false, markOnboardingCompleted),
-  },
-  showAppMenu: new IPCHandler(false, showAppMenu),
-  checkUpdate: new IPCHandler(false, Updater.checkUpdate),
-} satisfies DarkwriteAPI;
-export type DarkwritePreloadAPI = InferPreloadAPI<typeof DarkwriteElectronAPI>;
 
 const registerHandler = (
   channel: string,
@@ -58,22 +39,19 @@ const registerHandler = (
   }
 };
 
-const registerBridge = (channelPrefix: string, api: DarkwriteAPI) => {
-  const handlerKeys = recursiveKeys(api, (val) => val instanceof IPCHandler);
-  for (const keyPath of handlerKeys) {
+const registerBridge = (channelPrefix: string, api: NestedApiBridge) => {
+  recursiveKeys(api, (val) => val instanceof IPCHandler).forEach((keyPath) => {
     const handler = find(api, keyPath) as IPCHandler<boolean>;
     const channel = channelPrefix.concat(".").concat(keyPath.join("."));
     registerHandler(channel, handler.withEvent, handler.listener);
-  }
+  });
 };
 
 export const buildPreloadObject = (api: NestedApiBridge) => {
-  const handlerKeys = recursiveKeys(api, (val) => val instanceof IPCHandler);
   const obj = {};
-  // strip everything with true to replace in the preload script later
-  for (const keyPath of handlerKeys) {
-    deepAssign(obj, keyPath, true);
-  }
+  recursiveKeys(api, (val) => val instanceof IPCHandler).forEach((keyPath) =>
+    deepAssign(obj, keyPath, true),
+  );
   return obj;
 };
 

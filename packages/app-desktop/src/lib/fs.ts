@@ -1,7 +1,8 @@
 /* eslint-disable no-redeclare */
 import { buildDwError, dwErr, DwError } from "@darkwrite/common";
+import { accessSync } from "fs";
 import fse, { readFile, writeFile } from "fs-extra";
-import { ok, ResultAsync } from "neverthrow";
+import { ok, Result, ResultAsync } from "neverthrow";
 import path from "path";
 
 export async function rmIfExists(path: string) {
@@ -23,45 +24,11 @@ export function getFileInfo(filePath: string) {
   }));
 }
 
-/** @deprecated */
-export async function ls_legacy(dir: string) {
-  return await fse.readdir(dir);
-}
-
-export function checkAccess(_path: string) {
-  try {
-    fse.accessSync(_path, fse.constants.W_OK);
-    return true;
-  } catch {
-    return false;
-  }
-}
-
-export async function dirSize(root: string) {
-  let total = 0;
-  const files = await fse.readdir(root, { recursive: true, encoding: "utf-8" });
-  for (const file of files) {
-    const fullPath = path.join(root, file);
-    const stats = await fse.lstat(fullPath);
-    if (stats.isFile()) {
-      total += stats.size;
-    }
-  }
-  return total;
-}
-
-export class FileNotFoundError extends Error {
-  constructor(filePath: string) {
-    super(`File not found: ${filePath}`);
-    this.name = "FileNotFoundError";
-  }
-}
-
 // new result API
 
 const fsError = (e: unknown): DwError => {
   return buildDwError("Filesystem error.", String(e));
-}
+};
 
 /** Automatically wrap Node FS promises with ResultAsync<T, FsError> */
 export const fsResult = <T>(promise: Promise<T>) =>
@@ -85,14 +52,29 @@ export function stripExt(files: string | string[]) {
 
 export function assertExists(filepath: string) {
   return ResultAsync.fromSafePromise(fse.pathExists(filepath)).andThen(
-    (exists) =>
-      exists
-        ? ok()
-        : dwErr(`File ${filepath} not found.`),
+    (exists) => (exists ? ok() : dwErr(`File ${filepath} not found.`)),
   );
 }
 
-export const readFileUtf8 = (filepath: string) => fsResult(readFile(filepath, "utf8"));
-export const writeFileUtf8 = (filepath: string, content: string) => fsResult(writeFile(filepath, content, "utf8"))
-export const writeBinaryFile = (filepath: string, buffer: Buffer | Uint8Array) => fsResult(writeFile(filepath, buffer))
+export const assertAccessibleSync = Result.fromThrowable(
+  (filepath: string) => accessSync(filepath, fse.constants.W_OK),
+  (e) => buildDwError(`File has no write access.`, String(e)),
+);
 
+export const pathExists = (filePath: string) =>
+  fsResult(fse.pathExists(filePath));
+
+export const readFileUtf8 = (filepath: string) =>
+  fsResult(readFile(filepath, "utf8"));
+
+export const writeFileUtf8 = (filepath: string, content: string) =>
+  fsResult(writeFile(filepath, content, "utf8"));
+
+export const writeBinaryFile = (
+  filepath: string,
+  buffer: Buffer | Uint8Array,
+) => fsResult(writeFile(filepath, buffer));
+
+export const ensureDir = (path: string) => fsResult(fse.ensureDir(path));
+export const ensureDirs = (...paths: string[]) =>
+  ResultAsync.combine(paths.map(ensureDir));

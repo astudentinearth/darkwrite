@@ -29,8 +29,8 @@ import { Font } from "./font";
 import { FileLinkMetadata } from "./link";
 import { NoteExportFormat, NoteImportResult, ParentId } from "./note";
 import { PageSize } from "./pdf";
+import { DwError, DwResultAsync } from "./result";
 import { DarkwriteUserSettings } from "./settings";
-import { DwError } from "./result";
 
 export type ApiResult<T> = ResultAsync<T, DwError>;
 export type NoReturn = ResultAsync<void, never>;
@@ -186,7 +186,9 @@ export interface IBackupAPI {
   initCache: () => NoReturn;
 }
 
-export type CheckUpdateFn = () => Promise<UpdateServerResponse | undefined>;
+export type CheckUpdateFn = () => DwResultAsync<
+  UpdateServerResponse | undefined
+>;
 
 export interface IOnboardingAPI {
   isNewUser: () => ApiResult<boolean>;
@@ -230,7 +232,7 @@ export type DarkwriteIPCBridge = {
   onboarding: IOnboardingAPI;
   fileLink: IFileLinkAPI;
   checkUpdate: CheckUpdateFn;
-  showAppMenu: () => Promise<void>;
+  showAppMenu: () => NoReturn;
 };
 
 export interface WindowEvents {

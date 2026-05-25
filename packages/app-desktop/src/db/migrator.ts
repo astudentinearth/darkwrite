@@ -6,6 +6,8 @@ import { copy, pathExists, remove } from "fs-extra";
 import { DatabaseType } from "./data-source";
 import { fileURLToPath } from "url";
 import path from "path";
+import { app, dialog } from "electron";
+import { ResultAsync } from "neverthrow";
 
 const log = _log.create({ logId: "migrations" });
 log.transports.file.resolvePathFn = () => Paths.MIGRATION_LOG_FILE;
@@ -70,3 +72,25 @@ export async function migrateDatabaseWithBackup(
     throw new MigrationError(error, Paths.MIGRATION_LOG_FILE, backupPath);
   }
 }
+
+async function _migrateDatabaseOrExit(db: DatabaseType) {
+  try {
+    await migrateDatabaseWithBackup(db);
+  } catch (error) {
+    if (error instanceof MigrationError) {
+      log.error("Migration failed with error:", error.error);
+      log.error(`Migration log can be found at ${error.logFilePath}`);
+      dialog.showErrorBox(
+        "Database Migration Failed",
+        `An error occurred while migrating the database. A backup of your data was created at ${error.snapshotPath}. Please check the migration log at ${error.logFilePath} for details. Create an issue at https://github.com/astudentinearth/darkwrite to help us resolve this issue.`,
+      );
+    }
+    app.quit();
+    throw error;
+  }
+}
+
+export const migrateDatabaseOrExit = (db: DatabaseType) =>
+  ResultAsync.fromPromise(_migrateDatabaseOrExit(db), () => ({
+    migration_error: true,
+  }));

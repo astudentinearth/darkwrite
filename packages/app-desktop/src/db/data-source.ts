@@ -48,9 +48,9 @@ export type Transaction = Parameters<
   Parameters<DatabaseType["transaction"]>[0]
 >[0];
 
-
 export let db: DatabaseType;
 
 export function initDatabase() {
   db = createDatabase();
+  return db;
 }

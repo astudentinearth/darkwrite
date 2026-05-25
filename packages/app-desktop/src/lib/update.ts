@@ -1,16 +1,11 @@
 import { app } from "electron";
 import semver from "semver";
 import log from "electron-log";
-import { UpdateServerResponse } from "@darkwrite/common";
+import { buildDwError, UpdateServerResponse } from "@darkwrite/common";
+import { handler } from "@/types";
+import { ResultAsync } from "neverthrow";
 
 async function checkUpdateFromGithub() {
-  // return {
-  //   name: "v0.6.0-alpha.1",
-  //   latest: "0.6.0-alpha.1",
-  //   release_page:
-  //     "https://github.com/astudentinearth/darkwrite/releases/tag/v0.5.0-alpha.1",
-  // };
-
   const response = await fetch(
     "https://api.github.com/repos/astudentinearth/darkwrite/releases/latest",
     {
@@ -35,8 +30,6 @@ async function checkUpdateFromGithub() {
 }
 
 async function checkUpdate() {
-  //url: string = "http://localhost:3000/api/latest-release",
-  // const res = await (await fetch(url)).json();
   const res = await checkUpdateFromGithub();
   if (!res || !("latest" in res || "release_page" in res)) return undefined;
   return {
@@ -48,3 +41,9 @@ async function checkUpdate() {
 export const Updater = {
   checkUpdate,
 };
+
+export const updateCheckHandler = handler(() =>
+  ResultAsync.fromPromise(checkUpdate(), (e) =>
+    buildDwError("Failed to check for updates.", String(e)),
+  ),
+);

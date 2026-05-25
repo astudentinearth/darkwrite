@@ -59,8 +59,6 @@ function validateMoveDto(dto: MoveNoteDTO): Result<void, DwError> {
   return ok();
 }
 
-type RankCollisionErr = { type: "rank-collision" };
-
 export function NoteService(
   db: DatabaseType,
   documentService: IDocumentService,

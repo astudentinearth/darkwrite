@@ -1,25 +1,39 @@
-import { Paths } from "./paths";
-import fse from "fs-extra";
+import { IOnboardingAPI } from "@darkwrite/common";
+import { pathExists, readFileUtf8, writeFileUtf8 } from "./fs";
+import { handler, HandlerImplements } from "@/types";
 
 export const CURRENT_VERSION = "v1";
 
-export async function isNewUser() {
-  return !(await fse.pathExists(Paths.ONBOARD_FLAG_PATH));
-}
+export function OnboardingService(
+  onboardSentinel: string,
+  versionSentinel: string,
+) {
+  const isNewUser = () => pathExists(onboardSentinel).map((t) => !t);
 
-export async function markOnboardingCompleted() {
-  await fse.writeFile(Paths.ONBOARD_FLAG_PATH, "onboarded");
-}
+  const markOnboardingCompleted = () =>
+    writeFileUtf8(onboardSentinel, "onboarded");
 
-export async function hasMigratedToVersion(version: string) {
-  try {
-    const current = await fse.readFile(Paths.VERSION_FLAG_PATH, "utf-8");
-    return current.trim() === version;
-  } catch {
-    return false;
-  }
-}
+  const hasMigratedToVersion = (version: string) =>
+    readFileUtf8(versionSentinel)
+      .map((s) => s.trim())
+      .map((v) => v === version);
 
-export async function markVersionMigrated(version: string) {
-  await fse.writeFile(Paths.VERSION_FLAG_PATH, version);
+  const markVersionMigrated = (v: string) => writeFileUtf8(versionSentinel, v);
+
+  const hasMigratedToCurrentVersion = () =>
+    hasMigratedToVersion(CURRENT_VERSION);
+
+  const ipcHandlers: HandlerImplements<IOnboardingAPI> = {
+    isNewUser: handler(isNewUser),
+    markFinished: handler(markOnboardingCompleted),
+  };
+
+  return {
+    isNewUser,
+    markVersionMigrated,
+    markOnboardingCompleted,
+    hasMigratedToVersion,
+    hasMigratedToCurrentVersion,
+    ipcHandlers,
+  };
 }

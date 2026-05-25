@@ -1,6 +1,9 @@
-import { NoteDAOInstance } from "./note.dao";
+import { DatabaseType } from "@/db";
+import { resolveTx } from "@/db/transactional";
+import { NoteDAO } from "./note.dao";
 
-export function NoteQueryService(noteDAO: NoteDAOInstance) {
+export function NoteQueryService(db: DatabaseType) {
+  const noteDAO = NoteDAO(() => resolveTx(db));
   return {
     getAllByWorkspaceId: noteDAO.findAllByWorkspaceId,
     getByParentId: noteDAO.findAllByParentId,
