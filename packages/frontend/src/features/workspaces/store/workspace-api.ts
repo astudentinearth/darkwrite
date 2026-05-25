@@ -1,4 +1,5 @@
 import { DarkwriteAPIClient } from "@/api/api-client";
+import { resultQueryFn } from "@/lib/query-result";
 import { selectAllNoteIdsByWorkspaceIdUnfiltered } from "@/features/note/store/note-selectors";
 import { removeNotes } from "@/features/note/store/note-slice";
 import { appSessionSlice } from "@/features/session/session-slice";
@@ -7,37 +8,6 @@ import { CreateWorkspaceDTO, WorkspaceDTO } from "@darkwrite/common";
 import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
 import { selectAllWorkspaces } from "./workspace-selectors";
 import { UpdateWorkspaceArg, workspaceSlice } from "./workspace-slice";
-import { resultQueryFn } from "@/lib/query-result";
-
-export async function _updateWorkspaceMutationFn(arg: UpdateWorkspaceArg) {
-  try {
-    const response = await DarkwriteAPIClient.workspace.update(arg.id, arg);
-    return { data: response.workspace };
-  } catch (error) {
-    console.error("Error updating workspace:", error);
-    return { error: error as Error };
-  }
-}
-
-export async function _createWorkspaceMutationFn(arg: CreateWorkspaceDTO) {
-  try {
-    const response = await DarkwriteAPIClient.workspace.create(arg);
-    return { data: response.workspace };
-  } catch (error) {
-    console.error("Error creating workspace:", error);
-    return { error: error as Error };
-  }
-}
-
-export async function _deleteWorkspaceMutationFn(workspaceId: string) {
-  try {
-    await DarkwriteAPIClient.workspace.delete(workspaceId);
-    return { data: undefined };
-  } catch (error) {
-    console.error("Error deleting workspace:", error);
-    return { error: error as Error };
-  }
-}
 
 export const WORKSPACE_TAG_TYPE = "Workspace";
 
@@ -63,7 +33,11 @@ export const workspaceApi = createApi({
     }),
 
     updateWorkspace: builder.mutation<WorkspaceDTO, UpdateWorkspaceArg>({
-      queryFn: _updateWorkspaceMutationFn,
+      queryFn: resultQueryFn(
+        (arg: UpdateWorkspaceArg) =>
+          DarkwriteAPIClient.workspace.update(arg.id, arg),
+        (r) => r.workspace,
+      ),
       async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
@@ -76,20 +50,25 @@ export const workspaceApi = createApi({
     }),
 
     createWorkspace: builder.mutation<WorkspaceDTO, CreateWorkspaceDTO>({
-      queryFn: _createWorkspaceMutationFn,
+      queryFn: resultQueryFn(
+        (arg: CreateWorkspaceDTO) => DarkwriteAPIClient.workspace.create(arg),
+        (r) => r.workspace,
+      ),
       async onQueryStarted(_arg, { queryFulfilled, dispatch }) {
         try {
           const { data } = await queryFulfilled;
           dispatch(workspaceSlice.actions.addWorkspace(data));
         } catch (error) {
-          console.error("Error in onQueryStarted for updateWorkspace:", error);
+          console.error("Error in onQueryStarted for createWorkspace:", error);
         }
       },
       invalidatesTags: () => [{ type: WORKSPACE_TAG_TYPE, id: "ALL" }],
     }),
 
     deleteWorkspace: builder.mutation<void, string>({
-      queryFn: _deleteWorkspaceMutationFn,
+      queryFn: resultQueryFn((workspaceId: string) =>
+        DarkwriteAPIClient.workspace.delete(workspaceId),
+      ),
       async onQueryStarted(
         workspaceId,
         { queryFulfilled, dispatch, getState },

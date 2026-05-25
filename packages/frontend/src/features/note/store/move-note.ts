@@ -1,9 +1,11 @@
 import { DarkwriteAPIClient } from "@/api/api-client";
-import { NoteDTO } from "@darkwrite/common";
+import { resultQueryFn } from "@/lib/query-result";
+import { dwErrAsync, NoteDTO } from "@darkwrite/common";
 import { isDescendant, ParentId } from "@darkwrite/common";
 import { extractNoteDragData } from "@/features/dnd/datatransfer";
 import { RootState } from "@/features/store/types";
 import { DragEvent } from "react";
+import { okAsync } from "neverthrow";
 import {
   calculateOptimisticRankInLayer,
   calculateRelativeOptimisticRank,
@@ -11,7 +13,6 @@ import {
 import { selectNoteById, selectNotesByParentId } from "./note-selectors";
 import { updateNote, upsertNotes } from "./note-slice";
 import { noteByParentIdTag, NOTES_TAG_TYPE, notesApi } from "./notes-api";
-import { MutationError } from "@darkwrite/common";
 
 export type MoveNoteBelowArgs = {
   sourceNoteId: string;
@@ -36,49 +37,21 @@ export function getMovingNote(e: DragEvent<HTMLElement>, state: RootState) {
   return movingNote ?? null;
 }
 
-const _moveNoteIntoQueryFn = async ({
-  destinationNoteId,
-  placement,
-  sourceNoteId,
-}: MoveNoteIntoArgs) => {
-  try {
-    const { note } = await DarkwriteAPIClient.note.move({
-      destinationId: destinationNoteId,
-      placement,
-      sourceId: sourceNoteId,
-    });
-    if (!note) {
-      throw new MutationError("Failed to move note");
-    }
-    return { data: note };
-  } catch (error) {
-    return { error: error as Error };
-  }
-};
-
-const _moveNoteBelowQueryFn = async ({
-  aboveNoteId,
-  sourceNoteId,
-}: MoveNoteBelowArgs) => {
-  try {
-    const { note } = await DarkwriteAPIClient.note.move({
-      destinationId: aboveNoteId,
-      placement: "below",
-      sourceId: sourceNoteId,
-    });
-    if (!note) {
-      throw new MutationError("Failed to move note");
-    }
-    return { data: note };
-  } catch (error) {
-    return { error: error as Error };
-  }
-};
-
 export const moveNoteApi = notesApi.injectEndpoints({
   endpoints: (builder) => ({
     moveInto: builder.mutation<NoteDTO, MoveNoteIntoArgs>({
-      queryFn: _moveNoteIntoQueryFn,
+      queryFn: resultQueryFn(
+        ({ destinationNoteId, placement, sourceNoteId }: MoveNoteIntoArgs) =>
+          DarkwriteAPIClient.note
+            .move({
+              destinationId: destinationNoteId,
+              placement,
+              sourceId: sourceNoteId,
+            })
+            .andThen(({ note }) =>
+              note ? okAsync(note) : dwErrAsync("Failed to move note"),
+            ),
+      ),
 
       async onQueryStarted(args, { dispatch, getState, queryFulfilled }) {
         const state = getState() as RootState;
@@ -143,8 +116,20 @@ export const moveNoteApi = notesApi.injectEndpoints({
         return [];
       },
     }),
+
     moveBelow: builder.mutation<NoteDTO, MoveNoteBelowArgs>({
-      queryFn: _moveNoteBelowQueryFn,
+      queryFn: resultQueryFn(
+        ({ aboveNoteId, sourceNoteId }: MoveNoteBelowArgs) =>
+          DarkwriteAPIClient.note
+            .move({
+              destinationId: aboveNoteId,
+              placement: "below",
+              sourceId: sourceNoteId,
+            })
+            .andThen(({ note }) =>
+              note ? okAsync(note) : dwErrAsync("Failed to move note"),
+            ),
+      ),
 
       async onQueryStarted(args, { dispatch, getState, queryFulfilled }) {
         const state = getState() as RootState;
@@ -217,11 +202,3 @@ export const moveNoteApi = notesApi.injectEndpoints({
 });
 
 export const { useMoveIntoMutation, useMoveBelowMutation } = moveNoteApi;
-
-/**
- * This export is for unit tests only. Do NOT use this in components.
- */
-export const __moveNoteQueryMethods = {
-  _moveNoteIntoQueryFn,
-  _moveNoteBelowQueryFn,
-};

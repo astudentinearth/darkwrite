@@ -1,7 +1,8 @@
-import { ParentId } from "@darkwrite/common";
-import { noteByParentIdTag, NOTES_TAG_TYPE, notesApi } from "./notes-api";
-import { NoteDTO } from "@darkwrite/common";
 import { DarkwriteAPIClient } from "@/api/api-client";
+import { resultQueryFn } from "@/lib/query-result";
+import { dwErrAsync, NoteDTO, ParentId } from "@darkwrite/common";
+import { okAsync } from "neverthrow";
+import { noteByParentIdTag, NOTES_TAG_TYPE, notesApi } from "./notes-api";
 import { upsertNotes } from "./note-slice";
 import { navigateToNote } from "@/features/navigation/navigator";
 
@@ -11,36 +12,16 @@ export interface CreateNoteArgs {
   navigateAfter?: boolean;
 }
 
-async function _createNoteQueryFn(args: CreateNoteArgs) {
-  try {
-    const title = "";
-    const { parentId, workspaceId } = args;
-    const { note } = await DarkwriteAPIClient.note.create({
-      parentId: parentId ?? null,
-      workspaceId,
-      title,
-    });
-    if (!note) throw new Error("Failed to create note");
-    return { data: note };
-  } catch (error) {
-    return { error: error as Error };
-  }
-}
-
-async function _duplicateNoteQueryFn(noteId: string) {
-  try {
-    const { note } = await DarkwriteAPIClient.note.duplicate(noteId);
-    if (!note) throw new Error("Failed to duplicate note");
-    return { data: note };
-  } catch (error) {
-    return { error: error as Error };
-  }
-}
-
 export const createNoteApi = notesApi.injectEndpoints({
   endpoints: (builder) => ({
     createNote: builder.mutation<NoteDTO, CreateNoteArgs>({
-      queryFn: _createNoteQueryFn,
+      queryFn: resultQueryFn(({ parentId, workspaceId }: CreateNoteArgs) =>
+        DarkwriteAPIClient.note
+          .create({ parentId: parentId ?? null, workspaceId, title: "" })
+          .andThen(({ note }) =>
+            note ? okAsync(note) : dwErrAsync("Failed to create note"),
+          ),
+      ),
 
       async onQueryStarted(args, { dispatch, queryFulfilled }) {
         try {
@@ -59,8 +40,15 @@ export const createNoteApi = notesApi.injectEndpoints({
         },
       ],
     }),
+
     duplicateNote: builder.mutation<NoteDTO, string>({
-      queryFn: _duplicateNoteQueryFn,
+      queryFn: resultQueryFn((noteId: string) =>
+        DarkwriteAPIClient.note
+          .duplicate(noteId)
+          .andThen(({ note }) =>
+            note ? okAsync(note) : dwErrAsync("Failed to duplicate note"),
+          ),
+      ),
 
       async onQueryStarted(_noteId, { dispatch, queryFulfilled }) {
         try {

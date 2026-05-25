@@ -2,28 +2,32 @@ import { selectNoteById } from "./note-selectors";
 import { DarkwriteAPIClient } from "@/api/api-client";
 import { upsertNotes } from "./note-slice";
 import { AppStore } from "@/features/store/types";
+import { okAsync } from "neverthrow";
+import { dwErrAsync } from "@darkwrite/common";
 
 /**
  * Returns a note from cache, or fetches it from the backend.
  * The note will be placed into the cache if it's fetched later.
  * @param id
  */
-export async function resolveNote(id: string, store: AppStore) {
+export function resolveNote(id: string, store: AppStore) {
   const cached = selectNoteById(store.getState(), id);
-  if (cached != null) return cached;
+  if (cached != null) return okAsync(cached);
 
-  const { note } = await DarkwriteAPIClient.note.getById(id);
-  if (!note) throw new Error("Note not found.");
-  store.dispatch(upsertNotes([note]));
-  return note;
+  return DarkwriteAPIClient.note
+    .getById(id)
+    .andThen((n) => (n.note ? okAsync(n.note) : dwErrAsync("Note not found.")))
+    .map((note) => {
+      store.dispatch(upsertNotes([note]));
+      return note;
+    });
 }
 
 /**
  * @param noteId
  * @returns the document associated with given note ID;
  */
-export async function resolveDocument(noteId: string) {
+export function resolveDocument(noteId: string) {
   //TODO: Check Redux first after migrating editor code
-  const result = await DarkwriteAPIClient.note.getDocument(noteId);
-  return result.document;
+  DarkwriteAPIClient.note.getDocument(noteId).map((r) => r.document);
 }

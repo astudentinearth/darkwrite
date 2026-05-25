@@ -1,39 +1,13 @@
-import { NoteDTO } from "@darkwrite/common";
-import { notesApi } from "./notes-api";
 import { DarkwriteAPIClient } from "@/api/api-client";
-import { Rank } from "@darkwrite/common";
+import { resultQueryFn } from "@/lib/query-result";
+import { dwErrAsync, NoteDTO, Rank } from "@darkwrite/common";
+import { okAsync } from "neverthrow";
+import { notesApi } from "./notes-api";
 import { selectFavorites, selectNoteById } from "./note-selectors";
 import { RootState } from "@/features/store/types";
 import { updateNote } from "./note-slice";
-import { MutationError } from "@darkwrite/common";
 
 export type FavoriteNoteArgs = { noteId: string; aboveNoteId?: string | null };
-
-async function _favoriteNoteMutationFn({
-  noteId,
-  aboveNoteId,
-}: FavoriteNoteArgs) {
-  try {
-    const { note } = await DarkwriteAPIClient.note.favorite(
-      noteId,
-      aboveNoteId,
-    );
-    if (!note) throw new MutationError("Note not found");
-    return { data: note };
-  } catch (error) {
-    return { error: error as Error };
-  }
-}
-
-async function _unfavoriteNoteMutationFn(noteId: string) {
-  try {
-    const { note } = await DarkwriteAPIClient.note.unfavorite(noteId);
-    if (!note) throw new MutationError("Note not found");
-    return { data: note };
-  } catch (error) {
-    return { error: error as Error };
-  }
-}
 
 function computeOptimisticFavoriteOrderHint(
   favorites: NoteDTO[],
@@ -64,7 +38,13 @@ function computeOptimisticFavoriteOrderHint(
 export const favoritesApi = notesApi.injectEndpoints({
   endpoints: (builder) => ({
     favorite: builder.mutation<NoteDTO, FavoriteNoteArgs>({
-      queryFn: _favoriteNoteMutationFn,
+      queryFn: resultQueryFn(({ noteId, aboveNoteId }: FavoriteNoteArgs) =>
+        DarkwriteAPIClient.note
+          .favorite(noteId, aboveNoteId)
+          .andThen(({ note }) =>
+            note ? okAsync(note) : dwErrAsync("Note not found"),
+          ),
+      ),
 
       onQueryStarted: async (args, { dispatch, getState, queryFulfilled }) => {
         const state = getState() as RootState;
@@ -99,7 +79,13 @@ export const favoritesApi = notesApi.injectEndpoints({
     }),
 
     unfavorite: builder.mutation<NoteDTO, string>({
-      queryFn: _unfavoriteNoteMutationFn,
+      queryFn: resultQueryFn((noteId: string) =>
+        DarkwriteAPIClient.note
+          .unfavorite(noteId)
+          .andThen(({ note }) =>
+            note ? okAsync(note) : dwErrAsync("Note not found"),
+          ),
+      ),
 
       onQueryStarted: async (
         noteId,

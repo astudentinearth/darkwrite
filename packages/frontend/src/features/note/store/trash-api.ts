@@ -1,9 +1,9 @@
 import { DarkwriteAPIClient } from "@/api/api-client";
 import { resultQueryFn } from "@/lib/query-result";
+import { dwErrAsync, NoteDTO } from "@darkwrite/common";
+import { okAsync } from "neverthrow";
 import { NOTES_TAG_TYPE, notesApi } from "./notes-api";
 import { removeNote, removeNotes, updateNote, upsertNotes } from "./note-slice";
-import { NoteDTO } from "@darkwrite/common";
-import { MutationError } from "@darkwrite/common";
 import { RootState } from "@/features/store/types";
 import { selectNoteIdsInTrash } from "./note-selectors";
 
@@ -14,35 +14,6 @@ export function trashedByWorkspaceIdTag(workspaceId: string) {
 export function trashedByNoteIdTag(noteId: string) {
   return `TRASHED_BY_NOTE_ID_${noteId}` as const;
 }
-
-export const _moveToTrashMutationFn = async (noteId: string) => {
-  try {
-    const { note } = await DarkwriteAPIClient.note.moveToTrash(noteId);
-    if (!note) throw new MutationError("Note not found");
-    return { data: note };
-  } catch (error) {
-    return { error: error as Error };
-  }
-};
-
-export const _restoreFromTrashMutationFn = async (noteId: string) => {
-  try {
-    const { note } = await DarkwriteAPIClient.note.restoreFromTrash(noteId);
-    if (!note) throw new MutationError("Note not found");
-    return { data: note };
-  } catch (error) {
-    return { error: error as Error };
-  }
-};
-
-export const _clearTrashMutationFn = async (workspaceId: string) => {
-  try {
-    await DarkwriteAPIClient.note.clearTrash(workspaceId);
-    return { data: true as const };
-  } catch (error) {
-    return { error: error as Error };
-  }
-};
 
 export const trashApi = notesApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -74,7 +45,13 @@ export const trashApi = notesApi.injectEndpoints({
     }),
 
     moveToTrash: builder.mutation<NoteDTO, string>({
-      queryFn: _moveToTrashMutationFn,
+      queryFn: resultQueryFn((noteId: string) =>
+        DarkwriteAPIClient.note
+          .moveToTrash(noteId)
+          .andThen(({ note }) =>
+            note ? okAsync(note) : dwErrAsync("Note not found"),
+          ),
+      ),
       onQueryStarted: async (noteId, { dispatch, queryFulfilled }) => {
         const changes: Partial<NoteDTO> = { isTrashed: true };
         const undoPatch: Partial<NoteDTO> = { isTrashed: false };
@@ -83,11 +60,9 @@ export const trashApi = notesApi.injectEndpoints({
 
         try {
           const { data } = await queryFulfilled;
-          if (!data) throw new MutationError("Update failed");
           dispatch(upsertNotes([data]));
         } catch {
           dispatch(updateNote({ id: noteId, changes: undoPatch }));
-          /* empty */
         }
       },
       invalidatesTags: (result, _error, noteId) => [
@@ -99,13 +74,17 @@ export const trashApi = notesApi.injectEndpoints({
     }),
 
     restoreFromTrash: builder.mutation<NoteDTO, string>({
-      queryFn: _restoreFromTrashMutationFn,
+      queryFn: resultQueryFn((noteId: string) =>
+        DarkwriteAPIClient.note
+          .restoreFromTrash(noteId)
+          .andThen(({ note }) =>
+            note ? okAsync(note) : dwErrAsync("Note not found"),
+          ),
+      ),
       onQueryStarted: async (_noteId, { dispatch, queryFulfilled }) => {
         //TODO: implement optimistic update later
-
         try {
           const { data } = await queryFulfilled;
-          if (!data) throw new MutationError("Update failed");
           dispatch(upsertNotes([data]));
         } catch {
           /* empty */
@@ -120,14 +99,10 @@ export const trashApi = notesApi.injectEndpoints({
     }),
 
     delete: builder.mutation<true, string>({
-      queryFn: async (noteId) => {
-        try {
-          await DarkwriteAPIClient.note.delete(noteId);
-          return { data: true as const };
-        } catch (error) {
-          return { error: error as Error };
-        }
-      },
+      queryFn: resultQueryFn(
+        (noteId: string) => DarkwriteAPIClient.note.delete(noteId),
+        () => true as const,
+      ),
       onQueryStarted: async (
         noteId,
         { dispatch, queryFulfilled, getState },
@@ -147,7 +122,11 @@ export const trashApi = notesApi.injectEndpoints({
     }),
 
     clearTrash: builder.mutation<true, string>({
-      queryFn: _clearTrashMutationFn,
+      queryFn: resultQueryFn(
+        (workspaceId: string) =>
+          DarkwriteAPIClient.note.clearTrash(workspaceId),
+        () => true as const,
+      ),
       onQueryStarted: async (
         workspaceId,
         { dispatch, queryFulfilled, getState },
