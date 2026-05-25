@@ -71,6 +71,14 @@ export const getEditorActions = (dispatch: AppDispatch) => ({
       }),
     );
   },
+
+  showCenterView(noteId: string) {
+    dispatch(editorSlice.actions.showCenterView(noteId));
+  },
+
+  closeCenterView() {
+    dispatch(editorSlice.actions.closeCenterView());
+  },
 });
 
 export function useEditorActions() {

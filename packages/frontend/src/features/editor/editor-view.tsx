@@ -29,7 +29,11 @@ export function EditorViewRouteHandler() {
   );
 }
 
-function EditorViewport() {
+export function EditorViewport({
+  unconstrainedWidth,
+}: {
+  unconstrainedWidth?: boolean;
+}) {
   const { noteId } = use(EditorContext);
 
   const options = useEditorOptions();
@@ -41,7 +45,10 @@ function EditorViewport() {
   const { items } = useSlashCommand(options.imageConfig);
   if (!content || !customizations) return null;
   return (
-    <ConstrainedWidth fill={customizations?.widePage}>
+    <ConstrainedWidth
+      fill={customizations?.widePage}
+      noConstrain={unconstrainedWidth}
+    >
       <DarkwriteEditor
         content={content}
         noteId={noteId}
@@ -53,8 +60,8 @@ function EditorViewport() {
         showTextDirectionControls={settings.showTextDirectionControls}
         openFilesOnDoubleClick={settings.openFilesOnDoubleClick}
         codeBlockIndentSize={settings.codeIndentSize}
-        embedSourceResolver={async (id) =>
-          `embed://${id}` //TODO: band-aid for current circumstances. fix this with a proper cache when you can link remote images.
+        embedSourceResolver={
+          async (id) => `embed://${id}` //TODO: band-aid for current circumstances. fix this with a proper cache when you can link remote images.
         }
         key={noteId}
         onNavigateToNote={navigateToNote}

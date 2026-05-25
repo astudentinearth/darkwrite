@@ -1,14 +1,12 @@
 import { HeaderbarButton } from "@/components/headerbar-button";
 import { cn } from "@/lib/utils";
-import { useNoteFromURL } from "@/features/note/hooks/use-note-from-url";
 import { Star } from "lucide-react";
 import { useNoteById } from "../note/hooks/use-note-by-id";
 import { useNoteActions } from "../note/store/note-actions";
 import { TextTooltip } from "@/components/ui/tooltip";
 import { useTranslation } from "react-i18next";
 
-export default function FavoriteToggle() {
-  const id = useNoteFromURL();
+export default function FavoriteToggle({ id }: { id: string }) {
   const { note } = useNoteById(id);
   const { t } = useTranslation();
   const { favorite, unfavorite } = useNoteActions();

@@ -19,6 +19,11 @@ export interface FormattingState {
   currentLinkUrl?: string;
 }
 
+export interface CenterViewState {
+  noteId?: string;
+  open: boolean;
+}
+
 export interface EditorState {
   docs: Record<string, NoteContent | undefined>;
   wordCount: Record<string, number>;
@@ -26,6 +31,7 @@ export interface EditorState {
   canUndo: Record<string, boolean>;
   canRedo: Record<string, boolean>;
   formattingState: Record<string, FormattingState>;
+  centerView: CenterViewState;
 }
 
 const initialState: EditorState = {
@@ -35,6 +41,7 @@ const initialState: EditorState = {
   canRedo: {},
   canUndo: {},
   formattingState: {},
+  centerView: { open: false },
 };
 
 export const editorSlice = createSlice({
@@ -119,6 +126,20 @@ export const editorSlice = createSlice({
     ) => {
       const { noteId, formattingState } = action.payload;
       state.formattingState[noteId] = formattingState;
+    },
+
+    showCenterView: (state, action: PayloadAction<string>) => {
+      state.centerView = {
+        noteId: action.payload,
+        open: true,
+      };
+    },
+
+    closeCenterView: (state) => {
+      state.centerView = {
+        noteId: undefined,
+        open: false,
+      };
     },
   },
   initialState,

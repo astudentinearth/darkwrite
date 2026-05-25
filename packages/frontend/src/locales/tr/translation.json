@@ -39,7 +39,8 @@
         "duplicate": "Kopyasını oluştur",
         "export": "Dışa aktar",
         "trash": "Çöp kutusuna taşı",
-        "lastModified": "Son düzenleme:"
+        "lastModified": "Son düzenleme:",
+        "openInCenter": "Orta pencerede aç"
       },
       "noPages": "Başka sayfa yok."
     }

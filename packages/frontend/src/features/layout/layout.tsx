@@ -14,6 +14,7 @@ import { ClearTrashDialog } from "../trash/components/clear-trash-dialog";
 import { NativeContextMenuProvider } from "../context-menu/native-context-menu";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AppMenuHandler } from "../app-menu/app-menu-handler";
+import { EditorCenterView } from "../editor/components/center-view";
 
 //import { useStartup } from "@/hooks/use-startup";
 
@@ -47,6 +48,7 @@ export function Layout() {
               <SearchDialog />
               <MoveNoteDialog />
               <ClearTrashDialog />
+              <EditorCenterView />
               <Outlet />
             </div>
           </div>

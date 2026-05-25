@@ -46,7 +46,7 @@ export function Titlebar() {
       <HistoryNavigation />
       <PageTitle />
       <div className="grow"></div>
-      <Toolbar />
+      {noteId && <Toolbar noteId={noteId} />}
     </div>
   );
 }

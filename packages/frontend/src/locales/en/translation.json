@@ -39,7 +39,8 @@
         "duplicate": "Duplicate",
         "export": "Export",
         "trash": "Move to trash",
-        "lastModified": "Last edited:"
+        "lastModified": "Last edited:",
+        "openInCenter": "Open in center view"
       },
       "noPages": "No pages."
     }

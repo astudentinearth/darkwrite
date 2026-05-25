@@ -13,14 +13,51 @@ import ConstrainedWidth from "./constrained-width";
 import CoverImage from "./cover-image";
 import TrashBanner from "./components/trash-banner";
 
-export type EditorHeaderProps = {
-  noteId: string;
-};
-
-export default function EditorHeader() {
+export function NoteMetadataEditors({ mouseOver }: { mouseOver?: boolean }) {
   const { t } = useTranslation();
   const { noteId } = use(EditorContext);
-  const { addCover, updateIcon, hasCover, wide, icon } = useEditorCover(noteId);
+  const { addCover, updateIcon, hasCover, icon } = useEditorCover(noteId);
+  return (
+    <>
+      <div className="flex gap-2 items-end mb-4 font-ui">
+        {icon && (
+          <EmojiPicker
+            show={fromUnicode(icon ?? "")}
+            closeOnSelect
+            onSelect={updateIcon}
+            className={cn("z-50 -translate-x-1", hasCover && "-mt-8")}
+          />
+        )}
+        <div
+          className={cn(
+            "opacity-0 z-20 font-ui -translate-x-3",
+            mouseOver && "opacity-100",
+          )}
+        >
+          <AddRemoveIconButton />
+          {!hasCover && (
+            <Button onClick={addCover} className="w-fit" variant={"ghost"}>
+              <Image size={18} />
+              {t("editor.cover.addCover")}
+            </Button>
+          )}
+        </div>
+      </div>
+
+      <TitleEditField />
+    </>
+  );
+}
+
+export default function EditorHeader({
+  alwaysFill,
+  className,
+}: {
+  alwaysFill?: boolean;
+  className?: string;
+}) {
+  const { noteId } = use(EditorContext);
+  const { hasCover, wide } = useEditorCover(noteId);
 
   const mouseOver = useMouseOver();
   return (
@@ -33,35 +70,12 @@ export default function EditorHeader() {
     >
       <CoverImage />
       <ConstrainedWidth
-        className={cn("flex flex-col gap-2 px-4 pt-2")}
+        className={cn("flex flex-col w-full gap-2 px-4 pt-2", className)}
         fill={wide}
+        noConstrain={alwaysFill}
       >
-        <div className="flex gap-2 items-end mb-4 font-ui">
-          {icon && (
-            <EmojiPicker
-              show={fromUnicode(icon ?? "")}
-              closeOnSelect
-              onSelect={updateIcon}
-              className={cn("z-50 -translate-x-2", hasCover && "-mt-8")}
-            />
-          )}
-          <div
-            className={cn(
-              "opacity-0 z-20 font-ui -translate-x-3",
-              mouseOver.mouseOver && "opacity-100",
-            )}
-          >
-            <AddRemoveIconButton />
-            {!hasCover && (
-              <Button onClick={addCover} className="w-fit" variant={"ghost"}>
-                <Image size={18} />
-                {t("editor.cover.addCover")}
-              </Button>
-            )}
-          </div>
-        </div>
+        <NoteMetadataEditors mouseOver={mouseOver.mouseOver} />
 
-        <TitleEditField />
         <TrashBanner />
         <hr />
       </ConstrainedWidth>

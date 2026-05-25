@@ -12,6 +12,7 @@ import {
   FilePlus2,
   FileText,
   Forward,
+  GalleryVertical,
   Trash,
 } from "lucide-react";
 import { ReactNode, useState } from "react";
@@ -47,7 +48,11 @@ export function NoteContextMenuContainer({
         {children}
       </ContextMenuTrigger>
       <ContextMenuContent className="min-w-64">
-        <ToggleFavoriteContextMenuItem noteId={noteId} />
+        <ToggleFavoriteContextMenuItem noteId={noteId} />{" "}
+        <ContextMenuItem onSelect={actions.openInCenter}>
+          <GalleryVertical className="opacity-75" size={20}></GalleryVertical>
+          {t("openInCenter")}
+        </ContextMenuItem>
         <ContextMenuItem onSelect={actions.newSubpage}>
           <FilePlus2 className="opacity-75" size={20}></FilePlus2>
           {t("newSubpage")}

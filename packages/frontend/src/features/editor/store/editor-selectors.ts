@@ -26,3 +26,6 @@ export const selectCanRedo = (state: RootState, noteId: string) =>
 
 export const selectFormattingState = (state: RootState, noteId: string) =>
   state.editor.formattingState[noteId] ?? null;
+
+export const selectCenterViewState = (state: RootState) =>
+  state.editor.centerView;

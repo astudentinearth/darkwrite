@@ -12,7 +12,6 @@ import {
 } from "@/components/ui";
 import { useLocalStore } from "@/context/local-state";
 import { cn } from "@/lib/utils";
-import { useNoteFromURL } from "@/features/note/hooks/use-note-from-url";
 import {
   Download,
   FileCode,
@@ -115,11 +114,9 @@ function EditorMenuContent({ noteId }: { noteId: string }) {
   );
 }
 
-export default function EditorMenu() {
+export default function EditorMenu({ noteId }: { noteId: string }) {
   const [open, setOpen] = useState(false);
-  const noteId = useNoteFromURL();
   const { t } = useTranslation();
-  if (!noteId) return <></>;
 
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>

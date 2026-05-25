@@ -13,7 +13,6 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useNoteFromURL } from "@/features/note/hooks/use-note-from-url";
 import { cn } from "@/lib/utils";
 import { FontStyle, NoteCustomization } from "@darkwrite/common";
 import { Brush, RotateCcw } from "lucide-react";
@@ -22,8 +21,7 @@ import { useAppSelector } from "../store/hooks";
 import { selectEditorCustomizations } from "./store/editor-selectors";
 import useStylePopover from "./use-style-popover";
 
-export default function StylePopover() {
-  const id = useNoteFromURL();
+export default function StylePopover({ id }: { id: string }) {
   const customizations = useAppSelector((s) =>
     selectEditorCustomizations(s, id ?? ""),
   );
