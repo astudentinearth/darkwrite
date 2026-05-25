@@ -47,13 +47,15 @@ export function TextTooltip({
   return (
     <Tooltip delayDuration={delayDuration ?? 400}>
       <TooltipTrigger asChild>{children}</TooltipTrigger>
-      <TooltipContent
-        sideOffset={offset}
-        side={side ?? "bottom"}
-        className={cn("text-xs", className)}
-      >
-        {text}
-      </TooltipContent>
+      <TooltipPortal container={document.body}>
+        <TooltipContent
+          sideOffset={offset}
+          side={side ?? "bottom"}
+          className={cn("text-xs", className)}
+        >
+          {text}
+        </TooltipContent>
+      </TooltipPortal>
     </Tooltip>
   );
 }

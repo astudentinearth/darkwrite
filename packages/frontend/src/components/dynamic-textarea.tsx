@@ -29,13 +29,15 @@ export default function DynamicTextarea(props: DynamicTextareaProps) {
   const { preventNewline, className, autoFocus, ...attributes } = props;
   useLayoutEffect(() => {
     adjustHeight();
-    if (autoFocus && ref.current) {
-      ref.current.focus();
-      ref.current.setSelectionRange(
-        ref.current.value.length,
-        ref.current.value.length,
-      );
-    }
+    requestAnimationFrame(() => {
+      if (autoFocus && ref.current) {
+        ref.current.focus();
+        ref.current.setSelectionRange(
+          ref.current.value.length,
+          ref.current.value.length,
+        );
+      }
+    });
     const resize = () => {
       adjustHeight();
     };

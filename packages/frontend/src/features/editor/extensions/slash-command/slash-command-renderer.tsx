@@ -12,7 +12,6 @@ const updatePosition = (editor: Editor, element: HTMLElement) => {
         editor.state.selection.to,
       ),
   };
-  //debugger;
   computePosition(virtualElement, element, {
     placement: "bottom-start",
     strategy: "absolute",
@@ -22,7 +21,6 @@ const updatePosition = (editor: Editor, element: HTMLElement) => {
     element.style.position = strategy;
     element.style.top = `${y}px`;
     element.style.left = `${x}px`;
-    //debugger;
   });
 };
 
@@ -40,6 +38,7 @@ export const SlashCommandRenderer = {
         if (!props.clientRect) return;
 
         component.element.style.position = "absolute";
+        component.element.style.zIndex = "1000";
         document.body.appendChild(component.element);
         updatePosition(props.editor, component.element);
       },
