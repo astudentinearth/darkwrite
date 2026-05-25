@@ -32,7 +32,9 @@ export async function hydrateImages(content: EditorContent) {
   const embedIds = imageNodes
     .map((n) => n.attrs!.embedId as string)
     .filter((id) => id != null);
-  const urls = await DarkwriteAPIClient.embed.getEncoded(embedIds);
+  const dataUrlResult = await DarkwriteAPIClient.embed.getEncoded(embedIds);
+  if (dataUrlResult.isErr()) return;
+  const urls = dataUrlResult.value;
   for (const node of imageNodes) {
     if (!node.attrs) continue;
     node.attrs["src"] = urls[node.attrs!.embedId];

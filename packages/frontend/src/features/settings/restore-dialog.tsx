@@ -21,13 +21,12 @@ export function RestoreDataDialog() {
   const restore = () => {
     if (!path) return;
     setPending(true);
-    DarkwriteAPIClient.backup.restoreBackup(path).finally(() => {
+    DarkwriteAPIClient.backup.restoreBackup(path).then(() => {
       setPending(false);
     });
   };
   const chooseFile = async () => {
-    const filename = await DarkwriteAPIClient.backup.chooseArchive();
-    setPath(filename);
+    DarkwriteAPIClient.backup.chooseArchive().map(setPath);
   };
   return (
     <AlertDialog

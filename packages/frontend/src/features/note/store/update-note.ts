@@ -29,7 +29,8 @@ export function createTitleUpdater(noteId: string, store: AppStore) {
     if (!result) {
       result = await DarkwriteAPIClient.note.getById(noteId);
     }
-    const { note } = result;
+    if (result.isErr()) return;
+    const { note } = result.value;
     if (note) {
       store.dispatch(notesSlice.actions.upsertNotes([note]));
     }

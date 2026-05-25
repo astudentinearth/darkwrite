@@ -4,7 +4,9 @@ import { EditorEventType } from "@/features/editor/event/types";
 
 export default function useNoteImport(noteId: string) {
   const importNotes = async () => {
-    const result = await DarkwriteAPIClient.note.import();
+    const apiResult = await DarkwriteAPIClient.note.import();
+    if (apiResult.isErr()) return;
+    const result = apiResult.value;
     switch (result.type) {
       case "html": {
         const content = result.content.join("\n");

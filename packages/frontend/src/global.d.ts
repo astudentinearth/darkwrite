@@ -39,6 +39,8 @@ declare global {
      * This field will exist and be set to `true` if the application
      * is running inside an Electron container. This should not exist
      * at all in normal browsers;
+     *
+     * @deprecated we will remain a desktop app for the foreseeable future
      */
     isElectron: true | undefined;
     /**

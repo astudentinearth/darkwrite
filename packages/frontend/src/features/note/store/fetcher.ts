@@ -29,5 +29,5 @@ export function resolveNote(id: string, store: AppStore) {
  */
 export function resolveDocument(noteId: string) {
   //TODO: Check Redux first after migrating editor code
-  DarkwriteAPIClient.note.getDocument(noteId).map((r) => r.document);
+  return DarkwriteAPIClient.note.getDocument(noteId).map((r) => r.document);
 }

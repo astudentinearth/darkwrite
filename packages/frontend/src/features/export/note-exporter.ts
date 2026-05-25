@@ -11,6 +11,7 @@ import { getSettingsActions } from "../settings/store/settings-actions";
 import { ThemeSettings } from "@darkwrite/common";
 import { AppStore } from "../store/types";
 import { showExportToast } from "./export-toast";
+import { ResultAsync } from "neverthrow";
 
 export async function documentBodyToHTML(
   content: EditorContent,
@@ -45,66 +46,58 @@ export function getNoteExporter(store: AppStore) {
     return map[style] || fontSettings.sans;
   }
 
-  async function noteToHTML(id: string) {
-    const [doc, note] = await Promise.all([
-      resolveDocument(id),
-      resolveNote(id, store),
-    ]);
-    const font = determineDocumentFont(
-      getSettings().appearance.fonts,
-      doc.customizations.font,
-      doc.customizations.customFont,
-    );
-    const html = await documentBodyToHTML(
-      doc.contents,
-      font,
-      note.title,
-      note.icon,
-      getSettings().appearance.fonts.code,
-    );
-    return html;
+  function noteToHTML(id: string) {
+    return ResultAsync.combine([resolveDocument(id), resolveNote(id, store)])
+      .map(([doc, note]) => {
+        const font = determineDocumentFont(
+          getSettings().appearance.fonts,
+          doc.customizations.font,
+          doc.customizations.customFont,
+        );
+        return { doc, note, font };
+      })
+      .andThen(({ doc, note, font }) =>
+        ResultAsync.fromSafePromise(
+          documentBodyToHTML(
+            doc.contents,
+            font,
+            note.title,
+            note.icon,
+            getSettings().appearance.fonts.code,
+          ),
+        ),
+      );
   }
 
-  async function noteToJSON(id: string) {
-    const doc = await resolveDocument(id);
-    const jsonString = JSON.stringify(doc);
-    return jsonString;
+  function noteToJSON(id: string) {
+    return resolveDocument(id).map(JSON.stringify);
   }
 
-  async function exportJSON(noteId: string) {
-    const jsonString = await noteToJSON(noteId);
-    const note = await resolveNote(noteId, store);
-    const path = await DarkwriteAPIClient.note.export(
-      jsonString,
-      "json",
-      note?.title,
-    );
-    if (path) showExportToast(path);
+  function exportJSON(noteId: string) {
+    return ResultAsync.combine([noteToJSON(noteId), resolveNote(noteId, store)])
+      .andThen(([json, note]) =>
+        DarkwriteAPIClient.note.export(json, "json", note.title),
+      )
+      .andTee(showExportToast);
   }
 
-  async function exportHTML(noteId: string) {
-    const html = await noteToHTML(noteId);
-    const note = await resolveNote(noteId, store);
-    const path = await DarkwriteAPIClient.note.export(
-      html,
-      "html",
-      note?.title,
-    );
-    if (path) showExportToast(path);
+  function exportHTML(noteId: string) {
+    return ResultAsync.combine([noteToHTML(noteId), resolveNote(noteId, store)])
+      .andThen(([html, note]) =>
+        DarkwriteAPIClient.note.export(html, "html", note.title),
+      )
+      .andTee(showExportToast);
   }
 
-  async function exportPDF(
+  function exportPDF(
     noteId: string,
     pageSize: PageSize = getSettings().editor.preferredPageSize,
   ) {
-    const html = await noteToHTML(noteId);
-    const note = await resolveNote(noteId, store);
-    const path = await DarkwriteAPIClient.note.exportPdf(
-      html,
-      note?.title,
-      pageSize,
-    );
-    if (path) showExportToast(path);
+    return ResultAsync.combine([noteToHTML(noteId), resolveNote(noteId, store)])
+      .andThen(([html, note]) =>
+        DarkwriteAPIClient.note.exportPdf(html, note.title, pageSize),
+      )
+      .andTee(showExportToast);
   }
 
   return {

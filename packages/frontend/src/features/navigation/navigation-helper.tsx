@@ -17,14 +17,15 @@ async function correctWorkspace(store: AppStore) {
   if (!noteId) return;
   targetNoteId = noteId;
   const currentNote = await resolveNote(noteId, store);
+  if (currentNote.isErr()) return;
   const currentWorkspaceId = store.getState().session.workspaceId;
   // explictly check to prevent race condition
   if (
-    currentNote.workspaceId !== currentWorkspaceId &&
+    currentNote.value.workspaceId !== currentWorkspaceId &&
     targetNoteId === noteId
   ) {
     store.dispatch(
-      appSessionSlice.actions.switchWorkspace(currentNote.workspaceId),
+      appSessionSlice.actions.switchWorkspace(currentNote.value.workspaceId),
     );
     targetNoteId = null;
   }

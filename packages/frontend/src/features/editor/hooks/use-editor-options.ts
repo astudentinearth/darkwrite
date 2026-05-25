@@ -83,7 +83,9 @@ export function useEditorOptions() {
             fileType: filetype,
             workspaceId,
           })
-        ).embed?.id ?? "",
+        )
+          .map((r) => r.embed.id)
+          .unwrapOr(""),
       uploadFile: async (file) =>
         (
           await DarkwriteAPIClient.embed.create({
@@ -91,7 +93,9 @@ export function useEditorOptions() {
             fileType: file.type,
             workspaceId,
           })
-        ).embed?.id ?? "",
+        )
+          .map((r) => r.embed.id)
+          .unwrapOr(""),
     }),
     [workspaceId],
   );

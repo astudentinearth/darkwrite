@@ -2,21 +2,37 @@ import { DarkwriteAPIClient } from "@/api/api-client";
 import { generateHTML } from "@/features/editor/html-export";
 import { useState } from "react";
 import { useCurrentWorkspaceId } from "./use-workspace";
+import { ResultAsync } from "neverthrow";
 
-async function exportWorkspace(workspaceId: string, _generator = generateHTML) {
-  await DarkwriteAPIClient.backup.initCache();
-  const { notes } =
-    await DarkwriteAPIClient.note.getAllByWorkspaceId(workspaceId);
-  for (const noteId in notes) {
-    try {
-      const { document } = await DarkwriteAPIClient.note.getDocument(noteId);
-      const html = _generator(document.contents);
-      await DarkwriteAPIClient.backup.pushFile(`${noteId}.html`, html);
-    } catch {
-      continue;
-    }
-  }
-  await DarkwriteAPIClient.backup.finishExport();
+function exportWorkspace(workspaceId: string, _generator = generateHTML) {
+  return DarkwriteAPIClient.backup
+    .initCache()
+    .andThen(() =>
+      DarkwriteAPIClient.note
+        .getAllByWorkspaceId(workspaceId)
+        .map((r) => r.notes),
+    )
+    .andThen((notes) =>
+      ResultAsync.combine(
+        Object.keys(notes).map((id) =>
+          DarkwriteAPIClient.note.getDocument(id).map((doc) => ({ id, doc })),
+        ),
+      ),
+    )
+    .map((docs) =>
+      docs.map((d) => ({
+        id: d.id,
+        html: _generator(d.doc.document.contents),
+      })),
+    )
+    .andThen((files) =>
+      ResultAsync.combine(
+        files.map((f) =>
+          DarkwriteAPIClient.backup.pushFile(`${f.id}.html`, f.html),
+        ),
+      ),
+    )
+    .andThen(DarkwriteAPIClient.backup.finishExport);
 }
 
 export function useWorkspaceExport() {
@@ -25,7 +41,7 @@ export function useWorkspaceExport() {
   const _export = () => {
     if (!workspaceId) return;
     setExporting(true);
-    exportWorkspace(workspaceId).finally(() => {
+    exportWorkspace(workspaceId).then(() => {
       setExporting(false);
     });
   };

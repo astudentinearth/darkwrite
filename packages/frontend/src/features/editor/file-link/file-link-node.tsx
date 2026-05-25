@@ -44,11 +44,12 @@ export function FileLinkNode(props: ReactNodeViewProps) {
     DarkwriteAPIClient.fileLink.openById(fileLink.id);
   };
 
-  const changeFile = async () => {
-    const newLink = await DarkwriteAPIClient.fileLink.pickAndCreate();
-    if (!newLink) return;
-    const { id } = newLink;
-    props.updateAttributes({ linkId: id });
+  const changeFile = () => {
+    DarkwriteAPIClient.fileLink
+      .pickAndCreate()
+      .map((link) =>
+        link ? props.updateAttributes({ linkId: link.id }) : undefined,
+      );
   };
 
   const handleClick = (e: MouseEvent) => {

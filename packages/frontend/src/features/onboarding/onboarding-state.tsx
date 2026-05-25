@@ -85,24 +85,30 @@ export function setOnboardingTheme(theme: string) {
   applyTheme(_theme);
 }
 
-export async function finishOnboarding() {
-  const prefs = await DarkwriteAPIClient.settings.getUserSettings();
+export function finishOnboarding() {
   const state = useOnboardingState.getState();
-  prefs.appearance.darkColorScheme = state.theme;
-  prefs.client.autoUpdateCheck = state.enableUpdateCheck;
-
-  await DarkwriteAPIClient.settings.saveUserSettings(prefs);
-
-  const { workspaces } = await DarkwriteAPIClient.workspace.getAll();
-  const defaultWorkspace = workspaces[0];
-
-  await DarkwriteAPIClient.workspace.update(defaultWorkspace.id, {
-    name: state.workspaceName,
-  });
-
-  await DarkwriteAPIClient.onboarding.markFinished();
-  InitialUserSettings.settings = prefs;
-  await initializeUserPrefs(store);
-  correctWorkspaceState(store);
-  ReactRootContainer.root.render(<App store={store} />);
+  return DarkwriteAPIClient.settings
+    .getUserSettings()
+    .map((prefs) => {
+      prefs.appearance.darkColorScheme = state.theme;
+      prefs.client.autoUpdateCheck = state.enableUpdateCheck;
+      InitialUserSettings.settings = prefs;
+      return prefs;
+    })
+    .andThen((prefs) =>
+      DarkwriteAPIClient.settings.saveUserSettings(prefs).map(() => prefs),
+    )
+    .andThen(() => DarkwriteAPIClient.workspace.getAll())
+    .map((w) => w.workspaces[0])
+    .andThen((workspace) =>
+      DarkwriteAPIClient.workspace.update(workspace.id, {
+        name: state.workspaceName,
+      }),
+    )
+    .andThen(DarkwriteAPIClient.onboarding.markFinished)
+    .andThen(() => initializeUserPrefs(store))
+    .andThen(correctWorkspaceState)
+    .map(() => {
+      ReactRootContainer.root.render(<App store={store} />);
+    });
 }

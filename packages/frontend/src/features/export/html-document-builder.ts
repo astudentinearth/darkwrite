@@ -36,7 +36,7 @@ export class HtmlDocumentBuilder {
   }
 
   async embedImages() {
-    this.content = await hydrateImages(this.content);
+    this.content = (await hydrateImages(this.content)) ?? this.content;
     return this;
   }
 

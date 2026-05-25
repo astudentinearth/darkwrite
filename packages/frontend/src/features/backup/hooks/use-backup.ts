@@ -6,9 +6,7 @@ export default function useBackup() {
 
   const startBackup = () => {
     setIsWorking(true);
-    DarkwriteAPIClient.backup.performBackup().finally(() => {
-      setIsWorking(false);
-    });
+    DarkwriteAPIClient.backup.performBackup().then(() => setIsWorking(false));
   };
 
   return {

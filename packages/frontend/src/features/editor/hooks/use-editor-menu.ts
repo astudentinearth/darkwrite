@@ -12,11 +12,12 @@ import {
 } from "../store/editor-selectors";
 import { MoveNoteDialogPortal } from "@/features/note/store/notes-ui-actions";
 import { useNoteExport } from "@/features/export/note-exporter";
+import { DwResultAsync } from "@darkwrite/common";
 
 export interface EditorMenuActions {
-  exportHTML: () => Promise<void>;
-  exportJSON: () => Promise<void>;
-  exportPDF: () => Promise<void>;
+  exportHTML: () => DwResultAsync<string | undefined>;
+  exportJSON: () => DwResultAsync<string | undefined>;
+  exportPDF: () => DwResultAsync<string | undefined>;
   importNotes: () => void;
   undo: () => void;
   redo: () => void;

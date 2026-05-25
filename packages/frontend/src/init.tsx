@@ -8,12 +8,13 @@ import { getWorkspaceActions } from "./features/workspaces/store/workspace-actio
 import { setupContextMenuEvents } from "./features/context-menu/menu-event-bus";
 import { setupAppMenuEvents } from "./features/app-menu/app-menu-bus";
 import { setupLayoutEvents } from "./features/layout/layout-store";
+import { ResultAsync } from "neverthrow";
 
 export class InitialUserSettings {
   static settings: DarkwriteUserSettings;
 }
 
-export async function correctWorkspaceState(store: AppStore) {
+async function _correctWorkspaceState(store: AppStore) {
   const state = store.getState().session;
   const { fetchWorkspaces } = getWorkspaceActions(store);
   const workspaces = await fetchWorkspaces();
@@ -27,12 +28,23 @@ export async function correctWorkspaceState(store: AppStore) {
   }
 }
 
-export async function initializeUserPrefs(store: AppStore) {
-  const settings = await DarkwriteAPIClient.settings.getUserSettings();
-  InitialUserSettings.settings = settings;
-  store.dispatch(settingsSlice.actions.initialize(settings));
-  await Promise.all([initializeThemes(store), initializeFonts(store)]);
-  setupContextMenuEvents();
-  setupAppMenuEvents();
-  setupLayoutEvents();
+export const correctWorkspaceState = (store: AppStore) =>
+  ResultAsync.fromSafePromise(_correctWorkspaceState(store));
+
+export function initializeUserPrefs(store: AppStore) {
+  return DarkwriteAPIClient.settings
+    .getUserSettings()
+    .map((settings) => {
+      InitialUserSettings.settings = settings;
+      store.dispatch(settingsSlice.actions.initialize(settings));
+      return store;
+    })
+    .andThen(initializeThemes)
+    .andThen(initializeFonts)
+    .andTee(() => {
+      setupContextMenuEvents();
+      setupAppMenuEvents();
+      setupLayoutEvents();
+    })
+    .map(() => store);
 }

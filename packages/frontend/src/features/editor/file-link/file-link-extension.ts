@@ -46,7 +46,7 @@ export const FileLinkProseMirrorPlugin = new Plugin({
         });
         if (path) {
           const nodeType = Block.LinkToLocalFile;
-          DarkwriteAPIClient.fileLink.createFromPath(path).then((metadata) => {
+          DarkwriteAPIClient.fileLink.createFromPath(path).map((metadata) => {
             const tr = view.state.tr;
             const node = view.state.schema.nodes[nodeType].create({
               linkId: metadata.id,
