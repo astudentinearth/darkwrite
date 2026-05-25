@@ -1,5 +1,6 @@
 import { DarkwriteAPIClient } from "@/api/api-client";
-import { _tryFetch, NOTES_TAG_TYPE, notesApi } from "./notes-api";
+import { resultQueryFn } from "@/lib/query-result";
+import { NOTES_TAG_TYPE, notesApi } from "./notes-api";
 import { removeNote, removeNotes, updateNote, upsertNotes } from "./note-slice";
 import { NoteDTO } from "@darkwrite/common";
 import { MutationError } from "@darkwrite/common";
@@ -56,8 +57,11 @@ export const trashApi = notesApi.injectEndpoints({
             ]
           : [],
 
-      queryFn: (workspaceId) =>
-        _tryFetch(DarkwriteAPIClient.note.getTrashed(workspaceId)),
+      queryFn: resultQueryFn(
+        (workspaceId: string) =>
+          DarkwriteAPIClient.note.getTrashed(workspaceId),
+        (r) => Object.values(r.notes),
+      ),
 
       async onQueryStarted(_args, { dispatch, queryFulfilled }) {
         try {

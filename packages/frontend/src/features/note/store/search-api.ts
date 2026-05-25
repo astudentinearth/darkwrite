@@ -1,6 +1,8 @@
-import { NoteDTO } from "@darkwrite/common";
-import { NOTES_TAG_TYPE, notesApi } from "./notes-api";
 import { DarkwriteAPIClient } from "@/api/api-client";
+import { resultQueryFn } from "@/lib/query-result";
+import { NoteDTO } from "@darkwrite/common";
+import { okAsync } from "neverthrow";
+import { NOTES_TAG_TYPE, notesApi } from "./notes-api";
 import { upsertNotes } from "./note-slice";
 import { SearchArgs } from "./types";
 
@@ -8,25 +10,16 @@ export function _searchTag(args: SearchArgs) {
   return `SEARCH_${args.workspaceId}_${args.query}`;
 }
 
-export const _searchQueryFn = async (args: SearchArgs) => {
-  if (args.query == "") return { data: [] };
-  try {
-    const { notes } = await DarkwriteAPIClient.note.search(
-      args.workspaceId,
-      args.query,
-    );
-    return {
-      data: Object.values(notes),
-    };
-  } catch (e) {
-    return { error: e as Error };
-  }
-};
-
 export const searchApi = notesApi.injectEndpoints({
   endpoints: (builder) => ({
     search: builder.query<NoteDTO[], SearchArgs>({
-      queryFn: _searchQueryFn,
+      queryFn: resultQueryFn((args: SearchArgs) =>
+        args.query === ""
+          ? okAsync([] as NoteDTO[])
+          : DarkwriteAPIClient.note
+              .search(args.workspaceId, args.query)
+              .map(({ notes }) => Object.values(notes)),
+      ),
       async onQueryStarted(_args, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;

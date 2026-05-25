@@ -1,4 +1,5 @@
 import { DarkwriteAPIClient } from "@/api/api-client";
+import { resultQueryFn } from "@/lib/query-result";
 import { NoteContent } from "@darkwrite/common";
 import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
 import { editorSlice } from "./editor-slice";
@@ -22,15 +23,10 @@ export const editorApi = createApi({
   tagTypes: [EDITOR_API_TAG_TYPE],
   endpoints: (builder) => ({
     getDocument: builder.query<NoteContent, string>({
-      queryFn: async (noteId: string) => {
-        try {
-          const { document } =
-            await DarkwriteAPIClient.note.getDocument(noteId);
-          return { data: document };
-        } catch (e) {
-          return { error: e instanceof Error ? e : new Error("Unknown error") };
-        }
-      },
+      queryFn: resultQueryFn(
+        (noteId: string) => DarkwriteAPIClient.note.getDocument(noteId),
+        (r) => r.document,
+      ),
 
       onQueryStarted: async (args, { queryFulfilled, dispatch }) => {
         try {

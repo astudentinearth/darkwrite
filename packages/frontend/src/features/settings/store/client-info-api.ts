@@ -1,4 +1,5 @@
 import { DarkwriteAPIClient } from "@/api/api-client";
+import { resultQueryFn } from "@/lib/query-result";
 import { DarkwriteDesktopClientInfo } from "@darkwrite/common";
 import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
 
@@ -7,14 +8,7 @@ export const clientInfoApi = createApi({
   baseQuery: fakeBaseQuery(),
   endpoints: (builder) => ({
     getClientInfo: builder.query<DarkwriteDesktopClientInfo, void>({
-      async queryFn() {
-        try {
-          const data = await DarkwriteAPIClient.desktop.getClientInfo();
-          return { data };
-        } catch (error) {
-          return { error: error as Error };
-        }
-      },
+      queryFn: resultQueryFn(() => DarkwriteAPIClient.desktop.getClientInfo()),
     }),
   }),
 });

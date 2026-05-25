@@ -1,4 +1,5 @@
 import { DarkwriteAPIClient } from "@/api/api-client";
+import { resultQueryFn } from "@/lib/query-result";
 import { FileLinkMetadata } from "@darkwrite/common";
 import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
 
@@ -18,14 +19,9 @@ export const fileLinkApi = createApi({
   tagTypes: [FILE_LINK_TAG_TYPE],
   endpoints: (builder) => ({
     getFileLinkById: builder.query<FileLinkMetadata, string>({
-      queryFn: async (id: string) => {
-        try {
-          const data = await DarkwriteAPIClient.fileLink.getById(id);
-          return { data };
-        } catch (e) {
-          return { error: e instanceof Error ? e : new Error("Unknown error") };
-        }
-      },
+      queryFn: resultQueryFn((id: string) =>
+        DarkwriteAPIClient.fileLink.getById(id),
+      ),
       providesTags: (_result, _error, id) => [fileLinkByIdTag(id)],
     }),
   }),

@@ -7,16 +7,7 @@ import { CreateWorkspaceDTO, WorkspaceDTO } from "@darkwrite/common";
 import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
 import { selectAllWorkspaces } from "./workspace-selectors";
 import { UpdateWorkspaceArg, workspaceSlice } from "./workspace-slice";
-
-export async function _getWorkspacesQueryFn() {
-  try {
-    const response = await DarkwriteAPIClient.workspace.getAll();
-    return { data: response.workspaces };
-  } catch (error) {
-    console.error("Error fetching workspaces:", error);
-    return { error: error as Error };
-  }
-}
+import { resultQueryFn } from "@/lib/query-result";
 
 export async function _updateWorkspaceMutationFn(arg: UpdateWorkspaceArg) {
   try {
@@ -56,7 +47,10 @@ export const workspaceApi = createApi({
   tagTypes: [WORKSPACE_TAG_TYPE],
   endpoints: (builder) => ({
     getWorkspaces: builder.query<WorkspaceDTO[], void>({
-      queryFn: _getWorkspacesQueryFn,
+      queryFn: resultQueryFn(
+        () => DarkwriteAPIClient.workspace.getAll(),
+        (r) => r.workspaces,
+      ),
       async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
