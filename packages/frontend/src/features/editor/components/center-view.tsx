@@ -9,17 +9,19 @@ import { useEditorActions } from "../store/editor-actions";
 import { EditorContext } from "../store/editor-context";
 import { selectCenterViewState } from "../store/editor-selectors";
 import { OpenFullscreenButton } from "./open-fullscreen-button";
-import { use } from "react";
+import { use, useRef } from "react";
+import { nanoid } from "nanoid";
 import { useEditorView } from "../hooks/use-editor-options";
 
 export function EditorCenterView() {
   const { open, noteId } = useAppSelector(selectCenterViewState);
   const actions = useEditorActions();
+  const instanceId = useRef(nanoid()).current;
   useDocumentById(noteId ?? "");
   if (!noteId) return <></>;
 
   return (
-    <EditorContext.Provider value={{ noteId }}>
+    <EditorContext.Provider value={{ noteId, instanceId }}>
       <Dialog
         open={open}
         onOpenChange={(newOpen) => {

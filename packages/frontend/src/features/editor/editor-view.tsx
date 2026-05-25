@@ -1,7 +1,8 @@
 import { useLocalStore } from "@/context/local-state";
 import { useEditorOptions, useEditorView } from "./hooks/use-editor-options";
 import { useNoteFromURL } from "@/features/note/hooks/use-note-from-url";
-import { use } from "react";
+import { use, useRef } from "react";
+import { nanoid } from "nanoid";
 import DarkwriteEditor from ".";
 import { navigateToNote } from "../navigation/navigator";
 import { useAppSelector } from "../store/hooks";
@@ -19,10 +20,11 @@ import { useEditorSettings } from "../settings/hooks/use-settings";
 export function EditorViewRouteHandler() {
   const noteId = useNoteFromURL();
   const { document } = useDocumentById(noteId ?? "");
+  const instanceId = useRef(nanoid()).current;
   if (!noteId) return null;
   return (
     document && (
-      <EditorContext.Provider value={{ noteId }}>
+      <EditorContext.Provider value={{ noteId, instanceId }}>
         <EditorView key={`editor-root-${noteId}`} noteId={noteId} />
       </EditorContext.Provider>
     )

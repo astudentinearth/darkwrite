@@ -11,7 +11,7 @@ import { UtilityNodes } from "../node-types";
 import { useTranslation } from "react-i18next";
 
 export function TitleEditField() {
-  const { noteId } = use(EditorContext);
+  const { noteId, instanceId } = use(EditorContext);
   const titleUpdater = useTitleUpdater(noteId);
   const title = useAppSelector((s) => selectNoteTitle(s, noteId));
   const { t } = useTranslation();
@@ -32,8 +32,13 @@ export function TitleEditField() {
               position: 0,
               content: UtilityNodes.EmptyParagraph,
             },
+            targetInstanceId: instanceId,
           });
-          emitEditorEvent({ noteId, type: EditorEventType.FOCUS });
+          emitEditorEvent({
+            noteId,
+            type: EditorEventType.FOCUS,
+            targetInstanceId: instanceId,
+          });
         }
       }}
       onValueChange={(val) => titleUpdater.update(cleanNoteTitle(val))}

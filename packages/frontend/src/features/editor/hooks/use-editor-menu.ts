@@ -3,7 +3,9 @@ import { useNoteById } from "@/features/note/hooks/use-note-by-id";
 import { useNoteActions } from "@/features/note/store/note-actions";
 import { emitEditorEvent } from "../event/editor-bus";
 import { EditorEventType } from "../event/types";
+import { EditorContext } from "../store/editor-context";
 import { useAppDispatch, useAppSelector } from "@/features/store/hooks";
+import { use } from "react";
 import {
   selectCanRedo,
   selectCanUndo,
@@ -36,8 +38,9 @@ export interface UseEditorMenuResult {
 
 export default function useEditorMenu(noteId: string): UseEditorMenuResult {
   const dispatch = useAppDispatch();
+  const { instanceId } = use(EditorContext);
   const { note } = useNoteById(noteId);
-  const importer = useNoteImport(noteId);
+  const importer = useNoteImport(noteId, instanceId);
   const NoteExporter = useNoteExport();
   const wordCount = useAppSelector((s) => selectWordCount(s, noteId));
   const characterCount = useAppSelector((s) => selectCharacterCount(s, noteId));
@@ -56,12 +59,14 @@ export default function useEditorMenu(noteId: string): UseEditorMenuResult {
         noteId,
         type: EditorEventType.HISTORY,
         payload: "undo",
+        targetInstanceId: instanceId,
       }),
     redo: () =>
       emitEditorEvent({
         noteId,
         type: EditorEventType.HISTORY,
         payload: "redo",
+        targetInstanceId: instanceId,
       }),
     toggleTrash: () => {
       if (note?.isTrashed) restoreFromTrash(noteId);

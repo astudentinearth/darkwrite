@@ -2,7 +2,7 @@ import { DarkwriteAPIClient } from "@/api/api-client";
 import { emitEditorEvent } from "@/features/editor/event/editor-bus";
 import { EditorEventType } from "@/features/editor/event/types";
 
-export default function useNoteImport(noteId: string) {
+export default function useNoteImport(noteId: string, instanceId: string) {
   const importNotes = async () => {
     const apiResult = await DarkwriteAPIClient.note.import();
     if (apiResult.isErr()) return;
@@ -14,6 +14,7 @@ export default function useNoteImport(noteId: string) {
           noteId,
           type: EditorEventType.INSERT_CONTENT,
           payload: { type: "html", content },
+          targetInstanceId: instanceId,
         });
         break;
       }
@@ -24,6 +25,7 @@ export default function useNoteImport(noteId: string) {
             noteId,
             type: EditorEventType.INSERT_CONTENT,
             payload: { type: "json", content: item },
+            targetInstanceId: instanceId,
           });
         }
         break;
@@ -34,6 +36,7 @@ export default function useNoteImport(noteId: string) {
           noteId,
           type: EditorEventType.INSERT_CONTENT,
           payload: { type: "md", content: markdown },
+          targetInstanceId: instanceId,
         });
         break;
       }

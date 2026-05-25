@@ -33,6 +33,12 @@ export function handleEditorEvent(editor: Editor, event: EditorEvent) {
     case EditorEventType.HISTORY: {
       if (event.payload === "undo") editor.chain().undo().run();
       else if (event.payload === "redo") editor.chain().redo().run();
+      break;
+    }
+
+    case EditorEventType.SYNC_CONTENT: {
+      editor.commands.setContent(event.content, { emitUpdate: false });
+      break;
     }
   }
 }

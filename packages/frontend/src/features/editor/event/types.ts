@@ -1,15 +1,14 @@
-import { Content } from "@tiptap/core";
+import { Content, JSONContent } from "@tiptap/core";
 import { Fragment } from "@tiptap/pm/model";
 
 export enum EditorEventType {
   FOCUS = "focus",
   INSERT_CONTENT = "insert-content",
   HISTORY = "history",
+  SYNC_CONTENT = "sync-content",
 }
 
 export type EditorContentType = "md" | "json" | "html";
-
-// insert content
 
 export type InsertContentPayload = (
   | {
@@ -23,21 +22,33 @@ export interface InsertContentEvent {
   noteId: string;
   type: EditorEventType.INSERT_CONTENT;
   payload: InsertContentPayload;
+  targetInstanceId?: string;
 }
-
-// focus
 
 export interface FocusEvent {
   noteId: string;
   type: EditorEventType.FOCUS;
+  targetInstanceId?: string;
 }
-
-// history
 
 export interface HistoryEvent {
   noteId: string;
   type: EditorEventType.HISTORY;
   payload: "undo" | "redo";
+  targetInstanceId?: string;
 }
 
-export type EditorEvent = FocusEvent | InsertContentEvent | HistoryEvent;
+// sync-content
+
+export interface SyncContentEvent {
+  noteId: string;
+  type: EditorEventType.SYNC_CONTENT;
+  content: JSONContent;
+  instanceId: string;
+}
+
+export type EditorEvent =
+  | FocusEvent
+  | InsertContentEvent
+  | HistoryEvent
+  | SyncContentEvent;
