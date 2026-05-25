@@ -1,29 +1,30 @@
-import { IEmbedAPI } from "@darkwrite/common";
-import { CreateEmbedDTO } from "@darkwrite/common";
+import { CreateEmbedDTO, DesktopEmbedAPI } from "@darkwrite/common";
 import { ResultAsync } from "neverthrow";
 
-export class EmbedLocalAdapter implements IEmbedAPI {
-  create(dto: CreateEmbedDTO) {
+export function EmbedAdapter(api: DesktopEmbedAPI) {
+  function create(dto: CreateEmbedDTO) {
     const { file, fileType, workspaceId } = dto;
     const filePath = window.webUtils.getPathForFile(file);
 
     if (filePath === "") {
       return ResultAsync.fromSafePromise(file.arrayBuffer()).andThen((buffer) =>
-        window.api.embed.createFromArrayBuffer(buffer, fileType, workspaceId),
+        api.createFromArrayBuffer(buffer, fileType, workspaceId),
       );
     }
-    return window.api.embed.createFromLocalFile(filePath, workspaceId);
+    return api.createFromLocalFile(filePath, workspaceId);
   }
 
-  getById(id: string) {
-    return window.api.embed.getById(id);
+  function getById(id: string) {
+    return api.getById(id);
   }
 
-  getEncoded(ids: string[]) {
-    return window.api.embed.getEncoded(ids);
+  function getEncoded(ids: string[]) {
+    return api.getEncoded(ids);
   }
 
-  download(id: string) {
-    return window.api.embed.download(id);
+  function download(id: string) {
+    return api.download(id);
   }
+
+  return { create, getById, getEncoded, download };
 }

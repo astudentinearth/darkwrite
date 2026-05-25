@@ -27,14 +27,13 @@ const initialize = async () => {
   DarkwriteAPIClient.initialize(APIClientMode.LOCAL);
   window.addEventListener("beforeunload", flushPendingEditorSaves);
   init({ data });
-  await initializeUserPrefs(store);
-  await initalizePlatform();
-  if (await DarkwriteAPIClient.onboarding.isNewUser()) {
-    renderOnboarding();
-    return;
-  }
-
-  renderApp();
+  initializeUserPrefs(store)
+    .andThen(initalizePlatform)
+    .andThen(DarkwriteAPIClient.onboarding.isNewUser)
+    .map((isNew) => {
+      if (isNew) renderOnboarding();
+      else renderApp();
+    });
 };
 
 initialize();

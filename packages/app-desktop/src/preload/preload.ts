@@ -1,7 +1,6 @@
 import { AppMenuEvent, WindowEvent } from "@/types/window-events";
 import {
   deepAssign,
-  hydrateResultAsync,
   NativeContextMenuData,
   recursiveKeys,
   SerializedResult,
@@ -41,9 +40,8 @@ export const initalizeAPI = async () => {
   const obj = {};
   for (const keyPath of handlerKeys) {
     const channel = "api".concat(".").concat(keyPath.join("."));
-    const handlerFunc = async (...args: unknown[]) => {
-      const result = invoke<unknown>(channel, ...args);
-      return hydrateResultAsync(result);
+    const handlerFunc = (...args: unknown[]) => {
+      return invoke<unknown>(channel, ...args);
     };
     // replace each `true` with a wrapper to ipcRenderer.invoke
     deepAssign(obj, keyPath, handlerFunc);

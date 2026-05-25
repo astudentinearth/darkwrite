@@ -62,14 +62,17 @@ export function hydrateResult<T, E>(
 export function hydrateResultAsync<T, E>(
   serialized: Promise<SerializedResult<T, E>>,
 ): ResultAsync<T, E> {
-  return ResultAsync.fromPromise(
+  const r = ResultAsync.fromPromise(
     (async () => {
       const result = await serialized;
+      console.log("|| ", result);
       if (result.isOk) return result.value;
       else throw result.error;
     })(),
     (e) => e as E,
   );
+  console.log("&& ", r);
+  return r;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

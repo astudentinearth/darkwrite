@@ -30,6 +30,7 @@ import { handler, HandlerImplements } from "../types/ipc-handler";
 import { notesToDto, noteToDto } from "./note-mapper";
 import { INoteQueryService } from "./note-query.service";
 import { INoteService } from "./note.service";
+import { extname } from "path";
 
 const aggregateResponse = (notes: Note[]) =>
   ({ notes: notesToDto(notes) }) satisfies NotesResponseDTO;
@@ -45,7 +46,7 @@ const importTypeMap: Record<string, NoteExportFormat> = {
   ".htm": "html",
 };
 
-const determineImportType = (t: string) => importTypeMap[t] ?? "json";
+const determineImportType = (t: string) => importTypeMap[extname(t)] ?? "json";
 
 export function NoteAPI(
   noteService: INoteService,
@@ -142,9 +143,7 @@ export function NoteAPI(
         defaultPath: `${title ?? "document"}.${fileType}`,
         filters: [{ extensions: [fileType], name: FileFormatMap[fileType] }],
       })
-        .andThen((path) =>
-          writeFileUtf8(path, fileContent).map(() => path),
-        )
+        .andThen((path) => writeFileUtf8(path, fileContent).map(() => path))
         .orElse(whenDialogCancelled(undefined)),
   );
 
@@ -161,9 +160,7 @@ export function NoteAPI(
           })
             .map((path) => ({ buffer, path }))
             .andThen(({ buffer, path }) =>
-              (writeBinaryFile(path, Buffer.from(buffer.buffer))).map(
-                () => path,
-              ),
+              writeBinaryFile(path, Buffer.from(buffer.buffer)).map(() => path),
             ),
         )
         .orElse(whenDialogCancelled(undefined)),
@@ -211,6 +208,6 @@ export function NoteAPI(
     export: saveExportedNote,
     exportPdf: saveToPDF,
     import: importFiles,
-    unfavorite
+    unfavorite,
   };
 }
