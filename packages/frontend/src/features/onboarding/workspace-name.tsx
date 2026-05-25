@@ -19,15 +19,16 @@ export default function WorkspaceNameStep() {
       <div className="text-center text-[32px} font-semibold">
         {t("onboarding.welcome")}
       </div>
-      <div className="h-4"></div>
+      <div className="h-2"></div>
       <div className="text-xl text-center">{t("onboarding.welcomeDesc")}</div>
       <div className="h-6"></div>
-      <div className="flex gap-3">
+      <div className="flex gap-2">
         <Input
           value={name}
+          onKeyDown={(e) => e.key === "Enter" && canContinue && _continue()}
           onChange={(e) => setName(e.target.value)}
           placeholder={t("onboarding.nameWorkspaceHint")}
-          className="px-4 h-14 text-xl! bg-view-2 w-70 rounded-2xl"
+          className="px-4 h-14 text-xl! bg-view-2 w-70 rounded-xl top-highlight border-none"
         />
         <ForwardButton onClick={_continue} disabled={!canContinue} />
       </div>

@@ -217,6 +217,26 @@ em-emoji-picker {
   body {
     @apply bg-background text-foreground w-full h-full m-0;
   }
+  progress {
+    appearance: none;
+    -webkit-appearance: none;
+    color: var(--primary);
+    accent-color: var(--primary);
+  }
+  progress::-webkit-progress-bar {
+    background-color: var(--muted);
+    border-radius: var(--radius-full);
+  }
+  progress::-webkit-progress-value {
+    background-color: var(--primary);
+    border-radius: var(--radius-full);
+    transition: width 250ms ease-out;
+  }
+  progress::-moz-progress-bar {
+    background-color: var(--primary);
+    border-radius: var(--radius-full);
+    transition: width 250ms ease-out;
+  }
   #root {
     @apply w-full h-full m-0 p-0;
   }

@@ -20,7 +20,7 @@ export default function OnboardingFinish() {
       <OnboardingButton
         onClick={finishOnboarding}
         variant="default"
-        className="bg-primary border-primary"
+        className="bg-primary hover:bg-primary/80 border-primary"
       >
         {t("onboarding.letsBegin")}
       </OnboardingButton>

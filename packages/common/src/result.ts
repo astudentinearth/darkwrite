@@ -65,13 +65,11 @@ export function hydrateResultAsync<T, E>(
   const r = ResultAsync.fromPromise(
     (async () => {
       const result = await serialized;
-      console.log("|| ", result);
       if (result.isOk) return result.value;
       else throw result.error;
     })(),
     (e) => e as E,
   );
-  console.log("&& ", r);
   return r;
 }
 

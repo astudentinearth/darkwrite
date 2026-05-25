@@ -31,9 +31,9 @@ export default function ThemeSelection() {
         {t("onboarding.themeDesc")}
       </div>
       <div className="h-6"></div>
-      <div className="flex gap-3">
+      <div className="flex gap-2">
         <Select value={theme} onValueChange={(val) => setOnboardingTheme(val)}>
-          <SelectTrigger className="rounded-2xl text-xl! h-14 w-75 bg-view-2 pl-5 pr-4">
+          <SelectTrigger className="rounded-xl text-xl! h-14 w-75 bg-view-2 pl-5 pr-4">
             {DEFAULT_THEMES[theme].name}
           </SelectTrigger>
           <SelectContent className="rounded-2xl z-50 no-window-drag">

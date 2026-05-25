@@ -17,7 +17,7 @@ export default function OnboardingButton({
     <Button
       variant={variant ?? "secondary"}
       className={cn(
-        "bg-view-2 border rounded-2xl drop-shadow-sm h-fit px-6 py-4 grid grid-cols-[1fr_24px] text-start text-xl",
+        "bg-view-2 hover:bg-view-2/80 border rounded-xl drop-shadow-sm h-fit px-6 py-4 grid grid-cols-[1fr_24px] text-start text-xl",
         className,
       )}
       {...props}
@@ -31,9 +31,9 @@ export default function OnboardingButton({
 export function BackButton({ className, ...props }: OnboardingButtonProps) {
   return (
     <Button
-      variant={"secondary"}
+      variant={"ghost"}
       className={cn(
-        "bg-view-2 border rounded-2xl drop-shadow-sm size-14",
+        "hover:bg-view-2/80 rounded-md drop-shadow-sm size-14",
         className,
       )}
       {...props}
@@ -47,7 +47,7 @@ export function ForwardButton({ className, ...props }: OnboardingButtonProps) {
   return (
     <Button
       className={cn(
-        "bg-primary border border-primary rounded-2xl drop-shadow-sm size-14",
+        "bg-primary border border-primary rounded-xl drop-shadow-sm size-14",
         className,
       )}
       {...props}

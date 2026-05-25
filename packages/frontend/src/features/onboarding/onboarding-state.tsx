@@ -45,6 +45,13 @@ export function getOnboardingPage(key: OnboardingPage) {
   }
 }
 
+export const pageProgress: Record<OnboardingPage, number> = {
+  language: 0,
+  "workspace-name": 0.33,
+  theme: 0.66,
+  finish: 1,
+};
+
 export const useOnboardingState = create<IOnboardingState>()((set, get) => ({
   currentPage: "language",
   previousPage: null,

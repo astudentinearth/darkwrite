@@ -14,7 +14,10 @@ export default function LanguageSelection() {
 
   return (
     <div className="flex flex-col items-center slide-up-and-fade-in">
-      <img src="darkwrite_icon.png" className="w-30 h-30 drop-shadow-xl"></img>
+      <img
+        src="darkwrite_icon.png"
+        className="w-30 h-30 drop-shadow-xl select-none"
+      ></img>
       <div className="h-10" />
       <div className="flex gap-2 items-center">
         <Languages size={24} />

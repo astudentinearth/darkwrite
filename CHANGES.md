@@ -1,3 +1,10 @@
+# 1.2.3-beta.1
+## ✨ Improvements and fixes
+- Update onboarding screens
+
+## 🛠️ Technical changes
+- Full main process refactor to use functional programming patterns
+
 # 1.2.2-beta.1
 ## ✨ Improvements and fixes
 - Fix the image regression introduced in 1.2.1-beta.1 (#30)
