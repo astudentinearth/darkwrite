@@ -1,4 +1,5 @@
 import {
+  CheckUpdateFn,
   DarkwriteIPCBridge,
   hydrateResultAsync,
   IDesktopAPI,
@@ -36,6 +37,7 @@ export class DarkwriteAPIClient {
   static onboarding: typeof window.api.onboarding;
   static backup: typeof window.api.backup;
   static fileLink: IFileLinkAPI;
+  static checkUpdate: CheckUpdateFn;
 
   private static initializeLocalAPIs() {
     const api = resultHydrationMiddleware(window.api);
@@ -48,6 +50,7 @@ export class DarkwriteAPIClient {
     this.onboarding = api.onboarding;
     this.backup = api.backup;
     this.fileLink = api.fileLink;
+    this.checkUpdate = api.checkUpdate;
   }
 
   private static initializeCloudAPIs() {

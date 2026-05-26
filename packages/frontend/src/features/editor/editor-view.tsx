@@ -33,8 +33,10 @@ export function EditorViewRouteHandler() {
 
 export function EditorViewport({
   unconstrainedWidth,
+  onNavigate,
 }: {
   unconstrainedWidth?: boolean;
+  onNavigate?: (id: string) => void;
 }) {
   const { noteId } = use(EditorContext);
 
@@ -66,7 +68,7 @@ export function EditorViewport({
           async (id) => `embed://${id}` //TODO: band-aid for current circumstances. fix this with a proper cache when you can link remote images.
         }
         key={noteId}
-        onNavigateToNote={navigateToNote}
+        onNavigateToNote={onNavigate ?? navigateToNote}
       />
     </ConstrainedWidth>
   );

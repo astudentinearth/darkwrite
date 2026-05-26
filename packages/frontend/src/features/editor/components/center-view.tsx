@@ -12,6 +12,7 @@ import { OpenFullscreenButton } from "./open-fullscreen-button";
 import { use, useRef } from "react";
 import { nanoid } from "nanoid";
 import { useEditorView } from "../hooks/use-editor-options";
+import { navigateToNote } from "@/features/navigation/navigator";
 
 export function EditorCenterView() {
   const { open, noteId } = useAppSelector(selectCenterViewState);
@@ -35,6 +36,7 @@ export function EditorCenterView() {
 }
 
 function CenterViewContent() {
+  const actions = useEditorActions();
   const { noteId } = use(EditorContext);
   const { style } = useEditorView(noteId);
   return (
@@ -56,7 +58,13 @@ function CenterViewContent() {
           <hr />
         </div>
         <div className="px-16 w-full pt-4">
-          <EditorViewport unconstrainedWidth />
+          <EditorViewport
+            unconstrainedWidth
+            onNavigate={(id) => {
+              actions.closeCenterView();
+              navigateToNote(id);
+            }}
+          />
         </div>
       </div>
     </DialogContent>
