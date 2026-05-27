@@ -11,7 +11,7 @@ import {
 } from "@darkwrite/common";
 import { app, systemPreferences } from "electron";
 import { ok, ResultAsync } from "neverthrow";
-import os from "os";
+import os from "node:os";
 import { handler, type HandlerImplements } from "../types";
 
 const operatingSystem = os.platform() as OS;

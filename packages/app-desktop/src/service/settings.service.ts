@@ -5,7 +5,7 @@ import {
   parseJson,
   SettingsModel,
 } from "@darkwrite/common";
-import { readFile, writeFile } from "fs/promises";
+import { readFile, writeFile } from "node:fs/promises";
 import _ from "lodash";
 import { ok } from "neverthrow";
 import log from "electron-log"

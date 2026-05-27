@@ -6,7 +6,7 @@ import {
     type DesktopEmbedAPI,
 } from "@darkwrite/common";
 import { net } from "electron";
-import { writeFile } from "fs/promises";
+import { writeFile } from "node:fs/promises";
 import { okAsync, ResultAsync } from "neverthrow";
 import { embedToDto } from "./embed-mapper";
 import type { IEmbedService } from "./embed.service";

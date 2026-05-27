@@ -3,7 +3,7 @@ import { type NewNote, type Note, note as notesTable, type Workspace } from "@/d
 import { resolveTx } from "@/db/transactional";
 import { WorkspaceDAO } from "@/workspace/workspace.dao";
 import { type ParentId, Rank } from "@darkwrite/common";
-import { randomUUID } from "crypto";
+import { randomUUID } from "node:crypto";
 import { beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { NoteDAO, type NoteDAOInstance } from "./note.dao";
 

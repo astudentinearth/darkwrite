@@ -1,7 +1,7 @@
 import * as fslib from "@/lib/fs";
 import { dwErr, type DwError } from "@darkwrite/common";
 import { pathExists } from "fs-extra";
-import { readFile, rm, writeFile } from "fs/promises";
+import { readFile, rm, writeFile } from "node:fs/promises";
 import { ok, type Result, type ResultAsync } from "neverthrow";
 import path from "node:path";
 

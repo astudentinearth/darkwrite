@@ -2,11 +2,11 @@ import { DB_PATH } from "../lib/paths";
 import * as relations from "./relations";
 import * as tables from "./schema";
 
-import { randomUUID } from "crypto";
+import { randomUUID } from "node:crypto";
 import { drizzle } from "drizzle-orm/libsql/node";
-import { tmpdir } from "os";
-import { join } from "path";
-import { pathToFileURL } from "url";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { pathToFileURL } from "node:url";
 
 const dbPath = DB_PATH;
 export const DB_SYMBOL = Symbol("darkwrite-db-instance");

@@ -1,8 +1,8 @@
 import type { DwResultAsync } from "@darkwrite/common";
-import fse from "fs/promises";
+import fse from "node:fs/promises";
 import { okAsync } from "neverthrow";
-import { join } from "path";
-import { pathToFileURL } from "url";
+import { join } from "node:path";
+import { pathToFileURL } from "node:url";
 import { fsResult, rmIfExists } from "./fs";
 import { Paths } from "./paths";
 

@@ -1,4 +1,4 @@
-import path from "path";
+import path from "node:path";
 import { build, defineConfig, type InlineConfig } from "vite";
 import electron from "vite-plugin-electron";
 

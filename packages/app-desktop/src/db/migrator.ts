@@ -4,8 +4,8 @@ import { migrate } from "drizzle-orm/libsql/migrator";
 import { default as _log } from "electron-log";
 import { copy, pathExists, remove } from "fs-extra";
 import type { DatabaseType } from "./data-source";
-import { fileURLToPath } from "url";
-import path from "path";
+import { fileURLToPath } from "node:url";
+import path from "node:path";
 import { app, dialog } from "electron";
 import { ResultAsync } from "neverthrow";
 

@@ -30,7 +30,7 @@ import { handler, type HandlerImplements } from "../types/ipc-handler";
 import { notesToDto, noteToDto } from "./note-mapper";
 import type { INoteQueryService } from "./note-query.service";
 import type { INoteService } from "./note.service";
-import { extname } from "path";
+import { extname } from "node:path";
 
 const aggregateResponse = (notes: Note[]) =>
   ({ notes: notesToDto(notes) }) satisfies NotesResponseDTO;

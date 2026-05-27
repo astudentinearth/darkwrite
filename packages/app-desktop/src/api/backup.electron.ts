@@ -6,7 +6,7 @@ import extract from "extract-zip";
 import fse from "fs-extra";
 import { okAsync, ResultAsync } from "neverthrow";
 import { join } from "node:path";
-import os from "os";
+import os from "node:os";
 import { zip } from "zip-a-folder";
 import { db as DB } from "../db";
 import { rmIfExists } from "../lib/fs";
