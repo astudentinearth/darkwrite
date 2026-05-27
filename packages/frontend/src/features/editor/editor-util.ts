@@ -1,9 +1,9 @@
-import { Editor } from "@tiptap/core";
+import type { Editor } from "@tiptap/core";
 import { UtilityNodes } from "./node-types";
 import { useCurrentEditor } from "@tiptap/react";
 import { MarkdownConverter } from "@darkwrite/common";
-import { HeadingLevel, ListType, TextDirection, TextFormat } from "./types";
-import { FormattingState } from "./store/editor-slice";
+import { type HeadingLevel, ListType, TextDirection, TextFormat } from "./types";
+import type { FormattingState } from "./store/editor-slice";
 
 export default function EditorUtil(editor: Editor) {
   return {

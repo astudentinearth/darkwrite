@@ -1,6 +1,6 @@
 import { assertExists, fsResult } from "@/lib/fs";
 import {
-  DarkwriteUserSettings,
+  type DarkwriteUserSettings,
   migrateSettings,
   parseJson,
   SettingsModel,

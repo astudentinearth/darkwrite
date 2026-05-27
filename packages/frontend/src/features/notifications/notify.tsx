@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 import { toast as sonner } from "sonner";
 import { ErrorToast, SuccessToast, Toast } from "./components/base-toast";
 

@@ -2,10 +2,10 @@
 // Electron-side handlers should implement these directly and expose it via the API bridge.
 // Clients talking to a cloud instance shall make the appropriate network requests instead.
 // Cloud-specific code should be kept separate from Electron to ensure browser portability.
-import { ResultAsync } from "neverthrow";
-import { DarkwriteDesktopClientInfo, UpdateServerResponse } from "./client";
-import { NativeContextMenuData } from "./context-menu";
-import {
+import type { ResultAsync } from "neverthrow";
+import type { DarkwriteDesktopClientInfo, UpdateServerResponse } from "./client";
+import type { NativeContextMenuData } from "./context-menu";
+import type {
   CreateNoteDTO,
   MoveNoteDTO,
   NoteContentResponseDTO,
@@ -14,23 +14,23 @@ import {
   ParentTreeResponseDTO,
   UpdateNoteDTO,
 } from "./dto";
-import { CreateEmbedDTO } from "./dto/request/embed.request";
-import {
+import type { CreateEmbedDTO } from "./dto/request/embed.request";
+import type {
   CreateWorkspaceDTO,
   UpdateWorkspaceDTO,
 } from "./dto/request/workspace.request";
-import { EmbedResponseDTO } from "./dto/response/embed.response";
-import { ThemesResponseDTO } from "./dto/response/theme.response";
-import {
+import type { EmbedResponseDTO } from "./dto/response/embed.response";
+import type { ThemesResponseDTO } from "./dto/response/theme.response";
+import type {
   WorkspaceResponseDTO,
   WorkspacesResponseDTO,
 } from "./dto/response/workspace.response";
-import { Font } from "./font";
-import { FileLinkMetadata } from "./link";
-import { NoteExportFormat, NoteImportResult, ParentId } from "./note";
-import { PageSize } from "./pdf";
-import { DwError, DwResultAsync } from "./result";
-import { DarkwriteUserSettings } from "./settings";
+import type { Font } from "./font";
+import type { FileLinkMetadata } from "./link";
+import type { NoteExportFormat, NoteImportResult, ParentId } from "./note";
+import type { PageSize } from "./pdf";
+import type { DwError, DwResultAsync } from "./result";
+import type { DarkwriteUserSettings } from "./settings";
 
 export type ApiResult<T> = ResultAsync<T, DwError>;
 export type NoReturn = ResultAsync<void, never>;

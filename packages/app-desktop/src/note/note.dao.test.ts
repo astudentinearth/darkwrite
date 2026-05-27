@@ -1,11 +1,11 @@
-import { createTestDatabase, DatabaseType, applySqlMigrations } from "@/db";
-import { NewNote, Note, note as notesTable, Workspace } from "@/db/schema";
+import { createTestDatabase, type DatabaseType, applySqlMigrations } from "@/db";
+import { type NewNote, type Note, note as notesTable, type Workspace } from "@/db/schema";
 import { resolveTx } from "@/db/transactional";
 import { WorkspaceDAO } from "@/workspace/workspace.dao";
-import { ParentId, Rank } from "@darkwrite/common";
+import { type ParentId, Rank } from "@darkwrite/common";
 import { randomUUID } from "crypto";
 import { beforeAll, beforeEach, describe, expect, it } from "vitest";
-import { NoteDAO, NoteDAOInstance } from "./note.dao";
+import { NoteDAO, type NoteDAOInstance } from "./note.dao";
 
 let db: DatabaseType = createTestDatabase();
 

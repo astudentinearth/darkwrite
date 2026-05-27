@@ -1,5 +1,5 @@
-import { Content, JSONContent } from "@tiptap/core";
-import { Fragment } from "@tiptap/pm/model";
+import type { Content, JSONContent } from "@tiptap/core";
+import type { Fragment } from "@tiptap/pm/model";
 
 export enum EditorEventType {
   FOCUS = "focus",

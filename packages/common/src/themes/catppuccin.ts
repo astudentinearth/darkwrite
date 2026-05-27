@@ -21,7 +21,7 @@
  * SOFTWARE.
  */
 
-import { Theme } from "../theme";
+import type { Theme } from "../theme";
 
 export const CatppuccinMocha: Theme = {
   id: "darkwrite-catppuccin-mocha",

@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { NoteDTO } from "./dto";
+import type { NoteDTO } from "./dto";
 import { Rank } from "./rank";
 
 export interface IdRankPair {

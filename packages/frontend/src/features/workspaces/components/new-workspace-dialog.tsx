@@ -1,6 +1,6 @@
 import {
   Button,
-  ControlledDialogProps,
+  type ControlledDialogProps,
   Dialog,
   DialogContent,
   DialogTitle,
@@ -8,7 +8,7 @@ import {
   Input,
   Label,
 } from "@/components/ui";
-import { ReactNode, useState } from "react";
+import { type ReactNode, useState } from "react";
 import { getDefaultWorkspaceConfiguration } from "@darkwrite/common";
 import { useWorkspaceManager } from "@/features/workspaces/hooks/use-workspace-manager";
 import { useCreateWorkspaceMutation } from "../store/workspace-api";

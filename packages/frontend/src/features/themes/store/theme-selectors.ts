@@ -1,5 +1,5 @@
-import { Theme } from "@darkwrite/common";
-import { RootState, Selector } from "@/features/store/types";
+import type { Theme } from "@darkwrite/common";
+import type { RootState, Selector } from "@/features/store/types";
 import { createSelector } from "@reduxjs/toolkit";
 
 export const selectAllThemes = (state: RootState) =>

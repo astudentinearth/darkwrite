@@ -1,4 +1,4 @@
-import { NodeViewWrapper, ReactNodeViewProps } from "@tiptap/react";
+import { NodeViewWrapper, type ReactNodeViewProps } from "@tiptap/react";
 import { useEmbedSource } from "../../use-embed-source";
 import {
   ContextMenu,

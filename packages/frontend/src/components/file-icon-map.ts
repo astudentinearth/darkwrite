@@ -9,7 +9,7 @@ import {
   FileTerminal,
   FileText,
   Film,
-  LucideIcon,
+  type LucideIcon,
   Presentation,
 } from "lucide-react";
 

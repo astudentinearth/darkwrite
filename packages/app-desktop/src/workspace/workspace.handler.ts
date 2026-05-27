@@ -1,15 +1,15 @@
 import {
-  CreateWorkspaceDTO,
+  type CreateWorkspaceDTO,
   CreateWorkspaceDTOSchema,
-  IWorkspaceAPI,
+  type IWorkspaceAPI,
   okVoid,
-  UpdateWorkspaceDTO,
+  type UpdateWorkspaceDTO,
   UpdateWorkspaceDTOSchema,
   validateSchema,
 } from "@darkwrite/common";
-import { handler, HandlerImplements } from "../types/ipc-handler";
+import { handler, type HandlerImplements } from "../types/ipc-handler";
 import { workspaceToDto } from "./workspace-mapper";
-import { IWorkspaceService } from "./workspace.service";
+import type { IWorkspaceService } from "./workspace.service";
 
 export function WorkspaceAPI(
   workspaceService: IWorkspaceService,

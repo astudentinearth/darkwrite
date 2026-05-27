@@ -1,7 +1,7 @@
 import { useEditorStore } from "@/context/editor-store";
 import { useLocalStore } from "@/context/local-state";
 import { cn } from "@/lib/utils";
-import { TextareaHTMLAttributes, useLayoutEffect, useRef } from "react";
+import { type TextareaHTMLAttributes, useLayoutEffect, useRef } from "react";
 
 export interface DynamicTextareaProps extends Omit<
   TextareaHTMLAttributes<HTMLTextAreaElement>,

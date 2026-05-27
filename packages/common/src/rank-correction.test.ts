@@ -1,11 +1,11 @@
-import { NoteDTO } from "./dto";
+import type { NoteDTO } from "./dto";
 import { Rank } from "./rank";
 import {
   ANCHOR_ELEMENT_ID,
   fixCollisionsInGroup,
   generateRankCollisionChangeset,
   identifyCollisions,
-  IdRankPair,
+  type IdRankPair,
 } from "./rank-correction";
 
 describe("tests for order hint collision and their correction", () => {

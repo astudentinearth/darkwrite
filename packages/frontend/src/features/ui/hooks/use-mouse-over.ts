@@ -1,4 +1,4 @@
-import { MouseEvent, useState } from "react";
+import { type MouseEvent, useState } from "react";
 
 export default function useMouseOver(stopPropagation = false) {
   const [mouseOver, setMouseOver] = useState(false);

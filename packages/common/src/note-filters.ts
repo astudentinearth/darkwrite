@@ -1,4 +1,4 @@
-import { NoteDTO } from "./dto";
+import type { NoteDTO } from "./dto";
 
 export function notTrashed(note: NoteDTO) {
   return !note.isTrashed;

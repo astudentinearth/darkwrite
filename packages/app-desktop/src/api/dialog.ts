@@ -1,5 +1,5 @@
-import { dialog, OpenDialogOptions, SaveDialogOptions } from "electron";
-import { err, ok, Result, ResultAsync } from "neverthrow";
+import { dialog, type OpenDialogOptions, type SaveDialogOptions } from "electron";
+import { err, ok, type Result, ResultAsync } from "neverthrow";
 
 /** @deprecated useless abstraction */
 export type SaveFileDialogOptions = {

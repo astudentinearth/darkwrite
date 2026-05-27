@@ -1,5 +1,5 @@
 import { DarkwriteAPIClient } from "@/api/api-client";
-import { AppStore } from "../store/redux";
+import type { AppStore } from "../store/redux";
 import { getThemeActions } from "./store/theme-actions";
 
 export function initializeThemes(store: AppStore) {

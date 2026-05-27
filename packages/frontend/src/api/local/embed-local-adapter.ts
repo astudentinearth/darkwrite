@@ -1,4 +1,4 @@
-import { CreateEmbedDTO, DesktopEmbedAPI } from "@darkwrite/common";
+import type { CreateEmbedDTO, DesktopEmbedAPI } from "@darkwrite/common";
 import { ResultAsync } from "neverthrow";
 
 export function EmbedAdapter(api: DesktopEmbedAPI) {

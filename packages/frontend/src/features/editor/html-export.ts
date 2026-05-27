@@ -1,4 +1,4 @@
-import { Block, EditorContent } from "./types";
+import { Block, type EditorContent } from "./types";
 import { generateHTML as tiptapHTML } from "@tiptap/html";
 import { DefaultEditorExtensions } from "./extensions/default";
 import { CodeBlockExtension } from "./extensions";

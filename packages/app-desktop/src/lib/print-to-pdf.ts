@@ -1,4 +1,4 @@
-import { PageMargins, PageSize } from "@darkwrite/common";
+import { PageMargins, type PageSize } from "@darkwrite/common";
 import { BrowserWindow } from "electron";
 import log from "electron-log";
 import { writeFile } from "fs-extra";

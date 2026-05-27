@@ -1,12 +1,12 @@
-import { ImageExtensionConfig } from "@/features/editor/extensions/image/image-config";
+import type { ImageExtensionConfig } from "@/features/editor/extensions/image/image-config";
 import { useCenteredLayout } from "@/features/layout/hooks/use-centered-layout";
 import { DarkwriteAPIClient } from "@/api/api-client";
-import { CSSProperties, use, useCallback, useMemo } from "react";
+import { type CSSProperties, use, useCallback, useMemo } from "react";
 import { FONT_VARS, FontStyle } from "@darkwrite/common";
 import { useAppSelector } from "@/features/store/hooks";
 import { selectEditorCustomizations } from "@/features/editor/store/editor-selectors";
 import { useCurrentWorkspaceId } from "@/features/workspaces/hooks/use-workspace";
-import { Editor, JSONContent } from "@tiptap/core";
+import type { Editor, JSONContent } from "@tiptap/core";
 import { useEditorActions } from "@/features/editor/store/editor-actions";
 import { EditorContext } from "@/features/editor/store/editor-context";
 import EditorUtil from "@/features/editor/editor-util";

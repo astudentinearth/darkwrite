@@ -1,8 +1,8 @@
-import { CreateWorkspaceDTO } from "@darkwrite/common";
-import { WorkspaceDTO } from "@darkwrite/common";
-import { AppStore } from "@/features/store/redux";
+import type { CreateWorkspaceDTO } from "@darkwrite/common";
+import type { WorkspaceDTO } from "@darkwrite/common";
+import type { AppStore } from "@/features/store/redux";
 import { workspaceApi } from "./workspace-api";
-import { UpdateWorkspaceArg, workspaceSlice } from "./workspace-slice";
+import { type UpdateWorkspaceArg, workspaceSlice } from "./workspace-slice";
 import { useAppStore } from "@/features/store/hooks";
 import { useMemo } from "react";
 

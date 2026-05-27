@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { PageSize } from "./pdf";
+import type { PageSize } from "./pdf";
 
 export type ThemeMode = "light" | "dark" | "system";
 

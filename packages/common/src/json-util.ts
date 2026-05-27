@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Optional } from "@/ts-util";
+import type { Optional } from "@/ts-util";
 import _ from "lodash";
-import { err, ok, Result } from "neverthrow";
+import { err, ok, type Result } from "neverthrow";
 
 export type JsonParseError = { type: "invalid-json-string"; message?: string };
 

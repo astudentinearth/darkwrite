@@ -5,7 +5,7 @@ import NoteListRoot from "@/features/note/note-list-root";
 import { useSidebar } from "@/features/layout/hooks/use-sidebar";
 import { cn } from "@/lib/utils";
 import { LayoutDashboard, PanelRightOpen, Search } from "lucide-react";
-import React from "react";
+import type React from "react";
 import { useTranslation } from "react-i18next";
 import { showSearch } from "../search/search-state";
 import AppMenu from "./app-menu";

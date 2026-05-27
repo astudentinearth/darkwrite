@@ -1,6 +1,6 @@
-import { IOnboardingAPI } from "@darkwrite/common";
+import type { IOnboardingAPI } from "@darkwrite/common";
 import { pathExists, readFileUtf8, writeFileUtf8 } from "./fs";
-import { handler, HandlerImplements } from "@/types";
+import { handler, type HandlerImplements } from "@/types";
 
 export const CURRENT_VERSION = "v1";
 

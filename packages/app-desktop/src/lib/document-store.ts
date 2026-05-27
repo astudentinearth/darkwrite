@@ -1,8 +1,8 @@
 import * as fslib from "@/lib/fs";
-import { dwErr, DwError } from "@darkwrite/common";
+import { dwErr, type DwError } from "@darkwrite/common";
 import { pathExists } from "fs-extra";
 import { readFile, rm, writeFile } from "fs/promises";
-import { ok, Result, ResultAsync } from "neverthrow";
+import { ok, type Result, type ResultAsync } from "neverthrow";
 import path from "node:path";
 
 export interface IDocumentStore {

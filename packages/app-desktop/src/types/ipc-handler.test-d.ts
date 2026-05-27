@@ -1,6 +1,6 @@
 import { expectTypeOf } from "vitest";
 import type { IpcMainInvokeEvent } from "electron";
-import { Result, ResultAsync, ok } from "neverthrow";
+import { type Result, type ResultAsync, ok } from "neverthrow";
 import {
   type IPCListener,
   type GetMainHandlerParams,
@@ -8,10 +8,10 @@ import {
   type InferHandler,
   type IPCPreloadHandler,
   IPCHandler,
-  InferPreloadAPI,
-  HandlerImplements,
+  type InferPreloadAPI,
+  type HandlerImplements,
 } from "./ipc-handler";
-import { NestedApiBridge } from "@/ipc/api";
+import type { NestedApiBridge } from "@/ipc/api";
 
 type ipcWithoutEvent = (value: string, count: number) => Result<number, string>;
 type ipcWithoutEvent2 = (value: string) => ResultAsync<number, string>;

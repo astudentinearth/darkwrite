@@ -1,4 +1,4 @@
-import { DwResultAsync } from "@darkwrite/common";
+import type { DwResultAsync } from "@darkwrite/common";
 import fse from "fs/promises";
 import { okAsync } from "neverthrow";
 import { join } from "path";

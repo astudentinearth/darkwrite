@@ -5,7 +5,7 @@ import useEditorBuilder from "./hooks/use-editor-builder";
 import { emitEditorEvent } from "./event/editor-bus";
 import { EditorEventType } from "./event/types";
 import { EditorContext } from "./store/editor-context";
-import { EditorContent, TextDirection } from "./types";
+import { type EditorContent, TextDirection } from "./types";
 
 export function EditorRoot(props: { content: EditorContent }) {
   const context = use(DarkwriteEditorContext);

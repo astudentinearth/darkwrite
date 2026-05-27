@@ -1,12 +1,12 @@
 import { dbResult } from "@/db/db-result";
 import {
-  NewWorkspace,
-  PatchWorkspace,
-  Workspace,
+  type NewWorkspace,
+  type PatchWorkspace,
+  type Workspace,
   workspace as workspaceTable,
 } from "@/db/schema";
-import { TxResolver } from "@/db/transactional";
-import { dwErr, DwResultAsync } from "@darkwrite/common";
+import type { TxResolver } from "@/db/transactional";
+import { dwErr, type DwResultAsync } from "@darkwrite/common";
 import { eq } from "drizzle-orm";
 import { ok } from "neverthrow";
 

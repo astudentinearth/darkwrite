@@ -1,4 +1,4 @@
-import { DatabaseType } from "@/db";
+import type { DatabaseType } from "@/db";
 import { resolveTx } from "@/db/transactional";
 import { NoteDAO } from "./note.dao";
 

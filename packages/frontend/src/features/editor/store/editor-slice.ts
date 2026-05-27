@@ -1,9 +1,9 @@
-import { NoteContent } from "@darkwrite/common";
-import { NoteCustomization } from "@darkwrite/common";
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { JSONContent } from "@tiptap/core";
+import type { NoteContent } from "@darkwrite/common";
+import type { NoteCustomization } from "@darkwrite/common";
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import type { JSONContent } from "@tiptap/core";
 import _ from "lodash";
-import { TextDirection } from "../types";
+import type { TextDirection } from "../types";
 
 export const EDITOR_SLICE_NAME = "editor";
 

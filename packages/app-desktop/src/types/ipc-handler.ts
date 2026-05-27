@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-redeclare */
-import { ExtractResultTypes, type OmitFirstParameter } from "@darkwrite/common";
-import { type IpcMainInvokeEvent } from "electron";
-import { Result, ResultAsync } from "neverthrow";
+import type { ExtractResultTypes, OmitFirstParameter } from "@darkwrite/common";
+import type { IpcMainInvokeEvent } from "electron";
+import type { Result, ResultAsync } from "neverthrow";
 
 export type IPCMainListener = (
   event: IpcMainInvokeEvent,

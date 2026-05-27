@@ -1,14 +1,14 @@
 import { dbResult } from "@/db/db-result";
 import {
-  Database,
+  type Database,
   database as databaseTable,
-  NewDatabase,
-  PatchDatabase,
+  type NewDatabase,
+  type PatchDatabase,
 } from "@/db/schema";
-import { TxResolver } from "@/db/transactional";
+import type { TxResolver } from "@/db/transactional";
 import {
     buildDwError,
-    DwResultAsync,
+    type DwResultAsync,
   errOnUndefined,
   firstOrErr,
   okVoid,

@@ -1,5 +1,5 @@
-import { handler, HandlerImplements } from "@/types";
-import { IShellAPI } from "@darkwrite/common";
+import { handler, type HandlerImplements } from "@/types";
+import type { IShellAPI } from "@darkwrite/common";
 import { shell } from "electron";
 import { ok } from "neverthrow";
 

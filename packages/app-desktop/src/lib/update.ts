@@ -1,7 +1,7 @@
 import { app } from "electron";
 import semver from "semver";
 import log from "electron-log";
-import { buildDwError, UpdateServerResponse } from "@darkwrite/common";
+import { buildDwError, type UpdateServerResponse } from "@darkwrite/common";
 import { handler } from "@/types";
 import { ResultAsync } from "neverthrow";
 

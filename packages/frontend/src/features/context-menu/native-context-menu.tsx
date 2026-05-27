@@ -10,7 +10,7 @@ import {
   useNativeContextMenu,
   useSpellingActions,
 } from "./use-native-context-menu";
-import { ContextMenuEditActions } from "@darkwrite/common";
+import type { ContextMenuEditActions } from "@darkwrite/common";
 import { useTranslation } from "react-i18next";
 import { SpellCheck } from "lucide-react";
 

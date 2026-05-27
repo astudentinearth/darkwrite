@@ -1,4 +1,4 @@
-import { IDocumentStore } from "@/lib/document-store";
+import type { IDocumentStore } from "@/lib/document-store";
 import { dwErrAsync } from "@darkwrite/common";
 import { okAsync } from "neverthrow";
 

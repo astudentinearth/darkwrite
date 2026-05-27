@@ -1,13 +1,13 @@
-import { NewNote, Note, note as notesTable, Workspace } from "@/db/schema";
+import { type NewNote, type Note, note as notesTable, type Workspace } from "@/db/schema";
 import { resolveTx } from "@/db/transactional";
 import { DocumentService } from "@/service/document.service";
 import { MockDocumentStore } from "@/test/mocks/document-store.mock";
 import { WorkspaceDAO } from "@/workspace/workspace.dao";
-import { ParentId, Rank } from "@darkwrite/common";
+import { type ParentId, Rank } from "@darkwrite/common";
 import { beforeAll, beforeEach, describe, expect, it } from "vitest";
-import { applySqlMigrations, createTestDatabase, DatabaseType } from "../db";
-import { NoteDAO, NoteDAOInstance } from "./note.dao";
-import { INoteService, NoteService } from "./note.service";
+import { applySqlMigrations, createTestDatabase, type DatabaseType } from "../db";
+import { NoteDAO, type NoteDAOInstance } from "./note.dao";
+import { type INoteService, NoteService } from "./note.service";
 import { ResultAsync } from "neverthrow";
 
 describe("note service tests", () => {

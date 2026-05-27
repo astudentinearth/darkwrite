@@ -1,4 +1,4 @@
-import { EventBus, NativeContextMenuData } from "@darkwrite/common";
+import { EventBus, type NativeContextMenuData } from "@darkwrite/common";
 
 export type ContextMenuEventMap = {
   onShow: NativeContextMenuData;

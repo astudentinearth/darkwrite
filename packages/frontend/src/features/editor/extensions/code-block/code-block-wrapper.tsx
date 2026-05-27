@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui";
-import { NodeViewProps } from "@tiptap/core";
+import type { NodeViewProps } from "@tiptap/core";
 import { NodeViewContent, NodeViewWrapper } from "@tiptap/react";
 import { Check, Copy } from "lucide-react";
 import { useTranslation } from "react-i18next";

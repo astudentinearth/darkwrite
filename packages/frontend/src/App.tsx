@@ -3,7 +3,7 @@ import { Provider } from "react-redux";
 import { HashRouter, Route, Routes } from "react-router-dom";
 import { EditorViewRouteHandler } from "./features/editor/editor-view";
 import HomePage from "./features/home/home-page";
-import { AppStore } from "./features/store/redux";
+import type { AppStore } from "./features/store/redux";
 import UpdateChecker from "./features/update/update-checker";
 import { noteLoader } from "./lib/note-loader";
 

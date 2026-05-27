@@ -1,6 +1,6 @@
 import { useAppSelector } from "@/features/store/hooks";
 import { selectFormattingState } from "../store/editor-selectors";
-import { FormattingState } from "../store/editor-slice";
+import type { FormattingState } from "../store/editor-slice";
 
 /** Subscribe to the formatting state for the editor selection for given note id. Returns default state if not available. */
 export function useFormattingState(noteId: string): FormattingState {

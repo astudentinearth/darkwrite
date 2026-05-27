@@ -1,8 +1,8 @@
 import { embedProtocolHandler } from "@/embed/embed-protocol-handler";
 import {
-  DarkwriteIPCBridge,
-  DarkwriteUserSettings,
-  DwError,
+  type DarkwriteIPCBridge,
+  type DarkwriteUserSettings,
+  type DwError,
   panic,
 } from "@darkwrite/common";
 import { is } from "@electron-toolkit/utils";
@@ -36,7 +36,7 @@ import { DocumentService } from "./service/document.service";
 import { SettingsService } from "./service/settings.service";
 import { ThemeAPI } from "./theme/theme.handler";
 import { ThemeService } from "./theme/theme.service";
-import { handler, HandlerImplements } from "./types";
+import { handler, type HandlerImplements } from "./types";
 import {
   constructWindow,
   setupWindowEvents as setupBrowserWindowEvents,

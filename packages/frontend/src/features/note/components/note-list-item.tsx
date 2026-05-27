@@ -6,7 +6,7 @@ import {
 import { navigateToNote } from "@/features/navigation/navigator";
 import { cn, getNoteIcon } from "@/lib/utils";
 import { ChevronRight, Plus } from "lucide-react";
-import { memo, ReactNode, useState } from "react";
+import { memo, type ReactNode, useState } from "react";
 import {
   useNoteDropZone,
   useNoteItem,

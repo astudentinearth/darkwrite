@@ -1,6 +1,6 @@
 import { DarkwriteAPIClient } from "@/api/api-client";
 import { resultQueryFn } from "@/lib/query-result";
-import { dwErrAsync, NoteDTO } from "@darkwrite/common";
+import { dwErrAsync, type NoteDTO } from "@darkwrite/common";
 import { okAsync } from "neverthrow";
 import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
 import { upsertNotes } from "./note-slice";

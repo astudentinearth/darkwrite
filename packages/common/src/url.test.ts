@@ -1,7 +1,7 @@
 import { randomUUID } from "crypto";
 import {
   getResourceRefFromUrl,
-  DarkwriteResourceRef,
+  type DarkwriteResourceRef,
   DarkwriteResource,
   resourceRefToUrl,
 } from "./url";

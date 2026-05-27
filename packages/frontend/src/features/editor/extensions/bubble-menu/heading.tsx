@@ -14,10 +14,10 @@ import {
   Heading4,
   Pilcrow,
 } from "lucide-react";
-import { ReactNode, useCallback, useEffect, useState } from "react";
+import { type ReactNode, useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import EditorUtil from "../../editor-util";
-import { HeadingLevel } from "../../types";
+import type { HeadingLevel } from "../../types";
 
 const headingIcons: Record<HeadingLevel, ReactNode> = {
   1: <Heading1 />,

@@ -1,5 +1,5 @@
-import { Editor, JSONContent, Range } from "@tiptap/core";
-import { ReactNode } from "react";
+import type { Editor, JSONContent, Range } from "@tiptap/core";
+import type { ReactNode } from "react";
 export { type JSONContent as EditorContent };
 export interface SlashCommandItem {
   id: string;

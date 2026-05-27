@@ -1,6 +1,6 @@
 import DragHandle from "@tiptap/extension-drag-handle-react";
 import { useCurrentEditor } from "@tiptap/react";
-import { RefObject } from "react";
+import type { RefObject } from "react";
 
 export type DragHandleExtensionProps = {
   isDragging: RefObject<boolean>;

@@ -1,6 +1,6 @@
-import { WorkspaceDTO } from "@darkwrite/common";
-import { DeepPartial } from "@darkwrite/common";
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import type { WorkspaceDTO } from "@darkwrite/common";
+import type { DeepPartial } from "@darkwrite/common";
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import _ from "lodash";
 
 export type WorkspaceSlice = {

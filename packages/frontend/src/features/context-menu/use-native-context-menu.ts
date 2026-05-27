@@ -1,8 +1,8 @@
-import { NativeContextMenuData } from "@darkwrite/common";
-import { RefObject, useEffect, useRef, useState } from "react";
+import type { NativeContextMenuData } from "@darkwrite/common";
+import { type RefObject, useEffect, useRef, useState } from "react";
 import { ContextMenuEventBus } from "./menu-event-bus";
 import { DarkwriteAPIClient } from "@/api/api-client";
-import { ResultAsync } from "neverthrow";
+import type { ResultAsync } from "neverthrow";
 
 // requestAnimationFrame is required to ensure Radix context menu does not swallow the edit commands Electron sends to the webview. We wait until everything is done, then restore focus back to whatever was focused before the context menu popped.
 

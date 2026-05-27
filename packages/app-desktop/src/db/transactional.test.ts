@@ -7,7 +7,7 @@ import {
   txContext,
 } from "./transactional";
 import { sql } from "drizzle-orm";
-import { DwError, panic } from "@darkwrite/common";
+import { type DwError, panic } from "@darkwrite/common";
 
 const db = createTestDatabase();
 const db2 = createTestDatabase();

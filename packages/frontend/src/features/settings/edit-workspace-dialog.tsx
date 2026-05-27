@@ -1,4 +1,4 @@
-import { WorkspaceDTO } from "@darkwrite/common";
+import type { WorkspaceDTO } from "@darkwrite/common";
 import {
   AlertDialog,
   AlertDialogContent,
@@ -13,7 +13,7 @@ import { uploadImage } from "@/lib/upload-image";
 import { cn } from "@/lib/utils";
 import { produce } from "immer";
 import { Check, X } from "lucide-react";
-import { ReactNode, useRef, useState } from "react";
+import { type ReactNode, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { getWorkspaceActions } from "../workspaces/store/workspace-actions";
 import { useAppStore } from "../store/hooks";

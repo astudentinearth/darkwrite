@@ -1,4 +1,4 @@
-import { defineConfig, PluginOption } from "vite";
+import { defineConfig, type PluginOption } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
 import tailwind from "@tailwindcss/vite";

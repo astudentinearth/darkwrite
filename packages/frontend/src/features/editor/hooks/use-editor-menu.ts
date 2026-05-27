@@ -14,7 +14,7 @@ import {
 } from "../store/editor-selectors";
 import { MoveNoteDialogPortal } from "@/features/note/store/notes-ui-actions";
 import { useNoteExport } from "@/features/export/note-exporter";
-import { DwResultAsync } from "@darkwrite/common";
+import type { DwResultAsync } from "@darkwrite/common";
 
 export interface EditorMenuActions {
   exportHTML: () => DwResultAsync<string | undefined>;

@@ -1,4 +1,4 @@
-import { OS } from "./os";
+import type { OS } from "./os";
 
 export interface UpdateServerResponse {
   name: string;

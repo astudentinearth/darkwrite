@@ -1,20 +1,20 @@
 import { DatabaseDAO } from "@/database/database.dao";
-import { DatabaseType } from "@/db";
-import { NewNote, Note } from "@/db/schema";
+import type { DatabaseType } from "@/db";
+import type { NewNote, Note } from "@/db/schema";
 import { resolveTx, transactional } from "@/db/transactional";
-import { IDocumentService } from "@/service/document.service";
+import type { IDocumentService } from "@/service/document.service";
 import { WorkspaceDAO } from "@/workspace/workspace.dao";
 import {
-  CreateNoteDTO,
+  type CreateNoteDTO,
   dwErr,
   dwErrAsync,
-  DwError,
-  MoveNoteDTO,
+  type DwError,
+  type MoveNoteDTO,
   Rank,
-  UpdateNoteDTO,
+  type UpdateNoteDTO,
 } from "@darkwrite/common";
-import { err, ok, okAsync, Result, ResultAsync } from "neverthrow";
-import { NoteDAO, OrderKeyDto } from "./note.dao";
+import { err, ok, okAsync, type Result, ResultAsync } from "neverthrow";
+import { NoteDAO, type OrderKeyDto } from "./note.dao";
 
 function buildNewNote(dto: CreateNoteDTO, { end }: OrderKeyDto): NewNote {
   const { title, workspaceId, databaseId, icon, parentId } = dto;

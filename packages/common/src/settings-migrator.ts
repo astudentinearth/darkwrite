@@ -1,5 +1,5 @@
-import { DarkwriteUserSettings, SettingsModel } from "./settings";
-import { SettingsV1Schema } from "./settings-v1-schema";
+import { type DarkwriteUserSettings, SettingsModel } from "./settings";
+import type { SettingsV1Schema } from "./settings-v1-schema";
 
 function migrateToV2(v1: SettingsV1Schema) {
   const v2 = SettingsModel.getDefaults();

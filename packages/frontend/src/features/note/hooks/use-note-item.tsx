@@ -1,7 +1,7 @@
 import { beginDrag, DragType } from "@/features/dnd/datatransfer";
 import { useDragState } from "@/features/dnd/use-drag-state";
 import { useAppSelector, useAppStore } from "@/features/store/hooks";
-import { MouseEvent, useCallback, useEffect, useState } from "react";
+import { type MouseEvent, useCallback, useEffect, useState } from "react";
 import { matchPath } from "react-router-dom";
 import {
   getMovingNote,

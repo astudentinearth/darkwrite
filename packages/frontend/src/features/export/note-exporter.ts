@@ -1,15 +1,15 @@
 import { FontStyle } from "@darkwrite/common";
 
 import { DarkwriteAPIClient } from "@/api/api-client";
-import { PageSize } from "@darkwrite/common";
-import { EditorContent } from "@/features/editor/types";
+import type { PageSize } from "@darkwrite/common";
+import type { EditorContent } from "@/features/editor/types";
 import { HtmlDocumentBuilder } from "@/features/export/html-document-builder";
 import { useMemo } from "react";
 import { resolveDocument, resolveNote } from "../note/store/fetcher";
 import { useAppStore } from "../store/hooks";
 import { getSettingsActions } from "../settings/store/settings-actions";
-import { ThemeSettings } from "@darkwrite/common";
-import { AppStore } from "../store/types";
+import type { ThemeSettings } from "@darkwrite/common";
+import type { AppStore } from "../store/types";
 import { showExportToast } from "./export-toast";
 import { ResultAsync } from "neverthrow";
 

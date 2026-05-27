@@ -1,6 +1,6 @@
 import { EventBus } from "@darkwrite/common";
-import { Editor } from "@tiptap/core";
-import { EditorEventType, EditorEvent } from "./types";
+import type { Editor } from "@tiptap/core";
+import { EditorEventType, type EditorEvent } from "./types";
 import EditorUtil from "../editor-util";
 
 export type EditorEvents = {

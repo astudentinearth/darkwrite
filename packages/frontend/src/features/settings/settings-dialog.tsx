@@ -1,9 +1,9 @@
 /** eslint-disable @typescript-eslint/no-explicit-any */
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 import {
-  SETTINGS_PAGE,
+  type SETTINGS_PAGE,
   TAB_TITLES,
   TAB_ICONS,
   SETTINGS_PAGES,

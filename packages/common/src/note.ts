@@ -1,4 +1,4 @@
-import { NoteDTO } from "./dto";
+import type { NoteDTO } from "./dto";
 
 export function resolveUpperTree(id: string, notes: Record<string, NoteDTO>) {
   const list: NoteDTO[] = [];

@@ -1,5 +1,5 @@
 import { tryParse } from "@darkwrite/common";
-import { DragEvent as ReactDragEvent } from "react";
+import type { DragEvent as ReactDragEvent } from "react";
 
 export const DRAG_DATA_TYPE = "application/darkwrite-drag-internal";
 

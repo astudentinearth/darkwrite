@@ -1,4 +1,4 @@
-import { RootState } from "@/features/store/types";
+import type { RootState } from "@/features/store/types";
 
 export const selectEditorCustomizations = (state: RootState, noteId: string) =>
   state.editor.docs[noteId]?.customizations;

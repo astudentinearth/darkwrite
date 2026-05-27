@@ -1,5 +1,5 @@
-import { Note } from "@/db/schema";
-import { NoteDTO } from "@darkwrite/common";
+import type { Note } from "@/db/schema";
+import type { NoteDTO } from "@darkwrite/common";
 
 export function noteToDto(note: Note): NoteDTO {
   const { createdAt, modifiedAt, propertyValues, trashedAt, ...rest } = note;

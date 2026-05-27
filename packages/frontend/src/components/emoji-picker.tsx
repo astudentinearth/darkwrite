@@ -5,7 +5,7 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import { CSSProperties, useState } from "react";
+import { type CSSProperties, useState } from "react";
 import { cn } from "@/lib/utils";
 import "./emoji-picker.css";
 import { hex } from "color-convert";

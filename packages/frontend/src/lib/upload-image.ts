@@ -1,5 +1,5 @@
 import { DarkwriteAPIClient } from "@/api/api-client";
-import { EmbedDTO } from "@darkwrite/common";
+import type { EmbedDTO } from "@darkwrite/common";
 
 export function uploadImage(
   getCurrentWorkspaceId: () => string | null,

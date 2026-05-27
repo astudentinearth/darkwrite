@@ -40,12 +40,19 @@
   "linter": {
     "enabled": true,
     "rules": {
-      "recommended": true
+      "recommended": true,
+      "complexity": {
+        "useArrowFunction": "off",
+	"noImportantStyles": "off"
+      },
+      "suspicious": {
+	      "useIterableCallbackReturn": "off"
+      }
     }
   },
   "css": {
     "parser": {
-      "allowWrongLineComments": true
+      "tailwindDirectives": true
     }
   },
   "assist": {

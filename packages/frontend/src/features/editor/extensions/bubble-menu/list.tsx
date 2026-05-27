@@ -7,7 +7,7 @@ import {
 import { cn } from "@/lib/utils";
 import { useCurrentEditor } from "@tiptap/react";
 import { ChevronDown, List, ListOrdered, ListTodo } from "lucide-react";
-import { ReactNode, useCallback, useEffect, useState } from "react";
+import { type ReactNode, useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ListType } from "../../types";
 import EditorUtil from "../../editor-util";

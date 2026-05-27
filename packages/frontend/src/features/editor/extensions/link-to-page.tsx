@@ -14,12 +14,12 @@ import {
 import { mergeAttributes, Node } from "@tiptap/core";
 import {
   NodeViewWrapper,
-  ReactNodeViewProps,
+  type ReactNodeViewProps,
   ReactNodeViewRenderer,
 } from "@tiptap/react";
 import { ArrowLeftRight, File } from "lucide-react";
 import { Plugin } from "@tiptap/pm/state";
-import { memo, MouseEvent, use, useState } from "react";
+import { memo, type MouseEvent, use, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { DarkwriteEditorContext } from "../context";
 import { cn, getNoteIcon } from "@/lib/utils";

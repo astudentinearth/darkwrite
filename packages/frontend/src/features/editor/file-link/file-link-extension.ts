@@ -1,4 +1,4 @@
-import { Node, Attributes, mergeAttributes } from "@tiptap/core";
+import { Node, type Attributes, mergeAttributes } from "@tiptap/core";
 import { Block } from "../types";
 import { Plugin } from "@tiptap/pm/state";
 import { DarkwriteAPIClient } from "@/api/api-client";

@@ -1,5 +1,5 @@
-import { Editor, posToDOMRect, ReactRenderer } from "@tiptap/react";
-import { SuggestionOptions, SuggestionProps } from "@tiptap/suggestion";
+import { type Editor, posToDOMRect, ReactRenderer } from "@tiptap/react";
+import type { SuggestionOptions, SuggestionProps } from "@tiptap/suggestion";
 import { SlashCommandView } from "./slash-command-view";
 import { computePosition, shift, flip } from "@floating-ui/dom";
 

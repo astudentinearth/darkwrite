@@ -1,12 +1,12 @@
 import { dwErrAsync, getDefaultWorkspaceConfiguration } from "@darkwrite/common";
-import { createTestDatabase, DatabaseType, applySqlMigrations } from "../db";
+import { createTestDatabase, type DatabaseType, applySqlMigrations } from "../db";
 import { WorkspaceService } from "./workspace.service";
-import { NewNote, workspace } from "@/db/schema";
+import { type NewNote, workspace } from "@/db/schema";
 import { WorkspaceDAO } from "./workspace.dao";
 import { NoteDAO } from "@/note/note.dao";
 import { DocumentService } from "@/service/document.service";
 import { MockDocumentStore } from "@/test/mocks/document-store.mock";
-import { IDocumentStore } from "@/lib/document-store";
+import type { IDocumentStore } from "@/lib/document-store";
 import { resolveTx } from "@/db/transactional";
 
 let _db: DatabaseType = createTestDatabase();

@@ -1,8 +1,8 @@
 // this file is a stub to provide a clear
 // interface for imperative actions.
 
-import { createNoteApi, CreateNoteArgs } from "./create-note";
-import { FavoriteNoteArgs, favoritesApi } from "./favorites-api";
+import { createNoteApi, type CreateNoteArgs } from "./create-note";
+import { type FavoriteNoteArgs, favoritesApi } from "./favorites-api";
 import { navigateToNote } from "@/features/navigation/navigator";
 import { trashApi } from "./trash-api";
 import { moveNoteApi } from "./move-note";

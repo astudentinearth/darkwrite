@@ -1,4 +1,4 @@
-import { Attributes } from "@tiptap/core";
+import type { Attributes } from "@tiptap/core";
 
 const ImageAttributes: Attributes = {
   embedId: {

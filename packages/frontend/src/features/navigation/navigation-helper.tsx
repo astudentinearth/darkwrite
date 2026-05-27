@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { resolveNote } from "../note/store/fetcher";
 import { appSessionSlice } from "../session/session-slice";
 import { useAppStore } from "../store/hooks";
-import { AppStore } from "../store/redux";
+import type { AppStore } from "../store/redux";
 import {
   getCurrentNoteIdFromPath,
   NavigationEventBus,

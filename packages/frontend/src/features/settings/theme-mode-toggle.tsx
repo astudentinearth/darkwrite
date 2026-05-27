@@ -1,4 +1,4 @@
-import { ThemeMode } from "@darkwrite/common";
+import type { ThemeMode } from "@darkwrite/common";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Monitor, Moon, Sun } from "lucide-react";

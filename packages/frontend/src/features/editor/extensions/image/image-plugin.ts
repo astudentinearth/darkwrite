@@ -1,5 +1,5 @@
 import { Plugin } from "@tiptap/pm/state";
-import { ImageExtensionConfig } from "./image-config";
+import type { ImageExtensionConfig } from "./image-config";
 import { createImageNode } from "./image-upload-transaction";
 import { Block } from "../../types";
 

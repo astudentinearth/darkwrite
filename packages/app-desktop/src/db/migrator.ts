@@ -3,7 +3,7 @@ import { is } from "@electron-toolkit/utils";
 import { migrate } from "drizzle-orm/libsql/migrator";
 import { default as _log } from "electron-log";
 import { copy, pathExists, remove } from "fs-extra";
-import { DatabaseType } from "./data-source";
+import type { DatabaseType } from "./data-source";
 import { fileURLToPath } from "url";
 import path from "path";
 import { app, dialog } from "electron";

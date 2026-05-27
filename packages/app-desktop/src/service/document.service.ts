@@ -1,6 +1,6 @@
-import { NoteContent } from "@darkwrite/common";
+import type { NoteContent } from "@darkwrite/common";
 import _ from "lodash";
-import { IDocumentStore } from "../lib/document-store";
+import type { IDocumentStore } from "../lib/document-store";
 
 function documentToJson(documentStr: string): NoteContent {
   const document = _.attempt(() => JSON.parse(documentStr));

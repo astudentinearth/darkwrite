@@ -1,4 +1,4 @@
-import { Predicate } from "./ts-util";
+import type { Predicate } from "./ts-util";
 
 /**
  * Retrieves the value of a given nested key in an object.

@@ -1,6 +1,6 @@
-import { DarkwriteUserSettings, SettingsModel } from "@darkwrite/common";
-import { DeepPartial } from "@darkwrite/common";
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { type DarkwriteUserSettings, SettingsModel } from "@darkwrite/common";
+import type { DeepPartial } from "@darkwrite/common";
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import _ from "lodash";
 
 export const SETTINGS_SLICE_NAME = "settings";

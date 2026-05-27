@@ -1,4 +1,4 @@
-import { SlashCommandItem as ISlashCommandItem } from "../../types";
+import type { SlashCommandItem as ISlashCommandItem } from "../../types";
 import { cn } from "@/lib/utils";
 import {
   Command,
@@ -7,11 +7,11 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui";
-import { Editor, Range } from "@tiptap/core";
+import type { Editor, Range } from "@tiptap/core";
 import { useCurrentEditor } from "@tiptap/react";
-import { SuggestionKeyDownProps, SuggestionProps } from "@tiptap/suggestion";
+import type { SuggestionKeyDownProps, SuggestionProps } from "@tiptap/suggestion";
 import {
-  ForwardedRef,
+  type ForwardedRef,
   forwardRef,
   useImperativeHandle,
   useRef,

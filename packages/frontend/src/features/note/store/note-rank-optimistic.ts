@@ -1,5 +1,5 @@
-import { NoteDTO } from "@darkwrite/common";
-import { MovePlacement, OrderKey } from "@darkwrite/common";
+import type { NoteDTO } from "@darkwrite/common";
+import type { MovePlacement, OrderKey } from "@darkwrite/common";
 import { Rank } from "@darkwrite/common";
 
 /**

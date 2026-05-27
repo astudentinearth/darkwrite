@@ -1,4 +1,4 @@
-import { WorkspaceConfig } from "@/workspace-config";
+import type { WorkspaceConfig } from "@/workspace-config";
 
 export interface WorkspaceDTO {
   id: string;

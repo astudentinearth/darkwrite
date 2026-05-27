@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeAll, beforeEach } from "vitest";
-import { createDatabase, DatabaseType, applySqlMigrations } from "@/db";
+import { createDatabase, type DatabaseType, applySqlMigrations } from "@/db";
 import { FileLinkDAO } from "./file-link.dao";
 import { linkedFile as linkedFileTable } from "@/db/schema";
 import { resolveTx } from "@/db/transactional";

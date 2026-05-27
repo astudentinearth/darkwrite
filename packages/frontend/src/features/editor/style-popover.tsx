@@ -14,7 +14,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
-import { FontStyle, NoteCustomization } from "@darkwrite/common";
+import { FontStyle, type NoteCustomization } from "@darkwrite/common";
 import { Brush, RotateCcw } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useAppSelector } from "../store/hooks";

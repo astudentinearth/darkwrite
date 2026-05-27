@@ -15,7 +15,7 @@ import {
   GalleryVertical,
   Trash,
 } from "lucide-react";
-import { ReactNode, useState } from "react";
+import { type ReactNode, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ToggleFavoriteContextMenuItem } from "./components/toggle-favorite-item";
 import { ModificationDateLabel } from "./components/modification-date-label";

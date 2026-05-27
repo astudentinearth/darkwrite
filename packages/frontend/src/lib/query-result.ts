@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
  
-import { ResultAsync } from "neverthrow";
+import type { ResultAsync } from "neverthrow";
 
 export type QueryResult<T, E> = { data: T } | { error: E };
 export type ResultQueryFn<T, E, Args extends any[]> = (

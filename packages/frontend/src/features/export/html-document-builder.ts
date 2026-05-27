@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { EditorContent } from "../editor/types";
+import type { EditorContent } from "../editor/types";
 import { EmbeddedStyleBuilder } from "./exported-note-style";
 import { generateHTML, hydrateImages } from "../editor/html-export";
 import { fromUnicode } from "@/lib/utils";

@@ -1,7 +1,7 @@
-import { PageSize } from "@darkwrite/common";
-import { DarkwriteUserSettings } from "@darkwrite/common";
-import { DeepPartial } from "@darkwrite/common";
-import { AppStore } from "@/features/store/redux";
+import type { PageSize } from "@darkwrite/common";
+import type { DarkwriteUserSettings } from "@darkwrite/common";
+import type { DeepPartial } from "@darkwrite/common";
+import type { AppStore } from "@/features/store/redux";
 import { settingsSlice } from "./settings-slice";
 import { useMemo } from "react";
 import { useAppStore } from "@/features/store/hooks";

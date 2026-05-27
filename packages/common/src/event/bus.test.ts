@@ -1,4 +1,4 @@
-import { EventBus, EventBusListenerArgs } from "./bus";
+import { EventBus, type EventBusListenerArgs } from "./bus";
 
 interface TestEventData {
   message: string;

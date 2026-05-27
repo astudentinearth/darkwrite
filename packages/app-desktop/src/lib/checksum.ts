@@ -1,4 +1,4 @@
-import { BinaryToTextEncoding, createHash } from "crypto";
+import { type BinaryToTextEncoding, createHash } from "crypto";
 import { createReadStream } from "fs-extra";
 
 /** Calculate the SHA256 checksum of a file at the given path. Returns the checksum as a string in the specified encoding (default is hex). */

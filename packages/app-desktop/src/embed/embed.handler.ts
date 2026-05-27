@@ -1,15 +1,15 @@
 import { showSaveDialog } from "@/api/dialog";
 import { fsResult } from "@/lib/fs";
-import { handler, HandlerImplements } from "@/types";
+import { handler, type HandlerImplements } from "@/types";
 import {
     buildDwError,
-    DesktopEmbedAPI,
+    type DesktopEmbedAPI,
 } from "@darkwrite/common";
 import { net } from "electron";
 import { writeFile } from "fs/promises";
 import { okAsync, ResultAsync } from "neverthrow";
 import { embedToDto } from "./embed-mapper";
-import { IEmbedService } from "./embed.service";
+import type { IEmbedService } from "./embed.service";
 
 const fetchEmbed = (url: URL) =>
   ResultAsync.fromPromise(

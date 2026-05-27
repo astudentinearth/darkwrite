@@ -3,33 +3,33 @@ import {
   showSaveDialog,
   whenDialogCancelled,
 } from "@/api/dialog";
-import { Note } from "@/db/schema";
+import type { Note } from "@/db/schema";
 import { readFileUtf8, writeBinaryFile, writeFileUtf8 } from "@/lib/fs";
 import {
-  CreateNoteDTO,
+  type CreateNoteDTO,
   CreateNoteDTOSchema,
   dwErrAsync,
   FileFormatMap,
-  INoteAPI,
-  MoveNoteDTO,
+  type INoteAPI,
+  type MoveNoteDTO,
   MoveNoteDTOSchema,
-  NoteExportFormat,
-  NoteResponseDTO,
-  NotesResponseDTO,
+  type NoteExportFormat,
+  type NoteResponseDTO,
+  type NotesResponseDTO,
   okVoid,
-  PageSize,
-  ParentId,
-  UpdateNoteDTO,
+  type PageSize,
+  type ParentId,
+  type UpdateNoteDTO,
   UpdateNoteDTOSchema,
   validateSchema,
 } from "@darkwrite/common";
 import { ok, ResultAsync } from "neverthrow";
 import printToPdf from "../lib/print-to-pdf";
-import { IDocumentService } from "../service/document.service";
-import { handler, HandlerImplements } from "../types/ipc-handler";
+import type { IDocumentService } from "../service/document.service";
+import { handler, type HandlerImplements } from "../types/ipc-handler";
 import { notesToDto, noteToDto } from "./note-mapper";
-import { INoteQueryService } from "./note-query.service";
-import { INoteService } from "./note.service";
+import type { INoteQueryService } from "./note-query.service";
+import type { INoteService } from "./note.service";
 import { extname } from "path";
 
 const aggregateResponse = (notes: Note[]) =>

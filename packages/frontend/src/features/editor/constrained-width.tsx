@@ -1,7 +1,8 @@
 import { useEditorStore } from "@/context/editor-store";
 import { useCenteredLayout } from "@/features/layout/hooks/use-centered-layout";
 import { cn } from "@/lib/utils";
-import React, { useEffect } from "react";
+import type React from "react";
+import { useEffect } from "react";
 
 export default function ConstrainedWidth(
   props: {

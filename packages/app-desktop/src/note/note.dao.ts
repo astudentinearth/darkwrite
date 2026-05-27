@@ -1,11 +1,11 @@
 import { dbResult } from "@/db/db-result";
-import { NewNote, Note, note as notesTable, PatchNote } from "@/db/schema";
-import { TxResolver } from "@/db/transactional";
+import { type NewNote, type Note, note as notesTable, type PatchNote } from "@/db/schema";
+import type { TxResolver } from "@/db/transactional";
 import {
     dwErr,
-    DwResultAsync,
+    type DwResultAsync,
     isDescendantAsync,
-    ParentId,
+    type ParentId,
     Rank,
 } from "@darkwrite/common";
 import {

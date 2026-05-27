@@ -1,4 +1,4 @@
-import { RootState } from "../store/types";
+import type { RootState } from "../store/types";
 
 export const selectAllNotesViewOpen = (state: RootState) =>
   state.session.allNotesViewOpen;

@@ -1,5 +1,5 @@
-import { NoteDTO } from "@darkwrite/common";
-import { isDescendant, ParentId } from "@darkwrite/common";
+import type { NoteDTO } from "@darkwrite/common";
+import { isDescendant, type ParentId } from "@darkwrite/common";
 
 export function canMoveNoteInto(
   movingNoteId: string,

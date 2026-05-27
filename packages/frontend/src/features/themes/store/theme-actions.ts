@@ -1,7 +1,7 @@
-import { Theme } from "@darkwrite/common";
+import type { Theme } from "@darkwrite/common";
 import { themeSlice } from "./theme-slice";
-import { AppStore } from "@/features/store/redux";
-import { Font } from "@darkwrite/common";
+import type { AppStore } from "@/features/store/redux";
+import type { Font } from "@darkwrite/common";
 
 export function getThemeActions(store: AppStore) {
   function setThemes(themes: Theme[]) {

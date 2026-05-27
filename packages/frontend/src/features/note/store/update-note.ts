@@ -1,7 +1,7 @@
 import { DarkwriteAPIClient } from "@/api/api-client";
 import _ from "lodash";
 import { notesSlice } from "./note-slice";
-import { AppStore } from "@/features/store/types";
+import type { AppStore } from "@/features/store/types";
 import { useAppStore } from "@/features/store/hooks";
 import { useMemo } from "react";
 

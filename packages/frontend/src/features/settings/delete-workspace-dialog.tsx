@@ -1,4 +1,4 @@
-import { WorkspaceDTO } from "@darkwrite/common";
+import type { WorkspaceDTO } from "@darkwrite/common";
 import {
   AlertDialog,
   AlertDialogContent,
@@ -9,7 +9,7 @@ import {
   Input,
   Label,
 } from "@/components/ui";
-import { ReactNode, useState } from "react";
+import { type ReactNode, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useWorkspaceActions } from "../workspaces/store/workspace-actions";
 import notify from "../notifications/notify";

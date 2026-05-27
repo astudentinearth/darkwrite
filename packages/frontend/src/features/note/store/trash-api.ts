@@ -1,10 +1,10 @@
 import { DarkwriteAPIClient } from "@/api/api-client";
 import { resultQueryFn } from "@/lib/query-result";
-import { dwErrAsync, NoteDTO } from "@darkwrite/common";
+import { dwErrAsync, type NoteDTO } from "@darkwrite/common";
 import { okAsync } from "neverthrow";
 import { NOTES_TAG_TYPE, notesApi } from "./notes-api";
 import { removeNote, removeNotes, updateNote, upsertNotes } from "./note-slice";
-import { RootState } from "@/features/store/types";
+import type { RootState } from "@/features/store/types";
 import { selectNoteIdsInTrash } from "./note-selectors";
 
 export function trashedByWorkspaceIdTag(workspaceId: string) {

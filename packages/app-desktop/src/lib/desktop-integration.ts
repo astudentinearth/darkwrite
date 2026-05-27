@@ -2,17 +2,17 @@ import { ContextMenuApiBridge } from "@/desktop-integration/context-menu.handler
 import { ShellApiBridge } from "@/desktop-integration/shell.handler";
 import {
   buildDwError,
-  DarkwriteDesktopClientInfo,
-  DwResultAsync,
-  Font,
-  IDesktopAPI,
+  type DarkwriteDesktopClientInfo,
+  type DwResultAsync,
+  type Font,
+  type IDesktopAPI,
   OS,
   stripAlpha,
 } from "@darkwrite/common";
 import { app, systemPreferences } from "electron";
 import { ok, ResultAsync } from "neverthrow";
 import os from "os";
-import { handler, HandlerImplements } from "../types";
+import { handler, type HandlerImplements } from "../types";
 
 const operatingSystem = os.platform() as OS;
 

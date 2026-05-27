@@ -1,5 +1,5 @@
 import {
-  TypedUseSelectorHook,
+  type TypedUseSelectorHook,
   useDispatch,
   useSelector,
   useStore,

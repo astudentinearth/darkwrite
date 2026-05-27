@@ -1,4 +1,4 @@
-import { DatabaseType } from "@/db";
+import type { DatabaseType } from "@/db";
 import { FileLinkDAO } from "./file-link.dao";
 import { resolveTx } from "@/db/transactional";
 

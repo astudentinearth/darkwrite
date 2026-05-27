@@ -1,5 +1,5 @@
-import { DarkwriteUserSettings } from "@darkwrite/common";
-import { Theme } from "@darkwrite/common";
+import type { DarkwriteUserSettings } from "@darkwrite/common";
+import type { Theme } from "@darkwrite/common";
 
 export function applyTheme(theme: Theme) {
   const entries = Object.entries(theme.colors);

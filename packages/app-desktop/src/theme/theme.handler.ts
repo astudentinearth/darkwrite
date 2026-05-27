@@ -1,8 +1,8 @@
-import { handler, HandlerImplements } from "@/types";
-import { IThemeAPI } from "@darkwrite/common";
+import { handler, type HandlerImplements } from "@/types";
+import type { IThemeAPI } from "@darkwrite/common";
 import { BrowserWindow, dialog } from "electron";
-import { err, ok, Result } from "neverthrow";
-import { IThemeService } from "./theme.service";
+import { err, ok, type Result } from "neverthrow";
+import type { IThemeService } from "./theme.service";
 
 const _cancelledError = { type: "_internal-cancelled-action" as const };
 type CancelledErr = typeof _cancelledError;

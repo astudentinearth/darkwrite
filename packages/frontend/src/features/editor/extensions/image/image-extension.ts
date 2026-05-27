@@ -2,7 +2,7 @@ import Image from "@tiptap/extension-image";
 import ImageAttributes from "./image-attributes";
 import { mergeAttributes } from "@tiptap/core";
 import ImagePlugin from "./image-plugin";
-import { ImageExtensionConfig } from "./image-config";
+import type { ImageExtensionConfig } from "./image-config";
 import { ReactNodeViewRenderer } from "@tiptap/react";
 import { DarkwriteImageView } from "./image-view";
 import { cn } from "@/lib/utils";

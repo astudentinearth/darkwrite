@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import { CheckCircle, X, XCircle } from "lucide-react";
-import React, { ReactNode, use } from "react";
+import React, { type ReactNode, use } from "react";
 import { toast as sonner } from "sonner";
 
 export type ToastProps = {

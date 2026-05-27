@@ -1,4 +1,4 @@
-import { FileLinkMetadata } from "@darkwrite/common";
+import type { FileLinkMetadata } from "@darkwrite/common";
 import { skipToken } from "@reduxjs/toolkit/query";
 import { useGetFileLinkByIdQuery } from "./file-link-api";
 

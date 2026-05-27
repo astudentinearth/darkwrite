@@ -1,5 +1,5 @@
-import { DatabaseType } from "@/db";
-import { Embed, NewEmbed } from "@/db/schema";
+import type { DatabaseType } from "@/db";
+import type { Embed, NewEmbed } from "@/db/schema";
 import { resolveTx, transactional } from "@/db/transactional";
 import { EmbedDAO } from "@/embed/embed.dao";
 import { WorkspaceDAO } from "@/workspace/workspace.dao";
@@ -7,7 +7,7 @@ import { randomUUID } from "crypto";
 import log from "electron-log";
 import { readFile } from "fs/promises";
 import { okAsync, ResultAsync } from "neverthrow";
-import { IEmbedStore } from "../lib/blob-store";
+import type { IEmbedStore } from "../lib/blob-store";
 import { fsResult, getFileInfo } from "../lib/fs";
 
 export function EmbedService(db: DatabaseType, blobStore: IEmbedStore) {

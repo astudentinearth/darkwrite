@@ -1,4 +1,4 @@
-import { FontStyle } from "@darkwrite/common";
+import type { FontStyle } from "@darkwrite/common";
 import { useNoteFromURL } from "@/features/note/hooks/use-note-from-url";
 import { useEditorActions } from "./store/editor-actions";
 

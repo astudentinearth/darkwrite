@@ -1,6 +1,6 @@
 import { DarkwriteAPIClient } from "@/api/api-client";
 import { resultQueryFn } from "@/lib/query-result";
-import { dwErrAsync, NoteDTO, ParentId } from "@darkwrite/common";
+import { dwErrAsync, type NoteDTO, type ParentId } from "@darkwrite/common";
 import { okAsync } from "neverthrow";
 import { noteByParentIdTag, NOTES_TAG_TYPE, notesApi } from "./notes-api";
 import { upsertNotes } from "./note-slice";

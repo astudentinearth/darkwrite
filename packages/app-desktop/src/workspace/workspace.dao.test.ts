@@ -1,10 +1,10 @@
 import { describe, it, expect, beforeAll, beforeEach } from "vitest";
-import { createDatabase, DatabaseType, applySqlMigrations } from "@/db";
-import { WorkspaceDAO, WorkspaceDAOInstance } from "./workspace.dao";
+import { createDatabase, type DatabaseType, applySqlMigrations } from "@/db";
+import { WorkspaceDAO, type WorkspaceDAOInstance } from "./workspace.dao";
 import {
-  NewWorkspace,
+  type NewWorkspace,
   workspace as workspaceTable,
-  Workspace,
+  type Workspace,
 } from "@/db/schema";
 import { resolveTx } from "@/db/transactional";
 

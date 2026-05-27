@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { useAppStore } from "../store/hooks";
-import { AppStore } from "../store/redux";
+import type { AppStore } from "../store/redux";
 import { appSessionSlice } from "./session-slice";
 
 export function getSessionActions(store: AppStore) {

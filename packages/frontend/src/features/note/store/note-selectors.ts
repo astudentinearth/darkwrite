@@ -1,9 +1,9 @@
-import { RootState } from "@/features/store/types";
+import type { RootState } from "@/features/store/types";
 import { notesAdapter } from "./notes-adapter";
 import { createSelector } from "@reduxjs/toolkit";
 import { Rank } from "@darkwrite/common";
 import { byUpdateTime } from "@darkwrite/common";
-import { MoveNoteSearchArgs, SearchArgs } from "./types";
+import type { MoveNoteSearchArgs, SearchArgs } from "./types";
 import { isDescendant } from "@darkwrite/common";
 
 const selectNotesState = (store: RootState) => store["notes-slice"];

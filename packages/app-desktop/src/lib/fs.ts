@@ -1,5 +1,5 @@
 /* eslint-disable no-redeclare */
-import { buildDwError, dwErr, DwError } from "@darkwrite/common";
+import { buildDwError, dwErr, type DwError } from "@darkwrite/common";
 import { accessSync } from "fs";
 import fse, { readFile, writeFile } from "fs-extra";
 import { ok, Result, ResultAsync } from "neverthrow";

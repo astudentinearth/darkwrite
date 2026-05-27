@@ -1,4 +1,4 @@
-import { RefObject, useEffect } from "react";
+import { type RefObject, useEffect } from "react";
 import { useSidebar } from "./use-sidebar";
 import { useTitlebarWidth } from "./use-titlebar-width";
 

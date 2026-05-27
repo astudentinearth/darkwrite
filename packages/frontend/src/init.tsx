@@ -1,8 +1,8 @@
 import { DarkwriteAPIClient } from "./api/api-client";
-import { DarkwriteUserSettings } from "@darkwrite/common";
+import type { DarkwriteUserSettings } from "@darkwrite/common";
 import { appSessionSlice } from "./features/session/session-slice";
 import { settingsSlice } from "./features/settings/store/settings-slice";
-import { AppStore } from "./features/store/redux";
+import type { AppStore } from "./features/store/redux";
 import { initializeFonts, initializeThemes } from "./features/themes/init";
 import { getWorkspaceActions } from "./features/workspaces/store/workspace-actions";
 import { setupContextMenuEvents } from "./features/context-menu/menu-event-bus";

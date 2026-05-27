@@ -1,10 +1,10 @@
 import { AppMenuEvent, WindowEvent } from "@/types/window-events";
 import {
   deepAssign,
-  NativeContextMenuData,
+  type NativeContextMenuData,
   recursiveKeys,
-  SerializedResult,
-  WindowEvents,
+  type SerializedResult,
+  type WindowEvents,
 } from "@darkwrite/common";
 import { contextBridge, ipcRenderer, webUtils } from "electron";
 // import { DarkwriteElectronAPI } from "../ipc/api";

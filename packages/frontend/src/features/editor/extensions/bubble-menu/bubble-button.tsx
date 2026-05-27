@@ -1,8 +1,8 @@
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui";
-import { Editor } from "@tiptap/core";
-import { useCurrentEditor } from "@tiptap/react";
-import { FunctionComponent } from "react";
+import type { Editor } from "@tiptap/core";
+import type { useCurrentEditor } from "@tiptap/react";
+import type { FunctionComponent } from "react";
 import {
   Tooltip,
   TooltipContent,

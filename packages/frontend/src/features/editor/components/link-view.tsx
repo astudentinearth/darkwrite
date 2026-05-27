@@ -10,7 +10,7 @@ import { navigateToNote } from "@/features/navigation/navigator";
 import { useNoteById } from "@/features/note/hooks/use-note-by-id";
 import { getNoteIcon } from "@/lib/utils";
 import { DarkwriteResource, getResourceRefFromUrl } from "@darkwrite/common";
-import { MarkViewRendererProps } from "@tiptap/core";
+import type { MarkViewRendererProps } from "@tiptap/core";
 import { MarkViewContent } from "@tiptap/react";
 import { Check, Copy, Link } from "lucide-react";
 import { useState } from "react";

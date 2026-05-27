@@ -1,10 +1,10 @@
 import { DarkwriteAPIClient } from "@/api/api-client";
 import { resultQueryFn } from "@/lib/query-result";
-import { dwErrAsync, NoteDTO } from "@darkwrite/common";
-import { isDescendant, ParentId } from "@darkwrite/common";
+import { dwErrAsync, type NoteDTO } from "@darkwrite/common";
+import { isDescendant, type ParentId } from "@darkwrite/common";
 import { extractNoteDragData } from "@/features/dnd/datatransfer";
-import { RootState } from "@/features/store/types";
-import { DragEvent } from "react";
+import type { RootState } from "@/features/store/types";
+import type { DragEvent } from "react";
 import { okAsync } from "neverthrow";
 import {
   calculateOptimisticRankInLayer,

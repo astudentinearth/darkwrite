@@ -1,5 +1,5 @@
-import { NodeViewWrapper, ReactNodeViewProps } from "@tiptap/react";
-import { FileLinkAttributesType } from "./file-link-extension";
+import { NodeViewWrapper, type ReactNodeViewProps } from "@tiptap/react";
+import type { FileLinkAttributesType } from "./file-link-extension";
 import { cn } from "@/lib/utils";
 import { useFileLink } from "./use-file-link";
 import {
@@ -10,7 +10,7 @@ import {
   ContextMenuTrigger,
 } from "@/components/ui";
 import { useTranslation } from "react-i18next";
-import { use, useState, MouseEvent } from "react";
+import { use, useState, type MouseEvent } from "react";
 import { DarkwriteAPIClient } from "@/api/api-client";
 import { FileIcon } from "@/components/file-icon";
 import { DarkwriteEditorContext } from "../context";

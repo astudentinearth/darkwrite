@@ -1,5 +1,5 @@
-import { Workspace } from "@/db/schema";
-import { WorkspaceConfig, WorkspaceDTO } from "@darkwrite/common";
+import type { Workspace } from "@/db/schema";
+import type { WorkspaceConfig, WorkspaceDTO } from "@darkwrite/common";
 
 export function workspaceToDto(workspace: Workspace): WorkspaceDTO {
   const { id, ownerId, name, config, iconUrl, createdAt } = workspace;

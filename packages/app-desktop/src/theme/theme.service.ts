@@ -1,20 +1,20 @@
 import { fsResult } from "@/lib/fs";
 import {
   buildDwError,
-  DarkwriteUserSettings,
+  type DarkwriteUserSettings,
   DEFAULT_THEMES,
   dwErr,
-  DwResult,
+  type DwResult,
   isTheme,
   parseJson,
-  Theme,
+  type Theme,
 } from "@darkwrite/common";
 import { nativeTheme } from "electron";
 import log from "electron-log";
 import { readFile } from "fs-extra";
 import _ from "lodash";
 import { ok, okAsync, Result, ResultAsync } from "neverthrow";
-import { IDocumentStore } from "../lib/document-store";
+import type { IDocumentStore } from "../lib/document-store";
 
 const logInvalidTheme = (id?: string, message?: string) =>
   log.error(`Theme ${id} is invalid.`, message);

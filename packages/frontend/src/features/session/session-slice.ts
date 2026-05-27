@@ -1,8 +1,8 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import {
   DEFAULT_SESSION_STATE,
   loadSessionState,
-  SessionState,
+  type SessionState,
 } from "./session-persistence";
 
 const SESSION_SLICE_NAME = "session";

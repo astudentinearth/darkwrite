@@ -2,7 +2,7 @@ import {
   app,
   BrowserWindow,
   Menu,
-  MenuItemConstructorOptions,
+  type MenuItemConstructorOptions,
   shell,
 } from "electron";
 import { AppMenuEvent } from "./types/window-events";

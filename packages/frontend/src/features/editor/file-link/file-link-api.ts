@@ -1,6 +1,6 @@
 import { DarkwriteAPIClient } from "@/api/api-client";
 import { resultQueryFn } from "@/lib/query-result";
-import { FileLinkMetadata } from "@darkwrite/common";
+import type { FileLinkMetadata } from "@darkwrite/common";
 import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const FILE_LINK_API_REDUCER_PATH = "fileLinkApi";

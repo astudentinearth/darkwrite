@@ -1,4 +1,4 @@
-import { Editor, findParentNode } from "@tiptap/core";
+import { type Editor, findParentNode } from "@tiptap/core";
 import { CellSelection } from "@tiptap/pm/tables";
 
 export function getActiveTable(editor: Editor) {

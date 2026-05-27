@@ -1,6 +1,6 @@
 import { DarkwriteAPIClient } from "@/api/api-client";
 import { appSessionSlice } from "@/features/session/session-slice";
-import { AppStore } from "@/features/store/types";
+import type { AppStore } from "@/features/store/types";
 
 type NoteLoaderProps = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

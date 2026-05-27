@@ -1,7 +1,7 @@
 import { createListenerMiddleware, isAnyOf } from "@reduxjs/toolkit";
 import { appSessionSlice } from "./session-slice";
 import { saveSessionState } from "./session-persistence";
-import { RootState } from "../store/types";
+import type { RootState } from "../store/types";
 
 export const sessionListenerMiddleware = createListenerMiddleware();
 

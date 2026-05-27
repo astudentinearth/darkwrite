@@ -1,6 +1,6 @@
 import { DarkwriteAPIClient } from "@/api/api-client";
 import { resultQueryFn } from "@/lib/query-result";
-import { DarkwriteDesktopClientInfo } from "@darkwrite/common";
+import type { DarkwriteDesktopClientInfo } from "@darkwrite/common";
 import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const clientInfoApi = createApi({

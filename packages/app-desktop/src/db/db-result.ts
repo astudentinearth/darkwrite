@@ -1,4 +1,4 @@
-import { buildDwError, DwResultAsync } from "@darkwrite/common";
+import { buildDwError, type DwResultAsync } from "@darkwrite/common";
 import { ResultAsync } from "neverthrow";
 
 export function dbResult<T>(fn: () => Promise<T>): DwResultAsync<T> {

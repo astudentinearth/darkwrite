@@ -1,7 +1,7 @@
 import {
   IPCHandler,
-  IPCMainListenerUnion,
-  IPCMainListenerWithoutEvent,
+  type IPCMainListenerUnion,
+  type IPCMainListenerWithoutEvent,
 } from "@/types";
 import {
   deepAssign,

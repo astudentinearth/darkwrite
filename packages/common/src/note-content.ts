@@ -1,5 +1,5 @@
-import { type JSONContent } from "@tiptap/core";
-import { NoteCustomization } from "./note-customization";
+import type { JSONContent } from "@tiptap/core";
+import type { NoteCustomization } from "./note-customization";
 
 export interface JSONDocument {
   [key: string]: JSONDocument;

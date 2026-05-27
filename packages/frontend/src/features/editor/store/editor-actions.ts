@@ -1,7 +1,7 @@
-import { NoteCustomization } from "@darkwrite/common";
-import { editorSlice, FormattingState } from "./editor-slice";
-import { EditorContent } from "../types";
-import { AppDispatch } from "@/features/store/types";
+import type { NoteCustomization } from "@darkwrite/common";
+import { editorSlice, type FormattingState } from "./editor-slice";
+import type { EditorContent } from "../types";
+import type { AppDispatch } from "@/features/store/types";
 import { useAppDispatch } from "@/features/store/hooks";
 import { useMemo } from "react";
 

@@ -1,7 +1,7 @@
 import { dbResult } from "@/db/db-result";
-import { Embed, NewEmbed, PatchEmbed, embed as embedTable } from "@/db/schema";
-import { TxResolver } from "@/db/transactional";
-import { DwResultAsync, dwErr } from "@darkwrite/common";
+import { type Embed, type NewEmbed, type PatchEmbed, embed as embedTable } from "@/db/schema";
+import type { TxResolver } from "@/db/transactional";
+import { type DwResultAsync, dwErr } from "@darkwrite/common";
 import { eq } from "drizzle-orm";
 import { ok } from "neverthrow";
 

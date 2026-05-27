@@ -1,14 +1,14 @@
 import {
-  CheckUpdateFn,
-  DarkwriteIPCBridge,
+  type CheckUpdateFn,
+  type DarkwriteIPCBridge,
   hydrateResultAsync,
-  IDesktopAPI,
-  IEmbedAPI,
-  IFileLinkAPI,
-  INoteAPI,
-  ISettingsAPI,
-  IThemeAPI,
-  IWorkspaceAPI,
+  type IDesktopAPI,
+  type IEmbedAPI,
+  type IFileLinkAPI,
+  type INoteAPI,
+  type ISettingsAPI,
+  type IThemeAPI,
+  type IWorkspaceAPI,
 } from "@darkwrite/common";
 import _ from "lodash";
 import { EmbedAdapter } from "./local/embed-local-adapter";

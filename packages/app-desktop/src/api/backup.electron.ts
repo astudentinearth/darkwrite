@@ -1,5 +1,5 @@
-import { handler, HandlerImplements } from "@/types";
-import { buildDwError, DwResultAsync, IBackupAPI } from "@darkwrite/common";
+import { handler, type HandlerImplements } from "@/types";
+import { buildDwError, type DwResultAsync, type IBackupAPI } from "@darkwrite/common";
 import { app, dialog } from "electron";
 import log from "electron-log";
 import extract from "extract-zip";

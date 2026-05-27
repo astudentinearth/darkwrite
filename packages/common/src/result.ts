@@ -1,5 +1,5 @@
-import { err, errAsync, ok, Result, ResultAsync } from "neverthrow";
-import z from "zod";
+import { err, errAsync, ok, type Result, ResultAsync } from "neverthrow";
+import type z from "zod";
 
 export interface DwError {
   message: string;
