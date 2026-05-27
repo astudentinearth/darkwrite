@@ -1,9 +1,9 @@
 import { readFile, writeFile } from "node:fs/promises";
 import {
   type DarkwriteUserSettings,
+  getDefaultUserSettings,
   migrateSettings,
   parseJson,
-  getDefaultUserSettings
 } from "@darkwrite/common";
 import log from "electron-log";
 import _ from "lodash";

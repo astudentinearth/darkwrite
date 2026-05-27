@@ -10,4 +10,3 @@ export function parseJson<T>(str: string): Result<T, JsonParseError> {
     return err({ type: "invalid-json-string", message: e.message });
   }
 }
-

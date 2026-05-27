@@ -3,7 +3,9 @@
   "type": "module",
   "version": "0.0.1",
   "lint-staged": {
-    "*.{ts,astro,css}": ["prettier --write"]
+    "*.{ts,astro,css}": [
+      "prettier --write"
+    ]
   },
   "scripts": {
     "dev": "astro dev",
@@ -27,6 +29,7 @@
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.1.14",
+    "prettier": "^3.8.3",
     "prettier-plugin-astro": "^0.14.1",
     "tailwindcss": "catalog:"
   },

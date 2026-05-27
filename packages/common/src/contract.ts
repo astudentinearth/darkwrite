@@ -3,7 +3,10 @@
 // Clients talking to a cloud instance shall make the appropriate network requests instead.
 // Cloud-specific code should be kept separate from Electron to ensure browser portability.
 import type { ResultAsync } from "neverthrow";
-import type { DarkwriteDesktopClientInfo, UpdateServerResponse } from "./client";
+import type {
+  DarkwriteDesktopClientInfo,
+  UpdateServerResponse,
+} from "./client";
 import type { NativeContextMenuData } from "./context-menu";
 import type {
   CreateNoteDTO,
