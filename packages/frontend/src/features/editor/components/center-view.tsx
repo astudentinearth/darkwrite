@@ -1,18 +1,18 @@
-import { Dialog, DialogContent } from "@/components/ui";
+import { Dialog, DialogContentContainer, DialogOverlay } from "@/components/ui";
 import Toolbar from "@/features/layout/toolbar";
+import { navigateToNote } from "@/features/navigation/navigator";
 import { useAppSelector } from "@/features/store/hooks";
 import { cn } from "@/lib/utils";
+import { nanoid } from "nanoid";
+import { use, useRef } from "react";
 import { EditorViewport } from "../editor-view";
 import { NoteMetadataEditors } from "../header";
 import { useDocumentById } from "../hooks/use-document";
+import { useEditorView } from "../hooks/use-editor-options";
 import { useEditorActions } from "../store/editor-actions";
 import { EditorContext } from "../store/editor-context";
 import { selectCenterViewState } from "../store/editor-selectors";
 import { OpenFullscreenButton } from "./open-fullscreen-button";
-import { use, useRef } from "react";
-import { nanoid } from "nanoid";
-import { useEditorView } from "../hooks/use-editor-options";
-import { navigateToNote } from "@/features/navigation/navigator";
 
 export function EditorCenterView() {
   const { open, noteId } = useAppSelector(selectCenterViewState);
@@ -29,7 +29,9 @@ export function EditorCenterView() {
           if (!newOpen) actions.closeCenterView();
         }}
       >
-        <CenterViewContent />
+        <DialogOverlay className="fixed flex inset-0 w-screen h-screen items-center justify-center">
+          <CenterViewContent />
+        </DialogOverlay>
       </Dialog>
     </EditorContext.Provider>
   );
@@ -40,10 +42,9 @@ function CenterViewContent() {
   const { noteId } = use(EditorContext);
   const { style } = useEditorView(noteId);
   return (
-    <DialogContent
-      hideX
+    <DialogContentContainer
       className={cn(
-        "lg:max-w-240 max-w-[calc(100vw - 4rem)] h-[80vh] flex flex-col p-2 pr-0",
+        "lg:max-w-240 overflow-hidden z-50 max-w-[calc(100vw - 4rem)] translate-none h-[80vh] flex flex-col p-2 pr-0 static",
       )}
       style={style}
     >
@@ -52,7 +53,7 @@ function CenterViewContent() {
         <div className="grow" />
         <Toolbar noteId={noteId} />
       </div>
-      <div className="h-full overflow-y-auto scroll-view w-full">
+      <div className="relative h-full overflow-y-auto scroll-view w-full">
         <div className="px-20 w-full flex flex-col gap-2 mt-16">
           <NoteMetadataEditors />
           <hr />
@@ -67,6 +68,6 @@ function CenterViewContent() {
           />
         </div>
       </div>
-    </DialogContent>
+    </DialogContentContainer>
   );
 }

@@ -25,7 +25,7 @@ export function NoteMetadataEditors({ mouseOver }: { mouseOver?: boolean }) {
             show={fromUnicode(icon ?? "")}
             closeOnSelect
             onSelect={updateIcon}
-            className={cn("z-50 -translate-x-1", hasCover && "-mt-8")}
+            className={cn("z-30 -translate-x-1", hasCover && "-mt-8")}
           />
         )}
         <div

@@ -1,12 +1,8 @@
+import DeleteColumn from "@/assets/delete-column.svg?react";
+import DeleteRow from "@/assets/delete-row.svg?react";
+import { CellSelection } from "@tiptap/pm/tables";
 import { useCurrentEditor } from "@tiptap/react";
 import { BubbleMenu } from "@tiptap/react/menus";
-import {
-  calculateTableMenuPosition,
-  getActiveTable,
-  positionTableMenu,
-} from "./table-util";
-import { useCallback, useEffect, useRef } from "react";
-import { BubbleButton } from "../bubble-menu/bubble-button";
 import {
   PanelBottomClose,
   PanelRightClose,
@@ -15,11 +11,15 @@ import {
   Sheet,
   Trash,
 } from "lucide-react";
-import { CellSelection } from "@tiptap/pm/tables";
-import { TableBackgroundPicker } from "./table-background-picker";
-import DeleteColumn from "@/assets/delete-column.svg?react";
-import DeleteRow from "@/assets/delete-row.svg?react";
+import { useCallback, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
+import { BubbleButton } from "../bubble-menu/bubble-button";
+import { TableBackgroundPicker } from "./table-background-picker";
+import {
+  calculateTableMenuPosition,
+  getActiveTable,
+  positionTableMenu,
+} from "./table-util";
 
 export default function TableMenu() {
   const { editor } = useCurrentEditor();
@@ -77,7 +77,7 @@ export default function TableMenu() {
       <div
         ref={menuRef}
         //data-animation="slide"
-        className="flex w-fit h-fit max-w-[90vw] overflow-hidden gap-1 bubble-menu rounded-xl border border-border table-menu
+        className="flex w-fit h-fit max-w-[90vw] overflow-hidden gap-1 bubble-menu rounded-xl border border-border table-menu z-50
                     bg-view-2/80 top-highlight backdrop-blur-lg shadow-xl p-1 slide-in-from-top-1 transition-[opacity,transform,translate,scale,rotate]"
       >
         <BubbleButton
