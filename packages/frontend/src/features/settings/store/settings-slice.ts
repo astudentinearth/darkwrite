@@ -1,4 +1,4 @@
-import { type DarkwriteUserSettings, SettingsModel } from "@darkwrite/common";
+import { getDefaultUserSettings, type DarkwriteUserSettings } from "@darkwrite/common";
 import type { DeepPartial } from "@darkwrite/common";
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import _ from "lodash";
@@ -6,7 +6,7 @@ import _ from "lodash";
 export const SETTINGS_SLICE_NAME = "settings";
 
 export const settingsSlice = createSlice({
-  initialState: SettingsModel.getDefaults(),
+  initialState: getDefaultUserSettings()
   name: SETTINGS_SLICE_NAME,
   reducers: {
     update(state, action: PayloadAction<DeepPartial<DarkwriteUserSettings>>) {

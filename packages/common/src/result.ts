@@ -73,7 +73,7 @@ export function hydrateResultAsync<T, E>(
   return r;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// biome-ignore lint/suspicious/noExplicitAny: variadic function
 export type ExtractResultTypes<F extends (...args: any[]) => any> =
   Awaited<ReturnType<F>> extends Result<infer T, infer E> ? [T, E] : never;
 

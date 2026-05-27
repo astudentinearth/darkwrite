@@ -63,8 +63,9 @@ export class EventBus<Events extends EventMap> {
     channel: K,
     fn: EventBusListener<Events[K]>,
   ) {
-    if (!this.listeners.has(channel)) this.listeners.set(channel, new Set());
-    const listeners = this.listeners.get(channel)! as Set<
+    const listenerMap = this.listeners.get(channel);
+    if (!listenerMap) this.listeners.set(channel, new Set());
+    const listeners = listenerMap as Set<
       EventBusListener<Events[K]>
     >;
     listeners.add(fn);

@@ -49,19 +49,13 @@ export type DarkwriteUserSettings = {
   version: 2;
 };
 
-export class SettingsModel {
-  public static getDefaults(): DarkwriteUserSettings {
-    return _.cloneDeep({
-      appearance: DEFAULT_THEME_SETTINGS,
-      client: DEFAULT_CLIENT_SETTINGS,
-      editor: DEFAULT_EDITOR_SETTINGS,
-      version: 2,
-    });
-  }
+export const getDefaultUserSettings = () =>
+  _.cloneDeep({
+    appearance: DEFAULT_THEME_SETTINGS,
+    client: DEFAULT_CLIENT_SETTINGS,
+    editor: DEFAULT_EDITOR_SETTINGS,
+    version: 2,
+  }) satisfies DarkwriteUserSettings;
 
-  public static mergeWith(settings: Partial<DarkwriteUserSettings>) {
-    const defaults = this.getDefaults();
-    _.merge(defaults, settings);
-    return defaults as DarkwriteUserSettings;
-  }
-}
+export const mergeUserSettings = (settings: Partial<DarkwriteUserSettings>) =>
+  _.merge(getDefaultUserSettings(), settings) as DarkwriteUserSettings;

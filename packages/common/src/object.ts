@@ -1,3 +1,4 @@
+// biome-ignore-all lint/suspicious/noExplicitAny: this file only contains generic methods
 import type { Predicate } from "./ts-util";
 
 /**
@@ -23,7 +24,7 @@ export function find(obj: object, keys: string[]): unknown {
 export function recursiveKeys(obj: object, predicate?: Predicate) {
   const result: string[][] = [];
   const search = (keys: string[]) => {
-    if (predicate == undefined) {
+    if (predicate === undefined) {
       result.push(keys);
     } else if (predicate(find(obj, keys))) {
       result.push(keys);
@@ -41,7 +42,6 @@ export function recursiveKeys(obj: object, predicate?: Predicate) {
   return result;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type AnyObject = { [key: string]: any };
 //TODO: make type safe later
 export function deepAssign<DestType extends object, ValueType>(

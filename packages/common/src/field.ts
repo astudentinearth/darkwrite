@@ -21,13 +21,14 @@ export interface PropertyField {
   options?: SelectOption[];
 }
 
+// biome-ignore lint/complexity/noStaticOnlyClass: this will be refactored later
 export class FieldBuilder {
   private static generatePropertyFieldKey() {
     return generateId();
   }
 
   public static createSelectOption(text: string, color?: string) {
-    const optionKey = this.generatePropertyFieldKey();
+    const optionKey = FieldBuilder.generatePropertyFieldKey();
 
     return {
       key: optionKey,
@@ -45,7 +46,7 @@ export class FieldBuilder {
         ? SelectOption[]
         : never,
   ) {
-    const fieldKey = this.generatePropertyFieldKey();
+    const fieldKey = FieldBuilder.generatePropertyFieldKey();
     return {
       key: fieldKey,
       name,

@@ -1,9 +1,8 @@
-import { type DarkwriteUserSettings, SettingsModel } from "./settings";
+import { getDefaultUserSettings, type DarkwriteUserSettings } from "./settings";
 import type { SettingsV1Schema } from "./settings-v1-schema";
 
 function migrateToV2(v1: SettingsV1Schema) {
-  const v2 = SettingsModel.getDefaults();
-
+  const v2 = getDefaultUserSettings();
   v2.appearance.accentColor = v1.appearance.accentColor;
   v2.appearance.experimental.darwinCustomTitlebarEnabled =
     v1.appearance.enableCustomWindowFrameOnDarwin;
@@ -20,9 +19,9 @@ function migrateToV2(v1: SettingsV1Schema) {
 
 export function migrateSettings(obj: unknown): DarkwriteUserSettings {
   if (typeof obj !== "object" || obj == null || !("version" in obj))
-    return SettingsModel.getDefaults();
+    return getDefaultUserSettings();
 
   if (obj.version === "1") return migrateToV2(obj as SettingsV1Schema);
   if (obj.version === 2) return obj as DarkwriteUserSettings;
-  return SettingsModel.getDefaults();
+  return getDefaultUserSettings();
 }

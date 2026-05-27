@@ -3,17 +3,17 @@ import {
   type DarkwriteUserSettings,
   migrateSettings,
   parseJson,
-  SettingsModel,
+  getDefaultUserSettings
 } from "@darkwrite/common";
 import log from "electron-log";
 import _ from "lodash";
 import { ok } from "neverthrow";
 import { assertExists, fsResult } from "@/lib/fs";
 
-const DEFAULT_SETTINGS_STR = JSON.stringify(SettingsModel.getDefaults());
+const DEFAULT_SETTINGS_STR = JSON.stringify(getDefaultUserSettings());
 
 export function SettingsService(settingsFilePath: string) {
-  let currentSettings: DarkwriteUserSettings = SettingsModel.getDefaults();
+  let currentSettings: DarkwriteUserSettings = getDefaultUserSettings();
 
   /** @internal */
   const _writeSettingsFile = (contents: string) =>
@@ -44,7 +44,7 @@ export function SettingsService(settingsFilePath: string) {
     _readSettingsFile()
       .andThen(parseJson)
       .map(migrateSettings)
-      .orElse(() => ok(SettingsModel.getDefaults()))
+      .orElse(() => ok(getDefaultUserSettings()))
       .andThen(override);
 
   const getSettings = () => currentSettings;
