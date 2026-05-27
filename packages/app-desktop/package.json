@@ -14,16 +14,15 @@
   "license": "AGPL-3.0-or-later",
   "main": "dist-electron/main.js",
   "lint-staged": {
-    "*.{ts,tsx}": [
-      "prettier --write",
-      "eslint --fix --max-warnings 0"
+    "*.{ts,tsx,js,jsx,json,css}": [
+      "biome check --write"
     ]
   },
   "scripts": {
     "dev": "vite",
     "preview": "vite preview",
-    "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
-    "format": "prettier --check --write .",
+    "lint": "biome lint .",
+    "format": "biome format --write .",
     "test": "vitest run",
     "test:run": "vitest run",
     "test:watch": "vitest watch",

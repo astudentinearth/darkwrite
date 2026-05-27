@@ -10,11 +10,13 @@
     }
   },
   "lint-staged": {
-    "*.ts": ["prettier --write", "eslint --fix --max-warnings 0"]
+    "*.{ts,tsx,js,jsx,json,css}": [
+      "biome check --write"
+    ]
   },
   "scripts": {
-    "format": "prettier --check --write .",
-    "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
+    "format": "biome format --write .",
+    "lint": "biome lint .",
     "typecheck": "tsc --noEmit --project tsconfig.json",
     "test": "vitest run",
     "test:watch": "vitest watch",

@@ -38,8 +38,8 @@ pnpm build             # Build all packages
 cd packages/frontend
 pnpm dev               # Start dev server
 pnpm build             # Build for production
-pnpm lint              # Lint with ESLint
-pnpm format            # Format with Prettier
+pnpm lint              # Lint with Biome
+pnpm format            # Format with Biome
 pnpm test              # Run tests (Vitest)
 pnpm test:watch        # Watch mode
 pnpm test:run -- path  # Run single test file
@@ -150,8 +150,8 @@ When asked to perform a review, do NOT check for any inconsistencies that can be
 
 ### Editor Configuration
 - `.editorconfig` handles basic formatting
-- `eslint.config.mjs` configures linting (ESLint + TypeScript + React)
-- `.prettierrc` configures Prettier
+- `biome.json` (root) configures linting and formatting (Biome)
+- The `website` package uses Prettier (via `.prettierrc`) for Astro file support
 
 ## Architecture Notes
 
