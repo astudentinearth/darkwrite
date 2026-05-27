@@ -1,7 +1,7 @@
+import { useEffect } from "react";
 import { useLocalStore } from "@/context/local-state";
-import React, { useEffect } from "react";
-import { useUpdate } from "./use-update";
 import { useSettings } from "../settings/hooks/use-settings";
+import { useUpdate } from "./use-update";
 
 export default function UpdateChecker() {
   const enabled = useSettings().client.autoUpdateCheck;

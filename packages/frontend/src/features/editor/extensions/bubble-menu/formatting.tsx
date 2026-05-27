@@ -7,11 +7,11 @@ import {
   Strikethrough,
   Underline,
 } from "lucide-react";
-import { BubbleButton } from "./bubble-button";
-import { useFormattingState } from "../../hooks/use-formatting-state";
 import { use } from "react";
-import { DarkwriteEditorContext } from "../../context";
 import { useTranslation } from "react-i18next";
+import { DarkwriteEditorContext } from "../../context";
+import { useFormattingState } from "../../hooks/use-formatting-state";
+import { BubbleButton } from "./bubble-button";
 
 export function FormattingButtons() {
   const { editor } = useCurrentEditor();

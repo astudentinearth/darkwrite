@@ -4,7 +4,7 @@ import type { AppStore } from "@/features/store/types";
 
 type NoteLoaderProps = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  params: any;
+  params: { pageId?: string };
   store: AppStore;
 };
 

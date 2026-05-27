@@ -1,19 +1,19 @@
-import { create } from "zustand";
-import LanguageSelection from "./language-selection";
-import WorkspaceNameStep from "./workspace-name";
 import { DEFAULT_THEMES } from "@darkwrite/common";
-import { applyTheme } from "@/lib/theme-util";
-import ThemeSelection from "./theme-selection";
-import OnboardingFinish from "./finish";
-import { DarkwriteAPIClient } from "@/api/api-client";
-import { ReactRootContainer } from "@/react-root-helper";
+import { create } from "zustand";
 import App from "@/App";
+import { DarkwriteAPIClient } from "@/api/api-client";
 import {
   correctWorkspaceState,
-  initializeUserPrefs,
   InitialUserSettings,
+  initializeUserPrefs,
 } from "@/init";
+import { applyTheme } from "@/lib/theme-util";
+import { ReactRootContainer } from "@/react-root-helper";
 import store from "@/store";
+import OnboardingFinish from "./finish";
+import LanguageSelection from "./language-selection";
+import ThemeSelection from "./theme-selection";
+import WorkspaceNameStep from "./workspace-name";
 
 export type OnboardingPage = "language" | "workspace-name" | "theme" | "finish";
 

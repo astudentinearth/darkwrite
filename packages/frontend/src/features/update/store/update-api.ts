@@ -1,6 +1,6 @@
-import { resultQueryFn } from "@/lib/query-result";
 import { dwErrAsync, type UpdateServerResponse } from "@darkwrite/common";
 import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
+import { resultQueryFn } from "@/lib/query-result";
 
 export const UPDATE_TAG_TYPE = "update";
 

@@ -1,8 +1,13 @@
-import { beginDrag, DragType } from "@/features/dnd/datatransfer";
-import { useDragState } from "@/features/dnd/use-drag-state";
-import { useAppSelector, useAppStore } from "@/features/store/hooks";
 import { type MouseEvent, useCallback, useEffect, useState } from "react";
 import { matchPath } from "react-router-dom";
+import { beginDrag, DragType } from "@/features/dnd/datatransfer";
+import { useDragState } from "@/features/dnd/use-drag-state";
+import {
+  getCurrentRoutePath,
+  NavigationEventBus,
+} from "@/features/navigation/navigator";
+import { useAppSelector, useAppStore } from "@/features/store/hooks";
+import { useCurrentWorkspaceId } from "@/features/workspaces/hooks/use-workspace";
 import {
   getMovingNote,
   useMoveBelowMutation,
@@ -12,13 +17,8 @@ import {
   canMoveNoteBelow,
   canMoveNoteInto,
 } from "../store/move-note-validator";
-import { selectAllNotesAsMap, selectNoteById } from "../store/note-selectors";
-import {
-  getCurrentRoutePath,
-  NavigationEventBus,
-} from "@/features/navigation/navigator";
 import { useNoteActions } from "../store/note-actions";
-import { useCurrentWorkspaceId } from "@/features/workspaces/hooks/use-workspace";
+import { selectAllNotesAsMap, selectNoteById } from "../store/note-selectors";
 
 /**
  * Hook to get note data **within sidebar views.** Do NOT use this to

@@ -1,5 +1,3 @@
-import DeleteColumn from "@/assets/delete-column.svg?react";
-import DeleteRow from "@/assets/delete-row.svg?react";
 import { CellSelection } from "@tiptap/pm/tables";
 import { useCurrentEditor } from "@tiptap/react";
 import { BubbleMenu } from "@tiptap/react/menus";
@@ -13,6 +11,8 @@ import {
 } from "lucide-react";
 import { useCallback, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
+import DeleteColumn from "@/assets/delete-column.svg?react";
+import DeleteRow from "@/assets/delete-row.svg?react";
 import { BubbleButton } from "../bubble-menu/bubble-button";
 import { TableBackgroundPicker } from "./table-background-picker";
 import {
@@ -23,7 +23,7 @@ import {
 
 export default function TableMenu() {
   const { editor } = useCurrentEditor();
-  const menuRef = useRef<HTMLDivElement | null>(null!);
+  const menuRef = useRef<HTMLDivElement | null>(null);
 
   const { t } = useTranslation("translation", { keyPrefix: "editor.table" });
 

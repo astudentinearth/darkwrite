@@ -1,4 +1,5 @@
 import { DEFAULT_THEME_LIST, DEFAULT_THEMES } from "@darkwrite/common";
+import { useTranslation } from "react-i18next";
 import {
   Label,
   Select,
@@ -7,7 +8,6 @@ import {
   SelectTrigger,
   Switch,
 } from "@/components/ui";
-import { useTranslation } from "react-i18next";
 import { ForwardButton } from "./onboarding-button";
 import { setOnboardingTheme, useOnboardingState } from "./onboarding-state";
 

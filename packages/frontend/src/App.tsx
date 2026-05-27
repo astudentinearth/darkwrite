@@ -1,6 +1,6 @@
-import { Layout } from "@/features/layout";
 import { Provider } from "react-redux";
 import { HashRouter, Route, Routes } from "react-router-dom";
+import { Layout } from "@/features/layout";
 import { EditorViewRouteHandler } from "./features/editor/editor-view";
 import HomePage from "./features/home/home-page";
 import type { AppStore } from "./features/store/redux";

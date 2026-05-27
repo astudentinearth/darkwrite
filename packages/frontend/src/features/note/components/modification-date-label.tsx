@@ -1,5 +1,5 @@
-import { useAppSelector } from "@/features/store/hooks";
 import { useTranslation } from "react-i18next";
+import { useAppSelector } from "@/features/store/hooks";
 import { selectNoteById } from "../store/note-selectors";
 
 export function ModificationDateLabel(props: { noteId: string }) {

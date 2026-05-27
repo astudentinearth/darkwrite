@@ -1,5 +1,4 @@
-import type { NoteDTO } from "@darkwrite/common";
-import type { MovePlacement, OrderKey } from "@darkwrite/common";
+import type { MovePlacement, NoteDTO, OrderKey } from "@darkwrite/common";
 import { Rank } from "@darkwrite/common";
 
 /**
@@ -51,7 +50,7 @@ export function calculateRelativeOptimisticRank(
   const aboveNote = getNoteById(aboveNoteId);
   if (!aboveNote) return Rank.default().get();
 
-  const aboveIndex = siblingIds.findIndex((id) => id === aboveNoteId);
+  const aboveIndex = siblingIds.indexOf(aboveNoteId);
 
   let newOrderHint: string;
   if (aboveIndex >= 0 && aboveIndex < siblingIds.length - 1) {

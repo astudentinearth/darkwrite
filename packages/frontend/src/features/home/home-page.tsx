@@ -1,6 +1,6 @@
-import { Button } from "@/components/ui";
 import { SquarePen } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { Button } from "@/components/ui";
 import ConstrainedWidth from "../editor/constrained-width";
 import { useNoteActions } from "../note/store/note-actions";
 import { useCurrentWorkspaceId } from "../workspaces/hooks/use-workspace";

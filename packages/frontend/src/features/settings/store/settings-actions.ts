@@ -1,10 +1,12 @@
-import type { PageSize } from "@darkwrite/common";
-import type { DarkwriteUserSettings } from "@darkwrite/common";
-import type { DeepPartial } from "@darkwrite/common";
-import type { AppStore } from "@/features/store/redux";
-import { settingsSlice } from "./settings-slice";
+import type {
+  DarkwriteUserSettings,
+  DeepPartial,
+  PageSize,
+} from "@darkwrite/common";
 import { useMemo } from "react";
 import { useAppStore } from "@/features/store/hooks";
+import type { AppStore } from "@/features/store/redux";
+import { settingsSlice } from "./settings-slice";
 
 export const getSettingsActions = (store: AppStore) => {
   function updateSettings(partial: DeepPartial<DarkwriteUserSettings>) {

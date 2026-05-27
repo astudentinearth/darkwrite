@@ -1,9 +1,9 @@
-import { DarkwriteAPIClient } from "@/api/api-client";
-import { resultQueryFn } from "@/lib/query-result";
 import type { NoteDTO } from "@darkwrite/common";
 import { okAsync } from "neverthrow";
-import { NOTES_TAG_TYPE, notesApi } from "./notes-api";
+import { DarkwriteAPIClient } from "@/api/api-client";
+import { resultQueryFn } from "@/lib/query-result";
 import { upsertNotes } from "./note-slice";
+import { NOTES_TAG_TYPE, notesApi } from "./notes-api";
 import type { SearchArgs } from "./types";
 
 export function _searchTag(args: SearchArgs) {

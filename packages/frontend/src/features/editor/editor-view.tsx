@@ -1,21 +1,21 @@
-import { useLocalStore } from "@/context/local-state";
-import { useEditorOptions, useEditorView } from "./hooks/use-editor-options";
-import { useNoteFromURL } from "@/features/note/hooks/use-note-from-url";
-import { use, useRef } from "react";
 import { nanoid } from "nanoid";
-import DarkwriteEditor from ".";
+import { use, useRef } from "react";
+import { useLocalStore } from "@/context/local-state";
+import { useNoteFromURL } from "@/features/note/hooks/use-note-from-url";
 import { navigateToNote } from "../navigation/navigator";
+import { useEditorSettings } from "../settings/hooks/use-settings";
 import { useAppSelector } from "../store/hooks";
+import DarkwriteEditor from ".";
 import ConstrainedWidth from "./constrained-width";
 import { useSlashCommand } from "./extensions";
 import EditorHeader from "./header";
 import { useDocumentById } from "./hooks/use-document";
+import { useEditorOptions, useEditorView } from "./hooks/use-editor-options";
 import { EditorContext } from "./store/editor-context";
 import {
   selectEditorContent,
   selectEditorCustomizations,
 } from "./store/editor-selectors";
-import { useEditorSettings } from "../settings/hooks/use-settings";
 
 export function EditorViewRouteHandler() {
   const noteId = useNoteFromURL();

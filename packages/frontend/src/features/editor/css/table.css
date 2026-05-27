@@ -74,7 +74,6 @@
     font-size: 18px;
 
     &.resize-cursor {
-      cursor: ew-resize !important;
       cursor: col-resize !important;
     }
 

@@ -1,10 +1,10 @@
-import { HeaderbarButton } from "@/components/headerbar-button";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
-import { goBack, goForward } from "../navigation/navigator";
-import { TextTooltip } from "@/components/ui/tooltip";
 import { useTranslation } from "react-i18next";
+import { useLocation } from "react-router-dom";
+import { HeaderbarButton } from "@/components/headerbar-button";
+import { TextTooltip } from "@/components/ui/tooltip";
+import { goBack, goForward } from "../navigation/navigator";
 
 export function HistoryNavigation() {
   // check if we can go forward

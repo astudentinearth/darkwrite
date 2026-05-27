@@ -1,7 +1,7 @@
 import { Plugin } from "@tiptap/pm/state";
+import { Block } from "../../types";
 import type { ImageExtensionConfig } from "./image-config";
 import { createImageNode } from "./image-upload-transaction";
-import { Block } from "../../types";
 
 const ImagePlugin = (config: ImageExtensionConfig) =>
   new Plugin({

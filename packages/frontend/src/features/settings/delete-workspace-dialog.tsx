@@ -1,4 +1,6 @@
 import type { WorkspaceDTO } from "@darkwrite/common";
+import { type ReactNode, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   AlertDialog,
   AlertDialogContent,
@@ -9,10 +11,8 @@ import {
   Input,
   Label,
 } from "@/components/ui";
-import { type ReactNode, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { useWorkspaceActions } from "../workspaces/store/workspace-actions";
 import notify from "../notifications/notify";
+import { useWorkspaceActions } from "../workspaces/store/workspace-actions";
 
 export type DeleteWorkspaceDialogProps = {
   workspace: WorkspaceDTO;

@@ -1,16 +1,16 @@
-import type { ImageExtensionConfig } from "@/features/editor/extensions/image/image-config";
-import { useCenteredLayout } from "@/features/layout/hooks/use-centered-layout";
-import { DarkwriteAPIClient } from "@/api/api-client";
-import { type CSSProperties, use, useCallback, useMemo } from "react";
 import { FONT_VARS, FontStyle } from "@darkwrite/common";
-import { useAppSelector } from "@/features/store/hooks";
-import { selectEditorCustomizations } from "@/features/editor/store/editor-selectors";
-import { useCurrentWorkspaceId } from "@/features/workspaces/hooks/use-workspace";
 import type { Editor, JSONContent } from "@tiptap/core";
+import { type CSSProperties, use, useCallback, useMemo } from "react";
+import { DarkwriteAPIClient } from "@/api/api-client";
+import EditorUtil from "@/features/editor/editor-util";
+import type { ImageExtensionConfig } from "@/features/editor/extensions/image/image-config";
 import { useEditorActions } from "@/features/editor/store/editor-actions";
 import { EditorContext } from "@/features/editor/store/editor-context";
-import EditorUtil from "@/features/editor/editor-util";
+import { selectEditorCustomizations } from "@/features/editor/store/editor-selectors";
+import { useCenteredLayout } from "@/features/layout/hooks/use-centered-layout";
 import { useEditorSettings } from "@/features/settings/hooks/use-settings";
+import { useAppSelector } from "@/features/store/hooks";
+import { useCurrentWorkspaceId } from "@/features/workspaces/hooks/use-workspace";
 
 export function useEditorView(noteId: string, rootView: boolean = false) {
   const customizations = useAppSelector((s) =>

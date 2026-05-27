@@ -1,12 +1,12 @@
 import Picker from "@emoji-mart/react";
+import { type CSSProperties, useState } from "react";
+import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import { type CSSProperties, useState } from "react";
-import { cn } from "@/lib/utils";
 import "./emoji-picker.css";
 import { hex } from "color-convert";
 import { useAppearanceSettings } from "@/features/settings/hooks/use-settings";

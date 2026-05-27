@@ -1,5 +1,5 @@
-import { DarkwriteAPIClient } from "@/api/api-client";
 import { OS } from "@darkwrite/common";
+import { DarkwriteAPIClient } from "@/api/api-client";
 
 let os: OS = OS.WINDOWS;
 

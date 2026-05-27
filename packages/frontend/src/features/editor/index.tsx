@@ -1,4 +1,7 @@
-import { DarkwriteEditorContext, type IDarkwriteEditorContext } from "./context";
+import {
+  DarkwriteEditorContext,
+  type IDarkwriteEditorContext,
+} from "./context";
 import { EditorRoot } from "./editor-root";
 import "./css/handle.css";
 import "./css/editor.css";

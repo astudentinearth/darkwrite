@@ -1,11 +1,11 @@
-import { useAppDispatch, useAppSelector } from "@/features/store/hooks";
-import { selectMoveNoteDialogState } from "../store/notes-ui-selectors";
-import { MoveNoteDialogPortal } from "../store/notes-ui-actions";
-import { useCurrentWorkspaceId } from "@/features/workspaces/hooks/use-workspace";
-import { useLazySearchQuery } from "../store/search-api";
-import { useMemo, useState } from "react";
-import { selectNotesToMoveInto } from "../store/note-selectors";
 import _ from "lodash";
+import { useMemo, useState } from "react";
+import { useAppDispatch, useAppSelector } from "@/features/store/hooks";
+import { useCurrentWorkspaceId } from "@/features/workspaces/hooks/use-workspace";
+import { selectNotesToMoveInto } from "../store/note-selectors";
+import { MoveNoteDialogPortal } from "../store/notes-ui-actions";
+import { selectMoveNoteDialogState } from "../store/notes-ui-selectors";
+import { useLazySearchQuery } from "../store/search-api";
 
 export function useMoveNoteDialog() {
   const { open, noteId } = useAppSelector(selectMoveNoteDialogState);

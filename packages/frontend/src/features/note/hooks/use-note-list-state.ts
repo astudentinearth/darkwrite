@@ -1,5 +1,5 @@
-import { useAppSelector } from "@/features/store/hooks";
 import { shallowEqual } from "react-redux";
+import { useAppSelector } from "@/features/store/hooks";
 import { selectNotesByParentId } from "../store/note-selectors";
 import { useGetNotesByParentIdQuery } from "../store/notes-api";
 

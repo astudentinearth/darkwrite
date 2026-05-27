@@ -1,10 +1,8 @@
+import { byUpdateTime, isDescendant, Rank } from "@darkwrite/common";
+import { createSelector } from "@reduxjs/toolkit";
 import type { RootState } from "@/features/store/types";
 import { notesAdapter } from "./notes-adapter";
-import { createSelector } from "@reduxjs/toolkit";
-import { Rank } from "@darkwrite/common";
-import { byUpdateTime } from "@darkwrite/common";
 import type { MoveNoteSearchArgs, SearchArgs } from "./types";
-import { isDescendant } from "@darkwrite/common";
 
 const selectNotesState = (store: RootState) => store["notes-slice"];
 
@@ -83,7 +81,7 @@ export const selectParentIdTree = createSelector(
     const seen = new Set<string>();
     let currentNote = notesMap[noteId];
 
-    while (currentNote && currentNote.parentId) {
+    while (currentNote?.parentId) {
       if (seen.has(currentNote.id)) break; // prevent circular reference
       tree.push(currentNote.parentId);
       seen.add(currentNote.id);

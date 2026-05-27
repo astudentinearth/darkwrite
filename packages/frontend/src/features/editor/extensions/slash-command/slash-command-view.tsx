@@ -1,15 +1,9 @@
-import type { SlashCommandItem as ISlashCommandItem } from "../../types";
-import { cn } from "@/lib/utils";
-import {
-  Command,
-  CommandEmpty,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui";
 import type { Editor, Range } from "@tiptap/core";
 import { useCurrentEditor } from "@tiptap/react";
-import type { SuggestionKeyDownProps, SuggestionProps } from "@tiptap/suggestion";
+import type {
+  SuggestionKeyDownProps,
+  SuggestionProps,
+} from "@tiptap/suggestion";
 import {
   type ForwardedRef,
   forwardRef,
@@ -17,6 +11,15 @@ import {
   useRef,
   useState,
 } from "react";
+import {
+  Command,
+  CommandEmpty,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui";
+import { cn } from "@/lib/utils";
+import type { SlashCommandItem as ISlashCommandItem } from "../../types";
 
 export type SlashCommandViewProps = Omit<SuggestionProps, "items"> & {
   items: ISlashCommandItem[];
@@ -81,6 +84,8 @@ export const SlashCommandView = forwardRef(function (
 
   // this is disgusting
   // october 9th 2025: i have no idea what this does
+  // may 27th 2026: i dont know why this is still here
+  // biome-ignore lint/style/noNonNullAssertion: see above
   useImperativeHandle(ref, () => ({ ...containerRef.current!, onKeyDown }));
 
   return (
@@ -97,7 +102,7 @@ export const SlashCommandView = forwardRef(function (
           setValue(val);
         }}
         filter={(val, search, keywords) => {
-          const extended = val + " " + keywords?.join(" ");
+          const extended = `${val} ${keywords?.join(" ")}`;
           if (extended.toLocaleLowerCase().includes(search)) return 1;
           return 0;
         }}

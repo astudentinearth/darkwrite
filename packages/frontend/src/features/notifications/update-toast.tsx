@@ -21,6 +21,7 @@ export default function UpdateToast({ version, href }: UpdateToastProps) {
         className="flex items-center gap-2 text-primary-text hover:underline shrink-0 whitespace-nowrap"
         target="_blank"
         href={href}
+        rel="noopener"
       >
         <ArrowUpRightFromSquare size={18} className="shrink-0" />
         {t("toast.update.releasePageButton")}

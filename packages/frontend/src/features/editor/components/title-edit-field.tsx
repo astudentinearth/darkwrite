@@ -1,14 +1,14 @@
 import { cleanNoteTitle } from "@darkwrite/common";
+import { use } from "react";
+import { useTranslation } from "react-i18next";
 import DynamicTextarea from "@/components/dynamic-textarea";
 import { EditorContext } from "@/features/editor/store/editor-context";
 import { selectNoteTitle } from "@/features/note/store/note-selectors";
 import { useTitleUpdater } from "@/features/note/store/update-note";
 import { useAppSelector } from "@/features/store/hooks";
-import { use } from "react";
 import { emitEditorEvent } from "../event/editor-bus";
 import { EditorEventType } from "../event/types";
 import { UtilityNodes } from "../node-types";
-import { useTranslation } from "react-i18next";
 
 export function TitleEditField() {
   const { noteId, instanceId } = use(EditorContext);

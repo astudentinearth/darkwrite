@@ -1,6 +1,4 @@
 import type { WorkspaceDTO } from "@darkwrite/common";
-import { Button, Input, Label, Switch } from "@/components/ui";
-import WorkspaceIcon from "@/components/workspace-icon";
 import {
   Archive,
   Cloud,
@@ -11,18 +9,20 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import EditWorkspaceDialog from "./edit-workspace-dialog";
-import SettingsCard from "./settings-card";
-import { useWorkspaceExport } from "@/features/workspaces/hooks/use-workspace-export";
+import { Button, Input, Label, Switch } from "@/components/ui";
+import WorkspaceIcon from "@/components/workspace-icon";
 import useBackup from "@/features/backup/hooks/use-backup";
-import { RestoreDataDialog } from "./restore-dialog";
-import { useSettingsActions } from "./store/settings-actions";
+import { useWorkspaceExport } from "@/features/workspaces/hooks/use-workspace-export";
+import { useAppSelector } from "../store/hooks";
 import { useCurrentWorkspace } from "../workspaces/hooks/use-workspace";
 import { useUpdateWorkspaceMutation } from "../workspaces/store/workspace-api";
-import { useSettings } from "./hooks/use-settings";
-import { DeleteWorkspaceDialog } from "./delete-workspace-dialog";
-import { useAppSelector } from "../store/hooks";
 import { selectWorkspaceCount } from "../workspaces/store/workspace-selectors";
+import { DeleteWorkspaceDialog } from "./delete-workspace-dialog";
+import EditWorkspaceDialog from "./edit-workspace-dialog";
+import { useSettings } from "./hooks/use-settings";
+import { RestoreDataDialog } from "./restore-dialog";
+import SettingsCard from "./settings-card";
+import { useSettingsActions } from "./store/settings-actions";
 
 export default function WorkspaceSettings() {
   const currentWorkspace = useCurrentWorkspace();
@@ -116,13 +116,13 @@ export default function WorkspaceSettings() {
           <div className="flex gap-2">
             <Button
               onClick={() => i18n.changeLanguage("en")}
-              variant={i18n.language == "en" ? "default" : "secondary"}
+              variant={i18n.language === "en" ? "default" : "secondary"}
             >
               English
             </Button>
             <Button
               onClick={() => i18n.changeLanguage("tr")}
-              variant={i18n.language == "tr" ? "default" : "secondary"}
+              variant={i18n.language === "tr" ? "default" : "secondary"}
             >
               Türkçe
             </Button>
@@ -155,8 +155,8 @@ export default function WorkspaceSettings() {
             type="number"
             className="w-fit max-w-16 bg-secondary border-none top-highlight"
             onChange={(e) => {
-              const val = parseInt(e.target.value);
-              if (!isNaN(val) && val > 0) {
+              const val = parseInt(e.target.value, 10);
+              if (!Number.isNaN(val) && val > 0) {
                 setIndentSize(val);
               }
             }}

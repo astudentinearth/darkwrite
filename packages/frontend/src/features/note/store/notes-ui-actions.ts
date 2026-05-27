@@ -1,5 +1,5 @@
-import { notesUiSlice } from "./notes-ui-slice";
 import type { AppDispatch } from "@/features/store/types";
+import { notesUiSlice } from "./notes-ui-slice";
 
 export function MoveNoteDialogPortal(dispatch: AppDispatch) {
   function showMoveNoteDialog(noteId: string) {

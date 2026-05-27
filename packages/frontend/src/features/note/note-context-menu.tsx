@@ -1,12 +1,4 @@
 import {
-  ContextMenu,
-  ContextMenuContent,
-  ContextMenuItem,
-  ContextMenuSeparator,
-  ContextMenuTrigger,
-} from "@/components/ui/context-menu";
-import { useNoteContextMenu } from "./hooks/use-note-context-menu";
-import {
   Copy,
   FileCode,
   FilePlus2,
@@ -17,9 +9,17 @@ import {
 } from "lucide-react";
 import { type ReactNode, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { ToggleFavoriteContextMenuItem } from "./components/toggle-favorite-item";
-import { ModificationDateLabel } from "./components/modification-date-label";
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuSeparator,
+  ContextMenuTrigger,
+} from "@/components/ui/context-menu";
 import { cn } from "@/lib/utils";
+import { ModificationDateLabel } from "./components/modification-date-label";
+import { ToggleFavoriteContextMenuItem } from "./components/toggle-favorite-item";
+import { useNoteContextMenu } from "./hooks/use-note-context-menu";
 
 export function NoteContextMenuContainer({
   children,

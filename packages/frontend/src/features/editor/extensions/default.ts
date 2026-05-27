@@ -1,4 +1,3 @@
-import { cn } from "@/lib/utils";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import Highlight from "@tiptap/extension-highlight";
 import HorizontalRule from "@tiptap/extension-horizontal-rule";
@@ -8,16 +7,17 @@ import { TaskList } from "@tiptap/extension-task-list";
 import { TextStyleKit } from "@tiptap/extension-text-style";
 import { Underline } from "@tiptap/extension-underline";
 import { CharacterCount } from "@tiptap/extensions";
+import { ReactMarkViewRenderer } from "@tiptap/react";
 import { StarterKit } from "@tiptap/starter-kit";
 import AutoJoiner from "tiptap-extension-auto-joiner";
+import { cn } from "@/lib/utils";
+import { LinkView } from "../components/link-view";
+import { FileLinkExtension } from "../file-link/file-link-extension";
 import lowlight from "../lowlight";
 import { Block } from "../types";
 import { KeymapFixer } from "./keymap-patcher";
 import { LinkToPage } from "./link-to-page";
 import TableExtensions from "./table/table-extension";
-import { ReactMarkViewRenderer } from "@tiptap/react";
-import { LinkView } from "../components/link-view";
-import { FileLinkExtension } from "../file-link/file-link-extension";
 
 export const starterKit = StarterKit.configure({
   bulletList: {

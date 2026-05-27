@@ -5,9 +5,9 @@ import {
   Keyboard,
   SwatchBook,
 } from "lucide-react";
+import About from "./about";
 import AppearanceSettings from "./appearance-settings";
 import WorkspaceSettings from "./workspace-settings";
-import About from "./about";
 
 export const TAB_TITLES = {
   workspace: "settings.workspace.title",

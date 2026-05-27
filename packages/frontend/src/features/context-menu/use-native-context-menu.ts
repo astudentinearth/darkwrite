@@ -1,8 +1,8 @@
 import type { NativeContextMenuData } from "@darkwrite/common";
-import { type RefObject, useEffect, useRef, useState } from "react";
-import { ContextMenuEventBus } from "./menu-event-bus";
-import { DarkwriteAPIClient } from "@/api/api-client";
 import type { ResultAsync } from "neverthrow";
+import { type RefObject, useEffect, useRef, useState } from "react";
+import { DarkwriteAPIClient } from "@/api/api-client";
+import { ContextMenuEventBus } from "./menu-event-bus";
 
 // requestAnimationFrame is required to ensure Radix context menu does not swallow the edit commands Electron sends to the webview. We wait until everything is done, then restore focus back to whatever was focused before the context menu popped.
 
@@ -10,7 +10,7 @@ import type { ResultAsync } from "neverthrow";
 
 function waitFocusRestoration(
   previousFocus: RefObject<Element | null>,
-  fn: (...args: unknown[]) => void | ResultAsync<unknown, unknown>,
+  fn: (...args: unknown[]) => ResultAsync<unknown, unknown>,
 ) {
   return () => {
     requestAnimationFrame(() => {
@@ -60,7 +60,7 @@ export function useNativeContextMenu() {
 }
 
 export function useEditActions(previousFocus: RefObject<Element | null>) {
-  const restore = (fn: () => void | ResultAsync<unknown, unknown>) => {
+  const restore = (fn: () => ResultAsync<unknown, unknown>) => {
     return waitFocusRestoration(previousFocus, fn);
   };
   return {

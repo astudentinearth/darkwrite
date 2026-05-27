@@ -1,5 +1,5 @@
-import { useLocalStore } from "@/context/local-state";
 import { useEffect, useState } from "react";
+import { useLocalStore } from "@/context/local-state";
 
 export const useCenteredLayout = (maxWidth: number = 960) => {
   const [width, setWidth] = useState(maxWidth);

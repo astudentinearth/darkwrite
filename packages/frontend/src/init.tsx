@@ -1,15 +1,16 @@
-import { DarkwriteAPIClient } from "./api/api-client";
 import type { DarkwriteUserSettings } from "@darkwrite/common";
+import { ResultAsync } from "neverthrow";
+import { DarkwriteAPIClient } from "./api/api-client";
+import { setupAppMenuEvents } from "./features/app-menu/app-menu-bus";
+import { setupContextMenuEvents } from "./features/context-menu/menu-event-bus";
+import { setupLayoutEvents } from "./features/layout/layout-store";
 import { appSessionSlice } from "./features/session/session-slice";
 import { settingsSlice } from "./features/settings/store/settings-slice";
 import type { AppStore } from "./features/store/redux";
 import { initializeFonts, initializeThemes } from "./features/themes/init";
 import { getWorkspaceActions } from "./features/workspaces/store/workspace-actions";
-import { setupContextMenuEvents } from "./features/context-menu/menu-event-bus";
-import { setupAppMenuEvents } from "./features/app-menu/app-menu-bus";
-import { setupLayoutEvents } from "./features/layout/layout-store";
-import { ResultAsync } from "neverthrow";
 
+// biome-ignore lint/complexity/noStaticOnlyClass: will remove //FIXME
 export class InitialUserSettings {
   static settings: DarkwriteUserSettings;
 }

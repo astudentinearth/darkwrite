@@ -1,10 +1,10 @@
+import { Expand } from "lucide-react";
+import { use } from "react";
 import { HeaderbarButton } from "@/components/headerbar-button";
 import { TextTooltip } from "@/components/ui/tooltip";
 import { navigateToNote } from "@/features/navigation/navigator";
-import { Expand } from "lucide-react";
-import { use } from "react";
-import { EditorContext } from "../store/editor-context";
 import { useEditorActions } from "../store/editor-actions";
+import { EditorContext } from "../store/editor-context";
 
 export function OpenFullscreenButton() {
   const { noteId } = use(EditorContext);

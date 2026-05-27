@@ -1,5 +1,4 @@
-import type { NoteContent } from "@darkwrite/common";
-import type { NoteCustomization } from "@darkwrite/common";
+import type { NoteContent, NoteCustomization } from "@darkwrite/common";
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { JSONContent } from "@tiptap/core";
 import _ from "lodash";

@@ -1,12 +1,12 @@
-import Image from "@tiptap/extension-image";
-import ImageAttributes from "./image-attributes";
 import { mergeAttributes } from "@tiptap/core";
-import ImagePlugin from "./image-plugin";
-import type { ImageExtensionConfig } from "./image-config";
+import Image from "@tiptap/extension-image";
 import { ReactNodeViewRenderer } from "@tiptap/react";
-import { DarkwriteImageView } from "./image-view";
 import { cn } from "@/lib/utils";
 import { Block } from "../../types";
+import ImageAttributes from "./image-attributes";
+import type { ImageExtensionConfig } from "./image-config";
+import ImagePlugin from "./image-plugin";
+import { DarkwriteImageView } from "./image-view";
 
 export const ImageExtension = (config: ImageExtensionConfig) =>
   Image.extend({

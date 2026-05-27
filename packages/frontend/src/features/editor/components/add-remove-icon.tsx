@@ -1,12 +1,12 @@
 import { DEFAULT_NOTE_ICON } from "@darkwrite/common";
+import { Frown, Smile } from "lucide-react";
+import { use } from "react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui";
 import { EditorContext } from "@/features/editor/store/editor-context";
 import { selectNoteIcon } from "@/features/note/store/note-selectors";
 import { useTitleUpdater } from "@/features/note/store/update-note";
 import { useAppSelector } from "@/features/store/hooks";
-import { Frown, Smile } from "lucide-react";
-import { use } from "react";
-import { useTranslation } from "react-i18next";
 
 export function AddRemoveIconButton() {
   const { noteId } = use(EditorContext);

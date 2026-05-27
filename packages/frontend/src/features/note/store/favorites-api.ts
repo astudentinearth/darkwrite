@@ -1,11 +1,11 @@
-import { DarkwriteAPIClient } from "@/api/api-client";
-import { resultQueryFn } from "@/lib/query-result";
 import { dwErrAsync, type NoteDTO, Rank } from "@darkwrite/common";
 import { okAsync } from "neverthrow";
-import { notesApi } from "./notes-api";
-import { selectFavorites, selectNoteById } from "./note-selectors";
+import { DarkwriteAPIClient } from "@/api/api-client";
 import type { RootState } from "@/features/store/types";
+import { resultQueryFn } from "@/lib/query-result";
+import { selectFavorites, selectNoteById } from "./note-selectors";
 import { updateNote } from "./note-slice";
+import { notesApi } from "./notes-api";
 
 export type FavoriteNoteArgs = { noteId: string; aboveNoteId?: string | null };
 

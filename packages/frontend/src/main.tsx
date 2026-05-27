@@ -1,15 +1,15 @@
 import data from "@emoji-mart/data";
 import { init } from "emoji-mart";
-import { APIClientMode, DarkwriteAPIClient } from "./api/api-client";
 import App from "./App";
+import { APIClientMode, DarkwriteAPIClient } from "./api/api-client";
 import Onboarding from "./features/onboarding/onboarding";
 import "./globals.css";
 import "./i18n";
-import { correctWorkspaceState, initializeUserPrefs } from "./init";
-import { ReactRootContainer } from "./react-root-helper";
-import { initalizePlatform } from "./lib/platform";
-import store from "./store";
 import { flushPendingEditorSaves } from "./features/editor/store/editor-middleware";
+import { correctWorkspaceState, initializeUserPrefs } from "./init";
+import { initalizePlatform } from "./lib/platform";
+import { ReactRootContainer } from "./react-root-helper";
+import store from "./store";
 
 const renderApp = async () => {
   await correctWorkspaceState(store);

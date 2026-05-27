@@ -1,3 +1,5 @@
+import { memo, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import {
   CommandDialog,
   CommandEmpty,
@@ -7,8 +9,6 @@ import {
   CommandList,
 } from "@/components/ui";
 import { getNoteIcon } from "@/lib/utils";
-import { memo, useRef } from "react";
-import { useTranslation } from "react-i18next";
 import { navigateToNote } from "../navigation/navigator";
 import { useNoteById } from "../note/hooks/use-note-by-id";
 import { useSearch } from "../note/hooks/use-search";
@@ -20,7 +20,7 @@ const SearchItem = memo(function ({ noteId }: { noteId: string }) {
   return (
     <CommandItem
       className="px-2 py-4 flex items-center gap-2"
-      value={note.id + " " + note.title}
+      value={`${note.id} ${note.title}`}
       onSelect={() => {
         setSearchOpen(false);
         navigateToNote(noteId);
@@ -38,6 +38,7 @@ export default function SearchDialog() {
   const { t } = useTranslation();
   const { debouncedSearch, isLoading, results } = useSearch(query);
 
+  // biome-ignore lint/style/noNonNullAssertion: ref is always set
   const listRef = useRef<HTMLDivElement>(null!);
   return (
     <CommandDialog

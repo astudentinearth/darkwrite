@@ -1,8 +1,8 @@
+import { dwErrAsync, type NoteDTO } from "@darkwrite/common";
+import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
+import { okAsync } from "neverthrow";
 import { DarkwriteAPIClient } from "@/api/api-client";
 import { resultQueryFn } from "@/lib/query-result";
-import { dwErrAsync, type NoteDTO } from "@darkwrite/common";
-import { okAsync } from "neverthrow";
-import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
 import { upsertNotes } from "./note-slice";
 
 export const NOTES_API_REDUCER_PATH = "notes-api";
@@ -132,7 +132,7 @@ export const notesApi = createApi({
           ),
       ),
 
-      onQueryStarted: async (noteId: string, { dispatch, queryFulfilled }) => {
+      onQueryStarted: async (_noteId: string, { dispatch, queryFulfilled }) => {
         try {
           const { data } = await queryFulfilled;
           dispatch(upsertNotes([data]));
@@ -141,7 +141,7 @@ export const notesApi = createApi({
         }
       },
 
-      providesTags: (result, error, noteId) =>
+      providesTags: (result, _error, noteId) =>
         result
           ? [
               {

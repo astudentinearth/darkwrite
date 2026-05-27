@@ -1,3 +1,7 @@
+import { getDefaultWorkspaceConfiguration } from "@darkwrite/common";
+import { t } from "i18next";
+import { type ReactNode, useState } from "react";
+import { toast } from "sonner";
 import {
   Button,
   type ControlledDialogProps,
@@ -8,12 +12,8 @@ import {
   Input,
   Label,
 } from "@/components/ui";
-import { type ReactNode, useState } from "react";
-import { getDefaultWorkspaceConfiguration } from "@darkwrite/common";
 import { useWorkspaceManager } from "@/features/workspaces/hooks/use-workspace-manager";
 import { useCreateWorkspaceMutation } from "../store/workspace-api";
-import { toast } from "sonner";
-import { t } from "i18next";
 
 export default function NewWorkspaceDialog(
   props: ControlledDialogProps & { children: ReactNode },
@@ -28,7 +28,7 @@ export default function NewWorkspaceDialog(
     });
     if (!workspace.data) {
       toast.error(
-        t("sidebar.workspace.newWorkspaceError") + ": " + workspace.error,
+        `${t("sidebar.workspace.newWorkspaceError")}: ${workspace.error}`,
       );
       return;
     }

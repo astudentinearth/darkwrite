@@ -1,17 +1,17 @@
+import { skipToken } from "@reduxjs/toolkit/query";
+import { ChevronRight } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { cn } from "@/lib/utils";
-import { ChevronRight } from "lucide-react";
-import { useTranslation } from "react-i18next";
 import { FavoritesView } from "../note/components/favorites";
+import { useGetFavoritesByWorkspaceIdQuery } from "../note/store/notes-api";
 import { useSessionActions } from "../session/session-actions";
 import { useFavoritesViewOpen } from "../session/session-hooks";
-import { useGetFavoritesByWorkspaceIdQuery } from "../note/store/notes-api";
 import { useCurrentWorkspaceId } from "../workspaces/hooks/use-workspace";
-import { skipToken } from "@reduxjs/toolkit/query";
 import { SidebarItem } from "./sidebar-item";
 
 function PrefetchFavorites() {

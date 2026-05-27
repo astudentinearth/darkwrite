@@ -1,6 +1,6 @@
 import type { WorkspaceDTO } from "@darkwrite/common";
-import { WorkspaceLetterIcon } from "./workspace-letter-icon";
 import { cn } from "@/lib/utils";
+import { WorkspaceLetterIcon } from "./workspace-letter-icon";
 
 export default function WorkspaceIcon(props: {
   workspace: WorkspaceDTO;

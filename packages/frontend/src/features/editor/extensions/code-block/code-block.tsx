@@ -1,9 +1,9 @@
-import { cn } from "@/lib/utils";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import { ReactNodeViewRenderer } from "@tiptap/react";
+import { cn } from "@/lib/utils";
 import lowlight from "../../lowlight";
-import CodeBlockNodeView from "./code-block-wrapper";
 import { Block } from "../../types";
+import CodeBlockNodeView from "./code-block-wrapper";
 
 export const CodeBlockExtension = (indentSizeCallback: () => number) =>
   CodeBlockLowlight.extend({

@@ -1,7 +1,7 @@
 import { useDragState } from "@/features/dnd/use-drag-state";
-import { getMovingNote } from "../store/move-note";
 import { useAppDispatch, useAppStore } from "@/features/store/hooks";
 import { favoritesApi } from "../store/favorites-api";
+import { getMovingNote } from "../store/move-note";
 
 export function useFavoriteDropZone(aboveId: string | null) {
   const dragState = useDragState();

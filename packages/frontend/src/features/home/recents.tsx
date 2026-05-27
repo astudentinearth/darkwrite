@@ -1,9 +1,9 @@
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui";
 import { getNoteIcon } from "@/lib/utils";
-import { useTranslation } from "react-i18next";
 import { navigateToNote } from "../navigation/navigator";
-import useRecents from "./use-recents";
 import { NoteContextMenuContainer } from "../note/note-context-menu";
+import useRecents from "./use-recents";
 
 export default function RecentNotes() {
   const { recents } = useRecents();

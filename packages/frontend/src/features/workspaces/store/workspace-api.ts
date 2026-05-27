@@ -1,11 +1,11 @@
+import type { CreateWorkspaceDTO, WorkspaceDTO } from "@darkwrite/common";
+import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
 import { DarkwriteAPIClient } from "@/api/api-client";
-import { resultQueryFn } from "@/lib/query-result";
 import { selectAllNoteIdsByWorkspaceIdUnfiltered } from "@/features/note/store/note-selectors";
 import { removeNotes } from "@/features/note/store/note-slice";
 import { appSessionSlice } from "@/features/session/session-slice";
 import type { RootState } from "@/features/store/types";
-import type { CreateWorkspaceDTO, WorkspaceDTO } from "@darkwrite/common";
-import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
+import { resultQueryFn } from "@/lib/query-result";
 import { selectAllWorkspaces } from "./workspace-selectors";
 import { type UpdateWorkspaceArg, workspaceSlice } from "./workspace-slice";
 

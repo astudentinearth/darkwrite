@@ -1,17 +1,4 @@
-import { HeaderbarButton } from "@/components/headerbar-button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
-  DropdownMenuSwitchItem,
-  DropdownMenuTrigger,
-} from "@/components/ui";
-import { useLocalStore } from "@/context/local-state";
-import { cn } from "@/lib/utils";
+import { TooltipTrigger } from "@radix-ui/react-tooltip";
 import {
   Download,
   FileCode,
@@ -26,10 +13,23 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { HeaderbarButton } from "@/components/headerbar-button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuSwitchItem,
+  DropdownMenuTrigger,
+} from "@/components/ui";
+import { Tooltip, TooltipContent } from "@/components/ui/tooltip";
+import { useLocalStore } from "@/context/local-state";
+import { cn } from "@/lib/utils";
 import { PageSizeChooser } from "../export/page-size-chooser";
 import useEditorMenu from "./hooks/use-editor-menu";
-import { Tooltip, TooltipContent } from "@/components/ui/tooltip";
-import { TooltipTrigger } from "@radix-ui/react-tooltip";
 
 function EditorMenuContent({ noteId }: { noteId: string }) {
   const spellcheck = useLocalStore((s) => s.useSpellcheck);

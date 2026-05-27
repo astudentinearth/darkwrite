@@ -37,14 +37,14 @@
     animation-name: slide-up;
     animation-duration: 0.2s;
     animation-iteration-count: 1;
-    opacity: 1;
+    animation-fill-mode: forwards;
   }
   &[data-animation="cmd-slide-down"][data-state="visible"] {
     opacity: 0;
     animation-name: cmd-slide-down;
     animation-duration: 0.2s;
     animation-iteration-count: 1;
-    opacity: 1;
+    animation-fill-mode: forwards;
   }
 
   &[data-animation="cmd-slide-down"][data-state="visible"][data-placement="top-start"] {
@@ -52,7 +52,7 @@
     animation-name: cmd-slide-up;
     animation-duration: 0.2s;
     animation-iteration-count: 1;
-    opacity: 1;
+    animation-fill-mode: forwards;
   }
 }
 
@@ -137,8 +137,8 @@ hr.ProseMirror-selectednode {
 .node-dwimage {
   display: flex;
   justify-content: center;
-  width:100%;
-  overflow:hidden;
+  width: 100%;
+  overflow: hidden;
 }
 
 .dwimage-selection-overlay {

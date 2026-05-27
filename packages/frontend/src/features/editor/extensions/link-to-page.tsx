@@ -1,36 +1,36 @@
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-  Command,
-  CommandEmpty,
-  CommandInput,
-  CommandItem,
-  CommandList,
-  Button,
-} from "@/components/ui";
+import { DarkwriteResource, resourceRefToUrl } from "@darkwrite/common";
 //FIXME: This will be moved to @/components/ui
 //import { getNoteIcon } from "@renderer/lib/utils";
 import { mergeAttributes, Node } from "@tiptap/core";
+import { Plugin } from "@tiptap/pm/state";
 import {
   NodeViewWrapper,
   type ReactNodeViewProps,
   ReactNodeViewRenderer,
 } from "@tiptap/react";
 import { ArrowLeftRight, File } from "lucide-react";
-import { Plugin } from "@tiptap/pm/state";
-import { memo, type MouseEvent, use, useState } from "react";
+import { type MouseEvent, memo, use, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { DarkwriteEditorContext } from "../context";
-import { cn, getNoteIcon } from "@/lib/utils";
-import { useNoteById } from "@/features/note/hooks/use-note-by-id";
-import { useSearch } from "@/features/note/hooks/use-search";
+import {
+  Button,
+  Command,
+  CommandEmpty,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui";
 import {
   DRAG_DATA_TYPE,
   extractNoteIdFromDragData,
 } from "@/features/dnd/datatransfer";
+import { useNoteById } from "@/features/note/hooks/use-note-by-id";
+import { useSearch } from "@/features/note/hooks/use-search";
+import { cn, getNoteIcon } from "@/lib/utils";
+import { DarkwriteEditorContext } from "../context";
 import { Block } from "../types";
-import { DarkwriteResource, resourceRefToUrl } from "@darkwrite/common";
 
 const LinkResult = memo(function ({
   id,
@@ -208,10 +208,7 @@ export const LinkToPage = Node.create({
       new Plugin({
         props: {
           handleDrop(view, event) {
-            if (
-              event.dataTransfer &&
-              event.dataTransfer.types.includes(DRAG_DATA_TYPE)
-            ) {
+            if (event.dataTransfer?.types.includes(DRAG_DATA_TYPE)) {
               const id = extractNoteIdFromDragData(event);
               if (!id) return false;
               const nodeType = view.state.schema.nodes.linkToPage;

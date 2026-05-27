@@ -1,4 +1,7 @@
 import { cssTextColorVariables } from "@darkwrite/common";
+import { useCurrentEditor } from "@tiptap/react";
+import { Baseline, ChevronDown, Eraser } from "lucide-react";
+import { useState } from "react";
 import {
   Button,
   ColorPicker,
@@ -7,9 +10,6 @@ import {
   PopoverTrigger,
 } from "@/components/ui";
 import { cn } from "@/lib/utils";
-import { useCurrentEditor } from "@tiptap/react";
-import { Baseline, ChevronDown, Eraser } from "lucide-react";
-import { useState } from "react";
 
 export function TextColorSelector() {
   const colorVars = cssTextColorVariables;

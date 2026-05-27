@@ -1,6 +1,7 @@
 import type { Editor, JSONContent, Range } from "@tiptap/core";
 import type { ReactNode } from "react";
-export { type JSONContent as EditorContent };
+
+export type { JSONContent as EditorContent };
 export interface SlashCommandItem {
   id: string;
   icon: ReactNode;
@@ -27,7 +28,7 @@ export enum TextFormat {
 }
 
 export enum Block {
-  Blockquote = TextFormat.Quote, // shim to text format value
+  Blockquote = "blockquote",
   CodeBlock = "codeBlock",
   Image = "dwimage",
   HorizontalRule = "horizontalRule",

@@ -1,24 +1,24 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { appSessionSlice } from "../session/session-slice";
+import { fileLinkApi } from "../editor/file-link/file-link-api";
+import { editorApi } from "../editor/store/editor-api";
+import editorMiddleware from "../editor/store/editor-middleware";
+import { editorSlice } from "../editor/store/editor-slice";
+import { notesSlice } from "../note/store/note-slice";
+import { notesApi } from "../note/store/notes-api";
+import { notesUiSlice } from "../note/store/notes-ui-slice";
 import { sessionListenerMiddleware } from "../session/session-listener";
 import {
   DEFAULT_SESSION_STATE,
   loadSessionState,
 } from "../session/session-persistence";
-import { notesSlice } from "../note/store/note-slice";
-import { notesApi } from "../note/store/notes-api";
-import { settingsSlice } from "../settings/store/settings-slice";
-import { settingsPersistenceMiddleware } from "../settings/store/settings-persistence";
-import { editorSlice } from "../editor/store/editor-slice";
-import { themeSlice } from "../themes/store/theme-slice";
-import { editorApi } from "../editor/store/editor-api";
-import editorMiddleware from "../editor/store/editor-middleware";
-import { updateApi } from "../update/store/update-api";
-import { workspaceSlice } from "../workspaces/store/workspace-slice";
-import { workspaceApi } from "../workspaces/store/workspace-api";
+import { appSessionSlice } from "../session/session-slice";
 import { clientInfoApi } from "../settings/store/client-info-api";
-import { notesUiSlice } from "../note/store/notes-ui-slice";
-import { fileLinkApi } from "../editor/file-link/file-link-api";
+import { settingsPersistenceMiddleware } from "../settings/store/settings-persistence";
+import { settingsSlice } from "../settings/store/settings-slice";
+import { themeSlice } from "../themes/store/theme-slice";
+import { updateApi } from "../update/store/update-api";
+import { workspaceApi } from "../workspaces/store/workspace-api";
+import { workspaceSlice } from "../workspaces/store/workspace-slice";
 
 export function createAppStore() {
   return configureStore({

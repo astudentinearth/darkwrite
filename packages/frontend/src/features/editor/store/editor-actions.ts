@@ -1,9 +1,9 @@
 import type { NoteCustomization } from "@darkwrite/common";
-import { editorSlice, type FormattingState } from "./editor-slice";
-import type { EditorContent } from "../types";
-import type { AppDispatch } from "@/features/store/types";
-import { useAppDispatch } from "@/features/store/hooks";
 import { useMemo } from "react";
+import { useAppDispatch } from "@/features/store/hooks";
+import type { AppDispatch } from "@/features/store/types";
+import type { EditorContent } from "../types";
+import { editorSlice, type FormattingState } from "./editor-slice";
 
 export const getEditorActions = (dispatch: AppDispatch) => ({
   setEditorCustomizations(

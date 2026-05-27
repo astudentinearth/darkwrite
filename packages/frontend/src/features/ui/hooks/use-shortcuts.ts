@@ -1,6 +1,6 @@
+import { useEffect } from "react";
 import { toggleSidebar } from "@/context/local-state";
 import { showSearch } from "@/features/search/search-state";
-import { useEffect } from "react";
 
 export const useShortcuts = () => {
   useEffect(() => {

@@ -1,8 +1,8 @@
+import { OS } from "@darkwrite/common";
+import { useLocalStore } from "@/context/local-state";
+import { InitialUserSettings } from "@/init";
 import { getOperatingSystem } from "@/lib/platform";
 import { useLayoutStore } from "./layout-store";
-import { OS } from "@darkwrite/common";
-import { InitialUserSettings } from "@/init";
-import { useLocalStore } from "@/context/local-state";
 
 export default function TrafficLightsPlaceholder() {
   const fullscreen = useLayoutStore((state) => state.isFullscreen);

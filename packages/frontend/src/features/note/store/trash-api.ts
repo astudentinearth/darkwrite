@@ -1,11 +1,11 @@
-import { DarkwriteAPIClient } from "@/api/api-client";
-import { resultQueryFn } from "@/lib/query-result";
 import { dwErrAsync, type NoteDTO } from "@darkwrite/common";
 import { okAsync } from "neverthrow";
-import { NOTES_TAG_TYPE, notesApi } from "./notes-api";
-import { removeNote, removeNotes, updateNote, upsertNotes } from "./note-slice";
+import { DarkwriteAPIClient } from "@/api/api-client";
 import type { RootState } from "@/features/store/types";
+import { resultQueryFn } from "@/lib/query-result";
 import { selectNoteIdsInTrash } from "./note-selectors";
+import { removeNote, removeNotes, updateNote, upsertNotes } from "./note-slice";
+import { NOTES_TAG_TYPE, notesApi } from "./notes-api";
 
 export function trashedByWorkspaceIdTag(workspaceId: string) {
   return `TRASHED_BY_WORKSPACE_ID_${workspaceId}` as const;
@@ -65,7 +65,7 @@ export const trashApi = notesApi.injectEndpoints({
           dispatch(updateNote({ id: noteId, changes: undoPatch }));
         }
       },
-      invalidatesTags: (result, _error, noteId) => [
+      invalidatesTags: (_result, _error, noteId) => [
         {
           type: NOTES_TAG_TYPE,
           id: trashedByNoteIdTag(noteId),

@@ -1,7 +1,7 @@
-import { DarkwriteAPIClient } from "@/api/api-client";
-import { resultQueryFn } from "@/lib/query-result";
 import type { NoteContent } from "@darkwrite/common";
 import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
+import { DarkwriteAPIClient } from "@/api/api-client";
+import { resultQueryFn } from "@/lib/query-result";
 import { editorSlice } from "./editor-slice";
 
 export const EDITOR_API_NAME = "editorApi";

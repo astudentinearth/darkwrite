@@ -1,13 +1,13 @@
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { getNoteIcon } from "@/lib/utils";
 import { useNoteFromURL } from "@/features/note/hooks/use-note-from-url";
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
+import { getNoteIcon } from "@/lib/utils";
 import { navigateToNote } from "../navigation/navigator";
 import { useNoteById } from "../note/hooks/use-note-by-id";
 import { selectParentIdTree } from "../note/store/note-selectors";
@@ -54,7 +54,7 @@ export default function NoteDropdown() {
         {tree?.map((n) => (
           <ParentItem key={n} id={n} setOpen={setOpen} />
         ))}
-        {tree.length == 0 && (
+        {tree.length === 0 && (
           <span className="text-foreground/80 block px-4 py-2">
             {t("titlebar.noPagesAbove")}
           </span>

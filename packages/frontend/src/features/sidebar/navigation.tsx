@@ -1,15 +1,15 @@
 import { Home, Notebook, Settings } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { useLocation } from "react-router-dom";
+import { cn } from "@/lib/utils";
 import { navigateHome } from "../navigation/navigator";
 import SettingsDialog from "../settings/settings-dialog";
 import { SidebarItem } from "./sidebar-item";
-import { useLocation } from "react-router-dom";
-import { cn } from "@/lib/utils";
 
 export function SidebarNavigation() {
   const { t } = useTranslation(undefined, { keyPrefix: "sidebar.button" });
   const route = useLocation();
-  const isHome = route.pathname == "/";
+  const isHome = route.pathname === "/";
   return (
     <div className="flex flex-col gap-0.5">
       <SidebarItem

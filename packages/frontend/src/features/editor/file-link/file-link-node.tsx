@@ -1,7 +1,9 @@
 import { NodeViewWrapper, type ReactNodeViewProps } from "@tiptap/react";
-import type { FileLinkAttributesType } from "./file-link-extension";
-import { cn } from "@/lib/utils";
-import { useFileLink } from "./use-file-link";
+import { AppWindow } from "lucide-react";
+import { type MouseEvent, use, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { DarkwriteAPIClient } from "@/api/api-client";
+import { FileIcon } from "@/components/file-icon";
 import {
   ContextMenu,
   ContextMenuContent,
@@ -9,12 +11,10 @@ import {
   ContextMenuSeparator,
   ContextMenuTrigger,
 } from "@/components/ui";
-import { useTranslation } from "react-i18next";
-import { use, useState, type MouseEvent } from "react";
-import { DarkwriteAPIClient } from "@/api/api-client";
-import { FileIcon } from "@/components/file-icon";
+import { cn } from "@/lib/utils";
 import { DarkwriteEditorContext } from "../context";
-import { AppWindow } from "lucide-react";
+import type { FileLinkAttributesType } from "./file-link-extension";
+import { useFileLink } from "./use-file-link";
 
 const filename = (fullPath: string) => {
   const parts = fullPath.split(/[/\\]/);

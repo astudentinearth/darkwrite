@@ -1,4 +1,4 @@
-import { Block, type SlashCommandItem } from "../../types";
+import type { i18n } from "i18next";
 import {
   CheckSquare,
   Code,
@@ -16,11 +16,11 @@ import {
   Text,
   TextQuote,
 } from "lucide-react";
+import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
+import { Block, type SlashCommandItem } from "../../types";
 import type { ImageExtensionConfig } from "../image/image-config";
 import { createImageNode } from "../image/image-upload-transaction";
-import type { i18n } from "i18next";
-import { useMemo } from "react";
 
 export const useSlashCommand = (
   imageUploadConfig: ImageExtensionConfig,

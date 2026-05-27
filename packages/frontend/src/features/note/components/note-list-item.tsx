@@ -1,20 +1,20 @@
+import { ChevronRight, Plus } from "lucide-react";
+import { memo, type ReactNode, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui";
+import { TextTooltip } from "@/components/ui/tooltip";
 import { navigateToNote } from "@/features/navigation/navigator";
 import { cn, getNoteIcon } from "@/lib/utils";
-import { ChevronRight, Plus } from "lucide-react";
-import { memo, type ReactNode, useState } from "react";
 import {
   useNoteDropZone,
   useNoteItem,
   useNoteItemDrag,
 } from "../hooks/use-note-item";
 import { NoteContextMenuContainer } from "../note-context-menu";
-import { TextTooltip } from "@/components/ui/tooltip";
-import { useTranslation } from "react-i18next";
 
 export const NoteListItem = memo(function ({
   id,

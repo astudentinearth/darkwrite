@@ -1,7 +1,7 @@
-import { Button } from "@/components/ui";
-import { cn } from "@/lib/utils";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import type * as React from "react";
+import { Button } from "@/components/ui";
+import { cn } from "@/lib/utils";
 
 interface OnboardingButtonProps extends React.ComponentProps<"button"> {
   variant?: "secondary" | "default";

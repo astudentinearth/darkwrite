@@ -1,5 +1,5 @@
-import * as React from "react";
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
+import * as React from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -62,8 +62,8 @@ export function TextTooltip({
 
 export {
   Tooltip,
-  TooltipTrigger,
   TooltipContent,
-  TooltipProvider,
   TooltipPortal,
+  TooltipProvider,
+  TooltipTrigger,
 };

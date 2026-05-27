@@ -1,3 +1,5 @@
+import { Link, Trash } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import {
   Button,
   Command,
@@ -11,8 +13,6 @@ import {
 } from "@/components/ui";
 import { useNoteById } from "@/features/note/hooks/use-note-by-id";
 import { cn, getNoteIcon } from "@/lib/utils";
-import { Link, Trash } from "lucide-react";
-import { useTranslation } from "react-i18next";
 import { isValidLinkUrl, useLinkOptions } from "../../hooks/use-link-options";
 
 function NoteItem({

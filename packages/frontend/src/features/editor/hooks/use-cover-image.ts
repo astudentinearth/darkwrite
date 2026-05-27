@@ -1,8 +1,8 @@
 import { selectCoverImageSource } from "@/features/editor/store/editor-selectors";
 import { useAppSelector } from "@/features/store/hooks";
+import { useWorkspaceActions } from "@/features/workspaces/store/workspace-actions";
 import { uploadImage } from "@/lib/upload-image";
 import { useEditorActions } from "../store/editor-actions";
-import { useWorkspaceActions } from "@/features/workspaces/store/workspace-actions";
 
 export function useCoverImage(noteId: string) {
   const imageSource = useAppSelector((s) => selectCoverImageSource(s, noteId));

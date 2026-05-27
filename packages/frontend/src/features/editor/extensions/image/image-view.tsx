@@ -1,16 +1,16 @@
 import { NodeViewWrapper, type ReactNodeViewProps } from "@tiptap/react";
-import { useEmbedSource } from "../../use-embed-source";
+import { Download, RotateCcw } from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { DarkwriteAPIClient } from "@/api/api-client";
 import {
   ContextMenu,
   ContextMenuContent,
   ContextMenuItem,
   ContextMenuTrigger,
 } from "@/components/ui";
-import { DarkwriteAPIClient } from "@/api/api-client";
-import { Download, RotateCcw } from "lucide-react";
-import { useTranslation } from "react-i18next";
-import { useCallback, useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
+import { useEmbedSource } from "../../use-embed-source";
 
 enum GrabHandleSide {
   LEFT,
@@ -56,7 +56,6 @@ export const DarkwriteImageView = (props: DarkwriteImageViewProps) => {
     const target = natural * (percent / 100);
     container.style.setProperty("width", `min(${target}px, 100%)`);
   }, []);
-
 
   useEffect(() => {
     setDisplayWidth(props.node.attrs.widthPercent);

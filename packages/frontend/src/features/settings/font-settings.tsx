@@ -1,5 +1,5 @@
-import FontSelect from "@/components/font-select";
 import { useTranslation } from "react-i18next";
+import FontSelect from "@/components/font-select";
 import { useFontSettings } from "./hooks/use-settings";
 import { useSettingsActions } from "./store/settings-actions";
 

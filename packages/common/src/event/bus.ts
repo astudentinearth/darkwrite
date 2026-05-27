@@ -63,9 +63,9 @@ export class EventBus<Events extends EventMap> {
     channel: K,
     fn: EventBusListener<Events[K]>,
   ) {
-    const listenerMap = this.listeners.get(channel);
-    if (!listenerMap) this.listeners.set(channel, new Set());
-    const listeners = listenerMap as Set<
+    if (!this.listeners.has(channel)) this.listeners.set(channel, new Set());
+    // biome-ignore lint/style/noNonNullAssertion: see above line
+    const listeners = this.listeners.get(channel)! as Set<
       EventBusListener<Events[K]>
     >;
     listeners.add(fn);

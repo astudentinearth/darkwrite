@@ -1,9 +1,9 @@
 import { Tiptap, useEditor } from "@tiptap/react";
 import { use } from "react";
 import { DarkwriteEditorContext } from "./context";
-import useEditorBuilder from "./hooks/use-editor-builder";
 import { emitEditorEvent } from "./event/editor-bus";
 import { EditorEventType } from "./event/types";
+import useEditorBuilder from "./hooks/use-editor-builder";
 import { EditorContext } from "./store/editor-context";
 import { type EditorContent, TextDirection } from "./types";
 

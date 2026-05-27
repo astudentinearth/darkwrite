@@ -1,7 +1,7 @@
+import type { NoteContent } from "@darkwrite/common";
+import { skipToken } from "@reduxjs/toolkit/query";
 import { useAppSelector } from "@/features/store/hooks";
 import { useGetDocumentQuery } from "../store/editor-api";
-import { skipToken } from "@reduxjs/toolkit/query";
-import type { NoteContent } from "@darkwrite/common";
 
 export type useDocumentResult = {
   document: NoteContent | undefined;

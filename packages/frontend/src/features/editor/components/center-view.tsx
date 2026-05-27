@@ -1,10 +1,10 @@
+import { nanoid } from "nanoid";
+import { use, useRef } from "react";
 import { Dialog, DialogContentContainer, DialogOverlay } from "@/components/ui";
 import Toolbar from "@/features/layout/toolbar";
 import { navigateToNote } from "@/features/navigation/navigator";
 import { useAppSelector } from "@/features/store/hooks";
 import { cn } from "@/lib/utils";
-import { nanoid } from "nanoid";
-import { use, useRef } from "react";
 import { EditorViewport } from "../editor-view";
 import { NoteMetadataEditors } from "../header";
 import { useDocumentById } from "../hooks/use-document";

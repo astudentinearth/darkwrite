@@ -1,13 +1,13 @@
-import { useSearch } from "@/features/note/hooks/use-search";
+import { DarkwriteResource, resourceRefToUrl } from "@darkwrite/common";
 import { useCurrentEditor } from "@tiptap/react";
 import { use, useRef, useState } from "react";
+import { useSearch } from "@/features/note/hooks/use-search";
 import { DarkwriteEditorContext } from "../context";
 import { useFormattingState } from "./use-formatting-state";
-import { DarkwriteResource, resourceRefToUrl } from "@darkwrite/common";
 
 export function isValidLinkUrl(str: string) {
   try {
-    const url = new URL(str.includes("://") ? str : "http://" + str);
+    const url = new URL(str.includes("://") ? str : `http://${str}`);
     return ["http:", "https:"].includes(url.protocol);
   } catch {
     return false;
@@ -18,7 +18,7 @@ function normalizetoHttpUrl(str: string) {
   if (str.startsWith("http://") || str.startsWith("https://")) {
     return str;
   }
-  return "https://" + str;
+  return `https://${str}`;
 }
 
 export function useLinkOptions() {

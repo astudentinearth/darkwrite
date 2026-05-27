@@ -1,8 +1,8 @@
+import type { NoteDTO } from "@darkwrite/common";
+import { skipToken } from "@reduxjs/toolkit/query";
 import { useAppSelector } from "@/features/store/hooks";
 import { selectNoteById } from "../store/note-selectors";
 import { useGetNoteByIdQuery } from "../store/notes-api";
-import { skipToken } from "@reduxjs/toolkit/query";
-import type { NoteDTO } from "@darkwrite/common";
 
 interface NoteByIdResult {
   note: NoteDTO | null;

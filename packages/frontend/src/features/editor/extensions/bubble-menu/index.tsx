@@ -1,14 +1,14 @@
+import { CellSelection } from "@tiptap/pm/tables";
 import { useCurrentEditor } from "@tiptap/react";
 import { BubbleMenu } from "@tiptap/react/menus";
+import type { RefObject } from "react";
+import { Block } from "../../types";
+import { TextColorSelector } from "./color";
 import { FormattingButtons } from "./formatting";
 import { HeadingSelector } from "./heading";
+import { HighlightColorSelector } from "./highlight";
 import { BubbleLink } from "./link";
 import { ListSelector } from "./list";
-import { TextColorSelector } from "./color";
-import { HighlightColorSelector } from "./highlight";
-import { CellSelection } from "@tiptap/pm/tables";
-import { Block } from "../../types";
-import type { RefObject } from "react";
 import { TextDirectionMenu } from "./text-direction";
 
 export type BubbleMenuProps = {

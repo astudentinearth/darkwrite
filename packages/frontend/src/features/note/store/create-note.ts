@@ -1,10 +1,10 @@
-import { DarkwriteAPIClient } from "@/api/api-client";
-import { resultQueryFn } from "@/lib/query-result";
 import { dwErrAsync, type NoteDTO, type ParentId } from "@darkwrite/common";
 import { okAsync } from "neverthrow";
-import { noteByParentIdTag, NOTES_TAG_TYPE, notesApi } from "./notes-api";
-import { upsertNotes } from "./note-slice";
+import { DarkwriteAPIClient } from "@/api/api-client";
 import { navigateToNote } from "@/features/navigation/navigator";
+import { resultQueryFn } from "@/lib/query-result";
+import { upsertNotes } from "./note-slice";
+import { NOTES_TAG_TYPE, noteByParentIdTag, notesApi } from "./notes-api";
 
 export interface CreateNoteArgs {
   parentId?: ParentId;

@@ -1,14 +1,15 @@
 /** eslint-disable @typescript-eslint/no-explicit-any */
+
+import type { ReactNode } from "react";
+import { useTranslation } from "react-i18next";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import type { ReactNode } from "react";
 import {
   type SETTINGS_PAGE,
-  TAB_TITLES,
-  TAB_ICONS,
   SETTINGS_PAGES,
+  TAB_ICONS,
+  TAB_TITLES,
 } from "./settings-pages";
-import { useTranslation } from "react-i18next";
 
 export default function SettingsDialog(props: { children: ReactNode }) {
   return (
@@ -35,7 +36,7 @@ export function SettingsTabView() {
               className="flex gap-2 data-[state=active]:bg-secondary/40 data-[state=active]:text-primary-text hover:bg-secondary/80 rounded-lg py-2 px-4"
             >
               <TabIcon size={18} />
-              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+              {/** biome-ignore lint/suspicious/noExplicitAny: complex type */}
               {t(TAB_TITLES[key as SETTINGS_PAGE] as any)}
             </TabsTrigger>
           );

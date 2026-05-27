@@ -1,10 +1,10 @@
+import { useMemo } from "react";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
 } from "@/components/ui";
-import { useMemo } from "react";
 
 export interface LanguageChooserProps {
   onValueChange: (value: string) => void;

@@ -1,10 +1,10 @@
+import { useTranslation } from "react-i18next";
 import { ClearTrashDialogPortal } from "@/features/note/store/notes-ui-actions";
 import { selectClearTrashDialogState } from "@/features/note/store/notes-ui-selectors";
 import { useClearTrashMutation } from "@/features/note/store/trash-api";
 import notify from "@/features/notifications/notify";
 import { useAppDispatch, useAppSelector } from "@/features/store/hooks";
 import { useCurrentWorkspaceId } from "@/features/workspaces/hooks/use-workspace";
-import { useTranslation } from "react-i18next";
 
 export function useClearTrashDialog() {
   const { open } = useAppSelector((s) => selectClearTrashDialogState(s));

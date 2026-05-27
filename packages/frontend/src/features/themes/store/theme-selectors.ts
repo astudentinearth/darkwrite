@@ -1,6 +1,6 @@
 import type { Theme } from "@darkwrite/common";
-import type { RootState, Selector } from "@/features/store/types";
 import { createSelector } from "@reduxjs/toolkit";
+import type { RootState, Selector } from "@/features/store/types";
 
 export const selectAllThemes = (state: RootState) =>
   Object.values(state.theme.themes);

@@ -1,6 +1,6 @@
 import type { WorkspaceDTO } from "@darkwrite/common";
-import type { RootState, Selector } from "@/features/store/types";
 import { createSelector } from "@reduxjs/toolkit";
+import type { RootState, Selector } from "@/features/store/types";
 
 export const selectAllWorkspaces = createSelector(
   [(store: RootState) => Object.values(store.workspace.workspaces)],

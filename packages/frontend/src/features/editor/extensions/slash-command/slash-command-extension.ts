@@ -1,7 +1,7 @@
 import { type Editor, Extension, type Range } from "@tiptap/core";
+import { PluginKey } from "@tiptap/pm/state";
 import Suggestion, { type SuggestionOptions } from "@tiptap/suggestion";
 import { SlashCommandRenderer } from "./slash-command-renderer";
-import { PluginKey } from "@tiptap/pm/state";
 
 export const SlashCommandExtension = Extension.create({
   name: "slash-command",
@@ -21,7 +21,7 @@ export const SlashCommandExtension = Extension.create({
         }: {
           editor: Editor;
           range: Range;
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          // biome-ignore lint/suspicious/noExplicitAny: tiptap
           props: any;
         }) => {
           props.command(props.props);

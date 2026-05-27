@@ -1,7 +1,7 @@
 import { Languages } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import OnboardingButton from "./onboarding-button";
 import { useOnboardingState } from "./onboarding-state";
-import { useTranslation } from "react-i18next";
 
 export default function LanguageSelection() {
   const setPage = useOnboardingState((s) => s.goToPage);

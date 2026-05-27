@@ -1,5 +1,5 @@
-import { Label, Switch } from "@/components/ui";
 import { useTranslation } from "react-i18next";
+import { Label, Switch } from "@/components/ui";
 import { useSettings } from "./hooks/use-settings";
 import { useSettingsActions } from "./store/settings-actions";
 

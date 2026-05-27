@@ -1,7 +1,7 @@
-import { useAppSelector } from "@/features/store/hooks";
-import { useCurrentWorkspaceId } from "@/features/workspaces/hooks/use-workspace";
 import _ from "lodash";
 import { useMemo } from "react";
+import { useAppSelector } from "@/features/store/hooks";
+import { useCurrentWorkspaceId } from "@/features/workspaces/hooks/use-workspace";
 import { selectByWorkspaceAndSearchTerm } from "../store/note-selectors";
 import { useLazySearchQuery } from "../store/search-api";
 

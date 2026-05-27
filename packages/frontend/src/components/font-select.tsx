@@ -1,10 +1,10 @@
-import useFonts from "@/features/themes/hooks/use-fonts";
-import { getOperatingSystem } from "@/lib/platform";
-import { cn } from "@/lib/utils";
 import { OS } from "@darkwrite/common";
 import { ChevronDown } from "lucide-react";
 import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
+import useFonts from "@/features/themes/hooks/use-fonts";
+import { getOperatingSystem } from "@/lib/platform";
+import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
@@ -18,6 +18,7 @@ export default function FontSelect(props: {
   const fonts = useFonts();
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
+  // biome-ignore lint/style/noNonNullAssertion: guaranteed ref
   const inputRef = useRef<HTMLInputElement>(null!);
   const { t } = useTranslation("translation", { keyPrefix: "ui.font" });
   const { t: _t } = useTranslation("translation");
@@ -45,7 +46,7 @@ export default function FontSelect(props: {
     props.onValueChange?.call(undefined, value);
   };
 
-  return getOperatingSystem() == OS.MACOS ? (
+  return getOperatingSystem() === OS.MACOS ? (
     <Input
       defaultValue={props.value}
       placeholder={t("typeFontName")}

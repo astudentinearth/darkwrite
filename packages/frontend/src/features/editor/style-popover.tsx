@@ -1,3 +1,6 @@
+import { FontStyle, type NoteCustomization } from "@darkwrite/common";
+import { Brush, RotateCcw } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import FontSelect from "@/components/font-select";
 import { HeaderbarButton } from "@/components/headerbar-button";
 import { Switch } from "@/components/ui";
@@ -14,9 +17,6 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
-import { FontStyle, type NoteCustomization } from "@darkwrite/common";
-import { Brush, RotateCcw } from "lucide-react";
-import { useTranslation } from "react-i18next";
 import { useAppSelector } from "../store/hooks";
 import { selectEditorCustomizations } from "./store/editor-selectors";
 import useStylePopover from "./use-style-popover";

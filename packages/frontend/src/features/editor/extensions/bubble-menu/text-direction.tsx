@@ -1,6 +1,12 @@
+import { useCurrentEditor } from "@tiptap/react";
+import {
+  ArrowLeftRight,
+  ChevronDown,
+  PilcrowLeft,
+  PilcrowRight,
+} from "lucide-react";
 import { use, useState } from "react";
-import { useFormattingState } from "../../hooks/use-formatting-state";
-import { DarkwriteEditorContext } from "../../context";
+import { useTranslation } from "react-i18next";
 import {
   Button,
   Popover,
@@ -13,16 +19,10 @@ import {
   TooltipPortal,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useCurrentEditor } from "@tiptap/react";
-import {
-  ArrowLeftRight,
-  ChevronDown,
-  PilcrowLeft,
-  PilcrowRight,
-} from "lucide-react";
-import { TextDirection } from "../../types";
 import { cn } from "@/lib/utils";
-import { useTranslation } from "react-i18next";
+import { DarkwriteEditorContext } from "../../context";
+import { useFormattingState } from "../../hooks/use-formatting-state";
+import { TextDirection } from "../../types";
 import { BubbleButton } from "./bubble-button";
 
 const icons = {

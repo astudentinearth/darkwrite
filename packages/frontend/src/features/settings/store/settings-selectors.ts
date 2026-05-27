@@ -1,5 +1,5 @@
-import type { RootState } from "@/features/store/types";
 import { createSelector } from "@reduxjs/toolkit";
+import type { RootState } from "@/features/store/types";
 
 export const selectSettings = (state: RootState) => state.settings;
 

@@ -1,7 +1,7 @@
+import { useTranslation } from "react-i18next";
 import { Input } from "@/components/ui";
 import { ForwardButton } from "./onboarding-button";
 import { useOnboardingState } from "./onboarding-state";
-import { useTranslation } from "react-i18next";
 
 export default function WorkspaceNameStep() {
   const name = useOnboardingState((s) => s.workspaceName);

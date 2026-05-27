@@ -1,3 +1,6 @@
+import { ChevronDown, Cloud, HardDrive, Plus } from "lucide-react";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import {
   Popover,
@@ -6,9 +9,6 @@ import {
 } from "@/components/ui/popover";
 import WorkspaceIcon from "@/components/workspace-icon";
 import NewWorkspaceDialog from "@/features/workspaces/components/new-workspace-dialog";
-import { ChevronDown, Cloud, HardDrive, Plus } from "lucide-react";
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
 import { useWorkspaceSwitcher } from "../workspaces/hooks/use-workspace-switcher";
 import { WorkspaceItem } from "./workspace-item";
 

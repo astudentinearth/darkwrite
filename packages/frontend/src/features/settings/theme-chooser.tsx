@@ -1,3 +1,5 @@
+import { Folder } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { DarkwriteAPIClient } from "@/api/api-client";
 import { Button, Label, Switch } from "@/components/ui";
 import { ColorPicker } from "@/components/ui/color-picker";
@@ -8,13 +10,11 @@ import {
   SelectTrigger,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
-import { Folder } from "lucide-react";
-import { useTranslation } from "react-i18next";
+import { useAppStore } from "../store/hooks";
 import { useThemes } from "../themes/hooks/use-themes";
 import { initializeThemes } from "../themes/init";
 import { useAppearanceSettings } from "./hooks/use-settings";
 import { useSettingsActions } from "./store/settings-actions";
-import { useAppStore } from "../store/hooks";
 
 export function ThemeDropdown(props: {
   className?: string;

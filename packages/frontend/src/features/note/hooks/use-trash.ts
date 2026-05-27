@@ -1,11 +1,11 @@
-import { useCurrentWorkspaceId } from "@/features/workspaces/hooks/use-workspace";
-import { useGetTrashedQuery } from "../store/trash-api";
+import { byUpdateTime } from "@darkwrite/common";
+import { createSelector } from "@reduxjs/toolkit";
 import { skipToken } from "@reduxjs/toolkit/query";
 import { useAppSelector } from "@/features/store/hooks";
-import { createSelector } from "@reduxjs/toolkit";
-import { selectAllNotes } from "../store/note-selectors";
 import type { RootState } from "@/features/store/types";
-import { byUpdateTime } from "@darkwrite/common";
+import { useCurrentWorkspaceId } from "@/features/workspaces/hooks/use-workspace";
+import { selectAllNotes } from "../store/note-selectors";
+import { useGetTrashedQuery } from "../store/trash-api";
 
 export type SelectTrashedProps = {
   workspaceId: string;

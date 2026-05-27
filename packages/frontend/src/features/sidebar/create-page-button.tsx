@@ -1,9 +1,9 @@
-import { cn } from "@/lib/utils";
 import { SquarePen } from "lucide-react";
-import { SidebarItem } from "./sidebar-item";
 import { useTranslation } from "react-i18next";
+import { cn } from "@/lib/utils";
 import { useCreateNoteMutation } from "../note/store/create-note";
 import { useCurrentWorkspaceId } from "../workspaces/hooks/use-workspace";
+import { SidebarItem } from "./sidebar-item";
 
 export function CreatePageButton(props: { className?: string }) {
   const [create] = useCreateNoteMutation();

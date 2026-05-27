@@ -1,4 +1,3 @@
-import { cn } from "@/lib/utils";
 import {
   ArrowUpRightFromSquare,
   Code2,
@@ -7,6 +6,7 @@ import {
   Scale,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { cn } from "@/lib/utils";
 import { useUpdate } from "../update/use-update";
 import { useGetClientInfoQuery } from "./store/client-info-api";
 
@@ -16,6 +16,7 @@ function AboutButton(props: { children: React.ReactNode; href: string }) {
       href={props.href}
       target="_blank"
       className="flex gap-2 items-center top-highlight rounded-lg h-fit px-large text-foreground py-medium bg-view-2 hover:bg-view-2/80 w-full"
+      rel="noopener"
     >
       {props.children}
     </a>
@@ -31,7 +32,11 @@ export default function About() {
   };
   return (
     <div className="w-full h-full flex flex-col justify-center items-center pt-3 gap-1">
-      <img src="darkwrite_icon.svg" className="size-24 drop-shadow-2xl" />
+      <img
+        alt="Darkwrite Logo"
+        src="darkwrite_icon.svg"
+        className="size-24 drop-shadow-2xl"
+      />
       <h1 className="text-3xl font-semibold flex items-end gap-2 mt-4">
         Darkwrite
         <span className="text-2xl text-foreground/70">{data?.version}</span>

@@ -1,10 +1,9 @@
-import type { CreateWorkspaceDTO } from "@darkwrite/common";
-import type { WorkspaceDTO } from "@darkwrite/common";
+import type { CreateWorkspaceDTO, WorkspaceDTO } from "@darkwrite/common";
+import { useMemo } from "react";
+import { useAppStore } from "@/features/store/hooks";
 import type { AppStore } from "@/features/store/redux";
 import { workspaceApi } from "./workspace-api";
 import { type UpdateWorkspaceArg, workspaceSlice } from "./workspace-slice";
-import { useAppStore } from "@/features/store/hooks";
-import { useMemo } from "react";
 
 export function getWorkspaceActions(store: AppStore) {
   async function fetchWorkspaces() {

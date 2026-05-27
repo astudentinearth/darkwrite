@@ -1,8 +1,8 @@
+import { Pipette } from "lucide-react";
 import { HexColorInput, HexColorPicker } from "react-colorful";
+import { cn } from "@/lib/utils";
 import { Button } from "./button";
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
-import { Pipette } from "lucide-react";
-import { cn } from "@/lib/utils";
 
 export type ColorPickerProps = {
   onChange?: (val: string) => void;

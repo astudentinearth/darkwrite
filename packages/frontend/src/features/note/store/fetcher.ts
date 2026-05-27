@@ -1,9 +1,9 @@
-import { selectNoteById } from "./note-selectors";
-import { DarkwriteAPIClient } from "@/api/api-client";
-import { upsertNotes } from "./note-slice";
-import type { AppStore } from "@/features/store/types";
-import { okAsync } from "neverthrow";
 import { dwErrAsync } from "@darkwrite/common";
+import { okAsync } from "neverthrow";
+import { DarkwriteAPIClient } from "@/api/api-client";
+import type { AppStore } from "@/features/store/types";
+import { selectNoteById } from "./note-selectors";
+import { upsertNotes } from "./note-slice";
 
 /**
  * Returns a note from cache, or fetches it from the backend.

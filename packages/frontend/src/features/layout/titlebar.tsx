@@ -1,16 +1,16 @@
-import { HeaderbarButton } from "@/components/headerbar-button";
-import { TextTooltip } from "@/components/ui/tooltip";
-import { cn } from "@/lib/utils";
 import { PanelRightClose } from "lucide-react";
 import { useRef } from "react";
 import { useTranslation } from "react-i18next";
+import { HeaderbarButton } from "@/components/headerbar-button";
+import { TextTooltip } from "@/components/ui/tooltip";
+import { useLocalStore } from "@/context/local-state";
+import { useWindowControlsOverlay } from "@/features/layout/hooks/use-window-controls-overlay";
+import { useNoteFromURL } from "@/features/note/hooks/use-note-from-url";
+import { cn } from "@/lib/utils";
 import { HistoryNavigation } from "./navigation";
 import PageTitle from "./page-title";
 import Toolbar from "./toolbar";
 import TrafficLightsPlaceholder from "./traffic-lights-placeholder";
-import { useWindowControlsOverlay } from "@/features/layout/hooks/use-window-controls-overlay";
-import { useLocalStore } from "@/context/local-state";
-import { useNoteFromURL } from "@/features/note/hooks/use-note-from-url";
 
 export function Titlebar() {
   const headerRef = useRef<HTMLDivElement>(null);

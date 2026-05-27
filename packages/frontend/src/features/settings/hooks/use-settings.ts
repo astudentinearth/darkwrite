@@ -1,9 +1,9 @@
 import { useAppSelector } from "@/features/store/hooks";
 import {
-  selectSettings,
   selectAppearanceSettings,
-  selectFontSettings,
   selectEditorSettings,
+  selectFontSettings,
+  selectSettings,
 } from "../store/settings-selectors";
 
 export const useSettings = () => useAppSelector(selectSettings);

@@ -1,3 +1,5 @@
+import { Menu, Trash2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import {
   Button,
   DropdownMenu,
@@ -6,8 +8,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui";
 import { useAppDispatch } from "@/features/store/hooks";
-import { Menu, Trash2 } from "lucide-react";
-import { useTranslation } from "react-i18next";
 import { ClearTrashDialogPortal } from "../store/notes-ui-actions";
 
 export function TrashMenu() {

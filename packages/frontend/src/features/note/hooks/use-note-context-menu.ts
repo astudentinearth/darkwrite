@@ -1,9 +1,9 @@
+import { useEditorActions } from "@/features/editor/store/editor-actions";
+import { useNoteExport } from "@/features/export/note-exporter";
 import { useNoteActions } from "@/features/note/store/note-actions";
 import { selectNoteById } from "@/features/note/store/note-selectors";
 import { useAppDispatch, useAppSelector } from "@/features/store/hooks";
-import { useNoteExport } from "@/features/export/note-exporter";
 import { MoveNoteDialogPortal } from "../store/notes-ui-actions";
-import { useEditorActions } from "@/features/editor/store/editor-actions";
 
 export const useNoteContextMenu = (noteId: string) => {
   const note = useAppSelector((state) => selectNoteById(state, noteId));

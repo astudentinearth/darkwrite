@@ -1,8 +1,8 @@
-import { Node, type Attributes, mergeAttributes } from "@tiptap/core";
-import { Block } from "../types";
+import { type Attributes, mergeAttributes, Node } from "@tiptap/core";
 import { Plugin } from "@tiptap/pm/state";
-import { DarkwriteAPIClient } from "@/api/api-client";
 import { ReactNodeViewRenderer } from "@tiptap/react";
+import { DarkwriteAPIClient } from "@/api/api-client";
+import { Block } from "../types";
 import { FileLinkNode } from "./file-link-node";
 
 const ATTR_LINK_ID = "data-link-id";

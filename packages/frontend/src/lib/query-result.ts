@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
- 
+/** biome-ignore-all lint/suspicious/noExplicitAny: variadic functions */
+
 import type { ResultAsync } from "neverthrow";
 
 export type QueryResult<T, E> = { data: T } | { error: E };

@@ -1,10 +1,3 @@
-import {
-  Button,
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui";
-import { cn } from "@/lib/utils";
 import { useCurrentEditor } from "@tiptap/react";
 import {
   ChevronDown,
@@ -16,6 +9,13 @@ import {
 } from "lucide-react";
 import { type ReactNode, useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import {
+  Button,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui";
+import { cn } from "@/lib/utils";
 import EditorUtil from "../../editor-util";
 import type { HeadingLevel } from "../../types";
 

@@ -1,3 +1,6 @@
+import { Trash, Trash2, Undo2 } from "lucide-react";
+import { memo, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Button,
   Input,
@@ -9,9 +12,6 @@ import { TextTooltip } from "@/components/ui/tooltip";
 import { navigateToNote } from "@/features/navigation/navigator";
 import { SidebarItem } from "@/features/sidebar/sidebar-item";
 import { cn, getNoteIcon } from "@/lib/utils";
-import { Trash, Trash2, Undo2 } from "lucide-react";
-import { memo, useMemo, useState } from "react";
-import { useTranslation } from "react-i18next";
 import { useNoteById } from "../hooks/use-note-by-id";
 import { useTrash } from "../hooks/use-trash";
 import { useNoteActions } from "../store/note-actions";

@@ -1,18 +1,18 @@
+import { Placeholder } from "@tiptap/extensions";
 import { use, useMemo, useRef } from "react";
+import { useTranslation } from "react-i18next";
+import { EventHelper } from "../components/event-helper";
+import { FormattingHelper } from "../components/formatting-helper";
 import { DarkwriteEditorContext } from "../context";
 import {
   CodeBlockExtension,
   DefaultEditorExtensions,
   ImageExtension,
 } from "../extensions";
-import slashCommandExtension from "../extensions/slash-command/slash-command-extension";
 import Bubble from "../extensions/bubble-menu";
-import TableMenu from "../extensions/table/table-menu";
-import { EventHelper } from "../components/event-helper";
-import { FormattingHelper } from "../components/formatting-helper";
 import { DragHandleExtension } from "../extensions/drag-handle";
-import { Placeholder } from "@tiptap/extensions";
-import { useTranslation } from "react-i18next";
+import slashCommandExtension from "../extensions/slash-command/slash-command-extension";
+import TableMenu from "../extensions/table/table-menu";
 
 export default function useEditorBuilder() {
   const { imageUploadConfig, codeBlockIndentSize, commandItems } = use(

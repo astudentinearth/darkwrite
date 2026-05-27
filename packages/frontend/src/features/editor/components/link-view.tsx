@@ -1,3 +1,9 @@
+import { DarkwriteResource, getResourceRefFromUrl } from "@darkwrite/common";
+import type { MarkViewRendererProps } from "@tiptap/core";
+import { MarkViewContent } from "@tiptap/react";
+import { Check, Copy, Link } from "lucide-react";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui";
 import {
   Tooltip,
@@ -9,12 +15,6 @@ import {
 import { navigateToNote } from "@/features/navigation/navigator";
 import { useNoteById } from "@/features/note/hooks/use-note-by-id";
 import { getNoteIcon } from "@/lib/utils";
-import { DarkwriteResource, getResourceRefFromUrl } from "@darkwrite/common";
-import type { MarkViewRendererProps } from "@tiptap/core";
-import { MarkViewContent } from "@tiptap/react";
-import { Check, Copy, Link } from "lucide-react";
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
 
 function NotePreview(props: { noteId: string }) {
   const { note } = useNoteById(props.noteId);
@@ -27,12 +27,15 @@ function NotePreview(props: { noteId: string }) {
         e.preventDefault();
         navigateToNote(props.noteId);
       }}
-      className="flex gap-2 bg-view-2/85 hover:bg-view-2/75 cursor-pointer"
+      className="flex gap-2 bg-view-2/85 hover:bg-view-2/75 cursor-pointer items-center"
     >
       <span>{getNoteIcon(note?.icon)}</span>
-      <a className="max-w-48 w-full hover:underline cursor-pointer overflow-x-hidden text-ellipsis whitespace-nowrap flex">
+      <Button
+        variant="link"
+        className="max-w-64 w-full p-0 text-foreground cursor-default h-fit justify-start text-start hover:underline overflow-x-hidden text-ellipsis whitespace-nowrap flex"
+      >
         {note?.title || t("defaults.pageTitle")}
-      </a>
+      </Button>
     </TooltipContent>
   );
 }

@@ -48,7 +48,7 @@ export function setCellBackground(editor: Editor, color: string | null) {
   const tr = state.tr;
 
   if (selection instanceof CellSelection) {
-    selection.forEachCell((node, pos) => {
+    selection.forEachCell((_node, pos) => {
       tr.setNodeAttribute(pos, "background", color);
     });
   } else {

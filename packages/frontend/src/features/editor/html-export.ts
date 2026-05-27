@@ -1,16 +1,15 @@
-import { Block, type EditorContent } from "./types";
 import { generateHTML as tiptapHTML } from "@tiptap/html";
-import { DefaultEditorExtensions } from "./extensions/default";
-import { CodeBlockExtension } from "./extensions";
-import { ImageExtension } from "./extensions";
 import _ from "lodash";
 import { DarkwriteAPIClient } from "@/api/api-client";
+import { CodeBlockExtension, ImageExtension } from "./extensions";
+import { DefaultEditorExtensions } from "./extensions/default";
+import { Block, type EditorContent } from "./types";
 
 const defaultExtensions = [
   ...DefaultEditorExtensions,
   CodeBlockExtension(() => 4),
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ImageExtension({} as any), // This configuration is irrelevant for HTML export
+  // biome-ignore lint/suspicious/noExplicitAny: This configuration is irrelevant for HTML export
+  ImageExtension({} as any),
 ];
 
 export async function hydrateImages(content: EditorContent) {
@@ -18,7 +17,7 @@ export async function hydrateImages(content: EditorContent) {
   const imageNodes: EditorContent[] = [];
 
   function traverse(nodes: EditorContent) {
-    if (!nodes.content || nodes.content.length == 0) return;
+    if (!nodes.content || nodes.content.length === 0) return;
     for (const node of nodes.content) {
       if (node.type === Block.Image && node.attrs?.embedId) {
         imageNodes.push(node);
@@ -28,7 +27,9 @@ export async function hydrateImages(content: EditorContent) {
     }
   }
   traverse(copy);
-  if (imageNodes.length == 0) return copy;
+  if (imageNodes.length === 0) return copy;
+
+  // biome-ignore-start lint/style/noNonNullAssertion: images cannot exist without it
   const embedIds = imageNodes
     .map((n) => n.attrs!.embedId as string)
     .filter((id) => id != null);
@@ -37,10 +38,11 @@ export async function hydrateImages(content: EditorContent) {
   const urls = dataUrlResult.value;
   for (const node of imageNodes) {
     if (!node.attrs) continue;
-    node.attrs["src"] = urls[node.attrs!.embedId];
+    node.attrs.src = urls[node.attrs!.embedId];
     node.attrs["data-export"] = "true";
   }
   return copy;
+  // biome-ignore-end lint/style/noNonNullAssertion: images cannot exist without it
 }
 
 export const generateHTML = (content: EditorContent) => {

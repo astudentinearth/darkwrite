@@ -1,14 +1,14 @@
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui";
 import type { Editor } from "@tiptap/core";
 import type { useCurrentEditor } from "@tiptap/react";
 import type { FunctionComponent } from "react";
+import { Button } from "@/components/ui";
 import {
   Tooltip,
   TooltipContent,
   TooltipPortal,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { cn } from "@/lib/utils";
 
 export type BubbleButtonProps = {
   icon: FunctionComponent<React.SVGProps<SVGSVGElement>>;

@@ -1,4 +1,7 @@
 import { csshighlightColorVariables } from "@darkwrite/common";
+import { useCurrentEditor } from "@tiptap/react";
+import { ChevronDown, Eraser, Palette } from "lucide-react";
+import { useState } from "react";
 import {
   Button,
   ColorPicker,
@@ -7,9 +10,6 @@ import {
   PopoverTrigger,
 } from "@/components/ui";
 import { cn } from "@/lib/utils";
-import { useCurrentEditor } from "@tiptap/react";
-import { ChevronDown, Eraser, Palette } from "lucide-react";
-import { useState } from "react";
 import { setCellBackground } from "./table-util";
 
 export function TableBackgroundPicker() {

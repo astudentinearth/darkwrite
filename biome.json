@@ -43,10 +43,20 @@
       "recommended": true,
       "complexity": {
         "useArrowFunction": "off",
-	"noImportantStyles": "off"
+	"noImportantStyles": "off",
+	"noUselessFragments": "off"
       },
       "suspicious": {
 	      "useIterableCallbackReturn": "off"
+      },
+      "a11y": {
+	      "useAltText": "off",
+	      "useKeyWithClickEvents": "off",
+	      "noStaticElementInteractions": "off",
+	"noLabelWithoutControl": "off",
+	"noNoninteractiveTabindex": "off",
+	"useButtonType": "off",
+	"useValidAnchor": "off"
       }
     }
   },

@@ -1,20 +1,20 @@
+import { Outlet } from "react-router-dom";
 import ThemeHandler from "@/components/theme-handler";
 import { Toaster } from "@/components/ui";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import { useLocalStore } from "@/context/local-state";
 import { Sidebar } from "@/features/sidebar";
 import { useShortcuts } from "@/features/ui/hooks/use-shortcuts";
 import { cn } from "@/lib/utils";
-import { Outlet } from "react-router-dom";
+import { AppMenuHandler } from "../app-menu/app-menu-handler";
+import { NativeContextMenuProvider } from "../context-menu/native-context-menu";
+import { EditorCenterView } from "../editor/components/center-view";
 import NavigationHelper from "../navigation/navigation-helper";
+import MoveNoteDialog from "../note/components/move-note-dialog";
 import SearchDialog from "../search/search-dialog";
+import { ClearTrashDialog } from "../trash/components/clear-trash-dialog";
 import SidebarResizeHandle from "./sidebar-resize-handle";
 import { Titlebar } from "./titlebar";
-import MoveNoteDialog from "../note/components/move-note-dialog";
-import { ClearTrashDialog } from "../trash/components/clear-trash-dialog";
-import { NativeContextMenuProvider } from "../context-menu/native-context-menu";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { AppMenuHandler } from "../app-menu/app-menu-handler";
-import { EditorCenterView } from "../editor/components/center-view";
 
 //import { useStartup } from "@/hooks/use-startup";
 

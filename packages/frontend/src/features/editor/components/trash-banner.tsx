@@ -1,11 +1,11 @@
-import { Button } from "@/components/ui";
-import Alert from "@/components/ui/alert";
 import { Undo2 } from "lucide-react";
 import { use } from "react";
 import { useTranslation } from "react-i18next";
-import { EditorContext } from "../store/editor-context";
+import { Button } from "@/components/ui";
+import Alert from "@/components/ui/alert";
 import { useNoteById } from "@/features/note/hooks/use-note-by-id";
 import { useNoteActions } from "@/features/note/store/note-actions";
+import { EditorContext } from "../store/editor-context";
 
 export default function TrashBanner() {
   const { t } = useTranslation();

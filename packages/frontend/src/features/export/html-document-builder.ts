@@ -1,8 +1,8 @@
 import _ from "lodash";
+import { fromUnicode } from "@/lib/utils";
+import { generateHTML, hydrateImages } from "../editor/html-export";
 import type { EditorContent } from "../editor/types";
 import { EmbeddedStyleBuilder } from "./exported-note-style";
-import { generateHTML, hydrateImages } from "../editor/html-export";
-import { fromUnicode } from "@/lib/utils";
 
 export class HtmlDocumentBuilder {
   private content: EditorContent;

@@ -1,10 +1,10 @@
-import { showAppMenu } from "@/api/appmenu";
 import { OS } from "@darkwrite/common";
+import { useTranslation } from "react-i18next";
+import { showAppMenu } from "@/api/appmenu";
 import { HeaderbarButton } from "@/components/headerbar-button";
 import { TextTooltip } from "@/components/ui/tooltip";
 import { InitialUserSettings } from "@/init";
 import { getOperatingSystem } from "@/lib/platform";
-import { useTranslation } from "react-i18next";
 
 function shouldShow() {
   if (InitialUserSettings.settings.appearance.useSystemWindowFrame) return true;

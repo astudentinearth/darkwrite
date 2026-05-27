@@ -1,7 +1,7 @@
-import { cn } from "@/lib/utils";
 import { CheckCircle, X, XCircle } from "lucide-react";
 import React, { type ReactNode, use } from "react";
 import { toast as sonner } from "sonner";
+import { cn } from "@/lib/utils";
 
 export type ToastProps = {
   children: ReactNode | ReactNode[];

@@ -1,15 +1,15 @@
+import { ChevronRight } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { cn } from "@/lib/utils";
-import { ChevronRight } from "lucide-react";
-import { useTranslation } from "react-i18next";
-import NoteList from "./components/note-list";
-import { useAllNotesViewOpen } from "../session/session-hooks";
 import { useSessionActions } from "../session/session-actions";
+import { useAllNotesViewOpen } from "../session/session-hooks";
 import { SidebarItem } from "../sidebar/sidebar-item";
+import NoteList from "./components/note-list";
 
 export default function NoteListRoot() {
   const { t } = useTranslation("translation", { keyPrefix: "sidebar" });

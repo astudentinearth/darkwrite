@@ -1,13 +1,13 @@
+import { useTranslation } from "react-i18next";
 import {
   AlertDialog,
-  AlertDialogTitle,
-  AlertDialogDescription,
   AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogTitle,
   Button,
 } from "@/components/ui";
-import { useClearTrashDialog } from "../hooks/use-trash-dialog";
-import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
+import { useClearTrashDialog } from "../hooks/use-trash-dialog";
 
 export function ClearTrashDialog() {
   const { isLoading, hideClearTrashDialog, open, clearTrash } =

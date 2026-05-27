@@ -1,4 +1,8 @@
 import type { WorkspaceDTO } from "@darkwrite/common";
+import { produce } from "immer";
+import { Check, X } from "lucide-react";
+import { type ReactNode, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   AlertDialog,
   AlertDialogContent,
@@ -11,12 +15,8 @@ import {
 import { WorkspaceLetterIcon } from "@/components/workspace-letter-icon";
 import { uploadImage } from "@/lib/upload-image";
 import { cn } from "@/lib/utils";
-import { produce } from "immer";
-import { Check, X } from "lucide-react";
-import { type ReactNode, useRef, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { getWorkspaceActions } from "../workspaces/store/workspace-actions";
 import { useAppStore } from "../store/hooks";
+import { getWorkspaceActions } from "../workspaces/store/workspace-actions";
 
 export type EditWorkspaceDialogProps = {
   className?: string;
@@ -99,14 +99,14 @@ export default function EditWorkspaceDialog(props: EditWorkspaceDialogProps) {
             </Button>
           </div>
         </div>
-        <Label htmlFor={workspace.id + "-name"}>
+        <Label htmlFor={`${workspace.id}-name`}>
           {t("settings.workspace.editWorkspaceDialog.workspaceName")}
         </Label>
         <Input
           value={name}
           onChange={(e) => setName(e.target.value)}
           ref={nameRef}
-          id={workspace.id + "-name"}
+          id={`${workspace.id}-name`}
           placeholder={t(
             "settings.workspace.editWorkspaceDialog.workspaceName",
           )}

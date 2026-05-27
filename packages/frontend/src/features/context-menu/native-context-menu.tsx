@@ -1,3 +1,6 @@
+import type { ContextMenuEditActions } from "@darkwrite/common";
+import { SpellCheck } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import {
   ContextMenu,
   ContextMenuContent,
@@ -10,9 +13,6 @@ import {
   useNativeContextMenu,
   useSpellingActions,
 } from "./use-native-context-menu";
-import type { ContextMenuEditActions } from "@darkwrite/common";
-import { useTranslation } from "react-i18next";
-import { SpellCheck } from "lucide-react";
 
 export function NativeContextMenuProvider() {
   return window.isElectron ? <NativeContextMenu /> : null;

@@ -1,9 +1,9 @@
-import { DarkwriteAPIClient } from "@/api/api-client";
 import _ from "lodash";
-import { notesSlice } from "./note-slice";
-import type { AppStore } from "@/features/store/types";
-import { useAppStore } from "@/features/store/hooks";
 import { useMemo } from "react";
+import { DarkwriteAPIClient } from "@/api/api-client";
+import { useAppStore } from "@/features/store/hooks";
+import type { AppStore } from "@/features/store/types";
+import { notesSlice } from "./note-slice";
 
 const DEBOUNCE_TIME = 150;
 

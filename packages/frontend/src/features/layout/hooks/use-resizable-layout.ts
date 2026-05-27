@@ -1,5 +1,5 @@
-import { isClamped } from "@/lib/utils";
 import { useEffect, useRef } from "react";
+import { isClamped } from "@/lib/utils";
 
 export interface ResizableSidebarOptions {
   min: number;

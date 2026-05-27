@@ -1,7 +1,7 @@
 /// <reference types="vite/client" />
 /// <reference types="vitest/globals" />
 
-import {
+import type {
   DarkwriteIPCBridge,
   ElectronWebUtils,
   WindowEvents,
@@ -18,10 +18,6 @@ interface WindowControlsOverlay extends EventTarget {
 }
 
 declare global {
-  type Result<T, E> =
-    | { value: T; error?: undefined }
-    | { value?: undefined; error: E };
-
   interface Window {
     /**
      * Interface with the Electron main process.

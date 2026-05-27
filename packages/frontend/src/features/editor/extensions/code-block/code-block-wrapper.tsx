@@ -1,11 +1,11 @@
-import { Button } from "@/components/ui";
 import type { NodeViewProps } from "@tiptap/core";
 import { NodeViewContent, NodeViewWrapper } from "@tiptap/react";
 import { Check, Copy } from "lucide-react";
-import { useTranslation } from "react-i18next";
-import LanguageChooser from "./language-chooser";
-import lowlight from "../../lowlight";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
+import { Button } from "@/components/ui";
+import lowlight from "../../lowlight";
+import LanguageChooser from "./language-chooser";
 
 export default function CodeBlockNodeView(props: NodeViewProps) {
   const language = props.node.attrs.language || "plaintext";

@@ -1,18 +1,22 @@
+import {
+  dwErrAsync,
+  isDescendant,
+  type NoteDTO,
+  type ParentId,
+} from "@darkwrite/common";
+import { okAsync } from "neverthrow";
+import type { DragEvent } from "react";
 import { DarkwriteAPIClient } from "@/api/api-client";
-import { resultQueryFn } from "@/lib/query-result";
-import { dwErrAsync, type NoteDTO } from "@darkwrite/common";
-import { isDescendant, type ParentId } from "@darkwrite/common";
 import { extractNoteDragData } from "@/features/dnd/datatransfer";
 import type { RootState } from "@/features/store/types";
-import type { DragEvent } from "react";
-import { okAsync } from "neverthrow";
+import { resultQueryFn } from "@/lib/query-result";
 import {
   calculateOptimisticRankInLayer,
   calculateRelativeOptimisticRank,
 } from "./note-rank-optimistic";
 import { selectNoteById, selectNotesByParentId } from "./note-selectors";
 import { updateNote, upsertNotes } from "./note-slice";
-import { noteByParentIdTag, NOTES_TAG_TYPE, notesApi } from "./notes-api";
+import { NOTES_TAG_TYPE, noteByParentIdTag, notesApi } from "./notes-api";
 
 export type MoveNoteBelowArgs = {
   sourceNoteId: string;
@@ -188,10 +192,12 @@ export const moveNoteApi = notesApi.injectEndpoints({
         return [
           {
             type: NOTES_TAG_TYPE,
+            // biome-ignore lint/style/noNonNullAssertion: error check
             id: noteByParentIdTag(_result!.workspaceId, _result!.parentId),
           },
           {
             type: NOTES_TAG_TYPE,
+            // biome-ignore lint/style/noNonNullAssertion: error check
             id: noteByParentIdTag(_result!.workspaceId, _result!.id),
           },
         ];

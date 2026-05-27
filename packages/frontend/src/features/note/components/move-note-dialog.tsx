@@ -1,3 +1,5 @@
+import { memo, useRef } from "react";
+import { Trans, useTranslation } from "react-i18next";
 import {
   CommandDialog,
   CommandEmpty,
@@ -7,13 +9,11 @@ import {
   CommandList,
   DialogTitle,
 } from "@/components/ui";
-import { getNoteIcon } from "@/lib/utils";
-import { memo, useRef } from "react";
-import { Trans, useTranslation } from "react-i18next";
-import { useNoteById } from "../hooks/use-note-by-id";
-import { useMoveNoteDialog } from "../hooks/use-move-note-dialog";
-import { useNoteActions } from "../store/note-actions";
 import { useAppDispatch, useAppSelector } from "@/features/store/hooks";
+import { getNoteIcon } from "@/lib/utils";
+import { useMoveNoteDialog } from "../hooks/use-move-note-dialog";
+import { useNoteById } from "../hooks/use-note-by-id";
+import { useNoteActions } from "../store/note-actions";
 import { selectNoteIcon, selectNoteTitle } from "../store/note-selectors";
 import { MoveNoteDialogPortal } from "../store/notes-ui-actions";
 
@@ -50,7 +50,7 @@ const SearchItem = memo(function ({
   return (
     <CommandItem
       className="px-2 py-4 flex items-center gap-2"
-      value={note.id + " " + note.title}
+      value={`${note.id} ${note.title}`}
       onSelect={() => {
         moveInto(targetNoteId, noteId);
         MoveNoteDialogPortal(dispatch).hideMoveNoteDialog();
@@ -74,6 +74,7 @@ export default function MoveNoteDialog() {
     query,
   } = useMoveNoteDialog();
 
+  // biome-ignore lint/style/noNonNullAssertion: ref is always set
   const listRef = useRef<HTMLDivElement>(null!);
   return (
     <CommandDialog

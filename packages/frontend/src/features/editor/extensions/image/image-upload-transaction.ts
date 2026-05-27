@@ -1,7 +1,7 @@
 import type { EditorView } from "@tiptap/pm/view";
 import { nanoid } from "nanoid";
-import type { ImageExtensionConfig } from "./image-config";
 import { Block } from "../../types";
+import type { ImageExtensionConfig } from "./image-config";
 
 function createImageNode(
   file: File,

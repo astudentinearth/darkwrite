@@ -1,19 +1,19 @@
-import { HeaderbarButton } from "@/components/headerbar-button";
-import { Button } from "@/components/ui/button";
-import { TextTooltip } from "@/components/ui/tooltip";
-import NoteListRoot from "@/features/note/note-list-root";
-import { useSidebar } from "@/features/layout/hooks/use-sidebar";
-import { cn } from "@/lib/utils";
 import { LayoutDashboard, PanelRightOpen, Search } from "lucide-react";
 import type React from "react";
 import { useTranslation } from "react-i18next";
+import { HeaderbarButton } from "@/components/headerbar-button";
+import { Button } from "@/components/ui/button";
+import { TextTooltip } from "@/components/ui/tooltip";
+import { useSidebar } from "@/features/layout/hooks/use-sidebar";
+import NoteListRoot from "@/features/note/note-list-root";
+import { cn } from "@/lib/utils";
+import { TrashWidget } from "../note/components/trash";
 import { showSearch } from "../search/search-state";
 import AppMenu from "./app-menu";
-import { SidebarNavigation } from "./navigation";
-import { WorkspaceSwitcher } from "./workspace-switcher";
 import { CreatePageButton } from "./create-page-button";
 import FavoritesContainer from "./favorites-container";
-import { TrashWidget } from "../note/components/trash";
+import { SidebarNavigation } from "./navigation";
+import { WorkspaceSwitcher } from "./workspace-switcher";
 
 export type SidebarProps = React.HTMLAttributes<HTMLDivElement> & {};
 

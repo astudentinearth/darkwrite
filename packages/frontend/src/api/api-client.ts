@@ -27,6 +27,7 @@ function resultHydrationMiddleware(api: typeof window.api) {
   return clone as DarkwriteIPCBridge;
 }
 
+// biome-ignore lint/complexity/noStaticOnlyClass: we want this as a namespace
 export class DarkwriteAPIClient {
   static note: INoteAPI;
   static embed: IEmbedAPI;
@@ -41,25 +42,26 @@ export class DarkwriteAPIClient {
 
   private static initializeLocalAPIs() {
     const api = resultHydrationMiddleware(window.api);
-    this.note = api.note;
-    this.workspace = api.workspace;
-    this.settings = api.settings;
-    this.embed = EmbedAdapter(api.embed);
-    this.theme = api.theme;
-    this.desktop = api.desktop;
-    this.onboarding = api.onboarding;
-    this.backup = api.backup;
-    this.fileLink = api.fileLink;
-    this.checkUpdate = api.checkUpdate;
+    DarkwriteAPIClient.note = api.note;
+    DarkwriteAPIClient.workspace = api.workspace;
+    DarkwriteAPIClient.settings = api.settings;
+    DarkwriteAPIClient.embed = EmbedAdapter(api.embed);
+    DarkwriteAPIClient.theme = api.theme;
+    DarkwriteAPIClient.desktop = api.desktop;
+    DarkwriteAPIClient.onboarding = api.onboarding;
+    DarkwriteAPIClient.backup = api.backup;
+    DarkwriteAPIClient.fileLink = api.fileLink;
+    DarkwriteAPIClient.checkUpdate = api.checkUpdate;
   }
 
   private static initializeCloudAPIs() {
     //TODO: cloud support not implemented yet
-    this.initializeLocalAPIs();
+    DarkwriteAPIClient.initializeLocalAPIs();
   }
 
   static initialize(mode: APIClientMode) {
-    if (mode === APIClientMode.LOCAL) this.initializeLocalAPIs();
-    else if (mode === APIClientMode.CLOUD) this.initializeCloudAPIs();
+    if (mode === APIClientMode.LOCAL) DarkwriteAPIClient.initializeLocalAPIs();
+    else if (mode === APIClientMode.CLOUD)
+      DarkwriteAPIClient.initializeCloudAPIs();
   }
 }
