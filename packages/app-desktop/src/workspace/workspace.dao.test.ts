@@ -1,12 +1,12 @@
-import { describe, it, expect, beforeAll, beforeEach } from "vitest";
-import { createDatabase, type DatabaseType, applySqlMigrations } from "@/db";
-import { WorkspaceDAO, type WorkspaceDAOInstance } from "./workspace.dao";
+import { beforeAll, beforeEach, describe, expect, it } from "vitest";
+import { applySqlMigrations, createDatabase, type DatabaseType } from "@/db";
 import {
   type NewWorkspace,
-  workspace as workspaceTable,
   type Workspace,
+  workspace as workspaceTable,
 } from "@/db/schema";
 import { resolveTx } from "@/db/transactional";
+import { WorkspaceDAO, type WorkspaceDAOInstance } from "./workspace.dao";
 
 let db: DatabaseType;
 let dao: WorkspaceDAOInstance;

@@ -1,13 +1,22 @@
-import { createTestDatabase, type DatabaseType, applySqlMigrations } from "@/db";
-import { type NewNote, type Note, note as notesTable, type Workspace } from "@/db/schema";
+import { randomUUID } from "node:crypto";
+import { type ParentId, Rank } from "@darkwrite/common";
+import { beforeAll, beforeEach, describe, expect, it } from "vitest";
+import {
+  applySqlMigrations,
+  createTestDatabase,
+  type DatabaseType,
+} from "@/db";
+import {
+  type NewNote,
+  type Note,
+  note as notesTable,
+  type Workspace,
+} from "@/db/schema";
 import { resolveTx } from "@/db/transactional";
 import { WorkspaceDAO } from "@/workspace/workspace.dao";
-import { type ParentId, Rank } from "@darkwrite/common";
-import { randomUUID } from "node:crypto";
-import { beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { NoteDAO, type NoteDAOInstance } from "./note.dao";
 
-let db: DatabaseType = createTestDatabase();
+const db: DatabaseType = createTestDatabase();
 
 describe("NoteDAO", () => {
   let noteDao: NoteDAOInstance;
@@ -38,7 +47,7 @@ describe("NoteDAO", () => {
   ): Promise<Note> => {
     return {
       id,
-      title: "Test Note" + id,
+      title: `Test Note${id}`,
       workspaceId: workspaceId,
       parentId,
       orderHint: Rank.default().get(),
@@ -132,8 +141,8 @@ describe("NoteDAO", () => {
         ])
       )._unsafeUnwrap();
 
-      const updated1 = updatedNotes.find((n) => n.id == note1.id);
-      const updated2 = updatedNotes.find((n) => n.id == note2.id);
+      const updated1 = updatedNotes.find((n) => n.id === note1.id);
+      const updated2 = updatedNotes.find((n) => n.id === note2.id);
 
       expect(updated1).not.toBeUndefined();
       expect(updated2).not.toBeUndefined();

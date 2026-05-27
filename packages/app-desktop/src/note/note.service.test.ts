@@ -1,21 +1,30 @@
-import { type NewNote, type Note, note as notesTable, type Workspace } from "@/db/schema";
+import { type ParentId, Rank } from "@darkwrite/common";
+import { ResultAsync } from "neverthrow";
+import { beforeAll, beforeEach, describe, expect, it } from "vitest";
+import {
+  type NewNote,
+  type Note,
+  note as notesTable,
+  type Workspace,
+} from "@/db/schema";
 import { resolveTx } from "@/db/transactional";
 import { DocumentService } from "@/service/document.service";
 import { MockDocumentStore } from "@/test/mocks/document-store.mock";
 import { WorkspaceDAO } from "@/workspace/workspace.dao";
-import { type ParentId, Rank } from "@darkwrite/common";
-import { beforeAll, beforeEach, describe, expect, it } from "vitest";
-import { applySqlMigrations, createTestDatabase, type DatabaseType } from "../db";
+import {
+  applySqlMigrations,
+  createTestDatabase,
+  type DatabaseType,
+} from "../db";
 import { NoteDAO, type NoteDAOInstance } from "./note.dao";
 import { type INoteService, NoteService } from "./note.service";
-import { ResultAsync } from "neverthrow";
 
 describe("note service tests", () => {
-  let db: DatabaseType = createTestDatabase();
+  const db: DatabaseType = createTestDatabase();
   let workspace: Workspace;
   let noteDAO: NoteDAOInstance;
   let noteService: INoteService;
-  let documentStore = MockDocumentStore();
+  const documentStore = MockDocumentStore();
 
   beforeAll(async () => {
     await applySqlMigrations(db);
@@ -107,7 +116,7 @@ describe("note service tests", () => {
       ).not.toBeUndefined();
       expect(
         (await noteDAO.findById(localNote.id))._unsafeUnwrapErr(),
-      ).toBeDefined()
+      ).toBeDefined();
     });
 
     it("should not touch notes that are not trashed", async () => {

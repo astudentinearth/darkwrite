@@ -1,5 +1,5 @@
-import type { Note } from "@/db/schema";
 import type { NoteDTO } from "@darkwrite/common";
+import type { Note } from "@/db/schema";
 import { noteToDto } from "./note-mapper";
 
 /** @deprecated moved */

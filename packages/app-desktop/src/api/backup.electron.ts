@@ -1,13 +1,17 @@
-import { handler, type HandlerImplements } from "@/types";
-import { buildDwError, type DwResultAsync, type IBackupAPI } from "@darkwrite/common";
+import os from "node:os";
+import { join } from "node:path";
+import {
+  buildDwError,
+  type DwResultAsync,
+  type IBackupAPI,
+} from "@darkwrite/common";
 import { app, dialog } from "electron";
 import log from "electron-log";
 import extract from "extract-zip";
 import fse from "fs-extra";
 import { okAsync, ResultAsync } from "neverthrow";
-import { join } from "node:path";
-import os from "node:os";
 import { zip } from "zip-a-folder";
+import { type HandlerImplements, handler } from "@/types";
 import { db as DB } from "../db";
 import { rmIfExists } from "../lib/fs";
 import { logError } from "../lib/log";
@@ -142,13 +146,10 @@ function beginHtmlExport() {
   return ResultAsync.fromSafePromise(HTMLExporterAPI.initializeExporterCache());
 }
 
-function addHtml(
-  filename: string,
-  content: string,
-): DwResultAsync<void> {
+function addHtml(filename: string, content: string): DwResultAsync<void> {
   return ResultAsync.fromPromise(
     HTMLExporterAPI.pushToExporterCache(filename, content),
-    () => (buildDwError("Not ready to export HTML files.")),
+    () => buildDwError("Not ready to export HTML files."),
   );
 }
 

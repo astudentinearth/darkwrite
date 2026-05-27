@@ -1,9 +1,10 @@
 /* eslint-disable no-redeclare */
-import { buildDwError, dwErr, type DwError } from "@darkwrite/common";
+
 import { accessSync } from "node:fs";
+import path from "node:path";
+import { buildDwError, type DwError, dwErr } from "@darkwrite/common";
 import fse, { readFile, writeFile } from "fs-extra";
 import { ok, Result, ResultAsync } from "neverthrow";
-import path from "node:path";
 
 export async function rmIfExists(path: string) {
   if (await fse.pathExists(path)) {

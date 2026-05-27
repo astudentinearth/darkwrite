@@ -1,9 +1,14 @@
-import { dbResult } from "@/db/db-result";
-import { type Embed, type NewEmbed, type PatchEmbed, embed as embedTable } from "@/db/schema";
-import type { TxResolver } from "@/db/transactional";
 import { type DwResultAsync, dwErr } from "@darkwrite/common";
 import { eq } from "drizzle-orm";
 import { ok } from "neverthrow";
+import { dbResult } from "@/db/db-result";
+import {
+  type Embed,
+  embed as embedTable,
+  type NewEmbed,
+  type PatchEmbed,
+} from "@/db/schema";
+import type { TxResolver } from "@/db/transactional";
 
 const hasFileSize = (fileSize: number) => eq(embedTable.fileSize, fileSize);
 
@@ -21,19 +26,13 @@ export function EmbedDAO(tx: TxResolver) {
         .set(embed)
         .where(eq(embedTable.id, embed.id))
         .returning(),
-    ).andThen((rows) =>
-      rows.at(0)
-        ? ok(rows[0])
-        : dwErr("Embed not found")
-      );
+    ).andThen((rows) => (rows.at(0) ? ok(rows[0]) : dwErr("Embed not found")));
   }
 
   function findById(id: string): DwResultAsync<Embed> {
     return dbResult(() =>
       tx().select().from(embedTable).where(eq(embedTable.id, id)).get(),
-    ).andThen((row) =>
-      row ? ok(row) : dwErr("Embed not found.") 
-    );
+    ).andThen((row) => (row ? ok(row) : dwErr("Embed not found.")));
   }
 
   function findAll(): DwResultAsync<Embed[]> {

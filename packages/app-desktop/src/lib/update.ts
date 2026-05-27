@@ -1,9 +1,9 @@
-import { app } from "electron";
-import semver from "semver";
-import log from "electron-log";
 import { buildDwError, type UpdateServerResponse } from "@darkwrite/common";
-import { handler } from "@/types";
+import { app } from "electron";
+import log from "electron-log";
 import { ResultAsync } from "neverthrow";
+import semver from "semver";
+import { handler } from "@/types";
 
 async function checkUpdateFromGithub() {
   const response = await fetch(

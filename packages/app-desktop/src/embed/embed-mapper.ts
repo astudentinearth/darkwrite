@@ -1,5 +1,5 @@
-import type { Embed } from "@/db/schema";
 import type { EmbedDTO } from "@darkwrite/common";
+import type { Embed } from "@/db/schema";
 
 export function embedToDto(embed: Embed, url: string): EmbedDTO {
   const {

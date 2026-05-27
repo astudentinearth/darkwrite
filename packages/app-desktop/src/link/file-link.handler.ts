@@ -1,5 +1,3 @@
-import { showOpenDialog, whenDialogCancelled } from "@/api/dialog";
-import { handler, type HandlerImplements } from "@/types";
 import {
   buildDwError,
   type FileLinkMetadata,
@@ -7,8 +5,10 @@ import {
 } from "@darkwrite/common";
 import { shell } from "electron";
 import { ok } from "neverthrow";
-import { previewFileLink } from "./file-link-preview";
+import { showOpenDialog, whenDialogCancelled } from "@/api/dialog";
+import { type HandlerImplements, handler } from "@/types";
 import type { IFileLinkService } from "./file-link.service";
+import { previewFileLink } from "./file-link-preview";
 
 /** @internal */
 function resolveMetadata(id: string, filePath: string) {

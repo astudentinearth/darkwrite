@@ -1,4 +1,8 @@
-import { dialog, type OpenDialogOptions, type SaveDialogOptions } from "electron";
+import {
+  dialog,
+  type OpenDialogOptions,
+  type SaveDialogOptions,
+} from "electron";
 import { err, ok, type Result, ResultAsync } from "neverthrow";
 
 /** @deprecated useless abstraction */
@@ -38,7 +42,7 @@ export type DialogCancelError = { type: "_internal-dialog-cancelled" };
 
 const isDialogCancelErr = (val: unknown) =>
   typeof val === "object"
-    ? (val as DialogCancelError | null)?.type == "_internal-dialog-cancelled"
+    ? (val as DialogCancelError | null)?.type === "_internal-dialog-cancelled"
     : false;
 
 export function showOpenDialog(options: OpenDialogOptions) {

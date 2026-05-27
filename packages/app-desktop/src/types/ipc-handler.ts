@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable no-redeclare */
+// biome-ignore-all lint/suspicious/noExplicitAny: variadic functions
 import type { ExtractResultTypes, OmitFirstParameter } from "@darkwrite/common";
 import type { IpcMainInvokeEvent } from "electron";
 import type { Result, ResultAsync } from "neverthrow";

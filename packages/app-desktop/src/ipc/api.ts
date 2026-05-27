@@ -1,9 +1,4 @@
 import {
-  IPCHandler,
-  type IPCMainListenerUnion,
-  type IPCMainListenerWithoutEvent,
-} from "@/types";
-import {
   deepAssign,
   find,
   recursiveKeys,
@@ -11,6 +6,11 @@ import {
 } from "@darkwrite/common";
 import { ipcMain } from "electron";
 import log from "electron-log";
+import {
+  IPCHandler,
+  type IPCMainListenerUnion,
+  type IPCMainListenerWithoutEvent,
+} from "@/types";
 
 export type NestedApiBridge = {
   [key: string]: IPCHandler<boolean> | NestedApiBridge;

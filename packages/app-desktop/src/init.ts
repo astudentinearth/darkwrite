@@ -1,4 +1,5 @@
-import { embedProtocolHandler } from "@/embed/embed-protocol-handler";
+import path, { join } from "node:path";
+import { fileURLToPath } from "node:url";
 import {
   type DarkwriteIPCBridge,
   type DarkwriteUserSettings,
@@ -9,8 +10,7 @@ import { is } from "@electron-toolkit/utils";
 import { app, BrowserWindow, dialog, protocol, shell } from "electron";
 import log from "electron-log/main.js";
 import { okAsync } from "neverthrow";
-import path, { join } from "node:path";
-import { fileURLToPath } from "node:url";
+import { embedProtocolHandler } from "@/embed/embed-protocol-handler";
 import { BackupApiBridge } from "./api/backup.electron";
 import { setupCsp } from "./csp";
 import { db, initDatabase, migrateDatabaseOrExit } from "./db";
@@ -29,14 +29,14 @@ import { FileLinkAPI } from "./link/file-link.handler";
 import { FileLinkService } from "./link/file-link.service";
 import { initAppMenu, showAppMenu } from "./menu";
 import { webcontentsUrl } from "./metadata.json";
-import { NoteQueryService } from "./note/note-query.service";
 import { NoteAPI } from "./note/note.handler";
 import { NoteService } from "./note/note.service";
+import { NoteQueryService } from "./note/note-query.service";
 import { DocumentService } from "./service/document.service";
 import { SettingsService } from "./service/settings.service";
 import { ThemeAPI } from "./theme/theme.handler";
 import { ThemeService } from "./theme/theme.service";
-import { handler, type HandlerImplements } from "./types";
+import { type HandlerImplements, handler } from "./types";
 import {
   constructWindow,
   setupWindowEvents as setupBrowserWindowEvents,
@@ -48,7 +48,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const DEV_SERVER_URL =
-  process.env["ELECTRON_RENDERER_URL"] ?? "http://localhost:5173";
+  process.env.ELECTRON_RENDERER_URL ?? "http://localhost:5173";
 
 let win: BrowserWindow | null;
 
@@ -56,10 +56,10 @@ const bail = (msg: string | DwError): never => {
   log.error("== INITIALIZATION FAILURE ==");
   dialog.showErrorBox(
     "Darkwrite failed to start",
-    typeof msg === "string" ? msg : msg.message + " cause:" + String(msg.cause),
+    typeof msg === "string" ? msg : `${msg.message} cause:${String(msg.cause)}`,
   );
   app.quit();
-  panic(typeof msg === "string" ? msg : msg.message + " cause:" + msg.cause);
+  panic(typeof msg === "string" ? msg : `${msg.message} cause:${msg.cause}`);
 };
 
 async function showMainWindow(

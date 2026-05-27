@@ -1,9 +1,9 @@
+import path from "node:path";
+import { pathToFileURL } from "node:url";
 import { PageMargins, type PageSize } from "@darkwrite/common";
 import { BrowserWindow } from "electron";
 import log from "electron-log";
 import { writeFile } from "fs-extra";
-import path from "node:path";
-import { pathToFileURL } from "node:url";
 import { Paths } from "./paths";
 
 async function saveTempFile(html: string) {

@@ -1,13 +1,13 @@
-import { DB_PATH, Paths } from "@/lib/paths";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { is } from "@electron-toolkit/utils";
 import { migrate } from "drizzle-orm/libsql/migrator";
+import { app, dialog } from "electron";
 import { default as _log } from "electron-log";
 import { copy, pathExists, remove } from "fs-extra";
-import type { DatabaseType } from "./data-source";
-import { fileURLToPath } from "node:url";
-import path from "node:path";
-import { app, dialog } from "electron";
 import { ResultAsync } from "neverthrow";
+import { DB_PATH, Paths } from "@/lib/paths";
+import type { DatabaseType } from "./data-source";
 
 const log = _log.create({ logId: "migrations" });
 log.transports.file.resolvePathFn = () => Paths.MIGRATION_LOG_FILE;

@@ -1,26 +1,31 @@
-import { dbResult } from "@/db/db-result";
-import { type NewNote, type Note, note as notesTable, type PatchNote } from "@/db/schema";
-import type { TxResolver } from "@/db/transactional";
 import {
-    dwErr,
-    type DwResultAsync,
-    isDescendantAsync,
-    type ParentId,
-    Rank,
+  type DwResultAsync,
+  dwErr,
+  isDescendantAsync,
+  type ParentId,
+  Rank,
 } from "@darkwrite/common";
 import {
-    and,
-    asc,
-    desc,
-    eq,
-    gt,
-    inArray,
-    isNull,
-    like,
-    ne,
-    or,
+  and,
+  asc,
+  desc,
+  eq,
+  gt,
+  inArray,
+  isNull,
+  like,
+  ne,
+  or,
 } from "drizzle-orm";
 import { ok, ResultAsync } from "neverthrow";
+import { dbResult } from "@/db/db-result";
+import {
+  type NewNote,
+  type Note,
+  note as notesTable,
+  type PatchNote,
+} from "@/db/schema";
+import type { TxResolver } from "@/db/transactional";
 import { noteToDto } from "./note-mapper";
 
 const withParent = (parentId: ParentId) =>
@@ -46,7 +51,10 @@ export function NoteDAO(tx: TxResolver) {
     ).andThen((row) =>
       row
         ? ok(row)
-        : dwErr( "Note failed to create", "Expected a note to return from the database, nothing returned."),
+        : dwErr(
+            "Note failed to create",
+            "Expected a note to return from the database, nothing returned.",
+          ),
     );
   }
 
@@ -59,11 +67,7 @@ export function NoteDAO(tx: TxResolver) {
           .where(eq(notesTable.id, note.id))
           .returning()
       ).at(0),
-    ).andThen((row) =>
-      row
-        ? ok(row)
-        : dwErr("Note not found")
-    );
+    ).andThen((row) => (row ? ok(row) : dwErr("Note not found")));
   }
 
   function updateAll(notes: PatchNote[]): DwResultAsync<Note[]> {
@@ -79,9 +83,7 @@ export function NoteDAO(tx: TxResolver) {
           .where(eq(notesTable.id, id))
           .limit(1)
           .get(),
-    ).andThen((row) =>
-      row ? ok(row) : dwErr("Note not found.")
-    );
+    ).andThen((row) => (row ? ok(row) : dwErr("Note not found.")));
   }
 
   function findAll(): DwResultAsync<Note[]> {

@@ -1,12 +1,12 @@
+import { randomUUID } from "node:crypto";
+import { readFile } from "node:fs/promises";
+import log from "electron-log";
+import { okAsync, ResultAsync } from "neverthrow";
 import type { DatabaseType } from "@/db";
 import type { Embed, NewEmbed } from "@/db/schema";
 import { resolveTx, transactional } from "@/db/transactional";
 import { EmbedDAO } from "@/embed/embed.dao";
 import { WorkspaceDAO } from "@/workspace/workspace.dao";
-import { randomUUID } from "node:crypto";
-import log from "electron-log";
-import { readFile } from "node:fs/promises";
-import { okAsync, ResultAsync } from "neverthrow";
 import type { IEmbedStore } from "../lib/blob-store";
 import { fsResult, getFileInfo } from "../lib/fs";
 

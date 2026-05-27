@@ -1,7 +1,12 @@
 import { AsyncLocalStorage } from "node:async_hooks";
-import { type DatabaseType, db, isDataSource, type Transaction } from "./data-source";
-import { ResultAsync } from "neverthrow";
 import { buildDwError, type DwError, panic } from "@darkwrite/common";
+import { ResultAsync } from "neverthrow";
+import {
+  type DatabaseType,
+  db,
+  isDataSource,
+  type Transaction,
+} from "./data-source";
 
 export const txContext = new AsyncLocalStorage<Transaction>();
 
@@ -13,7 +18,6 @@ export function getActiveTransaction(): Transaction | undefined {
 export function getActiveDb(): DatabaseType | Transaction {
   return txContext.getStore() ?? db;
 }
-
 
 export type TxResolver = () => Transaction | DatabaseType;
 

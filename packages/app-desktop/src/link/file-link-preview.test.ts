@@ -1,7 +1,7 @@
-import { describe, it, expect, beforeAll, afterAll } from "vitest";
+import { unlinkSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { writeFileSync, unlinkSync } from "node:fs";
+import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { previewFileLink } from "./file-link-preview";
 
 const tmp = tmpdir();

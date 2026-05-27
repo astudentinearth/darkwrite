@@ -1,13 +1,13 @@
-import { dbResult } from "@/db/db-result";
-import {
-  type LinkedFile,
-  type NewLinkedFile,
-  linkedFile as linkedFileTable,
-} from "@/db/schema";
-import type { TxResolver } from "@/db/transactional";
 import { type DwResultAsync, dwErr } from "@darkwrite/common";
 import { eq } from "drizzle-orm";
 import { ok } from "neverthrow";
+import { dbResult } from "@/db/db-result";
+import {
+  type LinkedFile,
+  linkedFile as linkedFileTable,
+  type NewLinkedFile,
+} from "@/db/schema";
+import type { TxResolver } from "@/db/transactional";
 
 export function FileLinkDAO(tx: TxResolver) {
   function create(link: NewLinkedFile): DwResultAsync<LinkedFile> {

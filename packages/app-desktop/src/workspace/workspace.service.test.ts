@@ -1,15 +1,22 @@
-import { dwErrAsync, getDefaultWorkspaceConfiguration } from "@darkwrite/common";
-import { createTestDatabase, type DatabaseType, applySqlMigrations } from "../db";
-import { WorkspaceService } from "./workspace.service";
+import {
+  dwErrAsync,
+  getDefaultWorkspaceConfiguration,
+} from "@darkwrite/common";
 import { type NewNote, workspace } from "@/db/schema";
-import { WorkspaceDAO } from "./workspace.dao";
+import { resolveTx } from "@/db/transactional";
+import type { IDocumentStore } from "@/lib/document-store";
 import { NoteDAO } from "@/note/note.dao";
 import { DocumentService } from "@/service/document.service";
 import { MockDocumentStore } from "@/test/mocks/document-store.mock";
-import type { IDocumentStore } from "@/lib/document-store";
-import { resolveTx } from "@/db/transactional";
+import {
+  applySqlMigrations,
+  createTestDatabase,
+  type DatabaseType,
+} from "../db";
+import { WorkspaceDAO } from "./workspace.dao";
+import { WorkspaceService } from "./workspace.service";
 
-let _db: DatabaseType = createTestDatabase();
+const _db: DatabaseType = createTestDatabase();
 const workspaceDao = WorkspaceDAO(() => resolveTx(_db));
 const noteDao = NoteDAO(() => resolveTx(_db));
 const documentService = DocumentService(MockDocumentStore());

@@ -1,7 +1,7 @@
+import http from "node:http";
 import { is } from "@electron-toolkit/utils";
 import { app, BrowserWindow } from "electron";
 import log from "electron-log";
-import http from "node:http";
 
 // we could utilize this server to test APIs without a frontend
 

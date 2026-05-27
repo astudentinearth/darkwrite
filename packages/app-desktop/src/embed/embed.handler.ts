@@ -1,15 +1,12 @@
+import { writeFile } from "node:fs/promises";
+import { buildDwError, type DesktopEmbedAPI } from "@darkwrite/common";
+import { net } from "electron";
+import { okAsync, ResultAsync } from "neverthrow";
 import { showSaveDialog } from "@/api/dialog";
 import { fsResult } from "@/lib/fs";
-import { handler, type HandlerImplements } from "@/types";
-import {
-    buildDwError,
-    type DesktopEmbedAPI,
-} from "@darkwrite/common";
-import { net } from "electron";
-import { writeFile } from "node:fs/promises";
-import { okAsync, ResultAsync } from "neverthrow";
-import { embedToDto } from "./embed-mapper";
+import { type HandlerImplements, handler } from "@/types";
 import type { IEmbedService } from "./embed.service";
+import { embedToDto } from "./embed-mapper";
 
 const fetchEmbed = (url: URL) =>
   ResultAsync.fromPromise(
@@ -52,15 +49,14 @@ export function EmbedAPI(
             .getEmbedUrl(embed.id)
             .map((url) => embedToDto(embed, url)),
         )
-        .map((embed) => ({ embed }))
+        .map((embed) => ({ embed })),
   );
 
   const getById = handler((id: string) =>
     ResultAsync.combine([
       embedService.getEmbedById(id),
       embedService.getEmbedUrl(id),
-    ])
-      .map(([embed, url]) => ({ embed: embedToDto(embed, url) }))
+    ]).map(([embed, url]) => ({ embed: embedToDto(embed, url) })),
   );
 
   const download = handler((id: string) =>
@@ -109,8 +105,11 @@ export function EmbedAPI(
           {} as Record<string, string>,
         ),
       )
-      .mapErr(
-        (cause) => buildDwError("Something went wrong while encoding embeds.", cause.message),
+      .mapErr((cause) =>
+        buildDwError(
+          "Something went wrong while encoding embeds.",
+          cause.message,
+        ),
       ),
   );
 
@@ -122,4 +121,3 @@ export function EmbedAPI(
     createFromLocalFile,
   };
 }
-

@@ -1,5 +1,4 @@
-import { ContextMenuApiBridge } from "@/desktop-integration/context-menu.handler";
-import { ShellApiBridge } from "@/desktop-integration/shell.handler";
+import os from "node:os";
 import {
   buildDwError,
   type DarkwriteDesktopClientInfo,
@@ -11,15 +10,16 @@ import {
 } from "@darkwrite/common";
 import { app, systemPreferences } from "electron";
 import { ok, ResultAsync } from "neverthrow";
-import os from "node:os";
-import { handler, type HandlerImplements } from "../types";
+import { ContextMenuApiBridge } from "@/desktop-integration/context-menu.handler";
+import { ShellApiBridge } from "@/desktop-integration/shell.handler";
+import { type HandlerImplements, handler } from "../types";
 
 const operatingSystem = os.platform() as OS;
 
 function getSystemAccentColor() {
   // TODO: Linux integration will be provided over D-Bus hopefully,
   // unless Electron implements Linux support themselves.
-  if (operatingSystem == OS.LINUX) return ok("0000ff");
+  if (operatingSystem === OS.LINUX) return ok("0000ff");
   const color = systemPreferences.getAccentColor();
   return ok(stripAlpha(color));
 }
@@ -30,7 +30,7 @@ function getAvailableFonts(): DwResultAsync<Font[]> {
     // due to some CJS issue. We'll fall back to text
     // fields on macOS until we figure out how to call
     // CoreText directly.
-    if (os.platform() == "darwin") return [];
+    if (os.platform() === "darwin") return [];
     const { getFonts2 } = await import("font-list");
     const fonts = await getFonts2();
     const list = fonts.map(

@@ -1,9 +1,9 @@
-import * as fslib from "@/lib/fs";
-import { dwErr, type DwError } from "@darkwrite/common";
-import { pathExists } from "fs-extra";
 import { readFile, rm, writeFile } from "node:fs/promises";
-import { ok, type Result, type ResultAsync } from "neverthrow";
 import path from "node:path";
+import { type DwError, dwErr } from "@darkwrite/common";
+import { pathExists } from "fs-extra";
+import { ok, type Result, type ResultAsync } from "neverthrow";
+import * as fslib from "@/lib/fs";
 
 export interface IDocumentStore {
   create: (id: string) => ResultAsync<void, DwError>;

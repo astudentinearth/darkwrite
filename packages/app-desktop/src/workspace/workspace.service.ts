@@ -1,7 +1,3 @@
-import type { DatabaseType } from "@/db";
-import { resolveTx, transactional } from "@/db/transactional";
-import { NoteDAO } from "@/note/note.dao";
-import type { IDocumentService } from "@/service/document.service";
 import {
   type CreateWorkspaceDTO,
   getDefaultWorkspaceConfiguration,
@@ -9,6 +5,10 @@ import {
 } from "@darkwrite/common";
 import log from "electron-log";
 import { okAsync, ResultAsync } from "neverthrow";
+import type { DatabaseType } from "@/db";
+import { resolveTx, transactional } from "@/db/transactional";
+import { NoteDAO } from "@/note/note.dao";
+import type { IDocumentService } from "@/service/document.service";
 import { WorkspaceDAO } from "./workspace.dao";
 
 export function WorkspaceService(

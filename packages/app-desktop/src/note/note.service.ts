@@ -1,19 +1,19 @@
+import {
+  type CreateNoteDTO,
+  type DwError,
+  dwErr,
+  dwErrAsync,
+  type MoveNoteDTO,
+  Rank,
+  type UpdateNoteDTO,
+} from "@darkwrite/common";
+import { err, ok, okAsync, type Result, ResultAsync } from "neverthrow";
 import { DatabaseDAO } from "@/database/database.dao";
 import type { DatabaseType } from "@/db";
 import type { NewNote, Note } from "@/db/schema";
 import { resolveTx, transactional } from "@/db/transactional";
 import type { IDocumentService } from "@/service/document.service";
 import { WorkspaceDAO } from "@/workspace/workspace.dao";
-import {
-  type CreateNoteDTO,
-  dwErr,
-  dwErrAsync,
-  type DwError,
-  type MoveNoteDTO,
-  Rank,
-  type UpdateNoteDTO,
-} from "@darkwrite/common";
-import { err, ok, okAsync, type Result, ResultAsync } from "neverthrow";
 import { NoteDAO, type OrderKeyDto } from "./note.dao";
 
 function buildNewNote(dto: CreateNoteDTO, { end }: OrderKeyDto): NewNote {
@@ -180,7 +180,8 @@ export function NoteService(
           )
           .andThen(([source, destination]) =>
             dto.placement === "below"
-              ? moveBelow(source, destination!) // we validated dto shape previously
+              ? // biome-ignore lint/style/noNonNullAssertion: we validated dto shape previously
+                moveBelow(source, destination!)
               : moveInto(source, destination, dto.placement),
           ),
       db,

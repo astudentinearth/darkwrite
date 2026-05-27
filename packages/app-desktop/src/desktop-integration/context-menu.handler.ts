@@ -1,7 +1,7 @@
-import { handler, type HandlerImplements } from "@/types";
 import type { IContextMenuAPI } from "@darkwrite/common";
 import type { IpcMainInvokeEvent } from "electron";
 import { ok } from "neverthrow";
+import { type HandlerImplements, handler } from "@/types";
 
 export const ContextMenuHandler = {
   copy({ sender }: IpcMainInvokeEvent) {

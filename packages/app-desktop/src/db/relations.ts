@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm/relations";
-import { workspace, note, database, embed } from "./schema";
+import { database, embed, note, workspace } from "./schema";
 
 export const noteRelations = relations(note, ({ one }) => ({
   workspace: one(workspace, {

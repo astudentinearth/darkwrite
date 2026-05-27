@@ -1,6 +1,6 @@
-import type { IDocumentStore } from "@/lib/document-store";
 import { dwErrAsync } from "@darkwrite/common";
 import { okAsync } from "neverthrow";
+import type { IDocumentStore } from "@/lib/document-store";
 
 export function MockDocumentStore(): IDocumentStore {
   const docs: Map<string, string> = new Map();

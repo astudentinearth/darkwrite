@@ -1,5 +1,5 @@
-import type { Note } from "@/db/schema";
 import type { NoteDTO } from "@darkwrite/common";
+import type { Note } from "@/db/schema";
 
 export function noteToDto(note: Note): NoteDTO {
   const { createdAt, modifiedAt, propertyValues, trashedAt, ...rest } = note;
@@ -37,4 +37,3 @@ export function notesToDto(notes: Note[]) {
       {} as Record<string, NoteDTO>,
     );
 }
-

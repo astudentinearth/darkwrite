@@ -1,6 +1,6 @@
-import type { IEmbedService } from "./embed.service";
 import { net } from "electron";
 import { okAsync } from "neverthrow";
+import type { IEmbedService } from "./embed.service";
 
 export function embedProtocolHandler(embedService: IEmbedService) {
   return async function (req: Request) {

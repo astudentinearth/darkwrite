@@ -7,14 +7,13 @@ import {
   UpdateWorkspaceDTOSchema,
   validateSchema,
 } from "@darkwrite/common";
-import { handler, type HandlerImplements } from "../types/ipc-handler";
-import { workspaceToDto } from "./workspace-mapper";
+import { type HandlerImplements, handler } from "../types/ipc-handler";
 import type { IWorkspaceService } from "./workspace.service";
+import { workspaceToDto } from "./workspace-mapper";
 
 export function WorkspaceAPI(
   workspaceService: IWorkspaceService,
 ): HandlerImplements<IWorkspaceAPI> {
-
   const create = handler((dto: CreateWorkspaceDTO) =>
     validateSchema(CreateWorkspaceDTOSchema)(dto)
       .asyncAndThen((dto) => workspaceService.createWorkspace(dto))

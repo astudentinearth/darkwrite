@@ -1,12 +1,12 @@
-import { is } from "@electron-toolkit/utils";
-import type { BrowserWindowConstructorOptions } from "electron";
-import { join, dirname } from "node:path";
+import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import metadata from "./metadata.json";
 import type {
   DarkwriteUserSettings,
   NativeContextMenuData,
 } from "@darkwrite/common";
+import { is } from "@electron-toolkit/utils";
+import type { BrowserWindowConstructorOptions } from "electron";
+import metadata from "./metadata.json";
 import { WindowEvent } from "./types/window-events";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -37,10 +37,10 @@ export function constructWindow(
       x: 15,
       y: 15,
     },
-    ...(process.platform != "darwin"
+    ...(process.platform !== "darwin"
       ? {
           titleBarOverlay:
-            titleBarStyle == "hidden"
+            titleBarStyle === "hidden"
               ? metadata.windowDefaults.titleBarOverlay
               : undefined,
         }

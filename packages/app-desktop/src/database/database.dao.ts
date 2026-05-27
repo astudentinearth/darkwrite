@@ -1,3 +1,11 @@
+import {
+  buildDwError,
+  type DwResultAsync,
+  errOnUndefined,
+  firstOrErr,
+  okVoid,
+} from "@darkwrite/common";
+import { eq } from "drizzle-orm";
 import { dbResult } from "@/db/db-result";
 import {
   type Database,
@@ -6,15 +14,6 @@ import {
   type PatchDatabase,
 } from "@/db/schema";
 import type { TxResolver } from "@/db/transactional";
-import {
-    buildDwError,
-    type DwResultAsync,
-  errOnUndefined,
-  firstOrErr,
-  okVoid,
-} from "@darkwrite/common";
-import { eq } from "drizzle-orm";
-
 
 export function DatabaseDAO(tx: TxResolver) {
   function create(database: NewDatabase): DwResultAsync<Database> {
@@ -30,17 +29,13 @@ export function DatabaseDAO(tx: TxResolver) {
         .set(database)
         .where(eq(databaseTable.id, database.id))
         .returning(),
-    ).andThen(
-      firstOrErr(buildDwError("Database not found.")),
-    );
+    ).andThen(firstOrErr(buildDwError("Database not found.")));
   }
 
   function findById(id: string): DwResultAsync<Database> {
     return dbResult(() =>
       tx().select().from(databaseTable).where(eq(databaseTable.id, id)).get(),
-    ).andThen(
-      errOnUndefined(buildDwError("Database not found.")),
-    );
+    ).andThen(errOnUndefined(buildDwError("Database not found.")));
   }
 
   function findAll(): DwResultAsync<Database[]> {

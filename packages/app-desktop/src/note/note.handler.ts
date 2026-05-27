@@ -1,10 +1,4 @@
-import {
-  showOpenDialog,
-  showSaveDialog,
-  whenDialogCancelled,
-} from "@/api/dialog";
-import type { Note } from "@/db/schema";
-import { readFileUtf8, writeBinaryFile, writeFileUtf8 } from "@/lib/fs";
+import { extname } from "node:path";
 import {
   type CreateNoteDTO,
   CreateNoteDTOSchema,
@@ -24,13 +18,19 @@ import {
   validateSchema,
 } from "@darkwrite/common";
 import { ok, ResultAsync } from "neverthrow";
+import {
+  showOpenDialog,
+  showSaveDialog,
+  whenDialogCancelled,
+} from "@/api/dialog";
+import type { Note } from "@/db/schema";
+import { readFileUtf8, writeBinaryFile, writeFileUtf8 } from "@/lib/fs";
 import printToPdf from "../lib/print-to-pdf";
 import type { IDocumentService } from "../service/document.service";
-import { handler, type HandlerImplements } from "../types/ipc-handler";
+import { type HandlerImplements, handler } from "../types/ipc-handler";
+import type { INoteService } from "./note.service";
 import { notesToDto, noteToDto } from "./note-mapper";
 import type { INoteQueryService } from "./note-query.service";
-import type { INoteService } from "./note.service";
-import { extname } from "node:path";
 
 const aggregateResponse = (notes: Note[]) =>
   ({ notes: notesToDto(notes) }) satisfies NotesResponseDTO;

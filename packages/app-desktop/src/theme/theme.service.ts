@@ -1,10 +1,9 @@
-import { fsResult } from "@/lib/fs";
 import {
   buildDwError,
   type DarkwriteUserSettings,
   DEFAULT_THEMES,
-  dwErr,
   type DwResult,
+  dwErr,
   isTheme,
   parseJson,
   type Theme,
@@ -14,6 +13,7 @@ import log from "electron-log";
 import { readFile } from "fs-extra";
 import _ from "lodash";
 import { ok, okAsync, Result, ResultAsync } from "neverthrow";
+import { fsResult } from "@/lib/fs";
 import type { IDocumentStore } from "../lib/document-store";
 
 const logInvalidTheme = (id?: string, message?: string) =>

@@ -1,17 +1,17 @@
+import { join } from "node:path";
 import { is } from "@electron-toolkit/utils";
 import { app } from "electron";
-import { join } from "node:path";
-import { pathConfig } from "../metadata.json";
 import log from "electron-log";
+import { pathConfig } from "../metadata.json";
 import { assertAccessibleSync, ensureDirs } from "./fs";
 
 //TODO: Refactor all IO into separate classes and deprecate this override later.
 //TODO: Make this an actual option
-const DATA_ROOT = process.env["DARKWRITE_ROOT_OVERRIDE"]
-  ? process.env["DARKWRITE_ROOT_OVERRIDE"]
+const DATA_ROOT = process.env.DARKWRITE_ROOT_OVERRIDE
+  ? process.env.DARKWRITE_ROOT_OVERRIDE
   : app.getPath("userData");
 
-if (process.env["DARKWRITE_ROOT_OVERRIDE"]) {
+if (process.env.DARKWRITE_ROOT_OVERRIDE) {
   log.warn("You have set a profile override with DARKWRITE_ROOT_OVERRIDE.");
 }
 
@@ -74,7 +74,7 @@ export const SESSION_DATA_DIR = join(
 
 function getPathError() {
   return `Darkwrite cannot access ${DATA_ROOT} : Make sure the directory exists and you have write permissions for that directory. ${
-    process.env["DARKWRITE_ROOT_OVERRIDE"]
+    process.env.DARKWRITE_ROOT_OVERRIDE
       ? `You have set the "DARKWRITE_ROOT_OVERRIDE" environment variable to a directory Darkwrite does not have permissions for.
           Please ensure you can write into that directory.`
       : ""

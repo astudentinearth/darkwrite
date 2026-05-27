@@ -1,17 +1,17 @@
-import { expectTypeOf } from "vitest";
 import type { IpcMainInvokeEvent } from "electron";
-import { type Result, type ResultAsync, ok } from "neverthrow";
+import { ok, type Result, type ResultAsync } from "neverthrow";
+import { expectTypeOf } from "vitest";
+import type { NestedApiBridge } from "@/ipc/api";
 import {
-  type IPCListener,
   type GetMainHandlerParams,
   type GetPreloadReturnType,
-  type InferHandler,
-  type IPCPreloadHandler,
-  IPCHandler,
-  type InferPreloadAPI,
   type HandlerImplements,
+  type InferHandler,
+  type InferPreloadAPI,
+  IPCHandler,
+  type IPCListener,
+  type IPCPreloadHandler,
 } from "./ipc-handler";
-import type { NestedApiBridge } from "@/ipc/api";
 
 type ipcWithoutEvent = (value: string, count: number) => Result<number, string>;
 type ipcWithoutEvent2 = (value: string) => ResultAsync<number, string>;
@@ -87,7 +87,7 @@ expectTypeOf<PreloadHandler4>().toEqualTypeOf<
 //eslint-disable-next-line @typescript-eslint/no-unused-vars
 const handlerWithoutEvent = new IPCHandler(
   false,
-  (value: string, count: number): Result<number, string> => {
+  (_value: string, count: number): Result<number, string> => {
     return ok(count);
   },
 );
@@ -100,8 +100,8 @@ expectTypeOf<InferHandler<typeof handlerWithoutEvent>>().toEqualTypeOf<
 const handlerWithEvent = new IPCHandler(
   true,
   (
-    event: IpcMainInvokeEvent,
-    value: string,
+    _event: IpcMainInvokeEvent,
+    _value: string,
     count: number,
   ): Result<number, string> => {
     return ok(count);
@@ -115,12 +115,12 @@ expectTypeOf<InferHandler<typeof handlerWithEvent>>().toEqualTypeOf<
 // test full inference
 
 //eslint-disable-next-line @typescript-eslint/no-unused-vars
-const createNote = (name: string, count: number) => {
+const createNote = (_name: string, _count: number) => {
   return ok(null);
 };
 
 //eslint-disable-next-line @typescript-eslint/no-unused-vars
-const exit = (event: IpcMainInvokeEvent) => {
+const exit = (_event: IpcMainInvokeEvent) => {
   return ok();
 };
 

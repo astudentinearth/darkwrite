@@ -1,6 +1,6 @@
 import type { DatabaseType } from "@/db";
-import { FileLinkDAO } from "./file-link.dao";
 import { resolveTx } from "@/db/transactional";
+import { FileLinkDAO } from "./file-link.dao";
 
 export function FileLinkService(db: DatabaseType) {
   const fileLinkDao = FileLinkDAO(() => resolveTx(db));

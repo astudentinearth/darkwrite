@@ -1,18 +1,17 @@
-import { DB_PATH } from "../lib/paths";
-import * as relations from "./relations";
-import * as tables from "./schema";
-
 import { randomUUID } from "node:crypto";
-import { drizzle } from "drizzle-orm/libsql/node";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { pathToFileURL } from "node:url";
+import { drizzle } from "drizzle-orm/libsql/node";
+import { DB_PATH } from "../lib/paths";
+import * as relations from "./relations";
+import * as tables from "./schema";
 
 const dbPath = DB_PATH;
 export const DB_SYMBOL = Symbol("darkwrite-db-instance");
 
 const getDatabaseUrl = () =>
-  process.env["NODE_ENV"] === "test" ? ":memory:" : pathToFileURL(dbPath).href;
+  process.env.NODE_ENV === "test" ? ":memory:" : pathToFileURL(dbPath).href;
 
 function makeDrizzleDb(url: string) {
   return drizzle({

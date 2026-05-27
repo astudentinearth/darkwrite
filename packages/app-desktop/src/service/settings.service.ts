@@ -1,14 +1,14 @@
-import { assertExists, fsResult } from "@/lib/fs";
+import { readFile, writeFile } from "node:fs/promises";
 import {
   type DarkwriteUserSettings,
   migrateSettings,
   parseJson,
   SettingsModel,
 } from "@darkwrite/common";
-import { readFile, writeFile } from "node:fs/promises";
+import log from "electron-log";
 import _ from "lodash";
 import { ok } from "neverthrow";
-import log from "electron-log"
+import { assertExists, fsResult } from "@/lib/fs";
 
 const DEFAULT_SETTINGS_STR = JSON.stringify(SettingsModel.getDefaults());
 
@@ -23,12 +23,17 @@ export function SettingsService(settingsFilePath: string) {
   const _readSettingsFile = () =>
     assertExists(settingsFilePath)
       .andThen(() => fsResult(readFile(settingsFilePath, "utf-8")))
-      .orTee(error => log.error("Could not read settings file. Attempting to re-create it.", error))
-      .orElse(() =>
-           _writeSettingsFile(DEFAULT_SETTINGS_STR).map(
-              () => DEFAULT_SETTINGS_STR,
-            )
+      .orTee((error) =>
+        log.error(
+          "Could not read settings file. Attempting to re-create it.",
+          error,
+        ),
       )
+      .orElse(() =>
+        _writeSettingsFile(DEFAULT_SETTINGS_STR).map(
+          () => DEFAULT_SETTINGS_STR,
+        ),
+      );
 
   const override = (settings: DarkwriteUserSettings) => {
     currentSettings = _.cloneDeep(settings);
