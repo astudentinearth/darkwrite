@@ -8,7 +8,7 @@ import {
   type ReactNodeViewProps,
   ReactNodeViewRenderer,
 } from "@tiptap/react";
-import { ArrowLeftRight, File } from "lucide-react";
+import { ArrowLeftRight, File, GalleryVertical } from "lucide-react";
 import { type MouseEvent, memo, use, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
@@ -30,6 +30,7 @@ import { useNoteById } from "@/features/note/hooks/use-note-by-id";
 import { useSearch } from "@/features/note/hooks/use-search";
 import { cn, getNoteIcon } from "@/lib/utils";
 import { DarkwriteEditorContext } from "../context";
+import { useEditorActions } from "../store/editor-actions";
 import { Block } from "../types";
 
 const LinkResult = memo(function ({
@@ -69,6 +70,7 @@ const LinkComponent = ({
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
   const { results, debouncedSearch } = useSearch(search);
+  const { showCenterView } = useEditorActions();
 
   const contextMenu = (e: MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -81,6 +83,7 @@ const LinkComponent = ({
     const linkContent = `${typeof icon === "string" ? `${icon} ` : ""}${note.title}`;
     const pos = getPos();
     const url = resourceRefToUrl({ type: DarkwriteResource.Note, id: note.id });
+
     if (typeof pos !== "number") return;
     editor
       .chain()
@@ -119,7 +122,9 @@ const LinkComponent = ({
             {!note ? (
               t("editor.blocks.linkToPage.placeholder")
             ) : (
-              <span className="font-semibold">{note?.title}</span>
+              <span className="font-semibold">
+                {note?.title || t("defaults.pageTitle")}
+              </span>
             )}
           </div>
         </PopoverTrigger>
@@ -130,7 +135,7 @@ const LinkComponent = ({
         >
           {note && (
             <>
-              <div className="p-1 w-full flex">
+              <div className="p-1 w-full flex flex-col">
                 <Button
                   variant="ghost"
                   onClick={turnIntoInlineLink}
@@ -140,6 +145,17 @@ const LinkComponent = ({
                   <span>
                     {t("editor.blocks.linkToPage.turnIntoInlineLink")}
                   </span>
+                </Button>
+                <Button
+                  variant="ghost"
+                  className="h-fit px-2 py-1.5 w-full justify-start"
+                  onClick={() => {
+                    showCenterView(id);
+                    setOpen(false);
+                  }}
+                >
+                  <GalleryVertical size={16} />
+                  <span>{t("sidebar.notes.contextmenu.openInCenter")}</span>
                 </Button>
               </div>
               <hr />

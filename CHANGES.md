@@ -1,4 +1,7 @@
 # 1.2.3-beta.1
+## 🌟 Features
+- Add center view
+
 ## ✨ Improvements and fixes
 - Update onboarding screens
 
