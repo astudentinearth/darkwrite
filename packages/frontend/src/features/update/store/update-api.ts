@@ -1,5 +1,6 @@
-import { dwErrAsync, type UpdateServerResponse } from "@darkwrite/common";
+import type { UpdateServerResponse } from "@darkwrite/common";
 import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
+import { DarkwriteAPIClient } from "@/api/api-client";
 import { resultQueryFn } from "@/lib/query-result";
 
 export const UPDATE_TAG_TYPE = "update";
@@ -11,11 +12,7 @@ export const updateApi = createApi({
   keepUnusedDataFor: 60 * 15,
   endpoints: (builder) => ({
     checkUpdate: builder.query<UpdateServerResponse | undefined, void>({
-      queryFn: resultQueryFn(() =>
-        window.isElectron
-          ? window.api.checkUpdate()
-          : dwErrAsync("Not running in Electron environment"),
-      ),
+      queryFn: resultQueryFn(() => DarkwriteAPIClient.checkUpdate()),
       providesTags: [UPDATE_TAG_TYPE],
     }),
   }),
