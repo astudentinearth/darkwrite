@@ -111,7 +111,7 @@
     "tailwindcss": "catalog:",
     "typescript": "catalog:",
     "vite": "catalog:",
-    "vite-plugin-svgr": "^4.5.0",
+    "vite-plugin-svgr": "^5.2.0",
     "vitest": "catalog:"
   },
   "packageManager": "pnpm@10.26.2"
