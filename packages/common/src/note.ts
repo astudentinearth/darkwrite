@@ -1,4 +1,35 @@
-import type { NoteDTO } from "./dto";
+export interface BaseNoteDTO {
+  id: string;
+  title: string;
+  icon: string | null;
+  parentId: string | null;
+  createdAt: string;
+  modifiedAt: string;
+  trashedAt: string | null;
+  orderHint: string;
+  favoriteOrderHint: string;
+  isFavorite: boolean | null;
+  isTrashed: boolean | null;
+
+  propertyValues?: Record<string, string> | null;
+
+  userId: string | null; // Owner of the note
+  databaseId: string | null; // ID of the database this note belongs to
+  workspaceId: string; // ID of the workspace this note belongs to
+}
+
+export enum NoteType {
+  Doc = "doc",
+  Database = "database",
+}
+
+export type DocumentNoteDTO = BaseNoteDTO & { type: NoteType.Doc };
+export type DatabaseNoteDTO = BaseNoteDTO & {
+  type: NoteType.Database;
+  ownedDatabaseId: string;
+};
+
+export type NoteDTO = DocumentNoteDTO | DatabaseNoteDTO;
 
 export function resolveUpperTree(id: string, notes: Record<string, NoteDTO>) {
   const list: NoteDTO[] = [];
@@ -115,6 +146,7 @@ export type MovePlacement = "inside-start" | "inside-end" | "below";
 /** 📄*/
 export const DEFAULT_NOTE_ICON = "1f4c4";
 
+/** Remove all newlines from a note's title. They will be replaced with whitespace characters. */
 export function cleanNoteTitle(title: string) {
   return title.replace(/(\r\n|\n|\r)/gm, " ");
 }

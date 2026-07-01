@@ -1,4 +1,4 @@
-import type { NoteDTO } from "./dto";
+import type { NoteDTO } from "@/note";
 import { isDescendant, resolveUpperTree } from "./note";
 
 test("should resolve the parent tree of a note", () => {
