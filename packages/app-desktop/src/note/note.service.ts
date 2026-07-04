@@ -8,7 +8,6 @@ import {
   type UpdateNoteDTO,
 } from "@darkwrite/common";
 import { err, ok, okAsync, type Result, ResultAsync } from "neverthrow";
-import { DatabaseDAO } from "@/database/database.dao";
 import type { DatabaseType } from "@/db";
 import type { NewNote, Note } from "@/db/schema";
 import { resolveTx, transactional } from "@/db/transactional";
@@ -17,11 +16,10 @@ import { WorkspaceDAO } from "@/workspace/workspace.dao";
 import { NoteDAO, type OrderKeyDto } from "./note.dao";
 
 function buildNewNote(dto: CreateNoteDTO, { end }: OrderKeyDto): NewNote {
-  const { title, workspaceId, databaseId, icon, parentId } = dto;
+  const { title, workspaceId, icon, parentId } = dto;
   return {
     title,
     workspaceId,
-    databaseId,
     icon,
     parentId,
     favoriteOrderHint: "",
@@ -31,20 +29,11 @@ function buildNewNote(dto: CreateNoteDTO, { end }: OrderKeyDto): NewNote {
   };
 }
 
-function buildDuplicate({
-  title,
-  icon,
-  databaseId,
-  workspaceId,
-  propertyValues,
-  parentId,
-}: Note): NewNote {
+function buildDuplicate({ title, icon, workspaceId, parentId }: Note): NewNote {
   return {
     title: `${title} (copy)`,
     icon,
-    databaseId,
     workspaceId,
-    propertyValues,
     parentId,
     orderHint: "",
     favoriteOrderHint: "",
@@ -65,7 +54,6 @@ export function NoteService(
 ) {
   const noteDAO = NoteDAO(() => resolveTx(db));
   const workspaceDAO = WorkspaceDAO(() => resolveTx(db));
-  const databaseDAO = DatabaseDAO(() => resolveTx(db));
 
   const assertNotDescendant = (result: boolean | "CIRCULAR") =>
     result === "CIRCULAR" || result === true
@@ -228,11 +216,7 @@ export function NoteService(
 
   const update = (id: string, dto: UpdateNoteDTO) =>
     transactional(
-      () =>
-        (dto.databaseId
-          ? databaseDAO.findById(dto.databaseId).andThen(() => okAsync())
-          : okAsync()
-        ).andThen(() => noteDAO.update({ id, modifiedAt: new Date(), ...dto })),
+      () => noteDAO.update({ id, modifiedAt: new Date(), ...dto }),
       db,
     );
 
