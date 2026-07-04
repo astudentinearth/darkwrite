@@ -39,8 +39,6 @@ const isTrashed = () => eq(notesTable.isTrashed, true);
 const isFavorite = () => eq(notesTable.isFavorite, true);
 const inWorkspace = (workspaceId: string) =>
   eq(notesTable.workspaceId, workspaceId);
-const inDatabase = (databaseId: string) =>
-  eq(notesTable.databaseId, databaseId);
 
 export type OrderKeyDto = { start: string; end: string };
 
@@ -97,9 +95,10 @@ export function NoteDAO(tx: TxResolver) {
     );
   }
 
+  /** @deprecated use findAllByParentId instead. */
   function findAllByDatabaseId(databaseId: string): DwResultAsync<Note[]> {
     return dbResult(async () =>
-      tx().select().from(notesTable).where(inDatabase(databaseId)),
+      tx().select().from(notesTable).where(withParent(databaseId)),
     );
   }
 

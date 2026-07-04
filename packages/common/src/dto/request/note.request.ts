@@ -4,7 +4,6 @@ export const CreateNoteDTOSchema = z.object({
   title: z.string(),
   parentId: z.string().nullable(),
   icon: z.string().nullable().optional(),
-  databaseId: z.string().nullable().optional(),
   workspaceId: z.string(),
 });
 
@@ -13,8 +12,6 @@ export type CreateNoteDTO = z.infer<typeof CreateNoteDTOSchema>;
 export const UpdateNoteDTOSchema = z.object({
   title: z.string().optional(),
   icon: z.string().nullable().optional(),
-  databaseId: z.string().nullable().optional(),
-  propertyValues: z.record(z.string(), z.string()).nullable().optional(),
 });
 
 export type UpdateNoteDTO = z.infer<typeof UpdateNoteDTOSchema>;
