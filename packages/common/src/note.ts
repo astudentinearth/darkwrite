@@ -1,6 +1,13 @@
-export interface BaseNoteDTO {
+export enum NoteType {
+  Doc = "doc",
+  Database = "database",
+  DatabaseView = "database_view",
+}
+
+export interface NoteDTO {
   id: string;
   title: string;
+  type: NoteType;
   icon: string | null;
   parentId: string | null;
   createdAt: string;
@@ -10,26 +17,14 @@ export interface BaseNoteDTO {
   favoriteOrderHint: string;
   isFavorite: boolean | null;
   isTrashed: boolean | null;
-
-  propertyValues?: Record<string, string> | null;
-
-  userId: string | null; // Owner of the note
-  databaseId: string | null; // ID of the database this note belongs to
   workspaceId: string; // ID of the workspace this note belongs to
 }
 
-export enum NoteType {
-  Doc = "doc",
-  Database = "database",
+export enum DatabaseViewType {
+  Board = "board",
+  Table = "table",
+  Calendar = "calendar",
 }
-
-export type DocumentNoteDTO = BaseNoteDTO & { type: NoteType.Doc };
-export type DatabaseNoteDTO = BaseNoteDTO & {
-  type: NoteType.Database;
-  ownedDatabaseId: string;
-};
-
-export type NoteDTO = DocumentNoteDTO | DatabaseNoteDTO;
 
 export function resolveUpperTree(id: string, notes: Record<string, NoteDTO>) {
   const list: NoteDTO[] = [];

@@ -1,11 +1,11 @@
 import { generateId } from "@/id";
 
-export enum PropertyFieldType {
-  TEXT = 0,
-  SELECT = 1,
-  MULTI_SELECT = 2,
-  CHECKBOX = 3,
-  DATE = 4,
+export enum PropertyType {
+  Text = "text",
+  Select = "select",
+  MultiSelect = "multi_select",
+  Checkbox = "checkbox",
+  Date = "date",
 }
 
 export interface SelectOption {
@@ -14,44 +14,28 @@ export interface SelectOption {
   text: string;
 }
 
-export interface PropertyField {
-  key: string;
-  type: PropertyFieldType;
+export interface SelectPropertyConfig {
+  options: SelectOption[];
+}
+
+export interface BasePropertyField {
+  id: string;
   name: string;
-  options?: SelectOption[];
+  type: PropertyType;
 }
 
-// biome-ignore lint/complexity/noStaticOnlyClass: this will be refactored later
-export class FieldBuilder {
-  private static generatePropertyFieldKey() {
-    return generateId();
-  }
+export type PropertyField =
+  | BasePropertyField
+  | {
+      type: PropertyType.MultiSelect | PropertyType.Select;
+      config: SelectPropertyConfig;
+    };
 
-  public static createSelectOption(text: string, color?: string) {
-    const optionKey = FieldBuilder.generatePropertyFieldKey();
-
-    return {
-      key: optionKey,
-      color: color ?? "#ffffff",
-      text,
-    } satisfies SelectOption;
-  }
-
-  public static createPropertyField<T extends PropertyFieldType>(
-    name: string,
-    type: T,
-    options: T extends PropertyFieldType.SELECT
-      ? SelectOption[]
-      : T extends PropertyFieldType.MULTI_SELECT
-        ? SelectOption[]
-        : never,
-  ) {
-    const fieldKey = FieldBuilder.generatePropertyFieldKey();
-    return {
-      key: fieldKey,
-      name,
-      type,
-      options,
-    } satisfies PropertyField;
-  }
-}
+export const createSelectOption = (opts: {
+  text: string;
+  color?: string;
+}): SelectOption => ({
+  key: generateId(),
+  color: opts.color ?? "#ffffff",
+  text: opts.text,
+});
