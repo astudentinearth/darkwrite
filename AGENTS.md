@@ -118,6 +118,7 @@ When asked to perform a review, do NOT check for any inconsistencies that can be
 ### SQLite migrations in the main process
 - When reviewing migration SQL, always explicitly check for column names when a table copy is applicable.
 - Always make sure the SQL statements have `--> statement-breakpoint` comments between individual statements. **Without these comments, only the first statement will actually be applied.**
+- Important bug: a trailing `--> statement-breakpoint` at the end of a migration file will cause an SQL error for no reason. SQL files should never end with `--> statement-breakpoint`. https://github.com/drizzle-team/drizzle-orm/issues/4583
 
 ### SQLite transactions
 - Transactions must be handled using our custom transaction manager defined in @packages/app-desktop/src/db/transactional.ts
@@ -175,10 +176,12 @@ src/electron/
 ```
 
 ## Documentation Links
+If you are looking for something, **CHECK THESE FIRST** instead of grep'ing your way through `node_modules`. Chances are the answer is available in the documentation.
 - [TipTap docs](https://tiptap.dev/llms.txt)
 - [shadcn-ui docs](https://ui.shadcn.com/llms.txt)
 - [Vitest docs](https://vitest.dev/llms.txt)
-- [Vite docs](https://vite.dev/llms.txt)
+- [Vite docs](https://vite.dev/llms.txt)a
+- [Drizzle ORM docs](https://orm.drizzle.team/llms.txt)
 
 ## Dependencies
 If a new dependency is required, ask the user before proceeding with installation.
