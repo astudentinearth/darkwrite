@@ -87,7 +87,7 @@ export const propertyValue = sqliteTable(
   "property_value",
   {
     propertyId: text()
-      .references(() => propertyDefinition.id)
+      .references(() => propertyDefinition.id, { onDelete: "cascade" })
       .notNull(),
     noteId: fk_note().notNull(),
     value: json(),

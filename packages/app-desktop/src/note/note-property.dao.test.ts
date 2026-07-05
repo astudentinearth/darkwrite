@@ -9,7 +9,6 @@ import {
 import {
   type NewNote,
   type NewPropertyDefRow,
-  note as notesTable,
   propertyDefinition as propertyDefinitionTable,
   type Workspace,
 } from "@/db/schema";
