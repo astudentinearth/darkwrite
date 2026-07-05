@@ -1,7 +1,5 @@
 // This file contains the common interfaces for frontend API clients.
 // Electron-side handlers should implement these directly and expose it via the API bridge.
-// Clients talking to a cloud instance shall make the appropriate network requests instead.
-// Cloud-specific code should be kept separate from Electron to ensure browser portability.
 import type { ResultAsync } from "neverthrow";
 import type {
   DarkwriteDesktopClientInfo,
