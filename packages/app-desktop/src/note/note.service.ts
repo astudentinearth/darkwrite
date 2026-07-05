@@ -1,9 +1,11 @@
 import {
   type CreateNoteDTO,
+  DatabaseViewType,
   type DwError,
   dwErr,
   dwErrAsync,
   type MoveNoteDTO,
+  NoteType,
   Rank,
   type UpdateNoteDTO,
 } from "@darkwrite/common";
@@ -13,6 +15,7 @@ import type { NewNote, Note } from "@/db/schema";
 import { resolveTx, transactional } from "@/db/transactional";
 import type { IDocumentService } from "@/service/document.service";
 import { WorkspaceDAO } from "@/workspace/workspace.dao";
+import { DatabaseViewDAO } from "./database-view.dao";
 import { NoteDAO, type OrderKeyDto } from "./note.dao";
 
 function buildNewNote(dto: CreateNoteDTO, { end }: OrderKeyDto): NewNote {
@@ -54,6 +57,7 @@ export function NoteService(
 ) {
   const noteDAO = NoteDAO(() => resolveTx(db));
   const workspaceDAO = WorkspaceDAO(() => resolveTx(db));
+  const databaseViewDAO = DatabaseViewDAO(() => resolveTx(db));
 
   const assertNotDescendant = (result: boolean | "CIRCULAR") =>
     result === "CIRCULAR" || result === true
@@ -139,6 +143,46 @@ export function NoteService(
         );
   }
 
+  function setDatabaseViewMetadata(
+    databaseId: string,
+    type: DatabaseViewType = DatabaseViewType.Table,
+  ) {
+    return transactional(
+      () =>
+        noteDAO
+          .findById(databaseId)
+          .andThen((database) =>
+            noteDAO.create({
+              type: NoteType.DatabaseView,
+              orderHint: "", // views are not user sorted
+              favoriteOrderHint: "",
+              createdAt: new Date(),
+              modifiedAt: new Date(),
+              title: `View of ${database.title}`,
+              workspaceId: database.workspaceId,
+              parentId: database.id,
+            }),
+          )
+          .andThen((note) =>
+            databaseViewDAO.createView({ id: note.id, type }).map(() => note),
+          ),
+      db,
+    );
+  }
+
+  /** Handles side effects of note creation, such as inserting additional metadata entities. */
+  function postCreate(note: Note) {
+    if (note.type === NoteType.Doc) {
+      return documentService.setNoteContent(note.id, "{}").map(() => note);
+    }
+    if (note.type === NoteType.DatabaseView) {
+      /* Database views hold additional metadata */
+      return setDatabaseViewMetadata(note.id).map(() => note);
+    }
+    /* For database type notes, we don't need to create a JSON document. */
+    return okAsync(note);
+  }
+
   function create(dto: CreateNoteDTO) {
     return transactional(
       () =>
@@ -147,9 +191,7 @@ export function NoteService(
           .andThen((w) => noteDAO.computeOrderKeysForLayer(w.id, dto.parentId))
           .map((keys) => buildNewNote(dto, keys))
           .andThen(noteDAO.create)
-          .andThen((note) =>
-            documentService.setNoteContent(note.id, "{}").map(() => note),
-          ),
+          .andThen(postCreate),
       db,
     );
   }

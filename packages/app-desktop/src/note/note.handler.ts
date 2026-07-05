@@ -1,6 +1,7 @@
 import { extname } from "node:path";
 import {
   type CreateNoteDTO,
+  type CreateNoteDTOInput,
   CreateNoteDTOSchema,
   dwErrAsync,
   FileFormatMap,
@@ -53,7 +54,7 @@ export function NoteAPI(
   noteQueryService: INoteQueryService,
   documentService: IDocumentService,
 ): HandlerImplements<INoteAPI> {
-  const create = handler((dto: CreateNoteDTO) =>
+  const create = handler((dto: CreateNoteDTOInput) =>
     validateSchema(CreateNoteDTOSchema)(dto)
       .asyncAndThen(noteService.create)
       .map(singleResponse),

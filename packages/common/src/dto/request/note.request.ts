@@ -1,13 +1,17 @@
 import { z } from "zod";
+import { NoteType } from "@/note";
 
 export const CreateNoteDTOSchema = z.object({
   title: z.string(),
   parentId: z.string().nullable(),
   icon: z.string().nullable().optional(),
   workspaceId: z.string(),
+  /** Type of the note. Default is "doc" */
+  type: z.enum(Object.values(NoteType)).default(NoteType.Doc),
 });
 
 export type CreateNoteDTO = z.infer<typeof CreateNoteDTOSchema>;
+export type CreateNoteDTOInput = z.input<typeof CreateNoteDTOSchema>;
 
 export const UpdateNoteDTOSchema = z.object({
   title: z.string().optional(),

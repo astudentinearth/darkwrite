@@ -1,4 +1,4 @@
-import { type ParentId, Rank } from "@darkwrite/common";
+import { NoteType, type ParentId, Rank } from "@darkwrite/common";
 import { ResultAsync } from "neverthrow";
 import { beforeAll, beforeEach, describe, expect, it } from "vitest";
 import {
@@ -143,6 +143,7 @@ describe("note service tests", () => {
           title: "With content",
           workspaceId: workspace.id,
           parentId: null,
+          type: NoteType.Doc,
         })
       )._unsafeUnwrap();
 

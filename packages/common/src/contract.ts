@@ -10,6 +10,7 @@ import type {
 import type { NativeContextMenuData } from "./context-menu";
 import type {
   CreateNoteDTO,
+  CreateNoteDTOInput,
   MoveNoteDTO,
   NoteContentResponseDTO,
   NoteResponseDTO,
@@ -39,7 +40,7 @@ export type ApiResult<T> = ResultAsync<T, DwError>;
 export type NoReturn = ResultAsync<void, never>;
 
 export interface INoteAPI {
-  create: (dto: CreateNoteDTO) => ApiResult<NoteResponseDTO>;
+  create: (dto: CreateNoteDTOInput) => ApiResult<NoteResponseDTO>;
   update: (id: string, dto: UpdateNoteDTO) => ApiResult<NoteResponseDTO>;
   move: (dto: MoveNoteDTO) => ApiResult<NoteResponseDTO>;
 
