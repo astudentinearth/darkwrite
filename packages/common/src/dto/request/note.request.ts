@@ -1,17 +1,33 @@
 import { z } from "zod";
-import { NoteType } from "@/note";
+import { DatabaseViewType, NoteType } from "@/note";
 
-export const CreateNoteDTOSchema = z.object({
+export const ZCreateDocumentRequest = z.object({
   title: z.string(),
   parentId: z.string().nullable(),
   icon: z.string().nullable().optional(),
   workspaceId: z.string(),
-  /** Type of the note. Default is "doc" */
-  type: z.enum(Object.values(NoteType)).default(NoteType.Doc),
 });
 
-export type CreateNoteDTO = z.infer<typeof CreateNoteDTOSchema>;
-export type CreateNoteDTOInput = z.input<typeof CreateNoteDTOSchema>;
+export type CreateDocumentRequest = z.infer<typeof ZCreateDocumentRequest>;
+export type CreateDocumentArgs = z.input<typeof ZCreateDocumentRequest>;
+
+export const ZCreateDatabaseViewRequest = z.object({
+  databaseId: z.string(),
+  type: z.enum(Object.values(DatabaseViewType)).default(DatabaseViewType.Table),
+});
+
+export type CreateDatabaseViewRequest = z.infer<
+  typeof ZCreateDatabaseViewRequest
+>;
+export type CreateDatabaseViewArgs = z.input<typeof ZCreateDatabaseViewRequest>;
+
+export const ZCreateDatabaseRequest = z.object({
+  parentId: z.string().nullable().default(null),
+  workspaceId: z.string(),
+});
+
+export type CreateDatabaseRequest = z.infer<typeof ZCreateDatabaseRequest>;
+export type CreateDatabaseArgs = z.infer<typeof ZCreateDatabaseRequest>;
 
 export const UpdateNoteDTOSchema = z.object({
   title: z.string().optional(),

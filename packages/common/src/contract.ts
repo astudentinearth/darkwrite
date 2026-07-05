@@ -9,8 +9,11 @@ import type {
 } from "./client";
 import type { NativeContextMenuData } from "./context-menu";
 import type {
-  CreateNoteDTO,
-  CreateNoteDTOInput,
+  CreateDatabaseArgs,
+  CreateDatabaseResponse,
+  CreateDatabaseViewArgs,
+  CreateDatabaseViewResponse,
+  CreateDocumentArgs,
   MoveNoteDTO,
   NoteContentResponseDTO,
   NoteResponseDTO,
@@ -40,7 +43,13 @@ export type ApiResult<T> = ResultAsync<T, DwError>;
 export type NoReturn = ResultAsync<void, never>;
 
 export interface INoteAPI {
-  create: (dto: CreateNoteDTOInput) => ApiResult<NoteResponseDTO>;
+  create: (dto: CreateDocumentArgs) => ApiResult<NoteResponseDTO>;
+  createDatabase: (
+    args: CreateDatabaseArgs,
+  ) => ApiResult<CreateDatabaseResponse>;
+  createDatabaseView: (
+    args: CreateDatabaseViewArgs,
+  ) => ApiResult<CreateDatabaseViewResponse>;
   update: (id: string, dto: UpdateNoteDTO) => ApiResult<NoteResponseDTO>;
   move: (dto: MoveNoteDTO) => ApiResult<NoteResponseDTO>;
 

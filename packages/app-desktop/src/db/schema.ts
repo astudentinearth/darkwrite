@@ -1,4 +1,5 @@
 import { randomUUID } from "node:crypto";
+import type { DatabaseViewType } from "@darkwrite/common";
 import {
   integer,
   sqliteTable,
@@ -64,7 +65,8 @@ export const linkedFile = sqliteTable("linked_file", {
   filePath: text().notNull(),
 });
 
-const databaseViewType = () => text({ enum: ["table", "board", "calendar"] });
+const databaseViewType = () =>
+  text({ enum: ["table", "board", "calendar"] }).$type<DatabaseViewType>();
 
 /** View-specific metadata for a note of type "database_view" */
 export const databaseView = sqliteTable("database_view", {

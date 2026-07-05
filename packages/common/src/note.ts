@@ -26,6 +26,11 @@ export enum DatabaseViewType {
   Calendar = "calendar",
 }
 
+export interface DatabaseViewMeta {
+  id: string;
+  type: DatabaseViewType;
+}
+
 export function resolveUpperTree(id: string, notes: Record<string, NoteDTO>) {
   const list: NoteDTO[] = [];
   if (!notes[id] || !("parentId" in notes[id])) return [];

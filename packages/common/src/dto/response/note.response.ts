@@ -1,4 +1,4 @@
-import type { NoteDTO } from "@/note";
+import type { DatabaseViewMeta, NoteDTO } from "@/note";
 import type { NoteContent } from "@/note-content";
 
 export interface NotesResponseDTO {
@@ -15,4 +15,15 @@ export interface NoteResponseDTO {
 
 export interface NoteContentResponseDTO {
   document: NoteContent;
+}
+
+export interface CreateDatabaseResponse {
+  database: NoteDTO;
+  views: NoteDTO[];
+  viewMetadata: DatabaseViewMeta[];
+}
+
+export interface CreateDatabaseViewResponse {
+  note: NoteDTO;
+  meta: DatabaseViewMeta;
 }

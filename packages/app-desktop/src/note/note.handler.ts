@@ -1,8 +1,10 @@
 import { extname } from "node:path";
 import {
-  type CreateNoteDTO,
-  type CreateNoteDTOInput,
-  CreateNoteDTOSchema,
+  type CreateDatabaseArgs,
+  type CreateDatabaseViewArgs,
+  type CreateDocumentArgs,
+  type CreateDocumentRequest,
+  DatabaseViewMeta,
   dwErrAsync,
   FileFormatMap,
   type INoteAPI,
@@ -17,6 +19,9 @@ import {
   type UpdateNoteDTO,
   UpdateNoteDTOSchema,
   validateSchema,
+  ZCreateDatabaseRequest,
+  ZCreateDatabaseViewRequest,
+  ZCreateDocumentRequest,
 } from "@darkwrite/common";
 import { ok, ResultAsync } from "neverthrow";
 import {
@@ -54,10 +59,31 @@ export function NoteAPI(
   noteQueryService: INoteQueryService,
   documentService: IDocumentService,
 ): HandlerImplements<INoteAPI> {
-  const create = handler((dto: CreateNoteDTOInput) =>
-    validateSchema(CreateNoteDTOSchema)(dto)
+  const create = handler((dto: CreateDocumentArgs) =>
+    validateSchema(ZCreateDocumentRequest)(dto)
       .asyncAndThen(noteService.create)
       .map(singleResponse),
+  );
+
+  const createDatabase = handler((dto: CreateDatabaseArgs) =>
+    validateSchema(ZCreateDatabaseRequest)(dto)
+      .asyncAndThen(noteService.createDatabase)
+      .map((result) => ({
+        database: noteToDto(result.database),
+        views: [noteToDto(result.view)],
+        viewMetadata: [result.viewMeta],
+      })),
+  );
+
+  const createDatabaseView = handler((dto: CreateDatabaseViewArgs) =>
+    validateSchema(ZCreateDatabaseViewRequest)(dto).asyncAndThen((result) =>
+      noteService
+        .createDatabaseView(result.databaseId, result.type)
+        .map((result) => ({
+          note: noteToDto(result.note),
+          meta: result.view,
+        })),
+    ),
   );
 
   const deleteNote = handler((id: string) => noteService.deleteById(id));
@@ -210,5 +236,7 @@ export function NoteAPI(
     exportPdf: saveToPDF,
     import: importFiles,
     unfavorite,
+    createDatabase,
+    createDatabaseView,
   };
 }

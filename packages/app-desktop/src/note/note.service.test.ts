@@ -143,7 +143,6 @@ describe("note service tests", () => {
           title: "With content",
           workspaceId: workspace.id,
           parentId: null,
-          type: NoteType.Doc,
         })
       )._unsafeUnwrap();
 

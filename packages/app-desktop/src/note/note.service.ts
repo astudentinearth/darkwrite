@@ -1,5 +1,6 @@
 import {
-  type CreateNoteDTO,
+  type CreateDatabaseRequest,
+  type CreateDocumentRequest,
   DatabaseViewType,
   type DwError,
   dwErr,
@@ -18,7 +19,10 @@ import { WorkspaceDAO } from "@/workspace/workspace.dao";
 import { DatabaseViewDAO } from "./database-view.dao";
 import { NoteDAO, type OrderKeyDto } from "./note.dao";
 
-function buildNewNote(dto: CreateNoteDTO, { end }: OrderKeyDto): NewNote {
+function buildNewNote(
+  dto: CreateDocumentRequest,
+  { end }: OrderKeyDto,
+): NewNote {
   const { title, workspaceId, icon, parentId } = dto;
   return {
     title,
@@ -143,7 +147,7 @@ export function NoteService(
         );
   }
 
-  function setDatabaseViewMetadata(
+  function createDatabaseView(
     databaseId: string,
     type: DatabaseViewType = DatabaseViewType.Table,
   ) {
@@ -164,7 +168,9 @@ export function NoteService(
             }),
           )
           .andThen((note) =>
-            databaseViewDAO.createView({ id: note.id, type }).map(() => note),
+            databaseViewDAO
+              .createView({ id: note.id, type })
+              .map((view) => ({ note, view })),
           ),
       db,
     );
@@ -177,13 +183,13 @@ export function NoteService(
     }
     if (note.type === NoteType.DatabaseView) {
       /* Database views hold additional metadata */
-      return setDatabaseViewMetadata(note.id).map(() => note);
+      return createDatabaseView(note.id).map(() => note);
     }
     /* For database type notes, we don't need to create a JSON document. */
     return okAsync(note);
   }
 
-  function create(dto: CreateNoteDTO) {
+  function createDocument(dto: CreateDocumentRequest) {
     return transactional(
       () =>
         workspaceDAO
@@ -192,6 +198,35 @@ export function NoteService(
           .map((keys) => buildNewNote(dto, keys))
           .andThen(noteDAO.create)
           .andThen(postCreate),
+      db,
+    );
+  }
+
+  function createDatabase(dto: CreateDatabaseRequest) {
+    return transactional(
+      () =>
+        workspaceDAO
+          .findById(dto.workspaceId)
+          .andThen((w) => noteDAO.computeOrderKeysForLayer(w.id, dto.parentId))
+          .andThen((keys) =>
+            noteDAO.create({
+              workspaceId: dto.workspaceId,
+              parentId: dto.parentId,
+              orderHint: keys.end,
+              favoriteOrderHint: "",
+              createdAt: new Date(),
+              modifiedAt: new Date(),
+              title: "New database",
+              type: NoteType.Database,
+            }),
+          )
+          .andThen((database) =>
+            createDatabaseView(database.id).map((result) => ({
+              view: result.note,
+              viewMeta: result.view,
+              database,
+            })),
+          ),
       db,
     );
   }
@@ -363,7 +398,7 @@ export function NoteService(
     );
 
   return {
-    create,
+    create: createDocument,
     update,
     move,
     favorite,
@@ -374,6 +409,8 @@ export function NoteService(
     setModificationDate,
     restoreFromTrash,
     emptyTrash,
+    createDatabase,
+    createDatabaseView,
   };
 }
 
