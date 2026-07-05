@@ -29,5 +29,17 @@ export function NotePropertyDAO(tx: TxResolver) {
         .where(eq(propertyDefinition.id, id)),
     );
 
-  return { getDatabaseSchema, addDatabaseColumn, updateDatabaseColumn };
+  const dropDatabaseColumn = (columnId: string) =>
+    dbResult(() =>
+      tx()
+        .delete(propertyDefinition)
+        .where(eq(propertyDefinition.id, columnId)),
+    );
+
+  return {
+    getDatabaseSchema,
+    addDatabaseColumn,
+    updateDatabaseColumn,
+    dropDatabaseColumn,
+  };
 }

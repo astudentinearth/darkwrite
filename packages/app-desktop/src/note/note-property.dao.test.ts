@@ -371,4 +371,125 @@ describe("NotePropertyDAO", () => {
       expect(result.isOk()).toBe(true);
     });
   });
+
+  describe("dropDatabaseColumn", () => {
+    it("should remove the column from the schema", async () => {
+      const column: NewPropertyDefRow = {
+        name: "To Be Deleted",
+        type: PropertyType.Text,
+        databaseId: databaseNoteId,
+      };
+      const inserted = (
+        await propDao.addDatabaseColumn(column)
+      )._unsafeUnwrap()[0];
+
+      await propDao.dropDatabaseColumn(inserted.id);
+
+      const schema = (
+        await propDao.getDatabaseSchema(databaseNoteId)
+      )._unsafeUnwrap();
+
+      expect(schema[inserted.id]).toBeUndefined();
+    });
+
+    it("should return Ok", async () => {
+      const column: NewPropertyDefRow = {
+        name: "Droppable",
+        type: PropertyType.Checkbox,
+        databaseId: databaseNoteId,
+      };
+      const inserted = (
+        await propDao.addDatabaseColumn(column)
+      )._unsafeUnwrap()[0];
+
+      const result = await propDao.dropDatabaseColumn(inserted.id);
+
+      expect(result.isOk()).toBe(true);
+    });
+
+    it("should not affect other columns in the same database", async () => {
+      const columnA: NewPropertyDefRow = {
+        name: "Keep Me",
+        type: PropertyType.Text,
+        databaseId: databaseNoteId,
+      };
+      const columnB: NewPropertyDefRow = {
+        name: "Delete Me",
+        type: PropertyType.Select,
+        databaseId: databaseNoteId,
+      };
+
+      const propA = (
+        await propDao.addDatabaseColumn(columnA)
+      )._unsafeUnwrap()[0];
+      const propB = (
+        await propDao.addDatabaseColumn(columnB)
+      )._unsafeUnwrap()[0];
+
+      await propDao.dropDatabaseColumn(propB.id);
+
+      const schema = (
+        await propDao.getDatabaseSchema(databaseNoteId)
+      )._unsafeUnwrap();
+
+      expect(schema[propA.id]).toBeDefined();
+      expect(schema[propA.id].name).toBe(columnA.name);
+      expect(schema[propB.id]).toBeUndefined();
+    });
+
+    it("should not affect columns belonging to a different database", async () => {
+      const otherDatabaseNoteId = await createDatabaseNote();
+
+      const columnInOther: NewPropertyDefRow = {
+        name: "Other DB Column",
+        type: PropertyType.Date,
+        databaseId: otherDatabaseNoteId,
+      };
+      const columnInTarget: NewPropertyDefRow = {
+        name: "Target DB Column",
+        type: PropertyType.Text,
+        databaseId: databaseNoteId,
+      };
+
+      const otherProp = (
+        await propDao.addDatabaseColumn(columnInOther)
+      )._unsafeUnwrap()[0];
+      const targetProp = (
+        await propDao.addDatabaseColumn(columnInTarget)
+      )._unsafeUnwrap()[0];
+
+      await propDao.dropDatabaseColumn(targetProp.id);
+
+      const otherSchema = (
+        await propDao.getDatabaseSchema(otherDatabaseNoteId)
+      )._unsafeUnwrap();
+
+      expect(otherSchema[otherProp.id]).toBeDefined();
+    });
+
+    it("should be a no-op when given a non-existent column id", async () => {
+      const result = await propDao.dropDatabaseColumn(randomUUID());
+
+      expect(result.isOk()).toBe(true);
+    });
+
+    it("should remove all data when the only column is dropped", async () => {
+      const column: NewPropertyDefRow = {
+        name: "Only Column",
+        type: PropertyType.MultiSelect,
+        databaseId: databaseNoteId,
+      };
+      const inserted = (
+        await propDao.addDatabaseColumn(column)
+      )._unsafeUnwrap()[0];
+
+      await propDao.dropDatabaseColumn(inserted.id);
+
+      const schema = (
+        await propDao.getDatabaseSchema(databaseNoteId)
+      )._unsafeUnwrap();
+
+      expect(Object.keys(schema)).toHaveLength(0);
+    });
+  });
 });
