@@ -1,6 +1,7 @@
 // this file is a stub to provide a clear
 // interface for imperative actions.
 
+import type { CreateDatabaseArgs } from "@darkwrite/common";
 import { t } from "i18next";
 import { useMemo } from "react";
 import { navigateToNote } from "@/features/navigation/navigator";
@@ -15,6 +16,10 @@ import { trashApi } from "./trash-api";
 export const getNoteActions = (dispatch: AppDispatch) => ({
   async createNote(args: CreateNoteArgs) {
     dispatch(createNoteApi.endpoints.createNote.initiate(args));
+  },
+
+  createDatabase(args: CreateDatabaseArgs) {
+    dispatch(createNoteApi.endpoints.createDatabase.initiate(args));
   },
 
   async favorite(args: FavoriteNoteArgs) {

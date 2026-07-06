@@ -5,6 +5,7 @@ import {
   FileText,
   Forward,
   GalleryVertical,
+  Grid2x2Plus,
   Trash,
 } from "lucide-react";
 import { type ReactNode, useState } from "react";
@@ -56,6 +57,10 @@ export function NoteContextMenuContainer({
         <ContextMenuItem onSelect={actions.newSubpage}>
           <FilePlus2 className="opacity-75" size={20}></FilePlus2>
           {t("newSubpage")}
+        </ContextMenuItem>
+        <ContextMenuItem onSelect={actions.newDatabase}>
+          <Grid2x2Plus className="opacity-75" size={20} />
+          <span>New database</span>
         </ContextMenuItem>
         <ContextMenuItem onSelect={actions.move}>
           <Forward className="opacity-75" size={20}></Forward>

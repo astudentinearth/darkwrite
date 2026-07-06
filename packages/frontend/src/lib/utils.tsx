@@ -1,6 +1,12 @@
+import { NoteType } from "@darkwrite/common";
 import { type ClassValue, clsx } from "clsx";
 import { hex } from "color-convert";
-import { FileText } from "lucide-react";
+import {
+  FileText,
+  type LucideIcon,
+  Table2,
+  TableProperties,
+} from "lucide-react";
 import { nanoid } from "nanoid";
 import { twMerge } from "tailwind-merge";
 
@@ -14,8 +20,29 @@ export function fromUnicode(unicode: string) {
   return String.fromCodePoint(...points.filter((p) => !Number.isNaN(p)));
 }
 
+export const noteTypeToIcon: Record<NoteType, LucideIcon> = {
+  [NoteType.Doc]: FileText,
+  [NoteType.Database]: TableProperties,
+  [NoteType.DatabaseView]: Table2,
+};
+
+/** @deprecated use `getNoteIcon2` instead. */
 export function getNoteIcon(icon?: string | null, className?: string) {
-  if (!icon) return <FileText size={18} className={className} />;
+  if (!icon) {
+    return <FileText size={18} className={className} />;
+  }
+  return fromUnicode(icon);
+}
+
+export function getNoteIcon2(
+  icon: string | null,
+  type: NoteType,
+  className?: string,
+) {
+  if (!icon) {
+    const Icon = noteTypeToIcon[type];
+    return <Icon size={18} className={className} />;
+  }
   return fromUnicode(icon);
 }
 

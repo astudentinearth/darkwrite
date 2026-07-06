@@ -1,4 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
+import { databaseViewSlice } from "../database/store/database-view-slice";
 import { fileLinkApi } from "../editor/file-link/file-link-api";
 import { editorApi } from "../editor/store/editor-api";
 import editorMiddleware from "../editor/store/editor-middleware";
@@ -36,6 +37,7 @@ export function createAppStore() {
       [clientInfoApi.reducerPath]: clientInfoApi.reducer,
       [notesUiSlice.name]: notesUiSlice.reducer,
       [fileLinkApi.reducerPath]: fileLinkApi.reducer,
+      [databaseViewSlice.name]: databaseViewSlice.reducer,
     },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware()
