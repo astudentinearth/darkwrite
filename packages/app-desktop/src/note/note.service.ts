@@ -167,6 +167,7 @@ export function NoteService(
               parentId: database.id,
             }),
           )
+          .andThen(setDefaultDocument)
           .andThen((note) =>
             databaseViewDAO
               .createView({ id: note.id, type })
@@ -176,17 +177,8 @@ export function NoteService(
     );
   }
 
-  /** Handles side effects of note creation, such as inserting additional metadata entities. */
-  function postCreate(note: Note) {
-    if (note.type === NoteType.Doc) {
-      return documentService.setNoteContent(note.id, "{}").map(() => note);
-    }
-    if (note.type === NoteType.DatabaseView) {
-      /* Database views hold additional metadata */
-      return createDatabaseView(note.id).map(() => note);
-    }
-    /* For database type notes, we don't need to create a JSON document. */
-    return okAsync(note);
+  function setDefaultDocument(note: Note) {
+    return documentService.setNoteContent(note.id, "{}").map(() => note);
   }
 
   function createDocument(dto: CreateDocumentRequest) {
@@ -197,7 +189,7 @@ export function NoteService(
           .andThen((w) => noteDAO.computeOrderKeysForLayer(w.id, dto.parentId))
           .map((keys) => buildNewNote(dto, keys))
           .andThen(noteDAO.create)
-          .andThen(postCreate),
+          .andThen(setDefaultDocument),
       db,
     );
   }
@@ -209,16 +201,18 @@ export function NoteService(
           .findById(dto.workspaceId)
           .andThen((w) => noteDAO.computeOrderKeysForLayer(w.id, dto.parentId))
           .andThen((keys) =>
-            noteDAO.create({
-              workspaceId: dto.workspaceId,
-              parentId: dto.parentId,
-              orderHint: keys.end,
-              favoriteOrderHint: "",
-              createdAt: new Date(),
-              modifiedAt: new Date(),
-              title: "New database",
-              type: NoteType.Database,
-            }),
+            noteDAO
+              .create({
+                workspaceId: dto.workspaceId,
+                parentId: dto.parentId,
+                orderHint: keys.end,
+                favoriteOrderHint: "",
+                createdAt: new Date(),
+                modifiedAt: new Date(),
+                title: "New database",
+                type: NoteType.Database,
+              })
+              .andThen(setDefaultDocument),
           )
           .andThen((database) =>
             createDatabaseView(database.id).map((result) => ({

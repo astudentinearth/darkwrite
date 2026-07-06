@@ -143,6 +143,7 @@ export function NoteAPI(
     noteService.duplicate(id).map(singleResponse),
   );
   const getDocument = handler((id: string) =>
+    //FIXME: add self healing here!
     documentService.getNoteContent(id).map((document) => ({ document })),
   );
   const setDocument = handler((id: string, jsonStr: string) =>
