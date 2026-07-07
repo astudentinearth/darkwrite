@@ -27,3 +27,8 @@ export interface CreateDatabaseViewResponse {
   note: NoteDTO;
   meta: DatabaseViewMeta;
 }
+
+export interface GetDatabaseViewResponse {
+  note: NoteDTO;
+  meta: DatabaseViewMeta;
+}

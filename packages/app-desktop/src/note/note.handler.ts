@@ -213,6 +213,12 @@ export function NoteAPI(
       .orElse(whenDialogCancelled({ content: [], type: "html" as const })),
   );
 
+  const getDatabaseView = handler((id: string) =>
+    noteQueryService
+      .getDatabaseView(id)
+      .map((result) => ({ note: noteToDto(result.note), meta: result.view })),
+  );
+
   return {
     create,
     delete: deleteNote,
@@ -239,5 +245,6 @@ export function NoteAPI(
     unfavorite,
     createDatabase,
     createDatabaseView,
+    getDatabaseView,
   };
 }

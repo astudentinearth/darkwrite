@@ -58,5 +58,6 @@ export const useNoteContextMenu = (noteId: string) => {
     move,
     openInCenter,
     newDatabase,
+    type: note.type,
   };
 };

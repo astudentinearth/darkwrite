@@ -73,13 +73,15 @@ export function NoteItem({
               }}
               className="flex items-center gap-1 rounded-[6px] justify-center size-5 hover:bg-muted/50"
             >
-              <ChevronRight
-                className={cn(
-                  "size-4 transition-transform duration-100 hidden group-hover:block",
-                  open && "rotate-90",
-                )}
-              />
-              <span className="flex group-hover:hidden">
+              {expandable && (
+                <ChevronRight
+                  className={cn(
+                    "size-4 transition-transform duration-100 hidden group-hover:block",
+                    open && "rotate-90",
+                  )}
+                />
+              )}
+              <span className={cn("flex", expandable && "group-hover:hidden")}>
                 {getNoteIcon2(note.icon, note.type, "size-4")}
               </span>
             </button>

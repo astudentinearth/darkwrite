@@ -1,3 +1,4 @@
+import { NoteType } from "@darkwrite/common";
 import {
   Copy,
   FileCode,
@@ -35,7 +36,7 @@ export function NoteContextMenuContainer({
     keyPrefix: "sidebar.notes.contextmenu",
   });
   const { t: _t } = useTranslation();
-  const actions = useNoteContextMenu(noteId);
+  const context = useNoteContextMenu(noteId);
   const [open, setOpen] = useState(false);
 
   const openChanged = (val: boolean) => {
@@ -50,43 +51,48 @@ export function NoteContextMenuContainer({
       </ContextMenuTrigger>
       <ContextMenuContent className="min-w-64">
         <ToggleFavoriteContextMenuItem noteId={noteId} />{" "}
-        <ContextMenuItem onSelect={actions.openInCenter}>
+        <ContextMenuItem onSelect={context.openInCenter}>
           <GalleryVertical className="opacity-75" size={20}></GalleryVertical>
           {t("openInCenter")}
         </ContextMenuItem>
-        <ContextMenuItem onSelect={actions.newSubpage}>
-          <FilePlus2 className="opacity-75" size={20}></FilePlus2>
-          {t("newSubpage")}
-        </ContextMenuItem>
-        <ContextMenuItem onSelect={actions.newDatabase}>
-          <Grid2x2Plus className="opacity-75" size={20} />
-          <span>New database</span>
-        </ContextMenuItem>
-        <ContextMenuItem onSelect={actions.move}>
-          <Forward className="opacity-75" size={20}></Forward>
-          {t("moveTo")}
-        </ContextMenuItem>
-        <ContextMenuItem onSelect={actions.duplicate}>
-          <Copy className="opacity-75" size={20}></Copy>
-          {t("duplicate")}
-        </ContextMenuItem>
-        <ContextMenuSeparator />
-        <span className="text-sm mx-2 my-2 flex">{t("export")}</span>
-        <ContextMenuItem onSelect={actions.exportHTML}>
-          <FileCode size={18} />
-          {_t("editor.menu.htmlExport")}
-        </ContextMenuItem>
-        <ContextMenuItem onSelect={actions.exportJSON}>
-          <FileText size={18} />
-          {_t("editor.menu.jsonExport")}
-        </ContextMenuItem>
-        <ContextMenuItem onSelect={actions.exportPDF}>
-          <FileText size={18} />
-          PDF
-        </ContextMenuItem>
+        {context.type !== NoteType.DatabaseView && (
+          <>
+            {" "}
+            <ContextMenuItem onSelect={context.newSubpage}>
+              <FilePlus2 className="opacity-75" size={20}></FilePlus2>
+              {t("newSubpage")}
+            </ContextMenuItem>
+            <ContextMenuItem onSelect={context.newDatabase}>
+              <Grid2x2Plus className="opacity-75" size={20} />
+              <span>New database</span>
+            </ContextMenuItem>
+            <ContextMenuItem onSelect={context.move}>
+              <Forward className="opacity-75" size={20}></Forward>
+              {t("moveTo")}
+            </ContextMenuItem>
+            <ContextMenuItem onSelect={context.duplicate}>
+              <Copy className="opacity-75" size={20}></Copy>
+              {t("duplicate")}
+            </ContextMenuItem>
+            <ContextMenuSeparator />
+            <span className="text-sm mx-2 my-2 flex">{t("export")}</span>
+            <ContextMenuItem onSelect={context.exportHTML}>
+              <FileCode size={18} />
+              {_t("editor.menu.htmlExport")}
+            </ContextMenuItem>
+            <ContextMenuItem onSelect={context.exportJSON}>
+              <FileText size={18} />
+              {_t("editor.menu.jsonExport")}
+            </ContextMenuItem>
+            <ContextMenuItem onSelect={context.exportPDF}>
+              <FileText size={18} />
+              PDF
+            </ContextMenuItem>
+          </>
+        )}
         <ContextMenuSeparator />
         <ContextMenuItem
-          onSelect={actions.trash}
+          onSelect={context.trash}
           variant="destructive"
           className="group focus:text-destructive"
         >

@@ -12,6 +12,7 @@ import type {
   CreateDatabaseViewArgs,
   CreateDatabaseViewResponse,
   CreateDocumentArgs,
+  GetDatabaseViewResponse,
   MoveNoteDTO,
   NoteContentResponseDTO,
   NoteResponseDTO,
@@ -59,6 +60,8 @@ export interface INoteAPI {
    * @returns
    */
   delete: (id: string) => ApiResult<void>;
+
+  getDatabaseView: (id: string) => ApiResult<GetDatabaseViewResponse>;
 
   /**
    * @deprecated This API is way too broad and should be avoided in favor of more specific queries. This can be removed in future releases.
