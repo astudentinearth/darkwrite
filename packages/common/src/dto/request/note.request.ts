@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { DatabaseViewType, NoteType } from "@/note";
+import { DatabaseViewType } from "@/note";
 
 export const ZCreateDocumentRequest = z.object({
   title: z.string(),

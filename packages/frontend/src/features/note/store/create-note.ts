@@ -53,7 +53,7 @@ export const createNoteApi = notesApi.injectEndpoints({
       CreateDatabaseArgs
     >({
       queryFn: resultQueryFn((args) =>
-        DarkwriteAPIClient.note.createDatabase(args),
+        DarkwriteAPIClient.database.createDatabase(args),
       ),
       async onQueryStarted(_args, { dispatch, queryFulfilled }) {
         try {

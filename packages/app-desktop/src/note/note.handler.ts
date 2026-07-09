@@ -64,28 +64,6 @@ export function NoteAPI(
       .asyncAndThen(noteService.create)
       .map(singleResponse),
   );
-
-  const createDatabase = handler((dto: CreateDatabaseArgs) =>
-    validateSchema(ZCreateDatabaseRequest)(dto)
-      .asyncAndThen(noteService.createDatabase)
-      .map((result) => ({
-        database: noteToDto(result.database),
-        views: [noteToDto(result.view)],
-        viewMetadata: [result.viewMeta],
-      })),
-  );
-
-  const createDatabaseView = handler((dto: CreateDatabaseViewArgs) =>
-    validateSchema(ZCreateDatabaseViewRequest)(dto).asyncAndThen((result) =>
-      noteService
-        .createDatabaseView(result.databaseId, result.type)
-        .map((result) => ({
-          note: noteToDto(result.note),
-          meta: result.view,
-        })),
-    ),
-  );
-
   const deleteNote = handler((id: string) => noteService.deleteById(id));
 
   const getAllByWorkspaceId = handler((workspaceId: string) =>
@@ -213,12 +191,6 @@ export function NoteAPI(
       .orElse(whenDialogCancelled({ content: [], type: "html" as const })),
   );
 
-  const getDatabaseView = handler((id: string) =>
-    noteQueryService
-      .getDatabaseView(id)
-      .map((result) => ({ note: noteToDto(result.note), meta: result.view })),
-  );
-
   return {
     create,
     delete: deleteNote,
@@ -243,8 +215,5 @@ export function NoteAPI(
     exportPdf: saveToPDF,
     import: importFiles,
     unfavorite,
-    createDatabase,
-    createDatabaseView,
-    getDatabaseView,
   };
 }

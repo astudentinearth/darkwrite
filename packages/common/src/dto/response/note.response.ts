@@ -32,3 +32,12 @@ export interface GetDatabaseViewResponse {
   note: NoteDTO;
   meta: DatabaseViewMeta;
 }
+
+export interface GetViewsOfResponse {
+  notes: NoteDTO[];
+  views: DatabaseViewMeta[];
+}
+
+export interface GetNotesInDatabaseResponse {
+  notes: NoteDTO[];
+}

@@ -9,6 +9,7 @@ export interface NoteDTO {
   title: string;
   type: NoteType;
   icon: string | null;
+  /** This defines relationships between notes. Children of a database belong to that database. Child database view type notes of a database are also views of that database. */
   parentId: string | null;
   createdAt: string;
   modifiedAt: string;

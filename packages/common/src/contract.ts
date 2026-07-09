@@ -13,6 +13,8 @@ import type {
   CreateDatabaseViewResponse,
   CreateDocumentArgs,
   GetDatabaseViewResponse,
+  GetNotesInDatabaseResponse,
+  GetViewsOfResponse,
   MoveNoteDTO,
   NoteContentResponseDTO,
   NoteResponseDTO,
@@ -43,12 +45,6 @@ export type NoReturn = ResultAsync<void, never>;
 
 export interface INoteAPI {
   create: (dto: CreateDocumentArgs) => ApiResult<NoteResponseDTO>;
-  createDatabase: (
-    args: CreateDatabaseArgs,
-  ) => ApiResult<CreateDatabaseResponse>;
-  createDatabaseView: (
-    args: CreateDatabaseViewArgs,
-  ) => ApiResult<CreateDatabaseViewResponse>;
   update: (id: string, dto: UpdateNoteDTO) => ApiResult<NoteResponseDTO>;
   move: (dto: MoveNoteDTO) => ApiResult<NoteResponseDTO>;
 
@@ -60,8 +56,6 @@ export interface INoteAPI {
    * @returns
    */
   delete: (id: string) => ApiResult<void>;
-
-  getDatabaseView: (id: string) => ApiResult<GetDatabaseViewResponse>;
 
   /**
    * @deprecated This API is way too broad and should be avoided in favor of more specific queries. This can be removed in future releases.
@@ -137,6 +131,20 @@ export interface INoteAPI {
     pageSize?: PageSize,
   ) => ApiResult<string | undefined>;
   import: () => ApiResult<NoteImportResult>;
+}
+
+export interface IDatabaseAPI {
+  createDatabase: (
+    args: CreateDatabaseArgs,
+  ) => ApiResult<CreateDatabaseResponse>;
+  createDatabaseView: (
+    args: CreateDatabaseViewArgs,
+  ) => ApiResult<CreateDatabaseViewResponse>;
+  getDatabaseView: (id: string) => ApiResult<GetDatabaseViewResponse>;
+  getViewsOf: (databaseId: string) => ApiResult<GetViewsOfResponse>;
+  getNotesInDatabase: (
+    databaseId: string,
+  ) => ApiResult<GetNotesInDatabaseResponse>;
 }
 
 export interface IWorkspaceAPI {
@@ -237,6 +245,7 @@ export interface DesktopEmbedAPI {
 
 export type DarkwriteIPCBridge = {
   note: INoteAPI;
+  database: IDatabaseAPI;
   workspace: IWorkspaceAPI;
   embed: DesktopEmbedAPI;
   settings: ISettingsAPI;

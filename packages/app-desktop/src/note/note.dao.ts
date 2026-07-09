@@ -2,6 +2,7 @@ import {
   type DwResultAsync,
   dwErr,
   isDescendantAsync,
+  NoteType,
   type ParentId,
   Rank,
 } from "@darkwrite/common";
@@ -39,6 +40,8 @@ const isTrashed = () => eq(notesTable.isTrashed, true);
 const isFavorite = () => eq(notesTable.isFavorite, true);
 const inWorkspace = (workspaceId: string) =>
   eq(notesTable.workspaceId, workspaceId);
+
+export const noteTypeOf = (type: NoteType) => eq(notesTable.type, type);
 
 export type OrderKeyDto = { start: string; end: string };
 
@@ -92,13 +95,6 @@ export function NoteDAO(tx: TxResolver) {
     return dbResult(
       async () =>
         await tx().select().from(notesTable).where(inWorkspace(workspaceId)),
-    );
-  }
-
-  /** @deprecated use findAllByParentId instead. */
-  function findAllByDatabaseId(databaseId: string): DwResultAsync<Note[]> {
-    return dbResult(async () =>
-      tx().select().from(notesTable).where(withParent(databaseId)),
     );
   }
 
@@ -348,6 +344,14 @@ export function NoteDAO(tx: TxResolver) {
     ).map((n) => n.at(0));
   }
 
+  const getAllDocumentsInDatabase = (databaseId: string) =>
+    dbResult(() =>
+      tx()
+        .select()
+        .from(notesTable)
+        .where(and(withParent(databaseId), noteTypeOf(NoteType.Doc))),
+    );
+
   return {
     create,
     update,
@@ -355,7 +359,6 @@ export function NoteDAO(tx: TxResolver) {
     findById,
     findAll,
     findAllByWorkspaceId,
-    findAllByDatabaseId,
     findAllByParentId,
     findAllByParentIdSortAsc,
     deleteMany,
@@ -374,6 +377,7 @@ export function NoteDAO(tx: TxResolver) {
     getRecentlyModifiedNotes,
     resolveParentTree,
     noteRightAfter,
+    getAllDocumentsInDatabase,
   };
 }
 

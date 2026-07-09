@@ -154,6 +154,13 @@ When asked to perform a review, do NOT check for any inconsistencies that can be
 - `biome.json` (root) configures linting and formatting (Biome)
 - The `website` package uses Prettier (via `.prettierrc`) for Astro file support
 
+### Naming types and variables
+- The \*DTO suffixation in the common package is old practice. Originally, database entities had the domain object name, and the frontend object had the DTO name. The new practice is to let the shared type have the domain name (eg. Note, Database) and suffix the database objects with `Row` (eg. DatabaseViewRow)
+- Prefer `camelCase` for variables and functions.
+- Use `PascalCase` for types, enums and enum members.
+- Use `SCREAMING_PASCAL_CASE` for constants.
+- Avoid `snake_case` in general.
+
 ## Architecture Notes
 
 ### Frontend (Feature-based)

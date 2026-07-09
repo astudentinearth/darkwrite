@@ -1,9 +1,10 @@
-import { dwErrAsync } from "@darkwrite/common";
-import { eq } from "drizzle-orm";
+import { dwErrAsync, NoteType } from "@darkwrite/common";
+import { and, eq } from "drizzle-orm";
 import { okAsync } from "neverthrow";
 import { dbResult } from "@/db/db-result";
-import { databaseView, type NewDatabaseViewRow } from "@/db/schema";
+import { databaseView, type NewDatabaseViewRow, note } from "@/db/schema";
 import type { TxResolver } from "@/db/transactional";
+import { noteTypeOf } from "./note.dao";
 
 export function DatabaseViewDAO(tx: TxResolver) {
   const getView = (id: string) =>
@@ -18,5 +19,16 @@ export function DatabaseViewDAO(tx: TxResolver) {
       (arr) => arr[0],
     );
 
-  return { getView, createView };
+  const getAllViewsOf = (databaseId: string) =>
+    dbResult(() =>
+      tx()
+        .select()
+        .from(note)
+        .where(
+          and(eq(note.parentId, databaseId), noteTypeOf(NoteType.DatabaseView)),
+        )
+        .innerJoin(databaseView, eq(note.id, databaseView.id)),
+    );
+
+  return { getView, createView, getAllViewsOf };
 }
