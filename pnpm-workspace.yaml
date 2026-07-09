@@ -14,7 +14,7 @@ catalog:
   tailwindcss: ^4.2
   tsx: ^4.21.0
   turbo: ^2.9.10
-  typescript: ^5.9.3
+  typescript: ^7
   vite: ^8.1
   vitest: ^4.1.7
 

@@ -34,6 +34,7 @@ export default function useEditorBuilder() {
       CodeBlockExtension(() => codeBlockIndentSize),
       slashCommandExtension.configure({
         suggestion: {
+          //@ts-expect-error will fix
           items: () => commandItems,
         },
       }),
