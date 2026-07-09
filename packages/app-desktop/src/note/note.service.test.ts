@@ -1,4 +1,4 @@
-import { NoteType, type ParentId, Rank } from "@darkwrite/common";
+import { type ParentId, Rank } from "@darkwrite/common";
 import { ResultAsync } from "neverthrow";
 import { beforeAll, beforeEach, describe, expect, it } from "vitest";
 import {

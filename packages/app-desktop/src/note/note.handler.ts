@@ -1,10 +1,6 @@
 import { extname } from "node:path";
 import {
-  type CreateDatabaseArgs,
-  type CreateDatabaseViewArgs,
   type CreateDocumentArgs,
-  type CreateDocumentRequest,
-  DatabaseViewMeta,
   dwErrAsync,
   FileFormatMap,
   type INoteAPI,
@@ -19,8 +15,6 @@ import {
   type UpdateNoteDTO,
   UpdateNoteDTOSchema,
   validateSchema,
-  ZCreateDatabaseRequest,
-  ZCreateDatabaseViewRequest,
   ZCreateDocumentRequest,
 } from "@darkwrite/common";
 import { ok, ResultAsync } from "neverthrow";
