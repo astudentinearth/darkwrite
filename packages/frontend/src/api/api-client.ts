@@ -16,11 +16,6 @@ import {
 import _ from "lodash";
 import { EmbedAdapter } from "./local/embed-local-adapter";
 
-export enum APIClientMode {
-  LOCAL = "local",
-  CLOUD = "cloud",
-}
-
 function resultHydrationMiddleware(api: typeof window.api) {
   const clone = _.cloneDeepWith(api, (value) => {
     if (_.isFunction(value))
@@ -46,6 +41,7 @@ export class DarkwriteAPIClient {
 
   private static initializeLocalAPIs() {
     const api = resultHydrationMiddleware(window.api);
+    console.log(api);
     DarkwriteAPIClient.note = api.note;
     DarkwriteAPIClient.workspace = api.workspace;
     DarkwriteAPIClient.settings = api.settings;
@@ -59,14 +55,7 @@ export class DarkwriteAPIClient {
     DarkwriteAPIClient.database = api.database;
   }
 
-  private static initializeCloudAPIs() {
-    //TODO: cloud support not implemented yet
+  static initialize() {
     DarkwriteAPIClient.initializeLocalAPIs();
-  }
-
-  static initialize(mode: APIClientMode) {
-    if (mode === APIClientMode.LOCAL) DarkwriteAPIClient.initializeLocalAPIs();
-    else if (mode === APIClientMode.CLOUD)
-      DarkwriteAPIClient.initializeCloudAPIs();
   }
 }

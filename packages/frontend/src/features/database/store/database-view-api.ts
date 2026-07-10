@@ -29,7 +29,9 @@ export const databaseViewApi = createApi({
   tagTypes: [DATABASE_VIEW_TAG_TYPE],
   endpoints: (builder) => ({
     getDatabaseView: builder.query<GetDatabaseViewResponse, string>({
-      queryFn: resultQueryFn(DarkwriteAPIClient.database.getDatabaseView),
+      queryFn: resultQueryFn((arg) =>
+        DarkwriteAPIClient.database.getDatabaseView(arg),
+      ),
       async onQueryStarted(_args, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;

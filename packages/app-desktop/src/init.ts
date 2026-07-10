@@ -153,6 +153,7 @@ export async function init() {
     onboarding: onboardingService.ipcHandlers,
   };
 
+  log.debug("Settings up API bridge...");
   setupAPI(apiBridge);
 
   await workspaceService

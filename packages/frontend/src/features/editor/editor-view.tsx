@@ -18,6 +18,7 @@ import {
   selectEditorContent,
   selectEditorCustomizations,
 } from "./store/editor-selectors";
+import { DatabaseEditor } from "../database/components/database-editor";
 
 export function EditorViewRouteHandler() {
   const noteId = useNoteFromURL();
@@ -76,7 +77,7 @@ export function EditorViewport({
           onNavigateToNote={onNavigate ?? navigateToNote}
         />
       ) : (
-        "Editing a database"
+        <DatabaseEditor id={noteId} />
       )}
     </ConstrainedWidth>
   );
