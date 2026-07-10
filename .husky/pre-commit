@@ -1,1 +1,1 @@
-pnpm -r exec lint-staged --allow-empty
+pnpm -r exec lint-staged --allow-empty --concurrent false

@@ -1,5 +1,5 @@
 import { dwErrAsync, NoteType } from "@darkwrite/common";
-import { and, eq } from "drizzle-orm";
+import { and, eq, inArray } from "drizzle-orm";
 import { okAsync } from "neverthrow";
 import { dbResult } from "@/db/db-result";
 import { databaseView, type NewDatabaseViewRow, note } from "@/db/schema";
@@ -30,5 +30,14 @@ export function DatabaseViewDAO(tx: TxResolver) {
         .innerJoin(databaseView, eq(note.id, databaseView.id)),
     );
 
-  return { getView, createView, getAllViewsOf };
+  const getViewsByIds = (ids: string[]) =>
+    dbResult(() =>
+      tx()
+        .select()
+        .from(note)
+        .where(and(inArray(note.id, ids), noteTypeOf(NoteType.DatabaseView)))
+        .innerJoin(databaseView, eq(note.id, databaseView.id)),
+    );
+
+  return { getView, createView, getAllViewsOf, getViewsByIds };
 }

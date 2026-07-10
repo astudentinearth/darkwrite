@@ -60,11 +60,19 @@ export function DatabaseAPI({
       .map((notes) => ({ notes: notes.map(noteToDto) })),
   );
 
+  const getViewsById = handler((ids: string[]) =>
+    noteQueryService.getViewsByIds(ids).map((result) => ({
+      notes: result.map((i) => noteToDto(i.note)),
+      views: result.map((i) => i.database_view),
+    })),
+  );
+
   return {
     createDatabase,
     createDatabaseView,
     getDatabaseView,
     getViewsOf,
     getNotesInDatabase,
+    getViewsById,
   };
 }

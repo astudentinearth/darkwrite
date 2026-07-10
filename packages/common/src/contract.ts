@@ -14,6 +14,7 @@ import type {
   CreateDocumentArgs,
   GetDatabaseViewResponse,
   GetNotesInDatabaseResponse,
+  GetViewsByIdResponse,
   GetViewsOfResponse,
   MoveNoteDTO,
   NoteContentResponseDTO,
@@ -145,6 +146,7 @@ export interface IDatabaseAPI {
   getNotesInDatabase: (
     databaseId: string,
   ) => ApiResult<GetNotesInDatabaseResponse>;
+  getViewsById: (ids: string[]) => ApiResult<GetViewsByIdResponse>;
 }
 
 export interface IWorkspaceAPI {

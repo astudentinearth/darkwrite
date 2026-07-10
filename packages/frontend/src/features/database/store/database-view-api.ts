@@ -1,5 +1,6 @@
 import type {
   GetDatabaseViewResponse,
+  GetViewsByIdResponse,
   GetViewsOfResponse,
 } from "@darkwrite/common";
 import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
@@ -16,6 +17,10 @@ export function databaseViewTag(id: string) {
 
 export function viewsOfDatabaseTag(databaseId: string) {
   return `VIEWS_OF_DATABASE_${databaseId}`;
+}
+
+export function viewsByIdTag(ids: string[]) {
+  return `VIEWS_BY_ID_${[...ids].sort().join(",")}`;
 }
 
 export const databaseViewApi = createApi({
@@ -41,9 +46,8 @@ export const databaseViewApi = createApi({
     }),
 
     getViewsOf: builder.query<GetViewsOfResponse, string>({
-      queryFn: resultQueryFn(
-        (databaseId: string) =>
-          DarkwriteAPIClient.database.getViewsOf(databaseId),
+      queryFn: resultQueryFn((databaseId: string) =>
+        DarkwriteAPIClient.database.getViewsOf(databaseId),
       ),
       async onQueryStarted(_args, { dispatch, queryFulfilled }) {
         try {
@@ -64,7 +68,35 @@ export const databaseViewApi = createApi({
             ]
           : [],
     }),
+
+    getViewsById: builder.query<GetViewsByIdResponse, string[]>({
+      queryFn: resultQueryFn((ids: string[]) =>
+        DarkwriteAPIClient.database.getViewsById(ids),
+      ),
+      async onQueryStarted(_args, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          dispatch(upsertNotes(data.notes));
+          dispatch(upsertViews(data.views));
+        } catch {
+          /* empty */
+        }
+      },
+      providesTags: (_result, _error, ids) =>
+        _result
+          ? [
+              {
+                type: DATABASE_VIEW_TAG_TYPE,
+                id: viewsByIdTag(ids),
+              },
+            ]
+          : [],
+    }),
   }),
 });
 
-export const { useGetDatabaseViewQuery, useGetViewsOfQuery } = databaseViewApi;
+export const {
+  useGetDatabaseViewQuery,
+  useGetViewsOfQuery,
+  useGetViewsByIdQuery,
+} = databaseViewApi;

@@ -29,6 +29,7 @@ export function NoteQueryService(db: DatabaseType) {
     getDatabaseView,
     getAllDocumentsInDatabase: noteDAO.getAllDocumentsInDatabase,
     getAllViewsOf: databaseViewDAO.getAllViewsOf,
+    getViewsByIds: databaseViewDAO.getViewsByIds,
   };
 }
 

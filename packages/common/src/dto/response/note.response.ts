@@ -41,3 +41,8 @@ export interface GetViewsOfResponse {
 export interface GetNotesInDatabaseResponse {
   notes: NoteDTO[];
 }
+
+export interface GetViewsByIdResponse {
+  notes: NoteDTO[];
+  views: DatabaseViewMeta[];
+}
