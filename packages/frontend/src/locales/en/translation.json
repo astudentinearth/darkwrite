@@ -339,8 +339,8 @@
     },
     "showInFolder": "Reval in file manager",
     "history": {
-      "back": "Geri",
-      "forward": "İleri"
+      "back": "Back",
+      "forward": "Forward"
     }
   }
 }

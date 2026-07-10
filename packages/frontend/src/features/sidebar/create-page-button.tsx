@@ -25,7 +25,7 @@ export function CreatePageButton(props: { className?: string }) {
         props.className,
       )}
     >
-      <SquarePen size={18} />
+      <SquarePen size={16} />
       {t("sidebar.button.newPage")}
     </SidebarItem>
   );

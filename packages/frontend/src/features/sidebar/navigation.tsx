@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { navigateHome } from "../navigation/navigator";
 import SettingsDialog from "../settings/settings-dialog";
 import { SidebarItem } from "./sidebar-item";
+import { CreatePageButton } from "./create-page-button";
 
 export function SidebarNavigation() {
   const { t } = useTranslation(undefined, { keyPrefix: "sidebar.button" });
@@ -12,6 +13,7 @@ export function SidebarNavigation() {
   const isHome = route.pathname === "/";
   return (
     <div className="flex flex-col gap-0.5">
+      <CreatePageButton />
       <SidebarItem
         onClick={() => !isHome && navigateHome()}
         className={cn(isHome && "bg-secondary/20")}

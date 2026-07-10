@@ -18,8 +18,7 @@ export default function NoteListRoot() {
   return (
     <Collapsible open={open} onOpenChange={setOpen}>
       <CollapsibleTrigger asChild>
-        <SidebarItem className="w-full gap-1">
-          {t("title.allNotes")}
+        <SidebarItem className="w-full gap-1 text-xs pl-2">
           <ChevronRight
             size={16}
             className={cn(
@@ -27,6 +26,7 @@ export default function NoteListRoot() {
               open && "rotate-90",
             )}
           />
+          {t("title.allNotes")}
         </SidebarItem>
       </CollapsibleTrigger>
       <CollapsibleContent>

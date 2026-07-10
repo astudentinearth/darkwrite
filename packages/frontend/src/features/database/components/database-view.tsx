@@ -16,7 +16,7 @@ function ViewTabTrigger(props: { view: DatabaseViewMeta }) {
   return (
     <TabsTrigger
       value={props.view.id}
-      className="bg-transparent hover:bg-secondary/75! data-[state=active]:bg-secondary/50 flex items-center gap-2"
+      className="bg-transparent hover:bg-secondary/75! data-[state=active]:bg-secondary/50 flex items-center gap-2 px-2 rounded-md"
     >
       <ViewIcon type={props.view.type} size={18} />
       {note.title}
@@ -29,7 +29,7 @@ export function DatabaseViewRenderer(props: DatabaseViewProps) {
 
   return (
     <Tabs className="w-full">
-      <TabsList className="bg-transparent border-b w-full justify-start rounded-none">
+      <TabsList className="bg-transparent px-0 border-b w-full justify-start rounded-none">
         {views.map((view) => (
           <ViewTabTrigger view={view} />
         ))}

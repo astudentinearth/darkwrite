@@ -15,6 +15,7 @@ import {
   useNoteItemDrag,
 } from "../hooks/use-note-item";
 import { NoteContextMenuContainer } from "../note-context-menu";
+import { NoteType } from "@darkwrite/common";
 
 export const NoteListItem = memo(function ({
   id,
@@ -93,20 +94,22 @@ export function NoteItem({
               </span>
             )}
           </span>
-          <TextTooltip text={t("sidebar.notes.contextmenu.newSubpage")}>
-            <button
-              onClick={(e) => {
-                createChild(e);
-                setOpen(true);
-              }}
-              className={cn(
-                "hover:bg-secondary/50 size-5 group-hover:opacity-100 rounded-[6px] group-hover:flex hidden justify-center items-center",
-                isDragging && "hidden",
-              )}
-            >
-              <Plus className="size-4" />
-            </button>
-          </TextTooltip>
+          {note.type !== NoteType.DatabaseView && (
+            <TextTooltip text={t("sidebar.notes.contextmenu.newSubpage")}>
+              <button
+                onClick={(e) => {
+                  createChild(e);
+                  setOpen(true);
+                }}
+                className={cn(
+                  "hover:bg-secondary/50 size-5 group-hover:opacity-100 rounded-[6px] group-hover:flex hidden justify-center items-center",
+                  isDragging && "hidden",
+                )}
+              >
+                <Plus className="size-4" />
+              </button>
+            </TextTooltip>
+          )}
         </div>
       </NoteContextMenuContainer>
       <CollapsibleContent className="pl-1.5">{children}</CollapsibleContent>

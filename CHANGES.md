@@ -1,3 +1,10 @@
+# 1.3.0-beta.1
+## 🌟 Features
+- Introducing **Databases** (finally)
+
+## ✨ Improvements and fixes
+- Fix translation issue in back/forward buttons (the English keys had Turkish content for some reason)
+
 # 1.2.3-beta.1
 ## 🌟 Features
 - Add center view
