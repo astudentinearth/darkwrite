@@ -10,7 +10,6 @@ import { cn } from "@/lib/utils";
 import { TrashWidget } from "../note/components/trash";
 import { showSearch } from "../search/search-state";
 import AppMenu from "./app-menu";
-import { CreatePageButton } from "./create-page-button";
 import FavoritesContainer from "./favorites-container";
 import { SidebarNavigation } from "./navigation";
 import { WorkspaceSwitcher } from "./workspace-switcher";

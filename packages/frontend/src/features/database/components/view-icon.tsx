@@ -1,6 +1,6 @@
 import { DatabaseViewType } from "@darkwrite/common";
-import { Calendar1, Kanban, LucideIcon, Table2 } from "lucide-react";
-import React from "react";
+import { Calendar1, Kanban, type LucideIcon, Table2 } from "lucide-react";
+import type React from "react";
 
 export const viewIcons: Record<DatabaseViewType, LucideIcon> = {
   [DatabaseViewType.Table]: Table2,

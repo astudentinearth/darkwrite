@@ -3,6 +3,7 @@ import { nanoid } from "nanoid";
 import { use, useRef } from "react";
 import { useLocalStore } from "@/context/local-state";
 import { useNoteFromURL } from "@/features/note/hooks/use-note-from-url";
+import { DatabaseEditor } from "../database/components/database-editor";
 import { navigateToNote } from "../navigation/navigator";
 import { useNoteById } from "../note/hooks/use-note-by-id";
 import { useEditorSettings } from "../settings/hooks/use-settings";
@@ -18,7 +19,6 @@ import {
   selectEditorContent,
   selectEditorCustomizations,
 } from "./store/editor-selectors";
-import { DatabaseEditor } from "../database/components/database-editor";
 
 export function EditorViewRouteHandler() {
   const noteId = useNoteFromURL();

@@ -3,7 +3,6 @@ import { shallowEqual } from "react-redux";
 import { useAppSelector } from "@/features/store/hooks";
 import { selectDatabaseViewById } from "../store/database-selectors";
 import { useGetViewsByIdQuery } from "../store/database-view-api";
-import { selectNoteById } from "@/features/note/store/note-selectors";
 
 const EMPTY_ARRAY: never[] = [];
 

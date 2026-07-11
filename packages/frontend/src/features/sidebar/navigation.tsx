@@ -4,8 +4,8 @@ import { useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { navigateHome } from "../navigation/navigator";
 import SettingsDialog from "../settings/settings-dialog";
-import { SidebarItem } from "./sidebar-item";
 import { CreatePageButton } from "./create-page-button";
+import { SidebarItem } from "./sidebar-item";
 
 export function SidebarNavigation() {
   const { t } = useTranslation(undefined, { keyPrefix: "sidebar.button" });

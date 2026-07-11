@@ -1,3 +1,4 @@
+import { NoteType } from "@darkwrite/common";
 import { ChevronRight, Plus } from "lucide-react";
 import { memo, type ReactNode, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -8,14 +9,13 @@ import {
 } from "@/components/ui";
 import { TextTooltip } from "@/components/ui/tooltip";
 import { navigateToNote } from "@/features/navigation/navigator";
-import { cn, getNoteIcon, getNoteIcon2 } from "@/lib/utils";
+import { cn, getNoteIcon2 } from "@/lib/utils";
 import {
   useNoteDropZone,
   useNoteItem,
   useNoteItemDrag,
 } from "../hooks/use-note-item";
 import { NoteContextMenuContainer } from "../note-context-menu";
-import { NoteType } from "@darkwrite/common";
 
 export const NoteListItem = memo(function ({
   id,

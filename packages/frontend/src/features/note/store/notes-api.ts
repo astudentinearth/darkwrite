@@ -195,6 +195,7 @@ export const notesApi = createApi({
       async onQueryStarted(_args, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
+          console.log(data);
           dispatch(upsertNotes(data.notes));
         } catch {
           /* empty */

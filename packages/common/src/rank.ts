@@ -28,7 +28,9 @@ export class Rank {
     return Rank.between(this, _other);
   }
 
-  constructor(private _rank: string) {}
+  constructor(private _rank: string) {
+    this._rank ||= Rank.default().get();
+  }
 
   get() {
     return this._rank;
