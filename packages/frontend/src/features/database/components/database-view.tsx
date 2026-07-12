@@ -1,12 +1,22 @@
-import { DatabaseViewMeta, DatabaseViewType } from "@darkwrite/common";
+import { type DatabaseViewMeta, DatabaseViewType } from "@darkwrite/common";
+import { Plus } from "lucide-react";
 import type React from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui";
+import { type JSX, useState } from "react";
+import { useTranslation } from "react-i18next";
+import {
+  Button,
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/ui";
 import { useNoteById } from "@/features/note/hooks/use-note-by-id";
+import { useNoteActions } from "@/features/note/store/note-actions";
+import { useCurrentWorkspaceId } from "@/features/workspaces/hooks/use-workspace";
 import { useViewsById } from "../hooks/use-views-by-id";
-import { ViewIcon } from "./view-icon";
-import { TableView } from "./table-view";
-import { JSX } from "react";
 import { DatabaseViewContext } from "../store/database-view-context";
+import { TableView } from "./table-view";
+import { ViewIcon } from "./view-icon";
 
 export type DatabaseViewProps = React.ComponentProps<"div"> & {
   views: string[];
@@ -53,14 +63,41 @@ function ViewRenderer(props: { view: DatabaseViewMeta }) {
 
 export function DatabaseViewRenderer(props: DatabaseViewProps) {
   const { views, isLoading } = useViewsById(props.views);
+  const [activeViewId, setActiveViewId] = useState(views.at(0)?.id);
+  const effectiveId = activeViewId ?? views.at(0)?.id;
+  const { note: activeView } = useNoteById(effectiveId);
+  const { createNote } = useNoteActions();
+  const workspaceId = useCurrentWorkspaceId();
+  const { t } = useTranslation();
 
   return (
     !isLoading && (
-      <Tabs className="w-full" defaultValue={views.at(0)?.id}>
-        <TabsList className="bg-transparent px-0 border-b w-full justify-start rounded-none">
-          {views.map((view) => (
-            <ViewTabTrigger key={view.id} view={view} />
-          ))}
+      <Tabs
+        className="w-full"
+        defaultValue={views.at(0)?.id}
+        value={effectiveId}
+        onValueChange={setActiveViewId}
+      >
+        <TabsList className="bg-transparent px-0 border-b w-full justify-start rounded-none grid grid-cols-[1fr_auto] gap-0.5">
+          <div className="w-full overflow-x-auto">
+            {views.map((view) => (
+              <ViewTabTrigger key={view.id} view={view} />
+            ))}
+          </div>
+          {activeView && (
+            <Button
+              onClick={() =>
+                createNote({
+                  workspaceId,
+                  parentId: activeView.parentId,
+                })
+              }
+              className="w-fit h-fit px-1.5 py-1 gap-1"
+            >
+              <Plus size={18} />
+              {t("sidebar.button.newPage")}
+            </Button>
+          )}
         </TabsList>
         {views.map((view) => (
           <TabsContent key={view.id} value={view.id}>

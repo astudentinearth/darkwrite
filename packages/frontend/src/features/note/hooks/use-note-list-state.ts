@@ -1,12 +1,22 @@
+import { NoteType } from "@darkwrite/common";
 import { shallowEqual } from "react-redux";
 import { useAppSelector } from "@/features/store/hooks";
-import { selectNotesByParentId } from "../store/note-selectors";
+import {
+  selectNoteById,
+  selectNotesByParentId,
+  selectViewsOfDatabase,
+} from "../store/note-selectors";
 import { useGetNotesByParentIdQuery } from "../store/notes-api";
 
 const EMPTY_ARRAY: string[] = [];
 
 export function useNoteListState(parentId: string | null) {
-  const workspaceId = useAppSelector((state) => state.session.workspaceId);
+  const workspaceId = useAppSelector(
+    (state) => state.session.workspaceId ?? "",
+  );
+  const note = useAppSelector((s) =>
+    parentId ? selectNoteById(s, parentId) : null,
+  );
 
   const { isLoading, isFetching } = useGetNotesByParentIdQuery({
     parentId,
@@ -15,9 +25,9 @@ export function useNoteListState(parentId: string | null) {
 
   const noteIds = useAppSelector(
     (state) =>
-      workspaceId
+      note?.type === NoteType.Doc || !parentId
         ? selectNotesByParentId(state, workspaceId, parentId)
-        : EMPTY_ARRAY,
+        : selectViewsOfDatabase(state, parentId ?? ""),
     shallowEqual,
   );
 
