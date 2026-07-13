@@ -1,13 +1,20 @@
-import { type ParentId, Rank } from "@darkwrite/common";
+import {
+  DatabaseViewType,
+  NoteType,
+  type ParentId,
+  Rank,
+} from "@darkwrite/common";
 import { ResultAsync } from "neverthrow";
 import { beforeAll, beforeEach, describe, expect, it } from "vitest";
 import {
+  databaseView as databaseViewTable,
   type NewNote,
   type Note,
   note as notesTable,
   type Workspace,
 } from "@/db/schema";
 import { resolveTx } from "@/db/transactional";
+import { DatabaseViewDAO } from "@/note/database-view.dao";
 import { DocumentService } from "@/service/document.service";
 import { MockDocumentStore } from "@/test/mocks/document-store.mock";
 import { WorkspaceDAO } from "@/workspace/workspace.dao";
@@ -24,12 +31,14 @@ describe("note service tests", () => {
   let workspace: Workspace;
   let noteDAO: NoteDAOInstance;
   let noteService: INoteService;
+  let viewDao: ReturnType<typeof DatabaseViewDAO>;
   const documentStore = MockDocumentStore();
 
   beforeAll(async () => {
     await applySqlMigrations(db);
     noteDAO = NoteDAO(() => resolveTx(db));
     noteService = NoteService(db, DocumentService(documentStore));
+    viewDao = DatabaseViewDAO(() => resolveTx(db));
     workspace = (
       await WorkspaceDAO(() => resolveTx(db)).create({
         name: "Test Workspace",
@@ -38,6 +47,7 @@ describe("note service tests", () => {
     )._unsafeUnwrap();
   });
   beforeEach(async () => {
+    await db.delete(databaseViewTable);
     await db.delete(notesTable);
     await documentStore
       .ls()
@@ -320,6 +330,95 @@ describe("note service tests", () => {
       const updatedSource = (await noteDAO.findById(source.id))._unsafeUnwrap();
       expect(updatedSource.parentId).toBeNull();
       expect(updatedSource.orderHint > rootNote.orderHint).toBe(true);
+    });
+  });
+
+  describe("createDatabase", () => {
+    it("should create a database, set document content, and initialize a default view", async () => {
+      const result = (
+        await noteService.createDatabase({
+          workspaceId: workspace.id,
+          parentId: null,
+        })
+      )._unsafeUnwrap();
+
+      expect(result.database).not.toBeUndefined();
+      expect(result.view).not.toBeUndefined();
+      expect(result.viewMeta).not.toBeUndefined();
+
+      expect(result.database.type).toBe(NoteType.Database);
+      expect(result.database.title).toBe("New database");
+      expect(result.database.workspaceId).toBe(workspace.id);
+      expect(result.database.parentId).toBeNull();
+
+      expect(result.view.type).toBe(NoteType.DatabaseView);
+      expect(result.view.parentId).toBe(result.database.id);
+      expect(result.view.workspaceId).toBe(workspace.id);
+
+      expect(result.viewMeta.type).toBe(DatabaseViewType.Table);
+      expect(result.viewMeta.id).toBe(result.view.id);
+
+      const docContent = (
+        await documentStore.read(result.database.id)
+      )._unsafeUnwrap();
+
+      expect(docContent).toBe("{}");
+    });
+
+    it("should create a database under a parent when specified", async () => {
+      const parent = (
+        await noteDAO.create({
+          workspaceId: workspace.id,
+          title: "Parent",
+          createdAt: new Date(),
+          modifiedAt: new Date(),
+          orderHint: Rank.default().get(),
+          favoriteOrderHint: "",
+        })
+      )._unsafeUnwrap();
+
+      const result = (
+        await noteService.createDatabase({
+          workspaceId: workspace.id,
+          parentId: parent.id,
+        })
+      )._unsafeUnwrap();
+
+      expect(result.database.parentId).toBe(parent.id);
+    });
+
+    it("should return an error when the workspace does not exist", async () => {
+      const result = await noteService.createDatabase({
+        workspaceId: "non-existent-id",
+        parentId: null,
+      });
+
+      expect(result.isErr()).toBe(true);
+    });
+
+    it("should persist the database and view to the database", async () => {
+      const result = (
+        await noteService.createDatabase({
+          workspaceId: workspace.id,
+          parentId: null,
+        })
+      )._unsafeUnwrap();
+
+      const foundDatabase = (
+        await noteDAO.findById(result.database.id)
+      )._unsafeUnwrap();
+
+      const foundView = (
+        await noteDAO.findById(result.view.id)
+      )._unsafeUnwrap();
+
+      const foundViewMeta = (
+        await viewDao.getView(result.viewMeta.id)
+      )._unsafeUnwrap();
+
+      expect(foundDatabase.title).toBe("New database");
+      expect(foundView.parentId).toBe(result.database.id);
+      expect(foundViewMeta.type).toBe(DatabaseViewType.Table);
     });
   });
 });

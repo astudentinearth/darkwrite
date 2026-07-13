@@ -349,7 +349,9 @@ export function NoteDAO(tx: TxResolver) {
       tx()
         .select()
         .from(notesTable)
-        .where(and(withParent(databaseId), noteTypeOf(NoteType.Doc))),
+        .where(
+          and(withParent(databaseId), noteTypeOf(NoteType.Doc), notTrashed()),
+        ),
     );
 
   const getAllDatabasesInWorkspace = (

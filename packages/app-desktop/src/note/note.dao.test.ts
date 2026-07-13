@@ -692,6 +692,137 @@ describe("NoteDAO", () => {
     });
   });
 
+  describe("getAllDocumentsInDatabase, getAllDatabasesInWorkspace", () => {
+    it("getAllDocumentsInDatabase should return only non-trashed documents under the given parent", async () => {
+      const databaseId = randomUUID();
+      const docId = randomUUID();
+      const trashedDocId = randomUUID();
+      const otherParentDocId = randomUUID();
+
+      await createNote(databaseId);
+      await saveNote({
+        ...(await buildNote(docId, databaseId)),
+        type: "doc",
+      });
+      await saveNote({
+        ...(await buildNote(trashedDocId, databaseId)),
+        type: "doc",
+        isTrashed: true,
+      });
+      await saveNote({
+        ...(await buildNote(otherParentDocId)),
+        type: "doc",
+      });
+
+      const docs = (
+        await noteDao.getAllDocumentsInDatabase(databaseId)
+      )._unsafeUnwrap();
+      const docIds = docs.map((n) => n.id);
+
+      expect(docIds).toEqual([docId]);
+      expect(docIds).not.toContain(trashedDocId);
+      expect(docIds).not.toContain(otherParentDocId);
+    });
+
+    it("getAllDocumentsInDatabase should exclude non-document types", async () => {
+      const databaseId = randomUUID();
+      const docId = randomUUID();
+      const databaseViewId = randomUUID();
+
+      await createNote(databaseId);
+      await saveNote({
+        ...(await buildNote(docId, databaseId)),
+        type: "doc",
+      });
+      await saveNote({
+        ...(await buildNote(databaseViewId, databaseId)),
+        type: "database_view",
+      });
+
+      const docs = (
+        await noteDao.getAllDocumentsInDatabase(databaseId)
+      )._unsafeUnwrap();
+      const docIds = docs.map((n) => n.id);
+
+      expect(docIds).toEqual([docId]);
+      expect(docIds).not.toContain(databaseViewId);
+    });
+
+    it("getAllDocumentsInDatabase should return empty array when no documents exist", async () => {
+      const databaseId = randomUUID();
+      await createNote(databaseId);
+
+      const docs = (
+        await noteDao.getAllDocumentsInDatabase(databaseId)
+      )._unsafeUnwrap();
+
+      expect(docs).toEqual([]);
+    });
+
+    it("getAllDatabasesInWorkspace should return only non-trashed databases in the workspace", async () => {
+      const databaseId = randomUUID();
+      const trashedDatabaseId = randomUUID();
+      const docId = randomUUID();
+
+      await saveNote({
+        ...(await buildNote(databaseId)),
+        type: "database",
+      });
+      await saveNote({
+        ...(await buildNote(trashedDatabaseId)),
+        type: "database",
+        isTrashed: true,
+      });
+      await createNote(docId);
+
+      const databases = (
+        await noteDao.getAllDatabasesInWorkspace(workspaceId)
+      )._unsafeUnwrap();
+      const dbIds = databases.map((n) => n.id);
+
+      expect(dbIds).toEqual([databaseId]);
+      expect(dbIds).not.toContain(trashedDatabaseId);
+      expect(dbIds).not.toContain(docId);
+    });
+
+    it("getAllDatabasesInWorkspace should exclude databases from other workspaces", async () => {
+      const otherWorkspace = (
+        await WorkspaceDAO(() => resolveTx(db)).create({
+          name: "Other Workspace",
+          createdAt: new Date(),
+        })
+      )._unsafeUnwrap();
+      const localDbId = randomUUID();
+      const otherDbId = randomUUID();
+
+      await saveNote({
+        ...(await buildNote(localDbId)),
+        type: "database",
+      });
+      await saveNote({
+        ...(await buildNote(otherDbId)),
+        workspaceId: otherWorkspace.id,
+        type: "database",
+      });
+
+      const databases = (
+        await noteDao.getAllDatabasesInWorkspace(workspaceId)
+      )._unsafeUnwrap();
+      const dbIds = databases.map((n) => n.id);
+
+      expect(dbIds).toContain(localDbId);
+      expect(dbIds).not.toContain(otherDbId);
+    });
+
+    it("getAllDatabasesInWorkspace should return empty array when no databases exist", async () => {
+      const databases = (
+        await noteDao.getAllDatabasesInWorkspace(workspaceId)
+      )._unsafeUnwrap();
+
+      expect(databases).toEqual([]);
+    });
+  });
+
   describe("isDescendant", () => {
     it("should return 'CIRCULAR' when target is the parent (self-descendant check)", async () => {
       // Logic: if (targetId === potentialParentId) return true;

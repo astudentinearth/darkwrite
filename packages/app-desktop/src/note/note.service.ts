@@ -195,6 +195,8 @@ export function NoteService(
     );
   }
 
+  /** Creates a new database and initializes a default database view for it.
+   * @returns the database, initialized view and view metadata */
   function createDatabase(dto: CreateDatabaseRequest) {
     return transactional(
       () =>
