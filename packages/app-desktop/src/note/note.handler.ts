@@ -1,7 +1,6 @@
 import { extname } from "node:path";
 import {
-  type CreateNoteDTO,
-  CreateNoteDTOSchema,
+  type CreateDocumentArgs,
   dwErrAsync,
   FileFormatMap,
   type INoteAPI,
@@ -16,6 +15,7 @@ import {
   type UpdateNoteDTO,
   UpdateNoteDTOSchema,
   validateSchema,
+  ZCreateDocumentRequest,
 } from "@darkwrite/common";
 import { ok, ResultAsync } from "neverthrow";
 import {
@@ -53,12 +53,11 @@ export function NoteAPI(
   noteQueryService: INoteQueryService,
   documentService: IDocumentService,
 ): HandlerImplements<INoteAPI> {
-  const create = handler((dto: CreateNoteDTO) =>
-    validateSchema(CreateNoteDTOSchema)(dto)
+  const create = handler((dto: CreateDocumentArgs) =>
+    validateSchema(ZCreateDocumentRequest)(dto)
       .asyncAndThen(noteService.create)
       .map(singleResponse),
   );
-
   const deleteNote = handler((id: string) => noteService.deleteById(id));
 
   const getAllByWorkspaceId = handler((workspaceId: string) =>
@@ -116,6 +115,7 @@ export function NoteAPI(
     noteService.duplicate(id).map(singleResponse),
   );
   const getDocument = handler((id: string) =>
+    //FIXME: add self healing here!
     documentService.getNoteContent(id).map((document) => ({ document })),
   );
   const setDocument = handler((id: string, jsonStr: string) =>

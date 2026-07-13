@@ -2,21 +2,19 @@ import {
   type CheckUpdateFn,
   type DarkwriteIPCBridge,
   hydrateResultAsync,
+  type IBackupAPI,
+  type IDatabaseAPI,
   type IDesktopAPI,
   type IEmbedAPI,
   type IFileLinkAPI,
   type INoteAPI,
+  type IOnboardingAPI,
   type ISettingsAPI,
   type IThemeAPI,
   type IWorkspaceAPI,
 } from "@darkwrite/common";
 import _ from "lodash";
 import { EmbedAdapter } from "./local/embed-local-adapter";
-
-export enum APIClientMode {
-  LOCAL = "local",
-  CLOUD = "cloud",
-}
 
 function resultHydrationMiddleware(api: typeof window.api) {
   const clone = _.cloneDeepWith(api, (value) => {
@@ -35,13 +33,15 @@ export class DarkwriteAPIClient {
   static settings: ISettingsAPI;
   static theme: IThemeAPI;
   static desktop: IDesktopAPI;
-  static onboarding: typeof window.api.onboarding;
-  static backup: typeof window.api.backup;
+  static onboarding: IOnboardingAPI;
+  static backup: IBackupAPI;
+  static database: IDatabaseAPI;
   static fileLink: IFileLinkAPI;
   static checkUpdate: CheckUpdateFn;
 
   private static initializeLocalAPIs() {
     const api = resultHydrationMiddleware(window.api);
+    console.log(api);
     DarkwriteAPIClient.note = api.note;
     DarkwriteAPIClient.workspace = api.workspace;
     DarkwriteAPIClient.settings = api.settings;
@@ -52,16 +52,10 @@ export class DarkwriteAPIClient {
     DarkwriteAPIClient.backup = api.backup;
     DarkwriteAPIClient.fileLink = api.fileLink;
     DarkwriteAPIClient.checkUpdate = api.checkUpdate;
+    DarkwriteAPIClient.database = api.database;
   }
 
-  private static initializeCloudAPIs() {
-    //TODO: cloud support not implemented yet
+  static initialize() {
     DarkwriteAPIClient.initializeLocalAPIs();
-  }
-
-  static initialize(mode: APIClientMode) {
-    if (mode === APIClientMode.LOCAL) DarkwriteAPIClient.initializeLocalAPIs();
-    else if (mode === APIClientMode.CLOUD)
-      DarkwriteAPIClient.initializeCloudAPIs();
   }
 }

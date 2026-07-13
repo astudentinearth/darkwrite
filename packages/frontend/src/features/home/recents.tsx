@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui";
-import { getNoteIcon } from "@/lib/utils";
+import { getNoteIcon, getNoteIcon2 } from "@/lib/utils";
 import { navigateToNote } from "../navigation/navigator";
 import { NoteContextMenuContainer } from "../note/note-context-menu";
 import useRecents from "./use-recents";
@@ -21,7 +21,7 @@ export default function RecentNotes() {
             onClick={() => navigateToNote(note.id)}
             variant={"ghost"}
           >
-            <span>{getNoteIcon(note.icon)}</span>
+            <span>{getNoteIcon2(note.icon, note.type)}</span>
             <span className="w-full overflow-hidden text-ellipsis whitespace-nowrap text-start">
               {note.title || t("defaults.pageTitle")}
             </span>

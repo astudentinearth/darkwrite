@@ -29,8 +29,7 @@ export default function FavoritesContainer() {
       <PrefetchFavorites />
       <Collapsible open={open} onOpenChange={setFavoritesViewOpen}>
         <CollapsibleTrigger asChild>
-          <SidebarItem className="w-full gap-1">
-            {t("title.favorites")}
+          <SidebarItem className="w-full gap-1 text-xs pl-2">
             <ChevronRight
               size={16}
               className={cn(
@@ -38,6 +37,7 @@ export default function FavoritesContainer() {
                 open && "rotate-90",
               )}
             />
+            {t("title.favorites")}
           </SidebarItem>
         </CollapsibleTrigger>
         <CollapsibleContent>

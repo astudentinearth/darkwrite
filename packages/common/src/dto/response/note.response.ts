@@ -1,24 +1,5 @@
+import type { DatabaseViewMeta, NoteDTO } from "@/note";
 import type { NoteContent } from "@/note-content";
-
-export interface NoteDTO {
-  id: string;
-  title: string;
-  icon: string | null;
-  parentId: string | null;
-  createdAt: string;
-  modifiedAt: string;
-  trashedAt: string | null;
-  orderHint: string;
-  favoriteOrderHint: string;
-  isFavorite: boolean | null;
-  isTrashed: boolean | null;
-
-  propertyValues?: Record<string, string> | null;
-
-  userId: string | null; // Owner of the note
-  databaseId: string | null; // ID of the database this note belongs to
-  workspaceId: string; // ID of the workspace this note belongs to
-}
 
 export interface NotesResponseDTO {
   notes: Record<string, NoteDTO>;
@@ -34,4 +15,34 @@ export interface NoteResponseDTO {
 
 export interface NoteContentResponseDTO {
   document: NoteContent;
+}
+
+export interface CreateDatabaseResponse {
+  database: NoteDTO;
+  views: NoteDTO[];
+  viewMetadata: DatabaseViewMeta[];
+}
+
+export interface CreateDatabaseViewResponse {
+  note: NoteDTO;
+  meta: DatabaseViewMeta;
+}
+
+export interface GetDatabaseViewResponse {
+  note: NoteDTO;
+  meta: DatabaseViewMeta;
+}
+
+export interface GetViewsOfResponse {
+  notes: NoteDTO[];
+  views: DatabaseViewMeta[];
+}
+
+export interface GetNotesInDatabaseResponse {
+  notes: NoteDTO[];
+}
+
+export interface GetViewsByIdResponse {
+  notes: NoteDTO[];
+  views: DatabaseViewMeta[];
 }

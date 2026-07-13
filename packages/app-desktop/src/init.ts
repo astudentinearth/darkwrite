@@ -29,6 +29,7 @@ import { FileLinkAPI } from "./link/file-link.handler";
 import { FileLinkService } from "./link/file-link.service";
 import { initAppMenu, showAppMenu } from "./menu";
 import { webcontentsUrl } from "./metadata.json";
+import { DatabaseAPI } from "./note/database.handler";
 import { NoteAPI } from "./note/note.handler";
 import { NoteService } from "./note/note.service";
 import { NoteQueryService } from "./note/note-query.service";
@@ -143,6 +144,7 @@ export async function init() {
     embed: EmbedAPI(embedService),
     workspace: WorkspaceAPI(workspaceService),
     note: NoteAPI(noteService, noteQueryService, documentService),
+    database: DatabaseAPI({ noteService, noteQueryService }),
     checkUpdate: updateCheckHandler,
     showAppMenu: handler(() => {
       showAppMenu();
@@ -151,6 +153,7 @@ export async function init() {
     onboarding: onboardingService.ipcHandlers,
   };
 
+  log.debug("Settings up API bridge...");
   setupAPI(apiBridge);
 
   await workspaceService

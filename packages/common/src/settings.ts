@@ -16,6 +16,7 @@ export const DEFAULT_THEME_SETTINGS = {
     code: "ui-monospace" as string,
     ui: "system-ui" as string,
   },
+  compactSidebar: true as boolean,
   experimental: {
     /** @deprecated no longer used */
     darwinCustomTitlebarEnabled: false as boolean,

@@ -1,7 +1,5 @@
 // This file contains the common interfaces for frontend API clients.
 // Electron-side handlers should implement these directly and expose it via the API bridge.
-// Clients talking to a cloud instance shall make the appropriate network requests instead.
-// Cloud-specific code should be kept separate from Electron to ensure browser portability.
 import type { ResultAsync } from "neverthrow";
 import type {
   DarkwriteDesktopClientInfo,
@@ -9,7 +7,15 @@ import type {
 } from "./client";
 import type { NativeContextMenuData } from "./context-menu";
 import type {
-  CreateNoteDTO,
+  CreateDatabaseArgs,
+  CreateDatabaseResponse,
+  CreateDatabaseViewArgs,
+  CreateDatabaseViewResponse,
+  CreateDocumentArgs,
+  GetDatabaseViewResponse,
+  GetNotesInDatabaseResponse,
+  GetViewsByIdResponse,
+  GetViewsOfResponse,
   MoveNoteDTO,
   NoteContentResponseDTO,
   NoteResponseDTO,
@@ -39,7 +45,7 @@ export type ApiResult<T> = ResultAsync<T, DwError>;
 export type NoReturn = ResultAsync<void, never>;
 
 export interface INoteAPI {
-  create: (dto: CreateNoteDTO) => ApiResult<NoteResponseDTO>;
+  create: (dto: CreateDocumentArgs) => ApiResult<NoteResponseDTO>;
   update: (id: string, dto: UpdateNoteDTO) => ApiResult<NoteResponseDTO>;
   move: (dto: MoveNoteDTO) => ApiResult<NoteResponseDTO>;
 
@@ -126,6 +132,24 @@ export interface INoteAPI {
     pageSize?: PageSize,
   ) => ApiResult<string | undefined>;
   import: () => ApiResult<NoteImportResult>;
+}
+
+export interface IDatabaseAPI {
+  createDatabase: (
+    args: CreateDatabaseArgs,
+  ) => ApiResult<CreateDatabaseResponse>;
+  createDatabaseView: (
+    args: CreateDatabaseViewArgs,
+  ) => ApiResult<CreateDatabaseViewResponse>;
+  getDatabaseView: (id: string) => ApiResult<GetDatabaseViewResponse>;
+  getViewsOf: (databaseId: string) => ApiResult<GetViewsOfResponse>;
+  getNotesInDatabase: (
+    databaseId: string,
+  ) => ApiResult<GetNotesInDatabaseResponse>;
+  getViewsById: (ids: string[]) => ApiResult<GetViewsByIdResponse>;
+  getAllDatabasesInWorkspace: (
+    workspaceId: string,
+  ) => ApiResult<NotesResponseDTO>;
 }
 
 export interface IWorkspaceAPI {
@@ -226,6 +250,7 @@ export interface DesktopEmbedAPI {
 
 export type DarkwriteIPCBridge = {
   note: INoteAPI;
+  database: IDatabaseAPI;
   workspace: IWorkspaceAPI;
   embed: DesktopEmbedAPI;
   settings: ISettingsAPI;

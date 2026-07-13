@@ -116,7 +116,7 @@ export function StyleUI(props: {
       </div>
       {font === FontStyle.CUSTOM && (
         <FontSelect
-          className="w-full"
+          className="w-full max-w-full"
           value={customFont}
           onValueChange={(val) => setFont(FontStyle.CUSTOM, val)}
         />

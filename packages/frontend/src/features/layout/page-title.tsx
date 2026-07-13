@@ -1,3 +1,4 @@
+import { IconHome } from "@tabler/icons-react";
 import { Home, Settings } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
@@ -12,7 +13,7 @@ export default function PageTitle() {
       return (
         <TitlebarNavTrigger>
           <>
-            <Home size={18} />
+            <IconHome size={18} />
             {t("sidebar.button.home")}
           </>
         </TitlebarNavTrigger>

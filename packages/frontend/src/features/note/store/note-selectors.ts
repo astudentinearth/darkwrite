@@ -1,4 +1,4 @@
-import { byUpdateTime, isDescendant, Rank } from "@darkwrite/common";
+import { byUpdateTime, isDescendant, NoteType, Rank } from "@darkwrite/common";
 import { createSelector } from "@reduxjs/toolkit";
 import type { RootState } from "@/features/store/types";
 import { notesAdapter } from "./notes-adapter";
@@ -144,5 +144,47 @@ export const selectNoteIdsInTrash = createSelector(
   (allNotes, workspaceId) =>
     allNotes
       .filter((n) => n.workspaceId === workspaceId && n.isTrashed)
+      .map((n) => n.id),
+);
+
+/** Selects IDs of Doc-type notes that are direct children of the given database. */
+export const selectNotesInDatabase = createSelector(
+  [selectAllNotes, (_state: RootState, parentId: string) => parentId],
+  (allNotes, parentId) =>
+    allNotes
+      .filter(
+        (n) =>
+          n.parentId === parentId && n.type === NoteType.Doc && !n.isTrashed,
+      )
+      .toSorted((a, b) => Rank.sorter(a.orderHint, b.orderHint))
+      .map((n) => n.id),
+);
+
+/** Selects IDs of DatabaseView-type notes that are direct children of the given database. */
+export const selectViewsOfDatabase = createSelector(
+  [selectAllNotes, (_state: RootState, parentId: string) => parentId],
+  (allNotes, parentId) =>
+    allNotes
+      .filter(
+        (n) =>
+          n.parentId === parentId &&
+          n.type === NoteType.DatabaseView &&
+          !n.isTrashed,
+      )
+      .toSorted((a, b) => Rank.sorter(a.orderHint, b.orderHint))
+      .map((n) => n.id),
+);
+
+/** Selects IDs of Database-type notes in the given workspace that are not trashed. */
+export const selectDatabasesInWorkspace = createSelector(
+  [selectAllNotes, (_state: RootState, workspaceId: string) => workspaceId],
+  (allNotes, workspaceId) =>
+    allNotes
+      .filter(
+        (n) =>
+          n.workspaceId === workspaceId &&
+          n.type === NoteType.Database &&
+          !n.isTrashed,
+      )
       .map((n) => n.id),
 );

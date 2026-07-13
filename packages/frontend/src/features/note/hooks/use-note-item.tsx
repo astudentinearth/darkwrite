@@ -1,3 +1,4 @@
+import { NoteType } from "@darkwrite/common";
 import { type MouseEvent, useCallback, useEffect, useState } from "react";
 import { matchPath } from "react-router-dom";
 import { beginDrag, DragType } from "@/features/dnd/datatransfer";
@@ -30,6 +31,9 @@ export function useNoteItem(id: string) {
   const [isActive, setIsActive] = useState(false);
   const { createNote } = useNoteActions();
   const workspaceId = useCurrentWorkspaceId();
+  const draggable = note.type !== NoteType.DatabaseView;
+  const acceptsDrop = note.type !== NoteType.DatabaseView;
+  const expandable = note.type !== NoteType.DatabaseView;
 
   useEffect(() => {
     // get the path name at the moment of render to determine
@@ -57,7 +61,7 @@ export function useNoteItem(id: string) {
     createNote({ parentId: id, workspaceId, navigateAfter: true });
   };
 
-  return { note, isActive, createChild };
+  return { note, isActive, createChild, draggable, acceptsDrop, expandable };
 }
 
 export function useNoteItemDrag(id: string) {

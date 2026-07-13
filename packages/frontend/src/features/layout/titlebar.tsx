@@ -1,3 +1,4 @@
+import { IconLayoutSidebar } from "@tabler/icons-react";
 import { PanelRightClose } from "lucide-react";
 import { useRef } from "react";
 import { useTranslation } from "react-i18next";
@@ -40,7 +41,7 @@ export function Titlebar() {
           onClick={expandCallback}
           aria-label={t("sidebar.button.showSidebar")}
         >
-          <PanelRightClose width={20} height={20}></PanelRightClose>
+          <IconLayoutSidebar size={18} />
         </HeaderbarButton>
       </TextTooltip>
       <HistoryNavigation />

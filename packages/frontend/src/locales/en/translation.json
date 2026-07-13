@@ -1,7 +1,7 @@
 {
   "sidebar": {
     "button": {
-      "newPage": "New Page",
+      "newPage": "New note",
       "home": "Home",
       "settings": "Settings",
       "trash": "Trash",
@@ -157,6 +157,17 @@
       "jsonExport": "Darkwrite document (JSON)",
       "htmlExport": "HTML (plain)",
       "tooltip": "Other options"
+    },
+    "database": {
+      "newView": {
+        "titleLabel": "View name",
+        "cancel": "Cancel",
+        "create": "Create",
+        "dataSource": "Data source"
+      },
+      "picker": {
+        "placeholder": "Choose a database"
+      }
     },
     "slashCommand": {
       "text": "Text",
@@ -339,8 +350,8 @@
     },
     "showInFolder": "Reval in file manager",
     "history": {
-      "back": "Geri",
-      "forward": "İleri"
+      "back": "Back",
+      "forward": "Forward"
     }
   }
 }

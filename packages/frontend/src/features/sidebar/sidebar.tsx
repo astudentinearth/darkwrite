@@ -1,3 +1,4 @@
+import { IconLayoutSidebar } from "@tabler/icons-react";
 import { LayoutDashboard, PanelRightOpen, Search } from "lucide-react";
 import type React from "react";
 import { useTranslation } from "react-i18next";
@@ -10,7 +11,6 @@ import { cn } from "@/lib/utils";
 import { TrashWidget } from "../note/components/trash";
 import { showSearch } from "../search/search-state";
 import AppMenu from "./app-menu";
-import { CreatePageButton } from "./create-page-button";
 import FavoritesContainer from "./favorites-container";
 import { SidebarNavigation } from "./navigation";
 import { WorkspaceSwitcher } from "./workspace-switcher";
@@ -57,14 +57,13 @@ export function Sidebar(props: SidebarProps) {
             onClick={() => setSidebarCollapsed(true)}
             aria-label={t("sidebar.button.hideSidebar")}
           >
-            <PanelRightOpen width={18} height={18} />
+            <IconLayoutSidebar size={18} />
           </HeaderbarButton>
         </TextTooltip>
       </div>
-      <div className="h-full w-full grow pl-2 pr-0 py-0 overflow-y-auto scroll-view gutter-stable">
+      <div className="h-full w-full grow pl-2 pr-2 py-0 overflow-y-auto scroll-view">
         <div className="flex gap-2 flex-col mb-16 max-w-full">
           <WorkspaceSwitcher />
-          <CreatePageButton />
           <SidebarNavigation />
           <FavoritesContainer />
           <NoteListRoot />

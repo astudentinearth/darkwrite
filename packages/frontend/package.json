@@ -36,6 +36,7 @@
     "@radix-ui/react-tabs": "^1.1.13",
     "@radix-ui/react-tooltip": "^1.2.8",
     "@reduxjs/toolkit": "^2.11.2",
+    "@tabler/icons-react": "^3.44.0",
     "@tailwindcss/typography": "^0.5.19",
     "@tiptap/core": "catalog:",
     "@tiptap/extension-bubble-menu": "^3.22.4",
