@@ -60,7 +60,7 @@ export function Sidebar(props: SidebarProps) {
           </HeaderbarButton>
         </TextTooltip>
       </div>
-      <div className="h-full w-full grow pl-2 pr-0 py-0 overflow-y-auto scroll-view gutter-stable">
+      <div className="h-full w-full grow pl-2 pr-2 py-0 overflow-y-auto scroll-view">
         <div className="flex gap-2 flex-col mb-16 max-w-full">
           <WorkspaceSwitcher />
           <SidebarNavigation />
