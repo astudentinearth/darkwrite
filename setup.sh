@@ -3,11 +3,7 @@ pushd .
 
 cd $REPO_ROOT
 echo "Building common..."
-yarn workspace @darkwrite/common build
-echo "Building ui..."
-yarn workspace @darkwrite/ui build
-echo "Building editor..."
-yarn workspace @darkwrite/editor build
+pnpm build:common
 
 if [[ $DW_WITHOUT_ELECTRON == 1 ]]; then
   echo "Skipping electron dependencies"
@@ -35,7 +31,7 @@ else
   fi
 
   echo "Installing electron dependencies"
-  yarn workspace @darkwrite/app-desktop install_app_deps
+  pnpm --filter=app-desktop install_app_deps
 fi
 
 echo "Your development environment is ready."
