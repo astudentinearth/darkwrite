@@ -14,6 +14,7 @@ export type CreateDocumentArgs = z.input<typeof ZCreateDocumentRequest>;
 export const ZCreateDatabaseViewRequest = z.object({
   databaseId: z.string(),
   type: z.enum(Object.values(DatabaseViewType)).default(DatabaseViewType.Table),
+  title: z.string().optional(),
 });
 
 export type CreateDatabaseViewRequest = z.infer<

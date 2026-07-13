@@ -158,6 +158,17 @@
       "htmlExport": "HTML (plain)",
       "tooltip": "Other options"
     },
+    "database": {
+      "newView": {
+        "titleLabel": "View name",
+        "cancel": "Cancel",
+        "create": "Create",
+        "dataSource": "Data source"
+      },
+      "picker": {
+        "placeholder": "Choose a database"
+      }
+    },
     "slashCommand": {
       "text": "Text",
       "textDescription": "Express it in plain text.",

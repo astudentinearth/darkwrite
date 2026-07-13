@@ -212,6 +212,33 @@ export const notesApi = createApi({
             ]
           : [],
     }),
+
+    getDatabasesInWorkspace: builder.query<NoteDTO[], string>({
+      queryFn: resultQueryFn(
+        (workspaceId: string) =>
+          DarkwriteAPIClient.database.getAllDatabasesInWorkspace(workspaceId),
+        (r) => Object.values(r.notes),
+      ),
+
+      async onQueryStarted(_args, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          dispatch(upsertNotes(data));
+        } catch {
+          /* empty */
+        }
+      },
+
+      providesTags: (result, _error, workspaceId) =>
+        result
+          ? [
+              {
+                type: NOTES_TAG_TYPE,
+                id: noteByWorkspaceIdTag(workspaceId),
+              },
+            ]
+          : [],
+    }),
   }),
 });
 
@@ -221,4 +248,5 @@ export const {
   useGetFavoritesByWorkspaceIdQuery,
   useGetNoteByIdQuery,
   useGetNotesInDatabaseQuery,
+  useGetDatabasesInWorkspaceQuery,
 } = notesApi;

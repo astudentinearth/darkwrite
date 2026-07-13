@@ -17,6 +17,7 @@ import { useViewsById } from "../hooks/use-views-by-id";
 import { DatabaseViewContext } from "../store/database-view-context";
 import { TableView } from "./table-view";
 import { ViewIcon } from "./view-icon";
+import { NewDatabaseViewPopover } from "./new-view-popover";
 
 export type DatabaseViewProps = React.ComponentProps<"div"> & {
   views: string[];
@@ -79,10 +80,13 @@ export function DatabaseViewRenderer(props: DatabaseViewProps) {
         onValueChange={setActiveViewId}
       >
         <TabsList className="bg-transparent px-0 border-b w-full justify-start rounded-none grid grid-cols-[1fr_auto] gap-0.5">
-          <div className="w-full overflow-x-auto">
+          <div className="w-full overflow-x-auto flex gap-0.5">
             {views.map((view) => (
               <ViewTabTrigger key={view.id} view={view} />
             ))}
+            <NewDatabaseViewPopover onCreate={note => {
+              setActiveViewId(note.id); 
+            }} defaultDatabaseId={activeView?.parentId ?? undefined} />
           </div>
           {activeView && (
             <Button

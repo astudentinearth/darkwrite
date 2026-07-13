@@ -8,7 +8,7 @@ import {
 } from "@darkwrite/common";
 import { type HandlerImplements, handler } from "@/types";
 import type { INoteService } from "./note.service";
-import { noteToDto } from "./note-mapper";
+import { notesToDto, noteToDto } from "./note-mapper";
 import type { INoteQueryService } from "./note-query.service";
 
 export type DatabaseAPIDeps = {
@@ -33,7 +33,7 @@ export function DatabaseAPI({
   const createDatabaseView = handler((dto: CreateDatabaseViewArgs) =>
     validateSchema(ZCreateDatabaseViewRequest)(dto).asyncAndThen((result) =>
       noteService
-        .createDatabaseView(result.databaseId, result.type)
+        .createDatabaseView(result.databaseId, result.type, result.title)
         .map((result) => ({
           note: noteToDto(result.note),
           meta: result.view,
@@ -67,6 +67,12 @@ export function DatabaseAPI({
     })),
   );
 
+  const getAllDatabasesInWorkspace = handler((workspaceId: string) =>
+    noteQueryService
+      .getAllDatabasesInWorkspace(workspaceId)
+      .map((notes) => ({ notes: notesToDto(notes) })),
+  );
+
   return {
     createDatabase,
     createDatabaseView,
@@ -74,5 +80,6 @@ export function DatabaseAPI({
     getViewsOf,
     getNotesInDatabase,
     getViewsById,
+    getAllDatabasesInWorkspace,
   };
 }

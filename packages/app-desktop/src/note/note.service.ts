@@ -150,6 +150,7 @@ export function NoteService(
   function createDatabaseView(
     databaseId: string,
     type: DatabaseViewType = DatabaseViewType.Table,
+    title?: string,
   ) {
     return transactional(
       () =>
@@ -162,7 +163,7 @@ export function NoteService(
               favoriteOrderHint: "",
               createdAt: new Date(),
               modifiedAt: new Date(),
-              title: `View of ${database.title}`,
+              title: title ?? `View of ${database.title}`,
               workspaceId: database.workspaceId,
               parentId: database.id,
             }),

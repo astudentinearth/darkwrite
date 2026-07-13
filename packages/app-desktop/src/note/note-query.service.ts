@@ -28,6 +28,7 @@ export function NoteQueryService(db: DatabaseType) {
     getParentTree: noteDAO.resolveParentTree,
     getDatabaseView,
     getAllDocumentsInDatabase: noteDAO.getAllDocumentsInDatabase,
+    getAllDatabasesInWorkspace: noteDAO.getAllDatabasesInWorkspace,
     getAllViewsOf: databaseViewDAO.getAllViewsOf,
     getViewsByIds: databaseViewDAO.getViewsByIds,
   };

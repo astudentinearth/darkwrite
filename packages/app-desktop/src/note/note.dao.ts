@@ -352,6 +352,22 @@ export function NoteDAO(tx: TxResolver) {
         .where(and(withParent(databaseId), noteTypeOf(NoteType.Doc))),
     );
 
+  const getAllDatabasesInWorkspace = (
+    workspaceId: string,
+  ): DwResultAsync<Note[]> =>
+    dbResult(() =>
+      tx()
+        .select()
+        .from(notesTable)
+        .where(
+          and(
+            inWorkspace(workspaceId),
+            notTrashed(),
+            noteTypeOf(NoteType.Database),
+          ),
+        ),
+    );
+
   return {
     create,
     update,
@@ -378,6 +394,7 @@ export function NoteDAO(tx: TxResolver) {
     resolveParentTree,
     noteRightAfter,
     getAllDocumentsInDatabase,
+    getAllDatabasesInWorkspace,
   };
 }
 

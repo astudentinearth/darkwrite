@@ -1,4 +1,6 @@
 import type {
+  CreateDatabaseViewArgs,
+  CreateDatabaseViewResponse,
   GetDatabaseViewResponse,
   GetViewsByIdResponse,
   GetViewsOfResponse,
@@ -28,6 +30,24 @@ export const databaseViewApi = createApi({
   reducerPath: "database-view-api",
   tagTypes: [DATABASE_VIEW_TAG_TYPE],
   endpoints: (builder) => ({
+    createDatabaseView: builder.mutation<
+      CreateDatabaseViewResponse,
+      CreateDatabaseViewArgs
+    >({
+      queryFn: resultQueryFn((args) =>
+        DarkwriteAPIClient.database.createDatabaseView(args),
+      ),
+      async onQueryStarted(_args, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          dispatch(upsertNotes([data.note]));
+          dispatch(upsertView(data.meta));
+        } catch {
+          /* empty */
+        }
+      },
+    }),
+
     getDatabaseView: builder.query<GetDatabaseViewResponse, string>({
       queryFn: resultQueryFn((arg) =>
         DarkwriteAPIClient.database.getDatabaseView(arg),
@@ -98,6 +118,7 @@ export const databaseViewApi = createApi({
 });
 
 export const {
+  useCreateDatabaseViewMutation,
   useGetDatabaseViewQuery,
   useGetViewsOfQuery,
   useGetViewsByIdQuery,

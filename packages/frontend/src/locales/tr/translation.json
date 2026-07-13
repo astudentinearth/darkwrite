@@ -158,6 +158,17 @@
       "htmlExport": "HTML (düz)",
       "tooltip": "Diğer seçenekler"
     },
+    "database": {
+      "newView": {
+        "titleLabel": "Görünüm adı",
+        "cancel": "Vazgeç",
+        "create": "Oluştur",
+        "dataSource": "Veri kaynağı"
+      },
+      "picker": {
+        "placeholder": "Bir veritabanı seçin"
+      }
+    },
     "slashCommand": {
       "text": "Metin",
       "toDoList": "Yapılacaklar listesi",

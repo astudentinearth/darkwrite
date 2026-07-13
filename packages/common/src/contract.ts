@@ -147,6 +147,9 @@ export interface IDatabaseAPI {
     databaseId: string,
   ) => ApiResult<GetNotesInDatabaseResponse>;
   getViewsById: (ids: string[]) => ApiResult<GetViewsByIdResponse>;
+  getAllDatabasesInWorkspace: (
+    workspaceId: string,
+  ) => ApiResult<NotesResponseDTO>;
 }
 
 export interface IWorkspaceAPI {

@@ -174,3 +174,17 @@ export const selectViewsOfDatabase = createSelector(
       .toSorted((a, b) => Rank.sorter(a.orderHint, b.orderHint))
       .map((n) => n.id),
 );
+
+/** Selects IDs of Database-type notes in the given workspace that are not trashed. */
+export const selectDatabasesInWorkspace = createSelector(
+  [selectAllNotes, (_state: RootState, workspaceId: string) => workspaceId],
+  (allNotes, workspaceId) =>
+    allNotes
+      .filter(
+        (n) =>
+          n.workspaceId === workspaceId &&
+          n.type === NoteType.Database &&
+          !n.isTrashed,
+      )
+      .map((n) => n.id),
+);
