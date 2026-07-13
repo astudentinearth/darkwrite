@@ -1,3 +1,4 @@
+import { IconEdit } from "@tabler/icons-react";
 import { SquarePen } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
@@ -25,7 +26,7 @@ export function CreatePageButton(props: { className?: string }) {
         props.className,
       )}
     >
-      <SquarePen size={16} />
+      <IconEdit size={18} />
       {t("sidebar.button.newPage")}
     </SidebarItem>
   );

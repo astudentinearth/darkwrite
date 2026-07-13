@@ -1,4 +1,10 @@
 import { NoteType } from "@darkwrite/common";
+import {
+  IconBorderAll,
+  IconFileDescription,
+  IconTable,
+  type Icon as TablerIcon,
+} from "@tabler/icons-react";
 import { type ClassValue, clsx } from "clsx";
 import { hex } from "color-convert";
 import {
@@ -20,10 +26,10 @@ export function fromUnicode(unicode: string) {
   return String.fromCodePoint(...points.filter((p) => !Number.isNaN(p)));
 }
 
-export const noteTypeToIcon: Record<NoteType, LucideIcon> = {
-  [NoteType.Doc]: FileText,
-  [NoteType.Database]: TableProperties,
-  [NoteType.DatabaseView]: Table2,
+export const noteTypeToIcon: Record<NoteType, TablerIcon> = {
+  [NoteType.Doc]: IconFileDescription,
+  [NoteType.Database]: IconTable,
+  [NoteType.DatabaseView]: IconBorderAll,
 };
 
 /** @deprecated use `getNoteIcon2` instead. */

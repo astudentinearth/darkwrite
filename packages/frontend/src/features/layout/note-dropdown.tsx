@@ -7,7 +7,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useNoteFromURL } from "@/features/note/hooks/use-note-from-url";
-import { getNoteIcon } from "@/lib/utils";
+import { getNoteIcon, getNoteIcon2 } from "@/lib/utils";
 import { navigateToNote } from "../navigation/navigator";
 import { useNoteById } from "../note/hooks/use-note-by-id";
 import { selectParentIdTree } from "../note/store/note-selectors";
@@ -44,7 +44,7 @@ export default function NoteDropdown() {
     <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
         <TitlebarNavTrigger className="max-w-64 overflow-hidden">
-          <span>{getNoteIcon(currentNote.icon)}</span>
+          <span>{getNoteIcon2(currentNote.icon, currentNote.type)}</span>
           <span className="overflow-hidden w-full text-ellipsis whitespace-nowrap wrap-break-word">
             {currentNote.title || t("defaults.pageTitle")}
           </span>

@@ -1,4 +1,4 @@
-import { GalleryVertical } from "lucide-react";
+import { GalleryVertical, TextAlignStart } from "lucide-react";
 import { use, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui";
@@ -63,7 +63,9 @@ export function TableView() {
       <table className="w-full">
         <thead>
           <tr className="text-start *:text-start *:py-1.5 border-b *:px-2">
-            <th>Title</th>
+            <th className="flex items-center gap-2 select-none hover:bg-secondary/50">
+              <TextAlignStart size={18} /> Title
+            </th>
           </tr>
         </thead>
         <tbody>

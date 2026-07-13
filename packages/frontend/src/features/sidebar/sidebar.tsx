@@ -1,3 +1,4 @@
+import { IconLayoutSidebar } from "@tabler/icons-react";
 import { LayoutDashboard, PanelRightOpen, Search } from "lucide-react";
 import type React from "react";
 import { useTranslation } from "react-i18next";
@@ -56,7 +57,7 @@ export function Sidebar(props: SidebarProps) {
             onClick={() => setSidebarCollapsed(true)}
             aria-label={t("sidebar.button.hideSidebar")}
           >
-            <PanelRightOpen width={18} height={18} />
+            <IconLayoutSidebar size={18} />
           </HeaderbarButton>
         </TextTooltip>
       </div>
