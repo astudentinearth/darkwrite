@@ -1,3 +1,4 @@
+import { IconTrash } from "@tabler/icons-react";
 import { Trash, Trash2, Undo2 } from "lucide-react";
 import { memo, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -83,7 +84,7 @@ export function TrashWidget() {
     <Popover>
       <PopoverTrigger asChild>
         <SidebarItem>
-          <Trash2 size={16} />
+          <IconTrash size={18} />
           <span>{t("sidebar.button.trash")}</span>
         </SidebarItem>
       </PopoverTrigger>

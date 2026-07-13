@@ -25,6 +25,7 @@ export function EditorRoot(props: { content: EditorContent }) {
         instanceId,
       });
     },
+    editable: context.editable,
     onCreate: ({ editor }) => {
       context.onCreate?.(editor);
     },

@@ -61,6 +61,7 @@ export function EditorViewport({
       {note.type === NoteType.Doc ? (
         <DarkwriteEditor
           content={content}
+          editable={options.editable}
           noteId={noteId}
           commandItems={items}
           onContentChange={options.handleContentChange}
@@ -73,7 +74,7 @@ export function EditorViewport({
           embedSourceResolver={
             async (id) => `embed://${id}` //TODO: band-aid for current circumstances. fix this with a proper cache when you can link remote images.
           }
-          key={noteId}
+          key={`${noteId}-${options.editable}`}
           onNavigateToNote={onNavigate ?? navigateToNote}
         />
       ) : (

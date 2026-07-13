@@ -8,6 +8,9 @@ import { useLocalStore } from "@/context/local-state";
 import { useWindowControlsOverlay } from "@/features/layout/hooks/use-window-controls-overlay";
 import { useNoteFromURL } from "@/features/note/hooks/use-note-from-url";
 import { cn } from "@/lib/utils";
+import { ReaderModeToggle } from "../editor/components/reader-mode-toggle";
+import { editorSlice } from "../editor/store/editor-slice";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { HistoryNavigation } from "./navigation";
 import PageTitle from "./page-title";
 import Toolbar from "./toolbar";
@@ -22,6 +25,7 @@ export function Titlebar() {
   };
   useWindowControlsOverlay(headerRef);
   const noteId = useNoteFromURL();
+
   return (
     <div
       ref={headerRef}
@@ -45,6 +49,7 @@ export function Titlebar() {
         </HeaderbarButton>
       </TextTooltip>
       <HistoryNavigation />
+      {noteId && <ReaderModeToggle />}
       <PageTitle />
       <div className="grow"></div>
       {noteId && <Toolbar noteId={noteId} />}

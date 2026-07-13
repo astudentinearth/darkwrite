@@ -1,6 +1,7 @@
 # 1.3.0-beta.1
 ## 🌟 Features
 - Introducing **Databases** (finally)
+- Add read-only toggle (#32)
 
 ## ✨ Improvements and fixes
 - Fix translation issue in back/forward buttons (the English keys had Turkish content for some reason)

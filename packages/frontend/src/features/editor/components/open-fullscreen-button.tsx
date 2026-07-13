@@ -1,3 +1,4 @@
+import { IconArrowsMaximize } from "@tabler/icons-react";
 import { Expand } from "lucide-react";
 import { use } from "react";
 import { HeaderbarButton } from "@/components/headerbar-button";
@@ -18,7 +19,7 @@ export function OpenFullscreenButton() {
           navigateToNote(noteId);
         }}
       >
-        <Expand size={20} />
+        <IconArrowsMaximize size={20} />
       </HeaderbarButton>
     </TextTooltip>
   );

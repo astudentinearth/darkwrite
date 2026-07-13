@@ -17,6 +17,7 @@ export interface IDarkwriteEditorContext {
   noteId: string;
   showTextDirectionControls?: boolean;
   openFilesOnDoubleClick?: boolean;
+  editable: boolean;
 }
 
 export const DarkwriteEditorContext = createContext<IDarkwriteEditorContext>({
@@ -26,4 +27,5 @@ export const DarkwriteEditorContext = createContext<IDarkwriteEditorContext>({
   embedSourceResolver: () => new Promise(() => ""),
   imageUploadConfig: {} as ImageExtensionConfig,
   noteId: "",
+  editable: true,
 });

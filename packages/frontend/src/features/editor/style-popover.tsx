@@ -1,4 +1,5 @@
 import { FontStyle, type NoteCustomization } from "@darkwrite/common";
+import { IconBrush } from "@tabler/icons-react";
 import { Brush, RotateCcw } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import FontSelect from "@/components/font-select";
@@ -33,7 +34,7 @@ export default function StylePopover({ id }: { id: string }) {
         <PopoverTrigger asChild>
           <TooltipTrigger>
             <HeaderbarButton>
-              <Brush size={20} />
+              <IconBrush size={20} />
             </HeaderbarButton>
           </TooltipTrigger>
         </PopoverTrigger>
