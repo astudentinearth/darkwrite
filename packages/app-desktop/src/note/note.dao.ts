@@ -110,6 +110,7 @@ export function NoteDAO(tx: TxResolver) {
     );
   }
 
+  /** @deprecated */
   function findAllByParentIdSortAsc(
     workspaceId: string,
     parentId: ParentId,
@@ -122,6 +123,7 @@ export function NoteDAO(tx: TxResolver) {
         .orderBy(asc(notesTable.orderHint)),
     );
   }
+
 
   function deleteMany(ids: string[]): DwResultAsync<void> {
     return dbResult(async () => {
@@ -154,6 +156,7 @@ export function NoteDAO(tx: TxResolver) {
     );
   }
 
+  /** @deprecated */
   function findFirstNoteInLayer(
     workspaceId: string,
     parentId: ParentId,
@@ -170,6 +173,7 @@ export function NoteDAO(tx: TxResolver) {
     });
   }
 
+  /** @deprecated */
   function findLastNoteInLayer(
     workspaceId: string,
     parentId: ParentId,
@@ -187,6 +191,7 @@ export function NoteDAO(tx: TxResolver) {
     });
   }
 
+  /** @deprecated */
   function findAllFavorites(workspaceId: string): DwResultAsync<Note[]> {
     return dbResult(async () =>
       tx()
@@ -207,6 +212,7 @@ export function NoteDAO(tx: TxResolver) {
     );
   }
 
+  /** @deprecated */
   function findLastNoteInFavorites(
     workspaceId: string,
   ): DwResultAsync<Note | undefined> {
@@ -240,6 +246,7 @@ export function NoteDAO(tx: TxResolver) {
     });
   }
 
+  /** @deprecated */
   function computeOrderKeysForLayer(
     workspaceId: string,
     parentId: ParentId,
@@ -257,6 +264,7 @@ export function NoteDAO(tx: TxResolver) {
     );
   }
 
+  /** @deprecated */
   function computeOrderKeysForFavorites(
     workspaceId: string,
   ): DwResultAsync<OrderKeyDto> {
@@ -319,6 +327,7 @@ export function NoteDAO(tx: TxResolver) {
     });
   }
 
+  /** @deprecated */
   function noteRightAfter(
     targetId: string,
     workspaceId: string,

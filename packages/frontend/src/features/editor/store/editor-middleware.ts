@@ -1,6 +1,7 @@
 import { createListenerMiddleware, isAnyOf } from "@reduxjs/toolkit";
 import { type DebouncedFunc, debounce } from "lodash";
 import { DarkwriteAPIClient } from "@/api/api-client";
+import { updateNote } from "@/features/note/store/note-slice";
 import type { RootState } from "@/features/store/types";
 import { editorSlice } from "./editor-slice";
 
@@ -20,6 +21,13 @@ editorMiddleware.startListening({
   ),
   effect: (action, listenerApi) => {
     const { noteId } = action.payload as { noteId: string };
+
+    listenerApi.dispatch(
+      updateNote({
+        id: noteId,
+        changes: { modifiedAt: new Date().toISOString() },
+      }),
+    );
 
     let debouncedSave = debouncedSaves.get(noteId);
 

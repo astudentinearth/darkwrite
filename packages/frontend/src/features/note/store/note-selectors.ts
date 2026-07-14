@@ -12,6 +12,7 @@ export const {
   selectEntities: selectAllNotesAsMap,
 } = notesAdapter.getSelectors(selectNotesState);
 
+/** Select notes in a layer sorted descending by their modification date */
 export const selectNotesByParentId = createSelector(
   [
     selectAllNotes,
@@ -27,7 +28,27 @@ export const selectNotesByParentId = createSelector(
           note.parentId === parentId &&
           !note.isTrashed,
       )
-      .toSorted((a, b) => Rank.sorter(a.orderHint, b.orderHint))
+      .toSorted((a, b) => b.modifiedAt.localeCompare(a.modifiedAt))
+      .map((n) => n.id);
+  },
+);
+
+export const selectNotesByParentIdAlphabetical = createSelector(
+  [
+    selectAllNotes,
+    (_state: RootState, workspaceId: string) => workspaceId,
+    (_state: RootState, _workspaceId: string, parentId: string | null) =>
+      parentId,
+  ],
+  (allNotes, workspaceId, parentId) => {
+    return allNotes
+      .filter(
+        (note) =>
+          note.workspaceId === workspaceId &&
+          note.parentId === parentId &&
+          !note.isTrashed,
+      )
+      .toSorted((a, b) => a.title.localeCompare(b.title))
       .map((n) => n.id);
   },
 );
