@@ -55,7 +55,6 @@ describe("DatabaseViewDAO", () => {
       title: `Test Note${id}`,
       workspaceId: workspaceId,
       parentId,
-      orderHint: Rank.default().get(),
       favoriteOrderHint: Rank.default().get(),
       createdAt: new Date(),
       modifiedAt: new Date(),

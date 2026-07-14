@@ -10,11 +10,7 @@ import { DarkwriteAPIClient } from "@/api/api-client";
 import { extractNoteDragData } from "@/features/dnd/datatransfer";
 import type { RootState } from "@/features/store/types";
 import { resultQueryFn } from "@/lib/query-result";
-import {
-  calculateOptimisticRankInLayer,
-  calculateRelativeOptimisticRank,
-} from "./note-rank-optimistic";
-import { selectNoteById, selectNotesByParentId } from "./note-selectors";
+import { selectNoteById } from "./note-selectors";
 import { updateNote, upsertNotes } from "./note-slice";
 import { NOTES_TAG_TYPE, noteByParentIdTag, notesApi } from "./notes-api";
 
@@ -73,29 +69,15 @@ export const moveNoteApi = notesApi.injectEndpoints({
           return;
         }
 
-        const childNotes = selectNotesByParentId(
-          state,
-          note.workspaceId,
-          args.destinationNoteId,
-        );
-
         const undoPatch: Partial<NoteDTO> = {
           parentId: note.parentId,
-          orderHint: note.orderHint,
         };
-
-        const newOrderHint = calculateOptimisticRankInLayer(
-          childNotes,
-          args.placement,
-          (id: string) => selectNoteById(state, id),
-        );
 
         dispatch(
           updateNote({
             id: args.sourceNoteId,
             changes: {
               parentId: args.destinationNoteId,
-              orderHint: newOrderHint,
             },
           }),
         );
@@ -143,26 +125,13 @@ export const moveNoteApi = notesApi.injectEndpoints({
         const sourceNote = selectNoteById(state, sourceNoteId);
 
         if (!aboveNote || !sourceNote) return;
-        const siblings = selectNotesByParentId(
-          state,
-          aboveNote.workspaceId,
-          aboveNote.parentId,
-        );
-
-        const newOrderHint = calculateRelativeOptimisticRank(
-          aboveNoteId,
-          siblings,
-          (id: string) => selectNoteById(state, id),
-        );
 
         const undoPatch: Partial<NoteDTO> = {
           parentId: sourceNote.parentId,
-          orderHint: sourceNote.orderHint,
         };
 
         const changes: Partial<NoteDTO> = {
           parentId: aboveNote.parentId,
-          orderHint: newOrderHint,
         };
 
         dispatch(
