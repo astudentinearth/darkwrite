@@ -14,7 +14,6 @@ export interface NoteDTO {
   createdAt: string;
   modifiedAt: string;
   trashedAt: string | null;
-  orderHint: string;
   favoriteOrderHint: string;
   isFavorite: boolean | null;
   isTrashed: boolean | null;
@@ -140,7 +139,7 @@ export type NoteImportResult = {
   content: string[];
 };
 
-export type OrderKey = "orderHint" | "favoriteOrderHint";
+export type OrderKey = "favoriteOrderHint";
 export type ParentId = string | null;
 export type MovePlacement = "inside-start" | "inside-end" | "below";
 

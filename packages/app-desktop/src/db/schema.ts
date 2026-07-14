@@ -40,7 +40,6 @@ export const note = sqliteTable("note", {
   isFavorite: bool(),
   isTrashed: bool(),
   favoriteOrderHint: text().notNull(),
-  orderHint: text().notNull(),
   workspaceId: text()
     .references(() => workspace.id, { onDelete: "cascade" })
     .notNull(),

@@ -1,0 +1,1 @@
+ALTER TABLE `note` DROP COLUMN `orderHint`;

@@ -26,12 +26,7 @@ export const NoteListItem = memo(function ({
   id: string;
   children: ReactNode[] | ReactNode;
 }) {
-  return (
-    <>
-      <NoteItem id={id}>{children}</NoteItem>
-      <NoteDropZone aboveOrParentId={id} mode="below" />
-    </>
-  );
+  return <NoteItem id={id}>{children}</NoteItem>;
 });
 
 export function NoteItem({
