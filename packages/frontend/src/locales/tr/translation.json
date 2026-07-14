@@ -116,7 +116,9 @@
       "systemMode": "Sistem",
       "darkMode": "Koyu",
       "lightColorScheme": "Açık renk teması",
-      "darkColorScheme": "Koyu renk teması"
+      "darkColorScheme": "Koyu renk teması",
+      "compactSidebar": "Sıkışık kenar çubuğu düzeni",
+      "compactSidebarDescription": "Kenar çubuğuna birkaç notun daha sığmasını sağlar"
     },
     "fonts": {
       "title": "Yazı tipleri",

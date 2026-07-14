@@ -116,7 +116,9 @@
       "systemMode": "System",
       "darkMode": "Dark",
       "lightColorScheme": "Light color theme",
-      "darkColorScheme": "Dark color theme"
+      "darkColorScheme": "Dark color theme",
+      "compactSidebar": "Compact sidebar layout",
+      "compactSidebarDescription": "Makes a few more notes fit into the sidebar"
     },
     "fonts": {
       "title": "Fonts",

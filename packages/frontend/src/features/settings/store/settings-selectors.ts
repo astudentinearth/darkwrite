@@ -17,3 +17,8 @@ export const selectEditorSettings = createSelector(
   selectSettings,
   (settings) => settings.editor,
 );
+
+export const selectCompactSidebar = createSelector(
+  selectAppearanceSettings,
+  (settings) => settings.compactSidebar,
+);

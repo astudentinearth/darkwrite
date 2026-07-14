@@ -13,7 +13,7 @@ export function SwitchablePreference(props: SwitchableProps) {
 
   return (
     <div className="flex items-center justify-between">
-      <div className="flex flex-col-gap-2">
+      <div className="flex flex-col gap-1">
         <Label htmlFor={id}>{props.title}</Label>
         {props.description && (
           <p className="text-sm text-muted-foreground">{props.description}</p>

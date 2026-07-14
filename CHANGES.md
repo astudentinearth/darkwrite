@@ -1,7 +1,8 @@
 # 1.3.0-beta.1
 ## 🌟 Features
-- Introducing **Databases** (finally)
+- Introducing **Databases** (finally) (#13)
 - Add read-only toggle (#32)
+- Add compact sidebar mode
 
 ## ✨ Improvements and fixes
 - Fix translation issue in back/forward buttons (the English keys had Turkish content for some reason)

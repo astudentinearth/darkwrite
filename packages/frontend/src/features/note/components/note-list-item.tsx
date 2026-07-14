@@ -9,6 +9,8 @@ import {
 } from "@/components/ui";
 import { TextTooltip } from "@/components/ui/tooltip";
 import { navigateToNote } from "@/features/navigation/navigator";
+import { selectCompactSidebar } from "@/features/settings/store/settings-selectors";
+import { useAppSelector } from "@/features/store/hooks";
 import { cn, getNoteIcon2 } from "@/lib/utils";
 import {
   useNoteDropZone,
@@ -46,6 +48,8 @@ export function NoteItem({
   const { isDragging, onDrag, onDragEnter, onDragLeave, onDrop, onDragOver } =
     useNoteItemDrag(id);
 
+  const compactMode = useAppSelector(selectCompactSidebar);
+
   if (!note) return null;
 
   return (
@@ -62,6 +66,7 @@ export function NoteItem({
           className={cn(
             `group grid grid-cols-[20px_1fr] active:pushdown-99% hover:grid-cols-[20px_1fr_20px] w-full
           items-center gap-2 rounded-md px-1.5 py-1.5 text-sm hover:bg-secondary/50`,
+            compactMode && "py-1 px-1",
             isActive && "bg-secondary/20 font-medium",
             isDragging && "bg-primary/25",
           )}
