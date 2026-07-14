@@ -17,7 +17,8 @@
       "newWorkspace": "Create new workspace",
       "newWorkspaceError": "Failed to create workspace",
       "offlineHeading": "Workspaces on your device",
-      "cloudHeading": "Workspaces in the cloud"
+      "cloudHeading": "Workspaces in the cloud",
+      "currentWorkspace": "Current workspace"
     },
     "title": {
       "favorites": "Favorites",

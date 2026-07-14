@@ -17,7 +17,8 @@
       "newWorkspace": "Çalışma alanı oluştur",
       "newWorkspaceError": "Çalışma alanı oluşturulamadı.",
       "offlineHeading": "Cihazınızdaki çalışma alanları",
-      "cloudHeading": "Buluttaki çalışma alanları"
+      "cloudHeading": "Buluttaki çalışma alanları",
+      "currentWorkspace": "Etkin çalışma alanı"
     },
     "title": {
       "favorites": "Favoriler",

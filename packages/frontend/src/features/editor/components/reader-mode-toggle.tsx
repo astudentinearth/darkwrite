@@ -16,7 +16,7 @@ export function ReaderModeToggle() {
         variant="ghost"
         onClick={() => onValueChange(EditorMode.Edit)}
         className={cn(
-          "p-1.5 h-fit",
+          "p-1.5 h-fit rounded-[6px]",
           value === EditorMode.Edit && "bg-view-2 top-highlight",
         )}
       >
@@ -26,7 +26,7 @@ export function ReaderModeToggle() {
         variant="ghost"
         onClick={() => onValueChange(EditorMode.ReadOnly)}
         className={cn(
-          "p-1.5 h-fit",
+          "p-1.5 h-fit rounded-[6px]",
           value === EditorMode.ReadOnly && "bg-view-2 top-highlight",
         )}
       >

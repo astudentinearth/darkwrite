@@ -5,6 +5,7 @@
 
 ## ✨ Improvements and fixes
 - Fix translation issue in back/forward buttons (the English keys had Turkish content for some reason)
+- Updated workspace switcher
 
 # 1.2.3-beta.1
 ## 🌟 Features

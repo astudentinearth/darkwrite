@@ -16,12 +16,15 @@ export function WorkspaceItem({
       {...props}
       variant={"ghost"}
       className={cn(
-        "flex justify-start p-1 w-full h-fit gap-3 items-center",
+        "flex justify-start p-1 w-full h-fit gap-1.5 items-center",
         props.active && "bg-secondary/15",
         className,
       )}
     >
-      <WorkspaceIcon workspace={workspace} className="w-8 h-8 text-lg" />
+      <WorkspaceIcon
+        workspace={workspace}
+        className="w-6 h-6 rounded-sm text-lg"
+      />
       <div className="flex flex-col text-start">
         <span>{workspace.name}</span>
       </div>

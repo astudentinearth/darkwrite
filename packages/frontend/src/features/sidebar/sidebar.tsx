@@ -1,4 +1,4 @@
-import { IconLayoutSidebar } from "@tabler/icons-react";
+import { IconLayoutSidebar, IconSettings } from "@tabler/icons-react";
 import { LayoutDashboard, PanelRightOpen, Search } from "lucide-react";
 import type React from "react";
 import { useTranslation } from "react-i18next";
@@ -10,6 +10,7 @@ import NoteListRoot from "@/features/note/note-list-root";
 import { cn } from "@/lib/utils";
 import { TrashWidget } from "../note/components/trash";
 import { showSearch } from "../search/search-state";
+import SettingsDialog from "../settings/settings-dialog";
 import AppMenu from "./app-menu";
 import FavoritesContainer from "./favorites-container";
 import { SidebarNavigation } from "./navigation";
@@ -63,13 +64,28 @@ export function Sidebar(props: SidebarProps) {
       </div>
       <div className="h-full w-full grow pl-2 pr-2 py-0 overflow-y-auto scroll-view">
         <div className="flex gap-2 flex-col mb-16 max-w-full">
-          <WorkspaceSwitcher />
           <SidebarNavigation />
           <FavoritesContainer />
           <NoteListRoot />
           <div className="flex flex-col gap-0.5"></div>
           <TrashWidget />
         </div>
+      </div>
+      <div
+        style={{
+          boxShadow: "0px -8px 12px var(--background)",
+        }}
+        className="p-2 pb-3 grid grid-cols-[1fr_auto] z-1 bg-background"
+      >
+        <WorkspaceSwitcher />
+        <SettingsDialog>
+          <Button
+            variant="ghost"
+            className="w-8 h-8 text-muted-foreground hover:bg-secondary/40"
+          >
+            <IconSettings size={18} />
+          </Button>
+        </SettingsDialog>
       </div>
     </div>
   );

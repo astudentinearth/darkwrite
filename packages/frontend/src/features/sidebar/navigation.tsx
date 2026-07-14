@@ -1,10 +1,9 @@
-import { IconHome, IconSettings } from "@tabler/icons-react";
-import { Home, Notebook, Settings } from "lucide-react";
+import { IconHome } from "@tabler/icons-react";
+import { Notebook } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { navigateHome } from "../navigation/navigator";
-import SettingsDialog from "../settings/settings-dialog";
 import { CreatePageButton } from "./create-page-button";
 import { SidebarItem } from "./sidebar-item";
 
@@ -26,12 +25,6 @@ export function SidebarNavigation() {
         <Notebook size={16} />
         <span>{"Journal"}</span>
       </SidebarItem>
-      <SettingsDialog>
-        <SidebarItem>
-          <IconSettings size={18} />
-          <span>{t("settings")}</span>
-        </SidebarItem>
-      </SettingsDialog>
     </div>
   );
 }
