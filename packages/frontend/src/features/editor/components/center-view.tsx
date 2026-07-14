@@ -1,6 +1,7 @@
 import { nanoid } from "nanoid";
 import { use, useRef } from "react";
 import { Dialog, DialogContentContainer, DialogOverlay } from "@/components/ui";
+import NoteDropdown from "@/features/layout/note-dropdown";
 import Toolbar from "@/features/layout/toolbar";
 import { navigateToNote } from "@/features/navigation/navigator";
 import { useAppDispatch, useAppSelector } from "@/features/store/hooks";
@@ -54,6 +55,7 @@ function CenterViewContent() {
       <div className="w-full flex z-10 pr-2 gap-2">
         <OpenFullscreenButton />
         <ReaderModeToggle />
+        <NoteDropdown id={noteId} />
         <div className="grow" />
         <Toolbar noteId={noteId} />
       </div>

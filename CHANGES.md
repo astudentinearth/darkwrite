@@ -3,6 +3,7 @@
 - Introducing **Databases** (finally) (#13)
 - Add read-only toggle (#32)
 - Add compact sidebar mode
+- Revamped parent tree dropdown
 
 ## ✨ Improvements and fixes
 - Fix translation issue in back/forward buttons (the English keys had Turkish content for some reason)

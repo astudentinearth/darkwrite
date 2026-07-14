@@ -27,5 +27,5 @@ export default function PageTitle() {
         </TitlebarNavTrigger>
       );
   }
-  return <NoteDropdown />;
+  return null;
 }

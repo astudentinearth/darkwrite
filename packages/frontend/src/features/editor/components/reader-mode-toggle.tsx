@@ -11,7 +11,7 @@ export function ReaderModeToggle() {
     dispatch(editorSlice.actions.setMode(val));
 
   return (
-    <div className="bg-view-1 flex p-0.5 w-fit rounded-md top-highlight">
+    <div className="bg-view-1 flex p-0.5 w-fit h-fit rounded-md top-highlight">
       <Button
         variant="ghost"
         onClick={() => onValueChange(EditorMode.Edit)}

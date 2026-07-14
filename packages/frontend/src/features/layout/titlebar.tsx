@@ -12,6 +12,7 @@ import { ReaderModeToggle } from "../editor/components/reader-mode-toggle";
 import { editorSlice } from "../editor/store/editor-slice";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { HistoryNavigation } from "./navigation";
+import NoteDropdown from "./note-dropdown";
 import PageTitle from "./page-title";
 import Toolbar from "./toolbar";
 import TrafficLightsPlaceholder from "./traffic-lights-placeholder";
@@ -50,7 +51,7 @@ export function Titlebar() {
       </TextTooltip>
       <HistoryNavigation />
       {noteId && <ReaderModeToggle />}
-      <PageTitle />
+      {noteId ? <NoteDropdown id={noteId} /> : <PageTitle />}
       <div className="grow"></div>
       {noteId && <Toolbar noteId={noteId} />}
     </div>
