@@ -14,6 +14,7 @@ import { useAppSelector } from "@/features/store/hooks";
 import { cn, getNoteIcon2 } from "@/lib/utils";
 import { useNoteItem, useNoteItemDrag } from "../hooks/use-note-item";
 import { NoteContextMenuContainer } from "../note-context-menu";
+import { NoteTitle } from "./note-title";
 
 export const NoteListItem = memo(function ({
   id,
@@ -83,13 +84,9 @@ export function NoteItem({
               </span>
             </button>
           </CollapsibleTrigger>
-          <span className="flex-1 truncate text-left select-none opacity-75 group-hover:opacity-100">
-            {note.title || (
-              <span className="text-muted-foreground">
-                {t("defaults.pageTitle")}
-              </span>
-            )}
-          </span>
+          <NoteTitle className="flex-1 truncate text-left select-none opacity-75 group-hover:opacity-100">
+            {note.title}
+          </NoteTitle>
           {note.type !== NoteType.DatabaseView && (
             <TextTooltip text={t("sidebar.notes.contextmenu.newSubpage")}>
               <button

@@ -1,4 +1,4 @@
-import { NoteType } from "@darkwrite/common";
+import { NoteType, type ParentId } from "@darkwrite/common";
 import { type MouseEvent, useCallback, useEffect, useState } from "react";
 import { matchPath } from "react-router-dom";
 import { beginDrag, DragType } from "@/features/dnd/datatransfer";
@@ -9,10 +9,7 @@ import {
 } from "@/features/navigation/navigator";
 import { useAppSelector, useAppStore } from "@/features/store/hooks";
 import { useCurrentWorkspaceId } from "@/features/workspaces/hooks/use-workspace";
-import {
-  getMovingNote,
-  useMoveNoteMutation,
-} from "../store/move-note";
+import { getMovingNote, useMoveNoteMutation } from "../store/move-note";
 import { canMoveNoteInto } from "../store/move-note-validator";
 import { useNoteActions } from "../store/note-actions";
 import { selectAllNotesAsMap, selectNoteById } from "../store/note-selectors";
@@ -57,7 +54,7 @@ export function useNoteItem(id: string) {
   return { note, isActive, createChild, draggable, acceptsDrop, expandable };
 }
 
-export function useNoteItemDrag(id: string) {
+export function useNoteItemDrag(id: ParentId) {
   const store = useAppStore();
   const {
     isDraggingOver,
@@ -71,6 +68,7 @@ export function useNoteItemDrag(id: string) {
   type DragEvent = React.DragEvent<HTMLElement>;
   const onDrag = useCallback(
     (event: DragEvent) => {
+      if (!id) return;
       beginDrag({ type: DragType.NOTE, noteId: id }, event, "move");
     },
     [id],
