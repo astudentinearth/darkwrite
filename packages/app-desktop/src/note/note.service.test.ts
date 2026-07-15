@@ -221,6 +221,32 @@ describe("note service tests", () => {
 
       expect(result.isErr()).toBe(true);
     });
+
+    it("should update workspaceId when moving across workspaces", async () => {
+      const otherWorkspace = (
+        await WorkspaceDAO(() => resolveTx(db)).create({
+          name: "Other Workspace",
+          createdAt: new Date(),
+        })
+      )._unsafeUnwrap();
+
+      const parentInOther = await createNote("Parent in other");
+      await noteDAO.update({
+        id: parentInOther.id,
+        workspaceId: otherWorkspace.id,
+      });
+
+      const source = await createNote("Source");
+
+      await noteService.move({
+        sourceId: source.id,
+        parentId: parentInOther.id,
+      });
+
+      const updated = (await noteDAO.findById(source.id))._unsafeUnwrap();
+      expect(updated.parentId).toBe(parentInOther.id);
+      expect(updated.workspaceId).toBe(otherWorkspace.id);
+    });
   });
 
   describe("createDatabase", () => {

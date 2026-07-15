@@ -175,6 +175,7 @@ export function NoteService(
             noteDAO.update({
               id: source.id,
               parentId: parent?.id ?? null,
+              workspaceId: parent?.workspaceId ?? source.workspaceId,
             }),
           ),
       db,
