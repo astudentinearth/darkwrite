@@ -10,6 +10,7 @@ export * from "./dto/response/note.response";
 export * from "./dto/response/theme.response";
 export * from "./dto/response/workspace.response";
 export * from "./event/bus";
+export * from "./favorite-ids";
 export * from "./field";
 export * from "./font";
 export * from "./id";
