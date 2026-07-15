@@ -154,61 +154,72 @@ describe("note service tests", () => {
     });
   });
 
-  describe("moveInto and moveBelow tests", () => {
-    it("moveBelow should move source note below target note", async () => {
-      const parent = await createNote("Parent");
-      const noteA = await createNote("Note A", parent.id);
-      const source = await createNote("Source");
-
-      await noteService.move({
-        destinationId: noteA.id,
-        sourceId: source.id,
-        placement: "below",
-      });
-
-      const updatedSource = (await noteDAO.findById(source.id))._unsafeUnwrap();
-      expect(updatedSource.parentId).toBe(parent.id);
-    });
-
-    it("moveInto 'start' should move source to start of destination", async () => {
+  describe("move tests", () => {
+    it("should move a note to a new parent", async () => {
       const parent = await createNote("Parent");
       const source = await createNote("Source");
 
       await noteService.move({
-        placement: "inside-start",
         sourceId: source.id,
-        destinationId: parent.id,
+        parentId: parent.id,
       });
 
-      const updatedSource = (await noteDAO.findById(source.id))._unsafeUnwrap();
-      expect(updatedSource.parentId).toBe(parent.id);
+      const updated = (await noteDAO.findById(source.id))._unsafeUnwrap();
+      expect(updated.parentId).toBe(parent.id);
     });
 
-    it("moveInto 'end' should move source to end of destination", async () => {
-      const parent = await createNote("Parent");
+    it("should move a note to root", async () => {
+      const source = await createNote("Source", "some-parent");
+
+      await noteService.move({ sourceId: source.id, parentId: null });
+
+      const updated = (await noteDAO.findById(source.id))._unsafeUnwrap();
+      expect(updated.parentId).toBeNull();
+    });
+
+    it("should prevent circular moves", async () => {
       const source = await createNote("Source");
+      const child = await createNote("Child", source.id);
 
-      await noteService.move({
-        placement: "inside-end",
+      const result = await noteService.move({
         sourceId: source.id,
-        destinationId: parent.id,
+        parentId: child.id,
       });
 
-      const updatedSource = (await noteDAO.findById(source.id))._unsafeUnwrap();
-      expect(updatedSource.parentId).toBe(parent.id);
+      expect(result.isErr()).toBe(true);
     });
 
-    it("moveInto with null destination (root) should work", async () => {
-      const source = await createNote("Source", "some-other-id");
+    it("should not move a note that does not exist", async () => {
+      const parent = await createNote("asdf");
 
-      await noteService.move({
-        placement: "inside-end",
-        sourceId: source.id,
-        destinationId: null,
+      const result = await noteService.move({
+        sourceId: "i do not exist",
+        parentId: parent.id,
       });
 
-      const updatedSource = (await noteDAO.findById(source.id))._unsafeUnwrap();
-      expect(updatedSource.parentId).toBeNull();
+      expect(result.isErr()).toBe(true);
+    });
+
+    it("should not move to a note that does not exist", async () => {
+      const source = await createNote("source");
+      const result = await noteService.move({
+        sourceId: source.id,
+        parentId: "i do not exist",
+      });
+      expect(result.isErr()).toBe(true);
+    });
+
+    it("should not move a trashed note", async () => {
+      const source = await createNote("Source");
+      await noteService.moveToTrash(source.id);
+      const parent = await createNote("Parent");
+
+      const result = await noteService.move({
+        sourceId: source.id,
+        parentId: parent.id,
+      });
+
+      expect(result.isErr()).toBe(true);
     });
   });
 

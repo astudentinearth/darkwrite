@@ -12,11 +12,7 @@ import { navigateToNote } from "@/features/navigation/navigator";
 import { selectCompactSidebar } from "@/features/settings/store/settings-selectors";
 import { useAppSelector } from "@/features/store/hooks";
 import { cn, getNoteIcon2 } from "@/lib/utils";
-import {
-  useNoteDropZone,
-  useNoteItem,
-  useNoteItemDrag,
-} from "../hooks/use-note-item";
+import { useNoteItem, useNoteItemDrag } from "../hooks/use-note-item";
 import { NoteContextMenuContainer } from "../note-context-menu";
 
 export const NoteListItem = memo(function ({
@@ -116,23 +112,3 @@ export function NoteItem({
     </Collapsible>
   );
 }
-
-export const NoteDropZone = memo(function ({
-  aboveOrParentId,
-  mode,
-}: {
-  aboveOrParentId: string | null;
-  mode: "below" | "into";
-}) {
-  const { isDragging, onDragEnter, onDragLeave, onDragOver, onDrop } =
-    useNoteDropZone(aboveOrParentId, mode);
-  return (
-    <div
-      onDragEnter={onDragEnter}
-      onDragLeave={onDragLeave}
-      onDragOver={onDragOver}
-      onDrop={onDrop}
-      className={cn("h-1", isDragging && "bg-primary/20")}
-    ></div>
-  );
-});

@@ -2,7 +2,6 @@ import {
   type CreateDatabaseRequest,
   type CreateDocumentRequest,
   DatabaseViewType,
-  type DwError,
   dwErr,
   dwErrAsync,
   type MoveNoteDTO,
@@ -10,7 +9,7 @@ import {
   Rank,
   type UpdateNoteDTO,
 } from "@darkwrite/common";
-import { ok, okAsync, type Result, ResultAsync } from "neverthrow";
+import { ok, okAsync, ResultAsync } from "neverthrow";
 import type { DatabaseType } from "@/db";
 import type { NewNote, Note } from "@/db/schema";
 import { resolveTx, transactional } from "@/db/transactional";
@@ -43,12 +42,6 @@ function buildDuplicate({ title, icon, workspaceId, parentId }: Note): NewNote {
   };
 }
 
-function validateMoveDto(dto: MoveNoteDTO): Result<void, DwError> {
-  if (dto.placement !== "below") return ok();
-  if (!dto.destinationId) return dwErr("Cannot move a note below nothing.");
-  return ok();
-}
-
 export function NoteService(
   db: DatabaseType,
   documentService: IDocumentService,
@@ -56,40 +49,26 @@ export function NoteService(
   const noteDAO = NoteDAO(() => resolveTx(db));
   const databaseViewDAO = DatabaseViewDAO(() => resolveTx(db));
 
-  const assertNotDescendant = (result: boolean | "CIRCULAR") =>
-    result === "CIRCULAR" || result === true
-      ? dwErrAsync(
-          "Could not move note.",
-          "This movement would create a circular reference.",
-        )
-      : ok();
-
-  /** @internal */
-  function canMoveBelow(source: Note, dest: Note) {
-    if (source.isTrashed || dest.isTrashed)
+  const isTrashOrCircular = (source: Note, parent?: Note | null) => {
+    if (source.isTrashed)
+      return dwErrAsync("Could not move note.", "The source note is in trash.");
+    if (parent?.isTrashed)
       return dwErrAsync(
         "Could not move note.",
         "The target note is in trash. Take it out first.",
       );
-
+    if (!parent) return okAsync<undefined>(undefined);
     return noteDAO
-      .isDescendant(dest.id, source.id)
-      .andThen(assertNotDescendant);
-  }
-
-  /** @internal */
-  function canMoveInto(source: Note, dest: Note | null) {
-    if (!dest) return okAsync();
-    if (source.isTrashed || dest.isTrashed)
-      return dwErrAsync(
-        "Could not move note.",
-        "The target note is in trash. Take it out first.",
+      .isDescendant(parent.id, source.id)
+      .andThen((result) =>
+        result === "CIRCULAR" || result === true
+          ? dwErrAsync(
+              "Could not move note.",
+              "This movement would create a circular reference.",
+            )
+          : okAsync(undefined),
       );
-    else
-      return noteDAO
-        .isDescendant(dest?.id, source.id)
-        .andThen(assertNotDescendant);
-  }
+  };
 
   /** @internal */
   function computeFavoriteRank(workspaceId: string, aboveId?: string | null) {
@@ -180,49 +159,24 @@ export function NoteService(
   const move = (dto: MoveNoteDTO) =>
     transactional(
       () =>
-        validateMoveDto(dto)
-          .asyncAndThen(() =>
-            ResultAsync.combine([
-              noteDAO.findById(dto.sourceId),
-              dto.destinationId
-                ? noteDAO.findById(dto.destinationId)
-                : okAsync(null),
-            ]),
+        noteDAO
+          .findById(dto.sourceId)
+          .andThen((source) =>
+            dto.parentId
+              ? noteDAO
+                  .findById(dto.parentId)
+                  .map((parent) => ({ source, parent }))
+              : okAsync({ source, parent: null as Note | null }),
           )
-          .andThen(([source, destination]) =>
-            dto.placement === "below"
-              ? // biome-ignore lint/style/noNonNullAssertion: we validated dto shape previously
-                moveBelow(source, destination!)
-              : moveInto(source, destination, dto.placement),
+          .andThen(({ source, parent }) =>
+            isTrashOrCircular(source, parent).map(() => ({ source, parent })),
+          )
+          .andThen(({ source, parent }) =>
+            noteDAO.update({
+              id: source.id,
+              parentId: parent?.id ?? null,
+            }),
           ),
-      db,
-    );
-
-  const moveBelow = (source: Note, destination: Note) =>
-    transactional(
-      () =>
-        canMoveBelow(source, destination).andThen(() =>
-          noteDAO.update({
-            id: source.id,
-            parentId: destination.parentId,
-          }),
-        ),
-      db,
-    );
-
-  const moveInto = (
-    source: Note,
-    destination: Note | null,
-    _placement: "inside-start" | "inside-end",
-  ) =>
-    transactional(
-      () =>
-        canMoveInto(source, destination).andThen(() =>
-          noteDAO.update({
-            id: source.id,
-            parentId: destination?.id ?? null,
-          }),
-        ),
       db,
     );
 

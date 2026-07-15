@@ -61,12 +61,11 @@ export const getNoteActions = (dispatch: AppDispatch) => ({
     return dispatch(databaseViewApi.endpoints.createDatabaseView.initiate(args))
   },
 
-  async moveInto(noteId: string, destinationNoteId: string, showToast = true) {
+  async moveInto(noteId: string, parentId: string, showToast = true) {
     const result = dispatch(
-      moveNoteApi.endpoints.moveInto.initiate({
-        destinationNoteId,
-        placement: "inside-end",
+      moveNoteApi.endpoints.moveNote.initiate({
         sourceNoteId: noteId,
+        parentId,
       }),
     ).unwrap();
     try {

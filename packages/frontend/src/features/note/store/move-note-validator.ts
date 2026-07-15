@@ -13,22 +13,3 @@ export function canMoveNoteInto(
 
   return true;
 }
-
-export function canMoveNoteBelow(
-  movingNoteId: string,
-  aboveNoteId: string,
-  notes: Record<string, NoteDTO>,
-) {
-  const aboveNote = notes[aboveNoteId];
-  if (!aboveNote) return false;
-  if (aboveNote.parentId == null) return true;
-  const isCircularMovement = isDescendant(
-    aboveNote.parentId,
-    movingNoteId,
-    notes,
-  );
-
-  if (isCircularMovement) return false;
-
-  return true;
-}

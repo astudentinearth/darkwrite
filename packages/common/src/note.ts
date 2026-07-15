@@ -141,7 +141,6 @@ export type NoteImportResult = {
 
 export type OrderKey = "favoriteOrderHint";
 export type ParentId = string | null;
-export type MovePlacement = "inside-start" | "inside-end" | "below";
 
 /** 📄*/
 export const DEFAULT_NOTE_ICON = "1f4c4";
