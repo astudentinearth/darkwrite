@@ -81,7 +81,6 @@ describe("delete workspace", () => {
     const note: NewNote = {
       title,
       workspaceId,
-      orderHint: "a",
       favoriteOrderHint: "a",
       parentId: null,
       createdAt: new Date(),

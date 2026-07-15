@@ -38,10 +38,8 @@ export const UpdateNoteDTOSchema = z.object({
 export type UpdateNoteDTO = z.infer<typeof UpdateNoteDTOSchema>;
 
 export const MoveNoteDTOSchema = z.object({
-  workspaceId: z.string().optional(),
   sourceId: z.string(),
-  destinationId: z.string().nullable(),
-  placement: z.enum(["below", "inside-start", "inside-end"]),
+  parentId: z.string().nullable(),
 });
 
 export type MoveNoteDTO = z.infer<typeof MoveNoteDTOSchema>;

@@ -50,7 +50,6 @@ describe("NoteDAO", () => {
       title: `Test Note${id}`,
       workspaceId: workspaceId,
       parentId,
-      orderHint: Rank.default().get(),
       favoriteOrderHint: Rank.default().get(),
       createdAt: new Date(),
       modifiedAt: new Date(),
@@ -73,7 +72,6 @@ describe("NoteDAO", () => {
         createdAt: new Date(),
         modifiedAt: new Date(),
         favoriteOrderHint: "",
-        orderHint: "",
         title: "New note",
       });
       const note = result._unsafeUnwrap();
@@ -90,7 +88,6 @@ describe("NoteDAO", () => {
         createdAt: new Date(),
         modifiedAt: new Date(),
         favoriteOrderHint: "",
-        orderHint: "",
         title: "New note",
       });
       const note = result._unsafeUnwrap();
@@ -232,7 +229,7 @@ describe("NoteDAO", () => {
     });
   });
 
-  describe("findAllByParentId, findAllByParentIdSortAsc", () => {
+  describe("findAllByParentId", () => {
     it("findAllByParentId should return only children of the given parent in the workspace", async () => {
       const parentId = randomUUID();
       const childAId = randomUUID();
@@ -267,143 +264,6 @@ describe("NoteDAO", () => {
       expect(rootIds).toContain(rootId);
       expect(rootIds).toContain(parentId);
       expect(rootIds).not.toContain(childId);
-    });
-
-    it("findAllByParentIdSortAsc should sort children by orderHint ascending", async () => {
-      const parentId = randomUUID();
-      await createNote(parentId);
-
-      const firstRank = Rank.default();
-      const secondRank = firstRank.next();
-      const thirdRank = secondRank.next();
-
-      const firstId = randomUUID();
-      const secondId = randomUUID();
-      const thirdId = randomUUID();
-
-      await saveNote({
-        ...(await buildNote(secondId, parentId)),
-        orderHint: secondRank.get(),
-      });
-      await saveNote({
-        ...(await buildNote(thirdId, parentId)),
-        orderHint: thirdRank.get(),
-      });
-      await saveNote({
-        ...(await buildNote(firstId, parentId)),
-        orderHint: firstRank.get(),
-      });
-
-      const sorted = await noteDao.findAllByParentIdSortAsc(
-        workspaceId,
-        parentId,
-      );
-      const sortedIds = sorted._unsafeUnwrap().map((n) => n.id);
-      const expectedOrder = [firstId, secondId, thirdId];
-
-      expect(sortedIds).toEqual(expectedOrder);
-    });
-  });
-
-  describe("findFirstNoteInLayer, findLastNoteInLayer, findLastNoteInFavorites", () => {
-    it("findFirstNoteInLayer should return the smallest orderHint among non-trashed notes", async () => {
-      const parentId = randomUUID();
-      await createNote(parentId);
-
-      const smallestRank = Rank.default();
-      const middleRank = smallestRank.next();
-      const largestRank = middleRank.next();
-
-      const firstExpectedId = randomUUID();
-      const trashedSmallerId = randomUUID();
-      const otherId = randomUUID();
-
-      await saveNote({
-        ...(await buildNote(firstExpectedId, parentId)),
-        orderHint: smallestRank.get(),
-      });
-      await saveNote({
-        ...(await buildNote(trashedSmallerId, parentId)),
-        orderHint: new Rank(smallestRank.get()).prev().get(),
-        isTrashed: true,
-      });
-      await saveNote({
-        ...(await buildNote(otherId, parentId)),
-        orderHint: largestRank.get(),
-      });
-
-      const first = (
-        await noteDao.findFirstNoteInLayer(workspaceId, parentId)
-      )._unsafeUnwrap();
-
-      expect(first).not.toBeUndefined();
-      expect(first?.id).toBe(firstExpectedId);
-    });
-
-    it("findLastNoteInLayer should return the greatest orderHint among non-trashed notes", async () => {
-      const parentId = randomUUID();
-      await createNote(parentId);
-
-      const firstRank = Rank.default();
-      const secondRank = firstRank.next();
-      const thirdRank = secondRank.next();
-
-      const expectedLastId = randomUUID();
-      const trashedLargestId = randomUUID();
-
-      await saveNote({
-        ...(await buildNote(randomUUID(), parentId)),
-        orderHint: firstRank.get(),
-      });
-      await saveNote({
-        ...(await buildNote(expectedLastId, parentId)),
-        orderHint: thirdRank.get(),
-      });
-      await saveNote({
-        ...(await buildNote(trashedLargestId, parentId)),
-        orderHint: new Rank(thirdRank.get()).next().get(),
-        isTrashed: true,
-      });
-
-      const last = (
-        await noteDao.findLastNoteInLayer(workspaceId, parentId)
-      )._unsafeUnwrap();
-
-      expect(last).not.toBeUndefined();
-      expect(last?.id).toBe(expectedLastId);
-    });
-
-    it("findLastNoteInFavorites should return the favorite with highest favoriteOrderHint and not trashed", async () => {
-      const firstFavoriteRank = Rank.default();
-      const secondFavoriteRank = firstFavoriteRank.next();
-      const thirdFavoriteRank = secondFavoriteRank.next();
-
-      const expectedId = randomUUID();
-      const trashedHighestFavoriteId = randomUUID();
-
-      await saveNote({
-        ...(await buildNote(randomUUID())),
-        isFavorite: true,
-        favoriteOrderHint: firstFavoriteRank.get(),
-      });
-      await saveNote({
-        ...(await buildNote(expectedId)),
-        isFavorite: true,
-        favoriteOrderHint: secondFavoriteRank.get(),
-      });
-      await saveNote({
-        ...(await buildNote(trashedHighestFavoriteId)),
-        isFavorite: true,
-        isTrashed: true,
-        favoriteOrderHint: thirdFavoriteRank.get(),
-      });
-
-      const lastFavorite = (
-        await noteDao.findLastNoteInFavorites(workspaceId)
-      )._unsafeUnwrap();
-
-      expect(lastFavorite).not.toBeUndefined();
-      expect(lastFavorite?.id).toBe(expectedId);
     });
   });
 
@@ -529,7 +389,7 @@ describe("NoteDAO", () => {
   });
 
   describe("noteRightAfter", () => {
-    it("should return the note with the next greater orderHint", async () => {
+    it("should return the note with the next greater favoriteOrderHint", async () => {
       const firstRank = Rank.default();
       const secondRank = firstRank.next();
       const thirdRank = secondRank.next();
@@ -540,15 +400,15 @@ describe("NoteDAO", () => {
 
       await saveNote({
         ...(await buildNote(firstId)),
-        orderHint: firstRank.get(),
+        favoriteOrderHint: firstRank.get(),
       });
       await saveNote({
         ...(await buildNote(secondId)),
-        orderHint: secondRank.get(),
+        favoriteOrderHint: secondRank.get(),
       });
       await saveNote({
         ...(await buildNote(thirdId)),
-        orderHint: thirdRank.get(),
+        favoriteOrderHint: thirdRank.get(),
       });
 
       const result = (
@@ -570,15 +430,15 @@ describe("NoteDAO", () => {
 
       await saveNote({
         ...(await buildNote(firstId)),
-        orderHint: firstRank.get(),
+        favoriteOrderHint: firstRank.get(),
       });
       await saveNote({
         ...(await buildNote(secondId)),
-        orderHint: secondRank.get(),
+        favoriteOrderHint: secondRank.get(),
       });
       await saveNote({
         ...(await buildNote(thirdId)),
-        orderHint: thirdRank.get(),
+        favoriteOrderHint: thirdRank.get(),
       });
 
       const result = (
@@ -598,11 +458,11 @@ describe("NoteDAO", () => {
 
       await saveNote({
         ...(await buildNote(firstId)),
-        orderHint: firstRank.get(),
+        favoriteOrderHint: firstRank.get(),
       });
       await saveNote({
         ...(await buildNote(lastId)),
-        orderHint: secondRank.get(),
+        favoriteOrderHint: secondRank.get(),
       });
 
       const result = (
@@ -616,7 +476,7 @@ describe("NoteDAO", () => {
       const someId = randomUUID();
       await saveNote({
         ...(await buildNote(randomUUID())),
-        orderHint: Rank.default().get(),
+        favoriteOrderHint: Rank.default().get(),
       });
 
       const result = (
@@ -624,39 +484,6 @@ describe("NoteDAO", () => {
       )._unsafeUnwrap();
 
       expect(result).toBeUndefined();
-    });
-
-    it("should use favoriteOrderHint when specified", async () => {
-      const firstRank = Rank.default();
-      const secondRank = firstRank.next();
-      const thirdRank = secondRank.next();
-
-      const firstId = randomUUID();
-      const secondId = randomUUID();
-      const thirdId = randomUUID();
-
-      await saveNote({
-        ...(await buildNote(firstId)),
-        favoriteOrderHint: firstRank.get(),
-        orderHint: thirdRank.get(),
-      });
-      await saveNote({
-        ...(await buildNote(secondId)),
-        favoriteOrderHint: secondRank.get(),
-        orderHint: secondRank.get(),
-      });
-      await saveNote({
-        ...(await buildNote(thirdId)),
-        favoriteOrderHint: thirdRank.get(),
-        orderHint: firstRank.get(),
-      });
-
-      const result = (
-        await noteDao.noteRightAfter(firstId, workspaceId, "favoriteOrderHint")
-      )._unsafeUnwrap();
-
-      expect(result).not.toBeUndefined();
-      expect(result?.id).toBe(secondId);
     });
 
     it("should not return notes from another workspace", async () => {
@@ -675,13 +502,13 @@ describe("NoteDAO", () => {
 
       await saveNote({
         ...(await buildNote(targetId)),
-        orderHint: firstRank.get(),
+        favoriteOrderHint: firstRank.get(),
       });
-      // A note in another workspace with a higher orderHint
+      // A note in another workspace with a higher favoriteOrderHint
       await saveNote({
         ...(await buildNote(otherWorkspaceNoteId)),
         workspaceId: otherWorkspace.id,
-        orderHint: secondRank.get(),
+        favoriteOrderHint: secondRank.get(),
       });
 
       const result = (
