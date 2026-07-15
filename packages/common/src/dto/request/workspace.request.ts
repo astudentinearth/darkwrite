@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/no-empty-object-type */
 
 import { z } from "zod";
-import { WorkspaceConfigSchema } from "@/workspace-config";
+
+export const ZNoteSortMode = z.enum(["lastModified", "alphabetical"]);
 
 export const CreateWorkspaceDTOSchema = z.object({
   name: z.string(),
   iconUrl: z.string().optional(),
-  config: WorkspaceConfigSchema,
+  allNotesSortMode: ZNoteSortMode.optional(),
 });
 
 export interface CreateWorkspaceDTO
@@ -15,7 +16,7 @@ export interface CreateWorkspaceDTO
 export const UpdateWorkspaceDTOSchema = z.object({
   name: z.string().optional(),
   iconUrl: z.string().nullable().optional(),
-  config: WorkspaceConfigSchema.partial().optional(),
+  allNotesSortMode: ZNoteSortMode.optional(),
 });
 
 export interface UpdateWorkspaceDTO

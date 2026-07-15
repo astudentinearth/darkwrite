@@ -19,14 +19,17 @@ const timestamp = (name?: string) =>
   name ? integer(name, { mode: "timestamp" }) : integer({ mode: "timestamp" });
 const json = () => text({ mode: "json" });
 const noteType = () => text({ enum: ["doc", "database", "database_view"] });
+const jsonArray = <T>() => text({ mode: "json" }).$type<T[]>();
 
 export const workspace = sqliteTable("workspace", {
   id: generatedUuid(),
-  ownerId: text(),
   name: text().notNull(),
   iconUrl: text(),
   createdAt: timestamp().notNull(),
-  config: json(),
+  favoriteIds: jsonArray<string>().default([]).notNull(),
+  allNotesSortMode: text({ enum: ["alphabetical", "lastModified"] })
+    .default("lastModified")
+    .notNull(),
 });
 
 export const note = sqliteTable("note", {
@@ -37,9 +40,7 @@ export const note = sqliteTable("note", {
   createdAt: timestamp().notNull(),
   modifiedAt: timestamp().notNull(),
   trashedAt: timestamp(),
-  isFavorite: bool(),
   isTrashed: bool(),
-  favoriteOrderHint: text().notNull(),
   workspaceId: text()
     .references(() => workspace.id, { onDelete: "cascade" })
     .notNull(),

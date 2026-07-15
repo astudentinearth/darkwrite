@@ -12,6 +12,7 @@ import type {
   CreateDatabaseViewArgs,
   CreateDatabaseViewResponse,
   CreateDocumentArgs,
+  FavoriteActionResponse,
   GetDatabaseViewResponse,
   GetNotesInDatabaseResponse,
   GetViewsByIdResponse,
@@ -101,15 +102,15 @@ export interface INoteAPI {
   /**
    * Favorites a note.
    * @param noteId
-   * @param aboveNoteId undefined for list end, null for list start
+   * @param insertAtIndex position to insert the note in the favorites list. Omit or -1 for end.
    * @returns
    */
   favorite: (
     noteId: string,
-    aboveNoteId?: string | null,
-  ) => ApiResult<NoteResponseDTO>;
+    insertAtIndex?: number,
+  ) => ApiResult<FavoriteActionResponse>;
 
-  unfavorite: (noteId: string) => ApiResult<NoteResponseDTO>;
+  unfavorite: (noteId: string) => ApiResult<FavoriteActionResponse>;
 
   search: (workspaceId: string, query: string) => ApiResult<NotesResponseDTO>;
   getRecents: (workspaceId: string) => ApiResult<NotesResponseDTO>;

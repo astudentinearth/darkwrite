@@ -14,8 +14,6 @@ export interface NoteDTO {
   createdAt: string;
   modifiedAt: string;
   trashedAt: string | null;
-  favoriteOrderHint: string;
-  isFavorite: boolean | null;
   isTrashed: boolean | null;
   workspaceId: string; // ID of the workspace this note belongs to
 }
@@ -139,7 +137,6 @@ export type NoteImportResult = {
   content: string[];
 };
 
-export type OrderKey = "favoriteOrderHint";
 export type ParentId = string | null;
 
 /** 📄*/

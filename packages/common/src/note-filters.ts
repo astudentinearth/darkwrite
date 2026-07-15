@@ -4,10 +4,6 @@ export function notTrashed(note: NoteDTO) {
   return !note.isTrashed;
 }
 
-export function notTrashedAndIsFavorite(note: NoteDTO) {
-  return !note.isTrashed && note.isFavorite;
-}
-
 export function withParent(parentId: string | null | undefined) {
   return (note: NoteDTO) => note.parentId === parentId;
 }

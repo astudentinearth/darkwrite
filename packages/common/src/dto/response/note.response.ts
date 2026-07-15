@@ -46,3 +46,9 @@ export interface GetViewsByIdResponse {
   notes: NoteDTO[];
   views: DatabaseViewMeta[];
 }
+
+export interface FavoriteActionResponse {
+  workspaceId: string;
+  noteId: string;
+  favoriteIds: string[];
+}
