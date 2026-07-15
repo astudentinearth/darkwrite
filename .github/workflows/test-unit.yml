@@ -28,7 +28,7 @@ jobs:
       - name: Install node
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
 
       - name: Checkout
         uses: actions/checkout@v4
@@ -38,9 +38,6 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install
-
-      - name: Ensure better-sqlite3 is built
-        run: pnpm --filter=@darkwrite/app-desktop rebuild better-sqlite3
 
       - name: Lint
         run: pnpm lint
