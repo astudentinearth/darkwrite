@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import { DatabaseViewType, type ParentId, Rank } from "@darkwrite/common";
+import { DatabaseViewType, type ParentId } from "@darkwrite/common";
 import { beforeAll, beforeEach, describe, expect, it } from "vitest";
 import {
   applySqlMigrations,
@@ -55,11 +55,9 @@ describe("DatabaseViewDAO", () => {
       title: `Test Note${id}`,
       workspaceId: workspaceId,
       parentId,
-      favoriteOrderHint: Rank.default().get(),
       createdAt: new Date(),
       modifiedAt: new Date(),
       icon: null,
-      isFavorite: false,
       isTrashed: null,
       trashedAt: null,
       type: "doc",

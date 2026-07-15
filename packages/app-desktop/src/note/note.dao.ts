@@ -4,14 +4,12 @@ import {
   isDescendantAsync,
   NoteType,
   type ParentId,
-  Rank,
 } from "@darkwrite/common";
 import {
   and,
   asc,
   desc,
   eq,
-  gt,
   inArray,
   isNull,
   like,
@@ -37,13 +35,10 @@ const withParent = (parentId: ParentId) =>
 const notTrashed = () =>
   or(isNull(notesTable.isTrashed), ne(notesTable.isTrashed, true));
 const isTrashed = () => eq(notesTable.isTrashed, true);
-const isFavorite = () => eq(notesTable.isFavorite, true);
 const inWorkspace = (workspaceId: string) =>
   eq(notesTable.workspaceId, workspaceId);
 
 export const noteTypeOf = (type: NoteType) => eq(notesTable.type, type);
-
-export type OrderKeyDto = { start: string; end: string };
 
 export function NoteDAO(tx: TxResolver) {
   function create(note: NewNote): DwResultAsync<Note> {
@@ -141,17 +136,6 @@ export function NoteDAO(tx: TxResolver) {
     );
   }
 
-  /** @deprecated */
-  function findAllFavorites(workspaceId: string): DwResultAsync<Note[]> {
-    return dbResult(async () =>
-      tx()
-        .select()
-        .from(notesTable)
-        .where(and(inWorkspace(workspaceId), notTrashed(), isFavorite()))
-        .orderBy(asc(notesTable.favoriteOrderHint)),
-    );
-  }
-
   function findAllTrashed(workspaceId: string): DwResultAsync<Note[]> {
     return dbResult(async () =>
       tx()
@@ -178,23 +162,6 @@ export function NoteDAO(tx: TxResolver) {
         potentialParentId,
         getter,
       );
-    });
-  }
-
-  /** @deprecated */
-  function computeOrderKeysForFavorites(
-    workspaceId: string,
-  ): DwResultAsync<OrderKeyDto> {
-    return findAllFavorites(workspaceId).map((favorites) => {
-      const start = favorites.length
-        ? new Rank(favorites[0].favoriteOrderHint).prev().toString()
-        : Rank.default().toString();
-      const end = favorites.length
-        ? new Rank(favorites[favorites.length - 1].favoriteOrderHint)
-            .next()
-            .toString()
-        : Rank.default().toString();
-      return { start, end };
     });
   }
 
@@ -244,31 +211,6 @@ export function NoteDAO(tx: TxResolver) {
     });
   }
 
-  function noteRightAfter(
-    targetId: string,
-    workspaceId: string,
-    sortBy: "favoriteOrderHint" = "favoriteOrderHint",
-  ): DwResultAsync<Note | undefined> {
-    const target = tx()
-      .select({ [sortBy]: notesTable[sortBy] })
-      .from(notesTable)
-      .where(and(eq(notesTable.id, targetId), inWorkspace(workspaceId)));
-    return dbResult(() =>
-      tx()
-        .select()
-        .from(notesTable)
-        .where(
-          and(
-            gt(notesTable[sortBy], target),
-            notTrashed(),
-            inWorkspace(workspaceId),
-          ),
-        )
-        .orderBy(asc(notesTable[sortBy]))
-        .limit(1),
-    ).map((n) => n.at(0));
-  }
-
   const getAllDocumentsInDatabase = (databaseId: string) =>
     dbResult(() =>
       tx()
@@ -307,14 +249,11 @@ export function NoteDAO(tx: TxResolver) {
     deleteById,
     delete: deleteNote,
     exists,
-    findAllFavorites,
     findAllTrashed,
     isDescendant,
-    computeOrderKeysForFavorites,
     searchByTitle,
     getRecentlyModifiedNotes,
     resolveParentTree,
-    noteRightAfter,
     getAllDocumentsInDatabase,
     getAllDatabasesInWorkspace,
   };

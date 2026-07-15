@@ -1,6 +1,5 @@
 import {
   type CreateWorkspaceDTO,
-  getDefaultWorkspaceConfiguration,
   type UpdateWorkspaceDTO,
 } from "@darkwrite/common";
 import log from "electron-log";
@@ -18,12 +17,12 @@ export function WorkspaceService(
   const noteDAO = NoteDAO(() => resolveTx(db));
   const workspaceDAO = WorkspaceDAO(() => resolveTx(db));
 
-  const createWorkspace = ({ config, name, iconUrl }: CreateWorkspaceDTO) =>
+  const createWorkspace = ({ allNotesSortMode, name, iconUrl }: CreateWorkspaceDTO) =>
     workspaceDAO.create({
-      config,
       name,
       iconUrl,
       createdAt: new Date(),
+      allNotesSortMode
     });
 
   /** Initializes a default workspace if no workspaces exist. Returns true if a workspace already exists, or the newly created workspace if not.
@@ -36,8 +35,7 @@ export function WorkspaceService(
         count > 0
           ? okAsync(true)
           : createWorkspace({
-              name: "My Workspace",
-              config: getDefaultWorkspaceConfiguration(),
+              name: "My Workspace"
             }),
       );
 

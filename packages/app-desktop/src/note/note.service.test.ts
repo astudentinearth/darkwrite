@@ -58,7 +58,6 @@ describe("note service tests", () => {
     const note: NewNote = {
       title,
       workspaceId: workspace.id,
-      favoriteOrderHint: "",
       parentId,
       createdAt: new Date(),
       modifiedAt: new Date(),
@@ -95,7 +94,6 @@ describe("note service tests", () => {
       const trashedInOther: NewNote = {
         title: "Trashed in other",
         workspaceId: otherWorkspace.id,
-        favoriteOrderHint: "",
         parentId: null,
         createdAt: new Date(),
         modifiedAt: new Date(),
@@ -288,7 +286,6 @@ describe("note service tests", () => {
           title: "Parent",
           createdAt: new Date(),
           modifiedAt: new Date(),
-          favoriteOrderHint: "",
         })
       )._unsafeUnwrap();
 

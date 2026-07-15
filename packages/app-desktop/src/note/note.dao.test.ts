@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import { type ParentId, Rank } from "@darkwrite/common";
+import { type ParentId } from "@darkwrite/common";
 import { beforeAll, beforeEach, describe, expect, it } from "vitest";
 import {
   applySqlMigrations,
@@ -50,11 +50,9 @@ describe("NoteDAO", () => {
       title: `Test Note${id}`,
       workspaceId: workspaceId,
       parentId,
-      favoriteOrderHint: Rank.default().get(),
       createdAt: new Date(),
       modifiedAt: new Date(),
       icon: null,
-      isFavorite: false,
       isTrashed: null,
       trashedAt: null,
       type: "doc",
@@ -71,7 +69,6 @@ describe("NoteDAO", () => {
         workspaceId,
         createdAt: new Date(),
         modifiedAt: new Date(),
-        favoriteOrderHint: "",
         title: "New note",
       });
       const note = result._unsafeUnwrap();
@@ -87,7 +84,6 @@ describe("NoteDAO", () => {
         workspaceId,
         createdAt: new Date(),
         modifiedAt: new Date(),
-        favoriteOrderHint: "",
         title: "New note",
       });
       const note = result._unsafeUnwrap();
@@ -132,7 +128,7 @@ describe("NoteDAO", () => {
       const updatedNotes = (
         await noteDao.updateAll([
           { id: note1.id, title: "trashed", isTrashed: true },
-          { id: note2.id, title: "favorite", isFavorite: true },
+          { id: note2.id, title: "updated", icon: "star" },
         ])
       )._unsafeUnwrap();
 
@@ -145,8 +141,8 @@ describe("NoteDAO", () => {
       expect(updated2?.id).toBe(note2.id);
       expect(updated1?.isTrashed).toBeTruthy();
       expect(updated1?.title).toBe("trashed");
-      expect(updated2?.isFavorite).toBeTruthy();
-      expect(updated2?.title).toBe("favorite");
+      expect(updated2?.icon).toBe("star");
+      expect(updated2?.title).toBe("updated");
     });
   });
 
@@ -267,45 +263,7 @@ describe("NoteDAO", () => {
     });
   });
 
-  describe("findAllFavorites, findAllTrashed", () => {
-    it("findAllFavorites should return only non-trashed favorites sorted ascending", async () => {
-      const lowRank = Rank.default();
-      const highRank = lowRank.next();
-
-      const firstExpectedId = randomUUID();
-      const secondExpectedId = randomUUID();
-      const notFavoriteId = randomUUID();
-      const trashedFavoriteId = randomUUID();
-
-      await saveNote({
-        ...(await buildNote(secondExpectedId)),
-        isFavorite: true,
-        favoriteOrderHint: highRank.get(),
-      });
-      await saveNote({
-        ...(await buildNote(firstExpectedId)),
-        isFavorite: true,
-        favoriteOrderHint: lowRank.get(),
-      });
-      await saveNote({
-        ...(await buildNote(notFavoriteId)),
-        isFavorite: false,
-      });
-      await saveNote({
-        ...(await buildNote(trashedFavoriteId)),
-        isFavorite: true,
-        isTrashed: true,
-      });
-
-      const favorites = await noteDao.findAllFavorites(workspaceId);
-      const favoriteIds = favorites._unsafeUnwrap().map((n) => n.id);
-      const expectedOrder = [firstExpectedId, secondExpectedId];
-
-      expect(favoriteIds).toEqual(expectedOrder);
-      expect(favoriteIds).not.toContain(notFavoriteId);
-      expect(favoriteIds).not.toContain(trashedFavoriteId);
-    });
-
+  describe("findAllTrashed", () => {
     it("findAllTrashed should return trashed notes sorted by trashedAt ascending", async () => {
       const earlyDate = new Date("2024-01-01T00:00:00.000Z");
       const lateDate = new Date("2024-01-02T00:00:00.000Z");
@@ -385,137 +343,6 @@ describe("NoteDAO", () => {
       await expect(noteDao.deleteMany([])).resolves.not.toThrow();
 
       expect((await noteDao.exists(existingId))._unsafeUnwrap()).toBe(true);
-    });
-  });
-
-  describe("noteRightAfter", () => {
-    it("should return the note with the next greater favoriteOrderHint", async () => {
-      const firstRank = Rank.default();
-      const secondRank = firstRank.next();
-      const thirdRank = secondRank.next();
-
-      const firstId = randomUUID();
-      const secondId = randomUUID();
-      const thirdId = randomUUID();
-
-      await saveNote({
-        ...(await buildNote(firstId)),
-        favoriteOrderHint: firstRank.get(),
-      });
-      await saveNote({
-        ...(await buildNote(secondId)),
-        favoriteOrderHint: secondRank.get(),
-      });
-      await saveNote({
-        ...(await buildNote(thirdId)),
-        favoriteOrderHint: thirdRank.get(),
-      });
-
-      const result = (
-        await noteDao.noteRightAfter(firstId, workspaceId)
-      )._unsafeUnwrap();
-
-      expect(result).not.toBeUndefined();
-      expect(result?.id).toBe(secondId);
-    });
-
-    it("should return only the immediately next note, not all subsequent ones", async () => {
-      const firstRank = Rank.default();
-      const secondRank = firstRank.next();
-      const thirdRank = secondRank.next();
-
-      const firstId = randomUUID();
-      const secondId = randomUUID();
-      const thirdId = randomUUID();
-
-      await saveNote({
-        ...(await buildNote(firstId)),
-        favoriteOrderHint: firstRank.get(),
-      });
-      await saveNote({
-        ...(await buildNote(secondId)),
-        favoriteOrderHint: secondRank.get(),
-      });
-      await saveNote({
-        ...(await buildNote(thirdId)),
-        favoriteOrderHint: thirdRank.get(),
-      });
-
-      const result = (
-        await noteDao.noteRightAfter(firstId, workspaceId)
-      )._unsafeUnwrap();
-
-      expect(result?.id).toBe(secondId);
-      expect(result?.id).not.toBe(thirdId);
-    });
-
-    it("should return undefined when the target is the last note", async () => {
-      const firstRank = Rank.default();
-      const secondRank = firstRank.next();
-
-      const firstId = randomUUID();
-      const lastId = randomUUID();
-
-      await saveNote({
-        ...(await buildNote(firstId)),
-        favoriteOrderHint: firstRank.get(),
-      });
-      await saveNote({
-        ...(await buildNote(lastId)),
-        favoriteOrderHint: secondRank.get(),
-      });
-
-      const result = (
-        await noteDao.noteRightAfter(lastId, workspaceId)
-      )._unsafeUnwrap();
-
-      expect(result).toBeUndefined();
-    });
-
-    it("should return undefined when the target does not exist", async () => {
-      const someId = randomUUID();
-      await saveNote({
-        ...(await buildNote(randomUUID())),
-        favoriteOrderHint: Rank.default().get(),
-      });
-
-      const result = (
-        await noteDao.noteRightAfter(someId, workspaceId)
-      )._unsafeUnwrap();
-
-      expect(result).toBeUndefined();
-    });
-
-    it("should not return notes from another workspace", async () => {
-      const otherWorkspace = (
-        await WorkspaceDAO(() => resolveTx(db)).create({
-          name: "Other Workspace",
-          createdAt: new Date(),
-        })
-      )._unsafeUnwrap();
-
-      const firstRank = Rank.default();
-      const secondRank = firstRank.next();
-
-      const targetId = randomUUID();
-      const otherWorkspaceNoteId = randomUUID();
-
-      await saveNote({
-        ...(await buildNote(targetId)),
-        favoriteOrderHint: firstRank.get(),
-      });
-      // A note in another workspace with a higher favoriteOrderHint
-      await saveNote({
-        ...(await buildNote(otherWorkspaceNoteId)),
-        workspaceId: otherWorkspace.id,
-        favoriteOrderHint: secondRank.get(),
-      });
-
-      const result = (
-        await noteDao.noteRightAfter(targetId, workspaceId)
-      )._unsafeUnwrap();
-
-      expect(result).toBeUndefined();
     });
   });
 

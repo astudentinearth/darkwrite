@@ -30,7 +30,6 @@ describe("NotePropertyDAO", () => {
     const newNote: NewNote = {
       title: "Test Database Note",
       workspaceId,
-      favoriteOrderHint: "",
       createdAt: new Date(),
       modifiedAt: new Date(),
       type: "database",

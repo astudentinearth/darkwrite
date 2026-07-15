@@ -2,14 +2,12 @@ import {
   type CreateDatabaseRequest,
   type CreateDocumentRequest,
   DatabaseViewType,
-  dwErr,
   dwErrAsync,
   type MoveNoteDTO,
   NoteType,
-  Rank,
   type UpdateNoteDTO,
 } from "@darkwrite/common";
-import { ok, okAsync, ResultAsync } from "neverthrow";
+import { okAsync, ResultAsync } from "neverthrow";
 import type { DatabaseType } from "@/db";
 import type { NewNote, Note } from "@/db/schema";
 import { resolveTx, transactional } from "@/db/transactional";
@@ -24,7 +22,6 @@ function buildNewNote(dto: CreateDocumentRequest): NewNote {
     workspaceId,
     icon,
     parentId,
-    favoriteOrderHint: "",
     createdAt: new Date(),
     modifiedAt: new Date(),
   };
@@ -36,7 +33,6 @@ function buildDuplicate({ title, icon, workspaceId, parentId }: Note): NewNote {
     icon,
     workspaceId,
     parentId,
-    favoriteOrderHint: "",
     createdAt: new Date(),
     modifiedAt: new Date(),
   };
@@ -70,24 +66,6 @@ export function NoteService(
       );
   };
 
-  /** @internal */
-  function computeFavoriteRank(workspaceId: string, aboveId?: string | null) {
-    return aboveId == null
-      ? noteDAO
-          .computeOrderKeysForFavorites(workspaceId)
-          .map((keys) => (aboveId === undefined ? keys.end : keys.start))
-      : ResultAsync.combine([
-          noteDAO.findById(aboveId),
-          noteDAO.noteRightAfter(aboveId, workspaceId, "favoriteOrderHint"),
-        ]).map(([above, below]) =>
-          below
-            ? new Rank(above.favoriteOrderHint)
-                .between(below.favoriteOrderHint)
-                .get()
-            : new Rank(above.favoriteOrderHint).next().get(),
-        );
-  }
-
   function createDatabaseView(
     databaseId: string,
     type: DatabaseViewType = DatabaseViewType.Table,
@@ -100,7 +78,6 @@ export function NoteService(
           .andThen((database) =>
             noteDAO.create({
               type: NoteType.DatabaseView,
-              favoriteOrderHint: "",
               createdAt: new Date(),
               modifiedAt: new Date(),
               title: title ?? `View of ${database.title}`,
@@ -138,7 +115,6 @@ export function NoteService(
           .create({
             workspaceId: dto.workspaceId,
             parentId: dto.parentId,
-            favoriteOrderHint: "",
             createdAt: new Date(),
             modifiedAt: new Date(),
             title: "New database",
@@ -187,30 +163,6 @@ export function NoteService(
       db,
     );
 
-  const favorite = (targetId: string, aboveNoteId?: string | null) =>
-    transactional(
-      () =>
-        noteDAO
-          .findById(targetId)
-          .andThen((note) =>
-            note.isTrashed
-              ? dwErr("Cannot favorite a note in trash.")
-              : ok(note),
-          )
-          .andThen((note) => computeFavoriteRank(note.workspaceId, aboveNoteId))
-          .andThen((rank) =>
-            noteDAO.update({
-              id: targetId,
-              isFavorite: true,
-              favoriteOrderHint: rank,
-            }),
-          ),
-      db,
-    );
-
-  const unfavorite = (id: string) =>
-    noteDAO.update({ id, isFavorite: false, favoriteOrderHint: "" });
-
   const duplicate = (id: string) =>
     transactional(
       () =>
@@ -239,8 +191,6 @@ export function NoteService(
     noteDAO.update({
       id,
       isTrashed: true,
-      favoriteOrderHint: "",
-      isFavorite: false,
     });
 
   const setModificationDate = (id: string, date: Date) =>
@@ -277,8 +227,6 @@ export function NoteService(
     create: createDocument,
     update,
     move,
-    favorite,
-    unfavorite,
     duplicate,
     deleteById,
     moveToTrash,

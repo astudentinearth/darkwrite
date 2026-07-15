@@ -1,7 +1,4 @@
-import {
-  dwErrAsync,
-  getDefaultWorkspaceConfiguration,
-} from "@darkwrite/common";
+import { dwErrAsync } from "@darkwrite/common";
 import { type NewNote, workspace } from "@/db/schema";
 import { resolveTx } from "@/db/transactional";
 import type { IDocumentStore } from "@/lib/document-store";
@@ -34,7 +31,6 @@ it("should create a workspace", async () => {
   const result = (
     await workspaceService.createWorkspace({
       name: "test workspace",
-      config: getDefaultWorkspaceConfiguration(),
     })
   )._unsafeUnwrap();
   expect(result.name).toBe("test workspace");
@@ -44,13 +40,11 @@ it("should get workspaces", async () => {
   const w1 = (
     await workspaceService.createWorkspace({
       name: "test workspace 1",
-      config: getDefaultWorkspaceConfiguration(),
     })
   )._unsafeUnwrap();
   const w2 = (
     await workspaceService.createWorkspace({
       name: "test workspace 2",
-      config: getDefaultWorkspaceConfiguration(),
     })
   )._unsafeUnwrap();
   const result = (await workspaceService.getWorkspaces())._unsafeUnwrap();
@@ -72,7 +66,6 @@ describe("delete workspace", () => {
     return (
       await workspaceService.createWorkspace({
         name,
-        config: getDefaultWorkspaceConfiguration(),
       })
     )._unsafeUnwrap();
   }
@@ -81,7 +74,6 @@ describe("delete workspace", () => {
     const note: NewNote = {
       title,
       workspaceId,
-      favoriteOrderHint: "a",
       parentId: null,
       createdAt: new Date(),
       modifiedAt: new Date(),
