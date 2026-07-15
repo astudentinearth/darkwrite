@@ -22,18 +22,19 @@ editorMiddleware.startListening({
   effect: (action, listenerApi) => {
     const { noteId } = action.payload as { noteId: string };
 
-    listenerApi.dispatch(
-      updateNote({
-        id: noteId,
-        changes: { modifiedAt: new Date().toISOString() },
-      }),
-    );
+    const state = listenerApi.getState() as RootState;
 
     let debouncedSave = debouncedSaves.get(noteId);
 
     if (!debouncedSave) {
+      listenerApi.dispatch(
+        updateNote({
+          id: noteId,
+          changes: { modifiedAt: new Date().toISOString() },
+        }),
+      );
+
       debouncedSave = debounce(async () => {
-        const state = listenerApi.getState() as RootState;
         const document = state.editor.docs[noteId];
 
         if (document) {

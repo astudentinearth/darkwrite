@@ -1,15 +1,19 @@
 // this file is a stub to provide a clear
 // interface for imperative actions.
 
-import type { CreateDatabaseArgs, CreateDatabaseViewArgs } from "@darkwrite/common";
+import type {
+  CreateDatabaseArgs,
+  CreateDatabaseViewArgs,
+  ParentId,
+} from "@darkwrite/common";
 import { t } from "i18next";
 import { useMemo } from "react";
+import { databaseViewApi } from "@/features/database/store/database-view-api";
 import { navigateToNote } from "@/features/navigation/navigator";
 import notify from "@/features/notifications/notify";
 import { useAppDispatch } from "@/features/store/hooks";
 import type { AppDispatch } from "@/features/store/types";
 import { type CreateNoteArgs, createNoteApi } from "./create-note";
-import { databaseViewApi } from "@/features/database/store/database-view-api";
 import { type FavoriteNoteArgs, favoritesApi } from "./favorites-api";
 import { moveNoteApi } from "./move-note";
 import { trashApi } from "./trash-api";
@@ -58,10 +62,12 @@ export const getNoteActions = (dispatch: AppDispatch) => ({
   },
 
   async createDatabaseView(args: CreateDatabaseViewArgs) {
-    return dispatch(databaseViewApi.endpoints.createDatabaseView.initiate(args))
+    return dispatch(
+      databaseViewApi.endpoints.createDatabaseView.initiate(args),
+    );
   },
 
-  async moveInto(noteId: string, parentId: string, showToast = true) {
+  async moveInto(noteId: string, parentId: ParentId, showToast = true) {
     const result = dispatch(
       moveNoteApi.endpoints.moveNote.initiate({
         sourceNoteId: noteId,
