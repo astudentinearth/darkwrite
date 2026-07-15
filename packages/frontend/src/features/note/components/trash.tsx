@@ -12,10 +12,11 @@ import {
 import { TextTooltip } from "@/components/ui/tooltip";
 import { navigateToNote } from "@/features/navigation/navigator";
 import { SidebarItem } from "@/features/sidebar/sidebar-item";
-import { cn, getNoteIcon } from "@/lib/utils";
+import { cn, getNoteIcon, getNoteIcon2 } from "@/lib/utils";
 import { useNoteById } from "../hooks/use-note-by-id";
 import { useTrash } from "../hooks/use-trash";
 import { useNoteActions } from "../store/note-actions";
+import { NoteTitle } from "./note-title";
 import { TrashMenu } from "./trash-menu";
 
 type TrashItemProps = {
@@ -34,14 +35,14 @@ const TrashItem = memo(function ({ noteId, className }: TrashItemProps) {
       tabIndex={0}
       onClick={() => navigateToNote(noteId)}
       className={cn(
-        "grid grid-cols-[24px_1fr_32px_32px] gap-1 items-center pr-1 pl-2 py-1 rounded-lg hover:bg-secondary/50 transition-colors duration-100",
+        "grid grid-cols-[24px_1fr_24px_24px] gap-1 items-center pr-1 pl-2 py-1 rounded-lg hover:bg-background/50 dark:hover:bg-secondary/50 transition-colors duration-100",
         className,
       )}
     >
-      <span>{getNoteIcon(note.icon)}</span>
-      <span className="whitespace-nowrap text-ellipsis overflow-hidden text-start">
+      <span>{getNoteIcon2(note.icon, note.type)}</span>
+      <NoteTitle className="whitespace-nowrap text-ellipsis overflow-hidden text-start">
         {note.title}
-      </span>
+      </NoteTitle>
       <TextTooltip text={t("sidebar.trash.restore")}>
         <Button
           aria-label={t("sidebar.trash.restore")}
@@ -50,7 +51,7 @@ const TrashItem = memo(function ({ noteId, className }: TrashItemProps) {
             restoreFromTrash(noteId);
           }}
           variant={"ghost"}
-          className="w-8 h-8 p-0"
+          className="w-6 h-6 p-0"
         >
           <Undo2 className="size-4" />
         </Button>
@@ -63,7 +64,7 @@ const TrashItem = memo(function ({ noteId, className }: TrashItemProps) {
             permanentlyDeleteNote(noteId);
           }}
           variant={"destructive"}
-          className="w-8 h-8 p-0 bg-transparent text-destructive hover:bg-destructive/25 border-none"
+          className="w-6 h-6 p-0 bg-transparent text-destructive hover:bg-destructive/25 border-none"
         >
           <Trash className="size-4" />
         </Button>
@@ -83,7 +84,7 @@ export function TrashWidget() {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <SidebarItem>
+        <SidebarItem className="col-span-2">
           <IconTrash size={18} />
           <span>{t("sidebar.button.trash")}</span>
         </SidebarItem>
@@ -93,16 +94,16 @@ export function TrashWidget() {
         sticky="always"
         className="w-80 ml-2 grid grid-rows-[auto_1fr] bg-view-2/80 top-highlight max-h-[60vh] p-0 mb-2"
       >
-        <div className="p-2 flex gap-2">
+        <div className="p-1 flex gap-0.5">
           <Input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder={t("sidebar.trash.search")}
-            className="bg-secondary/50 top-highlight border-border/25"
+            className="bg-secondary/50 rounded-lg top-highlight border-border/25"
           />
           <TrashMenu />
         </div>
-        <div className="h-full overflow-y-auto flex flex-col scroll-view pl-2 pr-1 gutter-stable pt-0 pb-2 w-full">
+        <div className="h-full overflow-y-auto flex flex-col scroll-view pl-1 pr-1 gutter-stable pt-0 pb-1 w-full">
           {items.length > 0 ? (
             items
           ) : (

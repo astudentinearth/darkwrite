@@ -62,21 +62,29 @@ export function Sidebar(props: SidebarProps) {
           </HeaderbarButton>
         </TextTooltip>
       </div>
-      <div className="h-full w-full grow pl-2 pr-2 py-0 overflow-y-auto scroll-view">
+
+      <div
+        style={{
+          boxShadow: "0px 8px 12px var(--background)",
+        }}
+        className="p-2 pt-0 gap-1 grid grid-cols-[1fr_auto] z-1 bg-background"
+      >
+        <SidebarNavigation />
+      </div>
+      <div className="h-full w-full grow pl-2 pr-2 py-2 overflow-y-auto scroll-view">
         <div className="flex gap-2 flex-col mb-16 max-w-full">
-          <SidebarNavigation />
           <FavoritesContainer />
           <NoteListRoot />
           <div className="flex flex-col gap-0.5"></div>
-          <TrashWidget />
         </div>
       </div>
       <div
         style={{
           boxShadow: "0px -8px 12px var(--background)",
         }}
-        className="p-2 pb-3 grid grid-cols-[1fr_auto] z-1 bg-background"
+        className="p-2 pb-3 gap-1 grid grid-cols-[1fr_auto] z-1 bg-background"
       >
+        <TrashWidget />
         <WorkspaceSwitcher />
         <SettingsDialog>
           <Button
