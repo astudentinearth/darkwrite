@@ -1,5 +1,5 @@
 import { dwErrAsync } from "@darkwrite/common";
-import { type NewNote, workspace } from "@/db/schema";
+import { type NewNote, note as notesTable, workspace } from "@/db/schema";
 import { resolveTx } from "@/db/transactional";
 import type { IDocumentStore } from "@/lib/document-store";
 import { NoteDAO } from "@/note/note.dao";
@@ -24,6 +24,7 @@ beforeAll(async () => {
 });
 
 beforeEach(async () => {
+  await _db.delete(notesTable);
   await _db.delete(workspace);
 });
 
@@ -161,5 +162,124 @@ describe("delete workspace", () => {
     expect(
       (await workspaceService.deleteWorkspace(ws.id))._unsafeUnwrapErr(),
     ).not.toBeUndefined();
+  });
+});
+
+describe("favorite operations", () => {
+  async function createWorkspace(name = "test workspace") {
+    return (await workspaceService.createWorkspace({ name }))._unsafeUnwrap();
+  }
+
+  async function createNote(workspaceId: string, title = "test note") {
+    const note: NewNote = {
+      title,
+      workspaceId,
+      parentId: null,
+      createdAt: new Date(),
+      modifiedAt: new Date(),
+    };
+    return (await noteDao.create(note))._unsafeUnwrap();
+  }
+
+  describe("addFavorite", () => {
+    it("should add a note to favorites", async () => {
+      const ws = await createWorkspace();
+      const note = await createNote(ws.id);
+
+      const result = (
+        await workspaceService.addFavorite(ws.id, note.id)
+      )._unsafeUnwrap();
+
+      expect(result).toEqual([note.id]);
+
+      const stored = (await workspaceDao.findById(ws.id))._unsafeUnwrap();
+      expect(stored.favoriteIds).toEqual([note.id]);
+    });
+
+    it("should append to favorites when atIndex is not specified", async () => {
+      const ws = await createWorkspace();
+      const noteA = await createNote(ws.id, "A");
+      const noteB = await createNote(ws.id, "B");
+
+      await workspaceService.addFavorite(ws.id, noteA.id);
+      const result = (
+        await workspaceService.addFavorite(ws.id, noteB.id)
+      )._unsafeUnwrap();
+
+      expect(result).toEqual([noteA.id, noteB.id]);
+    });
+
+    it("should insert at the specified index", async () => {
+      const ws = await createWorkspace();
+      const noteA = await createNote(ws.id, "A");
+      const noteB = await createNote(ws.id, "B");
+      const noteC = await createNote(ws.id, "C");
+
+      await workspaceService.addFavorite(ws.id, noteA.id);
+      await workspaceService.addFavorite(ws.id, noteC.id);
+      const result = (
+        await workspaceService.addFavorite(ws.id, noteB.id, 1)
+      )._unsafeUnwrap();
+
+      expect(result).toEqual([noteA.id, noteB.id, noteC.id]);
+    });
+
+    it("should move an existing favorite to the new index", async () => {
+      const ws = await createWorkspace();
+      const noteA = await createNote(ws.id, "A");
+      const noteB = await createNote(ws.id, "B");
+      const noteC = await createNote(ws.id, "C");
+
+      await workspaceService.addFavorite(ws.id, noteA.id);
+      await workspaceService.addFavorite(ws.id, noteB.id);
+      await workspaceService.addFavorite(ws.id, noteC.id);
+
+      const result = (
+        await workspaceService.addFavorite(ws.id, noteA.id, 2)
+      )._unsafeUnwrap();
+
+      expect(result).toEqual([noteB.id, noteC.id, noteA.id]);
+    });
+
+    it("should error when the note is trashed", async () => {
+      const ws = await createWorkspace();
+      const note = await createNote(ws.id, "trashed");
+      await noteDao.update({ id: note.id, isTrashed: true });
+
+      const result = await workspaceService.addFavorite(ws.id, note.id);
+
+      expect(result.isErr()).toBe(true);
+    });
+  });
+
+  describe("removeFavorite", () => {
+    it("should remove a note from favorites", async () => {
+      const ws = await createWorkspace();
+      const noteA = await createNote(ws.id, "A");
+      const noteB = await createNote(ws.id, "B");
+
+      await workspaceService.addFavorite(ws.id, noteA.id);
+      await workspaceService.addFavorite(ws.id, noteB.id);
+
+      const result = (
+        await workspaceService.removeFavorite(ws.id, noteA.id)
+      )._unsafeUnwrap();
+
+      expect(result).toEqual([noteB.id]);
+
+      const stored = (await workspaceDao.findById(ws.id))._unsafeUnwrap();
+      expect(stored.favoriteIds).toEqual([noteB.id]);
+    });
+
+    it("should handle removing a note that is not in favorites", async () => {
+      const ws = await createWorkspace();
+      const note = await createNote(ws.id);
+
+      const result = (
+        await workspaceService.removeFavorite(ws.id, note.id)
+      )._unsafeUnwrap();
+
+      expect(result).toEqual([]);
+    });
   });
 });
