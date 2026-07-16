@@ -67,9 +67,9 @@ export const favoritesApi = notesApi.injectEndpoints({
         const undo = workspace.favoriteIds;
 
         dispatch(
-          workspaceSlice.actions.updateWorkspace({
+          workspaceSlice.actions.setWorkspaceFavorites({
             id: workspace.id,
-            favoriteIds: ids,
+            ids,
           }),
         );
 
