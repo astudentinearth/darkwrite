@@ -5,17 +5,7 @@ import {
   NoteType,
   type ParentId,
 } from "@darkwrite/common";
-import {
-  and,
-  asc,
-  desc,
-  eq,
-  inArray,
-  isNull,
-  like,
-  ne,
-  or,
-} from "drizzle-orm";
+import { and, asc, desc, eq, inArray, isNull, like, ne, or } from "drizzle-orm";
 import { ok, ResultAsync } from "neverthrow";
 import { dbResult } from "@/db/db-result";
 import {

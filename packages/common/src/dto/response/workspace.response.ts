@@ -3,7 +3,7 @@ export interface WorkspaceDTO {
   name: string;
   iconUrl?: string | null;
   createdAt: string;
-  allNotesSortMode: string;
+  allNotesSortMode: "alphabetical" | "lastModified";
   favoriteIds: string[];
 }
 

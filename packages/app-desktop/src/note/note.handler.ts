@@ -2,6 +2,7 @@ import { extname } from "node:path";
 import {
   type CreateDocumentArgs,
   dwErrAsync,
+  type FavoriteActionResponse,
   FileFormatMap,
   type INoteAPI,
   type MoveNoteDTO,
@@ -25,6 +26,7 @@ import {
 } from "@/api/dialog";
 import type { Note } from "@/db/schema";
 import { readFileUtf8, writeBinaryFile, writeFileUtf8 } from "@/lib/fs";
+import type { IWorkspaceService } from "@/workspace/workspace.service";
 import printToPdf from "../lib/print-to-pdf";
 import type { IDocumentService } from "../service/document.service";
 import { type HandlerImplements, handler } from "../types/ipc-handler";
@@ -48,32 +50,52 @@ const importTypeMap: Record<string, NoteExportFormat> = {
 
 const determineImportType = (t: string) => importTypeMap[extname(t)] ?? "json";
 
+const discard = () => {};
+
 export function NoteAPI(
   noteService: INoteService,
   noteQueryService: INoteQueryService,
   documentService: IDocumentService,
+  workspaceService: IWorkspaceService,
 ): HandlerImplements<INoteAPI> {
   const create = handler((dto: CreateDocumentArgs) =>
     validateSchema(ZCreateDocumentRequest)(dto)
       .asyncAndThen(noteService.create)
       .map(singleResponse),
   );
-  const deleteNote = handler((id: string) => noteService.deleteById(id));
+  const deleteNote = handler((id: string) =>
+    noteService.deleteById(id).map(() => {}),
+  );
 
   const getAllByWorkspaceId = handler((workspaceId: string) =>
     noteQueryService.getAllByWorkspaceId(workspaceId).map(aggregateResponse),
   );
 
-  const getFavorites = handler((workspaceId: string) =>
-    noteQueryService.getFavorites(workspaceId).map(aggregateResponse),
-  );
+  /** @internal */
+  const _mapFavoriteIds = (
+    favoriteIds: string[],
+    workspaceId: string,
+    noteId: string,
+  ): FavoriteActionResponse => ({ favoriteIds, workspaceId, noteId });
 
-  const favorite = handler((noteId: string, aboveNoteId?: string | null) =>
-    noteService.favorite(noteId, aboveNoteId).map(singleResponse),
+  const favorite = handler((noteId: string, insertAtIndex?: number) =>
+    noteQueryService
+      .getById(noteId)
+      .andThen((note) =>
+        workspaceService
+          .addFavorite(note.workspaceId, noteId, insertAtIndex)
+          .map((ids) => _mapFavoriteIds(ids, note.workspaceId, noteId)),
+      ),
   );
 
   const unfavorite = handler((noteId: string) =>
-    noteService.unfavorite(noteId).map(singleResponse),
+    noteQueryService
+      .getById(noteId)
+      .andThen((note) =>
+        workspaceService
+          .removeFavorite(note.workspaceId, noteId)
+          .map((ids) => _mapFavoriteIds(ids, note.workspaceId, noteId)),
+      ),
   );
 
   const getTrashed = handler((wId: string) =>
@@ -124,7 +146,7 @@ export function NoteAPI(
       .andThen(
         () => noteService.setModificationDate(id, new Date()).orElse(okVoid), // unimportant side effect
       )
-      .map(() => {}),
+      .map(discard),
   );
 
   const getParentTree = handler((id: string) =>
@@ -134,7 +156,7 @@ export function NoteAPI(
   );
 
   const clearTrash = handler((wId: string) =>
-    noteService.emptyTrash(wId).map(() => {}),
+    noteService.emptyTrash(wId).map(discard),
   );
 
   const saveExportedNote = handler(
@@ -189,7 +211,6 @@ export function NoteAPI(
     create,
     delete: deleteNote,
     getAllByWorkspaceId,
-    getFavorites,
     favorite,
     getTrashed,
     search,

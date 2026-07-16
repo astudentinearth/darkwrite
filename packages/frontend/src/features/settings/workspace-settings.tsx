@@ -10,6 +10,7 @@ import { useAppSelector } from "../store/hooks";
 import { useCurrentWorkspace } from "../workspaces/hooks/use-workspace";
 import { useUpdateWorkspaceMutation } from "../workspaces/store/workspace-api";
 import { selectWorkspaceCount } from "../workspaces/store/workspace-selectors";
+import type { UpdateWorkspaceArg } from "../workspaces/store/workspace-slice";
 import { DeleteWorkspaceDialog } from "./delete-workspace-dialog";
 import EditWorkspaceDialog from "./edit-workspace-dialog";
 import { useSettings } from "./hooks/use-settings";
@@ -25,7 +26,12 @@ export default function WorkspaceSettings() {
   const [update] = useUpdateWorkspaceMutation();
   const { t, i18n } = useTranslation();
   const save = async (w: WorkspaceDTO) => {
-    update(w);
+    update({
+      id: w.id,
+      name: w.name,
+      iconUrl: w.iconUrl,
+      allNotesSortMode: w.allNotesSortMode,
+    });
     setEditDialogOpen(false);
   };
   const settings = useSettings();

@@ -1,4 +1,4 @@
-import type { DeepPartial, WorkspaceDTO } from "@darkwrite/common";
+import type { UpdateWorkspaceDTO, WorkspaceDTO } from "@darkwrite/common";
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import _ from "lodash";
 
@@ -12,7 +12,9 @@ const initialState: WorkspaceSlice = {
   workspaces: {},
 };
 
-export type UpdateWorkspaceArg = DeepPartial<WorkspaceDTO> & { id: string };
+export type UpdateWorkspaceArg = UpdateWorkspaceDTO & {
+  id: string;
+};
 
 export const workspaceSlice = createSlice({
   name: WORKSPACE_SLICE_NAME,
@@ -33,6 +35,13 @@ export const workspaceSlice = createSlice({
       if (state.workspaces[workspace.id]) {
         _.merge(state.workspaces[workspace.id], workspace);
       }
+    },
+    setWorkspaceFavorites(
+      state,
+      action: PayloadAction<{ id: string; ids: string[] }>,
+    ) {
+      if (state.workspaces[action.payload.id])
+        state.workspaces[action.payload.id].favoriteIds = action.payload.ids;
     },
     addWorkspace(state, action: PayloadAction<WorkspaceDTO>) {
       const workspace = action.payload;

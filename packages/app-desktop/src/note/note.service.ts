@@ -12,6 +12,7 @@ import type { DatabaseType } from "@/db";
 import type { NewNote, Note } from "@/db/schema";
 import { resolveTx, transactional } from "@/db/transactional";
 import type { IDocumentService } from "@/service/document.service";
+import { WorkspaceDAO } from "@/workspace/workspace.dao";
 import { DatabaseViewDAO } from "./database-view.dao";
 import { NoteDAO } from "./note.dao";
 
@@ -44,6 +45,7 @@ export function NoteService(
 ) {
   const noteDAO = NoteDAO(() => resolveTx(db));
   const databaseViewDAO = DatabaseViewDAO(() => resolveTx(db));
+  const workspaceDAO = WorkspaceDAO(() => resolveTx(db));
 
   const isTrashOrCircular = (source: Note, parent?: Note | null) => {
     if (source.isTrashed)
@@ -185,13 +187,47 @@ export function NoteService(
     );
 
   const deleteById = (id: string) =>
-    noteDAO.deleteById(id).andThen(() => documentService.deleteNoteContent(id));
+    transactional(
+      () =>
+        noteDAO
+          .findById(id)
+          .andThen((note) =>
+            workspaceDAO.findById(note.workspaceId).map((ws) => ({ note, ws })),
+          )
+          .andThen(({ ws }) => noteDAO.deleteById(id).map(() => ws))
+          .andThen((ws) =>
+            workspaceDAO.setFavoriteIds(
+              ws.id,
+              ws.favoriteIds.filter((fid) => fid !== id),
+            ),
+          )
+          .map(() => {}),
+      db,
+    ).andThen(() => documentService.deleteNoteContent(id));
 
   const moveToTrash = (id: string) =>
-    noteDAO.update({
-      id,
-      isTrashed: true,
-    });
+    transactional(
+      () =>
+        noteDAO
+          .findById(id)
+          .andThen((note) =>
+            workspaceDAO.findById(note.workspaceId).map((ws) => ({ note, ws })),
+          )
+          .andThen(({ ws, note }) =>
+            noteDAO
+              .update({ id, isTrashed: true })
+              .map((updatedNote) => ({ ws, updatedNote })),
+          )
+          .andThen(({ ws, updatedNote }) =>
+            workspaceDAO
+              .setFavoriteIds(
+                ws.id,
+                ws.favoriteIds.filter((fid) => fid !== id),
+              )
+              .map(() => updatedNote),
+          ),
+      db,
+    );
 
   const setModificationDate = (id: string, date: Date) =>
     noteDAO.update({ id, modifiedAt: date });

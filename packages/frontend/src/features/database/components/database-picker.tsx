@@ -40,10 +40,7 @@ export function DatabasePicker({
   );
 
   return (
-    <Select
-      {...props}
-      onValueChange={onValueChange}
-    >
+    <Select {...props} onValueChange={onValueChange}>
       <SelectTrigger className={cn("", className)}>
         {selected ? (
           <div className={"flex gap-1.5 items-center"}>

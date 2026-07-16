@@ -1,8 +1,4 @@
-import {
-  dwErrAsync,
-  isDescendant,
-  type NoteDTO,
-} from "@darkwrite/common";
+import { dwErrAsync, isDescendant, type NoteDTO } from "@darkwrite/common";
 import { okAsync } from "neverthrow";
 import type { DragEvent } from "react";
 import { DarkwriteAPIClient } from "@/api/api-client";
@@ -28,13 +24,12 @@ export function getMovingNote(e: DragEvent<HTMLElement>, state: RootState) {
 export const moveNoteApi = notesApi.injectEndpoints({
   endpoints: (builder) => ({
     moveNote: builder.mutation<NoteDTO, MoveNoteArgs>({
-      queryFn: resultQueryFn(
-        ({ sourceNoteId, parentId }: MoveNoteArgs) =>
-          DarkwriteAPIClient.note
-            .move({ sourceId: sourceNoteId, parentId })
-            .andThen(({ note }) =>
-              note ? okAsync(note) : dwErrAsync("Failed to move note"),
-            ),
+      queryFn: resultQueryFn(({ sourceNoteId, parentId }: MoveNoteArgs) =>
+        DarkwriteAPIClient.note
+          .move({ sourceId: sourceNoteId, parentId })
+          .andThen(({ note }) =>
+            note ? okAsync(note) : dwErrAsync("Failed to move note"),
+          ),
       ),
 
       async onQueryStarted(args, { dispatch, getState, queryFulfilled }) {

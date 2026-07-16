@@ -143,7 +143,12 @@ export async function init() {
     settings: SettingsAPI(settingsService),
     embed: EmbedAPI(embedService),
     workspace: WorkspaceAPI(workspaceService),
-    note: NoteAPI(noteService, noteQueryService, documentService),
+    note: NoteAPI(
+      noteService,
+      noteQueryService,
+      documentService,
+      workspaceService,
+    ),
     database: DatabaseAPI({ noteService, noteQueryService }),
     checkUpdate: updateCheckHandler,
     showAppMenu: handler(() => {

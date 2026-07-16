@@ -16,10 +16,6 @@ export function noteByWorkspaceIdTag(workspaceId: string) {
   return `WORKSPACE_${workspaceId}`;
 }
 
-export function favoriteByWorkspaceIdTag(workspaceId: string) {
-  return `WORKSPACE_${workspaceId}_FAVORITES`;
-}
-
 export function noteByParentIdTag(
   workspaceId: string,
   parentId: string | null,
@@ -99,33 +95,6 @@ export const notesApi = createApi({
               {
                 type: NOTES_TAG_TYPE,
                 id: parentTreeTag(noteId),
-              },
-            ]
-          : [],
-    }),
-
-    getFavoritesByWorkspaceId: builder.query<NoteDTO[], string>({
-      queryFn: resultQueryFn(
-        (workspaceId: string) =>
-          DarkwriteAPIClient.note.getFavorites(workspaceId),
-        (r) => Object.values(r.notes),
-      ),
-
-      async onQueryStarted(_args, { dispatch, queryFulfilled }) {
-        try {
-          const { data } = await queryFulfilled;
-          dispatch(upsertNotes(data));
-        } catch {
-          /* empty */
-        }
-      },
-
-      providesTags: (result, _error, workspaceId) =>
-        result
-          ? [
-              {
-                type: NOTES_TAG_TYPE,
-                id: favoriteByWorkspaceIdTag(workspaceId),
               },
             ]
           : [],
@@ -245,7 +214,6 @@ export const notesApi = createApi({
 export const {
   useGetNotesByParentIdQuery,
   useGetRecentsByWorkspaceIdQuery,
-  useGetFavoritesByWorkspaceIdQuery,
   useGetNoteByIdQuery,
   useGetNotesInDatabaseQuery,
   useGetDatabasesInWorkspaceQuery,

@@ -17,9 +17,7 @@ export function useDatabasesInWorkspace(workspaceId: string | undefined) {
   );
   const databaseIds = useAppSelector(
     (s) =>
-      workspaceId
-        ? selectDatabasesInWorkspace(s, workspaceId)
-        : EMPTY_ARRAY,
+      workspaceId ? selectDatabasesInWorkspace(s, workspaceId) : EMPTY_ARRAY,
     shallowEqual,
   );
   return {

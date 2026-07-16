@@ -41,7 +41,14 @@ export const workspaceApi = createApi({
       async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
-          dispatch(workspaceSlice.actions.updateWorkspace(data));
+          dispatch(
+            workspaceSlice.actions.updateWorkspace({
+              id: data.id,
+              name: data.name,
+              iconUrl: data.iconUrl,
+              allNotesSortMode: data.allNotesSortMode,
+            }),
+          );
         } catch (error) {
           console.error("Error in onQueryStarted for updateWorkspace:", error);
         }

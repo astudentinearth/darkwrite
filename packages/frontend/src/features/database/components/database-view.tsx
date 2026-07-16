@@ -84,9 +84,12 @@ export function DatabaseViewRenderer(props: DatabaseViewProps) {
             {views.map((view) => (
               <ViewTabTrigger key={view.id} view={view} />
             ))}
-            <NewDatabaseViewPopover onCreate={note => {
-              setActiveViewId(note.id); 
-            }} defaultDatabaseId={activeView?.parentId ?? undefined} />
+            <NewDatabaseViewPopover
+              onCreate={(note) => {
+                setActiveViewId(note.id);
+              }}
+              defaultDatabaseId={activeView?.parentId ?? undefined}
+            />
           </div>
           {activeView && (
             <Button

@@ -77,13 +77,6 @@ export interface INoteAPI {
   ) => ApiResult<NotesResponseDTO>;
 
   /**
-   * @param workspaceId
-   * @param parentId
-   * @returns favorites in the given workspace, provided they are not trashed.
-   */
-  getFavorites: (workspaceId: string) => ApiResult<NotesResponseDTO>;
-
-  /**
    * Returns notes that are in the trash for the given workspace.
    * @param workspaceId
    */

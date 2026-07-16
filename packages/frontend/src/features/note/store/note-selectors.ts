@@ -1,4 +1,4 @@
-import { byUpdateTime, isDescendant, NoteType, Rank } from "@darkwrite/common";
+import { byUpdateTime, isDescendant, NoteType } from "@darkwrite/common";
 import { createSelector } from "@reduxjs/toolkit";
 import type { RootState } from "@/features/store/types";
 import { notesAdapter } from "./notes-adapter";
@@ -71,27 +71,36 @@ export const selectRecentNotes = createSelector(
 );
 
 export const selectFavoriteIds = createSelector(
-  [selectAllNotes, (_state: RootState, workspaceId: string) => workspaceId],
-  (allNotes, workspaceId) => {
-    return allNotes
-      .filter(
-        (n) => n.workspaceId === workspaceId && n.isFavorite && !n.isTrashed,
-      )
-      .toSorted((a, b) => Rank.sorter(a.favoriteOrderHint, b.favoriteOrderHint))
-      .map((n) => n.id);
-  },
+  [
+    (state: RootState) => state.workspace.workspaces,
+    (_state: RootState, workspaceId: string) => workspaceId,
+  ],
+  (workspaces, workspaceId) => workspaces[workspaceId]?.favoriteIds ?? [],
 );
 
 export const selectFavorites = createSelector(
-  [selectAllNotes, (_state: RootState, workspaceId: string) => workspaceId],
-  (allNotes, workspaceId) => {
-    return allNotes
-      .filter(
-        (n) => n.workspaceId === workspaceId && n.isFavorite && !n.isTrashed,
-      )
-      .toSorted((a, b) =>
-        Rank.sorter(a.favoriteOrderHint, b.favoriteOrderHint),
-      );
+  [
+    selectAllNotes,
+    (state: RootState) => state.workspace.workspaces,
+    (_state: RootState, workspaceId: string) => workspaceId,
+  ],
+  (allNotes, workspaces, workspaceId) => {
+    const ids = workspaces[workspaceId]?.favoriteIds ?? [];
+    return ids
+      .map((id) => allNotes.find((n) => n.id === id))
+      .filter((n): n is NonNullable<typeof n> => n !== undefined);
+  },
+);
+
+export const selectIsFavorite = createSelector(
+  [
+    (state: RootState) => state.workspace.workspaces,
+    (_state: RootState, workspaceId: string) => workspaceId,
+    (_state: RootState, _workspaceId: string, noteId: string) => noteId,
+  ],
+  (workspaces, workspaceId, noteId) => {
+    const ids = workspaces[workspaceId]?.favoriteIds ?? [];
+    return ids.includes(noteId);
   },
 );
 

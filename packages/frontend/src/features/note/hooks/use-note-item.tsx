@@ -13,6 +13,7 @@ import { getMovingNote, useMoveNoteMutation } from "../store/move-note";
 import { canMoveNoteInto } from "../store/move-note-validator";
 import { useNoteActions } from "../store/note-actions";
 import { selectAllNotesAsMap, selectNoteById } from "../store/note-selectors";
+import { useNoteById } from "./use-note-by-id";
 
 /**
  * Hook to get note data **within sidebar views.** Do NOT use this to
@@ -20,13 +21,13 @@ import { selectAllNotesAsMap, selectNoteById } from "../store/note-selectors";
  * @param id
  */
 export function useNoteItem(id: string) {
-  const note = useAppSelector((state) => selectNoteById(state, id));
+  const { note } = useNoteById(id);
   const [isActive, setIsActive] = useState(false);
   const { createNote } = useNoteActions();
   const workspaceId = useCurrentWorkspaceId();
-  const draggable = note.type !== NoteType.DatabaseView;
-  const acceptsDrop = note.type !== NoteType.DatabaseView;
-  const expandable = note.type !== NoteType.DatabaseView;
+  const draggable = note?.type !== NoteType.DatabaseView;
+  const acceptsDrop = note?.type !== NoteType.DatabaseView;
+  const expandable = note?.type !== NoteType.DatabaseView;
 
   useEffect(() => {
     const path = getCurrentRoutePath();
