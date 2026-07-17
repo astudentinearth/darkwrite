@@ -24,6 +24,9 @@
       "favorites": "Favorites",
       "allNotes": "All notes"
     },
+    "favorites": {
+      "emptyHint": "No favorites yet, click the star ⭐ icon to pin notes, or drag one here."
+    },
     "trash": {
       "title": "Trash",
       "restore": "Restore",
@@ -53,6 +56,7 @@
     "welcome": "Welcome back",
     "recents": "Recent notes",
     "noPages": "You don't have any pages yet.",
+    "recentsEmpty": "Nothing to see here yet. Create your first note to get started!",
     "createPage": "Create a page"
   },
   "settings": {

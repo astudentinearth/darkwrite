@@ -1,4 +1,5 @@
 import { memo, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
 import { useFavoriteDropZone } from "../hooks/use-favorite-reorder";
 import { useFavorites } from "../hooks/use-favorites";
@@ -38,6 +39,27 @@ export function FavoriteItem(props: FavoriteItemProps) {
   );
 }
 
+const EmptyState = () => {
+  const { t } = useTranslation();
+  const { onDragEnter, onDragLeave, onDragOver, isDraggingOver, onDrop } =
+    useFavoriteDropZone(null);
+
+  return (
+    <div
+      onDragEnter={onDragEnter}
+      onDragLeave={onDragLeave}
+      onDragOver={onDragOver}
+      onDrop={onDrop}
+      className={cn(
+        "border border-dashed rounded-lg flex items-center text-center text-xs p-2 select-none",
+        isDraggingOver && "bg-star/5 border-star/10",
+      )}
+    >
+      {t("sidebar.favorites.emptyHint")}
+    </div>
+  );
+};
+
 export function FavoritesView() {
   const { noteIds } = useFavorites();
 
@@ -50,7 +72,7 @@ export function FavoritesView() {
   return (
     <div>
       <FavoriteDropZone aboveId={null} />
-      {items}
+      {items.length > 0 ? items : <EmptyState />}
     </div>
   );
 }

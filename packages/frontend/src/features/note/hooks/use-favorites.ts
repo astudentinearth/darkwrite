@@ -13,7 +13,5 @@ export function useFavorites() {
   );
   return {
     noteIds,
-    isFetching: false,
-    isLoading: false,
   };
 }
