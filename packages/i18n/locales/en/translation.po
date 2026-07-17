@@ -811,3 +811,9 @@ msgstr "Back"
 
 msgid "menu.forward"
 msgstr "Forward"
+
+msgid "menu.help.reportBugs"
+msgstr "Report issue"
+
+msgid "menu.help.website"
+msgstr "Visit Darkwrite website"

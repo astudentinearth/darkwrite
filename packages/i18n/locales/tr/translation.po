@@ -816,3 +816,10 @@ msgstr "Geri"
 
 msgid "menu.forward"
 msgstr "İleri"
+
+
+msgid "menu.help.reportBugs"
+msgstr "Hata bildir"
+
+msgid "menu.help.website"
+msgstr "Darkwrite internet sitesi"

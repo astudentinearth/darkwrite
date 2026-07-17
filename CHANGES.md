@@ -12,6 +12,7 @@
 - Updated workspace switcher
 - Improve empty states
 - Menu bar items are now localized
+- Menu bar now includes the `Help` section (macOS users can search the menu bar)
 
 ## 💥 Breaking changes
 - "All notes" section in the sidebar cannot be manually sorted anymore.
