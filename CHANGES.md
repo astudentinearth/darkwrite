@@ -5,6 +5,7 @@
 - Add compact sidebar mode
 - Revamped parent tree dropdown
 - Sort notes by modification date
+- Move notes to trash by dragging into it
 
 ## ✨ Improvements and fixes
 - Fix translation issue in back/forward buttons (the English keys had Turkish content for some reason)

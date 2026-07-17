@@ -10,11 +10,14 @@ import {
   PopoverTrigger,
 } from "@/components/ui";
 import { TextTooltip } from "@/components/ui/tooltip";
+import { useDragState } from "@/features/dnd/use-drag-state";
 import { navigateToNote } from "@/features/navigation/navigator";
 import { SidebarItem } from "@/features/sidebar/sidebar-item";
-import { cn, getNoteIcon, getNoteIcon2 } from "@/lib/utils";
+import { useAppStore } from "@/features/store/hooks";
+import { cn, getNoteIcon2 } from "@/lib/utils";
 import { useNoteById } from "../hooks/use-note-by-id";
 import { useTrash } from "../hooks/use-trash";
+import { getMovingNote } from "../store/move-note";
 import { useNoteActions } from "../store/note-actions";
 import { NoteTitle } from "./note-title";
 import { TrashMenu } from "./trash-menu";
@@ -75,8 +78,19 @@ const TrashItem = memo(function ({ noteId, className }: TrashItemProps) {
 
 export function TrashWidget() {
   const [query, setQuery] = useState("");
+
+  const {
+    isDraggingOver,
+    onDragEnter,
+    onDragLeave,
+    onDragOver,
+    setIsDraggingOver,
+  } = useDragState();
+
   const { t } = useTranslation();
   const { noteIds } = useTrash(query);
+  const store = useAppStore();
+  const actions = useNoteActions();
   const items = useMemo(() => {
     return noteIds.map((id) => <TrashItem noteId={id} key={id} />);
   }, [noteIds]);
@@ -84,9 +98,25 @@ export function TrashWidget() {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <SidebarItem className="col-span-2">
+        <SidebarItem
+          onDragEnter={onDragEnter}
+          onDragLeave={onDragLeave}
+          onDragOver={onDragOver}
+          onDrop={(e) => {
+            setIsDraggingOver(false);
+            const note = getMovingNote(e, store.getState());
+            if (note) actions.moveToTrash(note.id);
+          }}
+          className={cn("col-span-2", isDraggingOver && "bg-destructive/20")}
+        >
           <IconTrash size={18} />
-          <span>{t("sidebar.button.trash")}</span>
+          <span>
+            {t(
+              isDraggingOver
+                ? "sidebar.notes.contextmenu.trash"
+                : "sidebar.button.trash",
+            )}
+          </span>
         </SidebarItem>
       </PopoverTrigger>
       <PopoverContent
