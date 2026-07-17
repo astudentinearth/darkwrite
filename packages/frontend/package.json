@@ -11,11 +11,6 @@
     "test:watch": "vitest watch",
     "typecheck": "tsc --noEmit --project tsconfig.json"
   },
-  "lint-staged": {
-    "*.{ts,tsx,js,jsx,json,css}": [
-      "biome check --write"
-    ]
-  },
   "dependencies": {
     "@darkwrite/common": "workspace:",
     "@darkwrite/i18n": "workspace:",

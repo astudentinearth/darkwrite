@@ -9,11 +9,6 @@
       "types": "./dist/index.d.ts"
     }
   },
-  "lint-staged": {
-    "*.{ts,tsx,js,jsx,json,css}": [
-      "biome check --write"
-    ]
-  },
   "scripts": {
     "format": "biome format --write .",
     "lint": "biome lint .",
