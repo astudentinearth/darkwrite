@@ -13,11 +13,6 @@
   "type": "module",
   "license": "AGPL-3.0-or-later",
   "main": "dist-electron/main.js",
-  "lint-staged": {
-    "*.{ts,tsx,js,jsx,json,css}": [
-      "biome check --write"
-    ]
-  },
   "scripts": {
     "dev": "vite",
     "preview": "vite preview",

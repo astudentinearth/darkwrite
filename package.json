@@ -14,6 +14,14 @@
     "build:frontend": "pnpm --filter=@darkwrite/frontend build"
   },
   "packageManager": "pnpm@10.26.2",
+  "lint-staged": {
+    "packages/{frontend,app-desktop,common,i18n}/**/*.{ts,tsx,js,jsx,json,css}": [
+      "biome check --write"
+    ],
+    "packages/website/**/*.{ts,astro,css}": [
+      "pnpm --filter=@darkwrite/website exec prettier --write"
+    ]
+  },
   "devDependencies": {
     "@biomejs/biome": "2.4.15",
     "@types/node": "catalog:",
