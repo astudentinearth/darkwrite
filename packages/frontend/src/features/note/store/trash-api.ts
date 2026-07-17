@@ -2,6 +2,7 @@ import { dwErrAsync, type NoteDTO } from "@darkwrite/common";
 import { okAsync } from "neverthrow";
 import { DarkwriteAPIClient } from "@/api/api-client";
 import type { RootState } from "@/features/store/types";
+import { workspaceSlice } from "@/features/workspaces/store/workspace-slice";
 import { resultQueryFn } from "@/lib/query-result";
 import { selectNoteIdsInTrash } from "./note-selectors";
 import { removeNote, removeNotes, updateNote, upsertNotes } from "./note-slice";
@@ -52,7 +53,10 @@ export const trashApi = notesApi.injectEndpoints({
             note ? okAsync(note) : dwErrAsync("Note not found"),
           ),
       ),
-      onQueryStarted: async (noteId, { dispatch, queryFulfilled }) => {
+      onQueryStarted: async (
+        noteId,
+        { dispatch, queryFulfilled, getState },
+      ) => {
         const changes: Partial<NoteDTO> = { isTrashed: true };
         const undoPatch: Partial<NoteDTO> = { isTrashed: false };
 
@@ -60,7 +64,16 @@ export const trashApi = notesApi.injectEndpoints({
 
         try {
           const { data } = await queryFulfilled;
+          const state = getState() as RootState;
+          const favorites =
+            state.workspace.workspaces[data.workspaceId].favoriteIds;
           dispatch(upsertNotes([data]));
+          dispatch(
+            workspaceSlice.actions.setWorkspaceFavorites({
+              id: data.workspaceId,
+              ids: favorites.filter((id) => id !== noteId),
+            }),
+          );
         } catch {
           dispatch(updateNote({ id: noteId, changes: undoPatch }));
         }

@@ -9,10 +9,11 @@
 ## ✨ Improvements and fixes
 - Fix translation issue in back/forward buttons (the English keys had Turkish content for some reason)
 - Updated workspace switcher
+- Improve empty states
 
-## 🗑️ Removed
+## 💥 Breaking changes
 - "All notes" section in the sidebar cannot be manually sorted anymore.
-  - This was a hard decision but maintaining this feature was actively hurting development of new features.
+  - This was a hard decision but maintaining this feature was actively hurting the development of new features. Instead you can now sort by last edited or alphabetically. Use favorites and databases to stay better organized.
 
 # 1.2.3-beta.1
 ## 🌟 Features
