@@ -9,6 +9,7 @@ import { settingsSlice } from "./features/settings/store/settings-slice";
 import type { AppStore } from "./features/store/redux";
 import { initializeFonts, initializeThemes } from "./features/themes/init";
 import { getWorkspaceActions } from "./features/workspaces/store/workspace-actions";
+import i18n from "./i18n";
 
 // biome-ignore lint/complexity/noStaticOnlyClass: will remove //FIXME
 export class InitialUserSettings {
@@ -32,12 +33,29 @@ async function _correctWorkspaceState(store: AppStore) {
 export const correctWorkspaceState = (store: AppStore) =>
   ResultAsync.fromSafePromise(_correctWorkspaceState(store));
 
+/** Mirrors the detected/selected UI language into user settings so the
+ * main process can localize itself. localStorage (the language detector
+ * cache) remains the renderer's source of truth. */
+function setupLanguageSync(store: AppStore) {
+  const syncLanguage = (lng: string) => {
+    if (store.getState().settings.client.language !== lng) {
+      store.dispatch(
+        settingsSlice.actions.update({ client: { language: lng } }),
+      );
+    }
+  };
+  i18n.on("languageChanged", syncLanguage);
+  // converge existing users whose language only lives in localStorage
+  syncLanguage(i18n.resolvedLanguage ?? i18n.language);
+}
+
 export function initializeUserPrefs(store: AppStore) {
   return DarkwriteAPIClient.settings
     .getUserSettings()
     .map((settings) => {
       InitialUserSettings.settings = settings;
       store.dispatch(settingsSlice.actions.initialize(settings));
+      setupLanguageSync(store);
       return store;
     })
     .andThen(initializeThemes)

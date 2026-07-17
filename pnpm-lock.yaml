@@ -141,6 +141,9 @@ importers:
       '@darkwrite/common':
         specifier: 'workspace:'
         version: link:../common
+      '@darkwrite/i18n':
+        specifier: 'workspace:'
+        version: link:../i18n
       '@electron-toolkit/preload':
         specifier: ^3.0.2
         version: 3.0.2(electron@42.2.0)
@@ -165,6 +168,9 @@ importers:
       fs-extra:
         specifier: ^11.3.2
         version: 11.3.4
+      i18next:
+        specifier: ^25.5.3
+        version: 25.8.14(typescript@5.8.2)
       lodash:
         specifier: 'catalog:'
         version: 4.18.1
@@ -257,6 +263,9 @@ importers:
       '@darkwrite/common':
         specifier: 'workspace:'
         version: link:../common
+      '@darkwrite/i18n':
+        specifier: 'workspace:'
+        version: link:../i18n
       '@emoji-mart/data':
         specifier: ^1.2.1
         version: 1.2.1
@@ -407,9 +416,6 @@ importers:
       i18next-browser-languagedetector:
         specifier: ^8.2.0
         version: 8.2.1
-      i18next-resources-to-backend:
-        specifier: ^1.2.1
-        version: 1.2.1
       immer:
         specifier: ^10.1.3
         version: 10.2.0
@@ -540,6 +546,12 @@ importers:
       vitest:
         specifier: 'catalog:'
         version: 4.1.7(@types/node@24.12.2)(@vitest/coverage-v8@3.2.4)(happy-dom@20.8.3)(jsdom@24.1.3)(vite@8.1.0(@types/node@24.12.2)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.21.0)(yaml@2.8.3))
+
+  packages/i18n:
+    devDependencies:
+      i18next-conv:
+        specifier: ^17.0.0
+        version: 17.0.0
 
   packages/website:
     dependencies:
@@ -1785,6 +1797,9 @@ packages:
   '@pkgjs/parseargs@0.11.0':
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
     engines: {node: '>=14'}
+
+  '@postalsys/gettext@4.1.1':
+    resolution: {integrity: sha512-kOK8LVJ5imGo9cyR6td98OwSfMX/mtcoHiJ8Z3dCsEowkbbE6xmooVs9EYO4ZknQ7m9TkoGcMbUVY2UNH5XTqg==}
 
   '@radix-ui/number@1.1.1':
     resolution: {integrity: sha512-MkKCwxlXTgz6CFoJx3pCwn07GKp36+aZyu/u2Ln2VrA5DcdyCZkASEDBTd8x5whTQQL5CiYf4prXKLcgQdv29g==}
@@ -3521,6 +3536,10 @@ packages:
     resolution: {integrity: sha512-BNoCY6SXXPQ7gF2opIP4GBE+Xw7U+pHMYKuzjgCN3GwiaIR09UUeKfheyIry77QtrCBlC0KK0q5/TER/tYh3PQ==}
     engines: {node: '>= 0.4'}
 
+  arrify@2.0.1:
+    resolution: {integrity: sha512-3duEwti880xqi4eAMN8AyR4a0ByT90zoYdLlevfrvU43vb0YZwZVfxOgxWrLXXXpyugL0hNZc9G6BiB5B3nUug==}
+    engines: {node: '>=8'}
+
   assert-plus@1.0.0:
     resolution: {integrity: sha512-NfJ4UzBCcQGLDlQq7nHxH+tv3kyZ0hHQqF5BO6J7tNJeP5do1llPr8dZ8zHonfhAu0PHAdMkSo+8o0wxg9lZWw==}
     engines: {node: '>=0.8'}
@@ -3924,6 +3943,10 @@ packages:
 
   confbox@0.2.4:
     resolution: {integrity: sha512-ysOGlgTFbN2/Y6Cg3Iye8YKulHw+R2fNXHrgSmXISQdMnomY6eNDprVdW9R5xBguEqI954+S6709UyiO7B+6OQ==}
+
+  content-type@1.0.5:
+    resolution: {integrity: sha512-nTjqfcBFEipKdXCv4YDQWCfmcLZKm81ldF0pAopTvyrFGVbcR6P/VAAd5G7N+0tTr8QqiU0tFadD6FK4NtJwOA==}
+    engines: {node: '>= 0.6'}
 
   convert-source-map@2.0.0:
     resolution: {integrity: sha512-Kvp459HrV2FEJ1CAsi1Ku+MY3kasH19TFykTz2xWmMeq6bk2NU3XXvfJ+Q61m0xktWwt+1HSYf3JZsTms3aRJg==}
@@ -4642,6 +4665,13 @@ packages:
     resolution: {integrity: sha512-7nF7C9fIPFEMHgEMEfgIlO9wDdZ8CyHw27rWciFZfHvHDReIiPhsYuzPRXsfvBCqFy1l8RRyyWV7QLM+ZhUJsQ==}
     engines: {node: '>=20.20.0'}
 
+  gettext-converter@1.3.3:
+    resolution: {integrity: sha512-geN4Vc0T45a59rkUdjUYpu4PgpKdAcQ8bZPIAwNLw+ygYAahA7Ky/vwmVZ8v2szwQjHSRJDCuV8RG16PsE8a+Q==}
+
+  gettext-parser@9.1.1:
+    resolution: {integrity: sha512-ZLeqWPz9OMNrTgMuww0C22kkcNqis+e4059R94t7L7ERlZ2rUNpiDbaAUus+esBC6uBAQWbS9N+R5vJIJg//lw==}
+    engines: {node: '>=20'}
+
   github-from-package@0.0.0:
     resolution: {integrity: sha512-SyHy3T1v2NUXn29OsWdxmK6RwHD+vkj3v8en8AOBZ1wBQ/hCAQ5bAQTD02kW4W9tUp/3Qh6J8r9EvntiyCmOOw==}
 
@@ -4812,8 +4842,10 @@ packages:
   i18next-browser-languagedetector@8.2.1:
     resolution: {integrity: sha512-bZg8+4bdmaOiApD7N7BPT9W8MLZG+nPTOFlLiJiT8uzKXFjhxw4v2ierCXOwB5sFDMtuA5G4kgYZ0AznZxQ/cw==}
 
-  i18next-resources-to-backend@1.2.1:
-    resolution: {integrity: sha512-okHbVA+HZ7n1/76MsfhPqDou0fptl2dAlhRDu2ideXloRRduzHsqDOznJBef+R3DFZnbvWoBW+KxJ7fnFjd6Yw==}
+  i18next-conv@17.0.0:
+    resolution: {integrity: sha512-DmWA5wIWo0djzcP3b8DLX23ZBVRshoKB+Aq/zVN+g/+yiDlCYxYxZc7GnYKPHtShRuxrhW6iWScMBAi2lyMzyw==}
+    engines: {node: ^22.13.0 || >=24}
+    hasBin: true
 
   i18next@25.8.14:
     resolution: {integrity: sha512-paMUYkfWJMsWPeE/Hejcw+XLhHrQPehem+4wMo+uELnvIwvCG019L9sAIljwjCmEMtFQQO3YeitJY8Kctei3iA==}
@@ -5805,6 +5837,10 @@ packages:
   p-cancelable@2.1.1:
     resolution: {integrity: sha512-BZOr3nRQHOntUjTrH8+Lh54smKHoHyur8We1V8DSMVrl5A2malOOwuJRnKRDjSnkoeBh4at6BwEnb5I7Jl31wg==}
     engines: {node: '>=8'}
+
+  p-from-callback@3.0.0:
+    resolution: {integrity: sha512-ZkhRnvT4oY6f6XTb6wx07+Sw9NKQP9eguSh79rnPsyoB3pEDFjXle+Yu8Bd05OeqnjTyi54LsrHm3idZwpNDLA==}
+    engines: {node: '>=20.0'}
 
   p-limit@3.1.0:
     resolution: {integrity: sha512-TYOanM3wGwNGsZN2cVTYPArw454xnXj5qmWF1bEoAc4+cU/ol7GVh7odevjp1FNHduHc3KZMcFduxU5Xc6uJRQ==}
@@ -8546,6 +8582,8 @@ snapshots:
   '@pkgjs/parseargs@0.11.0':
     optional: true
 
+  '@postalsys/gettext@4.1.1': {}
+
   '@radix-ui/number@1.1.1': {}
 
   '@radix-ui/primitive@1.1.3': {}
@@ -10328,6 +10366,8 @@ snapshots:
       get-intrinsic: 1.3.0
       is-array-buffer: 3.0.5
 
+  arrify@2.0.1: {}
+
   assert-plus@1.0.0:
     optional: true
 
@@ -10852,6 +10892,8 @@ snapshots:
 
   confbox@0.2.4: {}
 
+  content-type@1.0.5: {}
+
   convert-source-map@2.0.0: {}
 
   cookie-es@1.2.3: {}
@@ -11220,7 +11262,6 @@ snapshots:
   encoding@0.1.13:
     dependencies:
       iconv-lite: 0.6.3
-    optional: true
 
   end-of-stream@1.4.5:
     dependencies:
@@ -11663,6 +11704,17 @@ snapshots:
     dependencies:
       resolve-pkg-maps: 1.0.0
 
+  gettext-converter@1.3.3:
+    dependencies:
+      arrify: 2.0.1
+      content-type: 1.0.5
+      encoding: 0.1.13
+
+  gettext-parser@9.1.1:
+    dependencies:
+      content-type: 1.0.5
+      encoding: 0.1.13
+
   github-from-package@0.0.0:
     optional: true
 
@@ -11908,9 +11960,20 @@ snapshots:
     dependencies:
       '@babel/runtime': 7.28.6
 
-  i18next-resources-to-backend@1.2.1:
+  i18next-conv@17.0.0:
+    dependencies:
+      '@postalsys/gettext': 4.1.1
+      colorette: 2.0.20
+      commander: 14.0.3
+      gettext-converter: 1.3.3
+      gettext-parser: 9.1.1
+      p-from-callback: 3.0.0
+
+  i18next@25.8.14(typescript@5.8.2):
     dependencies:
       '@babel/runtime': 7.28.6
+    optionalDependencies:
+      typescript: 5.8.2
 
   i18next@25.8.14(typescript@6.0.3):
     dependencies:
@@ -12908,6 +12971,8 @@ snapshots:
       safe-push-apply: 1.0.0
 
   p-cancelable@2.1.1: {}
+
+  p-from-callback@3.0.0: {}
 
   p-limit@3.1.0:
     dependencies:

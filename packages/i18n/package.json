@@ -1,0 +1,23 @@
+{
+  "name": "@darkwrite/i18n",
+  "version": "1.2.3",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./locales/*": "./dist/locales/*"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx,json,css}": [
+      "biome check --write"
+    ]
+  },
+  "scripts": {
+    "build": "node scripts/build.js",
+    "format": "biome format --write .",
+    "lint": "biome lint ."
+  },
+  "packageManager": "pnpm@10.26.2",
+  "devDependencies": {
+    "i18next-conv": "^17.0.0"
+  }
+}

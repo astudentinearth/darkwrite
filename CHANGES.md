@@ -11,6 +11,7 @@
 - Fix translation issue in back/forward buttons (the English keys had Turkish content for some reason)
 - Updated workspace switcher
 - Improve empty states
+- Menu bar items are now localized
 
 ## 💥 Breaking changes
 - "All notes" section in the sidebar cannot be manually sorted anymore.
