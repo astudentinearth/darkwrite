@@ -624,6 +624,12 @@ msgstr "Satır içi bağlantıya dönüştür"
 msgid "editor.blocks.databaseView.placeholder"
 msgstr "Görüntülenecek bir veritabanı seçin"
 
+msgid "editor.blocks.databaseView.deleteHint"
+msgstr "Görünümü nottan kaldırmak için sil düğmesini kullanın"
+
+msgid "editor.blocks.databaseView.remove"
+msgstr "Görünümü kaldır"
+
 msgid "editor.blocks.fileLink.placeholder"
 msgstr "Hızlı erişim için bir dosya seçin"
 

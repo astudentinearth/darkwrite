@@ -620,6 +620,12 @@ msgstr "Turn into inline link"
 msgid "editor.blocks.databaseView.placeholder"
 msgstr "Choose a database to display"
 
+msgid "editor.blocks.databaseView.deleteHint"
+msgstr "Use the view's delete button to remove it from the note"
+
+msgid "editor.blocks.databaseView.remove"
+msgstr "Remove view"
+
 msgid "editor.blocks.fileLink.placeholder"
 msgstr "Choose a file for quick access"
 

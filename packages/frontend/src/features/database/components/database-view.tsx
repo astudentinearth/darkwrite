@@ -3,7 +3,7 @@ import {
   DatabaseViewType,
   type NoteDTO,
 } from "@darkwrite/common";
-import { Plus } from "lucide-react";
+import { Plus, Trash2 } from "lucide-react";
 import type React from "react";
 import { type JSX, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -26,6 +26,10 @@ import { ViewIcon } from "./view-icon";
 export type DatabaseViewProps = React.ComponentProps<"div"> & {
   views: string[];
   onViewCreated?: (note: NoteDTO) => void;
+  /** Destroys the surrounding embed (e.g. deletes the editor node
+   * hosting this renderer). A delete button is only rendered when this
+   * callback is explicitly provided. */
+  destroyView?: () => void;
 };
 
 function ViewTabTrigger(props: { view: DatabaseViewMeta }) {
@@ -97,20 +101,33 @@ export function DatabaseViewRenderer(props: DatabaseViewProps) {
               defaultDatabaseId={activeView?.parentId ?? undefined}
             />
           </div>
-          {activeView && (
-            <Button
-              onClick={() =>
-                createNote({
-                  workspaceId,
-                  parentId: activeView.parentId,
-                })
-              }
-              className="w-fit h-fit px-1.5 py-1 gap-1"
-            >
-              <Plus size={18} />
-              {t("sidebar.button.newPage")}
-            </Button>
-          )}
+          <div className="flex items-center gap-1">
+            {activeView && (
+              <Button
+                onClick={() =>
+                  createNote({
+                    workspaceId,
+                    parentId: activeView.parentId,
+                  })
+                }
+                className="w-fit h-fit px-1.5 py-1 gap-1"
+              >
+                <Plus size={18} />
+                {t("sidebar.button.newPage")}
+              </Button>
+            )}
+            {props.destroyView && (
+              <Button
+                variant="secondary"
+                onClick={props.destroyView}
+                className="w-fit h-fit px-1.5 py-1"
+                aria-label={t("editor.blocks.databaseView.remove")}
+                title={t("editor.blocks.databaseView.remove")}
+              >
+                <Trash2 size={18} />
+              </Button>
+            )}
+          </div>
         </TabsList>
         {views.map((view) => (
           <TabsContent key={view.id} value={view.id}>
