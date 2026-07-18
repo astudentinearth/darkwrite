@@ -486,6 +486,18 @@ msgstr "Dosya bağlantısı"
 msgid "editor.slashCommand.fileLinkDescription"
 msgstr "Hızlı erişim için yerel bir dosya bağlayın."
 
+msgid "editor.slashCommand.databaseView.table.title"
+msgstr "Tablo görünümü"
+
+msgid "editor.slashCommand.databaseView.table.description"
+msgstr "Mevcut bir veritabanı için tablo görünümü oluşturun"
+
+msgid "editor.slashCommand.database"
+msgstr "Veritabanı"
+
+msgid "editor.slashCommand.databaseDescription"
+msgstr "Bu notun içinde yeni bir veritabanı oluşturun"
+
 msgid "editor.bubble.h1"
 msgstr "Başlık 1"
 
@@ -608,6 +620,9 @@ msgstr "Bir not seçin"
 
 msgid "editor.blocks.linkToPage.turnIntoInlineLink"
 msgstr "Satır içi bağlantıya dönüştür"
+
+msgid "editor.blocks.databaseView.placeholder"
+msgstr "Görüntülenecek bir veritabanı seçin"
 
 msgid "editor.blocks.fileLink.placeholder"
 msgstr "Hızlı erişim için bir dosya seçin"

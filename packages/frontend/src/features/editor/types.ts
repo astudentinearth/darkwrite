@@ -30,6 +30,7 @@ export enum TextFormat {
 export enum Block {
   Blockquote = "blockquote",
   CodeBlock = "codeBlock",
+  DatabaseView = "databaseView",
   Image = "dwimage",
   HorizontalRule = "horizontalRule",
   LinkToPage = "linkToPage",

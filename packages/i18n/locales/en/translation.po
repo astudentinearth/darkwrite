@@ -481,6 +481,19 @@ msgstr "File link"
 msgid "editor.slashCommand.fileLinkDescription"
 msgstr "Link a local file for quick access."
 
+msgid "editor.slashCommand.databaseView.table.title"
+msgstr "Table view"
+
+
+msgid "editor.slashCommand.databaseView.table.description"
+msgstr "Create a table view for an existing database"
+
+msgid "editor.slashCommand.database"
+msgstr "Database"
+
+msgid "editor.slashCommand.databaseDescription"
+msgstr "Create a new database inside this note"
+
 msgid "editor.bubble.h1"
 msgstr "Heading 1"
 
@@ -603,6 +616,9 @@ msgstr "Select a note"
 
 msgid "editor.blocks.linkToPage.turnIntoInlineLink"
 msgstr "Turn into inline link"
+
+msgid "editor.blocks.databaseView.placeholder"
+msgstr "Choose a database to display"
 
 msgid "editor.blocks.fileLink.placeholder"
 msgstr "Choose a file for quick access"

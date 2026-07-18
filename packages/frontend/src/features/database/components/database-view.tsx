@@ -1,4 +1,8 @@
-import { type DatabaseViewMeta, DatabaseViewType } from "@darkwrite/common";
+import {
+  type DatabaseViewMeta,
+  DatabaseViewType,
+  type NoteDTO,
+} from "@darkwrite/common";
 import { Plus } from "lucide-react";
 import type React from "react";
 import { type JSX, useState } from "react";
@@ -15,12 +19,13 @@ import { useNoteActions } from "@/features/note/store/note-actions";
 import { useCurrentWorkspaceId } from "@/features/workspaces/hooks/use-workspace";
 import { useViewsById } from "../hooks/use-views-by-id";
 import { DatabaseViewContext } from "../store/database-view-context";
+import { NewDatabaseViewPopover } from "./new-view-popover";
 import { TableView } from "./table-view";
 import { ViewIcon } from "./view-icon";
-import { NewDatabaseViewPopover } from "./new-view-popover";
 
 export type DatabaseViewProps = React.ComponentProps<"div"> & {
   views: string[];
+  onViewCreated?: (note: NoteDTO) => void;
 };
 
 function ViewTabTrigger(props: { view: DatabaseViewMeta }) {
@@ -74,7 +79,7 @@ export function DatabaseViewRenderer(props: DatabaseViewProps) {
   return (
     !isLoading && (
       <Tabs
-        className="w-full"
+        className="dw-database-view not-prose w-full"
         defaultValue={views.at(0)?.id}
         value={effectiveId}
         onValueChange={setActiveViewId}
@@ -87,6 +92,7 @@ export function DatabaseViewRenderer(props: DatabaseViewProps) {
             <NewDatabaseViewPopover
               onCreate={(note) => {
                 setActiveViewId(note.id);
+                props.onViewCreated?.(note);
               }}
               defaultDatabaseId={activeView?.parentId ?? undefined}
             />

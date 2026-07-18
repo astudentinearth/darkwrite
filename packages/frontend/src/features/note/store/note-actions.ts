@@ -23,8 +23,8 @@ export const getNoteActions = (dispatch: AppDispatch) => ({
     dispatch(createNoteApi.endpoints.createNote.initiate(args));
   },
 
-  createDatabase(args: CreateDatabaseArgs) {
-    dispatch(createNoteApi.endpoints.createDatabase.initiate(args));
+  async createDatabase(args: CreateDatabaseArgs) {
+    return dispatch(createNoteApi.endpoints.createDatabase.initiate(args));
   },
 
   async favorite(args: FavoriteNoteArgs) {

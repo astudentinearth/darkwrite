@@ -21,9 +21,6 @@ editorMiddleware.startListening({
   ),
   effect: (action, listenerApi) => {
     const { noteId } = action.payload as { noteId: string };
-
-    const state = listenerApi.getState() as RootState;
-
     let debouncedSave = debouncedSaves.get(noteId);
 
     if (!debouncedSave) {
@@ -35,6 +32,7 @@ editorMiddleware.startListening({
       );
 
       debouncedSave = debounce(async () => {
+        const state = listenerApi.getState() as RootState;
         const document = state.editor.docs[noteId];
 
         if (document) {
