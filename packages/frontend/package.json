@@ -34,6 +34,7 @@
     "@reduxjs/toolkit": "^2.11.2",
     "@tabler/icons-react": "^3.44.0",
     "@tailwindcss/typography": "^0.5.19",
+    "@tanstack/react-virtual": "^3.14.6",
     "@tiptap/core": "catalog:",
     "@tiptap/extension-bubble-menu": "^3.22.4",
     "@tiptap/extension-code-block-lowlight": "^3.22.4",

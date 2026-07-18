@@ -15,7 +15,7 @@ export default function TrashBanner() {
   if (!note?.isTrashed) return <></>;
 
   return (
-    <Alert className="grid grid-cols-[1fr_auto] p-2 pl-4 top-highlight items-center">
+    <Alert className="grid grid-cols-[1fr_auto] font-ui p-2 pl-4 top-highlight items-center">
       {t("editor.cover.trashWarning")}
       <Button
         onClick={() => restoreFromTrash(noteId)}

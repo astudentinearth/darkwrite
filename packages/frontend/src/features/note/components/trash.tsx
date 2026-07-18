@@ -1,6 +1,7 @@
 import { IconTrash } from "@tabler/icons-react";
-import { Trash, Trash2, Undo2 } from "lucide-react";
-import { memo, useMemo, useState } from "react";
+import { useVirtualizer } from "@tanstack/react-virtual";
+import { Trash, Undo2 } from "lucide-react";
+import { memo, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   Button,
@@ -76,6 +77,53 @@ const TrashItem = memo(function ({ noteId, className }: TrashItemProps) {
   );
 });
 
+function TrashList({ query }: { query: string }) {
+  const { noteIds } = useTrash(query);
+  const parentRef = useRef<HTMLDivElement>(null);
+  const { t } = useTranslation();
+
+  const virtual = useVirtualizer({
+    count: noteIds.length,
+    estimateSize: () => 32,
+    getScrollElement: () => parentRef.current,
+    getItemKey: (i) => noteIds[i],
+    overscan: 5,
+  });
+
+  useEffect(() => {
+    virtual.scrollToIndex(0);
+  }, [query]);
+
+  if (noteIds.length === 0)
+    return (
+      <span className="p-4 flex justify-center items-center">
+        {t("search.noResult")}
+      </span>
+    );
+
+  return (
+    <div
+      ref={parentRef}
+      className="h-full overflow-y-auto scroll-view pl-1 pr-1 gutter-stable pt-0 pb-1 w-full"
+    >
+      <div style={{ height: virtual.getTotalSize(), position: "relative" }}>
+        {virtual.getVirtualItems().map((v) => (
+          <div
+            key={v.key}
+            style={{
+              height: v.size,
+              transform: `translateY(${v.start}px)`,
+            }}
+            className="absolute top-0 left-0 w-full"
+          >
+            <TrashItem noteId={v.key.toString()} />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export function TrashWidget() {
   const [query, setQuery] = useState("");
 
@@ -88,12 +136,8 @@ export function TrashWidget() {
   } = useDragState();
 
   const { t } = useTranslation();
-  const { noteIds } = useTrash(query);
   const store = useAppStore();
   const actions = useNoteActions();
-  const items = useMemo(() => {
-    return noteIds.map((id) => <TrashItem noteId={id} key={id} />);
-  }, [noteIds]);
 
   return (
     <Popover>
@@ -122,7 +166,7 @@ export function TrashWidget() {
       <PopoverContent
         side="right"
         sticky="always"
-        className="w-80 ml-2 grid grid-rows-[auto_1fr] bg-view-2/80 top-highlight max-h-[60vh] p-0 mb-2"
+        className="w-80 ml-2 grid grid-rows-[auto_1fr] bg-view-2/80 top-highlight max-h-[60vh] min-h-120 p-0 mb-2"
       >
         <div className="p-1 flex gap-0.5">
           <Input
@@ -133,15 +177,7 @@ export function TrashWidget() {
           />
           <TrashMenu />
         </div>
-        <div className="h-full overflow-y-auto flex flex-col scroll-view pl-1 pr-1 gutter-stable pt-0 pb-1 w-full">
-          {items.length > 0 ? (
-            items
-          ) : (
-            <span className="p-4 flex items-center justify-center text-foreground/70 font-medium">
-              {t("search.noResult")}
-            </span>
-          )}
-        </div>
+        <TrashList query={query} />
       </PopoverContent>
     </Popover>
   );

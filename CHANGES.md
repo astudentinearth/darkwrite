@@ -13,6 +13,7 @@
 - Improve empty states
 - Menu bar items are now localized
 - Menu bar now includes the `Help` section (macOS users can search the menu bar)
+- Improved trash performance (especially if you had a lot of things in there)
 
 ## 💥 Breaking changes
 - "All notes" section in the sidebar cannot be manually sorted anymore.
