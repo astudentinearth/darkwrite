@@ -3,7 +3,7 @@ import {
   DatabaseViewType,
   type NoteDTO,
 } from "@darkwrite/common";
-import { Plus, Trash2 } from "lucide-react";
+import { IconPlus, IconTrash } from "@tabler/icons-react";
 import type React from "react";
 import { type JSX, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -22,6 +22,14 @@ import { DatabaseViewContext } from "../store/database-view-context";
 import { NewDatabaseViewPopover } from "./new-view-popover";
 import { TableView } from "./table-view";
 import { ViewIcon } from "./view-icon";
+
+export enum RenderingMode {
+  /** This view is rendered inside a document, as an embed. */
+  Inline = "inline",
+
+  /** This view is rendered as part of a database page, not as an embed. */
+  FullPage = "fullPage",
+}
 
 export type DatabaseViewProps = React.ComponentProps<"div"> & {
   views: string[];
@@ -112,7 +120,7 @@ export function DatabaseViewRenderer(props: DatabaseViewProps) {
                 }
                 className="w-fit h-fit px-1.5 py-1 gap-1"
               >
-                <Plus size={18} />
+                <IconPlus size={18} />
                 {t("sidebar.button.newPage")}
               </Button>
             )}
@@ -124,7 +132,7 @@ export function DatabaseViewRenderer(props: DatabaseViewProps) {
                 aria-label={t("editor.blocks.databaseView.remove")}
                 title={t("editor.blocks.databaseView.remove")}
               >
-                <Trash2 size={18} />
+                <IconTrash size={18} />
               </Button>
             )}
           </div>

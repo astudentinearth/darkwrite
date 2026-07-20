@@ -1,3 +1,4 @@
+import { SortProperty } from "@darkwrite/common";
 import { skipToken } from "@reduxjs/toolkit/query";
 import { shallowEqual } from "react-redux";
 import { selectNotesInDatabase } from "@/features/note/store/note-selectors";
@@ -15,7 +16,10 @@ export function useNotesInDatabase(databaseId: string | undefined) {
     databaseId ?? skipToken,
   );
   const noteIds = useAppSelector(
-    (s) => (databaseId ? selectNotesInDatabase(s, databaseId) : EMPTY_ARRAY),
+    (s) =>
+      databaseId
+        ? selectNotesInDatabase(s, databaseId, SortProperty.CreationDate, "asc")
+        : EMPTY_ARRAY,
     shallowEqual,
   );
   return {

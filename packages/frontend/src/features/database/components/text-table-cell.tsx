@@ -16,7 +16,7 @@ export function TextTableCell(props: TextTableCellProps) {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const saveAndExit = () => {
-    props.onValueChange(value);
+    if (value !== props.defaultValue) props.onValueChange(value);
     setEditing(false);
   };
 

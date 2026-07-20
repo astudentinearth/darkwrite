@@ -1,4 +1,10 @@
-import { byUpdateTime, isDescendant, NoteType } from "@darkwrite/common";
+import {
+  isDescendant,
+  NoteType,
+  noteComparator,
+  type SortDirection,
+  SortProperty,
+} from "@darkwrite/common";
 import { createSelector } from "@reduxjs/toolkit";
 import type { RootState } from "@/features/store/types";
 import { notesAdapter } from "./notes-adapter";
@@ -65,7 +71,7 @@ export const selectRecentNotes = createSelector(
   (allNotes, workspaceId) => {
     return allNotes
       .filter((n) => n.workspaceId === workspaceId && !n.isTrashed)
-      .toSorted(byUpdateTime("desc"))
+      .toSorted(noteComparator(SortProperty.ModificationDate, "desc"))
       .slice(0, 5);
   },
 );
@@ -179,14 +185,24 @@ export const selectNoteIdsInTrash = createSelector(
 
 /** Selects IDs of Doc-type notes that are direct children of the given database. */
 export const selectNotesInDatabase = createSelector(
-  [selectAllNotes, (_state: RootState, parentId: string) => parentId],
-  (allNotes, parentId) =>
+  [
+    selectAllNotes,
+    (_state: RootState, parentId: string) => parentId,
+    (_state: RootState, _parentId: string, property: SortProperty) => property,
+    (
+      _state: RootState,
+      _parentId: string,
+      _property: SortProperty,
+      mode: SortDirection,
+    ) => mode,
+  ],
+  (allNotes, parentId, property, mode) =>
     allNotes
       .filter(
         (n) =>
           n.parentId === parentId && n.type === NoteType.Doc && !n.isTrashed,
       )
-      .toSorted((a, b) => b.modifiedAt.localeCompare(a.modifiedAt))
+      .toSorted(noteComparator(property, mode))
       .map((n) => n.id),
 );
 
