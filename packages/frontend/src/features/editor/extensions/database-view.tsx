@@ -70,6 +70,50 @@ function cursorAdjacentBlock(state: EditorState, dir: -1 | 1): PMNode | null {
   return findCutAfter($cursor)?.nodeAfter ?? null;
 }
 
+const EmptyState = ({
+  addTableView,
+  isEditable,
+  deleteNode,
+  disabled,
+}: {
+  addTableView: (databaseId: string) => void;
+  isEditable: boolean;
+  deleteNode: () => void;
+  disabled: boolean;
+}) => {
+  const { t } = useTranslation();
+  return (
+    <NodeViewWrapper>
+      <div
+        data-drag-handle=""
+        className="not-prose border border-dashed bg-view-2/50 rounded-xl p-2 my-2 flex items-center gap-2"
+      >
+        <span className="text-sm text-muted-foreground select-none grow pl-2">
+          {t("editor.blocks.databaseView.placeholder")}
+        </span>
+        {isEditable && (
+          <>
+            <DatabasePicker
+              className="w-fit bg-secondary/50"
+              disabled={disabled}
+              onValueChange={addTableView}
+            />
+            <Button
+              variant="ghost"
+              onClick={deleteNode}
+              className="w-fit h-fit p-2"
+              aria-label={t("editor.blocks.databaseView.remove")}
+              title={t("editor.blocks.databaseView.remove")}
+            >
+              <Trash2 size={16} />
+            </Button>
+          </>
+        )}
+      </div>
+    </NodeViewWrapper>
+  );
+};
+
 const DatabaseViewComponent = ({
   node,
   updateAttributes,
@@ -79,7 +123,6 @@ const DatabaseViewComponent = ({
   const viewIds: string[] = node.attrs.viewIds;
   const [working, setWorking] = useState(false);
   const actions = useNoteActions();
-  const { t } = useTranslation();
 
   const appendView = (viewId: string) => {
     updateAttributes({ viewIds: [...viewIds, viewId] });
@@ -96,36 +139,15 @@ const DatabaseViewComponent = ({
       .finally(() => setWorking(false));
   };
 
-  if (viewIds.length === 0) {
+  if (viewIds.length === 0)
     return (
-      <NodeViewWrapper>
-        <div
-          data-drag-handle=""
-          className="not-prose border rounded-md p-3 my-2 flex flex-col gap-2"
-        >
-          <div className="flex items-center justify-between gap-2">
-            <span className="text-sm text-muted-foreground select-none">
-              {t("editor.blocks.databaseView.placeholder")}
-            </span>
-            {editor.isEditable && (
-              <Button
-                variant="ghost"
-                onClick={deleteNode}
-                className="w-fit h-fit p-1"
-                aria-label={t("editor.blocks.databaseView.remove")}
-                title={t("editor.blocks.databaseView.remove")}
-              >
-                <Trash2 size={16} />
-              </Button>
-            )}
-          </div>
-          {editor.isEditable && (
-            <DatabasePicker disabled={working} onValueChange={addTableView} />
-          )}
-        </div>
-      </NodeViewWrapper>
+      <EmptyState
+        addTableView={addTableView}
+        deleteNode={deleteNode}
+        disabled={working}
+        isEditable={editor.isEditable}
+      />
     );
-  }
 
   return (
     <NodeViewWrapper>

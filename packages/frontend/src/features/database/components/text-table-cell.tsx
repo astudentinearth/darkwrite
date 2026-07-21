@@ -34,7 +34,7 @@ export function TextTableCell(props: TextTableCellProps) {
       onClick={edit}
       onKeyDown={(e) => e.key === "Enter" && edit()}
       className={cn(
-        "border border-transparent h-12 px-2 focus-within:outline-0 focus:border-primary/50",
+        "border border-transparent h-10 px-2 focus-within:outline-0 focus:border-primary/50",
         props.className,
         isEditing && "p-0",
       )}

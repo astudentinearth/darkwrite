@@ -30,7 +30,7 @@ function TableItem({ id }: { id: string }) {
             titleUpdater.update(val);
           }}
           placeholder={t("defaults.pageTitle")}
-          className={"grid  grid-cols-[24px_1fr_auto] gap-2 place-items-center"}
+          className={"grid grid-cols-[24px_1fr_auto] gap-2 place-items-center"}
         >
           <span>{getNoteIcon2(note.icon, note.type)}</span>
           <span className="text-start justify-self-start">
