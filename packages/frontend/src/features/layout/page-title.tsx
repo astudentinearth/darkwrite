@@ -1,8 +1,7 @@
 import { IconHome } from "@tabler/icons-react";
-import { Home, Settings } from "lucide-react";
+import { Settings } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
-import NoteDropdown from "./note-dropdown";
 import TitlebarNavTrigger from "./titlebar-nav-trigger";
 
 export default function PageTitle() {

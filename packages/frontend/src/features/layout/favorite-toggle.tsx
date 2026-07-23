@@ -1,5 +1,4 @@
 import { IconStar } from "@tabler/icons-react";
-import { Star } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { HeaderbarButton } from "@/components/headerbar-button";
 import { TextTooltip } from "@/components/ui/tooltip";

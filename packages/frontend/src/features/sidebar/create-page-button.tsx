@@ -1,5 +1,4 @@
 import { IconEdit } from "@tabler/icons-react";
-import { SquarePen } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
 import { useCreateNoteMutation } from "../note/store/create-note";

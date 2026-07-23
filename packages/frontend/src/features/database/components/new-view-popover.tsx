@@ -1,3 +1,7 @@
+import { DatabaseViewType, type NoteDTO } from "@darkwrite/common";
+import { IconPlus } from "@tabler/icons-react";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Button,
   Input,
@@ -8,10 +12,6 @@ import {
 } from "@/components/ui";
 import { useNoteActions } from "@/features/note/store/note-actions";
 import { cn } from "@/lib/utils";
-import { DatabaseViewType, type NoteDTO } from "@darkwrite/common";
-import { IconPlus } from "@tabler/icons-react";
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
 import { DatabasePicker } from "./database-picker";
 
 export type NewDatabaseViewPopoverProps = {

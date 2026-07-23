@@ -7,8 +7,7 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useNoteFromURL } from "@/features/note/hooks/use-note-from-url";
-import { cn, getNoteIcon, getNoteIcon2 } from "@/lib/utils";
+import { cn, getNoteIcon2 } from "@/lib/utils";
 import { navigateToNote } from "../navigation/navigator";
 import { useNoteById } from "../note/hooks/use-note-by-id";
 import { selectParentIdTree } from "../note/store/note-selectors";

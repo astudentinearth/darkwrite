@@ -1,5 +1,4 @@
 import { useTranslation } from "react-i18next";
-import { Label, Switch } from "@/components/ui";
 import { SwitchablePreference } from "./components/switchable";
 import { useSettings } from "./hooks/use-settings";
 import { useSettingsActions } from "./store/settings-actions";

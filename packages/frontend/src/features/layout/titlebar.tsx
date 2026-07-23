@@ -1,5 +1,4 @@
 import { IconLayoutSidebar } from "@tabler/icons-react";
-import { PanelRightClose } from "lucide-react";
 import { useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { HeaderbarButton } from "@/components/headerbar-button";
@@ -9,8 +8,6 @@ import { useWindowControlsOverlay } from "@/features/layout/hooks/use-window-con
 import { useNoteFromURL } from "@/features/note/hooks/use-note-from-url";
 import { cn } from "@/lib/utils";
 import { ReaderModeToggle } from "../editor/components/reader-mode-toggle";
-import { editorSlice } from "../editor/store/editor-slice";
-import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { HistoryNavigation } from "./navigation";
 import NoteDropdown from "./note-dropdown";
 import PageTitle from "./page-title";

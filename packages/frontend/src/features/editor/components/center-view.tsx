@@ -4,7 +4,7 @@ import { Dialog, DialogContentContainer, DialogOverlay } from "@/components/ui";
 import NoteDropdown from "@/features/layout/note-dropdown";
 import Toolbar from "@/features/layout/toolbar";
 import { navigateToNote } from "@/features/navigation/navigator";
-import { useAppDispatch, useAppSelector } from "@/features/store/hooks";
+import { useAppSelector } from "@/features/store/hooks";
 import { cn } from "@/lib/utils";
 import { EditorViewport } from "../editor-view";
 import { NoteMetadataEditors } from "../header";
@@ -13,7 +13,6 @@ import { useEditorView } from "../hooks/use-editor-options";
 import { useEditorActions } from "../store/editor-actions";
 import { EditorContext } from "../store/editor-context";
 import { selectCenterViewState } from "../store/editor-selectors";
-import { editorSlice } from "../store/editor-slice";
 import { OpenFullscreenButton } from "./open-fullscreen-button";
 import { ReaderModeToggle } from "./reader-mode-toggle";
 

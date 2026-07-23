@@ -6,6 +6,7 @@ import {
   SortProperty,
 } from "@darkwrite/common";
 import { createSelector } from "@reduxjs/toolkit";
+import { weakMapMemoize } from "@reduxjs/toolkit/react";
 import type { RootState } from "@/features/store/types";
 import { notesAdapter } from "./notes-adapter";
 import type { MoveNoteSearchArgs, SearchArgs } from "./types";
@@ -37,6 +38,7 @@ export const selectNotesByParentId = createSelector(
       .toSorted((a, b) => b.modifiedAt.localeCompare(a.modifiedAt))
       .map((n) => n.id);
   },
+  { memoize: weakMapMemoize },
 );
 
 export const selectNotesByParentIdAlphabetical = createSelector(

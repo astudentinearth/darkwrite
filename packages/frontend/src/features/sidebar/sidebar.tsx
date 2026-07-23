@@ -1,18 +1,17 @@
 import { IconLayoutSidebar, IconSettings } from "@tabler/icons-react";
-import { LayoutDashboard, PanelRightOpen, Search } from "lucide-react";
+import { LayoutDashboard, Search } from "lucide-react";
 import type React from "react";
 import { useTranslation } from "react-i18next";
 import { HeaderbarButton } from "@/components/headerbar-button";
 import { Button } from "@/components/ui/button";
 import { TextTooltip } from "@/components/ui/tooltip";
 import { useSidebar } from "@/features/layout/hooks/use-sidebar";
-import NoteListRoot from "@/features/note/note-list-root";
 import { cn } from "@/lib/utils";
+import { FlatNoteList } from "../note/components/flat-note-list";
 import { TrashWidget } from "../note/components/trash";
 import { showSearch } from "../search/search-state";
 import SettingsDialog from "../settings/settings-dialog";
 import AppMenu from "./app-menu";
-import FavoritesContainer from "./favorites-container";
 import { SidebarNavigation } from "./navigation";
 import { WorkspaceSwitcher } from "./workspace-switcher";
 
@@ -73,9 +72,7 @@ export function Sidebar(props: SidebarProps) {
       </div>
       <div className="h-full w-full grow pl-2 pr-2 py-2 overflow-y-auto scroll-view">
         <div className="flex gap-2 flex-col mb-16 max-w-full">
-          <FavoritesContainer />
-          <NoteListRoot />
-          <div className="flex flex-col gap-0.5"></div>
+          <FlatNoteList />
         </div>
       </div>
       <div

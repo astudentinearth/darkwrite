@@ -16,6 +16,7 @@ import { useNoteItem, useNoteItemDrag } from "../hooks/use-note-item";
 import { NoteContextMenuContainer } from "../note-context-menu";
 import { NoteTitle } from "./note-title";
 
+/** @deprecated */
 export const NoteListItem = memo(function ({
   id,
   children,
@@ -26,6 +27,7 @@ export const NoteListItem = memo(function ({
   return <NoteItem id={id}>{children}</NoteItem>;
 });
 
+/** @deprecated */
 export function NoteItem({
   id,
   children,

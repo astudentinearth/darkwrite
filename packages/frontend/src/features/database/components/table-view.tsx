@@ -1,11 +1,10 @@
 import { GalleryVertical, TextAlignStart } from "lucide-react";
-import { use, useState } from "react";
+import { use } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui";
 import { useEditorActions } from "@/features/editor/store/editor-actions";
 import { useNoteById } from "@/features/note/hooks/use-note-by-id";
 import { NoteContextMenuContainer } from "@/features/note/note-context-menu";
-import { useNoteActions } from "@/features/note/store/note-actions";
 import { useTitleUpdater } from "@/features/note/store/update-note";
 import { getNoteIcon2 } from "@/lib/utils";
 import { useNotesInDatabase } from "../hooks/use-notes-in-database";

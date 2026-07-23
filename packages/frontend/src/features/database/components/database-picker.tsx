@@ -1,14 +1,14 @@
+import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
 } from "@/components/ui";
-import { useAvailableDatabases } from "../hooks/use-databases-in-workspace";
-import { useMemo, useState } from "react";
 import { useNoteById } from "@/features/note/hooks/use-note-by-id";
 import { cn, getNoteIcon2 } from "@/lib/utils";
-import { useTranslation } from "react-i18next";
+import { useAvailableDatabases } from "../hooks/use-databases-in-workspace";
 
 export type DatabasePickerProps = React.ComponentProps<typeof Select> & {
   className?: string;

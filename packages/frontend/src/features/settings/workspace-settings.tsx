@@ -10,7 +10,6 @@ import { useAppSelector } from "../store/hooks";
 import { useCurrentWorkspace } from "../workspaces/hooks/use-workspace";
 import { useUpdateWorkspaceMutation } from "../workspaces/store/workspace-api";
 import { selectWorkspaceCount } from "../workspaces/store/workspace-selectors";
-import type { UpdateWorkspaceArg } from "../workspaces/store/workspace-slice";
 import { DeleteWorkspaceDialog } from "./delete-workspace-dialog";
 import EditWorkspaceDialog from "./edit-workspace-dialog";
 import { useSettings } from "./hooks/use-settings";

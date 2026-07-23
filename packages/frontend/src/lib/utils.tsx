@@ -7,12 +7,7 @@ import {
 } from "@tabler/icons-react";
 import { type ClassValue, clsx } from "clsx";
 import { hex } from "color-convert";
-import {
-  FileText,
-  type LucideIcon,
-  Table2,
-  TableProperties,
-} from "lucide-react";
+import { FileText } from "lucide-react";
 import { nanoid } from "nanoid";
 import { twMerge } from "tailwind-merge";
 

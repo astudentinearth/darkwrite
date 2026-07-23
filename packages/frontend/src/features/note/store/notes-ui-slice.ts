@@ -10,10 +10,15 @@ export type MoveNoteDialogState = {
 export type ClearTrashDialogState = {
   open: boolean;
 };
+export type SidebarUiState = {
+  expandedFavorites: string[];
+  expandedNotes: string[];
+};
 
 export type NotesUiState = {
   moveNoteDialog: MoveNoteDialogState;
   trashDialog: ClearTrashDialogState;
+  sidebar: SidebarUiState;
 };
 
 export const initialNotesUiState: NotesUiState = {
@@ -23,6 +28,10 @@ export const initialNotesUiState: NotesUiState = {
   },
   trashDialog: {
     open: false,
+  },
+  sidebar: {
+    expandedFavorites: [],
+    expandedNotes: [],
   },
 };
 
@@ -43,6 +52,26 @@ export const notesUiSlice = createSlice({
     },
     closeClearTrashDialog(state) {
       state.trashDialog.open = false;
+    },
+    expandNote(state, { payload: id }: PayloadAction<string>) {
+      state.sidebar.expandedNotes = Array.from(
+        new Set(state.sidebar.expandedNotes).add(id),
+      );
+    },
+    expandFavorite(state, { payload: id }: PayloadAction<string>) {
+      state.sidebar.expandedFavorites = Array.from(
+        new Set(state.sidebar.expandedFavorites).add(id),
+      );
+    },
+    collapseNote(state, { payload: id }: PayloadAction<string>) {
+      state.sidebar.expandedNotes = state.sidebar.expandedNotes.filter(
+        (n) => n !== id,
+      );
+    },
+    collapseFavorite(state, { payload: id }: PayloadAction<string>) {
+      state.sidebar.expandedFavorites = state.sidebar.expandedFavorites.filter(
+        (n) => n !== id,
+      );
     },
   },
 });

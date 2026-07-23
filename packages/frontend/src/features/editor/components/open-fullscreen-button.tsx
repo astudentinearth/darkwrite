@@ -1,5 +1,4 @@
 import { IconArrowsMaximize } from "@tabler/icons-react";
-import { Expand } from "lucide-react";
 import { use } from "react";
 import { HeaderbarButton } from "@/components/headerbar-button";
 import { TextTooltip } from "@/components/ui/tooltip";

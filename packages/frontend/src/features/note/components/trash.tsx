@@ -1,7 +1,7 @@
 import { IconTrash } from "@tabler/icons-react";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { Trash, Undo2 } from "lucide-react";
-import { memo, useEffect, useMemo, useRef, useState } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   Button,

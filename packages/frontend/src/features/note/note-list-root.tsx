@@ -12,6 +12,7 @@ import { SidebarItem } from "../sidebar/sidebar-item";
 import NoteList from "./components/note-list";
 import { useNoteItemDrag } from "./hooks/use-note-item";
 
+/** @deprecated */
 export default function NoteListRoot() {
   const { t } = useTranslation("translation", { keyPrefix: "sidebar" });
   const open = useAllNotesViewOpen();

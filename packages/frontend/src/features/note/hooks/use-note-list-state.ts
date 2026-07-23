@@ -8,7 +8,7 @@ import {
 } from "../store/note-selectors";
 import { useGetNotesByParentIdQuery } from "../store/notes-api";
 
-const EMPTY_ARRAY: string[] = [];
+const _EMPTY_ARRAY: string[] = [];
 
 export function useNoteListState(parentId: string | null) {
   const workspaceId = useAppSelector(

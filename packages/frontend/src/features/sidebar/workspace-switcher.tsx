@@ -1,5 +1,5 @@
 import { IconSelector } from "@tabler/icons-react";
-import { ChevronDown, Cloud, HardDrive, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";

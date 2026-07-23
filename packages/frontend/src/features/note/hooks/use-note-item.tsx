@@ -7,12 +7,12 @@ import {
   getCurrentRoutePath,
   NavigationEventBus,
 } from "@/features/navigation/navigator";
-import { useAppSelector, useAppStore } from "@/features/store/hooks";
+import { useAppStore } from "@/features/store/hooks";
 import { useCurrentWorkspaceId } from "@/features/workspaces/hooks/use-workspace";
 import { getMovingNote, useMoveNoteMutation } from "../store/move-note";
 import { canMoveNoteInto } from "../store/move-note-validator";
 import { useNoteActions } from "../store/note-actions";
-import { selectAllNotesAsMap, selectNoteById } from "../store/note-selectors";
+import { selectAllNotesAsMap } from "../store/note-selectors";
 import { useNoteById } from "./use-note-by-id";
 
 /**

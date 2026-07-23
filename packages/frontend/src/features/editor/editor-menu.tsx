@@ -5,7 +5,6 @@ import {
   FileCode,
   FileText,
   Forward,
-  Menu,
   Redo,
   Trash,
   Undo,

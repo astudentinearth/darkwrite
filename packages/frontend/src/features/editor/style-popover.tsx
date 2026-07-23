@@ -1,6 +1,6 @@
 import { FontStyle, type NoteCustomization } from "@darkwrite/common";
 import { IconBrush } from "@tabler/icons-react";
-import { Brush, RotateCcw } from "lucide-react";
+import { RotateCcw } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import FontSelect from "@/components/font-select";
 import { HeaderbarButton } from "@/components/headerbar-button";
