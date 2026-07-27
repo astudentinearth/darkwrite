@@ -1,4 +1,3 @@
-import { NoteType, type ParentId } from "@darkwrite/common";
 import { type MouseEvent, useCallback, useEffect, useState } from "react";
 import { matchPath } from "react-router-dom";
 import { beginDrag, DragType } from "@/features/dnd/datatransfer";
@@ -7,13 +6,19 @@ import {
   getCurrentRoutePath,
   NavigationEventBus,
 } from "@/features/navigation/navigator";
-import { useAppStore } from "@/features/store/hooks";
+import { useAppSelector, useAppStore } from "@/features/store/hooks";
 import { useCurrentWorkspaceId } from "@/features/workspaces/hooks/use-workspace";
-import { getMovingNote, useMoveNoteMutation } from "../store/move-note";
-import { canMoveNoteInto } from "../store/move-note-validator";
+import {
+  getMovingNote,
+  useMoveBelowMutation,
+  useMoveIntoMutation,
+} from "../store/move-note";
+import {
+  canMoveNoteBelow,
+  canMoveNoteInto,
+} from "../store/move-note-validator";
 import { useNoteActions } from "../store/note-actions";
-import { selectAllNotesAsMap } from "../store/note-selectors";
-import { useNoteById } from "./use-note-by-id";
+import { selectAllNotesAsMap, selectNoteById } from "../store/note-selectors";
 
 /**
  * Hook to get note data **within sidebar views.** Do NOT use this to
@@ -21,15 +26,15 @@ import { useNoteById } from "./use-note-by-id";
  * @param id
  */
 export function useNoteItem(id: string) {
-  const { note } = useNoteById(id);
+  const note = useAppSelector((state) => selectNoteById(state, id));
   const [isActive, setIsActive] = useState(false);
   const { createNote } = useNoteActions();
   const workspaceId = useCurrentWorkspaceId();
-  const draggable = note?.type !== NoteType.DatabaseView;
-  const acceptsDrop = note?.type !== NoteType.DatabaseView;
-  const expandable = note?.type !== NoteType.DatabaseView;
 
   useEffect(() => {
+    // get the path name at the moment of render to determine
+    // initial active state. grab that state from react router
+    // without subscribing to changes.
     const path = getCurrentRoutePath();
     const match = matchPath("/page/:pageId", path);
     if (match?.params.pageId === id) {
@@ -52,10 +57,10 @@ export function useNoteItem(id: string) {
     createNote({ parentId: id, workspaceId, navigateAfter: true });
   };
 
-  return { note, isActive, createChild, draggable, acceptsDrop, expandable };
+  return { note, isActive, createChild };
 }
 
-export function useNoteItemDrag(id: ParentId) {
+export function useNoteItemDrag(id: string) {
   const store = useAppStore();
   const {
     isDraggingOver,
@@ -64,12 +69,11 @@ export function useNoteItemDrag(id: ParentId) {
     onDragOver,
     setIsDraggingOver,
   } = useDragState();
-  const [trigger] = useMoveNoteMutation();
+  const [trigger] = useMoveIntoMutation();
 
   type DragEvent = React.DragEvent<HTMLElement>;
   const onDrag = useCallback(
     (event: DragEvent) => {
-      if (!id) return;
       beginDrag({ type: DragType.NOTE, noteId: id }, event, "move");
     },
     [id],
@@ -90,7 +94,11 @@ export function useNoteItemDrag(id: ParentId) {
       if (note.parentId === id) return;
 
       try {
-        trigger({ sourceNoteId: note.id, parentId: id });
+        trigger({
+          sourceNoteId: note.id,
+          destinationNoteId: id,
+          placement: "inside-end",
+        });
       } catch (error) {
         console.error("Failed to move note:", error);
       }
@@ -105,5 +113,95 @@ export function useNoteItemDrag(id: ParentId) {
     isDragging: isDraggingOver,
     onDrop,
     onDragOver,
+  };
+}
+
+export function useNoteDropZone(
+  aboveOrParentId: string | null,
+  mode: "below" | "into" = "below",
+) {
+  const {
+    isDraggingOver,
+    onDragEnter,
+    onDragLeave,
+    onDragOver,
+    setIsDraggingOver,
+  } = useDragState();
+
+  const [moveBelow] = useMoveBelowMutation();
+  const [moveInto] = useMoveIntoMutation();
+
+  type DragEvent = React.DragEvent<HTMLElement>;
+  const store = useAppStore();
+
+  const handleDropForBelow = useCallback(
+    (e: DragEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      setIsDraggingOver(false);
+
+      if (!aboveOrParentId) return;
+
+      const movingNote = getMovingNote(e, store.getState());
+      if (!movingNote) return;
+
+      if (
+        !canMoveNoteBelow(
+          movingNote.id,
+          aboveOrParentId,
+          selectAllNotesAsMap(store.getState()),
+        )
+      )
+        return;
+
+      try {
+        moveBelow({
+          sourceNoteId: movingNote.id,
+          aboveNoteId: aboveOrParentId,
+        });
+      } catch (error) {
+        console.error("Failed to move note below:", error);
+      }
+    },
+    [aboveOrParentId, moveBelow, setIsDraggingOver, store],
+  );
+
+  const handleDropInto = useCallback(
+    (e: DragEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      setIsDraggingOver(false);
+
+      const movingNote = getMovingNote(e, store.getState());
+      if (!movingNote) return;
+
+      if (
+        !canMoveNoteInto(
+          movingNote.id,
+          aboveOrParentId,
+          selectAllNotesAsMap(store.getState()),
+        )
+      )
+        return;
+
+      try {
+        moveInto({
+          sourceNoteId: movingNote.id,
+          destinationNoteId: aboveOrParentId,
+          placement: "inside-start",
+        });
+      } catch (error) {
+        console.error("Failed to move note into:", error);
+      }
+    },
+    [aboveOrParentId, moveInto, setIsDraggingOver, store],
+  );
+
+  return {
+    onDragEnter,
+    onDragLeave,
+    isDragging: isDraggingOver,
+    onDragOver,
+    onDrop: mode === "below" ? handleDropForBelow : handleDropInto,
   };
 }

@@ -13,6 +13,11 @@
   "type": "module",
   "license": "AGPL-3.0-or-later",
   "main": "dist-electron/main.js",
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx,json,css}": [
+      "biome check --write"
+    ]
+  },
   "scripts": {
     "dev": "vite",
     "preview": "vite preview",
@@ -31,7 +36,6 @@
   },
   "dependencies": {
     "@darkwrite/common": "workspace:",
-    "@darkwrite/i18n": "workspace:",
     "@electron-toolkit/preload": "^3.0.2",
     "@electron-toolkit/utils": "^3.0.0",
     "@libsql/client": "^0.17.0",
@@ -40,7 +44,6 @@
     "extract-zip": "^2.0.1",
     "font-list": "^2.0.1",
     "fs-extra": "^11.3.2",
-    "i18next": "^25.5.3",
     "lodash": "catalog:",
     "mime": "^4.1.0",
     "semver": "^7.7.4",

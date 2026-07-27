@@ -1,33 +1,4 @@
-export enum NoteType {
-  Doc = "doc",
-  Database = "database",
-  DatabaseView = "database_view",
-}
-
-export interface NoteDTO {
-  id: string;
-  title: string;
-  type: NoteType;
-  icon: string | null;
-  /** This defines relationships between notes. Children of a database belong to that database. Child database view type notes of a database are also views of that database. */
-  parentId: string | null;
-  createdAt: string;
-  modifiedAt: string;
-  trashedAt: string | null;
-  isTrashed: boolean | null;
-  workspaceId: string; // ID of the workspace this note belongs to
-}
-
-export enum DatabaseViewType {
-  Board = "board",
-  Table = "table",
-  Calendar = "calendar",
-}
-
-export interface DatabaseViewMeta {
-  id: string;
-  type: DatabaseViewType;
-}
+import type { NoteDTO } from "./dto";
 
 export function resolveUpperTree(id: string, notes: Record<string, NoteDTO>) {
   const list: NoteDTO[] = [];
@@ -137,12 +108,13 @@ export type NoteImportResult = {
   content: string[];
 };
 
+export type OrderKey = "orderHint" | "favoriteOrderHint";
 export type ParentId = string | null;
+export type MovePlacement = "inside-start" | "inside-end" | "below";
 
 /** 📄*/
 export const DEFAULT_NOTE_ICON = "1f4c4";
 
-/** Remove all newlines from a note's title. They will be replaced with whitespace characters. */
 export function cleanNoteTitle(title: string) {
   return title.replace(/(\r\n|\n|\r)/gm, " ");
 }

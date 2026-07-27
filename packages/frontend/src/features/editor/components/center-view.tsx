@@ -1,7 +1,6 @@
 import { nanoid } from "nanoid";
 import { use, useRef } from "react";
 import { Dialog, DialogContentContainer, DialogOverlay } from "@/components/ui";
-import NoteDropdown from "@/features/layout/note-dropdown";
 import Toolbar from "@/features/layout/toolbar";
 import { navigateToNote } from "@/features/navigation/navigator";
 import { useAppSelector } from "@/features/store/hooks";
@@ -14,7 +13,6 @@ import { useEditorActions } from "../store/editor-actions";
 import { EditorContext } from "../store/editor-context";
 import { selectCenterViewState } from "../store/editor-selectors";
 import { OpenFullscreenButton } from "./open-fullscreen-button";
-import { ReaderModeToggle } from "./reader-mode-toggle";
 
 export function EditorCenterView() {
   const { open, noteId } = useAppSelector(selectCenterViewState);
@@ -43,7 +41,6 @@ function CenterViewContent() {
   const actions = useEditorActions();
   const { noteId } = use(EditorContext);
   const { style } = useEditorView(noteId);
-
   return (
     <DialogContentContainer
       className={cn(
@@ -51,10 +48,8 @@ function CenterViewContent() {
       )}
       style={style}
     >
-      <div className="w-full flex z-10 pr-2 gap-2">
+      <div className="w-full flex z-10 pr-2">
         <OpenFullscreenButton />
-        <ReaderModeToggle />
-        <NoteDropdown id={noteId} />
         <div className="grow" />
         <Toolbar noteId={noteId} />
       </div>

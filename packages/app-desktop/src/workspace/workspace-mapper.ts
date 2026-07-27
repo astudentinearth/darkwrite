@@ -1,16 +1,15 @@
-import type { WorkspaceDTO } from "@darkwrite/common";
+import type { WorkspaceConfig, WorkspaceDTO } from "@darkwrite/common";
 import type { Workspace } from "@/db/schema";
 
 export function workspaceToDto(workspace: Workspace): WorkspaceDTO {
-  const { id, name, iconUrl, createdAt, allNotesSortMode, favoriteIds } =
-    workspace;
+  const { id, ownerId, name, config, iconUrl, createdAt } = workspace;
   const dto: WorkspaceDTO = {
     id,
     iconUrl,
     createdAt: createdAt.toISOString(),
+    ...(ownerId ? { ownerId } : { ownerId: null }),
+    config: config as WorkspaceConfig,
     name,
-    allNotesSortMode,
-    favoriteIds: favoriteIds ?? [],
   };
   return dto;
 }

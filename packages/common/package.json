@@ -9,6 +9,11 @@
       "types": "./dist/index.d.ts"
     }
   },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx,json,css}": [
+      "biome check --write"
+    ]
+  },
   "scripts": {
     "format": "biome format --write .",
     "lint": "biome lint .",
@@ -21,6 +26,7 @@
   "dependencies": {
     "@tiptap/core": "catalog:",
     "color-string": "^2.1.4",
+    "fractional-indexing": "^3.2.0",
     "lodash": "catalog:",
     "nanoid": "^5.1.6",
     "showdown": "^2.1.0",

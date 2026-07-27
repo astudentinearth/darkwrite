@@ -1,24 +1,3 @@
-# 1.3.0-beta.1
-## 🌟 Features
-- Introducing **Databases** (finally) (#13)
-- Add read-only toggle (#32)
-- Add compact sidebar mode
-- Revamped parent tree dropdown
-- Sort notes by modification date
-- Move notes to trash by dragging into it
-
-## ✨ Improvements and fixes
-- Fix translation issue in back/forward buttons (the English keys had Turkish content for some reason)
-- Updated workspace switcher
-- Improve empty states
-- Menu bar items are now localized
-- Menu bar now includes the `Help` section (macOS users can search the menu bar)
-- Improved trash performance (especially if you had a lot of things in there)
-
-## 💥 Breaking changes
-- "All notes" section in the sidebar cannot be manually sorted anymore.
-  - This was a hard decision but maintaining this feature was actively hurting the development of new features. Instead you can now sort by last edited or alphabetically. Use favorites and databases to stay better organized.
-
 # 1.2.3-beta.1
 ## 🌟 Features
 - Add center view

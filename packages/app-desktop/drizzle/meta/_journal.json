@@ -36,48 +36,6 @@
       "when": 1776956686643,
       "tag": "0004_round_bulldozer",
       "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "6",
-      "when": 1783130210980,
-      "tag": "0005_glamorous_gravity",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "6",
-      "when": 1783213469263,
-      "tag": "0006_silent_screwball",
-      "breakpoints": true
-    },
-    {
-      "idx": 7,
-      "version": "6",
-      "when": 1784067414066,
-      "tag": "0007_parallel_speed_demon",
-      "breakpoints": true
-    },
-    {
-      "idx": 8,
-      "version": "6",
-      "when": 1784126518008,
-      "tag": "0008_tearful_bloodstrike",
-      "breakpoints": true
-    },
-    {
-      "idx": 9,
-      "version": "6",
-      "when": 1784126639512,
-      "tag": "0009_backfill_favorites",
-      "breakpoints": true
-    },
-    {
-      "idx": 10,
-      "version": "6",
-      "when": 1784126683197,
-      "tag": "0010_drop_favorite_columns",
-      "breakpoints": true
     }
   ]
 }

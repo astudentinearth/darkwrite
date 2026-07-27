@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["src/*"]
     },
     "types": ["vitest/globals", "node"],
     "lib": ["DOM", "DOM.Iterable", "ESNext"],

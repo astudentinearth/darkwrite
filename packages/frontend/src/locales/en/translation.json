@@ -1,0 +1,346 @@
+{
+  "sidebar": {
+    "button": {
+      "newPage": "New Page",
+      "home": "Home",
+      "settings": "Settings",
+      "trash": "Trash",
+      "hideSidebar": "Hide sidebar",
+      "showSidebar": "Show sidebar",
+      "editSidebar": "Edit sidebar",
+      "search": "Search",
+      "menu": "Menu"
+    },
+    "workspace": {
+      "offline": "On your device",
+      "cloud": "In the cloud",
+      "newWorkspace": "Create new workspace",
+      "newWorkspaceError": "Failed to create workspace",
+      "offlineHeading": "Workspaces on your device",
+      "cloudHeading": "Workspaces in the cloud"
+    },
+    "title": {
+      "favorites": "Favorites",
+      "allNotes": "All notes"
+    },
+    "trash": {
+      "title": "Trash",
+      "restore": "Restore",
+      "delete": "Delete permanently",
+      "search": "Search in trash",
+      "empty": "Clear trash"
+    },
+    "notes": {
+      "contextmenu": {
+        "addFavorite": "Add to favorites",
+        "removeFavorite": "Remove from favorites",
+        "newSubpage": "New subpage",
+        "moveTo": "Move to",
+        "duplicate": "Duplicate",
+        "export": "Export",
+        "trash": "Move to trash",
+        "lastModified": "Last edited:",
+        "openInCenter": "Open in center view"
+      },
+      "noPages": "No pages."
+    }
+  },
+  "defaults": {
+    "pageTitle": "Untitled"
+  },
+  "home": {
+    "welcome": "Welcome back",
+    "recents": "Recent notes",
+    "noPages": "You don't have any pages yet.",
+    "createPage": "Create a page"
+  },
+  "settings": {
+    "workspace": {
+      "title": "Workspace",
+      "exportAllText": "Export all notes as HTML",
+      "exportAllButton": "Export all notes",
+      "backupAndRestoreText": "Backup and restore data",
+      "backupButton": "Backup",
+      "restoreButton": "Restore",
+      "exporting": "Exporting...",
+      "restoreDialog": {
+        "title": "Restore backup",
+        "description": "You can restore a backup of your application data. ",
+        "warningText": "When you restore your data, your current data will be replaced with the contents of your backup. They will NOT be merged.",
+        "chooseFile": "Choose file",
+        "cancel": "Cancel",
+        "restore": "Restore"
+      },
+      "languageText": "Language",
+      "startupBehaviourText": "Startup behaviour",
+      "startupBehaviour": {
+        "openHome": "Always open home page",
+        "openLastPage": "Continue where I left off",
+        "openSpecificPage": "Open a specific page"
+      },
+      "deleteWorkspace": "Delete workspace",
+      "deleteWorkspaceDialog": {
+        "title": "Delete workspace",
+        "description": "This action is permanent and cannot be undone. All notes in this workspace will be permanently deleted.",
+        "confirmLabel": "Type \"{{name}}\" to confirm:",
+        "cancel": "Cancel",
+        "delete": "Delete workspace",
+        "successMessage": "Workspace deleted successfully.",
+        "errorMessage": "Failed to delete workspace."
+      },
+      "editWorkspace": "Edit workspace",
+      "editWorkspaceDialog": {
+        "title": "Edit workspace",
+        "changeIcon": "Change icon",
+        "removeIcon": "Remove icon",
+        "workspaceName": "Workspace name",
+        "save": "Save",
+        "cancel": "Cancel"
+      },
+      "alwaysShowWordCount": "Always show word count",
+      "codeBlockIndentSize": "Indent size in code blocks",
+      "codeBlockIndentSizeDescription": "Number of spaces to be inserted when you hit the Tab⇥ key.",
+      "showRtlControls": "Show text direction controls in the editor toolbar",
+      "openFilesOnDoubleClick": "Open linked files on double click"
+    },
+    "appearance": {
+      "title": "Appearance",
+      "colorThemeText": "Color theme",
+      "importTooltip": "Import theme",
+      "accentColorText": "Accent color",
+      "useSystemWindowFrame": "Use system window frame (requires restart)",
+      "useSystemAccentColor": "Use system accent color (only Windows or macOS)",
+      "useSystemAccentColorDescription": "This option may not work correctly when using automatic accent color on Windows.",
+      "lightMode": "Light",
+      "systemMode": "System",
+      "darkMode": "Dark",
+      "lightColorScheme": "Light color theme",
+      "darkColorScheme": "Dark color theme"
+    },
+    "fonts": {
+      "title": "Fonts",
+      "uiText": "User interface font",
+      "sansText": "Sans font:",
+      "serifText": "Serif font:",
+      "monoText": "Monospaced font:",
+      "applyButton": "Apply",
+      "systemDefault": "System default"
+    },
+    "experimental": {
+      "title": "Experimental features",
+      "enableCustomTitlebarOnMac": "Enable custom titlebar on macOS (requires restart)"
+    },
+    "about": {
+      "title": "About",
+      "sourceCode": "Source code",
+      "reportBugs": "Report bugs",
+      "checkUpdates": "Check for updates",
+      "checkUpdatesPending": "Checking for updates...",
+      "website": "Website",
+      "privacy": "Privacy",
+      "license": "License (AGPL v3)"
+    },
+    "privacy": {
+      "autoUpdateCheckLabel": "Check for updates on startup"
+    }
+  },
+  "editor": {
+    "menu": {
+      "checkSpelling": "Check spelling",
+      "export": "Export",
+      "import": "Import",
+      "duplicate": "Duplicate",
+      "wordCount": "{{count}} words",
+      "undo": "Undo",
+      "redo": "Redo",
+      "imageWarning": "We cannot include images for now.",
+      "jsonExport": "Darkwrite document (JSON)",
+      "htmlExport": "HTML (plain)",
+      "tooltip": "Other options"
+    },
+    "slashCommand": {
+      "text": "Text",
+      "textDescription": "Express it in plain text.",
+      "toDoList": "To-do list",
+      "toDoListDescription": "Track tasks with a simple list.",
+      "heading1": "Heading 1",
+      "heading1Description": "A large heading for sections.",
+      "heading2": "Heading 2",
+      "heading2Description": "A smaller heading for sub-sections.",
+      "heading3": "Heading 3",
+      "heading3Description": "A smaller heading for sub-sections.",
+      "heading4": "Heading 4",
+      "heading4Description": "A smaller heading for sub-sections.",
+      "bulletList": "Bullet list",
+      "bulletListDescription": "List things away without order.",
+      "numberedList": "Numbered list",
+      "numberedListDescription": "List things away in an organized way.",
+      "quote": "Quote",
+      "quoteDescription": "Capture a quote.",
+      "code": "Code",
+      "codeDescription": "Capture a code snippet inside your note.",
+      "divider": "Divider",
+      "dividerDescription": "Divide your note horizontally.",
+      "linkToPage": "Link to page",
+      "linkToPageDescription": "Add a clickable link to another note of yours.",
+      "image": "Image",
+      "imageDescription": "Embed an image.",
+      "table": "Table",
+      "tableDescription": "Add a good old table",
+      "fileLink": "File link",
+      "fileLinkDescription": "Link a local file for quick access."
+    },
+    "bubble": {
+      "h1": "Heading 1",
+      "h2": "Heading 2",
+      "h3": "Heading 3",
+      "h4": "Heading 4",
+      "clearHeading": "Clear heading",
+      "removeLink": "Remove link",
+      "saveLink": "Save link",
+      "linkPlaceholder": "Paste URL or search",
+      "bulletList": "Bullet list",
+      "numberedList": "Numbered list",
+      "toDoList": "To-do list",
+      "bold": "Bold",
+      "italic": "Italic",
+      "underline": "Underline",
+      "strike": "Strikethrough",
+      "code": "Inline code",
+      "blockquote": "Quote",
+      "textDirection": {
+        "label": "Text direction",
+        "ltr": "Left to right",
+        "rtl": "Right to left",
+        "auto": "Auto"
+      }
+    },
+    "table": {
+      "addColBefore": "Add column to the left",
+      "addColAfter": "Add column to the right",
+      "deleteCol": "Delete column",
+      "addRowBefore": "Add row above",
+      "addRowAfter": "Add row below",
+      "deleteRow": "Delete row",
+      "headerRow": "Toggle header row",
+      "headerCol": "Toggle header column",
+      "delete": "Delete table"
+    },
+    "customizations": {
+      "sansText": "Sans",
+      "serifText": "Serif",
+      "monoText": "Mono",
+      "customText": "Custom",
+      "backgroundColorText": "Background color",
+      "foregroundColorText": "Default text color",
+      "customFontNamePlaceholer": "Custom font name",
+      "widePage": "Fill width",
+      "tooltip": "Customize page appearance"
+    },
+    "blocks": {
+      "linkToPage": {
+        "placeholder": "Select a note",
+        "turnIntoInlineLink": "Turn into inline link"
+      },
+      "fileLink": {
+        "placeholder": "Choose a file for quick access",
+        "open": "Open",
+        "copyPath": "Copy full path",
+        "revealInFolder": "Reveal in folder",
+        "changeFile": "Change file"
+      }
+    },
+    "cover": {
+      "changeCover": "Change cover",
+      "removeCover": "Remove cover",
+      "addIcon": "Add icon",
+      "removeIcon": "Remove icon",
+      "addCover": "Add cover",
+      "trashWarning": "This page is currently in the trash."
+    },
+    "placeholder": "Press '/' for commands"
+  },
+  "search": {
+    "placeholder": "Search your notes",
+    "chooserPlaceholder": "Choose a note",
+    "noResult": "No results"
+  },
+  "toast": {
+    "update": {
+      "description": "Update available: {{version}}",
+      "releasePageButton": "Show release",
+      "upToDate": "Darkwrite is up to date."
+    },
+    "movePage": {
+      "success": "Page moved successfully.",
+      "error": "Failed to move page."
+    },
+    "clearTrash": {
+      "success": "Trash cleared successfully",
+      "error": "Failed to clear trash."
+    },
+    "restorePage": {
+      "success": "Page restored from trash.",
+      "error": "Failed to restore page."
+    },
+    "deletePage": {
+      "success": "Page deleted.",
+      "error": "Failed to delete page"
+    },
+    "trashPage": {
+      "success": "Page moved to trash.",
+      "error": "Failed to move page to trash."
+    },
+    "exportPage": {
+      "success": "Page exported.",
+      "error": "Could not export page."
+    }
+  },
+  "titlebar": {
+    "noPagesAbove": "No pages above."
+  },
+  "onboarding": {
+    "chooseLanguage": "Choose a language to get started.",
+    "welcome": "Welcome to Darkwrite",
+    "welcomeDesc": "Let's create your first workspace",
+    "nameWorkspaceHint": "Name your workspace",
+    "themeTitle": "Let's make it yours",
+    "themeDesc": "Choose a theme to get started with. You can change it at any time in settings.",
+    "finishedHeading": "You're all set.",
+    "finishedDesc": "Your truly personal workspace is ready. Happy writing!",
+    "letsBegin": "Let's begin",
+    "checkForUpdates": "Check for updates on startup"
+  },
+  "ui": {
+    "font": {
+      "typeFontName": "Type a font name",
+      "search": "Search fonts",
+      "placeholder": "Select a font"
+    },
+    "moveToDialog": {
+      "title": "Move <0></0> to:"
+    },
+    "clearTrashDialog": {
+      "title": "Clear trash",
+      "description": "Are you sure you want to permanently delete all notes in the trash? This action cannot be undone.",
+      "cancel": "Cancel",
+      "clear": "Clear trash"
+    },
+    "contextmenu": {
+      "copy": "Copy",
+      "cut": "Cut",
+      "paste": "Paste",
+      "delete": "Delete",
+      "downloadImage": "Download image",
+      "resetImageSize": "Reset size",
+      "selectAll": "Select all",
+      "pasteWithoutFormatting": "Paste without formatting",
+      "fixSpelling": "Fix spelling"
+    },
+    "showInFolder": "Reval in file manager",
+    "history": {
+      "back": "Geri",
+      "forward": "İleri"
+    }
+  }
+}

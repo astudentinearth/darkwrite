@@ -1,7 +1,7 @@
-import { IconHome } from "@tabler/icons-react";
-import { Settings } from "lucide-react";
+import { Home, Settings } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
+import NoteDropdown from "./note-dropdown";
 import TitlebarNavTrigger from "./titlebar-nav-trigger";
 
 export default function PageTitle() {
@@ -12,7 +12,7 @@ export default function PageTitle() {
       return (
         <TitlebarNavTrigger>
           <>
-            <IconHome size={18} />
+            <Home size={18} />
             {t("sidebar.button.home")}
           </>
         </TitlebarNavTrigger>
@@ -26,5 +26,5 @@ export default function PageTitle() {
         </TitlebarNavTrigger>
       );
   }
-  return null;
+  return <NoteDropdown />;
 }

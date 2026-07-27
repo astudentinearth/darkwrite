@@ -1,4 +1,4 @@
-import { IconLayoutSidebar } from "@tabler/icons-react";
+import { PanelRightClose } from "lucide-react";
 import { useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { HeaderbarButton } from "@/components/headerbar-button";
@@ -7,9 +7,7 @@ import { useLocalStore } from "@/context/local-state";
 import { useWindowControlsOverlay } from "@/features/layout/hooks/use-window-controls-overlay";
 import { useNoteFromURL } from "@/features/note/hooks/use-note-from-url";
 import { cn } from "@/lib/utils";
-import { ReaderModeToggle } from "../editor/components/reader-mode-toggle";
 import { HistoryNavigation } from "./navigation";
-import NoteDropdown from "./note-dropdown";
 import PageTitle from "./page-title";
 import Toolbar from "./toolbar";
 import TrafficLightsPlaceholder from "./traffic-lights-placeholder";
@@ -23,7 +21,6 @@ export function Titlebar() {
   };
   useWindowControlsOverlay(headerRef);
   const noteId = useNoteFromURL();
-
   return (
     <div
       ref={headerRef}
@@ -43,12 +40,11 @@ export function Titlebar() {
           onClick={expandCallback}
           aria-label={t("sidebar.button.showSidebar")}
         >
-          <IconLayoutSidebar size={18} />
+          <PanelRightClose width={20} height={20}></PanelRightClose>
         </HeaderbarButton>
       </TextTooltip>
       <HistoryNavigation />
-      {noteId && <ReaderModeToggle />}
-      {noteId ? <NoteDropdown id={noteId} /> : <PageTitle />}
+      <PageTitle />
       <div className="grow"></div>
       {noteId && <Toolbar noteId={noteId} />}
     </div>

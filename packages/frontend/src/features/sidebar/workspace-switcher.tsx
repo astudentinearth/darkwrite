@@ -1,5 +1,4 @@
-import { IconSelector } from "@tabler/icons-react";
-import { Plus } from "lucide-react";
+import { ChevronDown, Cloud, HardDrive, Plus } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
@@ -25,10 +24,9 @@ export function WorkspaceSwitcher() {
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <div className="flex items-center gap-1 text-muted-foreground hover:text-foreground w-full overflow-hidden text-ellipsis whitespace-nowrap opacity-80 p-1 hover:bg-secondary/50 hover:opacity-100 rounded-md select-none transition-[background,opacity] duration-75">
+        <div className="flex items-center gap-1 text-muted-foreground hover:text-foreground max-w-fit overflow-hidden text-ellipsis whitespace-nowrap opacity-80 p-1 hover:bg-secondary/50 hover:opacity-100 rounded-[8px] select-none transition-[background,opacity] duration-75">
           {currentWorkspace && (
             <>
-              <IconSelector className="shrink-0" size={18} />
               <WorkspaceIcon
                 className="size-6 rounded-md"
                 workspace={currentWorkspace}
@@ -36,12 +34,13 @@ export function WorkspaceSwitcher() {
               <span className="ml-1 text-ellipsis text-sm overflow-hidden whitespace-nowrap">
                 {currentWorkspace.name}
               </span>
+              <ChevronDown className="shrink-0" size={18} />
             </>
           )}
         </div>
       </PopoverTrigger>
       <PopoverContent className="ml-2 p-1 flex top-highlight">
-        <div className="w-full flex flex-col">
+        <div className="w-full flex flex-col gap-2">
           {currentWorkspace && (
             <div className="p-1 flex flex-col gap-2">
               <div className="flex gap-3 items-center">
@@ -52,7 +51,12 @@ export function WorkspaceSwitcher() {
                 <div>
                   <span>{currentWorkspace.name}</span>
                   <span className="flex gap-2 items-center text-sm text-popover-foreground/80">
-                    {t("currentWorkspace")}
+                    {currentWorkspace.config.syncMode === "offline" ? (
+                      <HardDrive size={18}></HardDrive>
+                    ) : (
+                      <Cloud size={18}></Cloud>
+                    )}
+                    {t(currentWorkspace.config.syncMode)}
                   </span>
                 </div>
               </div>
@@ -60,9 +64,11 @@ export function WorkspaceSwitcher() {
           )}
           {localWorkspaces && localWorkspaces.length > 0 && (
             <>
-              <div className="h-2"></div>
+              {" "}
               <hr></hr>
-              <div className="h-2"></div>
+              <span className="pl-1 text-sm text-popover-foreground/80">
+                {t("offlineHeading")}
+              </span>
               {localWorkspaces
                 ?.filter((w) => w.id !== currentWorkspace?.id)
                 .map((w) => (
@@ -77,9 +83,10 @@ export function WorkspaceSwitcher() {
                 ))}
             </>
           )}
+          <hr></hr>
           <NewWorkspaceDialog open={dialogOpen} onOpenChange={setDialogOpen}>
-            <Button variant="ghost" className="h-fit p-1 gap-1.5 justify-start">
-              <Plus size={24} className="scale-75"></Plus>
+            <Button variant="ghost">
+              <Plus size={18}></Plus>
               {t("newWorkspace")}
             </Button>
           </NewWorkspaceDialog>

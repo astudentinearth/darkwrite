@@ -1,8 +1,4 @@
-import {
-  dwErrAsync,
-  type GetNotesInDatabaseResponse,
-  type NoteDTO,
-} from "@darkwrite/common";
+import { dwErrAsync, type NoteDTO } from "@darkwrite/common";
 import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
 import { okAsync } from "neverthrow";
 import { DarkwriteAPIClient } from "@/api/api-client";
@@ -14,6 +10,10 @@ export const NOTES_TAG_TYPE = "Note";
 
 export function noteByWorkspaceIdTag(workspaceId: string) {
   return `WORKSPACE_${workspaceId}`;
+}
+
+export function favoriteByWorkspaceIdTag(workspaceId: string) {
+  return `WORKSPACE_${workspaceId}_FAVORITES`;
 }
 
 export function noteByParentIdTag(
@@ -33,10 +33,6 @@ export function parentTreeTag(noteId: string) {
 
 export function noteByIdTag(noteId: string) {
   return `NOTE_${noteId}`;
-}
-
-export function notesInDatabaseTag(databaseId: string) {
-  return `DATABASE_NOTES_${databaseId}`;
 }
 
 export const notesApi = createApi({
@@ -100,6 +96,33 @@ export const notesApi = createApi({
           : [],
     }),
 
+    getFavoritesByWorkspaceId: builder.query<NoteDTO[], string>({
+      queryFn: resultQueryFn(
+        (workspaceId: string) =>
+          DarkwriteAPIClient.note.getFavorites(workspaceId),
+        (r) => Object.values(r.notes),
+      ),
+
+      async onQueryStarted(_args, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          dispatch(upsertNotes(data));
+        } catch {
+          /* empty */
+        }
+      },
+
+      providesTags: (result, _error, workspaceId) =>
+        result
+          ? [
+              {
+                type: NOTES_TAG_TYPE,
+                id: favoriteByWorkspaceIdTag(workspaceId),
+              },
+            ]
+          : [],
+    }),
+
     getNoteById: builder.query<NoteDTO, string>({
       queryFn: resultQueryFn((noteId: string) =>
         DarkwriteAPIClient.note
@@ -124,33 +147,6 @@ export const notesApi = createApi({
               {
                 type: NOTES_TAG_TYPE,
                 id: noteByIdTag(noteId),
-              },
-            ]
-          : [],
-    }),
-
-    getAllByWorkspaceId: builder.query<NoteDTO[], string>({
-      queryFn: resultQueryFn(
-        (workspaceId: string) =>
-          DarkwriteAPIClient.note.getAllByWorkspaceId(workspaceId),
-        (r) => Object.values(r.notes),
-      ),
-
-      async onQueryStarted(_args, { dispatch, queryFulfilled }) {
-        try {
-          const { data } = await queryFulfilled;
-          dispatch(upsertNotes(data));
-        } catch {
-          /* empty */
-        }
-      },
-
-      providesTags: (result, _error, workspaceId) =>
-        result
-          ? [
-              {
-                type: NOTES_TAG_TYPE,
-                id: noteByWorkspaceIdTag(workspaceId),
               },
             ]
           : [],
@@ -182,67 +178,12 @@ export const notesApi = createApi({
             ]
           : [],
     }),
-
-    getNotesInDatabase: builder.query<GetNotesInDatabaseResponse, string>({
-      queryFn: resultQueryFn((databaseId: string) =>
-        DarkwriteAPIClient.database.getNotesInDatabase(databaseId),
-      ),
-
-      async onQueryStarted(_args, { dispatch, queryFulfilled }) {
-        try {
-          const { data } = await queryFulfilled;
-          console.log(data);
-          dispatch(upsertNotes(data.notes));
-        } catch {
-          /* empty */
-        }
-      },
-
-      providesTags: (result, _error, databaseId) =>
-        result
-          ? [
-              {
-                type: NOTES_TAG_TYPE,
-                id: notesInDatabaseTag(databaseId),
-              },
-            ]
-          : [],
-    }),
-
-    getDatabasesInWorkspace: builder.query<NoteDTO[], string>({
-      queryFn: resultQueryFn(
-        (workspaceId: string) =>
-          DarkwriteAPIClient.database.getAllDatabasesInWorkspace(workspaceId),
-        (r) => Object.values(r.notes),
-      ),
-
-      async onQueryStarted(_args, { dispatch, queryFulfilled }) {
-        try {
-          const { data } = await queryFulfilled;
-          dispatch(upsertNotes(data));
-        } catch {
-          /* empty */
-        }
-      },
-
-      providesTags: (result, _error, workspaceId) =>
-        result
-          ? [
-              {
-                type: NOTES_TAG_TYPE,
-                id: noteByWorkspaceIdTag(workspaceId),
-              },
-            ]
-          : [],
-    }),
   }),
 });
 
 export const {
-  useGetAllByWorkspaceIdQuery,
   useGetNotesByParentIdQuery,
   useGetRecentsByWorkspaceIdQuery,
+  useGetFavoritesByWorkspaceIdQuery,
   useGetNoteByIdQuery,
-  useGetNotesInDatabaseQuery,
-  useGetDatabasesInWorkspaceQuery,
 } = notesApi;

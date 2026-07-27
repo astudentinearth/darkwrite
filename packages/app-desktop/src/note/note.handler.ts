@@ -1,8 +1,8 @@
 import { extname } from "node:path";
 import {
-  type CreateDocumentArgs,
+  type CreateNoteDTO,
+  CreateNoteDTOSchema,
   dwErrAsync,
-  type FavoriteActionResponse,
   FileFormatMap,
   type INoteAPI,
   type MoveNoteDTO,
@@ -16,7 +16,6 @@ import {
   type UpdateNoteDTO,
   UpdateNoteDTOSchema,
   validateSchema,
-  ZCreateDocumentRequest,
 } from "@darkwrite/common";
 import { ok, ResultAsync } from "neverthrow";
 import {
@@ -26,7 +25,6 @@ import {
 } from "@/api/dialog";
 import type { Note } from "@/db/schema";
 import { readFileUtf8, writeBinaryFile, writeFileUtf8 } from "@/lib/fs";
-import type { IWorkspaceService } from "@/workspace/workspace.service";
 import printToPdf from "../lib/print-to-pdf";
 import type { IDocumentService } from "../service/document.service";
 import { type HandlerImplements, handler } from "../types/ipc-handler";
@@ -50,52 +48,33 @@ const importTypeMap: Record<string, NoteExportFormat> = {
 
 const determineImportType = (t: string) => importTypeMap[extname(t)] ?? "json";
 
-const discard = () => {};
-
 export function NoteAPI(
   noteService: INoteService,
   noteQueryService: INoteQueryService,
   documentService: IDocumentService,
-  workspaceService: IWorkspaceService,
 ): HandlerImplements<INoteAPI> {
-  const create = handler((dto: CreateDocumentArgs) =>
-    validateSchema(ZCreateDocumentRequest)(dto)
+  const create = handler((dto: CreateNoteDTO) =>
+    validateSchema(CreateNoteDTOSchema)(dto)
       .asyncAndThen(noteService.create)
       .map(singleResponse),
   );
-  const deleteNote = handler((id: string) =>
-    noteService.deleteById(id).map(() => {}),
-  );
+
+  const deleteNote = handler((id: string) => noteService.deleteById(id));
 
   const getAllByWorkspaceId = handler((workspaceId: string) =>
     noteQueryService.getAllByWorkspaceId(workspaceId).map(aggregateResponse),
   );
 
-  /** @internal */
-  const _mapFavoriteIds = (
-    favoriteIds: string[],
-    workspaceId: string,
-    noteId: string,
-  ): FavoriteActionResponse => ({ favoriteIds, workspaceId, noteId });
+  const getFavorites = handler((workspaceId: string) =>
+    noteQueryService.getFavorites(workspaceId).map(aggregateResponse),
+  );
 
-  const favorite = handler((noteId: string, insertAtIndex?: number) =>
-    noteQueryService
-      .getById(noteId)
-      .andThen((note) =>
-        workspaceService
-          .addFavorite(note.workspaceId, noteId, insertAtIndex)
-          .map((ids) => _mapFavoriteIds(ids, note.workspaceId, noteId)),
-      ),
+  const favorite = handler((noteId: string, aboveNoteId?: string | null) =>
+    noteService.favorite(noteId, aboveNoteId).map(singleResponse),
   );
 
   const unfavorite = handler((noteId: string) =>
-    noteQueryService
-      .getById(noteId)
-      .andThen((note) =>
-        workspaceService
-          .removeFavorite(note.workspaceId, noteId)
-          .map((ids) => _mapFavoriteIds(ids, note.workspaceId, noteId)),
-      ),
+    noteService.unfavorite(noteId).map(singleResponse),
   );
 
   const getTrashed = handler((wId: string) =>
@@ -137,7 +116,6 @@ export function NoteAPI(
     noteService.duplicate(id).map(singleResponse),
   );
   const getDocument = handler((id: string) =>
-    //FIXME: add self healing here!
     documentService.getNoteContent(id).map((document) => ({ document })),
   );
   const setDocument = handler((id: string, jsonStr: string) =>
@@ -146,7 +124,7 @@ export function NoteAPI(
       .andThen(
         () => noteService.setModificationDate(id, new Date()).orElse(okVoid), // unimportant side effect
       )
-      .map(discard),
+      .map(() => {}),
   );
 
   const getParentTree = handler((id: string) =>
@@ -156,7 +134,7 @@ export function NoteAPI(
   );
 
   const clearTrash = handler((wId: string) =>
-    noteService.emptyTrash(wId).map(discard),
+    noteService.emptyTrash(wId).map(() => {}),
   );
 
   const saveExportedNote = handler(
@@ -211,6 +189,7 @@ export function NoteAPI(
     create,
     delete: deleteNote,
     getAllByWorkspaceId,
+    getFavorites,
     favorite,
     getTrashed,
     search,

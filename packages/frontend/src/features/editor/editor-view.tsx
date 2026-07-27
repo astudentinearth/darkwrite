@@ -1,11 +1,8 @@
-import { NoteType } from "@darkwrite/common";
 import { nanoid } from "nanoid";
 import { use, useRef } from "react";
 import { useLocalStore } from "@/context/local-state";
 import { useNoteFromURL } from "@/features/note/hooks/use-note-from-url";
-import { DatabaseEditor } from "../database/components/database-editor";
 import { navigateToNote } from "../navigation/navigator";
-import { useNoteById } from "../note/hooks/use-note-by-id";
 import { useEditorSettings } from "../settings/hooks/use-settings";
 import { useAppSelector } from "../store/hooks";
 import DarkwriteEditor from ".";
@@ -43,8 +40,6 @@ export function EditorViewport({
 }) {
   const { noteId } = use(EditorContext);
 
-  const { note } = useNoteById(noteId);
-
   const options = useEditorOptions();
   const customizations = useAppSelector((s) =>
     selectEditorCustomizations(s, noteId),
@@ -52,34 +47,29 @@ export function EditorViewport({
   const content = useAppSelector((s) => selectEditorContent(s, noteId));
   const settings = useEditorSettings();
   const { items } = useSlashCommand(options.imageConfig);
-  if (!content || !customizations || !note) return null;
+  if (!content || !customizations) return null;
   return (
     <ConstrainedWidth
       fill={customizations?.widePage}
       noConstrain={unconstrainedWidth}
     >
-      {note.type === NoteType.Doc ? (
-        <DarkwriteEditor
-          content={content}
-          editable={options.editable}
-          noteId={noteId}
-          commandItems={items}
-          onContentChange={options.handleContentChange}
-          onUpdate={options.onUpdate}
-          onCreate={options.onCreate}
-          imageUploadConfig={options.imageConfig}
-          showTextDirectionControls={settings.showTextDirectionControls}
-          openFilesOnDoubleClick={settings.openFilesOnDoubleClick}
-          codeBlockIndentSize={settings.codeIndentSize}
-          embedSourceResolver={
-            async (id) => `embed://${id}` //TODO: band-aid for current circumstances. fix this with a proper cache when you can link remote images.
-          }
-          key={`${noteId}-${options.editable}`}
-          onNavigateToNote={onNavigate ?? navigateToNote}
-        />
-      ) : (
-        <DatabaseEditor id={noteId} />
-      )}
+      <DarkwriteEditor
+        content={content}
+        noteId={noteId}
+        commandItems={items}
+        onContentChange={options.handleContentChange}
+        onUpdate={options.onUpdate}
+        onCreate={options.onCreate}
+        imageUploadConfig={options.imageConfig}
+        showTextDirectionControls={settings.showTextDirectionControls}
+        openFilesOnDoubleClick={settings.openFilesOnDoubleClick}
+        codeBlockIndentSize={settings.codeIndentSize}
+        embedSourceResolver={
+          async (id) => `embed://${id}` //TODO: band-aid for current circumstances. fix this with a proper cache when you can link remote images.
+        }
+        key={noteId}
+        onNavigateToNote={onNavigate ?? navigateToNote}
+      />
     </ConstrainedWidth>
   );
 }

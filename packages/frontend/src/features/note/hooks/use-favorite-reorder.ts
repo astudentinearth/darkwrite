@@ -20,7 +20,7 @@ export function useFavoriteDropZone(aboveId: string | null) {
       dispatch(
         favoritesApi.endpoints.favorite.initiate({
           noteId: note.id,
-          aboveId,
+          aboveNoteId: aboveId,
         }),
       );
     } catch (error) {

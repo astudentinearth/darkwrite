@@ -1,4 +1,4 @@
-import { noteComparator, SortProperty } from "@darkwrite/common";
+import { byUpdateTime } from "@darkwrite/common";
 import { createSelector } from "@reduxjs/toolkit";
 import { skipToken } from "@reduxjs/toolkit/query";
 import { useAppSelector } from "@/features/store/hooks";
@@ -27,7 +27,7 @@ export const selectNotesForTrashView = createSelector(
           n.isTrashed &&
           (query ? n.title.toLowerCase().includes(q) : true),
       )
-      .toSorted(noteComparator(SortProperty.ModificationDate, "desc"))
+      .toSorted(byUpdateTime("desc"))
       .map((n) => n.id);
   },
 );

@@ -6,11 +6,6 @@ import type { TextDirection } from "../types";
 
 export const EDITOR_SLICE_NAME = "editor";
 
-export enum EditorMode {
-  ReadOnly,
-  Edit,
-}
-
 export interface FormattingState {
   isBold: boolean;
   isItalic: boolean;
@@ -36,7 +31,6 @@ export interface EditorState {
   canRedo: Record<string, boolean>;
   formattingState: Record<string, FormattingState>;
   centerView: CenterViewState;
-  mode: EditorMode;
 }
 
 const initialState: EditorState = {
@@ -47,7 +41,6 @@ const initialState: EditorState = {
   canUndo: {},
   formattingState: {},
   centerView: { open: false },
-  mode: EditorMode.Edit,
 };
 
 export const editorSlice = createSlice({
@@ -136,7 +129,6 @@ export const editorSlice = createSlice({
 
     showCenterView: (state, action: PayloadAction<string>) => {
       state.centerView = {
-        ...state.centerView,
         noteId: action.payload,
         open: true,
       };
@@ -144,14 +136,9 @@ export const editorSlice = createSlice({
 
     closeCenterView: (state) => {
       state.centerView = {
-        ...state.centerView,
         noteId: undefined,
         open: false,
       };
-    },
-
-    setMode: (state, action: PayloadAction<EditorMode>) => {
-      state.mode = action.payload;
     },
   },
   initialState,

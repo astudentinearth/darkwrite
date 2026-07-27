@@ -1,5 +1,5 @@
 import "i18next";
-import ns from "@darkwrite/i18n/locales/en/translation.json";
+import ns from "./locales/en/translation.json";
 
 declare module "i18next" {
   interface CustomTypeOptions {

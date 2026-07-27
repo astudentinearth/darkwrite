@@ -1,6 +1,5 @@
 import { FontStyle, type NoteCustomization } from "@darkwrite/common";
-import { IconBrush } from "@tabler/icons-react";
-import { RotateCcw } from "lucide-react";
+import { Brush, RotateCcw } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import FontSelect from "@/components/font-select";
 import { HeaderbarButton } from "@/components/headerbar-button";
@@ -34,7 +33,7 @@ export default function StylePopover({ id }: { id: string }) {
         <PopoverTrigger asChild>
           <TooltipTrigger>
             <HeaderbarButton>
-              <IconBrush size={20} />
+              <Brush size={20} />
             </HeaderbarButton>
           </TooltipTrigger>
         </PopoverTrigger>
@@ -117,7 +116,7 @@ export function StyleUI(props: {
       </div>
       {font === FontStyle.CUSTOM && (
         <FontSelect
-          className="w-full max-w-full"
+          className="w-full"
           value={customFont}
           onValueChange={(val) => setFont(FontStyle.CUSTOM, val)}
         />

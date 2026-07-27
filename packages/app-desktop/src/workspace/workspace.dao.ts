@@ -1,10 +1,9 @@
-import { cleanFavoriteIds, type DwResultAsync, dwErr } from "@darkwrite/common";
-import { eq, inArray } from "drizzle-orm";
+import { type DwResultAsync, dwErr } from "@darkwrite/common";
+import { eq } from "drizzle-orm";
 import { ok } from "neverthrow";
 import { dbResult } from "@/db/db-result";
 import {
   type NewWorkspace,
-  note as notesTable,
   type PatchWorkspace,
   type Workspace,
   workspace as workspaceTable,
@@ -50,31 +49,6 @@ export function WorkspaceDAO(tx: TxResolver) {
     return deleteById(value.id);
   }
 
-  function setFavoriteIds(
-    workspaceId: string,
-    ids: string[],
-  ): DwResultAsync<string[]> {
-    return dbResult(async () => {
-      let existingIdSet = new Set<string>();
-      if (ids.length > 0) {
-        const existingNotes = await tx()
-          .select({ id: notesTable.id })
-          .from(notesTable)
-          .where(inArray(notesTable.id, ids));
-        existingIdSet = new Set(existingNotes.map((n) => n.id));
-      }
-
-      const cleaned = cleanFavoriteIds(ids, existingIdSet);
-
-      await tx()
-        .update(workspaceTable)
-        .set({ favoriteIds: cleaned })
-        .where(eq(workspaceTable.id, workspaceId));
-
-      return cleaned;
-    });
-  }
-
   return {
     create,
     update,
@@ -82,7 +56,6 @@ export function WorkspaceDAO(tx: TxResolver) {
     deleteById,
     findAll,
     findById,
-    setFavoriteIds,
   };
 }
 

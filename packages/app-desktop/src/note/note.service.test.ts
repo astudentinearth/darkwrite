@@ -1,15 +1,13 @@
-import { DatabaseViewType, NoteType, type ParentId } from "@darkwrite/common";
+import { type ParentId, Rank } from "@darkwrite/common";
 import { ResultAsync } from "neverthrow";
 import { beforeAll, beforeEach, describe, expect, it } from "vitest";
 import {
-  databaseView as databaseViewTable,
   type NewNote,
   type Note,
   note as notesTable,
   type Workspace,
 } from "@/db/schema";
 import { resolveTx } from "@/db/transactional";
-import { DatabaseViewDAO } from "@/note/database-view.dao";
 import { DocumentService } from "@/service/document.service";
 import { MockDocumentStore } from "@/test/mocks/document-store.mock";
 import { WorkspaceDAO } from "@/workspace/workspace.dao";
@@ -26,14 +24,12 @@ describe("note service tests", () => {
   let workspace: Workspace;
   let noteDAO: NoteDAOInstance;
   let noteService: INoteService;
-  let viewDao: ReturnType<typeof DatabaseViewDAO>;
   const documentStore = MockDocumentStore();
 
   beforeAll(async () => {
     await applySqlMigrations(db);
     noteDAO = NoteDAO(() => resolveTx(db));
     noteService = NoteService(db, DocumentService(documentStore));
-    viewDao = DatabaseViewDAO(() => resolveTx(db));
     workspace = (
       await WorkspaceDAO(() => resolveTx(db)).create({
         name: "Test Workspace",
@@ -42,7 +38,6 @@ describe("note service tests", () => {
     )._unsafeUnwrap();
   });
   beforeEach(async () => {
-    await db.delete(databaseViewTable);
     await db.delete(notesTable);
     await documentStore
       .ls()
@@ -53,11 +48,14 @@ describe("note service tests", () => {
 
   async function createNote(
     title: string,
+    orderHint: string,
     parentId: ParentId = null,
   ): Promise<Note> {
     const note: NewNote = {
       title,
       workspaceId: workspace.id,
+      orderHint,
+      favoriteOrderHint: "",
       parentId,
       createdAt: new Date(),
       modifiedAt: new Date(),
@@ -67,8 +65,11 @@ describe("note service tests", () => {
 
   describe("clear trash tests", () => {
     it("should clear all trashed notes in the workspace", async () => {
-      const note1 = await createNote("Trashed 1");
-      const note2 = await createNote("Trashed 2");
+      const rankA = Rank.default().get();
+      const rankB = new Rank(rankA).next().get();
+
+      const note1 = await createNote("Trashed 1", rankA);
+      const note2 = await createNote("Trashed 2", rankB);
 
       await noteService.moveToTrash(note1.id);
       await noteService.moveToTrash(note2.id);
@@ -91,9 +92,12 @@ describe("note service tests", () => {
         })
       )._unsafeUnwrap();
 
+      const rankA = Rank.default().get();
       const trashedInOther: NewNote = {
         title: "Trashed in other",
         workspaceId: otherWorkspace.id,
+        orderHint: "",
+        favoriteOrderHint: "",
         parentId: null,
         createdAt: new Date(),
         modifiedAt: new Date(),
@@ -102,7 +106,7 @@ describe("note service tests", () => {
       };
       const saved = (await noteDAO.create(trashedInOther))._unsafeUnwrap();
 
-      const localNote = await createNote("Local trashed");
+      const localNote = await createNote("Local trashed", rankA);
       await noteService.moveToTrash(localNote.id);
 
       await noteService.emptyTrash(workspace.id);
@@ -116,8 +120,11 @@ describe("note service tests", () => {
     });
 
     it("should not touch notes that are not trashed", async () => {
-      const alive = await createNote("Alive");
-      const trashed = await createNote("Trashed");
+      const rankA = Rank.default().get();
+      const rankB = new Rank(rankA).next().get();
+
+      const alive = await createNote("Alive", rankA);
+      const trashed = await createNote("Trashed", rankB);
       await noteService.moveToTrash(trashed.id);
 
       await noteService.emptyTrash(workspace.id);
@@ -152,185 +159,167 @@ describe("note service tests", () => {
     });
   });
 
-  describe("move tests", () => {
-    it("should move a note to a new parent", async () => {
-      const parent = await createNote("Parent");
-      const source = await createNote("Source");
+  describe("moveInto and moveBelow tests", () => {
+    it("moveBelow should move source note below target note and update rank", async () => {
+      // Arrange
+      const rankA = Rank.default().get();
+      const rankC = new Rank(rankA).next().get(); // Note C is after A
+      // We want rankC > rankA, which next() guarantees.
 
+      const parent = await createNote("Parent", rankA);
+      const noteA = await createNote("Note A", rankA, parent.id);
+      const noteC = await createNote("Note C", rankC, parent.id);
+
+      const rankX = new Rank(rankC).next().get(); // Source is somewhere else
+      const source = await createNote("Source", rankX, null);
+
+      // Act: Move Source below Note A
+      await noteService.move({
+        destinationId: noteA.id,
+        sourceId: source.id,
+        placement: "below",
+      });
+
+      // Assert
+      const updatedSource = (await noteDAO.findById(source.id))._unsafeUnwrap();
+      expect(updatedSource.parentId).toBe(parent.id);
+      expect(updatedSource.orderHint > noteA.orderHint).toBe(true);
+      expect(updatedSource.orderHint < noteC.orderHint).toBe(true);
+    });
+
+    it("moveBelow should move source note to end if no next sibling", async () => {
+      // Arrange
+      const rankA = Rank.default().get();
+      const parent = await createNote("Parent", rankA);
+      const noteA = await createNote("Note A", rankA, parent.id);
+      // No next sibling
+      const rankX = new Rank(rankA).next().get();
+      const source = await createNote("Source", rankX, null);
+
+      // Act
       await noteService.move({
         sourceId: source.id,
-        parentId: parent.id,
+        destinationId: noteA.id,
+        placement: "below",
       });
 
-      const updated = (await noteDAO.findById(source.id))._unsafeUnwrap();
-      expect(updated.parentId).toBe(parent.id);
+      // Assert
+      const updatedSource = (await noteDAO.findById(source.id))._unsafeUnwrap();
+      expect(updatedSource.parentId).toBe(parent.id);
+      expect(updatedSource.orderHint > noteA.orderHint).toBe(true);
     });
 
-    it("should move a note to root", async () => {
-      const source = await createNote("Source", "some-parent");
+    it("moveInto 'start' should move source to start of destination", async () => {
+      // Arrange
+      const rankA = Rank.default().get();
+      const rankB = new Rank(rankA).next().get();
 
-      await noteService.move({ sourceId: source.id, parentId: null });
+      const parent = await createNote("Parent", rankA);
+      const child1 = await createNote("Child 1", rankB, parent.id);
 
-      const updated = (await noteDAO.findById(source.id))._unsafeUnwrap();
-      expect(updated.parentId).toBeNull();
-    });
+      const rankX = new Rank(rankB).next().get();
+      const source = await createNote("Source", rankX, null);
 
-    it("should prevent circular moves", async () => {
-      const source = await createNote("Source");
-      const child = await createNote("Child", source.id);
-
-      const result = await noteService.move({
-        sourceId: source.id,
-        parentId: child.id,
-      });
-
-      expect(result.isErr()).toBe(true);
-    });
-
-    it("should not move a note that does not exist", async () => {
-      const parent = await createNote("asdf");
-
-      const result = await noteService.move({
-        sourceId: "i do not exist",
-        parentId: parent.id,
-      });
-
-      expect(result.isErr()).toBe(true);
-    });
-
-    it("should not move to a note that does not exist", async () => {
-      const source = await createNote("source");
-      const result = await noteService.move({
-        sourceId: source.id,
-        parentId: "i do not exist",
-      });
-      expect(result.isErr()).toBe(true);
-    });
-
-    it("should not move a trashed note", async () => {
-      const source = await createNote("Source");
-      await noteService.moveToTrash(source.id);
-      const parent = await createNote("Parent");
-
-      const result = await noteService.move({
-        sourceId: source.id,
-        parentId: parent.id,
-      });
-
-      expect(result.isErr()).toBe(true);
-    });
-
-    it("should update workspaceId when moving across workspaces", async () => {
-      const otherWorkspace = (
-        await WorkspaceDAO(() => resolveTx(db)).create({
-          name: "Other Workspace",
-          createdAt: new Date(),
-        })
-      )._unsafeUnwrap();
-
-      const parentInOther = await createNote("Parent in other");
-      await noteDAO.update({
-        id: parentInOther.id,
-        workspaceId: otherWorkspace.id,
-      });
-
-      const source = await createNote("Source");
-
+      // Act
       await noteService.move({
+        placement: "inside-start",
         sourceId: source.id,
-        parentId: parentInOther.id,
+        destinationId: parent.id,
       });
 
-      const updated = (await noteDAO.findById(source.id))._unsafeUnwrap();
-      expect(updated.parentId).toBe(parentInOther.id);
-      expect(updated.workspaceId).toBe(otherWorkspace.id);
-    });
-  });
-
-  describe("createDatabase", () => {
-    it("should create a database, set document content, and initialize a default view", async () => {
-      const result = (
-        await noteService.createDatabase({
-          workspaceId: workspace.id,
-          parentId: null,
-        })
-      )._unsafeUnwrap();
-
-      expect(result.database).not.toBeUndefined();
-      expect(result.view).not.toBeUndefined();
-      expect(result.viewMeta).not.toBeUndefined();
-
-      expect(result.database.type).toBe(NoteType.Database);
-      expect(result.database.title).toBe("New database");
-      expect(result.database.workspaceId).toBe(workspace.id);
-      expect(result.database.parentId).toBeNull();
-
-      expect(result.view.type).toBe(NoteType.DatabaseView);
-      expect(result.view.parentId).toBe(result.database.id);
-      expect(result.view.workspaceId).toBe(workspace.id);
-
-      expect(result.viewMeta.type).toBe(DatabaseViewType.Table);
-      expect(result.viewMeta.id).toBe(result.view.id);
-
-      const docContent = (
-        await documentStore.read(result.database.id)
-      )._unsafeUnwrap();
-
-      expect(docContent).toBe("{}");
+      // Assert
+      const updatedSource = (await noteDAO.findById(source.id))._unsafeUnwrap();
+      expect(updatedSource.parentId).toBe(parent.id);
+      expect(updatedSource.orderHint < child1.orderHint).toBe(true);
     });
 
-    it("should create a database under a parent when specified", async () => {
-      const parent = (
-        await noteDAO.create({
-          workspaceId: workspace.id,
-          title: "Parent",
-          createdAt: new Date(),
-          modifiedAt: new Date(),
-        })
-      )._unsafeUnwrap();
+    it("moveInto 'start' on empty parent should use default rank", async () => {
+      // Arrange
+      const rankA = Rank.default().get();
+      const parent = await createNote("Parent", rankA);
 
-      const result = (
-        await noteService.createDatabase({
-          workspaceId: workspace.id,
-          parentId: parent.id,
-        })
-      )._unsafeUnwrap();
+      const rankX = new Rank(rankA).next().get();
+      const source = await createNote("Source", rankX, null);
 
-      expect(result.database.parentId).toBe(parent.id);
-    });
-
-    it("should return an error when the workspace does not exist", async () => {
-      const result = await noteService.createDatabase({
-        workspaceId: "non-existent-id",
-        parentId: null,
+      // Act
+      await noteService.move({
+        placement: "inside-start",
+        sourceId: source.id,
+        destinationId: parent.id,
       });
 
-      expect(result.isErr()).toBe(true);
+      // Assert
+      const updatedSource = (await noteDAO.findById(source.id))._unsafeUnwrap();
+      expect(updatedSource.parentId).toBe(parent.id);
+      // Should be roughly equal to default, or valid.
+      // Rank.default().get() is what the service uses.
+      expect(updatedSource.orderHint).toBe(Rank.default().get());
     });
 
-    it("should persist the database and view to the database", async () => {
-      const result = (
-        await noteService.createDatabase({
-          workspaceId: workspace.id,
-          parentId: null,
-        })
-      )._unsafeUnwrap();
+    it("moveInto 'end' should move source to end of destination", async () => {
+      // Arrange
+      const rankA = Rank.default().get();
+      const rankB = new Rank(rankA).next().get();
 
-      const foundDatabase = (
-        await noteDAO.findById(result.database.id)
-      )._unsafeUnwrap();
+      const parent = await createNote("Parent", rankA);
+      const child1 = await createNote("Child 1", rankB, parent.id);
 
-      const foundView = (
-        await noteDAO.findById(result.view.id)
-      )._unsafeUnwrap();
+      const rankX = new Rank(rankB).next().get();
+      const source = await createNote("Source", rankX, null);
 
-      const foundViewMeta = (
-        await viewDao.getView(result.viewMeta.id)
-      )._unsafeUnwrap();
+      // Act
+      await noteService.move({
+        placement: "inside-end",
+        sourceId: source.id,
+        destinationId: parent.id,
+      });
 
-      expect(foundDatabase.title).toBe("New database");
-      expect(foundView.parentId).toBe(result.database.id);
-      expect(foundViewMeta.type).toBe(DatabaseViewType.Table);
+      // Assert
+      const updatedSource = (await noteDAO.findById(source.id))._unsafeUnwrap();
+      expect(updatedSource.parentId).toBe(parent.id);
+      expect(updatedSource.orderHint > child1.orderHint).toBe(true);
+    });
+
+    it("moveInto 'end' on empty parent should use default rank", async () => {
+      // Arrange
+      const rankA = Rank.default().get();
+      const parent = await createNote("Parent", rankA);
+
+      const rankX = new Rank(rankA).next().get();
+      const source = await createNote("Source", rankX, null);
+
+      // Act
+      await noteService.move({
+        placement: "inside-end",
+        sourceId: source.id,
+        destinationId: parent.id,
+      });
+
+      // Assert
+      const updatedSource = (await noteDAO.findById(source.id))._unsafeUnwrap();
+      expect(updatedSource.parentId).toBe(parent.id);
+      expect(updatedSource.orderHint).toBe(Rank.default().get());
+    });
+
+    it("moveInto with null destination (root) should work", async () => {
+      // Arrange
+      const rankA = Rank.default().get();
+      const rootNote = await createNote("Root Note", rankA, null);
+
+      const rankX = new Rank(rankA).next().get();
+      const source = await createNote("Source", rankX, "some-other-id");
+
+      // Act
+      await noteService.move({
+        placement: "inside-end",
+        sourceId: source.id,
+        destinationId: null,
+      }); // Move to root
+
+      // Assert
+      const updatedSource = (await noteDAO.findById(source.id))._unsafeUnwrap();
+      expect(updatedSource.parentId).toBeNull();
+      expect(updatedSource.orderHint > rootNote.orderHint).toBe(true);
     });
   });
 });

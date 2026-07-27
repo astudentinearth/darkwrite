@@ -23,7 +23,7 @@ export default function Bubble({ isDragging }: BubbleMenuProps) {
       pluginKey={"bubbleMenu"}
       className="bubble-menu-wrapper"
       shouldShow={({ editor, state }) => {
-        if (!editor.isEditable || isDragging.current) return false;
+        if (isDragging.current) return false;
         if (state.selection instanceof CellSelection) return false;
         if (
           editor.isActive(Block.Image) ||

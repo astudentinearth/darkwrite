@@ -1,25 +1,27 @@
-import type { NoteDTO, NoteType } from "@darkwrite/common";
+import type { NoteDTO } from "@darkwrite/common";
 import type { Note } from "@/db/schema";
 
 export function noteToDto(note: Note): NoteDTO {
-  const { createdAt, modifiedAt, trashedAt, type, ...rest } = note;
+  const { createdAt, modifiedAt, propertyValues, trashedAt, ...rest } = note;
   return {
     ...rest,
     trashedAt: trashedAt?.toISOString() ?? null,
     createdAt: createdAt.toISOString(),
     modifiedAt: modifiedAt.toISOString(),
-    type: type as NoteType,
+    propertyValues: (propertyValues as Record<string, string>) ?? null,
   };
 }
 
 export function dtoToNote(dto: NoteDTO): Note {
-  const { createdAt, modifiedAt, trashedAt, ...rest } = dto;
+  const { createdAt, modifiedAt, propertyValues, trashedAt, ...rest } = dto;
 
   return {
     ...rest,
     createdAt: new Date(createdAt),
     modifiedAt: new Date(modifiedAt),
+    propertyValues: propertyValues,
     trashedAt: trashedAt ? new Date(trashedAt) : null,
+    userId: rest.userId,
     icon: rest.icon,
   };
 }

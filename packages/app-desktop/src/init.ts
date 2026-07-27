@@ -17,7 +17,6 @@ import { db, initDatabase, migrateDatabaseOrExit } from "./db";
 import { initDevtools } from "./debug/server";
 import { EmbedAPI } from "./embed/embed.handler";
 import { EmbedService } from "./embed/embed.service";
-import { initI18n, setLanguage } from "./i18n";
 import { setupAPI } from "./ipc/api";
 import { SettingsAPI } from "./ipc/settings.handler";
 import { EmbedFileStore } from "./lib/blob-store";
@@ -30,7 +29,6 @@ import { FileLinkAPI } from "./link/file-link.handler";
 import { FileLinkService } from "./link/file-link.service";
 import { initAppMenu, showAppMenu } from "./menu";
 import { webcontentsUrl } from "./metadata.json";
-import { DatabaseAPI } from "./note/database.handler";
 import { NoteAPI } from "./note/note.handler";
 import { NoteService } from "./note/note.service";
 import { NoteQueryService } from "./note/note-query.service";
@@ -141,18 +139,10 @@ export async function init() {
     desktop: DesktopApiBridge,
     fileLink: FileLinkAPI(fileLinkService),
     backup: BackupApiBridge,
-    settings: SettingsAPI(settingsService, (settings) => {
-      if (setLanguage(settings.client.language)) initAppMenu();
-    }),
+    settings: SettingsAPI(settingsService),
     embed: EmbedAPI(embedService),
     workspace: WorkspaceAPI(workspaceService),
-    note: NoteAPI(
-      noteService,
-      noteQueryService,
-      documentService,
-      workspaceService,
-    ),
-    database: DatabaseAPI({ noteService, noteQueryService }),
+    note: NoteAPI(noteService, noteQueryService, documentService),
     checkUpdate: updateCheckHandler,
     showAppMenu: handler(() => {
       showAppMenu();
@@ -161,16 +151,12 @@ export async function init() {
     onboarding: onboardingService.ipcHandlers,
   };
 
-  log.debug("Settings up API bridge...");
   setupAPI(apiBridge);
 
   await workspaceService
     .initializeDefaultWorkspace()
     .orElse(bail)
     .andThen(settingsService.loadFromFile);
-
-  // must happen after settings are loaded and before the menu is built
-  initI18n(settingsService.getSettings().client.language);
 
   // We change the session data directory to avoid polluting user data any further
   app.setPath("sessionData", Paths.SESSION_DATA_DIR);

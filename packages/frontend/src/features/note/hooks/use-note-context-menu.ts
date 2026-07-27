@@ -7,8 +7,7 @@ import { MoveNoteDialogPortal } from "../store/notes-ui-actions";
 
 export const useNoteContextMenu = (noteId: string) => {
   const note = useAppSelector((state) => selectNoteById(state, noteId));
-  const { createNote, duplicateNote, moveToTrash, createDatabase } =
-    useNoteActions();
+  const { createNote, duplicateNote, moveToTrash } = useNoteActions();
   const { showCenterView } = useEditorActions();
   const exporter = useNoteExport();
   const dispatch = useAppDispatch();
@@ -34,11 +33,6 @@ export const useNoteContextMenu = (noteId: string) => {
     });
   };
 
-  const newDatabase = () => {
-    if (!note) return;
-    createDatabase({ parentId: note.id, workspaceId: note.workspaceId });
-  };
-
   const trash = () => moveToTrash(noteId);
   const duplicate = () => duplicateNote(noteId);
 
@@ -57,7 +51,5 @@ export const useNoteContextMenu = (noteId: string) => {
     exportPDF,
     move,
     openInCenter,
-    newDatabase,
-    type: note.type,
   };
 };

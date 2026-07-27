@@ -30,7 +30,7 @@ export default function FontSelect(props: {
         props.onValueChange?.call(undefined, family);
         setOpen(false);
       }}
-      className="py-1 h-fit px-2 rounded-md transition-none hover:bg-secondary flex items-center justify-start w-full"
+      className="py-1.5 h-fit px-3 rounded-md hover:bg-secondary flex items-center justify-start w-full"
     >
       {family === props.systemDefault
         ? _t("settings.fonts.systemDefault")

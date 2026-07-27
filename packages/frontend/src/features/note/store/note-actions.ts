@@ -1,14 +1,8 @@
 // this file is a stub to provide a clear
 // interface for imperative actions.
 
-import type {
-  CreateDatabaseArgs,
-  CreateDatabaseViewArgs,
-  ParentId,
-} from "@darkwrite/common";
 import { t } from "i18next";
 import { useMemo } from "react";
-import { databaseViewApi } from "@/features/database/store/database-view-api";
 import { navigateToNote } from "@/features/navigation/navigator";
 import notify from "@/features/notifications/notify";
 import { useAppDispatch } from "@/features/store/hooks";
@@ -21,10 +15,6 @@ import { trashApi } from "./trash-api";
 export const getNoteActions = (dispatch: AppDispatch) => ({
   async createNote(args: CreateNoteArgs) {
     dispatch(createNoteApi.endpoints.createNote.initiate(args));
-  },
-
-  async createDatabase(args: CreateDatabaseArgs) {
-    return dispatch(createNoteApi.endpoints.createDatabase.initiate(args));
   },
 
   async favorite(args: FavoriteNoteArgs) {
@@ -61,17 +51,12 @@ export const getNoteActions = (dispatch: AppDispatch) => ({
     });
   },
 
-  async createDatabaseView(args: CreateDatabaseViewArgs) {
-    return dispatch(
-      databaseViewApi.endpoints.createDatabaseView.initiate(args),
-    );
-  },
-
-  async moveInto(noteId: string, parentId: ParentId, showToast = true) {
+  async moveInto(noteId: string, destinationNoteId: string, showToast = true) {
     const result = dispatch(
-      moveNoteApi.endpoints.moveNote.initiate({
+      moveNoteApi.endpoints.moveInto.initiate({
+        destinationNoteId,
+        placement: "inside-end",
         sourceNoteId: noteId,
-        parentId,
       }),
     ).unwrap();
     try {

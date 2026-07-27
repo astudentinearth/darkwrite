@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import { type ParentId } from "@darkwrite/common";
+import { type ParentId, Rank } from "@darkwrite/common";
 import { beforeAll, beforeEach, describe, expect, it } from "vitest";
 import {
   applySqlMigrations,
@@ -50,12 +50,17 @@ describe("NoteDAO", () => {
       title: `Test Note${id}`,
       workspaceId: workspaceId,
       parentId,
+      orderHint: Rank.default().get(),
+      favoriteOrderHint: Rank.default().get(),
       createdAt: new Date(),
       modifiedAt: new Date(),
+      userId: null,
+      propertyValues: null,
+      databaseId: null,
       icon: null,
+      isFavorite: false,
       isTrashed: null,
       trashedAt: null,
-      type: "doc",
     };
   };
 
@@ -69,6 +74,8 @@ describe("NoteDAO", () => {
         workspaceId,
         createdAt: new Date(),
         modifiedAt: new Date(),
+        favoriteOrderHint: "",
+        orderHint: "",
         title: "New note",
       });
       const note = result._unsafeUnwrap();
@@ -84,6 +91,8 @@ describe("NoteDAO", () => {
         workspaceId,
         createdAt: new Date(),
         modifiedAt: new Date(),
+        favoriteOrderHint: "",
+        orderHint: "",
         title: "New note",
       });
       const note = result._unsafeUnwrap();
@@ -128,7 +137,7 @@ describe("NoteDAO", () => {
       const updatedNotes = (
         await noteDao.updateAll([
           { id: note1.id, title: "trashed", isTrashed: true },
-          { id: note2.id, title: "updated", icon: "star" },
+          { id: note2.id, title: "favorite", isFavorite: true },
         ])
       )._unsafeUnwrap();
 
@@ -141,8 +150,8 @@ describe("NoteDAO", () => {
       expect(updated2?.id).toBe(note2.id);
       expect(updated1?.isTrashed).toBeTruthy();
       expect(updated1?.title).toBe("trashed");
-      expect(updated2?.icon).toBe("star");
-      expect(updated2?.title).toBe("updated");
+      expect(updated2?.isFavorite).toBeTruthy();
+      expect(updated2?.title).toBe("favorite");
     });
   });
 
@@ -225,7 +234,7 @@ describe("NoteDAO", () => {
     });
   });
 
-  describe("findAllByParentId", () => {
+  describe("findAllByParentId, findAllByParentIdSortAsc", () => {
     it("findAllByParentId should return only children of the given parent in the workspace", async () => {
       const parentId = randomUUID();
       const childAId = randomUUID();
@@ -261,9 +270,184 @@ describe("NoteDAO", () => {
       expect(rootIds).toContain(parentId);
       expect(rootIds).not.toContain(childId);
     });
+
+    it("findAllByParentIdSortAsc should sort children by orderHint ascending", async () => {
+      const parentId = randomUUID();
+      await createNote(parentId);
+
+      const firstRank = Rank.default();
+      const secondRank = firstRank.next();
+      const thirdRank = secondRank.next();
+
+      const firstId = randomUUID();
+      const secondId = randomUUID();
+      const thirdId = randomUUID();
+
+      await saveNote({
+        ...(await buildNote(secondId, parentId)),
+        orderHint: secondRank.get(),
+      });
+      await saveNote({
+        ...(await buildNote(thirdId, parentId)),
+        orderHint: thirdRank.get(),
+      });
+      await saveNote({
+        ...(await buildNote(firstId, parentId)),
+        orderHint: firstRank.get(),
+      });
+
+      const sorted = await noteDao.findAllByParentIdSortAsc(
+        workspaceId,
+        parentId,
+      );
+      const sortedIds = sorted._unsafeUnwrap().map((n) => n.id);
+      const expectedOrder = [firstId, secondId, thirdId];
+
+      expect(sortedIds).toEqual(expectedOrder);
+    });
   });
 
-  describe("findAllTrashed", () => {
+  describe("findFirstNoteInLayer, findLastNoteInLayer, findLastNoteInFavorites", () => {
+    it("findFirstNoteInLayer should return the smallest orderHint among non-trashed notes", async () => {
+      const parentId = randomUUID();
+      await createNote(parentId);
+
+      const smallestRank = Rank.default();
+      const middleRank = smallestRank.next();
+      const largestRank = middleRank.next();
+
+      const firstExpectedId = randomUUID();
+      const trashedSmallerId = randomUUID();
+      const otherId = randomUUID();
+
+      await saveNote({
+        ...(await buildNote(firstExpectedId, parentId)),
+        orderHint: smallestRank.get(),
+      });
+      await saveNote({
+        ...(await buildNote(trashedSmallerId, parentId)),
+        orderHint: new Rank(smallestRank.get()).prev().get(),
+        isTrashed: true,
+      });
+      await saveNote({
+        ...(await buildNote(otherId, parentId)),
+        orderHint: largestRank.get(),
+      });
+
+      const first = (
+        await noteDao.findFirstNoteInLayer(workspaceId, parentId)
+      )._unsafeUnwrap();
+
+      expect(first).not.toBeUndefined();
+      expect(first?.id).toBe(firstExpectedId);
+    });
+
+    it("findLastNoteInLayer should return the greatest orderHint among non-trashed notes", async () => {
+      const parentId = randomUUID();
+      await createNote(parentId);
+
+      const firstRank = Rank.default();
+      const secondRank = firstRank.next();
+      const thirdRank = secondRank.next();
+
+      const expectedLastId = randomUUID();
+      const trashedLargestId = randomUUID();
+
+      await saveNote({
+        ...(await buildNote(randomUUID(), parentId)),
+        orderHint: firstRank.get(),
+      });
+      await saveNote({
+        ...(await buildNote(expectedLastId, parentId)),
+        orderHint: thirdRank.get(),
+      });
+      await saveNote({
+        ...(await buildNote(trashedLargestId, parentId)),
+        orderHint: new Rank(thirdRank.get()).next().get(),
+        isTrashed: true,
+      });
+
+      const last = (
+        await noteDao.findLastNoteInLayer(workspaceId, parentId)
+      )._unsafeUnwrap();
+
+      expect(last).not.toBeUndefined();
+      expect(last?.id).toBe(expectedLastId);
+    });
+
+    it("findLastNoteInFavorites should return the favorite with highest favoriteOrderHint and not trashed", async () => {
+      const firstFavoriteRank = Rank.default();
+      const secondFavoriteRank = firstFavoriteRank.next();
+      const thirdFavoriteRank = secondFavoriteRank.next();
+
+      const expectedId = randomUUID();
+      const trashedHighestFavoriteId = randomUUID();
+
+      await saveNote({
+        ...(await buildNote(randomUUID())),
+        isFavorite: true,
+        favoriteOrderHint: firstFavoriteRank.get(),
+      });
+      await saveNote({
+        ...(await buildNote(expectedId)),
+        isFavorite: true,
+        favoriteOrderHint: secondFavoriteRank.get(),
+      });
+      await saveNote({
+        ...(await buildNote(trashedHighestFavoriteId)),
+        isFavorite: true,
+        isTrashed: true,
+        favoriteOrderHint: thirdFavoriteRank.get(),
+      });
+
+      const lastFavorite = (
+        await noteDao.findLastNoteInFavorites(workspaceId)
+      )._unsafeUnwrap();
+
+      expect(lastFavorite).not.toBeUndefined();
+      expect(lastFavorite?.id).toBe(expectedId);
+    });
+  });
+
+  describe("findAllFavorites, findAllTrashed", () => {
+    it("findAllFavorites should return only non-trashed favorites sorted ascending", async () => {
+      const lowRank = Rank.default();
+      const highRank = lowRank.next();
+
+      const firstExpectedId = randomUUID();
+      const secondExpectedId = randomUUID();
+      const notFavoriteId = randomUUID();
+      const trashedFavoriteId = randomUUID();
+
+      await saveNote({
+        ...(await buildNote(secondExpectedId)),
+        isFavorite: true,
+        favoriteOrderHint: highRank.get(),
+      });
+      await saveNote({
+        ...(await buildNote(firstExpectedId)),
+        isFavorite: true,
+        favoriteOrderHint: lowRank.get(),
+      });
+      await saveNote({
+        ...(await buildNote(notFavoriteId)),
+        isFavorite: false,
+      });
+      await saveNote({
+        ...(await buildNote(trashedFavoriteId)),
+        isFavorite: true,
+        isTrashed: true,
+      });
+
+      const favorites = await noteDao.findAllFavorites(workspaceId);
+      const favoriteIds = favorites._unsafeUnwrap().map((n) => n.id);
+      const expectedOrder = [firstExpectedId, secondExpectedId];
+
+      expect(favoriteIds).toEqual(expectedOrder);
+      expect(favoriteIds).not.toContain(notFavoriteId);
+      expect(favoriteIds).not.toContain(trashedFavoriteId);
+    });
+
     it("findAllTrashed should return trashed notes sorted by trashedAt ascending", async () => {
       const earlyDate = new Date("2024-01-01T00:00:00.000Z");
       const lateDate = new Date("2024-01-02T00:00:00.000Z");
@@ -346,134 +530,167 @@ describe("NoteDAO", () => {
     });
   });
 
-  describe("getAllDocumentsInDatabase, getAllDatabasesInWorkspace", () => {
-    it("getAllDocumentsInDatabase should return only non-trashed documents under the given parent", async () => {
-      const databaseId = randomUUID();
-      const docId = randomUUID();
-      const trashedDocId = randomUUID();
-      const otherParentDocId = randomUUID();
+  describe("noteRightAfter", () => {
+    it("should return the note with the next greater orderHint", async () => {
+      const firstRank = Rank.default();
+      const secondRank = firstRank.next();
+      const thirdRank = secondRank.next();
 
-      await createNote(databaseId);
+      const firstId = randomUUID();
+      const secondId = randomUUID();
+      const thirdId = randomUUID();
+
       await saveNote({
-        ...(await buildNote(docId, databaseId)),
-        type: "doc",
+        ...(await buildNote(firstId)),
+        orderHint: firstRank.get(),
       });
       await saveNote({
-        ...(await buildNote(trashedDocId, databaseId)),
-        type: "doc",
-        isTrashed: true,
+        ...(await buildNote(secondId)),
+        orderHint: secondRank.get(),
       });
       await saveNote({
-        ...(await buildNote(otherParentDocId)),
-        type: "doc",
+        ...(await buildNote(thirdId)),
+        orderHint: thirdRank.get(),
       });
 
-      const docs = (
-        await noteDao.getAllDocumentsInDatabase(databaseId)
-      )._unsafeUnwrap();
-      const docIds = docs.map((n) => n.id);
-
-      expect(docIds).toEqual([docId]);
-      expect(docIds).not.toContain(trashedDocId);
-      expect(docIds).not.toContain(otherParentDocId);
-    });
-
-    it("getAllDocumentsInDatabase should exclude non-document types", async () => {
-      const databaseId = randomUUID();
-      const docId = randomUUID();
-      const databaseViewId = randomUUID();
-
-      await createNote(databaseId);
-      await saveNote({
-        ...(await buildNote(docId, databaseId)),
-        type: "doc",
-      });
-      await saveNote({
-        ...(await buildNote(databaseViewId, databaseId)),
-        type: "database_view",
-      });
-
-      const docs = (
-        await noteDao.getAllDocumentsInDatabase(databaseId)
-      )._unsafeUnwrap();
-      const docIds = docs.map((n) => n.id);
-
-      expect(docIds).toEqual([docId]);
-      expect(docIds).not.toContain(databaseViewId);
-    });
-
-    it("getAllDocumentsInDatabase should return empty array when no documents exist", async () => {
-      const databaseId = randomUUID();
-      await createNote(databaseId);
-
-      const docs = (
-        await noteDao.getAllDocumentsInDatabase(databaseId)
+      const result = (
+        await noteDao.noteRightAfter(firstId, workspaceId)
       )._unsafeUnwrap();
 
-      expect(docs).toEqual([]);
+      expect(result).not.toBeUndefined();
+      expect(result?.id).toBe(secondId);
     });
 
-    it("getAllDatabasesInWorkspace should return only non-trashed databases in the workspace", async () => {
-      const databaseId = randomUUID();
-      const trashedDatabaseId = randomUUID();
-      const docId = randomUUID();
+    it("should return only the immediately next note, not all subsequent ones", async () => {
+      const firstRank = Rank.default();
+      const secondRank = firstRank.next();
+      const thirdRank = secondRank.next();
+
+      const firstId = randomUUID();
+      const secondId = randomUUID();
+      const thirdId = randomUUID();
 
       await saveNote({
-        ...(await buildNote(databaseId)),
-        type: "database",
+        ...(await buildNote(firstId)),
+        orderHint: firstRank.get(),
       });
       await saveNote({
-        ...(await buildNote(trashedDatabaseId)),
-        type: "database",
-        isTrashed: true,
+        ...(await buildNote(secondId)),
+        orderHint: secondRank.get(),
       });
-      await createNote(docId);
+      await saveNote({
+        ...(await buildNote(thirdId)),
+        orderHint: thirdRank.get(),
+      });
 
-      const databases = (
-        await noteDao.getAllDatabasesInWorkspace(workspaceId)
+      const result = (
+        await noteDao.noteRightAfter(firstId, workspaceId)
       )._unsafeUnwrap();
-      const dbIds = databases.map((n) => n.id);
 
-      expect(dbIds).toEqual([databaseId]);
-      expect(dbIds).not.toContain(trashedDatabaseId);
-      expect(dbIds).not.toContain(docId);
+      expect(result?.id).toBe(secondId);
+      expect(result?.id).not.toBe(thirdId);
     });
 
-    it("getAllDatabasesInWorkspace should exclude databases from other workspaces", async () => {
+    it("should return undefined when the target is the last note", async () => {
+      const firstRank = Rank.default();
+      const secondRank = firstRank.next();
+
+      const firstId = randomUUID();
+      const lastId = randomUUID();
+
+      await saveNote({
+        ...(await buildNote(firstId)),
+        orderHint: firstRank.get(),
+      });
+      await saveNote({
+        ...(await buildNote(lastId)),
+        orderHint: secondRank.get(),
+      });
+
+      const result = (
+        await noteDao.noteRightAfter(lastId, workspaceId)
+      )._unsafeUnwrap();
+
+      expect(result).toBeUndefined();
+    });
+
+    it("should return undefined when the target does not exist", async () => {
+      const someId = randomUUID();
+      await saveNote({
+        ...(await buildNote(randomUUID())),
+        orderHint: Rank.default().get(),
+      });
+
+      const result = (
+        await noteDao.noteRightAfter(someId, workspaceId)
+      )._unsafeUnwrap();
+
+      expect(result).toBeUndefined();
+    });
+
+    it("should use favoriteOrderHint when specified", async () => {
+      const firstRank = Rank.default();
+      const secondRank = firstRank.next();
+      const thirdRank = secondRank.next();
+
+      const firstId = randomUUID();
+      const secondId = randomUUID();
+      const thirdId = randomUUID();
+
+      await saveNote({
+        ...(await buildNote(firstId)),
+        favoriteOrderHint: firstRank.get(),
+        orderHint: thirdRank.get(),
+      });
+      await saveNote({
+        ...(await buildNote(secondId)),
+        favoriteOrderHint: secondRank.get(),
+        orderHint: secondRank.get(),
+      });
+      await saveNote({
+        ...(await buildNote(thirdId)),
+        favoriteOrderHint: thirdRank.get(),
+        orderHint: firstRank.get(),
+      });
+
+      const result = (
+        await noteDao.noteRightAfter(firstId, workspaceId, "favoriteOrderHint")
+      )._unsafeUnwrap();
+
+      expect(result).not.toBeUndefined();
+      expect(result?.id).toBe(secondId);
+    });
+
+    it("should not return notes from another workspace", async () => {
       const otherWorkspace = (
         await WorkspaceDAO(() => resolveTx(db)).create({
           name: "Other Workspace",
           createdAt: new Date(),
         })
       )._unsafeUnwrap();
-      const localDbId = randomUUID();
-      const otherDbId = randomUUID();
+
+      const firstRank = Rank.default();
+      const secondRank = firstRank.next();
+
+      const targetId = randomUUID();
+      const otherWorkspaceNoteId = randomUUID();
 
       await saveNote({
-        ...(await buildNote(localDbId)),
-        type: "database",
+        ...(await buildNote(targetId)),
+        orderHint: firstRank.get(),
       });
+      // A note in another workspace with a higher orderHint
       await saveNote({
-        ...(await buildNote(otherDbId)),
+        ...(await buildNote(otherWorkspaceNoteId)),
         workspaceId: otherWorkspace.id,
-        type: "database",
+        orderHint: secondRank.get(),
       });
 
-      const databases = (
-        await noteDao.getAllDatabasesInWorkspace(workspaceId)
-      )._unsafeUnwrap();
-      const dbIds = databases.map((n) => n.id);
-
-      expect(dbIds).toContain(localDbId);
-      expect(dbIds).not.toContain(otherDbId);
-    });
-
-    it("getAllDatabasesInWorkspace should return empty array when no databases exist", async () => {
-      const databases = (
-        await noteDao.getAllDatabasesInWorkspace(workspaceId)
+      const result = (
+        await noteDao.noteRightAfter(targetId, workspaceId)
       )._unsafeUnwrap();
 
-      expect(databases).toEqual([]);
+      expect(result).toBeUndefined();
     });
   });
 

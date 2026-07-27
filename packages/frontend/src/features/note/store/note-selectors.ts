@@ -1,12 +1,5 @@
-import {
-  isDescendant,
-  NoteType,
-  noteComparator,
-  type SortDirection,
-  SortProperty,
-} from "@darkwrite/common";
+import { byUpdateTime, isDescendant, Rank } from "@darkwrite/common";
 import { createSelector } from "@reduxjs/toolkit";
-import { weakMapMemoize } from "@reduxjs/toolkit/react";
 import type { RootState } from "@/features/store/types";
 import { notesAdapter } from "./notes-adapter";
 import type { MoveNoteSearchArgs, SearchArgs } from "./types";
@@ -19,7 +12,6 @@ export const {
   selectEntities: selectAllNotesAsMap,
 } = notesAdapter.getSelectors(selectNotesState);
 
-/** Select notes in a layer sorted descending by their modification date */
 export const selectNotesByParentId = createSelector(
   [
     selectAllNotes,
@@ -35,28 +27,7 @@ export const selectNotesByParentId = createSelector(
           note.parentId === parentId &&
           !note.isTrashed,
       )
-      .toSorted((a, b) => b.modifiedAt.localeCompare(a.modifiedAt))
-      .map((n) => n.id);
-  },
-  { memoize: weakMapMemoize },
-);
-
-export const selectNotesByParentIdAlphabetical = createSelector(
-  [
-    selectAllNotes,
-    (_state: RootState, workspaceId: string) => workspaceId,
-    (_state: RootState, _workspaceId: string, parentId: string | null) =>
-      parentId,
-  ],
-  (allNotes, workspaceId, parentId) => {
-    return allNotes
-      .filter(
-        (note) =>
-          note.workspaceId === workspaceId &&
-          note.parentId === parentId &&
-          !note.isTrashed,
-      )
-      .toSorted((a, b) => a.title.localeCompare(b.title))
+      .toSorted((a, b) => Rank.sorter(a.orderHint, b.orderHint))
       .map((n) => n.id);
   },
 );
@@ -73,42 +44,33 @@ export const selectRecentNotes = createSelector(
   (allNotes, workspaceId) => {
     return allNotes
       .filter((n) => n.workspaceId === workspaceId && !n.isTrashed)
-      .toSorted(noteComparator(SortProperty.ModificationDate, "desc"))
+      .toSorted(byUpdateTime("desc"))
       .slice(0, 5);
   },
 );
 
 export const selectFavoriteIds = createSelector(
-  [
-    (state: RootState) => state.workspace.workspaces,
-    (_state: RootState, workspaceId: string) => workspaceId,
-  ],
-  (workspaces, workspaceId) => workspaces[workspaceId]?.favoriteIds ?? [],
-);
-
-export const selectFavorites = createSelector(
-  [
-    selectAllNotes,
-    (state: RootState) => state.workspace.workspaces,
-    (_state: RootState, workspaceId: string) => workspaceId,
-  ],
-  (allNotes, workspaces, workspaceId) => {
-    const ids = workspaces[workspaceId]?.favoriteIds ?? [];
-    return ids
-      .map((id) => allNotes.find((n) => n.id === id))
-      .filter((n): n is NonNullable<typeof n> => n !== undefined);
+  [selectAllNotes, (_state: RootState, workspaceId: string) => workspaceId],
+  (allNotes, workspaceId) => {
+    return allNotes
+      .filter(
+        (n) => n.workspaceId === workspaceId && n.isFavorite && !n.isTrashed,
+      )
+      .toSorted((a, b) => Rank.sorter(a.favoriteOrderHint, b.favoriteOrderHint))
+      .map((n) => n.id);
   },
 );
 
-export const selectIsFavorite = createSelector(
-  [
-    (state: RootState) => state.workspace.workspaces,
-    (_state: RootState, workspaceId: string) => workspaceId,
-    (_state: RootState, _workspaceId: string, noteId: string) => noteId,
-  ],
-  (workspaces, workspaceId, noteId) => {
-    const ids = workspaces[workspaceId]?.favoriteIds ?? [];
-    return ids.includes(noteId);
+export const selectFavorites = createSelector(
+  [selectAllNotes, (_state: RootState, workspaceId: string) => workspaceId],
+  (allNotes, workspaceId) => {
+    return allNotes
+      .filter(
+        (n) => n.workspaceId === workspaceId && n.isFavorite && !n.isTrashed,
+      )
+      .toSorted((a, b) =>
+        Rank.sorter(a.favoriteOrderHint, b.favoriteOrderHint),
+      );
   },
 );
 
@@ -142,7 +104,7 @@ export const selectByWorkspaceAndSearchTerm = createSelector(
           (n.title ?? "").toLowerCase().includes(query.toLowerCase()) &&
           !n.isTrashed,
       )
-      .toSorted((a, b) => b.modifiedAt.localeCompare(a.modifiedAt))
+      .toSorted((a, b) => Rank.sorter(a.orderHint, b.orderHint))
       .map((n) => n.id);
   },
 );
@@ -182,57 +144,5 @@ export const selectNoteIdsInTrash = createSelector(
   (allNotes, workspaceId) =>
     allNotes
       .filter((n) => n.workspaceId === workspaceId && n.isTrashed)
-      .map((n) => n.id),
-);
-
-/** Selects IDs of Doc-type notes that are direct children of the given database. */
-export const selectNotesInDatabase = createSelector(
-  [
-    selectAllNotes,
-    (_state: RootState, parentId: string) => parentId,
-    (_state: RootState, _parentId: string, property: SortProperty) => property,
-    (
-      _state: RootState,
-      _parentId: string,
-      _property: SortProperty,
-      mode: SortDirection,
-    ) => mode,
-  ],
-  (allNotes, parentId, property, mode) =>
-    allNotes
-      .filter(
-        (n) =>
-          n.parentId === parentId && n.type === NoteType.Doc && !n.isTrashed,
-      )
-      .toSorted(noteComparator(property, mode))
-      .map((n) => n.id),
-);
-
-/** Selects IDs of DatabaseView-type notes that are direct children of the given database. */
-export const selectViewsOfDatabase = createSelector(
-  [selectAllNotes, (_state: RootState, parentId: string) => parentId],
-  (allNotes, parentId) =>
-    allNotes
-      .filter(
-        (n) =>
-          n.parentId === parentId &&
-          n.type === NoteType.DatabaseView &&
-          !n.isTrashed,
-      )
-      .toSorted((a, b) => b.modifiedAt.localeCompare(a.modifiedAt))
-      .map((n) => n.id),
-);
-
-/** Selects IDs of Database-type notes in the given workspace that are not trashed. */
-export const selectDatabasesInWorkspace = createSelector(
-  [selectAllNotes, (_state: RootState, workspaceId: string) => workspaceId],
-  (allNotes, workspaceId) =>
-    allNotes
-      .filter(
-        (n) =>
-          n.workspaceId === workspaceId &&
-          n.type === NoteType.Database &&
-          !n.isTrashed,
-      )
       .map((n) => n.id),
 );

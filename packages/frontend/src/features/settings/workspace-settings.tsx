@@ -1,5 +1,12 @@
 import type { WorkspaceDTO } from "@darkwrite/common";
-import { Archive, FolderDown, Languages, PenLine } from "lucide-react";
+import {
+  Archive,
+  Cloud,
+  FolderDown,
+  HardDrive,
+  Languages,
+  PenLine,
+} from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Button, Input, Label, Switch } from "@/components/ui";
@@ -23,14 +30,12 @@ export default function WorkspaceSettings() {
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [update] = useUpdateWorkspaceMutation();
+  const { t: tW } = useTranslation("translation", {
+    keyPrefix: "sidebar.workspace",
+  });
   const { t, i18n } = useTranslation();
   const save = async (w: WorkspaceDTO) => {
-    update({
-      id: w.id,
-      name: w.name,
-      iconUrl: w.iconUrl,
-      allNotesSortMode: w.allNotesSortMode,
-    });
+    update(w);
     setEditDialogOpen(false);
   };
   const settings = useSettings();
@@ -64,6 +69,14 @@ export default function WorkspaceSettings() {
             />
             <div className="flex flex-col">
               <h1 className="text-2xl font-medium">{currentWorkspace.name}</h1>
+              <span className="flex gap-2 items-center text-sm text-popover-foreground/80">
+                {currentWorkspace.config.syncMode === "offline" ? (
+                  <HardDrive size={18}></HardDrive>
+                ) : (
+                  <Cloud size={18}></Cloud>
+                )}
+                {tW(currentWorkspace.config.syncMode)}
+              </span>
             </div>
           </div>
           <div className="flex gap-2">

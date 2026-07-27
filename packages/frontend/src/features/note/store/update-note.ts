@@ -16,10 +16,7 @@ export function createTitleUpdater(noteId: string, store: AppStore) {
 
   function update(title: string) {
     store.dispatch(
-      notesSlice.actions.updateNote({
-        id: noteId,
-        changes: { title, modifiedAt: new Date().toISOString() },
-      }),
+      notesSlice.actions.updateNote({ id: noteId, changes: { title } }),
     );
     _persistTitleDelayed(title);
   }
@@ -41,10 +38,7 @@ export function createTitleUpdater(noteId: string, store: AppStore) {
 
   function updateIcon(noteId: string, icon: string | null) {
     store.dispatch(
-      notesSlice.actions.updateNote({
-        id: noteId,
-        changes: { icon, modifiedAt: new Date().toISOString() },
-      }),
+      notesSlice.actions.updateNote({ id: noteId, changes: { icon } }),
     );
     DarkwriteAPIClient.note.update(noteId, { icon });
   }

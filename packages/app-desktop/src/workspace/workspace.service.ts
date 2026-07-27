@@ -1,6 +1,6 @@
 import {
   type CreateWorkspaceDTO,
-  dwErrAsync,
+  getDefaultWorkspaceConfiguration,
   type UpdateWorkspaceDTO,
 } from "@darkwrite/common";
 import log from "electron-log";
@@ -18,16 +18,12 @@ export function WorkspaceService(
   const noteDAO = NoteDAO(() => resolveTx(db));
   const workspaceDAO = WorkspaceDAO(() => resolveTx(db));
 
-  const createWorkspace = ({
-    allNotesSortMode,
-    name,
-    iconUrl,
-  }: CreateWorkspaceDTO) =>
+  const createWorkspace = ({ config, name, iconUrl }: CreateWorkspaceDTO) =>
     workspaceDAO.create({
+      config,
       name,
       iconUrl,
       createdAt: new Date(),
-      allNotesSortMode,
     });
 
   /** Initializes a default workspace if no workspaces exist. Returns true if a workspace already exists, or the newly created workspace if not.
@@ -41,6 +37,7 @@ export function WorkspaceService(
           ? okAsync(true)
           : createWorkspace({
               name: "My Workspace",
+              config: getDefaultWorkspaceConfiguration(),
             }),
       );
 
@@ -74,52 +71,6 @@ export function WorkspaceService(
         .orElse(() => okAsync()),
     );
 
-  /** @internal */
-  const _insertNoteAt = (_ids: string[], noteId: string, atIndex?: number) => {
-    const ids = [..._ids];
-    if (atIndex === undefined) {
-      if (!ids.includes(noteId)) ids.push(noteId);
-    } else {
-      const existingIndex = ids.indexOf(noteId);
-      if (existingIndex !== -1) ids.splice(existingIndex, 1);
-      const insertAt = Math.min(atIndex, ids.length);
-      ids.splice(insertAt, 0, noteId);
-    }
-    return ids;
-  };
-
-  const addFavorite = (workspaceId: string, noteId: string, atIndex?: number) =>
-    transactional(
-      () =>
-        ResultAsync.combine([
-          workspaceDAO.findById(workspaceId),
-          noteDAO.findById(noteId),
-        ])
-          .andThen(([workspace, note]) =>
-            note.isTrashed
-              ? dwErrAsync(
-                  "Could not add favorite",
-                  "Cannot favorite a trashed note.",
-                )
-              : okAsync(workspace.favoriteIds),
-          )
-          .map((ids) => _insertNoteAt(ids, noteId, atIndex))
-          .andThen((ids) => workspaceDAO.setFavoriteIds(workspaceId, ids)),
-      db,
-    );
-
-  const removeFavorite = (workspaceId: string, noteId: string) =>
-    transactional(
-      () =>
-        workspaceDAO.findById(workspaceId).andThen((ws) =>
-          workspaceDAO.setFavoriteIds(
-            workspaceId,
-            ws.favoriteIds.filter((id) => id !== noteId),
-          ),
-        ),
-      db,
-    );
-
   return {
     createWorkspace,
     initializeDefaultWorkspace,
@@ -127,8 +78,6 @@ export function WorkspaceService(
     deleteWorkspace,
     update,
     getWorkspaces,
-    addFavorite,
-    removeFavorite,
   };
 }
 

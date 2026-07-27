@@ -1,3 +1,4 @@
+import { getDefaultWorkspaceConfiguration } from "@darkwrite/common";
 import { t } from "i18next";
 import { type ReactNode, useState } from "react";
 import { toast } from "sonner";
@@ -23,6 +24,7 @@ export default function NewWorkspaceDialog(
   const handleCreate = async () => {
     const workspace = await create({
       name,
+      config: getDefaultWorkspaceConfiguration(),
     });
     if (!workspace.data) {
       toast.error(

@@ -1,13 +1,6 @@
-import {
-  type CreateDatabaseArgs,
-  type CreateDatabaseResponse,
-  dwErrAsync,
-  type NoteDTO,
-  type ParentId,
-} from "@darkwrite/common";
+import { dwErrAsync, type NoteDTO, type ParentId } from "@darkwrite/common";
 import { okAsync } from "neverthrow";
 import { DarkwriteAPIClient } from "@/api/api-client";
-import { upsertViews } from "@/features/database/store/database-view-slice";
 import { navigateToNote } from "@/features/navigation/navigator";
 import { resultQueryFn } from "@/lib/query-result";
 import { upsertNotes } from "./note-slice";
@@ -46,22 +39,6 @@ export const createNoteApi = notesApi.injectEndpoints({
           id: noteByParentIdTag(args.workspaceId, args.parentId ?? "ROOT"),
         },
       ],
-    }),
-
-    createDatabase: builder.mutation<
-      CreateDatabaseResponse,
-      CreateDatabaseArgs
-    >({
-      queryFn: resultQueryFn((args) =>
-        DarkwriteAPIClient.database.createDatabase(args),
-      ),
-      async onQueryStarted(_args, { dispatch, queryFulfilled }) {
-        try {
-          const { data } = await queryFulfilled;
-          dispatch(upsertNotes([...data.views, data.database]));
-          dispatch(upsertViews(data.viewMetadata));
-        } catch {}
-      },
     }),
 
     duplicateNote: builder.mutation<NoteDTO, string>({

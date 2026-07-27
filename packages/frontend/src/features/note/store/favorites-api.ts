@@ -1,101 +1,90 @@
-import type { FavoriteActionResponse } from "@darkwrite/common";
+import { dwErrAsync, type NoteDTO, Rank } from "@darkwrite/common";
+import { okAsync } from "neverthrow";
 import { DarkwriteAPIClient } from "@/api/api-client";
 import type { RootState } from "@/features/store/types";
-import { workspaceSlice } from "@/features/workspaces/store/workspace-slice";
 import { resultQueryFn } from "@/lib/query-result";
-import { selectNoteById } from "./note-selectors";
+import { selectFavorites, selectNoteById } from "./note-selectors";
+import { updateNote } from "./note-slice";
 import { notesApi } from "./notes-api";
 
-export type FavoriteNoteArgs = { noteId: string; aboveId?: string | null };
+export type FavoriteNoteArgs = { noteId: string; aboveNoteId?: string | null };
 
-function computeInsertAtIndex(
-  favoriteIds: string[],
-  aboveId: string | null | undefined,
-): number | undefined {
-  if (aboveId === null) return 0;
-  if (aboveId != null) {
-    const idx = favoriteIds.indexOf(aboveId);
-    return idx >= 0 ? idx + 1 : favoriteIds.length;
+function computeOptimisticFavoriteOrderHint(
+  favorites: NoteDTO[],
+  aboveNoteId?: string | null,
+) {
+  if (favorites.length === 0) return Rank.default().get();
+  const sorted = favorites.toSorted((a, b) =>
+    Rank.sorter(a.favoriteOrderHint, b.favoriteOrderHint),
+  );
+  if (aboveNoteId === null) {
+    return new Rank(sorted[0].favoriteOrderHint).prev().get();
   }
-  return undefined;
+  if (aboveNoteId === undefined) {
+    return new Rank(sorted[sorted.length - 1].favoriteOrderHint).next().get();
+  }
+  const aboveIndex = sorted.findIndex((n) => n.id === aboveNoteId);
+  if (aboveIndex === -1 || aboveIndex + 1 >= sorted.length) {
+    return new Rank(sorted[sorted.length - 1].favoriteOrderHint).next().get();
+  }
+  const aboveFavorite = sorted[aboveIndex];
+  const belowFavorite = sorted[aboveIndex + 1];
+  const rank = new Rank(aboveFavorite.favoriteOrderHint).between(
+    new Rank(belowFavorite.favoriteOrderHint),
+  );
+  return rank.get();
 }
 
 export const favoritesApi = notesApi.injectEndpoints({
   endpoints: (builder) => ({
-    favorite: builder.mutation<FavoriteActionResponse, FavoriteNoteArgs>({
-      queryFn: async ({ noteId, aboveId }, api) => {
-        console.log(`adding ${noteId} to favorites`);
-        const state = api.getState() as RootState;
-        const note = selectNoteById(state, noteId);
-        const workspace = note
-          ? state.workspace.workspaces[note.workspaceId]
-          : undefined;
-        const favoriteIds = workspace?.favoriteIds ?? [];
-        const insertAtIndex = computeInsertAtIndex(favoriteIds, aboveId);
-        return DarkwriteAPIClient.note
-          .favorite(noteId, insertAtIndex)
-          .orTee(console.error)
-          .match(
-            (value) => ({ data: value }),
-            (error) => ({ error }),
-          );
-      },
+    favorite: builder.mutation<NoteDTO, FavoriteNoteArgs>({
+      queryFn: resultQueryFn(({ noteId, aboveNoteId }: FavoriteNoteArgs) =>
+        DarkwriteAPIClient.note
+          .favorite(noteId, aboveNoteId)
+          .andThen(({ note }) =>
+            note ? okAsync(note) : dwErrAsync("Note not found"),
+          ),
+      ),
 
-      onQueryStarted: async (
-        { noteId, aboveId },
-        { dispatch, getState, queryFulfilled },
-      ) => {
+      onQueryStarted: async (args, { dispatch, getState, queryFulfilled }) => {
         const state = getState() as RootState;
-        const note = selectNoteById(state, noteId);
-        if (!note) return;
-
-        const workspace = state.workspace.workspaces[note.workspaceId];
-        if (!workspace) return;
-
-        const ids = [...workspace.favoriteIds];
-        const insertAtIndex = computeInsertAtIndex(ids, aboveId);
-
-        if (insertAtIndex != null) {
-          const existingIndex = ids.indexOf(noteId);
-          if (existingIndex !== -1) ids.splice(existingIndex, 1);
-          const insertAt = Math.min(insertAtIndex, ids.length);
-          ids.splice(insertAt, 0, noteId);
-        } else {
-          if (!ids.includes(noteId)) ids.push(noteId);
-        }
-
-        const undo = workspace.favoriteIds;
-
-        dispatch(
-          workspaceSlice.actions.setWorkspaceFavorites({
-            id: workspace.id,
-            ids,
-          }),
+        const note = selectNoteById(state, args.noteId);
+        const favorites = selectFavorites(state, note.workspaceId);
+        const favoriteOrderHint = computeOptimisticFavoriteOrderHint(
+          favorites,
+          args.aboveNoteId,
         );
 
+        const changes: Partial<NoteDTO> = {
+          isFavorite: true,
+          favoriteOrderHint,
+        };
+
+        const undoPatch: Partial<NoteDTO> = {
+          isFavorite: false,
+          favoriteOrderHint: "",
+        };
+
+        dispatch(updateNote({ id: args.noteId, changes }));
+
         try {
-          const { data } = await queryFulfilled;
-          dispatch(
-            workspaceSlice.actions.setWorkspaceFavorites({
-              id: workspace.id,
-              ids: data.favoriteIds,
-            }),
-          );
+          const result = await queryFulfilled;
+          const updatedNote = result.data;
+          dispatch(updateNote({ id: args.noteId, changes: updatedNote }));
         } catch (error) {
-          dispatch(
-            workspaceSlice.actions.setWorkspaceFavorites({
-              id: workspace.id,
-              ids: undo,
-            }),
-          );
+          dispatch(updateNote({ id: args.noteId, changes: undoPatch }));
           console.error(error);
         }
       },
     }),
 
-    unfavorite: builder.mutation<FavoriteActionResponse, string>({
+    unfavorite: builder.mutation<NoteDTO, string>({
       queryFn: resultQueryFn((noteId: string) =>
-        DarkwriteAPIClient.note.unfavorite(noteId),
+        DarkwriteAPIClient.note
+          .unfavorite(noteId)
+          .andThen(({ note }) =>
+            note ? okAsync(note) : dwErrAsync("Note not found"),
+          ),
       ),
 
       onQueryStarted: async (
@@ -104,36 +93,25 @@ export const favoritesApi = notesApi.injectEndpoints({
       ) => {
         const state = getState() as RootState;
         const note = selectNoteById(state, noteId);
-        if (!note) return;
 
-        const workspace = state.workspace.workspaces[note.workspaceId];
-        if (!workspace) return;
+        const changes: Partial<NoteDTO> = {
+          isFavorite: false,
+          favoriteOrderHint: "",
+        };
 
-        const ids = workspace.favoriteIds.filter((id) => id !== noteId);
-        const undo = workspace.favoriteIds;
+        const undoPatch: Partial<NoteDTO> = {
+          isFavorite: true,
+          favoriteOrderHint: note.favoriteOrderHint,
+        };
 
-        dispatch(
-          workspaceSlice.actions.setWorkspaceFavorites({
-            id: workspace.id,
-            ids,
-          }),
-        );
+        dispatch(updateNote({ id: noteId, changes }));
 
         try {
-          const { data } = await queryFulfilled;
-          dispatch(
-            workspaceSlice.actions.setWorkspaceFavorites({
-              id: workspace.id,
-              ids: data.favoriteIds,
-            }),
-          );
+          const result = await queryFulfilled;
+          const updatedNote = result.data;
+          dispatch(updateNote({ id: noteId, changes: updatedNote }));
         } catch (error) {
-          dispatch(
-            workspaceSlice.actions.setWorkspaceFavorites({
-              id: workspace.id,
-              ids: undo,
-            }),
-          );
+          dispatch(updateNote({ id: noteId, changes: undoPatch }));
           console.error(error);
         }
       },

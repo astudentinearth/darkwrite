@@ -1,5 +1,7 @@
 // This file contains the common interfaces for frontend API clients.
 // Electron-side handlers should implement these directly and expose it via the API bridge.
+// Clients talking to a cloud instance shall make the appropriate network requests instead.
+// Cloud-specific code should be kept separate from Electron to ensure browser portability.
 import type { ResultAsync } from "neverthrow";
 import type {
   DarkwriteDesktopClientInfo,
@@ -7,16 +9,7 @@ import type {
 } from "./client";
 import type { NativeContextMenuData } from "./context-menu";
 import type {
-  CreateDatabaseArgs,
-  CreateDatabaseResponse,
-  CreateDatabaseViewArgs,
-  CreateDatabaseViewResponse,
-  CreateDocumentArgs,
-  FavoriteActionResponse,
-  GetDatabaseViewResponse,
-  GetNotesInDatabaseResponse,
-  GetViewsByIdResponse,
-  GetViewsOfResponse,
+  CreateNoteDTO,
   MoveNoteDTO,
   NoteContentResponseDTO,
   NoteResponseDTO,
@@ -46,7 +39,7 @@ export type ApiResult<T> = ResultAsync<T, DwError>;
 export type NoReturn = ResultAsync<void, never>;
 
 export interface INoteAPI {
-  create: (dto: CreateDocumentArgs) => ApiResult<NoteResponseDTO>;
+  create: (dto: CreateNoteDTO) => ApiResult<NoteResponseDTO>;
   update: (id: string, dto: UpdateNoteDTO) => ApiResult<NoteResponseDTO>;
   move: (dto: MoveNoteDTO) => ApiResult<NoteResponseDTO>;
 
@@ -77,6 +70,13 @@ export interface INoteAPI {
   ) => ApiResult<NotesResponseDTO>;
 
   /**
+   * @param workspaceId
+   * @param parentId
+   * @returns favorites in the given workspace, provided they are not trashed.
+   */
+  getFavorites: (workspaceId: string) => ApiResult<NotesResponseDTO>;
+
+  /**
    * Returns notes that are in the trash for the given workspace.
    * @param workspaceId
    */
@@ -95,15 +95,15 @@ export interface INoteAPI {
   /**
    * Favorites a note.
    * @param noteId
-   * @param insertAtIndex position to insert the note in the favorites list. Omit or -1 for end.
+   * @param aboveNoteId undefined for list end, null for list start
    * @returns
    */
   favorite: (
     noteId: string,
-    insertAtIndex?: number,
-  ) => ApiResult<FavoriteActionResponse>;
+    aboveNoteId?: string | null,
+  ) => ApiResult<NoteResponseDTO>;
 
-  unfavorite: (noteId: string) => ApiResult<FavoriteActionResponse>;
+  unfavorite: (noteId: string) => ApiResult<NoteResponseDTO>;
 
   search: (workspaceId: string, query: string) => ApiResult<NotesResponseDTO>;
   getRecents: (workspaceId: string) => ApiResult<NotesResponseDTO>;
@@ -126,24 +126,6 @@ export interface INoteAPI {
     pageSize?: PageSize,
   ) => ApiResult<string | undefined>;
   import: () => ApiResult<NoteImportResult>;
-}
-
-export interface IDatabaseAPI {
-  createDatabase: (
-    args: CreateDatabaseArgs,
-  ) => ApiResult<CreateDatabaseResponse>;
-  createDatabaseView: (
-    args: CreateDatabaseViewArgs,
-  ) => ApiResult<CreateDatabaseViewResponse>;
-  getDatabaseView: (id: string) => ApiResult<GetDatabaseViewResponse>;
-  getViewsOf: (databaseId: string) => ApiResult<GetViewsOfResponse>;
-  getNotesInDatabase: (
-    databaseId: string,
-  ) => ApiResult<GetNotesInDatabaseResponse>;
-  getViewsById: (ids: string[]) => ApiResult<GetViewsByIdResponse>;
-  getAllDatabasesInWorkspace: (
-    workspaceId: string,
-  ) => ApiResult<NotesResponseDTO>;
 }
 
 export interface IWorkspaceAPI {
@@ -244,7 +226,6 @@ export interface DesktopEmbedAPI {
 
 export type DarkwriteIPCBridge = {
   note: INoteAPI;
-  database: IDatabaseAPI;
   workspace: IWorkspaceAPI;
   embed: DesktopEmbedAPI;
   settings: ISettingsAPI;

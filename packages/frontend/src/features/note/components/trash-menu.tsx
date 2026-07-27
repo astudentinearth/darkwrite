@@ -17,7 +17,7 @@ export function TrashMenu() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant={"ghost"} className="w-9 h-9 p-0 shrink-0 rounded-lg">
+        <Button variant={"ghost"} className="w-9 h-9 p-0 shrink-0">
           <Menu className="size-4" />
         </Button>
       </DropdownMenuTrigger>

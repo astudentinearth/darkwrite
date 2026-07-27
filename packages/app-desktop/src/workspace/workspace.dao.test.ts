@@ -1,9 +1,7 @@
 import { beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { applySqlMigrations, createDatabase, type DatabaseType } from "@/db";
 import {
-  type NewNote,
   type NewWorkspace,
-  note as notesTable,
   type Workspace,
   workspace as workspaceTable,
 } from "@/db/schema";
@@ -21,7 +19,6 @@ describe("WorkspaceDAO", () => {
   });
 
   beforeEach(async () => {
-    await db.delete(notesTable);
     await db.delete(workspaceTable);
   });
 
@@ -33,20 +30,6 @@ describe("WorkspaceDAO", () => {
       name,
     };
     return (await dao.create(draft))._unsafeUnwrap();
-  };
-
-  const createTestNote = async (
-    workspaceId: string,
-    id: string,
-  ): Promise<void> => {
-    const note: NewNote = {
-      id,
-      workspaceId,
-      title: "Test Note",
-      createdAt: new Date(),
-      modifiedAt: new Date(),
-    };
-    await db.insert(notesTable).values(note);
   };
 
   describe("create", () => {
@@ -164,70 +147,6 @@ describe("WorkspaceDAO", () => {
 
       const result = await dao.findById(workspace.id);
       expect(result._unsafeUnwrapErr()).not.toBeUndefined();
-    });
-  });
-
-  describe("setFavoriteIds", () => {
-    it("should store cleaned IDs and return them", async () => {
-      const ws = await createTestWorkspace();
-      await createTestNote(ws.id, "a");
-      await createTestNote(ws.id, "b");
-
-      const result = (
-        await dao.setFavoriteIds(ws.id, ["a", "b"])
-      )._unsafeUnwrap();
-
-      expect(result).toEqual(["a", "b"]);
-
-      const stored = (await dao.findById(ws.id))._unsafeUnwrap();
-      expect(stored.favoriteIds).toEqual(["a", "b"]);
-    });
-
-    it("should remove duplicates keeping the first occurrence", async () => {
-      const ws = await createTestWorkspace();
-      await createTestNote(ws.id, "a");
-      await createTestNote(ws.id, "b");
-      await createTestNote(ws.id, "c");
-
-      const result = (
-        await dao.setFavoriteIds(ws.id, ["a", "b", "a", "c", "b"])
-      )._unsafeUnwrap();
-
-      expect(result).toEqual(["a", "b", "c"]);
-    });
-
-    it("should filter out non-existent note IDs", async () => {
-      const ws = await createTestWorkspace();
-      await createTestNote(ws.id, "a");
-
-      const result = (
-        await dao.setFavoriteIds(ws.id, ["a", "nonexistent"])
-      )._unsafeUnwrap();
-
-      expect(result).toEqual(["a"]);
-    });
-
-    it("should handle an empty array", async () => {
-      const ws = await createTestWorkspace();
-
-      const result = (await dao.setFavoriteIds(ws.id, []))._unsafeUnwrap();
-
-      expect(result).toEqual([]);
-
-      const stored = (await dao.findById(ws.id))._unsafeUnwrap();
-      expect(stored.favoriteIds).toEqual([]);
-    });
-
-    it("should combine deduplication and existence filtering", async () => {
-      const ws = await createTestWorkspace();
-      await createTestNote(ws.id, "a");
-      await createTestNote(ws.id, "c");
-
-      const result = (
-        await dao.setFavoriteIds(ws.id, ["a", "b", "a", "c", "b", "d"])
-      )._unsafeUnwrap();
-
-      expect(result).toEqual(["a", "c"]);
     });
   });
 });

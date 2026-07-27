@@ -11,7 +11,6 @@ import { useCenteredLayout } from "@/features/layout/hooks/use-centered-layout";
 import { useEditorSettings } from "@/features/settings/hooks/use-settings";
 import { useAppSelector } from "@/features/store/hooks";
 import { useCurrentWorkspaceId } from "@/features/workspaces/hooks/use-workspace";
-import { EditorMode } from "../store/editor-slice";
 
 export function useEditorView(noteId: string, rootView: boolean = false) {
   const customizations = useAppSelector((s) =>
@@ -75,7 +74,6 @@ export function useEditorOptions() {
   const workspaceId = useCurrentWorkspaceId() ?? "";
   const indentSize = useEditorSettings().codeIndentSize;
   const { noteId } = use(EditorContext);
-  const mode = useAppSelector((s) => s.editor.mode);
   const imageConfig: ImageExtensionConfig = useMemo(
     () => ({
       saveArrayBuffer: async (buf, filetype) =>
@@ -133,12 +131,5 @@ export function useEditorOptions() {
     [noteId, setCharacterCount, setWordCount],
   );
 
-  return {
-    imageConfig,
-    indentSize,
-    handleContentChange,
-    onUpdate,
-    onCreate,
-    editable: mode === EditorMode.Edit,
-  };
+  return { imageConfig, indentSize, handleContentChange, onUpdate, onCreate };
 }

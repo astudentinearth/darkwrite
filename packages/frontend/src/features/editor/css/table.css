@@ -5,9 +5,7 @@
   --th-bg: var(--view-2);
   --td-bg: transparent;
 
-  /* :not(.dw-database-view *) keeps document table styling out of
-     embedded database views, which render their own tables */
-  th:not(.dw-database-view *) {
+  th {
     background-color: var(--th-bg);
     border: 1px solid var(--border);
     border-radius: 4px 4px 0 0;
@@ -15,7 +13,7 @@
     position: relative;
   }
 
-  td:not(.dw-database-view *) {
+  td {
     border: 1px solid var(--border);
     background-color: var(--td-bg);
     padding: 8px 6px;
@@ -68,7 +66,7 @@
     cursor: default !important;
   }
 
-  table:not(.dw-database-view *) {
+  table {
     margin-top: 1rem;
     margin-bottom: 0;
     border-collapse: collapse;

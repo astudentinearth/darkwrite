@@ -21,7 +21,10 @@ export const selectCurrentWorkspace = createSelector(
     workspaces[workspaceId],
 );
 
-export const selectLocalWorkspaces = selectAllWorkspaces;
+export const selectLocalWorkspaces = createSelector(
+  [selectAllWorkspaces],
+  (workspaces) => workspaces.filter((w) => w.config.syncMode === "offline"),
+);
 
 export const selectWorkspaceCount = createSelector(
   [selectAllWorkspaces],

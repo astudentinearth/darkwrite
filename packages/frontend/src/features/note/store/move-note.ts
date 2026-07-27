@@ -1,17 +1,37 @@
-import { dwErrAsync, isDescendant, type NoteDTO } from "@darkwrite/common";
+import {
+  dwErrAsync,
+  isDescendant,
+  type NoteDTO,
+  type ParentId,
+} from "@darkwrite/common";
 import { okAsync } from "neverthrow";
 import type { DragEvent } from "react";
 import { DarkwriteAPIClient } from "@/api/api-client";
 import { extractNoteDragData } from "@/features/dnd/datatransfer";
 import type { RootState } from "@/features/store/types";
 import { resultQueryFn } from "@/lib/query-result";
-import { selectNoteById } from "./note-selectors";
+import {
+  calculateOptimisticRankInLayer,
+  calculateRelativeOptimisticRank,
+} from "./note-rank-optimistic";
+import { selectNoteById, selectNotesByParentId } from "./note-selectors";
 import { updateNote, upsertNotes } from "./note-slice";
-import { NOTES_TAG_TYPE, notesApi } from "./notes-api";
+import { NOTES_TAG_TYPE, noteByParentIdTag, notesApi } from "./notes-api";
 
-export type MoveNoteArgs = {
+export type MoveNoteBelowArgs = {
   sourceNoteId: string;
-  parentId: string | null;
+  aboveNoteId: string;
+};
+
+/**
+ * Moves the note into a tree level without specifying
+ * an order relative to another note. This can also be used to
+ * move notes to start or end within the same tree level.
+ */
+export type MoveNoteIntoArgs = {
+  sourceNoteId: string;
+  destinationNoteId: ParentId;
+  placement: "inside-start" | "inside-end";
 };
 
 export function getMovingNote(e: DragEvent<HTMLElement>, state: RootState) {
@@ -23,13 +43,18 @@ export function getMovingNote(e: DragEvent<HTMLElement>, state: RootState) {
 
 export const moveNoteApi = notesApi.injectEndpoints({
   endpoints: (builder) => ({
-    moveNote: builder.mutation<NoteDTO, MoveNoteArgs>({
-      queryFn: resultQueryFn(({ sourceNoteId, parentId }: MoveNoteArgs) =>
-        DarkwriteAPIClient.note
-          .move({ sourceId: sourceNoteId, parentId })
-          .andThen(({ note }) =>
-            note ? okAsync(note) : dwErrAsync("Failed to move note"),
-          ),
+    moveInto: builder.mutation<NoteDTO, MoveNoteIntoArgs>({
+      queryFn: resultQueryFn(
+        ({ destinationNoteId, placement, sourceNoteId }: MoveNoteIntoArgs) =>
+          DarkwriteAPIClient.note
+            .move({
+              destinationId: destinationNoteId,
+              placement,
+              sourceId: sourceNoteId,
+            })
+            .andThen(({ note }) =>
+              note ? okAsync(note) : dwErrAsync("Failed to move note"),
+            ),
       ),
 
       async onQueryStarted(args, { dispatch, getState, queryFulfilled }) {
@@ -38,24 +63,40 @@ export const moveNoteApi = notesApi.injectEndpoints({
         if (!note) return;
 
         if (
-          args.parentId &&
           isDescendant(
-            args.parentId,
+            args.destinationNoteId ?? "",
             args.sourceNoteId,
             state["notes-slice"].entities,
           )
         ) {
+          // Prevent moving a note into its own descendant
           return;
         }
 
+        const childNotes = selectNotesByParentId(
+          state,
+          note.workspaceId,
+          args.destinationNoteId,
+        );
+
         const undoPatch: Partial<NoteDTO> = {
           parentId: note.parentId,
+          orderHint: note.orderHint,
         };
+
+        const newOrderHint = calculateOptimisticRankInLayer(
+          childNotes,
+          args.placement,
+          (id: string) => selectNoteById(state, id),
+        );
 
         dispatch(
           updateNote({
             id: args.sourceNoteId,
-            changes: { parentId: args.parentId },
+            changes: {
+              parentId: args.destinationNoteId,
+              orderHint: newOrderHint,
+            },
           }),
         );
 
@@ -79,8 +120,91 @@ export const moveNoteApi = notesApi.injectEndpoints({
         return [];
       },
     }),
+
+    moveBelow: builder.mutation<NoteDTO, MoveNoteBelowArgs>({
+      queryFn: resultQueryFn(
+        ({ aboveNoteId, sourceNoteId }: MoveNoteBelowArgs) =>
+          DarkwriteAPIClient.note
+            .move({
+              destinationId: aboveNoteId,
+              placement: "below",
+              sourceId: sourceNoteId,
+            })
+            .andThen(({ note }) =>
+              note ? okAsync(note) : dwErrAsync("Failed to move note"),
+            ),
+      ),
+
+      async onQueryStarted(args, { dispatch, getState, queryFulfilled }) {
+        const state = getState() as RootState;
+
+        const { aboveNoteId, sourceNoteId } = args;
+        const aboveNote = selectNoteById(state, aboveNoteId);
+        const sourceNote = selectNoteById(state, sourceNoteId);
+
+        if (!aboveNote || !sourceNote) return;
+        const siblings = selectNotesByParentId(
+          state,
+          aboveNote.workspaceId,
+          aboveNote.parentId,
+        );
+
+        const newOrderHint = calculateRelativeOptimisticRank(
+          aboveNoteId,
+          siblings,
+          (id: string) => selectNoteById(state, id),
+        );
+
+        const undoPatch: Partial<NoteDTO> = {
+          parentId: sourceNote.parentId,
+          orderHint: sourceNote.orderHint,
+        };
+
+        const changes: Partial<NoteDTO> = {
+          parentId: aboveNote.parentId,
+          orderHint: newOrderHint,
+        };
+
+        dispatch(
+          updateNote({
+            id: sourceNoteId,
+            changes,
+          }),
+        );
+
+        try {
+          const { data } = await queryFulfilled;
+          dispatch(upsertNotes([data]));
+        } catch {
+          dispatch(
+            updateNote({
+              id: sourceNoteId,
+              changes: undoPatch,
+            }),
+          );
+        }
+      },
+
+      invalidatesTags: (_result, error) => {
+        if (error) {
+          return [NOTES_TAG_TYPE];
+        }
+        return [
+          {
+            type: NOTES_TAG_TYPE,
+            // biome-ignore lint/style/noNonNullAssertion: error check
+            id: noteByParentIdTag(_result!.workspaceId, _result!.parentId),
+          },
+          {
+            type: NOTES_TAG_TYPE,
+            // biome-ignore lint/style/noNonNullAssertion: error check
+            id: noteByParentIdTag(_result!.workspaceId, _result!.id),
+          },
+        ];
+      },
+    }),
   }),
   overrideExisting: false,
 });
 
-export const { useMoveNoteMutation } = moveNoteApi;
+export const { useMoveIntoMutation, useMoveBelowMutation } = moveNoteApi;

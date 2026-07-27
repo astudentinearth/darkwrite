@@ -6,5 +6,4 @@ export default defineConfig({
   dbCredentials: {
     url: ":memory:",
   },
-  out: "./drizzle",
 });

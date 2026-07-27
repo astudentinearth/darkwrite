@@ -15,7 +15,6 @@ import { LinkView } from "../components/link-view";
 import { FileLinkExtension } from "../file-link/file-link-extension";
 import lowlight from "../lowlight";
 import { Block } from "../types";
-import { DatabaseViewNode } from "./database-view";
 import { KeymapFixer } from "./keymap-patcher";
 import { LinkToPage } from "./link-to-page";
 import TableExtensions from "./table/table-extension";
@@ -143,7 +142,6 @@ export const DefaultEditorExtensions = [
   horizontalRule,
   link,
   LinkToPage,
-  DatabaseViewNode,
   underline,
   KeymapFixer,
   textStyle,

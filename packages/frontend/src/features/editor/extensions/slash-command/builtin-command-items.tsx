@@ -2,7 +2,6 @@ import type { i18n } from "i18next";
 import {
   CheckSquare,
   Code,
-  Database,
   Heading1,
   Heading2,
   Heading3,
@@ -14,15 +13,11 @@ import {
   Paperclip,
   SquareMinus,
   Table,
-  Table2,
   Text,
   TextQuote,
 } from "lucide-react";
-import { use, useMemo } from "react";
+import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { useNoteActions } from "@/features/note/store/note-actions";
-import { useCurrentWorkspaceId } from "@/features/workspaces/hooks/use-workspace";
-import { EditorContext } from "../../store/editor-context";
 import { Block, type SlashCommandItem } from "../../types";
 import type { ImageExtensionConfig } from "../image/image-config";
 import { createImageNode } from "../image/image-upload-transaction";
@@ -35,9 +30,6 @@ export const useSlashCommand = (
     keyPrefix: "editor.slashCommand",
     i18n,
   });
-  const actions = useNoteActions();
-  const workspaceId = useCurrentWorkspaceId();
-  const { noteId } = use(EditorContext);
   const items: SlashCommandItem[] = useMemo(
     () => [
       {
@@ -260,56 +252,6 @@ export const useSlashCommand = (
         },
       },
       {
-        id: "builtin.database",
-        title: t("database"),
-        description: t("databaseDescription"),
-        keywords: [t("database"), "database", "db", "data", "grid"],
-        icon: <Database size={18} />,
-        command({ editor, range }) {
-          editor.chain().focus().deleteRange(range).run();
-          actions
-            .createDatabase({ parentId: noteId, workspaceId })
-            .then(({ data, error }) => {
-              if (!data) {
-                console.error("Failed to create database:", error);
-                return;
-              }
-              editor
-                .chain()
-                .focus()
-                .insertContent({
-                  type: Block.DatabaseView,
-                  attrs: { viewIds: data.viewMetadata.map((v) => v.id) },
-                })
-                .run();
-            });
-        },
-      },
-      {
-        id: "builtin.tableview",
-        title: t("databaseView.table.title"),
-        description: t("databaseView.table.description"),
-        keywords: [
-          t("databaseView.table.title"),
-          "table",
-          "view",
-          "database",
-          "db",
-        ],
-        icon: <Table2 size={18} />,
-        command({ editor, range }) {
-          editor
-            .chain()
-            .focus()
-            .deleteRange(range)
-            .insertContent({
-              type: Block.DatabaseView,
-              attrs: { viewIds: [] },
-            })
-            .run();
-        },
-      },
-      {
         id: "builtin.filelink",
         title: t("fileLink"),
         description: t("fileLinkDescription"),
@@ -328,7 +270,7 @@ export const useSlashCommand = (
         },
       },
     ],
-    [imageUploadConfig, t, actions, workspaceId, noteId],
+    [imageUploadConfig, t],
   );
   return { items };
 };

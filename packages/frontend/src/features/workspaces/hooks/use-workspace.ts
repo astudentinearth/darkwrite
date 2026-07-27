@@ -1,4 +1,3 @@
-import { panic } from "@darkwrite/common";
 import { useAppSelector } from "@/features/store/hooks";
 import {
   selectAllWorkspaces,
@@ -8,9 +7,7 @@ import {
 } from "../store/workspace-selectors";
 
 export function useCurrentWorkspaceId() {
-  const id = useAppSelector((s) => s.session.workspaceId);
-  if (!id) panic("useCurrentWorkspaceId was called in an invalid context.");
-  return id;
+  return useAppSelector((s) => s.session.workspaceId);
 }
 
 export function useCurrentWorkspace() {

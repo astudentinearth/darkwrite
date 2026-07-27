@@ -1,10 +1,12 @@
+import type { WorkspaceConfig } from "@/workspace-config";
+
 export interface WorkspaceDTO {
   id: string;
+  ownerId: string | null;
   name: string;
   iconUrl?: string | null;
   createdAt: string;
-  allNotesSortMode: "alphabetical" | "lastModified";
-  favoriteIds: string[];
+  config: WorkspaceConfig;
 }
 
 export interface WorkspaceResponseDTO {
