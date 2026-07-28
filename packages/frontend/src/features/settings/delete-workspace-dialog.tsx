@@ -12,7 +12,8 @@ import {
   Label,
 } from "@/components/ui";
 import notify from "../notifications/notify";
-import { useWorkspaceActions } from "../workspaces/store/workspace-actions";
+import { useAppDispatch } from "../store/hooks";
+import { deleteWorkspace } from "../workspaces/store/workspace.thunk";
 
 export type DeleteWorkspaceDialogProps = {
   workspace: WorkspaceDTO;
@@ -34,22 +35,20 @@ export function DeleteWorkspaceDialog({
   });
 
   const isConfirmed = confirmName === workspace.name;
-  const { deleteWorkspace } = useWorkspaceActions();
-
+  const dispatch = useAppDispatch();
+  const [working, setWorking] = useState(false);
   const handleOpenChange = (val: boolean) => {
     if (!val) setConfirmName("");
     onOpenChange(val);
   };
 
-  const handleDelete = async () => {
-    try {
-      await deleteWorkspace(workspace.id);
-      notify.success(t("successMessage"));
-      handleOpenChange(false);
-    } catch {
-      notify.error(t("errorMessage"));
-    }
-  };
+  const handleDelete = () =>
+    dispatch(deleteWorkspace(workspace.id))
+      .andTee(() => {
+        notify.success(t("successMessage"));
+        handleOpenChange(false);
+      })
+      .orTee(() => notify.error(t("errorMessage")));
 
   return (
     <AlertDialog open={open} onOpenChange={handleOpenChange}>
@@ -78,9 +77,13 @@ export function DeleteWorkspaceDialog({
           </Button>
           <Button
             variant="destructive"
-            disabled={!isConfirmed}
+            disabled={!isConfirmed || working}
             className="w-1/2"
-            onClick={handleDelete}
+            onClick={async () => {
+              setWorking(true);
+              await handleDelete();
+              setWorking(false);
+            }}
           >
             {t("delete")}
           </Button>

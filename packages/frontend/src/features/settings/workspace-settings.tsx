@@ -13,9 +13,9 @@ import { Button, Input, Label, Switch } from "@/components/ui";
 import WorkspaceIcon from "@/components/workspace-icon";
 import useBackup from "@/features/backup/hooks/use-backup";
 import { useWorkspaceExport } from "@/features/workspaces/hooks/use-workspace-export";
-import { useAppSelector } from "../store/hooks";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { useCurrentWorkspace } from "../workspaces/hooks/use-workspace";
-import { useUpdateWorkspaceMutation } from "../workspaces/store/workspace-api";
+import { updateWorkspace } from "../workspaces/store/workspace.thunk";
 import { selectWorkspaceCount } from "../workspaces/store/workspace-selectors";
 import { DeleteWorkspaceDialog } from "./delete-workspace-dialog";
 import EditWorkspaceDialog from "./edit-workspace-dialog";
@@ -29,14 +29,13 @@ export default function WorkspaceSettings() {
   const workspaceCount = useAppSelector((state) => selectWorkspaceCount(state));
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [update] = useUpdateWorkspaceMutation();
   const { t: tW } = useTranslation("translation", {
     keyPrefix: "sidebar.workspace",
   });
   const { t, i18n } = useTranslation();
-  const save = async (w: WorkspaceDTO) => {
-    update(w);
-    setEditDialogOpen(false);
+  const dispatch = useAppDispatch();
+  const save = (w: WorkspaceDTO) => {
+    dispatch(updateWorkspace(w.id, w)).map(() => setEditDialogOpen(false));
   };
   const settings = useSettings();
   const exporter = useWorkspaceExport();

@@ -17,7 +17,6 @@ import { settingsPersistenceMiddleware } from "../settings/store/settings-persis
 import { settingsSlice } from "../settings/store/settings-slice";
 import { themeSlice } from "../themes/store/theme-slice";
 import { updateApi } from "../update/store/update-api";
-import { workspaceApi } from "../workspaces/store/workspace-api";
 import { workspaceSlice } from "../workspaces/store/workspace-slice";
 
 export function createAppStore() {
@@ -32,7 +31,6 @@ export function createAppStore() {
       [themeSlice.name]: themeSlice.reducer,
       [updateApi.reducerPath]: updateApi.reducer,
       [workspaceSlice.name]: workspaceSlice.reducer,
-      [workspaceApi.reducerPath]: workspaceApi.reducer,
       [clientInfoApi.reducerPath]: clientInfoApi.reducer,
       [notesUiSlice.name]: notesUiSlice.reducer,
       [fileLinkApi.reducerPath]: fileLinkApi.reducer,
@@ -46,7 +44,6 @@ export function createAppStore() {
           notesApi.middleware,
           editorApi.middleware,
           updateApi.middleware,
-          workspaceApi.middleware,
           clientInfoApi.middleware,
           fileLinkApi.middleware,
         ),

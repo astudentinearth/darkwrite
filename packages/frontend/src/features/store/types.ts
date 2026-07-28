@@ -8,3 +8,5 @@ export type Selector<argType, retType> = (
   state: RootState,
   arg: argType,
 ) => retType;
+
+export type AppGetState = AppStore["getState"];

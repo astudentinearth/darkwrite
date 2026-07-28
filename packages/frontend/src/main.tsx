@@ -11,9 +11,10 @@ import { initalizePlatform } from "./lib/platform";
 import { ReactRootContainer } from "./react-root-helper";
 import store from "./store";
 
-const renderApp = async () => {
-  await correctWorkspaceState(store);
-  ReactRootContainer.root.render(<App store={store} />);
+const renderApp = () => {
+  correctWorkspaceState(store).map(() =>
+    ReactRootContainer.root.render(<App store={store} />),
+  );
 };
 
 const renderOnboarding = () => {

@@ -12,27 +12,33 @@ import {
   Input,
   Label,
 } from "@/components/ui";
+import { useAppDispatch } from "@/features/store/hooks";
 import { useWorkspaceManager } from "@/features/workspaces/hooks/use-workspace-manager";
-import { useCreateWorkspaceMutation } from "../store/workspace-api";
+import { createWorkspace } from "../store/workspace.thunk";
 
 export default function NewWorkspaceDialog(
   props: ControlledDialogProps & { children: ReactNode },
 ) {
   const [name, setName] = useState("");
-  const [create, { isLoading }] = useCreateWorkspaceMutation();
   const manager = useWorkspaceManager();
+  const dispatch = useAppDispatch();
+  const [isLoading, setLoading] = useState(false);
+
   const handleCreate = async () => {
-    const workspace = await create({
-      name,
-      config: getDefaultWorkspaceConfiguration(),
-    });
-    if (!workspace.data) {
+    setLoading(true);
+    const workspace = await dispatch(
+      createWorkspace({
+        name,
+        config: getDefaultWorkspaceConfiguration(),
+      }),
+    );
+    if (workspace.isErr()) {
       toast.error(
         `${t("sidebar.workspace.newWorkspaceError")}: ${workspace.error}`,
       );
       return;
     }
-    manager.switchWorkspace(workspace.data.id);
+    manager.switchWorkspace(workspace.value.workspace.id);
     setName("");
     props.onOpenChange(false);
   };
@@ -52,7 +58,7 @@ export default function NewWorkspaceDialog(
         />
         <div className="grid grid-cols-[1fr_1fr] gap-2">
           <Button
-            onClick={handleCreate}
+            onClick={() => handleCreate().finally(() => setLoading(false))}
             className="transition-opacity duration-75"
             disabled={name.trim().length < 1 || isLoading}
           >
