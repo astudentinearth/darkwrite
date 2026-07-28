@@ -80,6 +80,7 @@ async function main() {
   const rootDir = process.cwd();
 
   await runPnpmScript("build:common");
+  await runPnpmScript("build:i18n");
 
   await installDependencies(); // Reinstall after building common to ensure all dependencies are correctly linked
   await runPnpmScript("build:frontend");

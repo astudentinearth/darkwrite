@@ -21,7 +21,6 @@ src
 - features -> feature specific components, hooks, state management, etc.
 - context -> non-specific global stores
 - lib -> non-specific frontend modules
-- locales -> i18n translations
 - test -> vitest setup code and mocks
 
 # Frontend architecture
@@ -80,9 +79,9 @@ This is the modern declarative API that was introduced in recent Tiptap releases
 - useTiptap() and useCurrentEditor() are both valid, but useCurrentEditor() is preferred for now
 
 # Translations
-Translations are managed using i18next. All translation files are located under `src/locales`. Each language has its own JSON file containing the translations for that language.
+Translations are managed using i18next. Translation sources live in the `@darkwrite/i18n` workspace package (`packages/i18n/locales/<lang>/translation.po`) as gettext .po files with dotted msgids (e.g. `msgid "sidebar.button.newPage"`). The package build (`pnpm --filter=@darkwrite/i18n build`) compiles them to nested i18next JSON, which the frontend imports as `@darkwrite/i18n/locales/<lang>/translation.json`. Do not import code from `@darkwrite/i18n` — it only exports translation resources.
 
-When adding new translations, ensure that the keys are consistent across all language files. Use descriptive keys that clearly indicate the purpose of the translation.
+When adding new translations, add the msgid/msgstr pair to every language's .po file and rebuild the i18n package. Use descriptive keys that clearly indicate the purpose of the translation.
 
 # Dependencies
 If a new dependency is absolutely required to solve a problem, ask the user before proceeding with installation.

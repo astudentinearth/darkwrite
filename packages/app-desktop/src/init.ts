@@ -17,6 +17,7 @@ import { db, initDatabase, migrateDatabaseOrExit } from "./db";
 import { initDevtools } from "./debug/server";
 import { EmbedAPI } from "./embed/embed.handler";
 import { EmbedService } from "./embed/embed.service";
+import { initI18n, setLanguage } from "./i18n";
 import { setupAPI } from "./ipc/api";
 import { SettingsAPI } from "./ipc/settings.handler";
 import { EmbedFileStore } from "./lib/blob-store";
@@ -139,7 +140,9 @@ export async function init() {
     desktop: DesktopApiBridge,
     fileLink: FileLinkAPI(fileLinkService),
     backup: BackupApiBridge,
-    settings: SettingsAPI(settingsService),
+    settings: SettingsAPI(settingsService, (settings) => {
+      if (setLanguage(settings.client.language)) initAppMenu();
+    }),
     embed: EmbedAPI(embedService),
     workspace: WorkspaceAPI(workspaceService),
     note: NoteAPI(noteService, noteQueryService, documentService),
@@ -157,6 +160,9 @@ export async function init() {
     .initializeDefaultWorkspace()
     .orElse(bail)
     .andThen(settingsService.loadFromFile);
+
+  // must happen after settings are loaded and before the menu is built
+  initI18n(settingsService.getSettings().client.language);
 
   // We change the session data directory to avoid polluting user data any further
   app.setPath("sessionData", Paths.SESSION_DATA_DIR);

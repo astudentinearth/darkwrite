@@ -1,3 +1,8 @@
+# Unreleased
+## 🛠️ Technical changes
+- Move translations to a separate `@darkwrite/i18n` package, using gettext (.po) files
+- Menu bar items are now localized
+
 # 1.2.3-beta.1
 ## 🌟 Features
 - Add center view
