@@ -1,5 +1,7 @@
-import { Trash, Trash2, Undo2 } from "lucide-react";
-import { memo, useMemo, useState } from "react";
+import { IconTrash } from "@tabler/icons-react";
+import { useVirtualizer } from "@tanstack/react-virtual";
+import { Trash, Undo2 } from "lucide-react";
+import { memo, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   Button,
@@ -9,12 +11,16 @@ import {
   PopoverTrigger,
 } from "@/components/ui";
 import { TextTooltip } from "@/components/ui/tooltip";
+import { useDragState } from "@/features/dnd/use-drag-state";
 import { navigateToNote } from "@/features/navigation/navigator";
 import { SidebarItem } from "@/features/sidebar/sidebar-item";
+import { useAppStore } from "@/features/store/hooks";
 import { cn, getNoteIcon } from "@/lib/utils";
 import { useNoteById } from "../hooks/use-note-by-id";
 import { useTrash } from "../hooks/use-trash";
+import { getMovingNote } from "../store/move-note";
 import { useNoteActions } from "../store/note-actions";
+import { NoteTitle } from "./note-title";
 import { TrashMenu } from "./trash-menu";
 
 type TrashItemProps = {
@@ -33,14 +39,14 @@ const TrashItem = memo(function ({ noteId, className }: TrashItemProps) {
       tabIndex={0}
       onClick={() => navigateToNote(noteId)}
       className={cn(
-        "grid grid-cols-[24px_1fr_32px_32px] gap-1 items-center pr-1 pl-2 py-1 rounded-lg hover:bg-secondary/50 transition-colors duration-100",
+        "grid grid-cols-[24px_1fr_24px_24px] gap-1 items-center pr-1 pl-2 py-1 rounded-lg hover:bg-background/50 dark:hover:bg-secondary/50 transition-colors duration-100",
         className,
       )}
     >
       <span>{getNoteIcon(note.icon)}</span>
-      <span className="whitespace-nowrap text-ellipsis overflow-hidden text-start">
+      <NoteTitle className="whitespace-nowrap text-ellipsis overflow-hidden text-start">
         {note.title}
-      </span>
+      </NoteTitle>
       <TextTooltip text={t("sidebar.trash.restore")}>
         <Button
           aria-label={t("sidebar.trash.restore")}
@@ -49,7 +55,7 @@ const TrashItem = memo(function ({ noteId, className }: TrashItemProps) {
             restoreFromTrash(noteId);
           }}
           variant={"ghost"}
-          className="w-8 h-8 p-0"
+          className="w-6 h-6 p-0"
         >
           <Undo2 className="size-4" />
         </Button>
@@ -62,7 +68,7 @@ const TrashItem = memo(function ({ noteId, className }: TrashItemProps) {
             permanentlyDeleteNote(noteId);
           }}
           variant={"destructive"}
-          className="w-8 h-8 p-0 bg-transparent text-destructive hover:bg-destructive/25 border-none"
+          className="w-6 h-6 p-0 bg-transparent text-destructive hover:bg-destructive/25 border-none"
         >
           <Trash className="size-4" />
         </Button>
@@ -71,45 +77,107 @@ const TrashItem = memo(function ({ noteId, className }: TrashItemProps) {
   );
 });
 
+function TrashList({ query }: { query: string }) {
+  const { noteIds } = useTrash(query);
+  const parentRef = useRef<HTMLDivElement>(null);
+  const { t } = useTranslation();
+
+  const virtual = useVirtualizer({
+    count: noteIds.length,
+    estimateSize: () => 32,
+    getScrollElement: () => parentRef.current,
+    getItemKey: (i) => noteIds[i],
+    overscan: 5,
+  });
+
+  useEffect(() => {
+    virtual.scrollToIndex(0);
+  }, [query]);
+
+  if (noteIds.length === 0)
+    return (
+      <span className="p-4 flex justify-center items-center">
+        {t("search.noResult")}
+      </span>
+    );
+
+  return (
+    <div
+      ref={parentRef}
+      className="h-full overflow-y-auto scroll-view pl-1 pr-1 gutter-stable pt-0 pb-1 w-full"
+    >
+      <div style={{ height: virtual.getTotalSize(), position: "relative" }}>
+        {virtual.getVirtualItems().map((v) => (
+          <div
+            key={v.key}
+            style={{
+              height: v.size,
+              transform: `translateY(${v.start}px)`,
+            }}
+            className="absolute top-0 left-0 w-full"
+          >
+            <TrashItem noteId={v.key.toString()} />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export function TrashWidget() {
   const [query, setQuery] = useState("");
+
+  const {
+    isDraggingOver,
+    onDragEnter,
+    onDragLeave,
+    onDragOver,
+    setIsDraggingOver,
+  } = useDragState();
+
   const { t } = useTranslation();
-  const { noteIds } = useTrash(query);
-  const items = useMemo(() => {
-    return noteIds.map((id) => <TrashItem noteId={id} key={id} />);
-  }, [noteIds]);
+  const store = useAppStore();
+  const actions = useNoteActions();
 
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <SidebarItem>
-          <Trash2 size={16} />
-          <span>{t("sidebar.button.trash")}</span>
+        <SidebarItem
+          onDragEnter={onDragEnter}
+          onDragLeave={onDragLeave}
+          onDragOver={onDragOver}
+          onDrop={(e) => {
+            setIsDraggingOver(false);
+            const note = getMovingNote(e, store.getState());
+            if (note) actions.moveToTrash(note.id);
+          }}
+          className={cn("col-span-2", isDraggingOver && "bg-destructive/20")}
+        >
+          <IconTrash size={18} />
+          <span>
+            {t(
+              isDraggingOver
+                ? "sidebar.notes.contextmenu.trash"
+                : "sidebar.button.trash",
+            )}
+          </span>
         </SidebarItem>
       </PopoverTrigger>
       <PopoverContent
         side="right"
         sticky="always"
-        className="w-80 ml-2 grid grid-rows-[auto_1fr] bg-view-2/80 top-highlight max-h-[60vh] p-0 mb-2"
+        className="w-80 ml-2 grid grid-rows-[auto_1fr] bg-view-2/80 top-highlight max-h-[60vh] min-h-120 p-0 mb-2"
       >
-        <div className="p-2 flex gap-2">
+        <div className="p-1 flex gap-0.5">
           <Input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder={t("sidebar.trash.search")}
-            className="bg-secondary/50 top-highlight border-border/25"
+            className="bg-secondary/50 rounded-lg top-highlight border-border/25"
           />
           <TrashMenu />
         </div>
-        <div className="h-full overflow-y-auto flex flex-col scroll-view pl-2 pr-1 gutter-stable pt-0 pb-2 w-full">
-          {items.length > 0 ? (
-            items
-          ) : (
-            <span className="p-4 flex items-center justify-center text-foreground/70 font-medium">
-              {t("search.noResult")}
-            </span>
-          )}
-        </div>
+        <TrashList query={query} />
       </PopoverContent>
     </Popover>
   );

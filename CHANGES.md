@@ -1,4 +1,7 @@
 # Unreleased
+## ✨ Improvements and fixes
+- Significantly improve trash performance
+
 ## 🛠️ Technical changes
 - Move translations to a separate `@darkwrite/i18n` package, using gettext (.po) files
 - Menu bar items are now localized
