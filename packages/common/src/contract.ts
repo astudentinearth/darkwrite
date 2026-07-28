@@ -41,6 +41,8 @@ export type NoReturn = ResultAsync<void, never>;
 export interface INoteAPI {
   create: (dto: CreateNoteDTO) => ApiResult<NoteResponseDTO>;
   update: (id: string, dto: UpdateNoteDTO) => ApiResult<NoteResponseDTO>;
+
+  /** @deprecated */
   move: (dto: MoveNoteDTO) => ApiResult<NoteResponseDTO>;
 
   /**
@@ -53,13 +55,13 @@ export interface INoteAPI {
   delete: (id: string) => ApiResult<void>;
 
   /**
-   * @deprecated This API is way too broad and should be avoided in favor of more specific queries. This can be removed in future releases.
    * @param workspaceId
-   * @returns
+   * @returns all notes in a workspace.
    */
   getAllByWorkspaceId: (workspaceId: string) => ApiResult<NotesResponseDTO>;
 
   /**
+   * @deprecated
    * @param workspaceId
    * @param parentId
    * @returns notes that belong to the given parent (folder) in the specified workspace and that are NOT trashed.
@@ -70,6 +72,7 @@ export interface INoteAPI {
   ) => ApiResult<NotesResponseDTO>;
 
   /**
+   * @deprecated
    * @param workspaceId
    * @param parentId
    * @returns favorites in the given workspace, provided they are not trashed.
@@ -77,6 +80,7 @@ export interface INoteAPI {
   getFavorites: (workspaceId: string) => ApiResult<NotesResponseDTO>;
 
   /**
+   * @deprecated
    * Returns notes that are in the trash for the given workspace.
    * @param workspaceId
    */
@@ -84,6 +88,7 @@ export interface INoteAPI {
 
   /**
    *
+   * @deprecated
    * @param noteId
    * @returns the parent tree of the note in sorted order.
    */
@@ -94,6 +99,7 @@ export interface INoteAPI {
 
   /**
    * Favorites a note.
+   * @deprecated
    * @param noteId
    * @param aboveNoteId undefined for list end, null for list start
    * @returns
@@ -103,14 +109,18 @@ export interface INoteAPI {
     aboveNoteId?: string | null,
   ) => ApiResult<NoteResponseDTO>;
 
+  /** @deprecated */
   unfavorite: (noteId: string) => ApiResult<NoteResponseDTO>;
 
   search: (workspaceId: string, query: string) => ApiResult<NotesResponseDTO>;
+
+  /** @deprecated */
   getRecents: (workspaceId: string) => ApiResult<NotesResponseDTO>;
 
   getById: (id: string) => ApiResult<NoteResponseDTO>;
   getDocument: (id: string) => ApiResult<NoteContentResponseDTO>;
   setDocument: (id: string, serializedDocument: string) => ApiResult<void>;
+  /** @deprecated */
   duplicate: (id: string) => ApiResult<NoteResponseDTO>;
   clearTrash: (workspaceId: string) => ApiResult<void>;
   /** @returns the file path of the exported PDF, or undefined if the export was cancelled. */

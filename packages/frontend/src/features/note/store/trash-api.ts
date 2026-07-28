@@ -17,6 +17,7 @@ export function trashedByNoteIdTag(noteId: string) {
 
 export const trashApi = notesApi.injectEndpoints({
   endpoints: (builder) => ({
+    /** @deprecated */
     getTrashed: builder.query<NoteDTO[], string>({
       providesTags: (result, _error, workspaceId) =>
         result

@@ -6,15 +6,19 @@ import Onboarding from "./features/onboarding/onboarding";
 import "./globals.css";
 import "./i18n";
 import { flushPendingEditorSaves } from "./features/editor/store/editor-middleware";
-import { correctWorkspaceState, initializeUserPrefs } from "./init";
+import {
+  correctWorkspaceState,
+  initializeUserPrefs,
+  loadInitialNotes,
+} from "./init";
 import { initalizePlatform } from "./lib/platform";
 import { ReactRootContainer } from "./react-root-helper";
 import store from "./store";
 
 const renderApp = () => {
-  correctWorkspaceState(store).map(() =>
-    ReactRootContainer.root.render(<App store={store} />),
-  );
+  correctWorkspaceState(store)
+    .andTee(() => ReactRootContainer.root.render(<App store={store} />))
+    .andThen(loadInitialNotes);
 };
 
 const renderOnboarding = () => {

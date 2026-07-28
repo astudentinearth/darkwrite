@@ -4,6 +4,11 @@ import { DarkwriteAPIClient } from "./api/api-client";
 import { setupAppMenuEvents } from "./features/app-menu/app-menu-bus";
 import { setupContextMenuEvents } from "./features/context-menu/menu-event-bus";
 import { setupLayoutEvents } from "./features/layout/layout-store";
+import {
+  fetchNotesInWorkspace,
+  loadNotesInCurrentWorkspace,
+} from "./features/note/store/note.thunk";
+import { switchWorkspace } from "./features/session/session.thunk";
 import { appSessionSlice } from "./features/session/session-slice";
 import { settingsSlice } from "./features/settings/store/settings-slice";
 import type { AppStore } from "./features/store/redux";
@@ -23,10 +28,9 @@ export const correctWorkspaceState = (store: AppStore) =>
       !state.workspaceId ||
       workspaces.findIndex((w) => w.id === state.workspaceId) === -1
     ) {
-      if (workspaces.length > 0)
-        store.dispatch(
-          appSessionSlice.actions.switchWorkspace(workspaces[0].id),
-        );
+      if (workspaces.length > 0) {
+        store.dispatch(switchWorkspace(workspaces[0].id));
+      }
     }
     return okAsync(store);
   });
@@ -46,6 +50,9 @@ function setupLanguageSync(store: AppStore) {
   // converge existing users whose language only lives in localStorage
   syncLanguage(i18n.resolvedLanguage ?? i18n.language);
 }
+
+export const loadInitialNotes = (store: AppStore) =>
+  store.dispatch(loadNotesInCurrentWorkspace()).map(() => store);
 
 export function initializeUserPrefs(store: AppStore) {
   return DarkwriteAPIClient.settings
