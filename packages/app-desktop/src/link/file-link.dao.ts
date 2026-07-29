@@ -26,8 +26,11 @@ export function FileLinkDAO(tx: TxResolver) {
     ).andThen((row) => (row ? ok(row) : dwErr("File link not found.")));
   }
 
+  const findAll = () => dbResult(() => tx().select().from(linkedFileTable));
+
   return {
     create,
     findById,
+    findAll,
   };
 }

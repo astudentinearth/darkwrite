@@ -49,10 +49,13 @@ export function FileLinkAPI(
       .orElse(() => ok()),
   );
 
+  const getAll = handler(() => fileLinkService.getAll());
+
   return {
     getById,
     createFromPath,
     openById,
     pickAndCreate,
+    getAll,
   };
 }

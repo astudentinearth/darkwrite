@@ -9,6 +9,7 @@ import { flushPendingEditorSaves } from "./features/editor/store/editor-middlewa
 import {
   correctWorkspaceState,
   initializeUserPrefs,
+  loadInitialFileLinks,
   loadInitialNotes,
 } from "./init";
 import { initalizePlatform } from "./lib/platform";
@@ -18,6 +19,7 @@ import store from "./store";
 const renderApp = () => {
   correctWorkspaceState(store)
     .andTee(() => ReactRootContainer.root.render(<App store={store} />))
+    .andThen(loadInitialFileLinks)
     .andThen(loadInitialNotes);
 };
 

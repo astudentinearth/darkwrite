@@ -116,8 +116,6 @@ export function EmbedService(db: DatabaseType, blobStore: IEmbedStore) {
   const getEmbedById = (id: string) => embedDao.findById(id);
   const getEmbedFileUrl = (id: string) => blobStore.getUrl(id);
 
-  const getAll = () => embedDao.findAll();
-
   return {
     createFromFilePath,
     createFromArrayBuffer,

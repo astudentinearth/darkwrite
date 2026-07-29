@@ -35,20 +35,6 @@ export function EmbedDAO(tx: TxResolver) {
     ).andThen((row) => (row ? ok(row) : dwErr("Embed not found.")));
   }
 
-  function findAll(): DwResultAsync<EmbedRow[]> {
-    return dbResult(() => tx().select().from(embedTable));
-  }
-
-  function deleteById(id: string): DwResultAsync<void> {
-    return dbResult(() =>
-      tx().delete(embedTable).where(eq(embedTable.id, id)),
-    ).andThen(() => ok());
-  }
-
-  function deleteEmbed(embed: EmbedRow): DwResultAsync<void> {
-    return deleteById(embed.id);
-  }
-
   function findAllByFileSize(fileSize: number): DwResultAsync<EmbedRow[]> {
     return dbResult(() =>
       tx().select().from(embedTable).where(hasFileSize(fileSize)),
@@ -59,9 +45,6 @@ export function EmbedDAO(tx: TxResolver) {
     create,
     update,
     findById,
-    findAll,
     findAllByFileSize,
-    delete: deleteEmbed,
-    deleteById,
   };
 }

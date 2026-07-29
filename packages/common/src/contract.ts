@@ -1,7 +1,3 @@
-// This file contains the common interfaces for frontend API clients.
-// Electron-side handlers should implement these directly and expose it via the API bridge.
-// Clients talking to a cloud instance shall make the appropriate network requests instead.
-// Cloud-specific code should be kept separate from Electron to ensure browser portability.
 import type { ResultAsync } from "neverthrow";
 import type {
   DarkwriteDesktopClientInfo,
@@ -107,7 +103,6 @@ export interface IWorkspaceAPI {
 }
 
 export interface IEmbedAPI {
-  // HTTP clients should build a multipart request using this DTO for compatibility
   create: (dto: CreateEmbedDTO) => ApiResult<EmbedResponseDTO>;
   getById: (id: string) => ApiResult<EmbedResponseDTO>;
   getEncoded: (ids: string[]) => ApiResult<Record<string, string>>;
@@ -124,7 +119,6 @@ export interface IThemeAPI {
   importTheme: () => ApiResult<void>;
 }
 
-/** APIs for triggering native context menu actions. These are only relevant in the Electron environment, but defining them here allows us to keep the frontend code that interacts with it platform-agnostic. In the browser, these should not be implemented, and the browser's own context menu should be used. */
 export interface IContextMenuAPI {
   copy: () => NoReturn;
   cut: () => NoReturn;
@@ -191,7 +185,6 @@ export interface DesktopEmbedAPI {
   getById: (id: string) => ApiResult<EmbedResponseDTO>;
   getEncoded: (ids: string[]) => ApiResult<Record<string, string>>;
   download: (id: string) => NoReturn;
-  getAll: () => ApiResult<Embed[]>;
 }
 
 export type DarkwriteIPCBridge = {

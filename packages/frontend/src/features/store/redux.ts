@@ -1,8 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { fileLinkApi } from "../editor/file-link/file-link-api";
 import { editorApi } from "../editor/store/editor-api";
 import editorMiddleware from "../editor/store/editor-middleware";
 import { editorSlice } from "../editor/store/editor-slice";
+import { fileLinkSlice } from "../link/store/file-link.slice";
 import { notesSlice } from "../note/store/note-slice";
 import { notesApi } from "../note/store/notes-api";
 import { notesUiSlice } from "../note/store/notes-ui-slice";
@@ -33,7 +33,7 @@ export function createAppStore() {
       [workspaceSlice.name]: workspaceSlice.reducer,
       [clientInfoApi.reducerPath]: clientInfoApi.reducer,
       [notesUiSlice.name]: notesUiSlice.reducer,
-      [fileLinkApi.reducerPath]: fileLinkApi.reducer,
+      [fileLinkSlice.name]: fileLinkSlice.reducer,
     },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware()
@@ -45,7 +45,6 @@ export function createAppStore() {
           editorApi.middleware,
           updateApi.middleware,
           clientInfoApi.middleware,
-          fileLinkApi.middleware,
         ),
     preloadedState: {
       [appSessionSlice.name]: loadSessionState() || DEFAULT_SESSION_STATE,

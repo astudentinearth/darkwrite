@@ -4,6 +4,7 @@ import { DarkwriteAPIClient } from "./api/api-client";
 import { setupAppMenuEvents } from "./features/app-menu/app-menu-bus";
 import { setupContextMenuEvents } from "./features/context-menu/menu-event-bus";
 import { setupLayoutEvents } from "./features/layout/layout-store";
+import { loadFileLinks } from "./features/link/store/file-link.thunk";
 import { loadNotesInCurrentWorkspace } from "./features/note/store/note.thunk";
 import { switchWorkspace } from "./features/session/session.thunk";
 import { settingsSlice } from "./features/settings/store/settings-slice";
@@ -49,6 +50,9 @@ function setupLanguageSync(store: AppStore) {
 
 export const loadInitialNotes = (store: AppStore) =>
   store.dispatch(loadNotesInCurrentWorkspace()).map(() => store);
+
+export const loadInitialFileLinks = (store: AppStore) =>
+  store.dispatch(loadFileLinks()).map(() => store);
 
 export function initializeUserPrefs(store: AppStore) {
   return DarkwriteAPIClient.settings

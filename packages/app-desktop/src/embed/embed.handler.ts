@@ -107,16 +107,11 @@ export function EmbedAPI(
       ),
   );
 
-  const getAll = handler(() =>
-    embedService.getAll().map((embeds) => embeds.map(embedToDto)),
-  );
-
   return {
     getById,
     getEncoded,
     download,
     createFromArrayBuffer,
     createFromLocalFile,
-    getAll,
   };
 }
