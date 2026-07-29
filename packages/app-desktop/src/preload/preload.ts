@@ -8,9 +8,6 @@ import {
 import { contextBridge, ipcRenderer, webUtils } from "electron";
 import { AppMenuEvent, WindowEvent } from "@/types/window-events";
 
-// import { DarkwriteElectronAPI } from "../ipc/api";
-// import { DarkwriteAPI, IPCHandler } from "../ipc/handler";
-
 /**
  * Wraps around ipcRenderer.invoke() to type APIs
  * @template T Expected return type of invocation. This method's return type will be a Promise of that type.
@@ -36,7 +33,7 @@ export const initalizeAPI = async () => {
   const apiObject = await ipcRenderer.invoke(
     "$darkwrite.build-preload-api-object",
   );
-  // et the list of IPC channels, which are derived from the object's keys
+  // get the list of IPC channels, which are derived from the object's keys
   const handlerKeys = recursiveKeys(apiObject, (val) => val === true);
   const obj = {};
   for (const keyPath of handlerKeys) {

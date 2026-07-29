@@ -1,7 +1,7 @@
 import data from "@emoji-mart/data";
 import { init } from "emoji-mart";
 import App from "./App";
-import { APIClientMode, DarkwriteAPIClient } from "./api/api-client";
+import { DarkwriteAPIClient } from "./api/api-client";
 import Onboarding from "./features/onboarding/onboarding";
 import "./globals.css";
 import "./i18n";
@@ -29,7 +29,7 @@ const initialize = async () => {
   if (window.isElectron) {
     await window.initPreload();
   }
-  DarkwriteAPIClient.initialize(APIClientMode.LOCAL);
+  DarkwriteAPIClient.initialize();
   window.addEventListener("beforeunload", flushPendingEditorSaves);
   init({ data });
   initializeUserPrefs(store)
