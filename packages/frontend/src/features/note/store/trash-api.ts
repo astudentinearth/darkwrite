@@ -17,34 +17,6 @@ export function trashedByNoteIdTag(noteId: string) {
 
 export const trashApi = notesApi.injectEndpoints({
   endpoints: (builder) => ({
-    /** @deprecated */
-    getTrashed: builder.query<NoteDTO[], string>({
-      providesTags: (result, _error, workspaceId) =>
-        result
-          ? [
-              {
-                type: NOTES_TAG_TYPE,
-                id: trashedByWorkspaceIdTag(workspaceId),
-              },
-            ]
-          : [],
-
-      queryFn: resultQueryFn(
-        (workspaceId: string) =>
-          DarkwriteAPIClient.note.getTrashed(workspaceId),
-        (r) => Object.values(r.notes),
-      ),
-
-      async onQueryStarted(_args, { dispatch, queryFulfilled }) {
-        try {
-          const { data } = await queryFulfilled;
-          dispatch(upsertNotes(data));
-        } catch {
-          /* empty */
-        }
-      },
-    }),
-
     moveToTrash: builder.mutation<NoteDTO, string>({
       queryFn: resultQueryFn((noteId: string) =>
         DarkwriteAPIClient.note
@@ -149,7 +121,6 @@ export const trashApi = notesApi.injectEndpoints({
 });
 
 export const {
-  useGetTrashedQuery,
   useDeleteMutation,
   useMoveToTrashMutation,
   useRestoreFromTrashMutation,

@@ -8,17 +8,10 @@ import {
 } from "@/components/ui/collapsible";
 import { cn } from "@/lib/utils";
 import { FavoritesView } from "../note/components/favorites";
-import { useGetFavoritesByWorkspaceIdQuery } from "../note/store/notes-api";
 import { useSessionActions } from "../session/session-actions";
 import { useFavoritesViewOpen } from "../session/session-hooks";
 import { useCurrentWorkspaceId } from "../workspaces/hooks/use-workspace";
 import { SidebarItem } from "./sidebar-item";
-
-function PrefetchFavorites() {
-  const workspaceId = useCurrentWorkspaceId();
-  useGetFavoritesByWorkspaceIdQuery(workspaceId ?? skipToken);
-  return null;
-}
 
 export default function FavoritesContainer() {
   const { t } = useTranslation("translation", { keyPrefix: "sidebar" });
@@ -26,7 +19,6 @@ export default function FavoritesContainer() {
   const { setFavoritesViewOpen } = useSessionActions();
   return (
     <>
-      <PrefetchFavorites />
       <Collapsible open={open} onOpenChange={setFavoritesViewOpen}>
         <CollapsibleTrigger asChild>
           <SidebarItem className="w-full gap-1">
