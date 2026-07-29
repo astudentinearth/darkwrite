@@ -32,7 +32,6 @@
   "dependencies": {
     "@darkwrite/common": "workspace:",
     "@darkwrite/i18n": "workspace:",
-    "@electron-toolkit/preload": "^3.0.2",
     "@electron-toolkit/utils": "^3.0.0",
     "@libsql/client": "^0.17.0",
     "drizzle-orm": "^0.45.1",
