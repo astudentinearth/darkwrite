@@ -5,7 +5,7 @@ import {
   type NewNoteRow,
   type NoteRow,
   note as notesTable,
-  type Workspace,
+  type WorkspaceRow,
 } from "@/db/schema";
 import { resolveTx } from "@/db/transactional";
 import { DocumentService } from "@/service/document.service";
@@ -21,7 +21,7 @@ import { type INoteService, NoteService } from "./note.service";
 
 describe("note service tests", () => {
   const db: DatabaseType = createTestDatabase();
-  let workspace: Workspace;
+  let workspace: WorkspaceRow;
   let noteDAO: NoteDAOInstance;
   let noteService: INoteService;
   const documentStore = MockDocumentStore();

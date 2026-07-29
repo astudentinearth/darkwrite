@@ -10,7 +10,7 @@ import {
   type NewNoteRow,
   type NoteRow,
   note as notesTable,
-  type Workspace,
+  type WorkspaceRow,
 } from "@/db/schema";
 import { resolveTx } from "@/db/transactional";
 import { WorkspaceDAO } from "@/workspace/workspace.dao";
@@ -26,7 +26,7 @@ describe("NoteDAO", () => {
     await applySqlMigrations(db);
     noteDao = NoteDAO(() => resolveTx(db));
 
-    const workspace: Workspace = (
+    const workspace: WorkspaceRow = (
       await WorkspaceDAO(() => resolveTx(db)).create({
         name: "Test Workspace",
         createdAt: new Date(),

@@ -14,12 +14,8 @@ import type {
   CreateWorkspaceDTO,
   UpdateWorkspaceDTO,
 } from "./dto/request/workspace.request";
-import type { EmbedResponseDTO } from "./dto/response/embed.response";
 import type { ThemesResponseDTO } from "./dto/response/theme.response";
-import type {
-  WorkspaceResponseDTO,
-  WorkspacesResponseDTO,
-} from "./dto/response/workspace.response";
+import type { EmbedResponseDTO } from "./embed";
 import type { Font } from "./font";
 import type { FileLinkMetadata } from "./link";
 import type {
@@ -33,6 +29,7 @@ import type {
 import type { PageSize } from "./pdf";
 import type { DwError, DwResultAsync } from "./result";
 import type { DarkwriteUserSettings } from "./settings";
+import type { WorkspaceResponseDTO, WorkspacesResponseDTO } from "./workspace";
 
 export type ApiResult<T> = ResultAsync<T, DwError>;
 export type NoReturn = ResultAsync<void, never>;
