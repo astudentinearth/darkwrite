@@ -39,8 +39,6 @@ const isTrashed = () => eq(notesTable.isTrashed, true);
 const isFavorite = () => eq(notesTable.isFavorite, true);
 const inWorkspace = (workspaceId: string) =>
   eq(notesTable.workspaceId, workspaceId);
-const inDatabase = (databaseId: string) =>
-  eq(notesTable.databaseId, databaseId);
 
 export type OrderKeyDto = { start: string; end: string };
 
@@ -86,45 +84,10 @@ export function NoteDAO(tx: TxResolver) {
     ).andThen((row) => (row ? ok(row) : dwErr("Note not found.")));
   }
 
-  function findAll(): DwResultAsync<Note[]> {
-    return dbResult(async () => tx().select().from(notesTable));
-  }
-
   function findAllByWorkspaceId(workspaceId: string): DwResultAsync<Note[]> {
     return dbResult(
       async () =>
         await tx().select().from(notesTable).where(inWorkspace(workspaceId)),
-    );
-  }
-
-  function findAllByDatabaseId(databaseId: string): DwResultAsync<Note[]> {
-    return dbResult(async () =>
-      tx().select().from(notesTable).where(inDatabase(databaseId)),
-    );
-  }
-
-  function findAllByParentId(
-    workspaceId: string,
-    parentId: string | null,
-  ): DwResultAsync<Note[]> {
-    return dbResult(async () =>
-      tx()
-        .select()
-        .from(notesTable)
-        .where(and(inWorkspace(workspaceId), withParent(parentId))),
-    );
-  }
-
-  function findAllByParentIdSortAsc(
-    workspaceId: string,
-    parentId: ParentId,
-  ): DwResultAsync<Note[]> {
-    return dbResult(async () =>
-      tx()
-        .select()
-        .from(notesTable)
-        .where(and(inWorkspace(workspaceId), withParent(parentId)))
-        .orderBy(asc(notesTable.orderHint)),
     );
   }
 
@@ -212,20 +175,6 @@ export function NoteDAO(tx: TxResolver) {
     );
   }
 
-  function findLastNoteInFavorites(
-    workspaceId: string,
-  ): DwResultAsync<Note | undefined> {
-    return dbResult(async () => {
-      const result = await tx()
-        .select()
-        .from(notesTable)
-        .where(and(inWorkspace(workspaceId), isFavorite(), notTrashed()))
-        .orderBy(desc(notesTable.favoriteOrderHint))
-        .limit(1);
-      return result.at(0);
-    });
-  }
-
   function isDescendant(
     potentialChildId: ParentId,
     potentialParentId: ParentId,
@@ -296,34 +245,6 @@ export function NoteDAO(tx: TxResolver) {
     );
   }
 
-  function getRecentlyModifiedNotes(
-    workspaceId: string,
-    limit: number,
-  ): DwResultAsync<Note[]> {
-    return dbResult(async () =>
-      tx()
-        .select()
-        .from(notesTable)
-        .where(and(inWorkspace(workspaceId), notTrashed()))
-        .orderBy(desc(notesTable.modifiedAt))
-        .limit(limit),
-    );
-  }
-
-  function resolveParentTree(noteId: string): DwResultAsync<Note[]> {
-    return dbResult(async () => {
-      const tree: Note[] = [];
-      let currentId: string | null = noteId;
-      while (currentId) {
-        const note: Note | null = (await findById(currentId)).unwrapOr(null);
-        if (!note) break;
-        tree.push(note);
-        currentId = note.parentId;
-      }
-      return tree.reverse();
-    });
-  }
-
   function noteRightAfter(
     targetId: string,
     workspaceId: string,
@@ -354,26 +275,18 @@ export function NoteDAO(tx: TxResolver) {
     update,
     updateAll,
     findById,
-    findAll,
     findAllByWorkspaceId,
-    findAllByDatabaseId,
-    findAllByParentId,
-    findAllByParentIdSortAsc,
     deleteMany,
     deleteById,
     delete: deleteNote,
     exists,
     findFirstNoteInLayer,
     findLastNoteInLayer,
-    findAllFavorites,
     findAllTrashed,
-    findLastNoteInFavorites,
     isDescendant,
     computeOrderKeysForLayer,
     computeOrderKeysForFavorites,
     searchByTitle,
-    getRecentlyModifiedNotes,
-    resolveParentTree,
     noteRightAfter,
   };
 }

@@ -1,15 +1,11 @@
 import type { DarkwriteUserSettings } from "@darkwrite/common";
-import { okAsync, ResultAsync } from "neverthrow";
+import { okAsync } from "neverthrow";
 import { DarkwriteAPIClient } from "./api/api-client";
 import { setupAppMenuEvents } from "./features/app-menu/app-menu-bus";
 import { setupContextMenuEvents } from "./features/context-menu/menu-event-bus";
 import { setupLayoutEvents } from "./features/layout/layout-store";
-import {
-  fetchNotesInWorkspace,
-  loadNotesInCurrentWorkspace,
-} from "./features/note/store/note.thunk";
+import { loadNotesInCurrentWorkspace } from "./features/note/store/note.thunk";
 import { switchWorkspace } from "./features/session/session.thunk";
-import { appSessionSlice } from "./features/session/session-slice";
 import { settingsSlice } from "./features/settings/store/settings-slice";
 import type { AppStore } from "./features/store/redux";
 import { initializeFonts, initializeThemes } from "./features/themes/init";

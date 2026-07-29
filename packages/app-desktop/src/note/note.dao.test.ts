@@ -174,28 +174,6 @@ describe("NoteDAO", () => {
       expect(found._unsafeUnwrapErr()).not.toBeUndefined();
     });
 
-    it("findAll should return notes from all workspaces", async () => {
-      const anotherWorkspace = (
-        await WorkspaceDAO(() => resolveTx(db)).create({
-          name: "Another Workspace",
-          createdAt: new Date(),
-        })
-      )._unsafeUnwrap();
-      const noteInCurrentWorkspaceId = randomUUID();
-      const noteInAnotherWorkspaceId = randomUUID();
-
-      await createNote(noteInCurrentWorkspaceId);
-      await saveNote({
-        ...(await buildNote(noteInAnotherWorkspaceId)),
-        workspaceId: anotherWorkspace.id,
-      });
-
-      const allIds = (await noteDao.findAll())._unsafeUnwrap().map((n) => n.id);
-
-      expect(allIds).toContain(noteInCurrentWorkspaceId);
-      expect(allIds).toContain(noteInAnotherWorkspaceId);
-    });
-
     it("findAllByWorkspaceId should return only notes from the given workspace", async () => {
       const anotherWorkspace = (
         await WorkspaceDAO(() => resolveTx(db)).create({
@@ -231,79 +209,6 @@ describe("NoteDAO", () => {
 
       expect(existingResult).toBe(true);
       expect(missingResult).toBe(false);
-    });
-  });
-
-  describe("findAllByParentId, findAllByParentIdSortAsc", () => {
-    it("findAllByParentId should return only children of the given parent in the workspace", async () => {
-      const parentId = randomUUID();
-      const childAId = randomUUID();
-      const childBId = randomUUID();
-      const siblingWithDifferentParentId = randomUUID();
-
-      await createNote(parentId);
-      await createNote(childAId, parentId);
-      await createNote(childBId, parentId);
-      await createNote(siblingWithDifferentParentId);
-
-      const children = await noteDao.findAllByParentId(workspaceId, parentId);
-      const childIds = children._unsafeUnwrap().map((n) => n.id);
-
-      expect(childIds).toContain(childAId);
-      expect(childIds).toContain(childBId);
-      expect(childIds).not.toContain(siblingWithDifferentParentId);
-    });
-
-    it("findAllByParentId should return root notes when parentId is null", async () => {
-      const rootId = randomUUID();
-      const parentId = randomUUID();
-      const childId = randomUUID();
-
-      await createNote(rootId);
-      await createNote(parentId);
-      await createNote(childId, parentId);
-
-      const roots = await noteDao.findAllByParentId(workspaceId, null);
-      const rootIds = roots._unsafeUnwrap().map((n) => n.id);
-
-      expect(rootIds).toContain(rootId);
-      expect(rootIds).toContain(parentId);
-      expect(rootIds).not.toContain(childId);
-    });
-
-    it("findAllByParentIdSortAsc should sort children by orderHint ascending", async () => {
-      const parentId = randomUUID();
-      await createNote(parentId);
-
-      const firstRank = Rank.default();
-      const secondRank = firstRank.next();
-      const thirdRank = secondRank.next();
-
-      const firstId = randomUUID();
-      const secondId = randomUUID();
-      const thirdId = randomUUID();
-
-      await saveNote({
-        ...(await buildNote(secondId, parentId)),
-        orderHint: secondRank.get(),
-      });
-      await saveNote({
-        ...(await buildNote(thirdId, parentId)),
-        orderHint: thirdRank.get(),
-      });
-      await saveNote({
-        ...(await buildNote(firstId, parentId)),
-        orderHint: firstRank.get(),
-      });
-
-      const sorted = await noteDao.findAllByParentIdSortAsc(
-        workspaceId,
-        parentId,
-      );
-      const sortedIds = sorted._unsafeUnwrap().map((n) => n.id);
-      const expectedOrder = [firstId, secondId, thirdId];
-
-      expect(sortedIds).toEqual(expectedOrder);
     });
   });
 
@@ -374,80 +279,9 @@ describe("NoteDAO", () => {
       expect(last).not.toBeUndefined();
       expect(last?.id).toBe(expectedLastId);
     });
-
-    it("findLastNoteInFavorites should return the favorite with highest favoriteOrderHint and not trashed", async () => {
-      const firstFavoriteRank = Rank.default();
-      const secondFavoriteRank = firstFavoriteRank.next();
-      const thirdFavoriteRank = secondFavoriteRank.next();
-
-      const expectedId = randomUUID();
-      const trashedHighestFavoriteId = randomUUID();
-
-      await saveNote({
-        ...(await buildNote(randomUUID())),
-        isFavorite: true,
-        favoriteOrderHint: firstFavoriteRank.get(),
-      });
-      await saveNote({
-        ...(await buildNote(expectedId)),
-        isFavorite: true,
-        favoriteOrderHint: secondFavoriteRank.get(),
-      });
-      await saveNote({
-        ...(await buildNote(trashedHighestFavoriteId)),
-        isFavorite: true,
-        isTrashed: true,
-        favoriteOrderHint: thirdFavoriteRank.get(),
-      });
-
-      const lastFavorite = (
-        await noteDao.findLastNoteInFavorites(workspaceId)
-      )._unsafeUnwrap();
-
-      expect(lastFavorite).not.toBeUndefined();
-      expect(lastFavorite?.id).toBe(expectedId);
-    });
   });
 
-  describe("findAllFavorites, findAllTrashed", () => {
-    it("findAllFavorites should return only non-trashed favorites sorted ascending", async () => {
-      const lowRank = Rank.default();
-      const highRank = lowRank.next();
-
-      const firstExpectedId = randomUUID();
-      const secondExpectedId = randomUUID();
-      const notFavoriteId = randomUUID();
-      const trashedFavoriteId = randomUUID();
-
-      await saveNote({
-        ...(await buildNote(secondExpectedId)),
-        isFavorite: true,
-        favoriteOrderHint: highRank.get(),
-      });
-      await saveNote({
-        ...(await buildNote(firstExpectedId)),
-        isFavorite: true,
-        favoriteOrderHint: lowRank.get(),
-      });
-      await saveNote({
-        ...(await buildNote(notFavoriteId)),
-        isFavorite: false,
-      });
-      await saveNote({
-        ...(await buildNote(trashedFavoriteId)),
-        isFavorite: true,
-        isTrashed: true,
-      });
-
-      const favorites = await noteDao.findAllFavorites(workspaceId);
-      const favoriteIds = favorites._unsafeUnwrap().map((n) => n.id);
-      const expectedOrder = [firstExpectedId, secondExpectedId];
-
-      expect(favoriteIds).toEqual(expectedOrder);
-      expect(favoriteIds).not.toContain(notFavoriteId);
-      expect(favoriteIds).not.toContain(trashedFavoriteId);
-    });
-
+  describe("findAllTrashed", () => {
     it("findAllTrashed should return trashed notes sorted by trashedAt ascending", async () => {
       const earlyDate = new Date("2024-01-01T00:00:00.000Z");
       const lateDate = new Date("2024-01-02T00:00:00.000Z");

@@ -12,7 +12,6 @@ import {
   type NotesResponseDTO,
   okVoid,
   type PageSize,
-  type ParentId,
   type UpdateNoteDTO,
   UpdateNoteDTOSchema,
   validateSchema,
@@ -65,20 +64,12 @@ export function NoteAPI(
     noteQueryService.getAllByWorkspaceId(workspaceId).map(aggregateResponse),
   );
 
-  const getFavorites = handler((workspaceId: string) =>
-    noteQueryService.getFavorites(workspaceId).map(aggregateResponse),
-  );
-
   const favorite = handler((noteId: string, aboveNoteId?: string | null) =>
     noteService.favorite(noteId, aboveNoteId).map(singleResponse),
   );
 
   const unfavorite = handler((noteId: string) =>
     noteService.unfavorite(noteId).map(singleResponse),
-  );
-
-  const getTrashed = handler((wId: string) =>
-    noteQueryService.getTrashed(wId).map(aggregateResponse),
   );
 
   const search = handler((wId: string, query: string) =>
@@ -90,12 +81,6 @@ export function NoteAPI(
   );
   const restoreFromTrash = handler((id: string) =>
     noteService.restoreFromTrash(id).map(singleResponse),
-  );
-  const getRecents = handler((wId: string) =>
-    noteQueryService.getRecents(wId).map(aggregateResponse),
-  );
-  const getByParentId = handler((wId: string, pId: ParentId) =>
-    noteQueryService.getByParentId(wId, pId).map(aggregateResponse),
   );
   const getById = handler((id: string) =>
     noteQueryService.getById(id).map(singleResponse),
@@ -125,12 +110,6 @@ export function NoteAPI(
         () => noteService.setModificationDate(id, new Date()).orElse(okVoid), // unimportant side effect
       )
       .map(() => {}),
-  );
-
-  const getParentTree = handler((id: string) =>
-    noteQueryService
-      .getParentTree(id)
-      .map((notes) => ({ parents: notes.map(noteToDto) })),
   );
 
   const clearTrash = handler((wId: string) =>
@@ -189,21 +168,16 @@ export function NoteAPI(
     create,
     delete: deleteNote,
     getAllByWorkspaceId,
-    getFavorites,
     favorite,
-    getTrashed,
     search,
     moveToTrash,
     restoreFromTrash,
-    getRecents,
-    getByParentId,
     getById,
     update,
     move,
     duplicate,
     getDocument,
     setDocument,
-    getParentTree,
     clearTrash,
     export: saveExportedNote,
     exportPdf: saveToPDF,

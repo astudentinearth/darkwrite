@@ -1,5 +1,4 @@
 import { dwErr } from "@darkwrite/common";
-import { err } from "neverthrow";
 import { DarkwriteAPIClient } from "@/api/api-client";
 import type { AppDispatch, AppGetState } from "@/features/store/types";
 import { getCurrentWorkspaceId } from "@/features/workspaces/store/workspace.thunk";

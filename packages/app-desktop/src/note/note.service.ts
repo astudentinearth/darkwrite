@@ -8,7 +8,6 @@ import {
   type UpdateNoteDTO,
 } from "@darkwrite/common";
 import { err, ok, okAsync, type Result, ResultAsync } from "neverthrow";
-import { DatabaseDAO } from "@/database/database.dao";
 import type { DatabaseType } from "@/db";
 import type { NewNote, Note } from "@/db/schema";
 import { resolveTx, transactional } from "@/db/transactional";
@@ -65,7 +64,6 @@ export function NoteService(
 ) {
   const noteDAO = NoteDAO(() => resolveTx(db));
   const workspaceDAO = WorkspaceDAO(() => resolveTx(db));
-  const databaseDAO = DatabaseDAO(() => resolveTx(db));
 
   const assertNotDescendant = (result: boolean | "CIRCULAR") =>
     result === "CIRCULAR" || result === true
@@ -228,11 +226,7 @@ export function NoteService(
 
   const update = (id: string, dto: UpdateNoteDTO) =>
     transactional(
-      () =>
-        (dto.databaseId
-          ? databaseDAO.findById(dto.databaseId).andThen(() => okAsync())
-          : okAsync()
-        ).andThen(() => noteDAO.update({ id, modifiedAt: new Date(), ...dto })),
+      () => noteDAO.update({ id, modifiedAt: new Date(), ...dto }),
       db,
     );
 

@@ -1,4 +1,3 @@
-import { skipToken } from "@reduxjs/toolkit/query";
 import { ChevronRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import {
@@ -10,7 +9,6 @@ import { cn } from "@/lib/utils";
 import { FavoritesView } from "../note/components/favorites";
 import { useSessionActions } from "../session/session-actions";
 import { useFavoritesViewOpen } from "../session/session-hooks";
-import { useCurrentWorkspaceId } from "../workspaces/hooks/use-workspace";
 import { SidebarItem } from "./sidebar-item";
 
 export default function FavoritesContainer() {

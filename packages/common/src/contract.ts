@@ -60,40 +60,6 @@ export interface INoteAPI {
    */
   getAllByWorkspaceId: (workspaceId: string) => ApiResult<NotesResponseDTO>;
 
-  /**
-   * @deprecated
-   * @param workspaceId
-   * @param parentId
-   * @returns notes that belong to the given parent (folder) in the specified workspace and that are NOT trashed.
-   */
-  getByParentId: (
-    workspaceId: string,
-    parentId: ParentId,
-  ) => ApiResult<NotesResponseDTO>;
-
-  /**
-   * @deprecated
-   * @param workspaceId
-   * @param parentId
-   * @returns favorites in the given workspace, provided they are not trashed.
-   */
-  getFavorites: (workspaceId: string) => ApiResult<NotesResponseDTO>;
-
-  /**
-   * @deprecated
-   * Returns notes that are in the trash for the given workspace.
-   * @param workspaceId
-   */
-  getTrashed: (workspaceId: string) => ApiResult<NotesResponseDTO>;
-
-  /**
-   *
-   * @deprecated
-   * @param noteId
-   * @returns the parent tree of the note in sorted order.
-   */
-  getParentTree: (noteId: string) => ApiResult<ParentTreeResponseDTO>;
-
   moveToTrash: (noteId: string) => ApiResult<NoteResponseDTO>;
   restoreFromTrash: (noteId: string) => ApiResult<NoteResponseDTO>;
 
@@ -113,9 +79,6 @@ export interface INoteAPI {
   unfavorite: (noteId: string) => ApiResult<NoteResponseDTO>;
 
   search: (workspaceId: string, query: string) => ApiResult<NotesResponseDTO>;
-
-  /** @deprecated */
-  getRecents: (workspaceId: string) => ApiResult<NotesResponseDTO>;
 
   getById: (id: string) => ApiResult<NoteResponseDTO>;
   getDocument: (id: string) => ApiResult<NoteContentResponseDTO>;
