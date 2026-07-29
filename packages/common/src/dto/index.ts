@@ -1,5 +1,4 @@
 export * from "./request/note.request";
-export * from "./response/note.response";
 export type FileImportResult = {
   /** Type of `content` field */
   type: "json" | "text" | "html";

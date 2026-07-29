@@ -8,15 +8,7 @@ import type {
   UpdateServerResponse,
 } from "./client";
 import type { NativeContextMenuData } from "./context-menu";
-import type {
-  CreateNoteDTO,
-  MoveNoteDTO,
-  NoteContentResponseDTO,
-  NoteResponseDTO,
-  NotesResponseDTO,
-  ParentTreeResponseDTO,
-  UpdateNoteDTO,
-} from "./dto";
+import type { CreateNoteDTO, MoveNoteDTO, UpdateNoteDTO } from "./dto";
 import type { CreateEmbedDTO } from "./dto/request/embed.request";
 import type {
   CreateWorkspaceDTO,
@@ -30,7 +22,14 @@ import type {
 } from "./dto/response/workspace.response";
 import type { Font } from "./font";
 import type { FileLinkMetadata } from "./link";
-import type { NoteExportFormat, NoteImportResult, ParentId } from "./note";
+import type {
+  NoteContentResponseDTO,
+  NoteExportFormat,
+  NoteImportResult,
+  NoteResponseDTO,
+  NotesResponseDTO,
+  ParentId,
+} from "./note";
 import type { PageSize } from "./pdf";
 import type { DwError, DwResultAsync } from "./result";
 import type { DarkwriteUserSettings } from "./settings";
