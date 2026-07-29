@@ -9,13 +9,13 @@ import {
 } from "@darkwrite/common";
 import { err, ok, okAsync, type Result, ResultAsync } from "neverthrow";
 import type { DatabaseType } from "@/db";
-import type { NewNote, Note } from "@/db/schema";
+import type { NewNoteRow, NoteRow } from "@/db/schema";
 import { resolveTx, transactional } from "@/db/transactional";
 import type { IDocumentService } from "@/service/document.service";
 import { WorkspaceDAO } from "@/workspace/workspace.dao";
 import { NoteDAO, type OrderKeyDto } from "./note.dao";
 
-function buildNewNote(dto: CreateNoteDTO, { end }: OrderKeyDto): NewNote {
+function buildNewNote(dto: CreateNoteDTO, { end }: OrderKeyDto): NewNoteRow {
   const { title, workspaceId, databaseId, icon, parentId } = dto;
   return {
     title,
@@ -37,7 +37,7 @@ function buildDuplicate({
   workspaceId,
   propertyValues,
   parentId,
-}: Note): NewNote {
+}: NoteRow): NewNoteRow {
   return {
     title: `${title} (copy)`,
     icon,
@@ -74,7 +74,7 @@ export function NoteService(
       : ok();
 
   /** @internal */
-  function canMoveBelow(source: Note, dest: Note) {
+  function canMoveBelow(source: NoteRow, dest: NoteRow) {
     if (source.isTrashed || dest.isTrashed)
       return dwErrAsync(
         "Could not move note.",
@@ -87,7 +87,7 @@ export function NoteService(
   }
 
   /** @internal */
-  function canMoveInto(source: Note, dest: Note | null) {
+  function canMoveInto(source: NoteRow, dest: NoteRow | null) {
     if (!dest) return okAsync();
     if (source.isTrashed || dest.isTrashed)
       return dwErrAsync(
@@ -101,7 +101,7 @@ export function NoteService(
   }
 
   /** @internal */
-  function computeBelowRank(dest: Note) {
+  function computeBelowRank(dest: NoteRow) {
     return noteDAO
       .noteRightAfter(dest.id, dest.workspaceId, "orderHint")
       .andThen((nextNote) => {
@@ -185,7 +185,7 @@ export function NoteService(
       db,
     );
 
-  const moveBelow = (source: Note, destination: Note) =>
+  const moveBelow = (source: NoteRow, destination: NoteRow) =>
     transactional(
       () =>
         canMoveBelow(source, destination)
@@ -201,8 +201,8 @@ export function NoteService(
     );
 
   const moveInto = (
-    source: Note,
-    destination: Note | null,
+    source: NoteRow,
+    destination: NoteRow | null,
     placement: "inside-start" | "inside-end",
   ) =>
     transactional(
@@ -267,7 +267,7 @@ export function NoteService(
           )
           .map(
             ([duplicate, keys]) =>
-              ({ ...duplicate, orderHint: keys.end }) satisfies NewNote,
+              ({ ...duplicate, orderHint: keys.end }) satisfies NewNoteRow,
           )
           .andThen(noteDAO.create)
           .andThen((n) =>

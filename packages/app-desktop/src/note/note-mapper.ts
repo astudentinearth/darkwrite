@@ -1,7 +1,7 @@
 import type { NoteDTO } from "@darkwrite/common";
-import type { Note } from "@/db/schema";
+import type { NoteRow } from "@/db/schema";
 
-export function noteToDto(note: Note): NoteDTO {
+export function noteToDto(note: NoteRow): NoteDTO {
   const { createdAt, modifiedAt, propertyValues, trashedAt, ...rest } = note;
   return {
     ...rest,
@@ -12,7 +12,7 @@ export function noteToDto(note: Note): NoteDTO {
   };
 }
 
-export function dtoToNote(dto: NoteDTO): Note {
+export function dtoToNote(dto: NoteDTO): NoteRow {
   const { createdAt, modifiedAt, propertyValues, trashedAt, ...rest } = dto;
 
   return {
@@ -26,7 +26,7 @@ export function dtoToNote(dto: NoteDTO): Note {
   };
 }
 
-export function notesToDto(notes: Note[]) {
+export function notesToDto(notes: NoteRow[]) {
   return notes
     .map((n) => noteToDto(n))
     .reduce(

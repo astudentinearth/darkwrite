@@ -1,9 +1,9 @@
 import type { NoteDTO } from "@darkwrite/common";
-import type { Note } from "@/db/schema";
+import type { NoteRow } from "@/db/schema";
 import { noteToDto } from "./note-mapper";
 
 /** @deprecated moved */
-export function mapNotesToDTO(notes: Note[]): Record<string, NoteDTO> {
+export function mapNotesToDTO(notes: NoteRow[]): Record<string, NoteDTO> {
   return notes
     .map((n) => noteToDto(n))
     .reduce(

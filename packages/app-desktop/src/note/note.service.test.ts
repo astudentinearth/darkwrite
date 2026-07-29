@@ -2,8 +2,8 @@ import { type ParentId, Rank } from "@darkwrite/common";
 import { ResultAsync } from "neverthrow";
 import { beforeAll, beforeEach, describe, expect, it } from "vitest";
 import {
-  type NewNote,
-  type Note,
+  type NewNoteRow,
+  type NoteRow,
   note as notesTable,
   type Workspace,
 } from "@/db/schema";
@@ -50,8 +50,8 @@ describe("note service tests", () => {
     title: string,
     orderHint: string,
     parentId: ParentId = null,
-  ): Promise<Note> {
-    const note: NewNote = {
+  ): Promise<NoteRow> {
+    const note: NewNoteRow = {
       title,
       workspaceId: workspace.id,
       orderHint,
@@ -93,7 +93,7 @@ describe("note service tests", () => {
       )._unsafeUnwrap();
 
       const rankA = Rank.default().get();
-      const trashedInOther: NewNote = {
+      const trashedInOther: NewNoteRow = {
         title: "Trashed in other",
         workspaceId: otherWorkspace.id,
         orderHint: "",

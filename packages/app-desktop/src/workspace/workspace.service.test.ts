@@ -2,7 +2,7 @@ import {
   dwErrAsync,
   getDefaultWorkspaceConfiguration,
 } from "@darkwrite/common";
-import { type NewNote, workspace } from "@/db/schema";
+import { type NewNoteRow, workspace } from "@/db/schema";
 import { resolveTx } from "@/db/transactional";
 import type { IDocumentStore } from "@/lib/document-store";
 import { NoteDAO } from "@/note/note.dao";
@@ -78,7 +78,7 @@ describe("delete workspace", () => {
   }
 
   async function createNote(workspaceId: string, title = "test note") {
-    const note: NewNote = {
+    const note: NewNoteRow = {
       title,
       workspaceId,
       orderHint: "a",

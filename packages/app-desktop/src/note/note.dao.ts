@@ -20,10 +20,10 @@ import {
 import { ok, ResultAsync } from "neverthrow";
 import { dbResult } from "@/db/db-result";
 import {
-  type NewNote,
-  type Note,
+  type NewNoteRow,
+  type NoteRow,
   note as notesTable,
-  type PatchNote,
+  type PatchNoteRow,
 } from "@/db/schema";
 import type { TxResolver } from "@/db/transactional";
 import { noteToDto } from "./note-mapper";
@@ -43,7 +43,7 @@ const inWorkspace = (workspaceId: string) =>
 export type OrderKeyDto = { start: string; end: string };
 
 export function NoteDAO(tx: TxResolver) {
-  function create(note: NewNote): DwResultAsync<Note> {
+  function create(note: NewNoteRow): DwResultAsync<NoteRow> {
     return dbResult(
       async () => (await tx().insert(notesTable).values(note).returning())[0],
     ).andThen((row) =>
@@ -56,7 +56,7 @@ export function NoteDAO(tx: TxResolver) {
     );
   }
 
-  function update(note: PatchNote): DwResultAsync<Note> {
+  function update(note: PatchNoteRow): DwResultAsync<NoteRow> {
     return dbResult(async () =>
       (
         await tx()
@@ -68,11 +68,11 @@ export function NoteDAO(tx: TxResolver) {
     ).andThen((row) => (row ? ok(row) : dwErr("Note not found")));
   }
 
-  function updateAll(notes: PatchNote[]): DwResultAsync<Note[]> {
+  function updateAll(notes: PatchNoteRow[]): DwResultAsync<NoteRow[]> {
     return ResultAsync.combine(notes.map((n) => update(n)));
   }
 
-  function findById(id: string): DwResultAsync<Note> {
+  function findById(id: string): DwResultAsync<NoteRow> {
     return dbResult(
       async () =>
         await tx()
@@ -84,7 +84,7 @@ export function NoteDAO(tx: TxResolver) {
     ).andThen((row) => (row ? ok(row) : dwErr("Note not found.")));
   }
 
-  function findAllByWorkspaceId(workspaceId: string): DwResultAsync<Note[]> {
+  function findAllByWorkspaceId(workspaceId: string): DwResultAsync<NoteRow[]> {
     return dbResult(
       async () =>
         await tx().select().from(notesTable).where(inWorkspace(workspaceId)),
@@ -103,7 +103,7 @@ export function NoteDAO(tx: TxResolver) {
     });
   }
 
-  function deleteNote(note: Note): DwResultAsync<void> {
+  function deleteNote(note: NoteRow): DwResultAsync<void> {
     return dbResult(async () => {
       await tx().delete(notesTable).where(eq(notesTable.id, note.id));
     });
@@ -125,7 +125,7 @@ export function NoteDAO(tx: TxResolver) {
   function findFirstNoteInLayer(
     workspaceId: string,
     parentId: ParentId,
-  ): DwResultAsync<Note | undefined> {
+  ): DwResultAsync<NoteRow | undefined> {
     return dbResult(async () => {
       const result = await tx()
         .select()
@@ -141,7 +141,7 @@ export function NoteDAO(tx: TxResolver) {
   function findLastNoteInLayer(
     workspaceId: string,
     parentId: ParentId,
-  ): DwResultAsync<Note | undefined> {
+  ): DwResultAsync<NoteRow | undefined> {
     return dbResult(async () => {
       const result = await tx()
         .select()
@@ -155,7 +155,7 @@ export function NoteDAO(tx: TxResolver) {
     });
   }
 
-  function findAllFavorites(workspaceId: string): DwResultAsync<Note[]> {
+  function findAllFavorites(workspaceId: string): DwResultAsync<NoteRow[]> {
     return dbResult(async () =>
       tx()
         .select()
@@ -165,7 +165,7 @@ export function NoteDAO(tx: TxResolver) {
     );
   }
 
-  function findAllTrashed(workspaceId: string): DwResultAsync<Note[]> {
+  function findAllTrashed(workspaceId: string): DwResultAsync<NoteRow[]> {
     return dbResult(async () =>
       tx()
         .select()
@@ -230,7 +230,7 @@ export function NoteDAO(tx: TxResolver) {
   function searchByTitle(
     workspaceId: string,
     query: string,
-  ): DwResultAsync<Note[]> {
+  ): DwResultAsync<NoteRow[]> {
     return dbResult(async () =>
       tx()
         .select()
@@ -249,7 +249,7 @@ export function NoteDAO(tx: TxResolver) {
     targetId: string,
     workspaceId: string,
     sortBy: "orderHint" | "favoriteOrderHint" = "orderHint",
-  ): DwResultAsync<Note | undefined> {
+  ): DwResultAsync<NoteRow | undefined> {
     const target = tx()
       .select({ [sortBy]: notesTable[sortBy] })
       .from(notesTable)

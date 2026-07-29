@@ -1,7 +1,7 @@
 import type { EmbedDTO } from "@darkwrite/common";
-import type { Embed } from "@/db/schema";
+import type { EmbedRow } from "@/db/schema";
 
-export function embedToDto(embed: Embed, url: string): EmbedDTO {
+export function embedToDto(embed: EmbedRow, url: string): EmbedDTO {
   const {
     id,
     ownerId,

@@ -3,7 +3,7 @@ import { readFile } from "node:fs/promises";
 import log from "electron-log";
 import { okAsync, ResultAsync } from "neverthrow";
 import type { DatabaseType } from "@/db";
-import type { Embed, NewEmbed } from "@/db/schema";
+import type { EmbedRow, NewEmbedRow } from "@/db/schema";
 import { resolveTx, transactional } from "@/db/transactional";
 import { EmbedDAO } from "@/embed/embed.dao";
 import { WorkspaceDAO } from "@/workspace/workspace.dao";
@@ -47,7 +47,7 @@ export function EmbedService(db: DatabaseType, blobStore: IEmbedStore) {
           ownerId: null,
           uploadedAt: new Date(),
           workspaceId: null,
-        }) satisfies Embed,
+        }) satisfies EmbedRow,
     );
 
   const createFromFilePath = (filePath: string, workspaceId: string) =>
@@ -94,7 +94,7 @@ export function EmbedService(db: DatabaseType, blobStore: IEmbedStore) {
               uploadedAt: new Date(),
               displayName: Date.now().toString(),
               fileName: `${id}`,
-            } satisfies NewEmbed;
+            } satisfies NewEmbedRow;
           })
           .andThen((e) =>
             findFirstDuplicate(e.fileSize, buf).map((duplicate) => ({

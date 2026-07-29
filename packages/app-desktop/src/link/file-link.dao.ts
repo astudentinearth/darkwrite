@@ -3,20 +3,20 @@ import { eq } from "drizzle-orm";
 import { ok } from "neverthrow";
 import { dbResult } from "@/db/db-result";
 import {
-  type LinkedFile,
+  type LinkedFileRow,
   linkedFile as linkedFileTable,
-  type NewLinkedFile,
+  type NewLinkedFileRow,
 } from "@/db/schema";
 import type { TxResolver } from "@/db/transactional";
 
 export function FileLinkDAO(tx: TxResolver) {
-  function create(link: NewLinkedFile): DwResultAsync<LinkedFile> {
+  function create(link: NewLinkedFileRow): DwResultAsync<LinkedFileRow> {
     return dbResult(() =>
       tx().insert(linkedFileTable).values(link).returning().get(),
     );
   }
 
-  function findById(id: string): DwResultAsync<LinkedFile> {
+  function findById(id: string): DwResultAsync<LinkedFileRow> {
     return dbResult(() =>
       tx()
         .select()

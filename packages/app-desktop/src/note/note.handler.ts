@@ -22,7 +22,7 @@ import {
   showSaveDialog,
   whenDialogCancelled,
 } from "@/api/dialog";
-import type { Note } from "@/db/schema";
+import type { NoteRow } from "@/db/schema";
 import { readFileUtf8, writeBinaryFile, writeFileUtf8 } from "@/lib/fs";
 import printToPdf from "../lib/print-to-pdf";
 import type { IDocumentService } from "../service/document.service";
@@ -31,10 +31,10 @@ import type { INoteService } from "./note.service";
 import { notesToDto, noteToDto } from "./note-mapper";
 import type { INoteQueryService } from "./note-query.service";
 
-const aggregateResponse = (notes: Note[]) =>
+const aggregateResponse = (notes: NoteRow[]) =>
   ({ notes: notesToDto(notes) }) satisfies NotesResponseDTO;
 
-const singleResponse = (note: Note) =>
+const singleResponse = (note: NoteRow) =>
   ({ note: noteToDto(note) }) satisfies NoteResponseDTO;
 
 const importTypeMap: Record<string, NoteExportFormat> = {

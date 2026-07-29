@@ -7,8 +7,8 @@ import {
   type DatabaseType,
 } from "@/db";
 import {
-  type NewNote,
-  type Note,
+  type NewNoteRow,
+  type NoteRow,
   note as notesTable,
   type Workspace,
 } from "@/db/schema";
@@ -44,7 +44,7 @@ describe("NoteDAO", () => {
   const buildNote = async (
     id: string,
     parentId: string | null = null,
-  ): Promise<Note> => {
+  ): Promise<NoteRow> => {
     return {
       id,
       title: `Test Note${id}`,
@@ -64,7 +64,7 @@ describe("NoteDAO", () => {
     };
   };
 
-  const saveNote = async (note: NewNote) => await noteDao.create(note);
+  const saveNote = async (note: NewNoteRow) => await noteDao.create(note);
   const createNote = async (id: string, parentId: ParentId = null) =>
     (await saveNote(await buildNote(id, parentId)))._unsafeUnwrap();
 
