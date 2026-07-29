@@ -28,16 +28,6 @@ export async function saveFile(opts: SaveFileDialogOptions) {
   return { canceled, path: filePath } as SaveFileDialogReturnType;
 }
 
-/**
- * Shows a native open file dialog
- * @deprecated useless abstraction
- * @param opts dialog options
- */
-export async function openFile(opts: OpenDialogOptions) {
-  const result = await dialog.showOpenDialog(opts);
-  return result;
-}
-
 export type DialogCancelError = { type: "_internal-dialog-cancelled" };
 
 const isDialogCancelErr = (val: unknown) =>
