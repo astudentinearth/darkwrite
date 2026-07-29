@@ -5,7 +5,6 @@ export interface Embed {
   displayName?: string;
   uploadedAt: Date;
   workspaceId?: string;
-  url: string;
 }
 
 /** @deprecated use `Embed` instead */

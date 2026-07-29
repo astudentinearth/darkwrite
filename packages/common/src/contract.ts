@@ -15,7 +15,7 @@ import type {
   UpdateWorkspaceDTO,
 } from "./dto/request/workspace.request";
 import type { ThemesResponseDTO } from "./dto/response/theme.response";
-import type { EmbedResponseDTO } from "./embed";
+import type { Embed, EmbedResponseDTO } from "./embed";
 import type { Font } from "./font";
 import type { FileLinkMetadata } from "./link";
 import type {
@@ -24,7 +24,6 @@ import type {
   NoteImportResult,
   NoteResponseDTO,
   NotesResponseDTO,
-  ParentId,
 } from "./note";
 import type { PageSize } from "./pdf";
 import type { DwError, DwResultAsync } from "./result";
@@ -175,6 +174,7 @@ export interface IFileLinkAPI {
   getById: (id: string) => ApiResult<FileLinkMetadata>;
   /** Opens the linked file in the OS default application. */
   openById: (id: string) => NoReturn;
+  getAll: () => ApiResult<FileLinkMetadata[]>;
 }
 
 /** Desktop specific bridge. This is decorated with IEmbedAPI on the frontend */
@@ -191,6 +191,7 @@ export interface DesktopEmbedAPI {
   getById: (id: string) => ApiResult<EmbedResponseDTO>;
   getEncoded: (ids: string[]) => ApiResult<Record<string, string>>;
   download: (id: string) => NoReturn;
+  getAll: () => ApiResult<Embed[]>;
 }
 
 export type DarkwriteIPCBridge = {

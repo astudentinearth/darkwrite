@@ -1,3 +1,4 @@
+import { getEmbedUrl } from "@darkwrite/common";
 import { Plugin } from "@tiptap/pm/state";
 import { Block } from "../../types";
 import type { ImageExtensionConfig } from "./image-config";
@@ -17,7 +18,7 @@ const ImagePlugin = (config: ImageExtensionConfig) =>
           config.saveArrayBuffer(file, filetype).then((id) => {
             const tr = view.state.tr;
             const node = view.state.schema.nodes[Block.Image].create({
-              src: `embed://${id}`,
+              src: getEmbedUrl(id),
               embedId: id,
             });
             tr.replaceSelectionWith(node);

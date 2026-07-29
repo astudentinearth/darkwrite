@@ -1,3 +1,4 @@
+import { getEmbedUrl } from "@darkwrite/common";
 import {
   selectCoverImageSource,
   selectIsWidePage,
@@ -30,7 +31,9 @@ export default function useEditorCover(noteId: string) {
     const embed = await uploadImage(() =>
       getCurrentWorkspaceId(store.getState),
     );
-    setEditorCustomizations(noteId, { coverImageSource: embed.url });
+    setEditorCustomizations(noteId, {
+      coverImageSource: getEmbedUrl(embed.id),
+    });
   };
 
   const restore = async () => restoreFromTrash(noteId);

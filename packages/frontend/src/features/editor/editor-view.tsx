@@ -1,3 +1,4 @@
+import { getEmbedUrl } from "@darkwrite/common";
 import { nanoid } from "nanoid";
 import { use, useRef } from "react";
 import { useLocalStore } from "@/context/local-state";
@@ -64,9 +65,7 @@ export function EditorViewport({
         showTextDirectionControls={settings.showTextDirectionControls}
         openFilesOnDoubleClick={settings.openFilesOnDoubleClick}
         codeBlockIndentSize={settings.codeIndentSize}
-        embedSourceResolver={
-          async (id) => `embed://${id}` //TODO: band-aid for current circumstances. fix this with a proper cache when you can link remote images.
-        }
+        embedSourceResolver={async (id) => getEmbedUrl(id)}
         key={noteId}
         onNavigateToNote={onNavigate ?? navigateToNote}
       />

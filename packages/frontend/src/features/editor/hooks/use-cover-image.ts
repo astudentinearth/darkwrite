@@ -1,3 +1,4 @@
+import { getEmbedUrl } from "@darkwrite/common";
 import { selectCoverImageSource } from "@/features/editor/store/editor-selectors";
 import { useAppSelector, useAppStore } from "@/features/store/hooks";
 import { getCurrentWorkspaceId } from "@/features/workspaces/store/workspace.thunk";
@@ -13,7 +14,9 @@ export function useCoverImage(noteId: string) {
     const embed = await uploadImage(() =>
       getCurrentWorkspaceId(store.getState),
     );
-    setEditorCustomizations(noteId, { coverImageSource: embed.url });
+    setEditorCustomizations(noteId, {
+      coverImageSource: getEmbedUrl(embed.id),
+    });
   };
 
   const removeCover = () => {

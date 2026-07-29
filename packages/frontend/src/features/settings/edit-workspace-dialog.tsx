@@ -1,4 +1,4 @@
-import type { WorkspaceDTO } from "@darkwrite/common";
+import { getEmbedUrl, type WorkspaceDTO } from "@darkwrite/common";
 import { produce } from "immer";
 import { Check, X } from "lucide-react";
 import { type ReactNode, useRef, useState } from "react";
@@ -54,7 +54,7 @@ export default function EditWorkspaceDialog(props: EditWorkspaceDialogProps) {
     const embed = await uploadImage(() =>
       getCurrentWorkspaceId(store.getState),
     );
-    setImageUrl(embed.url);
+    setImageUrl(getEmbedUrl(embed.id));
   };
 
   return (
