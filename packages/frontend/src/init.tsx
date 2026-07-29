@@ -5,6 +5,7 @@ import { setupAppMenuEvents } from "./features/app-menu/app-menu-bus";
 import { setupContextMenuEvents } from "./features/context-menu/menu-event-bus";
 import { setupLayoutEvents } from "./features/layout/layout-store";
 import { loadFileLinks } from "./features/link/store/file-link.thunk";
+import { setupFileLinkEvents } from "./features/link/store/file-link-events";
 import { loadNotesInCurrentWorkspace } from "./features/note/store/note.thunk";
 import { switchWorkspace } from "./features/session/session.thunk";
 import { settingsSlice } from "./features/settings/store/settings-slice";
@@ -69,6 +70,7 @@ export function initializeUserPrefs(store: AppStore) {
       setupContextMenuEvents();
       setupAppMenuEvents();
       setupLayoutEvents();
+      setupFileLinkEvents(store);
     })
     .map(() => store);
 }

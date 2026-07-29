@@ -1,5 +1,6 @@
 import {
   deepAssign,
+  type FileLinkMetadata,
   type NativeContextMenuData,
   recursiveKeys,
   type SerializedResult,
@@ -60,6 +61,8 @@ const events: WindowEvents = {
     ipcRenderer.on(WindowEvent.EXIT_FULLSCREEN, () => callback()),
   onContextMenu: (callback: (data: NativeContextMenuData) => void) =>
     ipcRenderer.on(WindowEvent.CONTEXT_MENU, (_, data) => callback(data)),
+  onFileLinkCreated: (callback: (link: FileLinkMetadata) => void) =>
+    ipcRenderer.on(WindowEvent.FILE_LINK_CREATED, (_, link) => callback(link)),
   menu: {
     onCreateNote: (callback: () => void) =>
       ipcRenderer.on(AppMenuEvent.CREATE_NEW_NOTE, () => callback()),

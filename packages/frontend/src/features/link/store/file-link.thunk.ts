@@ -1,7 +1,6 @@
-import { okAsync } from "neverthrow";
 import { DarkwriteAPIClient } from "@/api/api-client";
 import type { AppDispatch } from "@/features/store/types";
-import { fileLinkSlice, upsertLinkedFiles } from "./file-link.slice";
+import { fileLinkSlice } from "./file-link.slice";
 
 export const loadFileLinks = () => (dispatch: AppDispatch) =>
   DarkwriteAPIClient.fileLink
@@ -10,16 +9,11 @@ export const loadFileLinks = () => (dispatch: AppDispatch) =>
       dispatch(fileLinkSlice.actions.setAllLinkedFiles(links)),
     );
 
-export const pickAndCreateFileLink = () => (dispatch: AppDispatch) =>
-  DarkwriteAPIClient.fileLink.pickAndCreate().andThen((link) => {
-    // null means the action was cancelled, we can ignore it
-    if (link) dispatch(upsertLinkedFiles([link]));
-    return okAsync(link);
-  });
+// Creations flow into the store via the main process broadcast
+// (see setupFileLinkEvents), so these thunks only surface the result to the
+// caller and do not upsert into the store themselves.
+export const pickAndCreateFileLink = () => () =>
+  DarkwriteAPIClient.fileLink.pickAndCreate();
 
-export const createFileLinkFromPath =
-  (path: string) => (dispatch: AppDispatch) =>
-    DarkwriteAPIClient.fileLink.createFromPath(path).andThen((link) => {
-      dispatch(upsertLinkedFiles([link]));
-      return okAsync(link);
-    });
+export const createFileLinkFromPath = (path: string) => () =>
+  DarkwriteAPIClient.fileLink.createFromPath(path);

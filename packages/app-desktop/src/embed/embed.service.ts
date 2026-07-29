@@ -121,7 +121,6 @@ export function EmbedService(db: DatabaseType, blobStore: IEmbedStore) {
     createFromArrayBuffer,
     getEmbedFileUrl,
     getEmbedById,
-    getAll,
   };
 }
 

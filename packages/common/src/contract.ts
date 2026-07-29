@@ -205,6 +205,9 @@ export interface WindowEvents {
   onEnterFullScreen: (callback: () => void) => void;
   onExitFullScreen: (callback: () => void) => void;
   onContextMenu: (callback: (data: NativeContextMenuData) => void) => void;
+  /** Fired whenever a file link is created in any window, so every
+   * window can keep its in-memory file link list in sync. */
+  onFileLinkCreated: (callback: (link: FileLinkMetadata) => void) => void;
   menu: {
     onCreateNote: (callback: () => void) => void;
   };
