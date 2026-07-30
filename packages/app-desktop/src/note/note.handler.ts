@@ -7,6 +7,7 @@ import {
   MoveNoteDTOSchema,
   type Note,
   type NoteExportFormat,
+  type NotePartial,
   type NoteResponseDTO,
   type NotesResponseDTO,
   okVoid,
@@ -159,6 +160,10 @@ export function NoteAPI(
       .orElse(whenDialogCancelled({ content: [], type: "html" as const })),
   );
 
+  const patchAll = handler((notes: NotePartial[]) =>
+    noteService.patchAll(notes).map(() => {}),
+  );
+
   return {
     create,
     delete: deleteNote,
@@ -178,5 +183,6 @@ export function NoteAPI(
     exportPdf: saveToPDF,
     import: importFiles,
     unfavorite,
+    patchAll,
   };
 }

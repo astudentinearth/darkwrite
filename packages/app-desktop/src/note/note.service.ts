@@ -4,6 +4,7 @@ import {
   dwErrAsync,
   type MoveNoteDTO,
   type Note,
+  type NotePartial,
   Rank,
   type UpdateNoteDTO,
 } from "@darkwrite/common";
@@ -13,7 +14,7 @@ import type { NewNoteRow, NoteRow } from "@/db/schema";
 import { resolveTx, transactional } from "@/db/transactional";
 import type { IDocumentService } from "@/service/document.service";
 import { NoteDAO } from "./note.dao";
-import { noteToRow } from "./note-mapper";
+import { notePartialToRowPatch, noteToRow } from "./note-mapper";
 
 function buildDuplicate({
   title,
@@ -312,6 +313,12 @@ export function NoteService(
         ).orElse(() => okAsync()), // we don't care if files remain orphaned
     );
 
+  const patchAll = (notes: NotePartial[]) =>
+    transactional(
+      () => noteDAO.updateAll(notes.map(notePartialToRowPatch)),
+      db,
+    );
+
   return {
     create,
     update,
@@ -324,6 +331,7 @@ export function NoteService(
     setModificationDate,
     restoreFromTrash,
     emptyTrash,
+    patchAll,
   };
 }
 

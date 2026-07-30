@@ -16,6 +16,8 @@ export interface Note {
   workspaceId: string; // ID of the workspace this note belongs to
 }
 
+export type NotePartial = Partial<Note> & { id: Note["id"] };
+
 /** @deprecated use `Note` instead */
 export type NoteDTO = Note;
 

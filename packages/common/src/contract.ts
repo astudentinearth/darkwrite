@@ -19,6 +19,7 @@ import type {
   NoteContentResponseDTO,
   NoteExportFormat,
   NoteImportResult,
+  NotePartial,
   NoteResponseDTO,
   NotesResponseDTO,
 } from "./note";
@@ -36,6 +37,7 @@ export interface INoteAPI {
    */
   create: (note: Note) => ApiResult<void>;
   update: (id: string, dto: UpdateNoteDTO) => ApiResult<NoteResponseDTO>;
+  patchAll: (notes: NotePartial[]) => ApiResult<void>;
 
   /** @deprecated */
   move: (dto: MoveNoteDTO) => ApiResult<NoteResponseDTO>;

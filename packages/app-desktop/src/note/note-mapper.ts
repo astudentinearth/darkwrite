@@ -1,5 +1,5 @@
-import type { Note } from "@darkwrite/common";
-import type { NewNoteRow, NoteRow } from "@/db/schema";
+import type { Note, NotePartial } from "@darkwrite/common";
+import type { NewNoteRow, NoteRow, PatchNoteRow } from "@/db/schema";
 
 export function noteToRow(note: Note): NewNoteRow {
   const { createdAt, modifiedAt, trashedAt, ...rest } = note;
@@ -9,6 +9,16 @@ export function noteToRow(note: Note): NewNoteRow {
     modifiedAt: new Date(modifiedAt),
     trashedAt: trashedAt ? new Date(trashedAt) : null,
   };
+}
+
+export function notePartialToRowPatch(note: NotePartial): PatchNoteRow {
+  const { createdAt, modifiedAt, trashedAt, ...rest } = note;
+  const patch: PatchNoteRow = { ...rest };
+  if (createdAt !== undefined) patch.createdAt = new Date(createdAt);
+  if (modifiedAt !== undefined) patch.modifiedAt = new Date(modifiedAt);
+  if ("trashedAt" in note)
+    patch.trashedAt = trashedAt ? new Date(trashedAt) : null;
+  return patch;
 }
 
 export function noteToDto(note: NoteRow): Note {
