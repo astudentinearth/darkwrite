@@ -7,16 +7,12 @@ import { navigateToNote } from "@/features/navigation/navigator";
 import notify from "@/features/notifications/notify";
 import { useAppDispatch } from "@/features/store/hooks";
 import type { AppDispatch } from "@/features/store/types";
-import { type CreateNoteArgs, createNoteApi } from "./create-note";
+import { createNoteApi } from "./create-note";
 import { type FavoriteNoteArgs, favoritesApi } from "./favorites-api";
 import { moveNoteApi } from "./move-note";
 import { trashApi } from "./trash-api";
 
 export const getNoteActions = (dispatch: AppDispatch) => ({
-  async createNote(args: CreateNoteArgs) {
-    dispatch(createNoteApi.endpoints.createNote.initiate(args));
-  },
-
   async favorite(args: FavoriteNoteArgs) {
     dispatch(favoritesApi.endpoints.favorite.initiate(args));
   },

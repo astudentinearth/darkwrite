@@ -4,17 +4,18 @@ import type {
   UpdateServerResponse,
 } from "./client";
 import type { NativeContextMenuData } from "./context-menu";
-import type { CreateNoteDTO, MoveNoteDTO, UpdateNoteDTO } from "./dto";
+import type { MoveNoteDTO, UpdateNoteDTO } from "./dto";
 import type { CreateEmbedDTO } from "./dto/request/embed.request";
 import type {
   CreateWorkspaceDTO,
   UpdateWorkspaceDTO,
 } from "./dto/request/workspace.request";
 import type { ThemesResponseDTO } from "./dto/response/theme.response";
-import type { Embed, EmbedResponseDTO } from "./embed";
+import type { EmbedResponseDTO } from "./embed";
 import type { Font } from "./font";
 import type { FileLinkMetadata } from "./link";
 import type {
+  Note,
   NoteContentResponseDTO,
   NoteExportFormat,
   NoteImportResult,
@@ -30,7 +31,10 @@ export type ApiResult<T> = ResultAsync<T, DwError>;
 export type NoReturn = ResultAsync<void, never>;
 
 export interface INoteAPI {
-  create: (dto: CreateNoteDTO) => ApiResult<NoteResponseDTO>;
+  /**
+   * Save a newly created note.
+   */
+  create: (note: Note) => ApiResult<void>;
   update: (id: string, dto: UpdateNoteDTO) => ApiResult<NoteResponseDTO>;
 
   /** @deprecated */

@@ -1,5 +1,5 @@
 import { byUpdateTime, isDescendant, Rank } from "@darkwrite/common";
-import { createSelector } from "@reduxjs/toolkit";
+import { createSelector, weakMapMemoize } from "@reduxjs/toolkit";
 import type { RootState } from "@/features/store/types";
 import { notesAdapter } from "./notes-adapter";
 import type { MoveNoteSearchArgs, SearchArgs } from "./types";
@@ -27,9 +27,14 @@ export const selectNotesByParentId = createSelector(
           note.parentId === parentId &&
           !note.isTrashed,
       )
-      .toSorted((a, b) => Rank.sorter(a.orderHint, b.orderHint))
-      .map((n) => n.id);
+      .toSorted((a, b) => Rank.sorter(a.orderHint, b.orderHint));
   },
+);
+
+export const selectNoteIdsByParentId = createSelector(
+  [selectNotesByParentId],
+  (notes) => notes.map((n) => n.id),
+  { memoize: weakMapMemoize },
 );
 
 /** This selector returns any and all notes associated with given workspace. */

@@ -1,4 +1,4 @@
-import { type ParentId, Rank } from "@darkwrite/common";
+import { type Note, type ParentId, Rank } from "@darkwrite/common";
 import { ResultAsync } from "neverthrow";
 import { beforeAll, beforeEach, describe, expect, it } from "vitest";
 import {
@@ -138,13 +138,22 @@ describe("note service tests", () => {
     });
 
     it("should delete document content for trashed notes", async () => {
-      const note = (
-        await noteService.create({
-          title: "With content",
-          workspaceId: workspace.id,
-          parentId: null,
-        })
-      )._unsafeUnwrap();
+      const now = new Date().toISOString();
+      const note: Note = {
+        id: crypto.randomUUID(),
+        title: "With content",
+        icon: null,
+        parentId: null,
+        workspaceId: workspace.id,
+        orderHint: Rank.default().get(),
+        favoriteOrderHint: "",
+        isFavorite: false,
+        isTrashed: false,
+        trashedAt: null,
+        createdAt: now,
+        modifiedAt: now,
+      };
+      (await noteService.create(note))._unsafeUnwrap();
 
       expect((await documentStore.exists(note.id))._unsafeUnwrap()).toBe(true);
 

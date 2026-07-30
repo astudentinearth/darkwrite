@@ -3,11 +3,12 @@ import { useNoteExport } from "@/features/export/note-exporter";
 import { useNoteActions } from "@/features/note/store/note-actions";
 import { selectNoteById } from "@/features/note/store/note-selectors";
 import { useAppDispatch, useAppSelector } from "@/features/store/hooks";
+import { createNote } from "../store/note.thunk";
 import { MoveNoteDialogPortal } from "../store/notes-ui-actions";
 
 export const useNoteContextMenu = (noteId: string) => {
   const note = useAppSelector((state) => selectNoteById(state, noteId));
-  const { createNote, duplicateNote, moveToTrash } = useNoteActions();
+  const { duplicateNote, moveToTrash } = useNoteActions();
   const { showCenterView } = useEditorActions();
   const exporter = useNoteExport();
   const dispatch = useAppDispatch();
@@ -26,11 +27,7 @@ export const useNoteContextMenu = (noteId: string) => {
 
   const newSubpage = () => {
     if (!note) return;
-    createNote({
-      workspaceId: note.workspaceId,
-      navigateAfter: true,
-      parentId: note.id,
-    });
+    dispatch(createNote({ navigateAfter: true, parentId: note.id }));
   };
 
   const trash = () => moveToTrash(noteId);

@@ -14,7 +14,7 @@ import {
   calculateOptimisticRankInLayer,
   calculateRelativeOptimisticRank,
 } from "./note-rank-optimistic";
-import { selectNoteById, selectNotesByParentId } from "./note-selectors";
+import { selectNoteById, selectNoteIdsByParentId } from "./note-selectors";
 import { updateNote, upsertNotes } from "./note-slice";
 import { NOTES_TAG_TYPE, noteByParentIdTag, notesApi } from "./notes-api";
 
@@ -73,7 +73,7 @@ export const moveNoteApi = notesApi.injectEndpoints({
           return;
         }
 
-        const childNotes = selectNotesByParentId(
+        const childNotes = selectNoteIdsByParentId(
           state,
           note.workspaceId,
           args.destinationNoteId,
@@ -143,7 +143,7 @@ export const moveNoteApi = notesApi.injectEndpoints({
         const sourceNote = selectNoteById(state, sourceNoteId);
 
         if (!aboveNote || !sourceNote) return;
-        const siblings = selectNotesByParentId(
+        const siblings = selectNoteIdsByParentId(
           state,
           aboveNote.workspaceId,
           aboveNote.parentId,

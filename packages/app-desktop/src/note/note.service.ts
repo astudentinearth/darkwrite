@@ -1,9 +1,9 @@
 import {
-  type CreateNoteDTO,
   type DwError,
   dwErr,
   dwErrAsync,
   type MoveNoteDTO,
+  type Note,
   Rank,
   type UpdateNoteDTO,
 } from "@darkwrite/common";
@@ -12,23 +12,8 @@ import type { DatabaseType } from "@/db";
 import type { NewNoteRow, NoteRow } from "@/db/schema";
 import { resolveTx, transactional } from "@/db/transactional";
 import type { IDocumentService } from "@/service/document.service";
-import { WorkspaceDAO } from "@/workspace/workspace.dao";
-import { NoteDAO, type OrderKeyDto } from "./note.dao";
-
-function buildNewNote(dto: CreateNoteDTO, { end }: OrderKeyDto): NewNoteRow {
-  const { title, workspaceId, databaseId, icon, parentId } = dto;
-  return {
-    title,
-    workspaceId,
-    databaseId,
-    icon,
-    parentId,
-    favoriteOrderHint: "",
-    createdAt: new Date(),
-    modifiedAt: new Date(),
-    orderHint: end,
-  };
-}
+import { NoteDAO } from "./note.dao";
+import { noteToRow } from "./note-mapper";
 
 function buildDuplicate({
   title,
@@ -63,7 +48,6 @@ export function NoteService(
   documentService: IDocumentService,
 ) {
   const noteDAO = NoteDAO(() => resolveTx(db));
-  const workspaceDAO = WorkspaceDAO(() => resolveTx(db));
 
   const assertNotDescendant = (result: boolean | "CIRCULAR") =>
     result === "CIRCULAR" || result === true
@@ -149,17 +133,15 @@ export function NoteService(
         );
   }
 
-  function create(dto: CreateNoteDTO) {
+  function create(note: Note) {
     return transactional(
       () =>
-        workspaceDAO
-          .findById(dto.workspaceId)
-          .andThen((w) => noteDAO.computeOrderKeysForLayer(w.id, dto.parentId))
-          .map((keys) => buildNewNote(dto, keys))
-          .andThen(noteDAO.create)
-          .andThen((note) =>
-            documentService.setNoteContent(note.id, "{}").map(() => note),
-          ),
+        noteDAO
+          .create(noteToRow(note))
+          .andThen((created) =>
+            documentService.setNoteContent(created.id, "{}"),
+          )
+          .map(() => undefined),
       db,
     );
   }

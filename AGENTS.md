@@ -133,15 +133,16 @@ When asked to perform a review, do NOT check for any inconsistencies that can be
 - `Result/ResultAsync._unsafeUnwrap` MUST NOT be used in production code unless you are trying to interact with something that cannot handle `Result`s. `_unsafeUnwrap()` and `_unsafeUnwrapErr()` are perfectly fine in tests (an incorrect unwrap should fail the test), and should be preferred to test the expected cases directly.
 
 ### Redux / State Management
-- Use pre-defined Redux slices and selectors
-- **NEVER** dispatch directly to entity adapters unless creating a new mutation
-- Access data through selectors, not RTK Query directly
+- Use pre-defined Redux slices, selectors and thunks
+- RTK Query has been deprecated in this codebase.
 
 ### IPC Communication
 - Use `DarkwriteAPIClient` from `@/api/api-client.ts`
 - **DO NOT** use `window.api` directly
 - API types are defined in `@darkwrite/common` package, in src/contract.ts
 - Do not call Data Access Object (DAO) methods in IPC handler methods. Always use the corresponding service method instead.
+- The main process must be treated as an interface to the database for persistence, and the operating system for integration. Business logic should stay in the renderer process as much as possible.
+- SQLite is not the source of truth at runtime, it's a persistence path for Redux.
 
 ### Testing
 - Test files use Vitest with `@testing-library`
@@ -152,6 +153,10 @@ When asked to perform a review, do NOT check for any inconsistencies that can be
 - `.editorconfig` handles basic formatting
 - `biome.json` (root) configures linting and formatting (Biome)
 - The `website` package uses Prettier (via `.prettierrc`) for Astro file support
+
+### Security
+- `nodeIntegration` will not be enabled under any circumstances. No excuses.
+- Be on the look out for XSS attack vectors as this app deals with rich text.
 
 ## Architecture Notes
 

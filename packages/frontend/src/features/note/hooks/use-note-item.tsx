@@ -6,8 +6,11 @@ import {
   getCurrentRoutePath,
   NavigationEventBus,
 } from "@/features/navigation/navigator";
-import { useAppSelector, useAppStore } from "@/features/store/hooks";
-import { useCurrentWorkspaceId } from "@/features/workspaces/hooks/use-workspace";
+import {
+  useAppDispatch,
+  useAppSelector,
+  useAppStore,
+} from "@/features/store/hooks";
 import {
   getMovingNote,
   useMoveBelowMutation,
@@ -17,7 +20,7 @@ import {
   canMoveNoteBelow,
   canMoveNoteInto,
 } from "../store/move-note-validator";
-import { useNoteActions } from "../store/note-actions";
+import { createNote } from "../store/note.thunk";
 import { selectAllNotesAsMap, selectNoteById } from "../store/note-selectors";
 
 /**
@@ -28,8 +31,7 @@ import { selectAllNotesAsMap, selectNoteById } from "../store/note-selectors";
 export function useNoteItem(id: string) {
   const note = useAppSelector((state) => selectNoteById(state, id));
   const [isActive, setIsActive] = useState(false);
-  const { createNote } = useNoteActions();
-  const workspaceId = useCurrentWorkspaceId();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     // get the path name at the moment of render to determine
@@ -53,8 +55,7 @@ export function useNoteItem(id: string) {
   const createChild = (e?: MouseEvent<HTMLElement>) => {
     e?.preventDefault();
     e?.stopPropagation();
-    if (!workspaceId) return;
-    createNote({ parentId: id, workspaceId, navigateAfter: true });
+    dispatch(createNote({ parentId: id, navigateAfter: true }));
   };
 
   return { note, isActive, createChild };

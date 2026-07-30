@@ -1,6 +1,6 @@
 import { shallowEqual } from "react-redux";
 import { useAppSelector } from "@/features/store/hooks";
-import { selectNotesByParentId } from "../store/note-selectors";
+import { selectNoteIdsByParentId } from "../store/note-selectors";
 
 const EMPTY_ARRAY: string[] = [];
 
@@ -9,7 +9,7 @@ export function useNoteListState(parentId: string | null) {
   const noteIds = useAppSelector(
     (state) =>
       workspaceId
-        ? selectNotesByParentId(state, workspaceId, parentId)
+        ? selectNoteIdsByParentId(state, workspaceId, parentId)
         : EMPTY_ARRAY,
     shallowEqual,
   );

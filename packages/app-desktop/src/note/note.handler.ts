@@ -1,12 +1,11 @@
 import { extname } from "node:path";
 import {
-  type CreateNoteDTO,
-  CreateNoteDTOSchema,
   dwErrAsync,
   FileFormatMap,
   type INoteAPI,
   type MoveNoteDTO,
   MoveNoteDTOSchema,
+  type Note,
   type NoteExportFormat,
   type NoteResponseDTO,
   type NotesResponseDTO,
@@ -52,11 +51,7 @@ export function NoteAPI(
   noteQueryService: INoteQueryService,
   documentService: IDocumentService,
 ): HandlerImplements<INoteAPI> {
-  const create = handler((dto: CreateNoteDTO) =>
-    validateSchema(CreateNoteDTOSchema)(dto)
-      .asyncAndThen(noteService.create)
-      .map(singleResponse),
-  );
+  const create = handler((note: Note) => noteService.create(note));
 
   const deleteNote = handler((id: string) => noteService.deleteById(id));
 
