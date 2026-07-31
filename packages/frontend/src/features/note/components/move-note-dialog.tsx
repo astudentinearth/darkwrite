@@ -13,6 +13,8 @@ import { useAppDispatch, useAppSelector } from "@/features/store/hooks";
 import { getNoteIcon } from "@/lib/utils";
 import { useMoveNoteDialog } from "../hooks/use-move-note-dialog";
 import { useNoteById } from "../hooks/use-note-by-id";
+import { moveFailToast, moveSuccessToast } from "../note.toast";
+import { moveNote } from "../store/note.thunk";
 import { useNoteActions } from "../store/note-actions";
 import { selectNoteIcon, selectNoteTitle } from "../store/note-selectors";
 import { MoveNoteDialogPortal } from "../store/notes-ui-actions";
@@ -40,11 +42,12 @@ const SearchItem = memo(function ({
   noteId,
   targetNoteId,
 }: {
+  /** the note we are moving **into** */
   noteId: string;
+  /** the note we are moving */
   targetNoteId: string;
 }) {
   const { note } = useNoteById(noteId);
-  const { moveInto } = useNoteActions();
   const dispatch = useAppDispatch();
   if (!note) return <></>;
   return (
@@ -52,7 +55,9 @@ const SearchItem = memo(function ({
       className="px-2 py-4 flex items-center gap-2"
       value={`${note.id} ${note.title}`}
       onSelect={() => {
-        moveInto(targetNoteId, noteId);
+        dispatch(moveNote(targetNoteId, noteId))
+          .andTee(moveSuccessToast)
+          .orTee(moveFailToast);
         MoveNoteDialogPortal(dispatch).hideMoveNoteDialog();
       }}
     >

@@ -6,13 +6,14 @@ import {
   type NotePartial,
   type ParentId,
   Rank,
+  stableSortByOrderKeyFn,
 } from "@darkwrite/common";
 import { errAsync } from "neverthrow";
 import { DarkwriteAPIClient } from "@/api/api-client";
 import { navigateToNote } from "@/features/navigation/navigator";
 import type { AppDispatch, AppGetState } from "@/features/store/types";
 import { getCurrentWorkspaceId } from "@/features/workspaces/store/workspace.thunk";
-import { selectNotesByParentId } from "./note-selectors";
+import { selectNoteById, selectNotesByParentId } from "./note-selectors";
 import { notesSlice } from "./note-slice";
 
 export interface CreateNoteArgs {
@@ -127,3 +128,37 @@ export const updateManyNotes =
  * @returns the result of the update
  */
 export const updateNote = (patch: NotePartial) => updateManyNotes([patch]);
+
+export const moveNote =
+  (
+    sourceId: string,
+    destinationId: ParentId,
+    placement: "start" | "end" = "end",
+  ) =>
+  (dispatch: AppDispatch, getState: AppGetState) => {
+    const sourceNote = selectNoteById(getState(), sourceId);
+    if (!sourceNote) return dwErrAsync(`Note ${sourceId} does not exist.`);
+
+    const layer = selectNotesByParentId(
+      getState(),
+      sourceNote.workspaceId,
+      destinationId,
+    )
+      .toSorted(stableSortByOrderKeyFn())
+      .filter((n) => n.id !== sourceId);
+
+    const last =
+      layer.length > 0
+        ? layer[placement === "start" ? 0 : layer.length - 1]
+        : null;
+    const order = last ? Rank.safe(last.orderHint) : Rank.default();
+
+    return dispatch(
+      updateNote({
+        id: sourceId,
+        parentId: destinationId,
+        orderHint:
+          placement === "start" ? order.prev().get() : order.next().get(),
+      }),
+    );
+  };

@@ -1,6 +1,7 @@
 import {
   byUpdateTime,
   isDescendant,
+  type Note,
   Rank,
   stableSortByOrderKeyFn,
 } from "@darkwrite/common";
@@ -10,12 +11,17 @@ import { notesAdapter } from "./notes-adapter";
 import type { MoveNoteSearchArgs, SearchArgs } from "./types";
 
 const selectNotesState = (store: RootState) => store["notes-slice"];
+const adapterSelectors = notesAdapter.getSelectors(selectNotesState);
 
 export const {
   selectAll: selectAllNotes,
-  selectById: selectNoteById,
   selectEntities: selectAllNotesAsMap,
-} = notesAdapter.getSelectors(selectNotesState);
+} = adapterSelectors;
+
+export const selectNoteById: (
+  state: RootState,
+  id: string,
+) => Note | undefined = adapterSelectors.selectById;
 
 export const selectNotesByParentId = createSelector(
   [

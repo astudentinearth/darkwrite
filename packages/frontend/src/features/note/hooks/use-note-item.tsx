@@ -11,16 +11,12 @@ import {
   useAppSelector,
   useAppStore,
 } from "@/features/store/hooks";
-import {
-  getMovingNote,
-  useMoveBelowMutation,
-  useMoveIntoMutation,
-} from "../store/move-note";
+import { getMovingNote, useMoveBelowMutation } from "../store/move-note";
 import {
   canMoveNoteBelow,
   canMoveNoteInto,
 } from "../store/move-note-validator";
-import { createNote } from "../store/note.thunk";
+import { createNote, moveNote } from "../store/note.thunk";
 import { selectAllNotesAsMap, selectNoteById } from "../store/note-selectors";
 
 /**
@@ -70,7 +66,6 @@ export function useNoteItemDrag(id: string) {
     onDragOver,
     setIsDraggingOver,
   } = useDragState();
-  const [trigger] = useMoveIntoMutation();
 
   type DragEvent = React.DragEvent<HTMLElement>;
   const onDrag = useCallback(
@@ -94,17 +89,9 @@ export function useNoteItemDrag(id: string) {
 
       if (note.parentId === id) return;
 
-      try {
-        trigger({
-          sourceNoteId: note.id,
-          destinationNoteId: id,
-          placement: "inside-end",
-        });
-      } catch (error) {
-        console.error("Failed to move note:", error);
-      }
+      store.dispatch(moveNote(note.id, id));
     },
-    [id, trigger, setIsDraggingOver, store],
+    [id, setIsDraggingOver, store],
   );
 
   return {
@@ -130,7 +117,6 @@ export function useNoteDropZone(
   } = useDragState();
 
   const [moveBelow] = useMoveBelowMutation();
-  const [moveInto] = useMoveIntoMutation();
 
   type DragEvent = React.DragEvent<HTMLElement>;
   const store = useAppStore();
@@ -185,17 +171,9 @@ export function useNoteDropZone(
       )
         return;
 
-      try {
-        moveInto({
-          sourceNoteId: movingNote.id,
-          destinationNoteId: aboveOrParentId,
-          placement: "inside-start",
-        });
-      } catch (error) {
-        console.error("Failed to move note into:", error);
-      }
+      store.dispatch(moveNote(movingNote.id, aboveOrParentId, "start"));
     },
-    [aboveOrParentId, moveInto, setIsDraggingOver, store],
+    [aboveOrParentId, setIsDraggingOver, store],
   );
 
   return {

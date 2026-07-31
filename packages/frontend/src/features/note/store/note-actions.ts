@@ -46,26 +46,6 @@ export const getNoteActions = (dispatch: AppDispatch) => ({
       notify.success(t("toast.deletePage.success"));
     });
   },
-
-  async moveInto(noteId: string, destinationNoteId: string, showToast = true) {
-    const result = dispatch(
-      moveNoteApi.endpoints.moveInto.initiate({
-        destinationNoteId,
-        placement: "inside-end",
-        sourceNoteId: noteId,
-      }),
-    ).unwrap();
-    try {
-      await result;
-      if (showToast) notify.success(t("toast.movePage.success"));
-    } catch (error) {
-      if (showToast) {
-        notify.error(t("toast.movePage.error"));
-      }
-      console.error("Failed to move note:", error);
-    }
-    return result;
-  },
 });
 
 export function useNoteActions() {

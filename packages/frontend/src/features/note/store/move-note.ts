@@ -43,84 +43,6 @@ export function getMovingNote(e: DragEvent<HTMLElement>, state: RootState) {
 
 export const moveNoteApi = notesApi.injectEndpoints({
   endpoints: (builder) => ({
-    moveInto: builder.mutation<NoteDTO, MoveNoteIntoArgs>({
-      queryFn: resultQueryFn(
-        ({ destinationNoteId, placement, sourceNoteId }: MoveNoteIntoArgs) =>
-          DarkwriteAPIClient.note
-            .move({
-              destinationId: destinationNoteId,
-              placement,
-              sourceId: sourceNoteId,
-            })
-            .andThen(({ note }) =>
-              note ? okAsync(note) : dwErrAsync("Failed to move note"),
-            ),
-      ),
-
-      async onQueryStarted(args, { dispatch, getState, queryFulfilled }) {
-        const state = getState() as RootState;
-        const note = selectNoteById(state, args.sourceNoteId);
-        if (!note) return;
-
-        if (
-          isDescendant(
-            args.destinationNoteId ?? "",
-            args.sourceNoteId,
-            state["notes-slice"].entities,
-          )
-        ) {
-          // Prevent moving a note into its own descendant
-          return;
-        }
-
-        const childNotes = selectNoteIdsByParentId(
-          state,
-          note.workspaceId,
-          args.destinationNoteId,
-        );
-
-        const undoPatch: Partial<NoteDTO> = {
-          parentId: note.parentId,
-          orderHint: note.orderHint,
-        };
-
-        const newOrderHint = calculateOptimisticRankInLayer(
-          childNotes,
-          args.placement,
-          (id: string) => selectNoteById(state, id),
-        );
-
-        dispatch(
-          updateNote({
-            id: args.sourceNoteId,
-            changes: {
-              parentId: args.destinationNoteId,
-              orderHint: newOrderHint,
-            },
-          }),
-        );
-
-        try {
-          const { data } = await queryFulfilled;
-          dispatch(upsertNotes([data]));
-        } catch {
-          dispatch(
-            updateNote({
-              id: args.sourceNoteId,
-              changes: undoPatch,
-            }),
-          );
-        }
-      },
-
-      invalidatesTags: (_result, error) => {
-        if (error) {
-          return [NOTES_TAG_TYPE];
-        }
-        return [];
-      },
-    }),
-
     moveBelow: builder.mutation<NoteDTO, MoveNoteBelowArgs>({
       queryFn: resultQueryFn(
         ({ aboveNoteId, sourceNoteId }: MoveNoteBelowArgs) =>
@@ -207,4 +129,4 @@ export const moveNoteApi = notesApi.injectEndpoints({
   overrideExisting: false,
 });
 
-export const { useMoveIntoMutation, useMoveBelowMutation } = moveNoteApi;
+export const { useMoveBelowMutation } = moveNoteApi;

@@ -38,6 +38,11 @@ export class Rank {
     }
   }
 
+  static safe(val: string) {
+    if (Rank.isValid(val)) return new Rank(val);
+    else return Rank.default();
+  }
+
   static midpoint(
     a: Rank,
     b: Rank,
