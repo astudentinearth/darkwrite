@@ -6,16 +6,29 @@ import { DarkwriteAPIClient } from "@/api/api-client";
 import { NavigationEventBus } from "@/features/navigation/navigator";
 import { appSessionSlice } from "@/features/session/session-slice";
 import { type AppStore, createAppStore } from "@/features/store/redux";
-import { createNote, getCreationRank } from "./note.thunk";
-import { selectNotesByParentId } from "./note-selectors";
+import {
+  createNote,
+  getCreationRank,
+  updateManyNotes,
+  updateNote,
+} from "./note.thunk";
+import { selectNoteById, selectNotesByParentId } from "./note-selectors";
 import { notesSlice } from "./note-slice";
 
 vi.mock("@/api/api-client", () => ({
-  DarkwriteAPIClient: { note: { create: vi.fn() } },
+  DarkwriteAPIClient: {
+    note: {
+      create: vi.fn(),
+      patchAll: vi.fn(),
+      getAllByWorkspaceId: vi.fn(),
+    },
+  },
 }));
 
 const WORKSPACE_ID = "ws-1";
 const createMock = vi.mocked(DarkwriteAPIClient.note.create);
+const patchMock = vi.mocked(DarkwriteAPIClient.note.patchAll);
+const getAllMock = vi.mocked(DarkwriteAPIClient.note.getAllByWorkspaceId);
 
 const makeNote = (over: Partial<Note> = {}): Note => ({
   id: crypto.randomUUID(),
@@ -159,5 +172,98 @@ describe("createNote", () => {
 
     expect(seen).not.toHaveBeenCalled();
     unsubscribe();
+  });
+});
+
+describe("update thunks", () => {
+  let store: AppStore;
+
+  const seed = (...notes: Note[]) =>
+    store.dispatch(notesSlice.actions.upsertNotes(notes));
+
+  beforeEach(() => {
+    localStorage.clear();
+    patchMock.mockReset();
+    patchMock.mockReturnValue(okAsync(undefined));
+    getAllMock.mockReset();
+    getAllMock.mockReturnValue(okAsync({ notes: {} }));
+    store = createAppStore();
+    store.dispatch(appSessionSlice.actions.switchWorkspace(WORKSPACE_ID));
+  });
+
+  describe("updateNote", () => {
+    it("optimistically applies the patch and persists it", async () => {
+      const note = makeNote({ title: "original" });
+      seed(note);
+
+      await store.dispatch(updateNote({ id: note.id, title: "edited" }));
+
+      expect(selectNoteById(store.getState(), note.id)?.title).toBe("edited");
+      expect(patchMock).toHaveBeenCalledTimes(1);
+      expect(patchMock).toHaveBeenCalledWith([
+        { id: note.id, title: "edited" },
+      ]);
+    });
+
+    it("resyncs from the workspace and surfaces the error on failure", async () => {
+      const note = makeNote({ title: "original" });
+      seed(note);
+      patchMock.mockReturnValue(dwErrAsync("boom"));
+      // the server still holds the pre-edit note; reconcile must restore it
+      getAllMock.mockReturnValue(okAsync({ notes: { [note.id]: note } }));
+
+      const result = await store.dispatch(
+        updateNote({ id: note.id, title: "edited" }),
+      );
+
+      expect(result.isErr()).toBe(true);
+      expect(getAllMock).toHaveBeenCalledWith(WORKSPACE_ID);
+      // the optimistic edit is rolled back to server truth once the reload lands
+      await vi.waitFor(() =>
+        expect(selectNoteById(store.getState(), note.id)?.title).toBe(
+          "original",
+        ),
+      );
+    });
+  });
+
+  describe("updateManyNotes", () => {
+    it("optimistically applies every patch and persists them", async () => {
+      const a = makeNote({ title: "a0" });
+      const b = makeNote({ title: "b0" });
+      seed(a, b);
+
+      const patches = [
+        { id: a.id, title: "a1" },
+        { id: b.id, title: "b1" },
+      ];
+      await store.dispatch(updateManyNotes(patches));
+
+      expect(selectNoteById(store.getState(), a.id)?.title).toBe("a1");
+      expect(selectNoteById(store.getState(), b.id)?.title).toBe("b1");
+      expect(patchMock).toHaveBeenCalledWith(patches);
+    });
+
+    it("resyncs from the workspace and surfaces the error on failure", async () => {
+      const a = makeNote({ title: "a0" });
+      const b = makeNote({ title: "b0" });
+      seed(a, b);
+      patchMock.mockReturnValue(dwErrAsync("boom"));
+      getAllMock.mockReturnValue(okAsync({ notes: { [a.id]: a, [b.id]: b } }));
+
+      const result = await store.dispatch(
+        updateManyNotes([
+          { id: a.id, title: "a1" },
+          { id: b.id, title: "b1" },
+        ]),
+      );
+
+      expect(result.isErr()).toBe(true);
+      expect(getAllMock).toHaveBeenCalledWith(WORKSPACE_ID);
+      await vi.waitFor(() => {
+        expect(selectNoteById(store.getState(), a.id)?.title).toBe("a0");
+        expect(selectNoteById(store.getState(), b.id)?.title).toBe("b0");
+      });
+    });
   });
 });
