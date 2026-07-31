@@ -9,6 +9,7 @@ import { type AppStore, createAppStore } from "@/features/store/redux";
 import {
   createNote,
   getCreationRank,
+  moveNote,
   updateManyNotes,
   updateNote,
 } from "./note.thunk";
@@ -265,5 +266,123 @@ describe("update thunks", () => {
         expect(selectNoteById(store.getState(), b.id)?.title).toBe("b0");
       });
     });
+  });
+});
+
+describe("moveNote", () => {
+  let store: AppStore;
+  const DEST = "p-dest";
+
+  const seed = (...notes: Note[]) =>
+    store.dispatch(notesSlice.actions.upsertNotes(notes));
+
+  const rankOf = (id: string) =>
+    selectNoteById(store.getState(), id)?.orderHint ?? "";
+
+  beforeEach(() => {
+    localStorage.clear();
+    patchMock.mockReset();
+    patchMock.mockReturnValue(okAsync(undefined));
+    getAllMock.mockReset();
+    getAllMock.mockReturnValue(okAsync({ notes: {} }));
+    store = createAppStore();
+    store.dispatch(appSessionSlice.actions.switchWorkspace(WORKSPACE_ID));
+  });
+
+  /** Two siblings in DEST, ascending: a then b. */
+  const seedLayer = () => {
+    const a = makeNote({ parentId: DEST, orderHint: Rank.default().get() });
+    const b = makeNote({
+      parentId: DEST,
+      orderHint: new Rank(a.orderHint).next().get(),
+    });
+    return { a, b };
+  };
+
+  it("errors and persists nothing when the source does not exist", async () => {
+    const result = await store.dispatch(moveNote("ghost", null));
+
+    expect(result.isErr()).toBe(true);
+    expect(patchMock).not.toHaveBeenCalled();
+  });
+
+  it("places the note after every sibling when moving to the end", async () => {
+    const { a, b } = seedLayer();
+    const source = makeNote({ parentId: null });
+    seed(a, b, source);
+
+    await store.dispatch(moveNote(source.id, DEST, "end"));
+
+    expect(selectNoteById(store.getState(), source.id)?.parentId).toBe(DEST);
+    expect(Rank.sorter(rankOf(source.id), a.orderHint)).toBe(1);
+    expect(Rank.sorter(rankOf(source.id), b.orderHint)).toBe(1);
+  });
+
+  it("places the note before every sibling when moving to the start", async () => {
+    const { a, b } = seedLayer();
+    const source = makeNote({ parentId: null });
+    seed(a, b, source);
+
+    await store.dispatch(moveNote(source.id, DEST, "start"));
+
+    expect(Rank.sorter(rankOf(source.id), a.orderHint)).toBe(-1);
+    expect(Rank.sorter(rankOf(source.id), b.orderHint)).toBe(-1);
+  });
+
+  it("excludes the source from the layer when reordering in place", async () => {
+    const { a, b } = seedLayer();
+    // source currently sorts LAST within DEST
+    const source = makeNote({
+      parentId: DEST,
+      orderHint: new Rank(b.orderHint).next().get(),
+    });
+    seed(a, b, source);
+
+    await store.dispatch(moveNote(source.id, DEST, "start"));
+
+    // it landed before a, and did not anchor on its own (previously-last) key
+    expect(Rank.sorter(rankOf(source.id), a.orderHint)).toBe(-1);
+    expect(rankOf(source.id)).not.toBe(source.orderHint);
+  });
+
+  it("updates the parent when moving across layers", async () => {
+    const source = makeNote({ parentId: "p1" });
+    seed(source);
+
+    await store.dispatch(moveNote(source.id, "p2", "end"));
+
+    expect(selectNoteById(store.getState(), source.id)?.parentId).toBe("p2");
+  });
+
+  it("persists exactly the computed patch", async () => {
+    const source = makeNote({ parentId: null });
+    seed(source);
+
+    await store.dispatch(moveNote(source.id, DEST, "end"));
+
+    expect(patchMock).toHaveBeenCalledTimes(1);
+    expect(patchMock).toHaveBeenCalledWith([
+      { id: source.id, parentId: DEST, orderHint: rankOf(source.id) },
+    ]);
+  });
+
+  it("assigns a valid key without throwing when the boundary note is corrupt", async () => {
+    const corrupt = makeNote({ parentId: DEST, orderHint: "" });
+    const source = makeNote({ parentId: null });
+    seed(corrupt, source);
+
+    const result = await store.dispatch(moveNote(source.id, DEST, "end"));
+
+    expect(result.isOk()).toBe(true);
+    expect(Rank.isValid(rankOf(source.id))).toBe(true);
+  });
+
+  it("derives from the default rank for an empty destination", async () => {
+    const source = makeNote({ parentId: null });
+    seed(source);
+
+    await store.dispatch(moveNote(source.id, "empty-dest", "end"));
+
+    expect(rankOf(source.id)).toBe(Rank.default().next().get());
   });
 });
