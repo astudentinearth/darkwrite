@@ -87,12 +87,6 @@ export function NoteAPI(
       .map(singleResponse),
   );
 
-  const move = handler((dto: MoveNoteDTO) =>
-    validateSchema(MoveNoteDTOSchema)(dto)
-      .asyncAndThen(noteService.move)
-      .map(singleResponse),
-  );
-
   const duplicate = handler((id: string) =>
     noteService.duplicate(id).map(singleResponse),
   );
@@ -174,7 +168,6 @@ export function NoteAPI(
     restoreFromTrash,
     getById,
     update,
-    move,
     duplicate,
     getDocument,
     setDocument,

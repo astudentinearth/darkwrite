@@ -39,9 +39,6 @@ export interface INoteAPI {
   update: (id: string, dto: UpdateNoteDTO) => ApiResult<NoteResponseDTO>;
   patchAll: (notes: NotePartial[]) => ApiResult<void>;
 
-  /** @deprecated */
-  move: (dto: MoveNoteDTO) => ApiResult<NoteResponseDTO>;
-
   /**
    * **PERMANENTLY** deletes a note. This is **NOT** the same as moving to trash. If you
    * want to move a note to the trash can, do an update request with `isTrashed`.
