@@ -1,222 +1,115 @@
-import type { NoteDTO } from "./note";
+import { describe, expect, it } from "vitest";
+import { type Note, type OrderKey, stableSortByOrderKeyFn } from "./note";
 import { Rank } from "./rank";
-import {
-  ANCHOR_ELEMENT_ID,
-  fixCollisionsInGroup,
-  generateRankCollisionChangeset,
-  type IdRankPair,
-  identifyCollisions,
-} from "./rank-correction";
+import { rebalanceLayer } from "./rank-correction";
 
-describe("tests for order hint collision and their correction", () => {
-  // identification tests - these dont care about key format
+let idCounter = 0;
 
-  it("should identify collision groups in a list with 2 elements", () => {
-    const pairs: IdRankPair[] = [
-      { id: "a", rank: "aaazzb" },
-      { id: "b", rank: "aaazzb" },
-    ];
+function makeNote(overrides: Partial<Note> = {}): Note {
+  const id = overrides.id ?? `note-${idCounter++}`;
+  return {
+    id,
+    title: "untitled",
+    icon: null,
+    parentId: null,
+    createdAt: "2026-01-01T00:00:00.000Z",
+    modifiedAt: "2026-01-01T00:00:00.000Z",
+    trashedAt: null,
+    orderHint: Rank.default().get(),
+    favoriteOrderHint: Rank.default().get(),
+    isFavorite: null,
+    isTrashed: null,
+    workspaceId: "ws",
+    ...overrides,
+  };
+}
 
-    const groups = identifyCollisions(pairs);
-    expect(groups.length === 1);
-    const group = groups[0];
-    expect(group.length === 3);
-    expect(group[0].id).toBe(ANCHOR_ELEMENT_ID);
-    expect(group[0].rank).toBe(Rank.default().get());
+/** Build a layer with the given order keys, in the order supplied. */
+function layer(hints: string[], key: OrderKey = "orderHint"): Note[] {
+  return hints.map((hint, i) => makeNote({ id: `n${i}`, [key]: hint }));
+}
+
+describe("rebalanceLayer", () => {
+  it("returns an empty diff for an empty layer", () => {
+    expect(rebalanceLayer([], "orderHint")).toEqual([]);
   });
 
-  it("should identify collision groups in a list where all ranks are the same", () => {
-    const pairs: IdRankPair[] = [
-      { id: "a", rank: "aaazzb" },
-      { id: "b", rank: "aaazzb" },
-      { id: "c", rank: "aaazzb" },
-    ];
+  it("emits exactly one diff per note, covering every id", () => {
+    const notes = layer(["a5", "a1", "a3"]);
+    const diffs = rebalanceLayer(notes, "orderHint");
 
-    const groups = identifyCollisions(pairs);
-    expect(groups.length === 1);
-    const group = groups[0];
-    expect(group.length === 4);
-    expect(group[0].id).toBe(ANCHOR_ELEMENT_ID);
-    expect(group[0].rank).toBe(Rank.default().toString());
-  });
-
-  it("should identify a collision group in the middle of the list", () => {
-    const pairs: IdRankPair[] = [
-      { id: "a", rank: "aaazzb" },
-      { id: "b", rank: "aaazzc" },
-      { id: "c", rank: "aaazzc" },
-      { id: "d", rank: "aaazzd" },
-    ];
-
-    const groups = identifyCollisions(pairs);
-    expect(groups.length === 1);
-    const group = groups[0];
-    expect(group.length === 3);
-    expect(group[0].id === "a");
-    expect(group[1].rank === "aaazzc");
-    expect(group[2].rank === "aaazzc");
-  });
-
-  it("should identify 2 independent collision groups", () => {
-    const pairs: IdRankPair[] = [
-      { id: "a", rank: "aaazzb" },
-      { id: "b", rank: "aaazzc" },
-      { id: "c", rank: "aaazzc" },
-      { id: "d", rank: "aaazzd" },
-      { id: "e", rank: "aaazzd" },
-      { id: "f", rank: "aaazzd" },
-    ];
-
-    const groups = identifyCollisions(pairs);
-    expect(groups.length === 2);
-    const group1 = groups[0];
-    const group2 = groups[1];
-    expect(group1.length === 3);
-    expect(group2.length === 4);
-    expect(group1[0].id === "a");
-    expect(group1[1].rank === "aaazzc");
-    expect(group1[2].rank === "aaazzc");
-    expect(group2[0].id === "d");
-    expect(group2[1].rank === "aaazzd");
-    expect(group2[2].rank === "aaazzd");
-    expect(group2[3].rank === "aaazzd");
-  });
-
-  it("should return an empty list when no items are given", () => {
-    const result = identifyCollisions([]);
-    expect(result.length).toBe(0);
-  });
-
-  it("should return an empty list if there are no collisions", () => {
-    const pairs: IdRankPair[] = [
-      { id: "a", rank: "aaazzb" },
-      { id: "b", rank: "aaazzc" },
-      { id: "c", rank: "aaazzd" },
-      { id: "d", rank: "aaazze" },
-      { id: "e", rank: "aaazzf" },
-      { id: "f", rank: "aaazzg" },
-    ];
-
-    const result = identifyCollisions(pairs);
-    expect(result.length).toBe(0);
-  });
-
-  it("should identify a collision at the end", () => {
-    const pairs: IdRankPair[] = [
-      { id: "a", rank: "aaazzb" },
-      { id: "b", rank: "aaazzc" },
-      { id: "c", rank: "aaazzd" },
-      { id: "d", rank: "aaazzf" },
-      { id: "e", rank: "aaazzf" },
-      { id: "f", rank: "aaazzf" },
-    ];
-
-    const result = identifyCollisions(pairs);
-    expect(result.length).toBe(1);
-    const group = result[0];
-    expect(group.length).toBe(4);
-    expect(group[0].id).toBe("c");
-    expect(group[1].rank).toBe("aaazzf");
-    expect(group[2].rank).toBe("aaazzf");
-    expect(group[3].rank).toBe("aaazzf");
-  });
-
-  it("should identify a start, a middle and an end collision all at once", () => {
-    const pairs: IdRankPair[] = [
-      { id: "a", rank: "aaazzb" },
-      { id: "b", rank: "aaazzb" },
-      { id: "c", rank: "aaazzc" },
-      { id: "d", rank: "aaazzc" },
-      { id: "e", rank: "aaazzd" },
-      { id: "f", rank: "aaazze" },
-      { id: "g", rank: "aaazzf" },
-      { id: "h", rank: "aaazzf" },
-      { id: "i", rank: "aaazzf" },
-      { id: "j", rank: "aaazzf" },
-    ];
-
-    const result = identifyCollisions(pairs);
-    expect(result.length).toBe(3);
-    const group1 = result[0];
-    const group2 = result[1];
-    const group3 = result[2];
-
-    // group 1
-    expect(group1.length).toBe(3);
-    expect(group1[0].id).toBe(ANCHOR_ELEMENT_ID);
-    expect(group1[0].rank).toBe(Rank.default().toString());
-    expect(group1[1].rank).toBe("aaazzb");
-    expect(group1[2].rank).toBe("aaazzb");
-
-    // group 2
-    expect(group2.length).toBe(3);
-    expect(group2[0].id).toBe("b");
-    expect(group2[0].rank).toBe("aaazzb");
-    expect(group2[1].rank).toBe("aaazzc");
-    expect(group2[2].rank).toBe("aaazzc");
-
-    // group 3
-    expect(group3.length).toBe(5);
-    expect(group3[0].id).toBe("f");
-    expect(group3[0].rank).toBe("aaazze");
-    expect(group3[1].rank).toBe("aaazzf");
-    expect(group3[2].rank).toBe("aaazzf");
-    expect(group3[3].rank).toBe("aaazzf");
-    expect(group3[4].rank).toBe("aaazzf");
-  });
-
-  it("should refuse to perform a correction when group size is <3", () => {
-    const list: IdRankPair[] = [];
-    const result = fixCollisionsInGroup(list);
-    expect(result).toHaveLength(0);
-  });
-
-  // correction tests - these care about key format
-
-  it("should fix collisions in a group when a placeholder anchor is present", () => {
-    const collidingRank = Rank.default().next().next();
-    const list: IdRankPair[] = [
-      { id: ANCHOR_ELEMENT_ID, rank: Rank.default().toString() },
-      { id: "a", rank: collidingRank.get() },
-      { id: "b", rank: collidingRank.get() },
-    ];
-    const result = fixCollisionsInGroup(list);
-    expect(result).toHaveLength(2);
-    expect(result[0].rank).toBe(collidingRank.between(Rank.default()).get());
-    expect(result[1].rank).toBe(
-      collidingRank.between(Rank.default()).between(collidingRank).get(),
+    expect(diffs).toHaveLength(notes.length);
+    expect(new Set(diffs.map((d) => d.id))).toEqual(
+      new Set(notes.map((n) => n.id)),
     );
   });
 
-  it("should fix collisions in a group", () => {
-    const collidingRank = Rank.default().next().next();
-    const list: IdRankPair[] = [
-      { id: "a", rank: "aaazzz" },
-      { id: "b", rank: collidingRank.get() },
-      { id: "c", rank: collidingRank.get() },
-      { id: "d", rank: collidingRank.get() },
-    ];
-    const result = fixCollisionsInGroup(list);
-    expect(result).toHaveLength(3);
-    expect(new Set(result.map((e) => e.rank))).toHaveLength(3); // all different ranks
+  it("assigns strictly ascending, distinct keys in output order", () => {
+    const diffs = rebalanceLayer(layer(["a9", "a2", "a5", "a0"]), "orderHint");
+    const keys = diffs.map((d) => d.orderHint);
+
+    expect(new Set(keys).size).toBe(keys.length);
+    for (let i = 1; i < keys.length; i++) {
+      expect(Rank.sorter(keys[i - 1], keys[i])).toBe(-1);
+    }
   });
 
-  // full run
+  it("emits diffs in the same order stableSortByOrderKeyFn would produce", () => {
+    const notes = layer(["a5", "a1", "a3", "a2"]);
+    const expectedOrder = notes
+      .toSorted(stableSortByOrderKeyFn("orderHint"))
+      .map((n) => n.id);
 
-  it("should fix a list of notes that have colliding order keys", () => {
+    const diffs = rebalanceLayer(notes, "orderHint");
+    expect(diffs.map((d) => d.id)).toEqual(expectedOrder);
+  });
+
+  it("breaks rank collisions by id (immutable tiebreaker)", () => {
+    // three notes share the exact same orderHint
     const notes = [
-      {
-        id: "a",
-        orderHint: "a2",
-      },
-      { id: "b", orderHint: "a0" },
-      { id: "c", orderHint: "a2" },
-    ] as NoteDTO[]; // we don't care about other keys
+      makeNote({ id: "c", orderHint: "a5" }),
+      makeNote({ id: "a", orderHint: "a5" }),
+      makeNote({ id: "b", orderHint: "a5" }),
+    ];
+    const diffs = rebalanceLayer(notes, "orderHint");
 
-    const result = generateRankCollisionChangeset(notes, "orderHint");
-    const keys = new Set(result.map((e) => e.orderHint));
-    expect(keys).toHaveLength(2);
-    expect(result).toHaveLength(2);
-    expect(keys).not.contain("a0"); // we don't want the healthy note to be affected
+    // tiebreak is a.id.localeCompare(b.id) -> a, b, c
+    expect(diffs.map((d) => d.id)).toEqual(["a", "b", "c"]);
+    const keys = diffs.map((d) => d.orderHint);
+    for (let i = 1; i < keys.length; i++) {
+      expect(Rank.sorter(keys[i - 1], keys[i])).toBe(-1);
+    }
+  });
+
+  it("does not mutate the input notes", () => {
+    const notes = layer(["a5", "a1", "a3"]);
+    const snapshot = structuredClone(notes);
+
+    rebalanceLayer(notes, "orderHint");
+    expect(notes).toEqual(snapshot);
+  });
+
+  it("is idempotent: rebalancing balanced output reproduces the same keys", () => {
+    const notes = layer(["a9", "a2", "a5"]);
+    const first = rebalanceLayer(notes, "orderHint");
+
+    // apply the diff, then rebalance again
+    const applied = notes.map((n) => {
+      const diff = first.find((d) => d.id === n.id);
+      return diff ? { ...n, orderHint: diff.orderHint } : n;
+    });
+    const second = rebalanceLayer(applied, "orderHint");
+
+    expect(second).toEqual(first);
+  });
+
+  it("writes the favoriteOrderHint field when keyed on favorites", () => {
+    const notes = layer(["a5", "a1"], "favoriteOrderHint");
+    const diffs = rebalanceLayer(notes, "favoriteOrderHint");
+
+    for (const diff of diffs) {
+      expect(diff).toHaveProperty("favoriteOrderHint");
+      expect(diff).not.toHaveProperty("orderHint");
+    }
   });
 });
