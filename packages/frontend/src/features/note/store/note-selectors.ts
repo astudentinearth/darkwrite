@@ -1,4 +1,9 @@
-import { byUpdateTime, isDescendant, Rank } from "@darkwrite/common";
+import {
+  byUpdateTime,
+  isDescendant,
+  Rank,
+  stableSortByOrderKeyFn,
+} from "@darkwrite/common";
 import { createSelector, weakMapMemoize } from "@reduxjs/toolkit";
 import type { RootState } from "@/features/store/types";
 import { notesAdapter } from "./notes-adapter";
@@ -27,7 +32,7 @@ export const selectNotesByParentId = createSelector(
           note.parentId === parentId &&
           !note.isTrashed,
       )
-      .toSorted((a, b) => Rank.sorter(a.orderHint, b.orderHint));
+      .toSorted(stableSortByOrderKeyFn());
   },
 );
 
@@ -61,7 +66,7 @@ export const selectFavoriteIds = createSelector(
       .filter(
         (n) => n.workspaceId === workspaceId && n.isFavorite && !n.isTrashed,
       )
-      .toSorted((a, b) => Rank.sorter(a.favoriteOrderHint, b.favoriteOrderHint))
+      .toSorted(stableSortByOrderKeyFn("favoriteOrderHint"))
       .map((n) => n.id);
   },
 );

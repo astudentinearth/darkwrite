@@ -1,4 +1,5 @@
 import type { NoteContent } from "@/note-content";
+import { Rank } from "./rank";
 
 export interface Note {
   id: string;
@@ -151,3 +152,10 @@ export const DEFAULT_NOTE_ICON = "1f4c4";
 export function cleanNoteTitle(title: string) {
   return title.replace(/(\r\n|\n|\r)/gm, " ");
 }
+
+export const stableSortByOrderKeyFn =
+  (key: OrderKey = "orderHint") =>
+  (a: Note, b: Note) => {
+    const result = Rank.sorter(a[key], b[key]);
+    return result === 0 ? a.id.localeCompare(b.id) : result;
+  };

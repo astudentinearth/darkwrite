@@ -1,7 +1,7 @@
 import type {
   CreateWorkspaceDTO,
   DeepPartial,
-  WorkspaceDTO,
+  Workspace,
 } from "@darkwrite/common";
 import _ from "lodash";
 import { okAsync } from "neverthrow";
@@ -21,7 +21,7 @@ export const reloadWorkspaces = () => (dispatch: AppDispatch) =>
     .andTee((data) => dispatch(act.setWorkspaces(data.workspaces)));
 
 export const updateWorkspace =
-  (id: string, diff: DeepPartial<WorkspaceDTO>) => (dispatch: AppDispatch) =>
+  (id: string, diff: DeepPartial<Workspace>) => (dispatch: AppDispatch) =>
     DarkwriteAPIClient.workspace
       .update(id, diff)
       .map(() =>
