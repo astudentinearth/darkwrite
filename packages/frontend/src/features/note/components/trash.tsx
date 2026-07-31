@@ -18,8 +18,8 @@ import { useAppStore } from "@/features/store/hooks";
 import { cn, getNoteIcon } from "@/lib/utils";
 import { useNoteById } from "../hooks/use-note-by-id";
 import { useTrash } from "../hooks/use-trash";
-import { getMovingNote } from "../store/move-note";
 import { useNoteActions } from "../store/note-actions";
+import { getMovingNote } from "../store/note-selectors";
 import { NoteTitle } from "./note-title";
 import { TrashMenu } from "./trash-menu";
 

@@ -9,7 +9,6 @@ import { useAppDispatch } from "@/features/store/hooks";
 import type { AppDispatch } from "@/features/store/types";
 import { createNoteApi } from "./create-note";
 import { type FavoriteNoteArgs, favoritesApi } from "./favorites-api";
-import { moveNoteApi } from "./move-note";
 import { trashApi } from "./trash-api";
 
 export const getNoteActions = (dispatch: AppDispatch) => ({

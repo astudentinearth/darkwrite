@@ -6,6 +6,8 @@ import {
   stableSortByOrderKeyFn,
 } from "@darkwrite/common";
 import { createSelector, weakMapMemoize } from "@reduxjs/toolkit";
+import type { DragEvent } from "react";
+import { extractNoteDragData } from "@/features/dnd/datatransfer";
 import type { RootState } from "@/features/store/types";
 import { notesAdapter } from "./notes-adapter";
 import type { MoveNoteSearchArgs, SearchArgs } from "./types";
@@ -162,3 +164,10 @@ export const selectNoteIdsInTrash = createSelector(
       .filter((n) => n.workspaceId === workspaceId && n.isTrashed)
       .map((n) => n.id),
 );
+
+export function getMovingNote(e: DragEvent<HTMLElement>, state: RootState) {
+  const sourceId = extractNoteDragData(e)?.noteId;
+  if (!sourceId) return;
+  const movingNote = selectNoteById(state, sourceId);
+  return movingNote ?? null;
+}

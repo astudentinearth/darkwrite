@@ -11,13 +11,16 @@ import {
   useAppSelector,
   useAppStore,
 } from "@/features/store/hooks";
-import { getMovingNote } from "../store/move-note";
 import {
   canMoveNoteBelow,
   canMoveNoteInto,
 } from "../store/move-note-validator";
 import { createNote, moveNote, reorderNote } from "../store/note.thunk";
-import { selectAllNotesAsMap, selectNoteById } from "../store/note-selectors";
+import {
+  getMovingNote,
+  selectAllNotesAsMap,
+  selectNoteById,
+} from "../store/note-selectors";
 
 /**
  * Hook to get note data **within sidebar views.** Do NOT use this to
