@@ -2,10 +2,12 @@ import {
   type DwError,
   dwErr,
   dwErrAsync,
+  isDescendant,
   type Note,
   type NotePartial,
   type ParentId,
   Rank,
+  rebalanceLayer,
   stableSortByOrderKeyFn,
 } from "@darkwrite/common";
 import { errAsync } from "neverthrow";
@@ -13,7 +15,11 @@ import { DarkwriteAPIClient } from "@/api/api-client";
 import { navigateToNote } from "@/features/navigation/navigator";
 import type { AppDispatch, AppGetState } from "@/features/store/types";
 import { getCurrentWorkspaceId } from "@/features/workspaces/store/workspace.thunk";
-import { selectNoteById, selectNotesByParentId } from "./note-selectors";
+import {
+  selectAllNotesAsMap,
+  selectNoteById,
+  selectNotesByParentId,
+} from "./note-selectors";
 import { notesSlice } from "./note-slice";
 
 export interface CreateNoteArgs {
@@ -129,6 +135,13 @@ export const updateManyNotes =
  */
 export const updateNote = (patch: NotePartial) => updateManyNotes([patch]);
 
+/**
+ * Moves a note to the start or end of a tree layer.
+ * @param sourceId the note we are moving
+ * @param destinationId the new parent id
+ * @param placement start or end
+ * @returns nothing on success, error on failure
+ */
 export const moveNote =
   (
     sourceId: string,
@@ -138,6 +151,13 @@ export const moveNote =
   (dispatch: AppDispatch, getState: AppGetState) => {
     const sourceNote = selectNoteById(getState(), sourceId);
     if (!sourceNote) return dwErrAsync(`Note ${sourceId} does not exist.`);
+
+    // block moving a note into itself or one of its descendants
+    if (
+      destinationId !== null &&
+      isDescendant(destinationId, sourceId, selectAllNotesAsMap(getState()))
+    )
+      return dwErrAsync("Cannot move a note into its own subtree.");
 
     const layer = selectNotesByParentId(
       getState(),
@@ -159,6 +179,114 @@ export const moveNote =
         parentId: destinationId,
         orderHint:
           placement === "start" ? order.prev().get() : order.next().get(),
+      }),
+    );
+  };
+
+export type RelativePlacement = "above" | "below";
+
+/**
+ * Reorders a note in the tree.
+ * @param sourceId the note we are moving
+ * @param anchorId the note we are moving relative to
+ * @param placement side of the anchor note we should place it against
+ * @returns nothing on success, error on failure
+ */
+export const reorderNote =
+  (sourceId: string, anchorId: string, placement: RelativePlacement) =>
+  (dispatch: AppDispatch, getState: AppGetState) => {
+    const state = getState();
+
+    const sourceNote = selectNoteById(state, sourceId);
+    if (!sourceNote) return dwErrAsync("Source note does not exist.");
+
+    const anchorNote = selectNoteById(state, anchorId);
+    if (!anchorNote) return dwErrAsync("Neighboring note does not exist.");
+
+    // the source adopts the anchor's parent; block if that parent is the
+    // source itself or one of its descendants (would create a cycle)
+    if (
+      anchorNote.parentId !== null &&
+      isDescendant(anchorNote.parentId, sourceId, selectAllNotesAsMap(state))
+    )
+      return dwErrAsync("Cannot move a note into its own subtree.");
+
+    const siblings = selectNotesByParentId(
+      state,
+      anchorNote.workspaceId,
+      anchorNote.parentId,
+    )
+      .toSorted(stableSortByOrderKeyFn())
+      .filter((n) => n.id !== sourceId);
+
+    const anchorIdx = siblings.findIndex((n) => n.id === anchorId);
+    if (anchorIdx === -1) return dwErrAsync("Neighboring note does not exist.");
+
+    const otherNeighborIdx = anchorIdx + (placement === "above" ? -1 : 1);
+
+    const otherNeighbor =
+      otherNeighborIdx < 0 || otherNeighborIdx >= siblings.length
+        ? null
+        : siblings[otherNeighborIdx];
+
+    // no midpoint, equivalent to moving to list bounds. delegate to other handler
+    if (!otherNeighbor)
+      return dispatch(
+        moveNote(
+          sourceId,
+          anchorNote.parentId,
+          placement === "above" ? "start" : "end",
+        ),
+      );
+
+    // collision/corrupt case
+    if (
+      otherNeighbor.orderHint === anchorNote.orderHint ||
+      !Rank.isValid(otherNeighbor.orderHint) ||
+      !Rank.isValid(anchorNote.orderHint)
+    ) {
+      const rebalanced = rebalanceLayer(siblings);
+
+      // access by position directly, sort is stable
+      const anchorOrder = rebalanced[anchorIdx].orderHint;
+      const neighborOrder = rebalanced[otherNeighborIdx].orderHint;
+
+      // no need for additional validation
+      const result = Rank.midpoint(
+        new Rank(anchorOrder),
+        new Rank(neighborOrder),
+      );
+      if (result.collided)
+        return dwErrAsync(
+          "Layer reconciliation is broken: please report this issue.",
+        );
+
+      return dispatch(
+        updateManyNotes([
+          ...rebalanced,
+          {
+            id: sourceId,
+            parentId: anchorNote.parentId,
+            orderHint: result.midpoint.get(),
+          },
+        ]),
+      );
+    }
+
+    // no problems beyond this point
+    const newOrder = Rank.midpoint(
+      new Rank(anchorNote.orderHint),
+      new Rank(otherNeighbor.orderHint),
+    );
+
+    if (newOrder.collided)
+      return dwErrAsync("Note reordering is broken: please report this issue.");
+
+    return dispatch(
+      updateNote({
+        id: sourceId,
+        parentId: anchorNote.parentId,
+        orderHint: newOrder.midpoint.get(),
       }),
     );
   };

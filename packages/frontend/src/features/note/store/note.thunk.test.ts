@@ -10,6 +10,7 @@ import {
   createNote,
   getCreationRank,
   moveNote,
+  reorderNote,
   updateManyNotes,
   updateNote,
 } from "./note.thunk";
@@ -384,5 +385,227 @@ describe("moveNote", () => {
     await store.dispatch(moveNote(source.id, "empty-dest", "end"));
 
     expect(rankOf(source.id)).toBe(Rank.default().next().get());
+  });
+
+  it("refuses to move a note into one of its descendants", async () => {
+    // P > C > G
+    seed(
+      makeNote({ id: "P", parentId: null }),
+      makeNote({ id: "C", parentId: "P" }),
+      makeNote({ id: "G", parentId: "C" }),
+    );
+
+    const result = await store.dispatch(moveNote("P", "G", "end"));
+
+    expect(result.isErr()).toBe(true);
+    expect(patchMock).not.toHaveBeenCalled();
+  });
+
+  it("refuses to move a note into itself", async () => {
+    seed(makeNote({ id: "P", parentId: null }));
+
+    const result = await store.dispatch(moveNote("P", "P", "end"));
+
+    expect(result.isErr()).toBe(true);
+    expect(patchMock).not.toHaveBeenCalled();
+  });
+
+  it("allows moving a note into its own current parent", async () => {
+    seed(
+      makeNote({ id: "P", parentId: null }),
+      makeNote({ id: "C", parentId: "P" }),
+    );
+
+    // C -> P is not a cycle (P is not a descendant of C)
+    const result = await store.dispatch(moveNote("C", "P", "end"));
+
+    expect(result.isOk()).toBe(true);
+  });
+});
+
+describe("reorderNote", () => {
+  let store: AppStore;
+  const DEST = "p-dest";
+
+  const seed = (...notes: Note[]) =>
+    store.dispatch(notesSlice.actions.upsertNotes(notes));
+
+  const rankOf = (id: string) =>
+    selectNoteById(store.getState(), id)?.orderHint ?? "";
+
+  /** DEST layer ids in display (sorted) order. */
+  const layerIds = () =>
+    selectNotesByParentId(store.getState(), WORKSPACE_ID, DEST).map(
+      (n) => n.id,
+    );
+
+  beforeEach(() => {
+    localStorage.clear();
+    patchMock.mockReset();
+    patchMock.mockReturnValue(okAsync(undefined));
+    getAllMock.mockReset();
+    getAllMock.mockReturnValue(okAsync({ notes: {} }));
+    store = createAppStore();
+    store.dispatch(appSessionSlice.actions.switchWorkspace(WORKSPACE_ID));
+  });
+
+  /** Three clean, ascending siblings in DEST: a < b < c. */
+  const seedTriplet = () => {
+    const a = makeNote({ id: "a", parentId: DEST, orderHint: "a1" });
+    const b = makeNote({ id: "b", parentId: DEST, orderHint: "a2" });
+    const c = makeNote({ id: "c", parentId: DEST, orderHint: "a3" });
+    return { a, b, c };
+  };
+
+  it("errors when the source does not exist", async () => {
+    const result = await store.dispatch(
+      reorderNote("ghost", "anchor", "below"),
+    );
+
+    expect(result.isErr()).toBe(true);
+    expect(patchMock).not.toHaveBeenCalled();
+  });
+
+  it("errors when the anchor does not exist", async () => {
+    const source = makeNote({ parentId: null });
+    seed(source);
+
+    const result = await store.dispatch(
+      reorderNote(source.id, "ghost", "below"),
+    );
+
+    expect(result.isErr()).toBe(true);
+    expect(patchMock).not.toHaveBeenCalled();
+  });
+
+  it("errors when reordering a note relative to itself", async () => {
+    const source = makeNote({ parentId: DEST, orderHint: "a1" });
+    seed(source);
+
+    // source is filtered out of its own layer, so it can't be its own anchor
+    const result = await store.dispatch(
+      reorderNote(source.id, source.id, "below"),
+    );
+
+    expect(result.isErr()).toBe(true);
+    expect(patchMock).not.toHaveBeenCalled();
+  });
+
+  it("places the note between the anchor and its lower neighbor (below)", async () => {
+    const { a, b, c } = seedTriplet();
+    const source = makeNote({ id: "src", parentId: null });
+    seed(a, b, c, source);
+
+    // below b -> between b and c
+    await store.dispatch(reorderNote(source.id, b.id, "below"));
+
+    expect(layerIds()).toEqual(["a", "b", "src", "c"]);
+    expect(selectNoteById(store.getState(), source.id)?.parentId).toBe(DEST);
+  });
+
+  it("places the note between the anchor and its upper neighbor (above)", async () => {
+    const { a, b, c } = seedTriplet();
+    const source = makeNote({ id: "src", parentId: null });
+    seed(a, b, c, source);
+
+    // above b -> between a and b
+    await store.dispatch(reorderNote(source.id, b.id, "above"));
+
+    expect(layerIds()).toEqual(["a", "src", "b", "c"]);
+  });
+
+  it("delegates to the list start when dropped above the first sibling", async () => {
+    const { a, b, c } = seedTriplet();
+    const source = makeNote({ id: "src", parentId: null });
+    seed(a, b, c, source);
+
+    await store.dispatch(reorderNote(source.id, a.id, "above"));
+
+    expect(layerIds()).toEqual(["src", "a", "b", "c"]);
+    expect(patchMock).toHaveBeenCalledTimes(1); // proves the delegate dispatched
+  });
+
+  it("delegates to the list end when dropped below the last sibling", async () => {
+    const { a, b, c } = seedTriplet();
+    const source = makeNote({ id: "src", parentId: null });
+    seed(a, b, c, source);
+
+    await store.dispatch(reorderNote(source.id, c.id, "below"));
+
+    expect(layerIds()).toEqual(["a", "b", "c", "src"]);
+    expect(patchMock).toHaveBeenCalledTimes(1);
+  });
+
+  it("rebalances the layer when anchor and neighbor collide", async () => {
+    // a and b share the same key: the target gap has no midpoint
+    const a = makeNote({ id: "a", parentId: DEST, orderHint: "a5" });
+    const b = makeNote({ id: "b", parentId: DEST, orderHint: "a5" });
+    const source = makeNote({ id: "src", parentId: null });
+    seed(a, b, source);
+
+    // below a -> between a and b (which collide) -> rebalance path
+    const result = await store.dispatch(reorderNote(source.id, a.id, "below"));
+
+    expect(result.isOk()).toBe(true);
+    expect(layerIds()).toEqual(["a", "src", "b"]);
+    // every key is now valid and distinct
+    const keys = [rankOf("a"), rankOf("src"), rankOf("b")];
+    expect(keys.every((k) => Rank.isValid(k))).toBe(true);
+    expect(new Set(keys).size).toBe(3);
+  });
+
+  it("rebalances the layer when a neighbor key is corrupt", async () => {
+    const a = makeNote({ id: "a", parentId: DEST, orderHint: "a1" });
+    // corrupt key sorts to the front of the layer
+    const corrupt = makeNote({ id: "cor", parentId: DEST, orderHint: "" });
+    const source = makeNote({ id: "src", parentId: null });
+    seed(a, corrupt, source);
+
+    // above a -> neighbor is the corrupt note -> rebalance path
+    const result = await store.dispatch(reorderNote(source.id, a.id, "above"));
+
+    expect(result.isOk()).toBe(true);
+    expect(layerIds()).toEqual(["cor", "src", "a"]);
+    const keys = [rankOf("cor"), rankOf("src"), rankOf("a")];
+    expect(keys.every((k) => Rank.isValid(k))).toBe(true);
+    expect(new Set(keys).size).toBe(3);
+  });
+
+  it("moves the note across layers, adopting the anchor's parent", async () => {
+    const { a, b } = seedTriplet();
+    const source = makeNote({ id: "src", parentId: "other-parent" });
+    seed(a, b, source);
+
+    await store.dispatch(reorderNote(source.id, a.id, "below"));
+
+    expect(selectNoteById(store.getState(), source.id)?.parentId).toBe(DEST);
+    expect(layerIds()).toEqual(["a", "src", "b"]);
+  });
+
+  it("refuses to reorder against an anchor inside its own subtree", async () => {
+    // P > C > G; reordering P next to G would nest P under itself
+    seed(
+      makeNote({ id: "P", parentId: null }),
+      makeNote({ id: "C", parentId: "P" }),
+      makeNote({ id: "G", parentId: "C" }),
+    );
+
+    const result = await store.dispatch(reorderNote("P", "G", "below"));
+
+    expect(result.isErr()).toBe(true);
+    expect(patchMock).not.toHaveBeenCalled();
+  });
+
+  it("refuses to reorder a note next to its own direct child", async () => {
+    // anchor C's parent is P (the source): adopting it re-parents P under itself
+    seed(
+      makeNote({ id: "P", parentId: null }),
+      makeNote({ id: "C", parentId: "P" }),
+    );
+
+    const result = await store.dispatch(reorderNote("P", "C", "above"));
+
+    expect(result.isErr()).toBe(true);
+    expect(patchMock).not.toHaveBeenCalled();
   });
 });

@@ -11,12 +11,12 @@ import {
   useAppSelector,
   useAppStore,
 } from "@/features/store/hooks";
-import { getMovingNote, useMoveBelowMutation } from "../store/move-note";
+import { getMovingNote } from "../store/move-note";
 import {
   canMoveNoteBelow,
   canMoveNoteInto,
 } from "../store/move-note-validator";
-import { createNote, moveNote } from "../store/note.thunk";
+import { createNote, moveNote, reorderNote } from "../store/note.thunk";
 import { selectAllNotesAsMap, selectNoteById } from "../store/note-selectors";
 
 /**
@@ -116,8 +116,6 @@ export function useNoteDropZone(
     setIsDraggingOver,
   } = useDragState();
 
-  const [moveBelow] = useMoveBelowMutation();
-
   type DragEvent = React.DragEvent<HTMLElement>;
   const store = useAppStore();
 
@@ -141,16 +139,9 @@ export function useNoteDropZone(
       )
         return;
 
-      try {
-        moveBelow({
-          sourceNoteId: movingNote.id,
-          aboveNoteId: aboveOrParentId,
-        });
-      } catch (error) {
-        console.error("Failed to move note below:", error);
-      }
+      store.dispatch(reorderNote(movingNote.id, aboveOrParentId, "below"));
     },
-    [aboveOrParentId, moveBelow, setIsDraggingOver, store],
+    [aboveOrParentId, setIsDraggingOver, store],
   );
 
   const handleDropInto = useCallback(

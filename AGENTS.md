@@ -134,6 +134,7 @@ NEVER EVER EVER complain about whitespace, indentation, or whatever else Biome c
 
 ### Redux / State Management
 - Use pre-defined Redux slices, selectors and thunks
+- If a thunk is calling/delegating to another thunk, make sure it's dispatched and we are not returning a function reference/no-op.
 - RTK Query has been deprecated in this codebase.
 
 ### IPC Communication
