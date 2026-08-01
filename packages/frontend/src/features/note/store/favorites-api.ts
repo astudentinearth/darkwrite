@@ -118,5 +118,3 @@ export const favoritesApi = notesApi.injectEndpoints({
     }),
   }),
 });
-
-export const { useFavoriteMutation } = favoritesApi;

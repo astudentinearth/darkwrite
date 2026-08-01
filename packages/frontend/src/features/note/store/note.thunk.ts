@@ -17,6 +17,7 @@ import type { AppDispatch, AppGetState } from "@/features/store/types";
 import { getCurrentWorkspaceId } from "@/features/workspaces/store/workspace.thunk";
 import {
   selectAllNotesAsMap,
+  selectFavorites,
   selectNoteById,
   selectNotesByParentId,
 } from "./note-selectors";
@@ -290,3 +291,124 @@ export const reorderNote =
       }),
     );
   };
+
+const addFavoriteToEnd =
+  (noteId: string) => (dispatch: AppDispatch, getState: AppGetState) => {
+    const state = getState();
+    const note = selectNoteById(state, noteId);
+    if (!note) return dwErrAsync("Note does not exist.");
+
+    const favorites = selectFavorites(state, note.workspaceId).filter(
+      (n) => n.id !== noteId,
+    );
+
+    if (favorites.length === 0)
+      return dispatch(
+        updateNote({
+          id: noteId,
+          favoriteOrderHint: Rank.default().get(),
+          isFavorite: true,
+        }),
+      );
+
+    const last = favorites[favorites.length - 1];
+
+    return dispatch(
+      updateNote({
+        id: noteId,
+        isFavorite: true,
+        favoriteOrderHint: Rank.safe(last.favoriteOrderHint).next().get(),
+      }),
+    );
+  };
+
+export const reorderFavorite =
+  (
+    noteId: string,
+    anchorNoteId?: string,
+    placement: RelativePlacement = "below",
+  ) =>
+  (dispatch: AppDispatch, getState: AppGetState) => {
+    const state = getState();
+    const note = selectNoteById(state, noteId);
+    if (!note) return dwErrAsync("Note does not exist.");
+
+    const favorites = selectFavorites(state, note.workspaceId).filter(
+      (n) => n.id !== noteId,
+    );
+
+    if (!anchorNoteId) return dispatch(addFavoriteToEnd(noteId));
+
+    const anchor = selectNoteById(state, anchorNoteId);
+    if (!anchor) return dwErrAsync("Anchor note does not exist.");
+
+    const neighborIdx =
+      favorites.findIndex((n) => n.id === anchorNoteId) +
+      (placement === "below" ? 1 : -1);
+
+    if (neighborIdx >= favorites.length)
+      return dispatch(addFavoriteToEnd(noteId));
+
+    if (neighborIdx < 0) {
+      const rank = Rank.safe(anchor.favoriteOrderHint);
+      return dispatch(
+        updateNote({
+          id: noteId,
+          isFavorite: true,
+          favoriteOrderHint: rank.prev().get(),
+        }),
+      );
+    }
+
+    const neighbor = favorites[neighborIdx];
+
+    // collision case
+    if (
+      !Rank.isValid(neighbor.favoriteOrderHint) ||
+      !Rank.isValid(anchor.favoriteOrderHint) ||
+      anchor.favoriteOrderHint === neighbor.favoriteOrderHint
+    ) {
+      const rebalanced = rebalanceLayer(favorites, "favoriteOrderHint");
+      const anchorIdx = favorites.findIndex((n) => n.id === anchorNoteId);
+      const rank = Rank.midpoint(
+        new Rank(rebalanced[anchorIdx].favoriteOrderHint),
+        new Rank(rebalanced[neighborIdx].favoriteOrderHint),
+      );
+
+      if (rank.collided)
+        return dwErrAsync(
+          "Favorites reconciliation is broken: please report this issue.",
+        );
+
+      return dispatch(
+        updateManyNotes([
+          ...rebalanced,
+          {
+            id: noteId,
+            isFavorite: true,
+            favoriteOrderHint: rank.midpoint.get(),
+          },
+        ]),
+      );
+    }
+
+    const midpoint = Rank.midpoint(
+      new Rank(neighbor.favoriteOrderHint),
+      new Rank(anchor.favoriteOrderHint),
+    );
+    if (midpoint.collided)
+      return dwErrAsync(
+        "Favorite reordering is broken: please report this issue.",
+      );
+
+    return dispatch(
+      updateNote({
+        id: noteId,
+        favoriteOrderHint: midpoint.midpoint.get(),
+        isFavorite: true,
+      }),
+    );
+  };
+
+export const unfavorite = (noteId: string) => (dispatch: AppDispatch) =>
+  dispatch(updateNote({ id: noteId, isFavorite: false }));

@@ -8,18 +8,9 @@ import notify from "@/features/notifications/notify";
 import { useAppDispatch } from "@/features/store/hooks";
 import type { AppDispatch } from "@/features/store/types";
 import { createNoteApi } from "./create-note";
-import { type FavoriteNoteArgs, favoritesApi } from "./favorites-api";
 import { trashApi } from "./trash-api";
 
 export const getNoteActions = (dispatch: AppDispatch) => ({
-  async favorite(args: FavoriteNoteArgs) {
-    dispatch(favoritesApi.endpoints.favorite.initiate(args));
-  },
-
-  async unfavorite(noteId: string) {
-    dispatch(favoritesApi.endpoints.unfavorite.initiate(noteId));
-  },
-
   async duplicateNote(id: string, navigateAfter = true) {
     dispatch(createNoteApi.endpoints.duplicateNote.initiate(id))
       .unwrap()

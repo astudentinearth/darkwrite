@@ -67,6 +67,9 @@ export const selectRecentNotes = createSelector(
   },
 );
 
+/**
+ * Get favorite IDs in a workspace in stable sorted order.
+ */
 export const selectFavoriteIds = createSelector(
   [selectAllNotes, (_state: RootState, workspaceId: string) => workspaceId],
   (allNotes, workspaceId) => {
@@ -79,6 +82,9 @@ export const selectFavoriteIds = createSelector(
   },
 );
 
+/**
+ * Get favorites in a workspace in stable sorted order.
+ */
 export const selectFavorites = createSelector(
   [selectAllNotes, (_state: RootState, workspaceId: string) => workspaceId],
   (allNotes, workspaceId) => {
@@ -86,9 +92,7 @@ export const selectFavorites = createSelector(
       .filter(
         (n) => n.workspaceId === workspaceId && n.isFavorite && !n.isTrashed,
       )
-      .toSorted((a, b) =>
-        Rank.sorter(a.favoriteOrderHint, b.favoriteOrderHint),
-      );
+      .toSorted(stableSortByOrderKeyFn("favoriteOrderHint"));
   },
 );
 

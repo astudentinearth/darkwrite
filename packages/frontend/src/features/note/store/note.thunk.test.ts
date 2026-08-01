@@ -10,11 +10,16 @@ import {
   createNote,
   getCreationRank,
   moveNote,
+  reorderFavorite,
   reorderNote,
   updateManyNotes,
   updateNote,
 } from "./note.thunk";
-import { selectNoteById, selectNotesByParentId } from "./note-selectors";
+import {
+  selectFavorites,
+  selectNoteById,
+  selectNotesByParentId,
+} from "./note-selectors";
 import { notesSlice } from "./note-slice";
 
 vi.mock("@/api/api-client", () => ({
@@ -607,5 +612,203 @@ describe("reorderNote", () => {
 
     expect(result.isErr()).toBe(true);
     expect(patchMock).not.toHaveBeenCalled();
+  });
+});
+
+describe("reorderFavorite", () => {
+  let store: AppStore;
+
+  const seed = (...notes: Note[]) =>
+    store.dispatch(notesSlice.actions.upsertNotes(notes));
+
+  const favRankOf = (id: string) =>
+    selectNoteById(store.getState(), id)?.favoriteOrderHint ?? "";
+
+  /** Favorite ids in display (sorted) order. */
+  const favIds = () =>
+    selectFavorites(store.getState(), WORKSPACE_ID).map((n) => n.id);
+
+  /** Marks a note as a favorite with the given order key. */
+  const fav = (id: string, favoriteOrderHint: string): Note =>
+    makeNote({ id, isFavorite: true, favoriteOrderHint });
+
+  beforeEach(() => {
+    localStorage.clear();
+    patchMock.mockReset();
+    patchMock.mockReturnValue(okAsync(undefined));
+    getAllMock.mockReset();
+    getAllMock.mockReturnValue(okAsync({ notes: {} }));
+    store = createAppStore();
+    store.dispatch(appSessionSlice.actions.switchWorkspace(WORKSPACE_ID));
+  });
+
+  /** Three clean, ascending favorites: fa < fb < fc. */
+  const seedTriplet = () => {
+    const fa = fav("fa", "a1");
+    const fb = fav("fb", "a2");
+    const fc = fav("fc", "a3");
+    return { fa, fb, fc };
+  };
+
+  it("errors when the source does not exist", async () => {
+    const result = await store.dispatch(reorderFavorite("ghost", "anchor"));
+
+    expect(result.isErr()).toBe(true);
+    expect(patchMock).not.toHaveBeenCalled();
+  });
+
+  it("errors when the anchor does not exist", async () => {
+    const source = makeNote();
+    seed(source);
+
+    const result = await store.dispatch(reorderFavorite(source.id, "ghost"));
+
+    expect(result.isErr()).toBe(true);
+    expect(patchMock).not.toHaveBeenCalled();
+  });
+
+  it("favorites into the default slot when the list is empty", async () => {
+    const source = makeNote();
+    seed(source);
+
+    await store.dispatch(reorderFavorite(source.id));
+
+    expect(selectNoteById(store.getState(), source.id)?.isFavorite).toBe(true);
+    expect(favRankOf(source.id)).toBe(Rank.default().get());
+    expect(favIds()).toEqual([source.id]);
+  });
+
+  it("appends after the last favorite when no anchor is given", async () => {
+    const { fa, fb } = seedTriplet();
+    const source = makeNote();
+    seed(fa, fb, source);
+
+    await store.dispatch(reorderFavorite(source.id));
+
+    expect(favIds()).toEqual(["fa", "fb", source.id]);
+    expect(Rank.sorter(favRankOf(source.id), fb.favoriteOrderHint)).toBe(1);
+  });
+
+  it("marks a plain note as favorite when inserted via an anchor", async () => {
+    const { fa, fb, fc } = seedTriplet();
+    const source = makeNote();
+    seed(fa, fb, fc, source);
+
+    await store.dispatch(reorderFavorite(source.id, "fb", "below"));
+
+    expect(selectNoteById(store.getState(), source.id)?.isFavorite).toBe(true);
+  });
+
+  it("places the favorite between the anchor and its lower neighbor (below)", async () => {
+    const { fa, fb, fc } = seedTriplet();
+    const source = makeNote();
+    seed(fa, fb, fc, source);
+
+    // below fb -> between fb and fc
+    await store.dispatch(reorderFavorite(source.id, "fb", "below"));
+
+    expect(favIds()).toEqual(["fa", "fb", source.id, "fc"]);
+  });
+
+  it("places the favorite between the anchor and its upper neighbor (above)", async () => {
+    const { fa, fb, fc } = seedTriplet();
+    const source = makeNote();
+    seed(fa, fb, fc, source);
+
+    // above fb -> between fa and fb
+    await store.dispatch(reorderFavorite(source.id, "fb", "above"));
+
+    expect(favIds()).toEqual(["fa", source.id, "fb", "fc"]);
+  });
+
+  it("appends to the end when dropped below the last favorite", async () => {
+    const { fa, fb, fc } = seedTriplet();
+    const source = makeNote();
+    seed(fa, fb, fc, source);
+
+    await store.dispatch(reorderFavorite(source.id, "fc", "below"));
+
+    expect(favIds()).toEqual(["fa", "fb", "fc", source.id]);
+    expect(patchMock).toHaveBeenCalledTimes(1); // proves the delegate dispatched
+  });
+
+  it("prepends before the first favorite when dropped above it", async () => {
+    const { fa, fb, fc } = seedTriplet();
+    const source = makeNote();
+    seed(fa, fb, fc, source);
+
+    await store.dispatch(reorderFavorite(source.id, "fa", "above"));
+
+    expect(favIds()).toEqual([source.id, "fa", "fb", "fc"]);
+    expect(Rank.sorter(favRankOf(source.id), fa.favoriteOrderHint)).toBe(-1);
+  });
+
+  it("excludes an already-favorited source from its own layer", async () => {
+    // source is already a favorite sitting LAST; moving it up must not
+    // anchor on its own stale key nor emit a duplicate patch for itself
+    const { fa, fb, fc } = seedTriplet();
+    const source = fav("src", "a4");
+    seed(fa, fb, fc, source);
+
+    await store.dispatch(reorderFavorite("src", "fb", "above"));
+
+    expect(favIds()).toEqual(["fa", "src", "fb", "fc"]);
+    // the mover appears exactly once across everything persisted
+    const persisted = patchMock.mock.calls.flatMap((c) => c[0]);
+    expect(persisted.filter((p) => p.id === "src")).toHaveLength(1);
+  });
+
+  it("rebalances the layer when anchor and neighbor collide", async () => {
+    // fa and fb share the same key: the target gap has no midpoint
+    const fa = fav("fa", "a5");
+    const fb = fav("fb", "a5");
+    const source = makeNote();
+    seed(fa, fb, source);
+
+    // below fa -> between fa and fb (which collide) -> rebalance path
+    const result = await store.dispatch(
+      reorderFavorite(source.id, "fa", "below"),
+    );
+
+    expect(result.isOk()).toBe(true);
+    expect(favIds()).toEqual(["fa", source.id, "fb"]);
+    const keys = [favRankOf("fa"), favRankOf(source.id), favRankOf("fb")];
+    expect(keys.every((k) => Rank.isValid(k))).toBe(true);
+    expect(new Set(keys).size).toBe(3);
+  });
+
+  it("does not emit a duplicate patch when rebalancing an existing favorite", async () => {
+    // colliding anchors AND an already-favorited source: the rebalance must
+    // drop the mover from the layer so it is patched once, not twice
+    const fa = fav("fa", "a5");
+    const fb = fav("fb", "a5");
+    const source = fav("src", "a1"); // already a favorite, sorts first
+    seed(fa, fb, source);
+
+    const result = await store.dispatch(reorderFavorite("src", "fa", "below"));
+
+    expect(result.isOk()).toBe(true);
+    expect(favIds()).toEqual(["fa", "src", "fb"]);
+    const persisted = patchMock.mock.calls.flatMap((c) => c[0]);
+    expect(persisted.filter((p) => p.id === "src")).toHaveLength(1);
+  });
+
+  it("rebalances the layer when a neighbor key is corrupt", async () => {
+    const fa = fav("fa", "a1");
+    // corrupt key sorts to the front of the layer
+    const corrupt = fav("cor", "");
+    const source = makeNote();
+    seed(fa, corrupt, source);
+
+    // above fa -> neighbor is the corrupt favorite -> rebalance path
+    const result = await store.dispatch(
+      reorderFavorite(source.id, "fa", "above"),
+    );
+
+    expect(result.isOk()).toBe(true);
+    expect(favIds()).toEqual(["cor", source.id, "fa"]);
+    const keys = [favRankOf("cor"), favRankOf(source.id), favRankOf("fa")];
+    expect(keys.every((k) => Rank.isValid(k))).toBe(true);
+    expect(new Set(keys).size).toBe(3);
   });
 });
