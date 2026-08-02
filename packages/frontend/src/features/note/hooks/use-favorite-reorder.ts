@@ -1,8 +1,8 @@
 import { useDragState } from "@/features/dnd/use-drag-state";
 import { useAppDispatch, useAppStore } from "@/features/store/hooks";
-import { favoritesApi } from "../store/favorites-api";
+import { getCurrentWorkspaceId } from "@/features/workspaces/store/workspace.thunk";
 import { reorderFavorite } from "../store/note.thunk";
-import { getMovingNote } from "../store/note-selectors";
+import { getMovingNote, selectFavoriteIds } from "../store/note-selectors";
 
 export function useFavoriteDropZone(aboveId: string | null) {
   const dragState = useDragState();
@@ -17,7 +17,16 @@ export function useFavoriteDropZone(aboveId: string | null) {
     const note = getMovingNote(e, store.getState());
     if (!note) return;
 
-    dispatch(reorderFavorite(note.id, aboveId ?? undefined, "below"));
+    if (aboveId) {
+      dispatch(reorderFavorite(note.id, aboveId ?? undefined, "below"));
+    } else {
+      const anchor = selectFavoriteIds(
+        store.getState(),
+        getCurrentWorkspaceId(store.getState) ?? "",
+      ).at(0);
+      if (anchor) dispatch(reorderFavorite(note.id, anchor, "above"));
+      else dispatch(reorderFavorite(note.id, aboveId ?? undefined, "below"));
+    }
   };
 
   return {

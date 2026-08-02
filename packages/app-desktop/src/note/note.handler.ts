@@ -3,8 +3,6 @@ import {
   dwErrAsync,
   FileFormatMap,
   type INoteAPI,
-  type MoveNoteDTO,
-  MoveNoteDTOSchema,
   type Note,
   type NoteExportFormat,
   type NotePartial,
@@ -58,14 +56,6 @@ export function NoteAPI(
 
   const getAllByWorkspaceId = handler((workspaceId: string) =>
     noteQueryService.getAllByWorkspaceId(workspaceId).map(aggregateResponse),
-  );
-
-  const favorite = handler((noteId: string, aboveNoteId?: string | null) =>
-    noteService.favorite(noteId, aboveNoteId).map(singleResponse),
-  );
-
-  const unfavorite = handler((noteId: string) =>
-    noteService.unfavorite(noteId).map(singleResponse),
   );
 
   const search = handler((wId: string, query: string) =>
@@ -162,7 +152,6 @@ export function NoteAPI(
     create,
     delete: deleteNote,
     getAllByWorkspaceId,
-    favorite,
     search,
     moveToTrash,
     restoreFromTrash,
@@ -175,7 +164,6 @@ export function NoteAPI(
     export: saveExportedNote,
     exportPdf: saveToPDF,
     import: importFiles,
-    unfavorite,
     patchAll,
   };
 }

@@ -1,14 +1,5 @@
-import {
-  type DwError,
-  dwErr,
-  dwErrAsync,
-  type MoveNoteDTO,
-  type Note,
-  type NotePartial,
-  Rank,
-  type UpdateNoteDTO,
-} from "@darkwrite/common";
-import { err, ok, okAsync, type Result, ResultAsync } from "neverthrow";
+import type { Note, NotePartial, UpdateNoteDTO } from "@darkwrite/common";
+import { okAsync, ResultAsync } from "neverthrow";
 import type { DatabaseType } from "@/db";
 import type { NewNoteRow, NoteRow } from "@/db/schema";
 import { resolveTx, transactional } from "@/db/transactional";
@@ -43,25 +34,6 @@ export function NoteService(
   documentService: IDocumentService,
 ) {
   const noteDAO = NoteDAO(() => resolveTx(db));
-
-  /** @internal */
-  function computeFavoriteRank(workspaceId: string, aboveId?: string | null) {
-    return aboveId == null
-      ? noteDAO
-          .computeOrderKeysForFavorites(workspaceId)
-          .map((keys) => (aboveId === undefined ? keys.end : keys.start))
-      : ResultAsync.combine([
-          noteDAO.findById(aboveId),
-          noteDAO.noteRightAfter(aboveId, workspaceId, "favoriteOrderHint"),
-        ]).map(([above, below]) =>
-          below
-            ? new Rank(above.favoriteOrderHint)
-                .between(below.favoriteOrderHint)
-                .get()
-            : new Rank(above.favoriteOrderHint).next().get(),
-        );
-  }
-
   function create(note: Note) {
     return transactional(
       () =>
@@ -80,30 +52,6 @@ export function NoteService(
       () => noteDAO.update({ id, modifiedAt: new Date(), ...dto }),
       db,
     );
-
-  const favorite = (targetId: string, aboveNoteId?: string | null) =>
-    transactional(
-      () =>
-        noteDAO
-          .findById(targetId)
-          .andThen((note) =>
-            note.isTrashed
-              ? dwErr("Cannot favorite a note in trash.")
-              : ok(note),
-          )
-          .andThen((note) => computeFavoriteRank(note.workspaceId, aboveNoteId))
-          .andThen((rank) =>
-            noteDAO.update({
-              id: targetId,
-              isFavorite: true,
-              favoriteOrderHint: rank,
-            }),
-          ),
-      db,
-    );
-
-  const unfavorite = (id: string) =>
-    noteDAO.update({ id, isFavorite: false, favoriteOrderHint: "" });
 
   const duplicate = (id: string) =>
     transactional(
@@ -190,8 +138,6 @@ export function NoteService(
   return {
     create,
     update,
-    favorite,
-    unfavorite,
     duplicate,
     deleteById,
     moveToTrash,

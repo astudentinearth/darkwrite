@@ -26,7 +26,6 @@ import {
   type PatchNoteRow,
 } from "@/db/schema";
 import type { TxResolver } from "@/db/transactional";
-import { noteToDto } from "./note-mapper";
 
 const withParent = (parentId: ParentId) =>
   parentId === null
@@ -36,7 +35,6 @@ const withParent = (parentId: ParentId) =>
 const notTrashed = () =>
   or(isNull(notesTable.isTrashed), ne(notesTable.isTrashed, true));
 const isTrashed = () => eq(notesTable.isTrashed, true);
-const isFavorite = () => eq(notesTable.isFavorite, true);
 const inWorkspace = (workspaceId: string) =>
   eq(notesTable.workspaceId, workspaceId);
 
@@ -155,16 +153,6 @@ export function NoteDAO(tx: TxResolver) {
     });
   }
 
-  function findAllFavorites(workspaceId: string): DwResultAsync<NoteRow[]> {
-    return dbResult(async () =>
-      tx()
-        .select()
-        .from(notesTable)
-        .where(and(inWorkspace(workspaceId), notTrashed(), isFavorite()))
-        .orderBy(asc(notesTable.favoriteOrderHint)),
-    );
-  }
-
   function findAllTrashed(workspaceId: string): DwResultAsync<NoteRow[]> {
     return dbResult(async () =>
       tx()
@@ -173,25 +161,6 @@ export function NoteDAO(tx: TxResolver) {
         .where(and(inWorkspace(workspaceId), isTrashed()))
         .orderBy(asc(notesTable.trashedAt)),
     );
-  }
-
-  function isDescendant(
-    potentialChildId: ParentId,
-    potentialParentId: ParentId,
-  ): DwResultAsync<boolean | "CIRCULAR"> {
-    return dbResult(async () => {
-      if (potentialParentId == null) return false;
-      if (potentialChildId == null) return false;
-      const getter = async (id: string) => {
-        const result = (await findById(id)).unwrapOr(null);
-        return result ? noteToDto(result) : null;
-      };
-      return await isDescendantAsync(
-        potentialChildId,
-        potentialParentId,
-        getter,
-      );
-    });
   }
 
   function computeOrderKeysForLayer(
@@ -209,22 +178,6 @@ export function NoteDAO(tx: TxResolver) {
         return { start, end };
       }),
     );
-  }
-
-  function computeOrderKeysForFavorites(
-    workspaceId: string,
-  ): DwResultAsync<OrderKeyDto> {
-    return findAllFavorites(workspaceId).map((favorites) => {
-      const start = favorites.length
-        ? new Rank(favorites[0].favoriteOrderHint).prev().toString()
-        : Rank.default().toString();
-      const end = favorites.length
-        ? new Rank(favorites[favorites.length - 1].favoriteOrderHint)
-            .next()
-            .toString()
-        : Rank.default().toString();
-      return { start, end };
-    });
   }
 
   function searchByTitle(
@@ -245,31 +198,6 @@ export function NoteDAO(tx: TxResolver) {
     );
   }
 
-  function noteRightAfter(
-    targetId: string,
-    workspaceId: string,
-    sortBy: "orderHint" | "favoriteOrderHint" = "orderHint",
-  ): DwResultAsync<NoteRow | undefined> {
-    const target = tx()
-      .select({ [sortBy]: notesTable[sortBy] })
-      .from(notesTable)
-      .where(and(eq(notesTable.id, targetId), inWorkspace(workspaceId)));
-    return dbResult(() =>
-      tx()
-        .select()
-        .from(notesTable)
-        .where(
-          and(
-            gt(notesTable[sortBy], target),
-            notTrashed(),
-            inWorkspace(workspaceId),
-          ),
-        )
-        .orderBy(asc(notesTable[sortBy]))
-        .limit(1),
-    ).map((n) => n.at(0));
-  }
-
   return {
     create,
     update,
@@ -280,14 +208,9 @@ export function NoteDAO(tx: TxResolver) {
     deleteById,
     delete: deleteNote,
     exists,
-    findFirstNoteInLayer,
-    findLastNoteInLayer,
     findAllTrashed,
-    isDescendant,
     computeOrderKeysForLayer,
-    computeOrderKeysForFavorites,
     searchByTitle,
-    noteRightAfter,
   };
 }
 

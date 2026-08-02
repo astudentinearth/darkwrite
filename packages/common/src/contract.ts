@@ -4,7 +4,7 @@ import type {
   UpdateServerResponse,
 } from "./client";
 import type { NativeContextMenuData } from "./context-menu";
-import type { MoveNoteDTO, UpdateNoteDTO } from "./dto";
+import type { UpdateNoteDTO } from "./dto";
 import type { CreateEmbedDTO } from "./dto/request/embed.request";
 import type {
   CreateWorkspaceDTO,
@@ -56,21 +56,6 @@ export interface INoteAPI {
 
   moveToTrash: (noteId: string) => ApiResult<NoteResponseDTO>;
   restoreFromTrash: (noteId: string) => ApiResult<NoteResponseDTO>;
-
-  /**
-   * Favorites a note.
-   * @deprecated
-   * @param noteId
-   * @param aboveNoteId undefined for list end, null for list start
-   * @returns
-   */
-  favorite: (
-    noteId: string,
-    aboveNoteId?: string | null,
-  ) => ApiResult<NoteResponseDTO>;
-
-  /** @deprecated */
-  unfavorite: (noteId: string) => ApiResult<NoteResponseDTO>;
 
   search: (workspaceId: string, query: string) => ApiResult<NotesResponseDTO>;
 
