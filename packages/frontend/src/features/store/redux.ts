@@ -1,5 +1,4 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { editorApi } from "../editor/store/editor-api";
 import editorMiddleware from "../editor/store/editor-middleware";
 import { editorSlice } from "../editor/store/editor-slice";
 import { fileLinkSlice } from "../link/store/file-link.slice";
@@ -27,7 +26,6 @@ export function createAppStore() {
       [notesApi.reducerPath]: notesApi.reducer,
       [settingsSlice.name]: settingsSlice.reducer,
       [editorSlice.name]: editorSlice.reducer,
-      [editorApi.reducerPath]: editorApi.reducer,
       [themeSlice.name]: themeSlice.reducer,
       [updateApi.reducerPath]: updateApi.reducer,
       [workspaceSlice.name]: workspaceSlice.reducer,
@@ -42,7 +40,6 @@ export function createAppStore() {
         .prepend(editorMiddleware.middleware)
         .concat(
           notesApi.middleware,
-          editorApi.middleware,
           updateApi.middleware,
           clientInfoApi.middleware,
         ),

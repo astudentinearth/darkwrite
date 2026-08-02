@@ -4,6 +4,10 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui";
 import Alert from "@/components/ui/alert";
 import { useNoteById } from "@/features/note/hooks/use-note-by-id";
+import {
+  restoreFailToast,
+  restoreSuccessToast,
+} from "@/features/note/note.toast";
 import { restoreFromTrash } from "@/features/note/store/note.thunk";
 import { useNoteActions } from "@/features/note/store/note-actions";
 import { useAppDispatch } from "@/features/store/hooks";
@@ -20,7 +24,11 @@ export default function TrashBanner() {
     <Alert className="grid grid-cols-[1fr_auto] font-ui p-2 pl-4 top-highlight items-center">
       {t("editor.cover.trashWarning")}
       <Button
-        onClick={() => dispatch(restoreFromTrash(noteId))}
+        onClick={() =>
+          dispatch(restoreFromTrash(noteId))
+            .andTee(restoreSuccessToast)
+            .orTee(restoreFailToast)
+        }
         variant={"secondary"}
         className="w-fit"
       >

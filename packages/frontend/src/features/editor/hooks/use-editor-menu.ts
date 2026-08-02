@@ -4,6 +4,12 @@ import { useNoteExport } from "@/features/export/note-exporter";
 import { useNoteById } from "@/features/note/hooks/use-note-by-id";
 import useNoteImport from "@/features/note/hooks/use-note-import";
 import {
+  restoreFailToast,
+  restoreSuccessToast,
+  trashFailToast,
+  trashSuccessToast,
+} from "@/features/note/note.toast";
+import {
   moveToTrash,
   restoreFromTrash,
 } from "@/features/note/store/note.thunk";
@@ -72,8 +78,14 @@ export default function useEditorMenu(noteId: string): UseEditorMenuResult {
         targetInstanceId: instanceId,
       }),
     toggleTrash: () => {
-      if (note?.isTrashed) dispatch(restoreFromTrash(noteId));
-      else dispatch(moveToTrash(noteId));
+      if (note?.isTrashed)
+        dispatch(restoreFromTrash(noteId))
+          .andTee(restoreSuccessToast)
+          .orTee(restoreFailToast);
+      else
+        dispatch(moveToTrash(noteId))
+          .andTee(trashSuccessToast)
+          .orTee(trashFailToast);
     },
   };
 

@@ -19,6 +19,12 @@ import { cn, getNoteIcon } from "@/lib/utils";
 import { useNoteById } from "../hooks/use-note-by-id";
 import { useTrash } from "../hooks/use-trash";
 import {
+  restoreFailToast,
+  restoreSuccessToast,
+  trashFailToast,
+  trashSuccessToast,
+} from "../note.toast";
+import {
   moveToTrash,
   permanentlyDeleteNote,
   restoreFromTrash,
@@ -56,7 +62,9 @@ const TrashItem = memo(function ({ noteId, className }: TrashItemProps) {
           aria-label={t("sidebar.trash.restore")}
           onClick={(e) => {
             e.stopPropagation();
-            dispatch(restoreFromTrash(noteId));
+            dispatch(restoreFromTrash(noteId))
+              .andTee(restoreSuccessToast)
+              .orTee(restoreFailToast);
           }}
           variant={"ghost"}
           className="w-6 h-6 p-0"
@@ -152,7 +160,11 @@ export function TrashWidget() {
           onDrop={(e) => {
             setIsDraggingOver(false);
             const note = getMovingNote(e, store.getState());
-            if (note) store.dispatch(moveToTrash(note.id));
+            if (note)
+              store
+                .dispatch(moveToTrash(note.id))
+                .andTee(trashSuccessToast)
+                .orTee(trashFailToast);
           }}
           className={cn("col-span-2", isDraggingOver && "bg-destructive/20")}
         >
