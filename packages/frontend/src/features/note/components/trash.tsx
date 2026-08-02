@@ -14,11 +14,15 @@ import { TextTooltip } from "@/components/ui/tooltip";
 import { useDragState } from "@/features/dnd/use-drag-state";
 import { navigateToNote } from "@/features/navigation/navigator";
 import { SidebarItem } from "@/features/sidebar/sidebar-item";
-import { useAppStore } from "@/features/store/hooks";
+import { useAppDispatch, useAppStore } from "@/features/store/hooks";
 import { cn, getNoteIcon } from "@/lib/utils";
 import { useNoteById } from "../hooks/use-note-by-id";
 import { useTrash } from "../hooks/use-trash";
-import { useNoteActions } from "../store/note-actions";
+import {
+  moveToTrash,
+  permanentlyDeleteNote,
+  restoreFromTrash,
+} from "../store/note.thunk";
 import { getMovingNote } from "../store/note-selectors";
 import { NoteTitle } from "./note-title";
 import { TrashMenu } from "./trash-menu";
@@ -31,7 +35,7 @@ type TrashItemProps = {
 const TrashItem = memo(function ({ noteId, className }: TrashItemProps) {
   const { note } = useNoteById(noteId);
   const { t } = useTranslation();
-  const { restoreFromTrash, permanentlyDeleteNote } = useNoteActions();
+  const dispatch = useAppDispatch();
   if (!note) return null;
 
   return (
@@ -52,7 +56,7 @@ const TrashItem = memo(function ({ noteId, className }: TrashItemProps) {
           aria-label={t("sidebar.trash.restore")}
           onClick={(e) => {
             e.stopPropagation();
-            restoreFromTrash(noteId);
+            dispatch(restoreFromTrash(noteId));
           }}
           variant={"ghost"}
           className="w-6 h-6 p-0"
@@ -65,7 +69,7 @@ const TrashItem = memo(function ({ noteId, className }: TrashItemProps) {
           aria-label={t("sidebar.trash.delete")}
           onClick={(e) => {
             e.stopPropagation();
-            permanentlyDeleteNote(noteId);
+            dispatch(permanentlyDeleteNote(noteId));
           }}
           variant={"destructive"}
           className="w-6 h-6 p-0 bg-transparent text-destructive hover:bg-destructive/25 border-none"
@@ -137,7 +141,6 @@ export function TrashWidget() {
 
   const { t } = useTranslation();
   const store = useAppStore();
-  const actions = useNoteActions();
 
   return (
     <Popover>
@@ -149,7 +152,7 @@ export function TrashWidget() {
           onDrop={(e) => {
             setIsDraggingOver(false);
             const note = getMovingNote(e, store.getState());
-            if (note) actions.moveToTrash(note.id);
+            if (note) store.dispatch(moveToTrash(note.id));
           }}
           className={cn("col-span-2", isDraggingOver && "bg-destructive/20")}
         >

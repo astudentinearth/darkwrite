@@ -62,12 +62,6 @@ export function NoteAPI(
     noteQueryService.search(wId, query).map(aggregateResponse),
   );
 
-  const moveToTrash = handler((id: string) =>
-    noteService.moveToTrash(id).map(singleResponse),
-  );
-  const restoreFromTrash = handler((id: string) =>
-    noteService.restoreFromTrash(id).map(singleResponse),
-  );
   const getById = handler((id: string) =>
     noteQueryService.getById(id).map(singleResponse),
   );
@@ -153,8 +147,6 @@ export function NoteAPI(
     delete: deleteNote,
     getAllByWorkspaceId,
     search,
-    moveToTrash,
-    restoreFromTrash,
     getById,
     update,
     duplicate,

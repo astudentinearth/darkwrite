@@ -54,9 +54,6 @@ export interface INoteAPI {
    */
   getAllByWorkspaceId: (workspaceId: string) => ApiResult<NotesResponseDTO>;
 
-  moveToTrash: (noteId: string) => ApiResult<NoteResponseDTO>;
-  restoreFromTrash: (noteId: string) => ApiResult<NoteResponseDTO>;
-
   search: (workspaceId: string, query: string) => ApiResult<NotesResponseDTO>;
 
   getById: (id: string) => ApiResult<NoteResponseDTO>;

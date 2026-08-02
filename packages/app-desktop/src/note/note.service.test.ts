@@ -63,6 +63,15 @@ describe("note service tests", () => {
     return (await noteDAO.create(note))._unsafeUnwrap();
   }
 
+  /**
+   * Trashes a note through the same write-through path the renderer uses
+   * (moveToTrash/restoreFromTrash were removed; trashing is now a patch).
+   */
+  const trash = (id: string) =>
+    noteService.patchAll([
+      { id, isTrashed: true, trashedAt: new Date().toISOString() },
+    ]);
+
   describe("clear trash tests", () => {
     it("should clear all trashed notes in the workspace", async () => {
       const rankA = Rank.default().get();
@@ -71,8 +80,8 @@ describe("note service tests", () => {
       const note1 = await createNote("Trashed 1", rankA);
       const note2 = await createNote("Trashed 2", rankB);
 
-      await noteService.moveToTrash(note1.id);
-      await noteService.moveToTrash(note2.id);
+      await trash(note1.id);
+      await trash(note2.id);
 
       await noteService.emptyTrash(workspace.id);
 
@@ -107,7 +116,7 @@ describe("note service tests", () => {
       const saved = (await noteDAO.create(trashedInOther))._unsafeUnwrap();
 
       const localNote = await createNote("Local trashed", rankA);
-      await noteService.moveToTrash(localNote.id);
+      await trash(localNote.id);
 
       await noteService.emptyTrash(workspace.id);
 
@@ -125,7 +134,7 @@ describe("note service tests", () => {
 
       const alive = await createNote("Alive", rankA);
       const trashed = await createNote("Trashed", rankB);
-      await noteService.moveToTrash(trashed.id);
+      await trash(trashed.id);
 
       await noteService.emptyTrash(workspace.id);
 
@@ -157,7 +166,7 @@ describe("note service tests", () => {
 
       expect((await documentStore.exists(note.id))._unsafeUnwrap()).toBe(true);
 
-      await noteService.moveToTrash(note.id);
+      await trash(note.id);
       await noteService.emptyTrash(workspace.id);
 
       expect((await documentStore.exists(note.id))._unsafeUnwrap()).toBe(false);

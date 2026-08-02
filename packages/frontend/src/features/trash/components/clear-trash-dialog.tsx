@@ -10,8 +10,7 @@ import { cn } from "@/lib/utils";
 import { useClearTrashDialog } from "../hooks/use-trash-dialog";
 
 export function ClearTrashDialog() {
-  const { isLoading, hideClearTrashDialog, open, clearTrash } =
-    useClearTrashDialog();
+  const { hideClearTrashDialog, open, clearTrash } = useClearTrashDialog();
   const { t } = useTranslation("translation", {
     keyPrefix: "ui.clearTrashDialog",
   });
@@ -27,16 +26,14 @@ export function ClearTrashDialog() {
             onClick={() => {
               hideClearTrashDialog();
             }}
-            disabled={isLoading}
             className="w-1/2"
           >
             {t("cancel")}
           </Button>
           <Button
             onClick={clearTrash}
-            disabled={isLoading}
             variant="destructive"
-            className={cn("w-1/2", isLoading && "animate-pulse")}
+            className={cn("w-1/2")}
           >
             {t("clear")}
           </Button>

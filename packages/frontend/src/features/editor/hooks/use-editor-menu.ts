@@ -3,6 +3,10 @@ import { use } from "react";
 import { useNoteExport } from "@/features/export/note-exporter";
 import { useNoteById } from "@/features/note/hooks/use-note-by-id";
 import useNoteImport from "@/features/note/hooks/use-note-import";
+import {
+  moveToTrash,
+  restoreFromTrash,
+} from "@/features/note/store/note.thunk";
 import { useNoteActions } from "@/features/note/store/note-actions";
 import { MoveNoteDialogPortal } from "@/features/note/store/notes-ui-actions";
 import { useAppDispatch, useAppSelector } from "@/features/store/hooks";
@@ -46,7 +50,6 @@ export default function useEditorMenu(noteId: string): UseEditorMenuResult {
   const characterCount = useAppSelector((s) => selectCharacterCount(s, noteId));
   const canUndo = useAppSelector((s) => selectCanUndo(s, noteId));
   const canRedo = useAppSelector((s) => selectCanRedo(s, noteId));
-  const { moveToTrash, restoreFromTrash } = useNoteActions();
 
   const actions: EditorMenuActions = {
     exportHTML: () => NoteExporter.exportHTML(noteId),
@@ -69,8 +72,8 @@ export default function useEditorMenu(noteId: string): UseEditorMenuResult {
         targetInstanceId: instanceId,
       }),
     toggleTrash: () => {
-      if (note?.isTrashed) restoreFromTrash(noteId);
-      else moveToTrash(noteId);
+      if (note?.isTrashed) dispatch(restoreFromTrash(noteId));
+      else dispatch(moveToTrash(noteId));
     },
   };
 

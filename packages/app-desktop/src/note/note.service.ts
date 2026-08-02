@@ -86,33 +86,8 @@ export function NoteService(
   const deleteById = (id: string) =>
     noteDAO.deleteById(id).andThen(() => documentService.deleteNoteContent(id));
 
-  const moveToTrash = (id: string) =>
-    noteDAO.update({
-      id,
-      isTrashed: true,
-      orderHint: "",
-      favoriteOrderHint: "",
-      isFavorite: false,
-    });
-
   const setModificationDate = (id: string, date: Date) =>
     noteDAO.update({ id, modifiedAt: date });
-
-  const restoreFromTrash = (id: string) =>
-    transactional(
-      () =>
-        noteDAO
-          .findById(id)
-          .andThen((note) =>
-            noteDAO
-              .computeOrderKeysForLayer(note.workspaceId, note.parentId)
-              .map((keys) => keys.end),
-          )
-          .andThen((orderHint) =>
-            noteDAO.update({ id, isTrashed: false, orderHint }),
-          ),
-      db,
-    );
 
   const emptyTrash = (workspaceId: string) =>
     transactional(
@@ -140,9 +115,7 @@ export function NoteService(
     update,
     duplicate,
     deleteById,
-    moveToTrash,
     setModificationDate,
-    restoreFromTrash,
     emptyTrash,
     patchAll,
   };

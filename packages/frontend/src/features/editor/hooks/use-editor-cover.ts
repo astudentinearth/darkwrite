@@ -18,7 +18,6 @@ export default function useEditorCover(noteId: string) {
   const titleUpdater = useTitleUpdater(noteId);
   const title = useAppSelector((s) => selectNoteTitle(s, noteId));
   const icon = useAppSelector((s) => selectNoteIcon(s, noteId));
-  const { restoreFromTrash } = useNoteActions();
   const coverImageSource = useAppSelector((s) =>
     selectCoverImageSource(s, noteId),
   );
@@ -36,13 +35,10 @@ export default function useEditorCover(noteId: string) {
     });
   };
 
-  const restore = async () => restoreFromTrash(noteId);
-
   return {
     updateTitle: titleUpdater.update,
     updateIcon: (icon: string | null) => titleUpdater.updateIcon(noteId, icon),
     addCover,
-    restore,
     hasCover: !!coverImageSource,
     wide,
     title,
