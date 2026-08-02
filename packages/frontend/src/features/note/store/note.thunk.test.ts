@@ -7,17 +7,23 @@ import { NavigationEventBus } from "@/features/navigation/navigator";
 import { appSessionSlice } from "@/features/session/session-slice";
 import { type AppStore, createAppStore } from "@/features/store/redux";
 import {
+  clearTrash,
   createNote,
   getCreationRank,
   moveNote,
+  moveToTrash,
+  permanentlyDeleteNote,
   reorderFavorite,
   reorderNote,
+  restoreFromTrash,
+  unfavorite,
   updateManyNotes,
   updateNote,
 } from "./note.thunk";
 import {
   selectFavorites,
   selectNoteById,
+  selectNoteIdsInTrash,
   selectNotesByParentId,
 } from "./note-selectors";
 import { notesSlice } from "./note-slice";
@@ -28,6 +34,8 @@ vi.mock("@/api/api-client", () => ({
       create: vi.fn(),
       patchAll: vi.fn(),
       getAllByWorkspaceId: vi.fn(),
+      delete: vi.fn(),
+      clearTrash: vi.fn(),
     },
   },
 }));
@@ -36,6 +44,8 @@ const WORKSPACE_ID = "ws-1";
 const createMock = vi.mocked(DarkwriteAPIClient.note.create);
 const patchMock = vi.mocked(DarkwriteAPIClient.note.patchAll);
 const getAllMock = vi.mocked(DarkwriteAPIClient.note.getAllByWorkspaceId);
+const deleteMock = vi.mocked(DarkwriteAPIClient.note.delete);
+const clearTrashMock = vi.mocked(DarkwriteAPIClient.note.clearTrash);
 
 const makeNote = (over: Partial<Note> = {}): Note => ({
   id: crypto.randomUUID(),
@@ -810,5 +820,345 @@ describe("reorderFavorite", () => {
     const keys = [favRankOf("cor"), favRankOf(source.id), favRankOf("fa")];
     expect(keys.every((k) => Rank.isValid(k))).toBe(true);
     expect(new Set(keys).size).toBe(3);
+  });
+});
+
+describe("trash + favorite status thunks", () => {
+  let store: AppStore;
+
+  const seed = (...notes: Note[]) =>
+    store.dispatch(notesSlice.actions.upsertNotes(notes));
+
+  const layerIds = (parentId: string | null = null) =>
+    selectNotesByParentId(store.getState(), WORKSPACE_ID, parentId).map(
+      (n) => n.id,
+    );
+
+  const favIds = () =>
+    selectFavorites(store.getState(), WORKSPACE_ID).map((n) => n.id);
+
+  beforeEach(() => {
+    localStorage.clear();
+    patchMock.mockReset();
+    patchMock.mockReturnValue(okAsync(undefined));
+    getAllMock.mockReset();
+    getAllMock.mockReturnValue(okAsync({ notes: {} }));
+    store = createAppStore();
+    store.dispatch(appSessionSlice.actions.switchWorkspace(WORKSPACE_ID));
+  });
+
+  describe("moveToTrash", () => {
+    it("flags the note trashed and persists the patch", async () => {
+      const note = makeNote({ id: "n" });
+      seed(note);
+
+      await store.dispatch(moveToTrash("n"));
+
+      const trashed = selectNoteById(store.getState(), "n");
+      expect(trashed?.isTrashed).toBe(true);
+      // the deletion time is stamped so trash can be ordered by it later
+      expect(trashed?.trashedAt).toEqual(expect.any(String));
+      expect(patchMock).toHaveBeenCalledWith([
+        expect.objectContaining({
+          id: "n",
+          isTrashed: true,
+          trashedAt: expect.any(String),
+        }),
+      ]);
+    });
+
+    it("removes the note from its parent layer", async () => {
+      const a = makeNote({ id: "a", orderHint: "a1" });
+      const b = makeNote({ id: "b", orderHint: "a2" });
+      seed(a, b);
+
+      await store.dispatch(moveToTrash("a"));
+
+      expect(layerIds()).toEqual(["b"]);
+    });
+
+    it("drops a trashed note out of favorites without unfavoriting it", async () => {
+      const note = makeNote({
+        id: "n",
+        isFavorite: true,
+        favoriteOrderHint: "a1",
+      });
+      seed(note);
+
+      await store.dispatch(moveToTrash("n"));
+
+      // still marked favorite, just excluded from the favorites view
+      expect(selectNoteById(store.getState(), "n")?.isFavorite).toBe(true);
+      expect(favIds()).toEqual([]);
+    });
+
+    it("resyncs from the workspace on persistence failure", async () => {
+      const note = makeNote({ id: "n" });
+      seed(note);
+      patchMock.mockReturnValue(dwErrAsync("boom"));
+      getAllMock.mockReturnValue(okAsync({ notes: { n: note } }));
+
+      const result = await store.dispatch(moveToTrash("n"));
+
+      expect(result.isErr()).toBe(true);
+      await vi.waitFor(() =>
+        expect(selectNoteById(store.getState(), "n")?.isTrashed).toBe(false),
+      );
+    });
+  });
+
+  describe("restoreFromTrash", () => {
+    it("clears the trashed flag and returns the note to its layer", async () => {
+      const note = makeNote({
+        id: "n",
+        isTrashed: true,
+        trashedAt: new Date().toISOString(),
+      });
+      seed(note);
+
+      await store.dispatch(restoreFromTrash("n"));
+
+      const restored = selectNoteById(store.getState(), "n");
+      expect(restored?.isTrashed).toBe(false);
+      // the deletion stamp is cleared on the way out of the trash
+      expect(restored?.trashedAt).toBeNull();
+      expect(layerIds()).toEqual(["n"]);
+      expect(patchMock).toHaveBeenCalledWith([
+        { id: "n", isTrashed: false, trashedAt: null },
+      ]);
+    });
+
+    it("restores a favorite back into its old slot, key preserved", async () => {
+      const fa = makeNote({
+        id: "fa",
+        isFavorite: true,
+        favoriteOrderHint: "a1",
+      });
+      const restored = makeNote({
+        id: "r",
+        isFavorite: true,
+        favoriteOrderHint: "a2",
+        isTrashed: true,
+      });
+      const fc = makeNote({
+        id: "fc",
+        isFavorite: true,
+        favoriteOrderHint: "a3",
+      });
+      seed(fa, restored, fc);
+      // while trashed it is hidden from favorites
+      expect(favIds()).toEqual(["fa", "fc"]);
+
+      await store.dispatch(restoreFromTrash("r"));
+
+      expect(favIds()).toEqual(["fa", "r", "fc"]);
+      expect(selectNoteById(store.getState(), "r")?.favoriteOrderHint).toBe(
+        "a2",
+      );
+    });
+  });
+
+  describe("unfavorite", () => {
+    it("clears the favorite flag and drops it from the favorites view", async () => {
+      const note = makeNote({
+        id: "n",
+        isFavorite: true,
+        favoriteOrderHint: "a1",
+      });
+      seed(note);
+
+      await store.dispatch(unfavorite("n"));
+
+      expect(selectNoteById(store.getState(), "n")?.isFavorite).toBe(false);
+      expect(favIds()).toEqual([]);
+      expect(patchMock).toHaveBeenCalledWith([{ id: "n", isFavorite: false }]);
+    });
+
+    it("leaves the stale order key untouched", async () => {
+      const note = makeNote({
+        id: "n",
+        isFavorite: true,
+        favoriteOrderHint: "a1",
+      });
+      seed(note);
+
+      await store.dispatch(unfavorite("n"));
+
+      expect(selectNoteById(store.getState(), "n")?.favoriteOrderHint).toBe(
+        "a1",
+      );
+    });
+  });
+});
+
+describe("permanentlyDeleteNote", () => {
+  let store: AppStore;
+
+  const seed = (...notes: Note[]) =>
+    store.dispatch(notesSlice.actions.upsertNotes(notes));
+
+  beforeEach(() => {
+    localStorage.clear();
+    deleteMock.mockReset();
+    deleteMock.mockReturnValue(okAsync(undefined));
+    store = createAppStore();
+    store.dispatch(appSessionSlice.actions.switchWorkspace(WORKSPACE_ID));
+    window.location.hash = "";
+  });
+
+  it("removes the note from the store and calls the delete API", async () => {
+    const note = makeNote({ id: "n" });
+    seed(note);
+
+    await store.dispatch(permanentlyDeleteNote("n"));
+
+    expect(selectNoteById(store.getState(), "n")).toBeUndefined();
+    expect(deleteMock).toHaveBeenCalledWith("n");
+  });
+
+  it("restores the note into the store when deletion fails", async () => {
+    const note = makeNote({ id: "n", title: "keep me" });
+    seed(note);
+    deleteMock.mockReturnValue(dwErrAsync("boom"));
+
+    const result = await store.dispatch(permanentlyDeleteNote("n"));
+
+    expect(result.isErr()).toBe(true);
+    expect(selectNoteById(store.getState(), "n")?.title).toBe("keep me");
+  });
+
+  it("navigates home when deleting the note currently open", async () => {
+    const note = makeNote({ id: "n" });
+    seed(note);
+    window.location.hash = "#/page/n";
+    const routes: string[] = [];
+    const unsub = NavigationEventBus.subscribe("onRouteChanged", ({ data }) =>
+      routes.push(data),
+    );
+
+    await store.dispatch(permanentlyDeleteNote("n"));
+
+    expect(routes).toContain("/");
+    unsub();
+  });
+
+  it("does not navigate when a different note is open", async () => {
+    const note = makeNote({ id: "n" });
+    seed(note);
+    window.location.hash = "#/page/other";
+    const routes: string[] = [];
+    const unsub = NavigationEventBus.subscribe("onRouteChanged", ({ data }) =>
+      routes.push(data),
+    );
+
+    await store.dispatch(permanentlyDeleteNote("n"));
+
+    expect(routes).not.toContain("/");
+    unsub();
+  });
+
+  it("does not navigate when deletion fails", async () => {
+    const note = makeNote({ id: "n" });
+    seed(note);
+    deleteMock.mockReturnValue(dwErrAsync("boom"));
+    window.location.hash = "#/page/n";
+    const routes: string[] = [];
+    const unsub = NavigationEventBus.subscribe("onRouteChanged", ({ data }) =>
+      routes.push(data),
+    );
+
+    await store.dispatch(permanentlyDeleteNote("n"));
+
+    expect(routes).not.toContain("/");
+    unsub();
+  });
+});
+
+describe("clearTrash", () => {
+  let store: AppStore;
+
+  const seed = (...notes: Note[]) =>
+    store.dispatch(notesSlice.actions.upsertNotes(notes));
+
+  beforeEach(() => {
+    localStorage.clear();
+    clearTrashMock.mockReset();
+    clearTrashMock.mockReturnValue(okAsync(undefined));
+    getAllMock.mockReset();
+    getAllMock.mockReturnValue(okAsync({ notes: {} }));
+    store = createAppStore();
+    store.dispatch(appSessionSlice.actions.switchWorkspace(WORKSPACE_ID));
+    window.location.hash = "";
+  });
+
+  it("removes every trashed note but keeps the live ones", async () => {
+    const live = makeNote({ id: "live" });
+    const t1 = makeNote({ id: "t1", isTrashed: true });
+    const t2 = makeNote({ id: "t2", isTrashed: true });
+    seed(live, t1, t2);
+
+    await store.dispatch(clearTrash());
+
+    expect(selectNoteById(store.getState(), "live")).toBeDefined();
+    expect(selectNoteById(store.getState(), "t1")).toBeUndefined();
+    expect(selectNoteById(store.getState(), "t2")).toBeUndefined();
+    expect(selectNoteIdsInTrash(store.getState(), WORKSPACE_ID)).toEqual([]);
+    expect(clearTrashMock).toHaveBeenCalledWith(WORKSPACE_ID);
+  });
+
+  it("navigates home when the open note is being purged", async () => {
+    seed(makeNote({ id: "t1", isTrashed: true }));
+    window.location.hash = "#/page/t1";
+    const routes: string[] = [];
+    const unsub = NavigationEventBus.subscribe("onRouteChanged", ({ data }) =>
+      routes.push(data),
+    );
+
+    await store.dispatch(clearTrash());
+
+    expect(routes).toContain("/");
+    unsub();
+  });
+
+  it("stays put when the open note is not in the trash", async () => {
+    seed(makeNote({ id: "live" }), makeNote({ id: "t1", isTrashed: true }));
+    window.location.hash = "#/page/live";
+    const routes: string[] = [];
+    const unsub = NavigationEventBus.subscribe("onRouteChanged", ({ data }) =>
+      routes.push(data),
+    );
+
+    await store.dispatch(clearTrash());
+
+    expect(routes).not.toContain("/");
+    unsub();
+  });
+
+  it("resyncs from the workspace when the purge fails", async () => {
+    const t1 = makeNote({ id: "t1", isTrashed: true });
+    seed(t1);
+    clearTrashMock.mockReturnValue(dwErrAsync("boom"));
+    getAllMock.mockReturnValue(okAsync({ notes: { t1 } }));
+
+    const result = await store.dispatch(clearTrash());
+
+    expect(result.isErr()).toBe(true);
+    expect(getAllMock).toHaveBeenCalledWith(WORKSPACE_ID);
+    await vi.waitFor(() =>
+      expect(selectNoteById(store.getState(), "t1")).toBeDefined(),
+    );
+  });
+
+  it("errors and purges nothing when no workspace is active", async () => {
+    // fresh store with no workspace switched in
+    localStorage.clear();
+    store = createAppStore();
+    seed(makeNote({ id: "t1", isTrashed: true, workspaceId: WORKSPACE_ID }));
+
+    const result = await store.dispatch(clearTrash());
+
+    expect(result.isErr()).toBe(true);
+    expect(clearTrashMock).not.toHaveBeenCalled();
+    expect(selectNoteById(store.getState(), "t1")).toBeDefined();
   });
 });

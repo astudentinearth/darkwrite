@@ -12,16 +12,21 @@ import {
 } from "@darkwrite/common";
 import { errAsync } from "neverthrow";
 import { DarkwriteAPIClient } from "@/api/api-client";
-import { navigateToNote } from "@/features/navigation/navigator";
+import {
+  navigateOutOfNote,
+  navigateOutOfNotes,
+  navigateToNote,
+} from "@/features/navigation/navigator";
 import type { AppDispatch, AppGetState } from "@/features/store/types";
 import { getCurrentWorkspaceId } from "@/features/workspaces/store/workspace.thunk";
 import {
   selectAllNotesAsMap,
   selectFavorites,
   selectNoteById,
+  selectNoteIdsInTrash,
   selectNotesByParentId,
 } from "./note-selectors";
-import { notesSlice } from "./note-slice";
+import { notesSlice, removeNote, removeNotes, upsertNotes } from "./note-slice";
 
 export interface CreateNoteArgs {
   parentId?: ParentId;
@@ -412,3 +417,37 @@ export const reorderFavorite =
 
 export const unfavorite = (noteId: string) => (dispatch: AppDispatch) =>
   dispatch(updateNote({ id: noteId, isFavorite: false }));
+
+export const moveToTrash = (noteId: string) => (dispatch: AppDispatch) =>
+  dispatch(
+    updateNote({
+      id: noteId,
+      isTrashed: true,
+      trashedAt: new Date().toISOString(),
+    }),
+  );
+
+export const restoreFromTrash = (noteId: string) => (dispatch: AppDispatch) =>
+  dispatch(updateNote({ id: noteId, isTrashed: false, trashedAt: null }));
+
+export const permanentlyDeleteNote =
+  (noteId: string) => (dispatch: AppDispatch, getState: AppGetState) => {
+    const note = selectNoteById(getState(), noteId);
+    dispatch(removeNote(noteId));
+    return DarkwriteAPIClient.note
+      .delete(noteId)
+      .andTee(() => navigateOutOfNote(noteId))
+      .orTee(() => note && dispatch(upsertNotes([note])));
+  };
+
+export const clearTrash =
+  () => (dispatch: AppDispatch, getState: AppGetState) => {
+    const workspaceId = getCurrentWorkspaceId(getState);
+    if (!workspaceId) return dwErrAsync("Workspace not ready yet.");
+    const trashedNoteIds = selectNoteIdsInTrash(getState(), workspaceId);
+    navigateOutOfNotes(trashedNoteIds);
+    dispatch(removeNotes(trashedNoteIds));
+    return DarkwriteAPIClient.note
+      .clearTrash(workspaceId)
+      .orElse((err) => reconcileOnFailedUpdate(err, dispatch));
+  };
