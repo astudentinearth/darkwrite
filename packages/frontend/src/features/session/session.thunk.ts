@@ -5,7 +5,7 @@ import { appSessionSlice } from "./session-slice";
 export const switchWorkspace =
   (workspaceId: string) => (dispatch: AppDispatch) => {
     dispatch(appSessionSlice.actions.switchWorkspace(workspaceId));
-    dispatch(fetchNotesInWorkspace(workspaceId)).andTee((err) =>
+    return dispatch(fetchNotesInWorkspace(workspaceId)).orTee((err) =>
       console.log(err),
     );
   };

@@ -5,8 +5,8 @@ import type { AppStore } from "@/features/store/types";
 import { selectNoteById } from "./note-selectors";
 
 /**
- * Returns a note from cache, or fetches it from the backend.
- * The note will be placed into the cache if it's fetched later.
+ * Returns a note from the Redux store, or an error if it isn't present.
+ * @deprecated read directly from the store instead
  * @param id
  */
 export function resolveNote(id: string, store: AppStore) {

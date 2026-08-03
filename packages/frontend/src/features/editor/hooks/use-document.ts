@@ -20,7 +20,6 @@ export function useDocumentById(noteId: string): useDocumentResult {
     if (!selectContentLoaded(store.getState(), noteId))
       store
         .dispatch(loadNoteContent(noteId))
-        .andTee(() => setError(null))
         .orTee((err) => active && setError(err));
 
     return () => {
