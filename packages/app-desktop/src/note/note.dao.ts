@@ -27,13 +27,6 @@ import {
 } from "@/db/schema";
 import type { TxResolver } from "@/db/transactional";
 
-const withParent = (parentId: ParentId) =>
-  parentId === null
-    ? isNull(notesTable.parentId)
-    : eq(notesTable.parentId, parentId);
-
-const notTrashed = () =>
-  or(isNull(notesTable.isTrashed), ne(notesTable.isTrashed, true));
 const isTrashed = () => eq(notesTable.isTrashed, true);
 const inWorkspace = (workspaceId: string) =>
   eq(notesTable.workspaceId, workspaceId);
@@ -101,12 +94,6 @@ export function NoteDAO(tx: TxResolver) {
     });
   }
 
-  function deleteNote(note: NoteRow): DwResultAsync<void> {
-    return dbResult(async () => {
-      await tx().delete(notesTable).where(eq(notesTable.id, note.id));
-    });
-  }
-
   function exists(id: string): DwResultAsync<boolean> {
     return dbResult(
       async () =>
@@ -120,39 +107,6 @@ export function NoteDAO(tx: TxResolver) {
     );
   }
 
-  function findFirstNoteInLayer(
-    workspaceId: string,
-    parentId: ParentId,
-  ): DwResultAsync<NoteRow | undefined> {
-    return dbResult(async () => {
-      const result = await tx()
-        .select()
-        .from(notesTable)
-        .where(
-          and(inWorkspace(workspaceId), withParent(parentId), notTrashed()),
-        )
-        .orderBy(asc(notesTable.orderHint));
-      return result.at(0);
-    });
-  }
-
-  function findLastNoteInLayer(
-    workspaceId: string,
-    parentId: ParentId,
-  ): DwResultAsync<NoteRow | undefined> {
-    return dbResult(async () => {
-      const result = await tx()
-        .select()
-        .from(notesTable)
-        .where(
-          and(inWorkspace(workspaceId), withParent(parentId), notTrashed()),
-        )
-        .orderBy(desc(notesTable.orderHint))
-        .limit(1);
-      return result.at(0);
-    });
-  }
-
   function findAllTrashed(workspaceId: string): DwResultAsync<NoteRow[]> {
     return dbResult(async () =>
       tx()
@@ -160,41 +114,6 @@ export function NoteDAO(tx: TxResolver) {
         .from(notesTable)
         .where(and(inWorkspace(workspaceId), isTrashed()))
         .orderBy(asc(notesTable.trashedAt)),
-    );
-  }
-
-  function computeOrderKeysForLayer(
-    workspaceId: string,
-    parentId: ParentId,
-  ): DwResultAsync<OrderKeyDto> {
-    return findFirstNoteInLayer(workspaceId, parentId).andThen((firstInLayer) =>
-      findLastNoteInLayer(workspaceId, parentId).map((lastInLayer) => {
-        const start = firstInLayer
-          ? new Rank(firstInLayer.orderHint).prev().toString()
-          : Rank.default().toString();
-        const end = lastInLayer
-          ? new Rank(lastInLayer.orderHint).next().toString()
-          : Rank.default().toString();
-        return { start, end };
-      }),
-    );
-  }
-
-  function searchByTitle(
-    workspaceId: string,
-    query: string,
-  ): DwResultAsync<NoteRow[]> {
-    return dbResult(async () =>
-      tx()
-        .select()
-        .from(notesTable)
-        .where(
-          and(
-            like(notesTable.title, `%${query}%`),
-            inWorkspace(workspaceId),
-            notTrashed(),
-          ),
-        ),
     );
   }
 
@@ -206,11 +125,8 @@ export function NoteDAO(tx: TxResolver) {
     findAllByWorkspaceId,
     deleteMany,
     deleteById,
-    delete: deleteNote,
     exists,
     findAllTrashed,
-    computeOrderKeysForLayer,
-    searchByTitle,
   };
 }
 

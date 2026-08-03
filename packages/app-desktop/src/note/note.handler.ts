@@ -6,13 +6,9 @@ import {
   type Note,
   type NoteExportFormat,
   type NotePartial,
-  type NoteResponseDTO,
   type NotesResponseDTO,
   okVoid,
   type PageSize,
-  type UpdateNoteDTO,
-  UpdateNoteDTOSchema,
-  validateSchema,
 } from "@darkwrite/common";
 import { ok, ResultAsync } from "neverthrow";
 import {
@@ -26,14 +22,11 @@ import printToPdf from "../lib/print-to-pdf";
 import type { IDocumentService } from "../service/document.service";
 import { type HandlerImplements, handler } from "../types/ipc-handler";
 import type { INoteService } from "./note.service";
-import { notesToDto, noteToDto } from "./note-mapper";
+import { notesToDto } from "./note-mapper";
 import type { INoteQueryService } from "./note-query.service";
 
 const aggregateResponse = (notes: NoteRow[]) =>
   ({ notes: notesToDto(notes) }) satisfies NotesResponseDTO;
-
-const singleResponse = (note: NoteRow) =>
-  ({ note: noteToDto(note) }) satisfies NoteResponseDTO;
 
 const importTypeMap: Record<string, NoteExportFormat> = {
   ".md": "md",
@@ -58,22 +51,6 @@ export function NoteAPI(
     noteQueryService.getAllByWorkspaceId(workspaceId).map(aggregateResponse),
   );
 
-  const search = handler((wId: string, query: string) =>
-    noteQueryService.search(wId, query).map(aggregateResponse),
-  );
-
-  const getById = handler((id: string) =>
-    noteQueryService.getById(id).map(singleResponse),
-  );
-  const update = handler((id: string, dto: UpdateNoteDTO) =>
-    validateSchema(UpdateNoteDTOSchema)(dto)
-      .asyncAndThen((dto) => noteService.update(id, dto))
-      .map(singleResponse),
-  );
-
-  const duplicate = handler((id: string) =>
-    noteService.duplicate(id).map(singleResponse),
-  );
   const getDocument = handler((id: string) =>
     documentService.getNoteContent(id).map((document) => ({ document })),
   );
@@ -146,10 +123,6 @@ export function NoteAPI(
     create,
     delete: deleteNote,
     getAllByWorkspaceId,
-    search,
-    getById,
-    update,
-    duplicate,
     getDocument,
     setDocument,
     clearTrash,

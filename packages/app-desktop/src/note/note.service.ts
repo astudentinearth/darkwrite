@@ -1,33 +1,10 @@
-import type { Note, NotePartial, UpdateNoteDTO } from "@darkwrite/common";
+import type { Note, NotePartial } from "@darkwrite/common";
 import { okAsync, ResultAsync } from "neverthrow";
 import type { DatabaseType } from "@/db";
-import type { NewNoteRow, NoteRow } from "@/db/schema";
 import { resolveTx, transactional } from "@/db/transactional";
 import type { IDocumentService } from "@/service/document.service";
 import { NoteDAO } from "./note.dao";
 import { notePartialToRowPatch, noteToRow } from "./note-mapper";
-
-function buildDuplicate({
-  title,
-  icon,
-  databaseId,
-  workspaceId,
-  propertyValues,
-  parentId,
-}: NoteRow): NewNoteRow {
-  return {
-    title: `${title} (copy)`,
-    icon,
-    databaseId,
-    workspaceId,
-    propertyValues,
-    parentId,
-    orderHint: "",
-    favoriteOrderHint: "",
-    createdAt: new Date(),
-    modifiedAt: new Date(),
-  };
-}
 
 export function NoteService(
   db: DatabaseType,
@@ -46,43 +23,6 @@ export function NoteService(
       db,
     );
   }
-
-  const update = (id: string, dto: UpdateNoteDTO) =>
-    transactional(
-      () => noteDAO.update({ id, modifiedAt: new Date(), ...dto }),
-      db,
-    );
-
-  const duplicate = (id: string) =>
-    transactional(
-      () =>
-        noteDAO
-          .findById(id)
-          .andThen((note) =>
-            ResultAsync.combine([
-              okAsync(buildDuplicate(note)),
-              noteDAO.computeOrderKeysForLayer(note.workspaceId, note.parentId),
-            ]),
-          )
-          .map(
-            ([duplicate, keys]) =>
-              ({ ...duplicate, orderHint: keys.end }) satisfies NewNoteRow,
-          )
-          .andThen(noteDAO.create)
-          .andThen((n) =>
-            ResultAsync.combine([
-              okAsync(n),
-              documentService.getNoteContent(id),
-            ]),
-          )
-          .andThen(([note, content]) =>
-            documentService
-              .setNoteContent(note.id, JSON.stringify(content))
-              .map(() => note),
-          ),
-      db,
-    );
-
   const deleteById = (id: string) =>
     noteDAO.deleteById(id).andThen(() => documentService.deleteNoteContent(id));
 
@@ -112,8 +52,6 @@ export function NoteService(
 
   return {
     create,
-    update,
-    duplicate,
     deleteById,
     setModificationDate,
     emptyTrash,

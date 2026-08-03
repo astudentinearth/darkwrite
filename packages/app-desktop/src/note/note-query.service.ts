@@ -6,8 +6,6 @@ export function NoteQueryService(db: DatabaseType) {
   const noteDAO = NoteDAO(() => resolveTx(db));
   return {
     getAllByWorkspaceId: noteDAO.findAllByWorkspaceId,
-    getById: noteDAO.findById,
-    search: noteDAO.searchByTitle,
   };
 }
 

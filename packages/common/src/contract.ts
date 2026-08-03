@@ -4,7 +4,6 @@ import type {
   UpdateServerResponse,
 } from "./client";
 import type { NativeContextMenuData } from "./context-menu";
-import type { UpdateNoteDTO } from "./dto";
 import type { CreateEmbedDTO } from "./dto/request/embed.request";
 import type {
   CreateWorkspaceDTO,
@@ -20,7 +19,6 @@ import type {
   NoteExportFormat,
   NoteImportResult,
   NotePartial,
-  NoteResponseDTO,
   NotesResponseDTO,
 } from "./note";
 import type { PageSize } from "./pdf";
@@ -36,7 +34,7 @@ export interface INoteAPI {
    * Save a newly created note.
    */
   create: (note: Note) => ApiResult<void>;
-  update: (id: string, dto: UpdateNoteDTO) => ApiResult<NoteResponseDTO>;
+
   patchAll: (notes: NotePartial[]) => ApiResult<void>;
 
   /**
@@ -54,20 +52,19 @@ export interface INoteAPI {
    */
   getAllByWorkspaceId: (workspaceId: string) => ApiResult<NotesResponseDTO>;
 
-  search: (workspaceId: string, query: string) => ApiResult<NotesResponseDTO>;
-
-  getById: (id: string) => ApiResult<NoteResponseDTO>;
   getDocument: (id: string) => ApiResult<NoteContentResponseDTO>;
+
   setDocument: (id: string, serializedDocument: string) => ApiResult<void>;
-  /** @deprecated */
-  duplicate: (id: string) => ApiResult<NoteResponseDTO>;
+
   clearTrash: (workspaceId: string) => ApiResult<void>;
+
   /** @returns the file path of the exported PDF, or undefined if the export was cancelled. */
   export: (
     fileContent: string,
     fileType: NoteExportFormat,
     title?: string,
   ) => ApiResult<string | undefined>;
+
   /** @returns the file path of the exported PDF, or undefined if the export was cancelled. */
   exportPdf: (
     html: string,

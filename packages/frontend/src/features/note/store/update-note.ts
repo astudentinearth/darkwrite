@@ -10,7 +10,9 @@ const DEBOUNCE_TIME = 150;
 
 export function createTitleUpdater(noteId: string, dispatch: AppDispatch) {
   async function _titleUpdater(title: string) {
-    return await DarkwriteAPIClient.note.update(noteId, { title });
+    return await DarkwriteAPIClient.note.patchAll([
+      { id: noteId, title, modifiedAt: new Date().toISOString() },
+    ]);
   }
 
   const _persistTitleDelayed = _.debounce(_titleUpdater, DEBOUNCE_TIME);
