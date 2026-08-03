@@ -36,3 +36,5 @@ export function resourceRefToUrl(ref: DarkwriteResourceRef): string {
   if (!ref.id) throw new Error("Object reference must have an id");
   return `darkwrite://${ref.type}/${ref.id}`;
 }
+
+export const getEmbedUrl = (id: string) => `embed://${id}`;

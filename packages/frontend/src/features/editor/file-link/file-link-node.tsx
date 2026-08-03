@@ -11,6 +11,8 @@ import {
   ContextMenuSeparator,
   ContextMenuTrigger,
 } from "@/components/ui";
+import { pickAndCreateFileLink } from "@/features/link/store/file-link.thunk";
+import { useAppDispatch } from "@/features/store/hooks";
 import { cn } from "@/lib/utils";
 import { DarkwriteEditorContext } from "../context";
 import type { FileLinkAttributesType } from "./file-link-extension";
@@ -38,6 +40,7 @@ export function FileLinkNode(props: ReactNodeViewProps) {
   const { fileLink } = useFileLink(linkId);
   const { t } = useTranslation();
   const { openFilesOnDoubleClick } = use(DarkwriteEditorContext);
+  const dispatch = useAppDispatch();
 
   const openFile = () => {
     if (!fileLink) return;
@@ -45,11 +48,9 @@ export function FileLinkNode(props: ReactNodeViewProps) {
   };
 
   const changeFile = () => {
-    DarkwriteAPIClient.fileLink
-      .pickAndCreate()
-      .map((link) =>
-        link ? props.updateAttributes({ linkId: link.id }) : undefined,
-      );
+    dispatch(pickAndCreateFileLink()).map((link) =>
+      link ? props.updateAttributes({ linkId: link.id }) : undefined,
+    );
   };
 
   const handleClick = (e: MouseEvent) => {

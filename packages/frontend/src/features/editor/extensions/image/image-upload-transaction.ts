@@ -1,3 +1,4 @@
+import { getEmbedUrl } from "@darkwrite/common";
 import type { EditorView } from "@tiptap/pm/view";
 import { nanoid } from "nanoid";
 import { Block } from "../../types";
@@ -27,7 +28,7 @@ function createImageNode(
         node.type.name === Block.Image &&
         node.attrs.pendingId === pendingId
       ) {
-        tr.setNodeAttribute(pos, "src", `embed://${embedId}`);
+        tr.setNodeAttribute(pos, "src", getEmbedUrl(embedId));
         tr.setNodeAttribute(pos, "embedId", embedId);
         tr.setNodeAttribute(pos, "pendingId", "");
       }

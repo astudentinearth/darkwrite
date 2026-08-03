@@ -1,4 +1,4 @@
-import type { NoteDTO } from "./dto";
+import type { Note } from "./note";
 import { isDescendant, resolveUpperTree } from "./note";
 
 test("should resolve the parent tree of a note", () => {
@@ -6,7 +6,7 @@ test("should resolve the parent tree of a note", () => {
     a: { id: "a", parentId: null },
     b: { id: "b", parentId: "a" },
     c: { id: "c", parentId: null },
-  } as unknown as Record<string, NoteDTO>;
+  } as unknown as Record<string, Note>;
 
   const result = resolveUpperTree("b", notes);
   expect(result.findIndex((n) => n.id === "c")).toBe(-1);
@@ -20,7 +20,7 @@ describe("isDescendant", () => {
       a: { id: "a", parentId: "b" },
       b: { id: "b", parentId: "c" },
       c: { id: "c", parentId: "a" },
-    } as unknown as Record<string, NoteDTO>;
+    } as unknown as Record<string, Note>;
 
     expect(
       isDescendant("a", "d", notes),
@@ -35,7 +35,7 @@ describe("isDescendant", () => {
     const notes = {
       a: { id: "a", parentId: null },
       b: { id: "b", parentId: "a" },
-    } as unknown as Record<string, NoteDTO>;
+    } as unknown as Record<string, Note>;
 
     expect(isDescendant("b", "a", notes)).toBe(true);
   });
@@ -45,7 +45,7 @@ describe("isDescendant", () => {
       a: { id: "a", parentId: null },
       b: { id: "b", parentId: "a" },
       c: { id: "c", parentId: "b" },
-    } as unknown as Record<string, NoteDTO>;
+    } as unknown as Record<string, Note>;
 
     expect(isDescendant("c", "a", notes)).toBe(true);
   });
@@ -55,7 +55,7 @@ describe("isDescendant", () => {
       a: { id: "a", parentId: null },
       b: { id: "b", parentId: "a" },
       c: { id: "c", parentId: "b" },
-    } as unknown as Record<string, NoteDTO>;
+    } as unknown as Record<string, Note>;
 
     expect(isDescendant("k", "a", notes)).toBe(false);
     expect(isDescendant("a", "k", notes)).toBe(false);

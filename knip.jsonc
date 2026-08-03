@@ -1,0 +1,15 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "workspaces": {
+    "packages/app-desktop": {
+      // vitest.config.ts resolves its nested project's `root` with
+      // resolve(".") (cwd-relative), which knip evaluates from the repo
+      // root instead of the package dir, so it can't resolve this
+      // specifier. The file exists; this is a false positive.
+      "ignoreUnresolved": ["src/test/setup.electron.ts"]
+    },
+    "packages/i18n": {
+      "project": ["scripts/**/*.js"]
+    }
+  }
+}

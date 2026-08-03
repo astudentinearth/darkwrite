@@ -1,4 +1,4 @@
-import type { WorkspaceDTO } from "@darkwrite/common";
+import { getEmbedUrl, type WorkspaceDTO } from "@darkwrite/common";
 import { produce } from "immer";
 import { Check, X } from "lucide-react";
 import { type ReactNode, useRef, useState } from "react";
@@ -16,7 +16,7 @@ import { WorkspaceLetterIcon } from "@/components/workspace-letter-icon";
 import { uploadImage } from "@/lib/upload-image";
 import { cn } from "@/lib/utils";
 import { useAppStore } from "../store/hooks";
-import { getWorkspaceActions } from "../workspaces/store/workspace-actions";
+import { getCurrentWorkspaceId } from "../workspaces/store/workspace.thunk";
 
 export type EditWorkspaceDialogProps = {
   className?: string;
@@ -31,7 +31,6 @@ export default function EditWorkspaceDialog(props: EditWorkspaceDialogProps) {
   const { className, workspace, children } = props;
   const [name, setName] = useState(props.workspace.name);
   const store = useAppStore();
-  const { getCurrentWorkspaceId } = getWorkspaceActions(store);
   const [imageUrl, setImageUrl] = useState<string | undefined | null>(
     workspace.iconUrl,
   );
@@ -52,8 +51,10 @@ export default function EditWorkspaceDialog(props: EditWorkspaceDialogProps) {
   };
 
   const updateImage = async () => {
-    const embed = await uploadImage(getCurrentWorkspaceId);
-    setImageUrl(embed.url);
+    const embed = await uploadImage(() =>
+      getCurrentWorkspaceId(store.getState),
+    );
+    setImageUrl(getEmbedUrl(embed.id));
   };
 
   return (

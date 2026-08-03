@@ -67,21 +67,21 @@ export const linkedFile = sqliteTable("linked_file", {
   filePath: text().notNull(),
 });
 
-export type Workspace = typeof workspace.$inferSelect;
-export type NewWorkspace = typeof workspace.$inferInsert;
-export type PatchWorkspace = PatchPartial<Workspace, "id">;
+export type WorkspaceRow = typeof workspace.$inferSelect;
+export type NewWorkspaceRow = typeof workspace.$inferInsert;
+export type PatchWorkspaceRow = PatchPartial<WorkspaceRow, "id">;
 
-export type Note = typeof note.$inferSelect;
-export type NewNote = typeof note.$inferInsert;
-export type PatchNote = PatchPartial<Note, "id">;
+export type NoteRow = typeof note.$inferSelect;
+export type NewNoteRow = typeof note.$inferInsert;
+export type PatchNoteRow = PatchPartial<NoteRow, "id">;
 
 export type Database = typeof database.$inferSelect;
 export type NewDatabase = typeof database.$inferInsert;
 export type PatchDatabase = PatchPartial<Database, "id">;
 
-export type Embed = typeof embed.$inferSelect;
-export type NewEmbed = typeof embed.$inferInsert;
-export type PatchEmbed = PatchPartial<Embed, "id">;
+export type EmbedRow = typeof embed.$inferSelect;
+export type NewEmbedRow = typeof embed.$inferInsert;
+export type PatchEmbedRow = PatchPartial<EmbedRow, "id">;
 
-export type LinkedFile = typeof linkedFile.$inferSelect;
-export type NewLinkedFile = typeof linkedFile.$inferInsert;
+export type LinkedFileRow = typeof linkedFile.$inferSelect;
+export type NewLinkedFileRow = typeof linkedFile.$inferInsert;

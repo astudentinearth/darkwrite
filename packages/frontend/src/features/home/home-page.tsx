@@ -1,15 +1,14 @@
 import { SquarePen } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui";
+import { useAppDispatch } from "@/features/store/hooks";
 import ConstrainedWidth from "../editor/constrained-width";
-import { useNoteActions } from "../note/store/note-actions";
-import { useCurrentWorkspaceId } from "../workspaces/hooks/use-workspace";
+import { createNote } from "../note/store/note.thunk";
 import RecentNotes from "./recents";
 
 export default function HomePage() {
   const { t } = useTranslation();
-  const workspaceId = useCurrentWorkspaceId();
-  const { createNote } = useNoteActions();
+  const dispatch = useAppDispatch();
   return (
     <div className="flex items-center flex-col px-24 editor-fade-in min-h-full relative p-12">
       <ConstrainedWidth className="flex flex-col gap-6">
@@ -19,8 +18,7 @@ export default function HomePage() {
           </h1>
           <Button
             onClick={() => {
-              if (!workspaceId) return;
-              createNote({ workspaceId, navigateAfter: true });
+              dispatch(createNote({ navigateAfter: true }));
             }}
             variant="secondary"
             // y offset is for optical balance with the welcome text

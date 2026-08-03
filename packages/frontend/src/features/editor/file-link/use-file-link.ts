@@ -1,17 +1,14 @@
 import type { FileLinkMetadata } from "@darkwrite/common";
-import { skipToken } from "@reduxjs/toolkit/query";
-import { useGetFileLinkByIdQuery } from "./file-link-api";
+import { selectFileLinkById } from "@/features/link/store/file-link.selector";
+import { useAppSelector } from "@/features/store/hooks";
 
 export type UseFileLinkResult = {
-  fileLink: FileLinkMetadata | undefined;
-  isLoading: boolean;
-  isFetching: boolean;
-  isError: boolean;
+  fileLink: FileLinkMetadata | null;
 };
 
 export function useFileLink(id: string | null): UseFileLinkResult {
-  const { data, isLoading, isFetching, isError } = useGetFileLinkByIdQuery(
-    id ?? skipToken,
+  const fileLink = useAppSelector((state) =>
+    id ? selectFileLinkById(state, id) : null,
   );
-  return { fileLink: data, isLoading, isFetching, isError };
+  return { fileLink };
 }

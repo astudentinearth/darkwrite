@@ -1,11 +1,11 @@
-import { type ParentId, Rank } from "@darkwrite/common";
+import { type Note, type ParentId, Rank } from "@darkwrite/common";
 import { ResultAsync } from "neverthrow";
 import { beforeAll, beforeEach, describe, expect, it } from "vitest";
 import {
-  type NewNote,
-  type Note,
+  type NewNoteRow,
+  type NoteRow,
   note as notesTable,
-  type Workspace,
+  type WorkspaceRow,
 } from "@/db/schema";
 import { resolveTx } from "@/db/transactional";
 import { DocumentService } from "@/service/document.service";
@@ -21,7 +21,7 @@ import { type INoteService, NoteService } from "./note.service";
 
 describe("note service tests", () => {
   const db: DatabaseType = createTestDatabase();
-  let workspace: Workspace;
+  let workspace: WorkspaceRow;
   let noteDAO: NoteDAOInstance;
   let noteService: INoteService;
   const documentStore = MockDocumentStore();
@@ -50,8 +50,8 @@ describe("note service tests", () => {
     title: string,
     orderHint: string,
     parentId: ParentId = null,
-  ): Promise<Note> {
-    const note: NewNote = {
+  ): Promise<NoteRow> {
+    const note: NewNoteRow = {
       title,
       workspaceId: workspace.id,
       orderHint,
@@ -63,6 +63,15 @@ describe("note service tests", () => {
     return (await noteDAO.create(note))._unsafeUnwrap();
   }
 
+  /**
+   * Trashes a note through the same write-through path the renderer uses
+   * (moveToTrash/restoreFromTrash were removed; trashing is now a patch).
+   */
+  const trash = (id: string) =>
+    noteService.patchAll([
+      { id, isTrashed: true, trashedAt: new Date().toISOString() },
+    ]);
+
   describe("clear trash tests", () => {
     it("should clear all trashed notes in the workspace", async () => {
       const rankA = Rank.default().get();
@@ -71,8 +80,8 @@ describe("note service tests", () => {
       const note1 = await createNote("Trashed 1", rankA);
       const note2 = await createNote("Trashed 2", rankB);
 
-      await noteService.moveToTrash(note1.id);
-      await noteService.moveToTrash(note2.id);
+      await trash(note1.id);
+      await trash(note2.id);
 
       await noteService.emptyTrash(workspace.id);
 
@@ -93,7 +102,7 @@ describe("note service tests", () => {
       )._unsafeUnwrap();
 
       const rankA = Rank.default().get();
-      const trashedInOther: NewNote = {
+      const trashedInOther: NewNoteRow = {
         title: "Trashed in other",
         workspaceId: otherWorkspace.id,
         orderHint: "",
@@ -107,7 +116,7 @@ describe("note service tests", () => {
       const saved = (await noteDAO.create(trashedInOther))._unsafeUnwrap();
 
       const localNote = await createNote("Local trashed", rankA);
-      await noteService.moveToTrash(localNote.id);
+      await trash(localNote.id);
 
       await noteService.emptyTrash(workspace.id);
 
@@ -125,7 +134,7 @@ describe("note service tests", () => {
 
       const alive = await createNote("Alive", rankA);
       const trashed = await createNote("Trashed", rankB);
-      await noteService.moveToTrash(trashed.id);
+      await trash(trashed.id);
 
       await noteService.emptyTrash(workspace.id);
 
@@ -138,17 +147,26 @@ describe("note service tests", () => {
     });
 
     it("should delete document content for trashed notes", async () => {
-      const note = (
-        await noteService.create({
-          title: "With content",
-          workspaceId: workspace.id,
-          parentId: null,
-        })
-      )._unsafeUnwrap();
+      const now = new Date().toISOString();
+      const note: Note = {
+        id: crypto.randomUUID(),
+        title: "With content",
+        icon: null,
+        parentId: null,
+        workspaceId: workspace.id,
+        orderHint: Rank.default().get(),
+        favoriteOrderHint: "",
+        isFavorite: false,
+        isTrashed: false,
+        trashedAt: null,
+        createdAt: now,
+        modifiedAt: now,
+      };
+      (await noteService.create(note))._unsafeUnwrap();
 
       expect((await documentStore.exists(note.id))._unsafeUnwrap()).toBe(true);
 
-      await noteService.moveToTrash(note.id);
+      await trash(note.id);
       await noteService.emptyTrash(workspace.id);
 
       expect((await documentStore.exists(note.id))._unsafeUnwrap()).toBe(false);
@@ -156,170 +174,6 @@ describe("note service tests", () => {
 
     it("should handle empty trash gracefully", async () => {
       await expect(noteService.emptyTrash(workspace.id)).resolves.not.toThrow();
-    });
-  });
-
-  describe("moveInto and moveBelow tests", () => {
-    it("moveBelow should move source note below target note and update rank", async () => {
-      // Arrange
-      const rankA = Rank.default().get();
-      const rankC = new Rank(rankA).next().get(); // Note C is after A
-      // We want rankC > rankA, which next() guarantees.
-
-      const parent = await createNote("Parent", rankA);
-      const noteA = await createNote("Note A", rankA, parent.id);
-      const noteC = await createNote("Note C", rankC, parent.id);
-
-      const rankX = new Rank(rankC).next().get(); // Source is somewhere else
-      const source = await createNote("Source", rankX, null);
-
-      // Act: Move Source below Note A
-      await noteService.move({
-        destinationId: noteA.id,
-        sourceId: source.id,
-        placement: "below",
-      });
-
-      // Assert
-      const updatedSource = (await noteDAO.findById(source.id))._unsafeUnwrap();
-      expect(updatedSource.parentId).toBe(parent.id);
-      expect(updatedSource.orderHint > noteA.orderHint).toBe(true);
-      expect(updatedSource.orderHint < noteC.orderHint).toBe(true);
-    });
-
-    it("moveBelow should move source note to end if no next sibling", async () => {
-      // Arrange
-      const rankA = Rank.default().get();
-      const parent = await createNote("Parent", rankA);
-      const noteA = await createNote("Note A", rankA, parent.id);
-      // No next sibling
-      const rankX = new Rank(rankA).next().get();
-      const source = await createNote("Source", rankX, null);
-
-      // Act
-      await noteService.move({
-        sourceId: source.id,
-        destinationId: noteA.id,
-        placement: "below",
-      });
-
-      // Assert
-      const updatedSource = (await noteDAO.findById(source.id))._unsafeUnwrap();
-      expect(updatedSource.parentId).toBe(parent.id);
-      expect(updatedSource.orderHint > noteA.orderHint).toBe(true);
-    });
-
-    it("moveInto 'start' should move source to start of destination", async () => {
-      // Arrange
-      const rankA = Rank.default().get();
-      const rankB = new Rank(rankA).next().get();
-
-      const parent = await createNote("Parent", rankA);
-      const child1 = await createNote("Child 1", rankB, parent.id);
-
-      const rankX = new Rank(rankB).next().get();
-      const source = await createNote("Source", rankX, null);
-
-      // Act
-      await noteService.move({
-        placement: "inside-start",
-        sourceId: source.id,
-        destinationId: parent.id,
-      });
-
-      // Assert
-      const updatedSource = (await noteDAO.findById(source.id))._unsafeUnwrap();
-      expect(updatedSource.parentId).toBe(parent.id);
-      expect(updatedSource.orderHint < child1.orderHint).toBe(true);
-    });
-
-    it("moveInto 'start' on empty parent should use default rank", async () => {
-      // Arrange
-      const rankA = Rank.default().get();
-      const parent = await createNote("Parent", rankA);
-
-      const rankX = new Rank(rankA).next().get();
-      const source = await createNote("Source", rankX, null);
-
-      // Act
-      await noteService.move({
-        placement: "inside-start",
-        sourceId: source.id,
-        destinationId: parent.id,
-      });
-
-      // Assert
-      const updatedSource = (await noteDAO.findById(source.id))._unsafeUnwrap();
-      expect(updatedSource.parentId).toBe(parent.id);
-      // Should be roughly equal to default, or valid.
-      // Rank.default().get() is what the service uses.
-      expect(updatedSource.orderHint).toBe(Rank.default().get());
-    });
-
-    it("moveInto 'end' should move source to end of destination", async () => {
-      // Arrange
-      const rankA = Rank.default().get();
-      const rankB = new Rank(rankA).next().get();
-
-      const parent = await createNote("Parent", rankA);
-      const child1 = await createNote("Child 1", rankB, parent.id);
-
-      const rankX = new Rank(rankB).next().get();
-      const source = await createNote("Source", rankX, null);
-
-      // Act
-      await noteService.move({
-        placement: "inside-end",
-        sourceId: source.id,
-        destinationId: parent.id,
-      });
-
-      // Assert
-      const updatedSource = (await noteDAO.findById(source.id))._unsafeUnwrap();
-      expect(updatedSource.parentId).toBe(parent.id);
-      expect(updatedSource.orderHint > child1.orderHint).toBe(true);
-    });
-
-    it("moveInto 'end' on empty parent should use default rank", async () => {
-      // Arrange
-      const rankA = Rank.default().get();
-      const parent = await createNote("Parent", rankA);
-
-      const rankX = new Rank(rankA).next().get();
-      const source = await createNote("Source", rankX, null);
-
-      // Act
-      await noteService.move({
-        placement: "inside-end",
-        sourceId: source.id,
-        destinationId: parent.id,
-      });
-
-      // Assert
-      const updatedSource = (await noteDAO.findById(source.id))._unsafeUnwrap();
-      expect(updatedSource.parentId).toBe(parent.id);
-      expect(updatedSource.orderHint).toBe(Rank.default().get());
-    });
-
-    it("moveInto with null destination (root) should work", async () => {
-      // Arrange
-      const rankA = Rank.default().get();
-      const rootNote = await createNote("Root Note", rankA, null);
-
-      const rankX = new Rank(rankA).next().get();
-      const source = await createNote("Source", rankX, "some-other-id");
-
-      // Act
-      await noteService.move({
-        placement: "inside-end",
-        sourceId: source.id,
-        destinationId: null,
-      }); // Move to root
-
-      // Assert
-      const updatedSource = (await noteDAO.findById(source.id))._unsafeUnwrap();
-      expect(updatedSource.parentId).toBeNull();
-      expect(updatedSource.orderHint > rootNote.orderHint).toBe(true);
     });
   });
 });

@@ -6,19 +6,21 @@ import {
   getCurrentRoutePath,
   NavigationEventBus,
 } from "@/features/navigation/navigator";
-import { useAppSelector, useAppStore } from "@/features/store/hooks";
-import { useCurrentWorkspaceId } from "@/features/workspaces/hooks/use-workspace";
 import {
-  getMovingNote,
-  useMoveBelowMutation,
-  useMoveIntoMutation,
-} from "../store/move-note";
+  useAppDispatch,
+  useAppSelector,
+  useAppStore,
+} from "@/features/store/hooks";
 import {
   canMoveNoteBelow,
   canMoveNoteInto,
 } from "../store/move-note-validator";
-import { useNoteActions } from "../store/note-actions";
-import { selectAllNotesAsMap, selectNoteById } from "../store/note-selectors";
+import { createNote, moveNote, reorderNote } from "../store/note.thunk";
+import {
+  getMovingNote,
+  selectAllNotesAsMap,
+  selectNoteById,
+} from "../store/note-selectors";
 
 /**
  * Hook to get note data **within sidebar views.** Do NOT use this to
@@ -28,8 +30,7 @@ import { selectAllNotesAsMap, selectNoteById } from "../store/note-selectors";
 export function useNoteItem(id: string) {
   const note = useAppSelector((state) => selectNoteById(state, id));
   const [isActive, setIsActive] = useState(false);
-  const { createNote } = useNoteActions();
-  const workspaceId = useCurrentWorkspaceId();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     // get the path name at the moment of render to determine
@@ -53,8 +54,7 @@ export function useNoteItem(id: string) {
   const createChild = (e?: MouseEvent<HTMLElement>) => {
     e?.preventDefault();
     e?.stopPropagation();
-    if (!workspaceId) return;
-    createNote({ parentId: id, workspaceId, navigateAfter: true });
+    dispatch(createNote({ parentId: id, navigateAfter: true }));
   };
 
   return { note, isActive, createChild };
@@ -69,7 +69,6 @@ export function useNoteItemDrag(id: string) {
     onDragOver,
     setIsDraggingOver,
   } = useDragState();
-  const [trigger] = useMoveIntoMutation();
 
   type DragEvent = React.DragEvent<HTMLElement>;
   const onDrag = useCallback(
@@ -93,17 +92,9 @@ export function useNoteItemDrag(id: string) {
 
       if (note.parentId === id) return;
 
-      try {
-        trigger({
-          sourceNoteId: note.id,
-          destinationNoteId: id,
-          placement: "inside-end",
-        });
-      } catch (error) {
-        console.error("Failed to move note:", error);
-      }
+      store.dispatch(moveNote(note.id, id));
     },
-    [id, trigger, setIsDraggingOver, store],
+    [id, setIsDraggingOver, store],
   );
 
   return {
@@ -128,9 +119,6 @@ export function useNoteDropZone(
     setIsDraggingOver,
   } = useDragState();
 
-  const [moveBelow] = useMoveBelowMutation();
-  const [moveInto] = useMoveIntoMutation();
-
   type DragEvent = React.DragEvent<HTMLElement>;
   const store = useAppStore();
 
@@ -154,16 +142,9 @@ export function useNoteDropZone(
       )
         return;
 
-      try {
-        moveBelow({
-          sourceNoteId: movingNote.id,
-          aboveNoteId: aboveOrParentId,
-        });
-      } catch (error) {
-        console.error("Failed to move note below:", error);
-      }
+      store.dispatch(reorderNote(movingNote.id, aboveOrParentId, "below"));
     },
-    [aboveOrParentId, moveBelow, setIsDraggingOver, store],
+    [aboveOrParentId, setIsDraggingOver, store],
   );
 
   const handleDropInto = useCallback(
@@ -184,17 +165,9 @@ export function useNoteDropZone(
       )
         return;
 
-      try {
-        moveInto({
-          sourceNoteId: movingNote.id,
-          destinationNoteId: aboveOrParentId,
-          placement: "inside-start",
-        });
-      } catch (error) {
-        console.error("Failed to move note into:", error);
-      }
+      store.dispatch(moveNote(movingNote.id, aboveOrParentId, "start"));
     },
-    [aboveOrParentId, moveInto, setIsDraggingOver, store],
+    [aboveOrParentId, setIsDraggingOver, store],
   );
 
   return {

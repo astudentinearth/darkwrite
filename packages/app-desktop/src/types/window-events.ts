@@ -8,6 +8,7 @@ export const WindowEvent = {
   ENTER_FULLSCREEN: "enter-full-screen",
   EXIT_FULLSCREEN: "exit-full-screen",
   CONTEXT_MENU: "context-menu",
+  FILE_LINK_CREATED: "file-link-created",
 } as const;
 
 export const AppMenuEvent = {

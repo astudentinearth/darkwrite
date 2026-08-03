@@ -1,21 +1,14 @@
 import { extname } from "node:path";
 import {
-  type CreateNoteDTO,
-  CreateNoteDTOSchema,
   dwErrAsync,
   FileFormatMap,
   type INoteAPI,
-  type MoveNoteDTO,
-  MoveNoteDTOSchema,
+  type Note,
   type NoteExportFormat,
-  type NoteResponseDTO,
+  type NotePartial,
   type NotesResponseDTO,
   okVoid,
   type PageSize,
-  type ParentId,
-  type UpdateNoteDTO,
-  UpdateNoteDTOSchema,
-  validateSchema,
 } from "@darkwrite/common";
 import { ok, ResultAsync } from "neverthrow";
 import {
@@ -23,20 +16,17 @@ import {
   showSaveDialog,
   whenDialogCancelled,
 } from "@/api/dialog";
-import type { Note } from "@/db/schema";
+import type { NoteRow } from "@/db/schema";
 import { readFileUtf8, writeBinaryFile, writeFileUtf8 } from "@/lib/fs";
 import printToPdf from "../lib/print-to-pdf";
 import type { IDocumentService } from "../service/document.service";
 import { type HandlerImplements, handler } from "../types/ipc-handler";
 import type { INoteService } from "./note.service";
-import { notesToDto, noteToDto } from "./note-mapper";
+import { notesToDto } from "./note-mapper";
 import type { INoteQueryService } from "./note-query.service";
 
-const aggregateResponse = (notes: Note[]) =>
+const aggregateResponse = (notes: NoteRow[]) =>
   ({ notes: notesToDto(notes) }) satisfies NotesResponseDTO;
-
-const singleResponse = (note: Note) =>
-  ({ note: noteToDto(note) }) satisfies NoteResponseDTO;
 
 const importTypeMap: Record<string, NoteExportFormat> = {
   ".md": "md",
@@ -53,11 +43,7 @@ export function NoteAPI(
   noteQueryService: INoteQueryService,
   documentService: IDocumentService,
 ): HandlerImplements<INoteAPI> {
-  const create = handler((dto: CreateNoteDTO) =>
-    validateSchema(CreateNoteDTOSchema)(dto)
-      .asyncAndThen(noteService.create)
-      .map(singleResponse),
-  );
+  const create = handler((note: Note) => noteService.create(note));
 
   const deleteNote = handler((id: string) => noteService.deleteById(id));
 
@@ -65,56 +51,6 @@ export function NoteAPI(
     noteQueryService.getAllByWorkspaceId(workspaceId).map(aggregateResponse),
   );
 
-  const getFavorites = handler((workspaceId: string) =>
-    noteQueryService.getFavorites(workspaceId).map(aggregateResponse),
-  );
-
-  const favorite = handler((noteId: string, aboveNoteId?: string | null) =>
-    noteService.favorite(noteId, aboveNoteId).map(singleResponse),
-  );
-
-  const unfavorite = handler((noteId: string) =>
-    noteService.unfavorite(noteId).map(singleResponse),
-  );
-
-  const getTrashed = handler((wId: string) =>
-    noteQueryService.getTrashed(wId).map(aggregateResponse),
-  );
-
-  const search = handler((wId: string, query: string) =>
-    noteQueryService.search(wId, query).map(aggregateResponse),
-  );
-
-  const moveToTrash = handler((id: string) =>
-    noteService.moveToTrash(id).map(singleResponse),
-  );
-  const restoreFromTrash = handler((id: string) =>
-    noteService.restoreFromTrash(id).map(singleResponse),
-  );
-  const getRecents = handler((wId: string) =>
-    noteQueryService.getRecents(wId).map(aggregateResponse),
-  );
-  const getByParentId = handler((wId: string, pId: ParentId) =>
-    noteQueryService.getByParentId(wId, pId).map(aggregateResponse),
-  );
-  const getById = handler((id: string) =>
-    noteQueryService.getById(id).map(singleResponse),
-  );
-  const update = handler((id: string, dto: UpdateNoteDTO) =>
-    validateSchema(UpdateNoteDTOSchema)(dto)
-      .asyncAndThen((dto) => noteService.update(id, dto))
-      .map(singleResponse),
-  );
-
-  const move = handler((dto: MoveNoteDTO) =>
-    validateSchema(MoveNoteDTOSchema)(dto)
-      .asyncAndThen(noteService.move)
-      .map(singleResponse),
-  );
-
-  const duplicate = handler((id: string) =>
-    noteService.duplicate(id).map(singleResponse),
-  );
   const getDocument = handler((id: string) =>
     documentService.getNoteContent(id).map((document) => ({ document })),
   );
@@ -125,12 +61,6 @@ export function NoteAPI(
         () => noteService.setModificationDate(id, new Date()).orElse(okVoid), // unimportant side effect
       )
       .map(() => {}),
-  );
-
-  const getParentTree = handler((id: string) =>
-    noteQueryService
-      .getParentTree(id)
-      .map((notes) => ({ parents: notes.map(noteToDto) })),
   );
 
   const clearTrash = handler((wId: string) =>
@@ -185,29 +115,20 @@ export function NoteAPI(
       .orElse(whenDialogCancelled({ content: [], type: "html" as const })),
   );
 
+  const patchAll = handler((notes: NotePartial[]) =>
+    noteService.patchAll(notes).map(() => {}),
+  );
+
   return {
     create,
     delete: deleteNote,
     getAllByWorkspaceId,
-    getFavorites,
-    favorite,
-    getTrashed,
-    search,
-    moveToTrash,
-    restoreFromTrash,
-    getRecents,
-    getByParentId,
-    getById,
-    update,
-    move,
-    duplicate,
     getDocument,
     setDocument,
-    getParentTree,
     clearTrash,
     export: saveExportedNote,
     exportPdf: saveToPDF,
     import: importFiles,
-    unfavorite,
+    patchAll,
   };
 }

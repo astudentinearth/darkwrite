@@ -1,18 +1,20 @@
 import type { WorkspaceConfig } from "@/workspace-config";
 
-export interface WorkspaceDTO {
+export interface Workspace {
   id: string;
-  ownerId: string | null;
   name: string;
   iconUrl?: string | null;
   createdAt: string;
   config: WorkspaceConfig;
 }
 
+/** @deprecated use `Workspace` instead */
+export type WorkspaceDTO = Workspace;
+
 export interface WorkspaceResponseDTO {
-  workspace: WorkspaceDTO;
+  workspace: Workspace;
 }
 
 export interface WorkspacesResponseDTO {
-  workspaces: WorkspaceDTO[];
+  workspaces: Workspace[];
 }

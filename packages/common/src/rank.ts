@@ -13,6 +13,7 @@ export class Rank {
     return rank instanceof Rank ? rank.get() : rank;
   }
 
+  /** @deprecated this method can throw on collision */
   static between(a: string | Rank, b: string | Rank) {
     const first = Rank.lesserOne(a, b);
     const second = Rank.greaterOne(a, b);
@@ -23,6 +24,43 @@ export class Rank {
     return new Rank(generateKeyBetween(first, second));
   }
 
+  /**
+   * Checks if a rank is valid or malformed.
+   * @param val candidate string to check
+   * @returns true if valid, false if invalid
+   */
+  static isValid(val: string) {
+    try {
+      generateKeyBetween(null, val);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  static safe(val: string) {
+    if (Rank.isValid(val)) return new Rank(val);
+    else return Rank.default();
+  }
+
+  static midpoint(
+    a: Rank,
+    b: Rank,
+  ): { collided: true } | { collided: false; midpoint: Rank } {
+    if (Rank.eq(a, b)) return { collided: true as const };
+    const first = Rank.lesserOne(a, b);
+    const second = Rank.greaterOne(a, b);
+    return {
+      collided: false as const,
+      midpoint: new Rank(generateKeyBetween(first, second)),
+    };
+  }
+
+  midpoint(other: Rank) {
+    return Rank.midpoint(this, other);
+  }
+
+  /** @deprecated this method can throw */
   between(other: string | Rank) {
     const _other = Rank.stringify(other);
     return Rank.between(this, _other);
@@ -60,6 +98,10 @@ export class Rank {
 
   gt(rank: string | Rank) {
     return Rank.gt(this, rank);
+  }
+
+  static eq(a: Rank, b: Rank) {
+    return a.get() === b.get();
   }
 
   static greaterOne(a: string | Rank, b: string | Rank) {

@@ -1,5 +1,6 @@
 import {
   deepAssign,
+  type FileLinkMetadata,
   type NativeContextMenuData,
   recursiveKeys,
   type SerializedResult,
@@ -7,9 +8,6 @@ import {
 } from "@darkwrite/common";
 import { contextBridge, ipcRenderer, webUtils } from "electron";
 import { AppMenuEvent, WindowEvent } from "@/types/window-events";
-
-// import { DarkwriteElectronAPI } from "../ipc/api";
-// import { DarkwriteAPI, IPCHandler } from "../ipc/handler";
 
 /**
  * Wraps around ipcRenderer.invoke() to type APIs
@@ -36,7 +34,7 @@ export const initalizeAPI = async () => {
   const apiObject = await ipcRenderer.invoke(
     "$darkwrite.build-preload-api-object",
   );
-  // et the list of IPC channels, which are derived from the object's keys
+  // get the list of IPC channels, which are derived from the object's keys
   const handlerKeys = recursiveKeys(apiObject, (val) => val === true);
   const obj = {};
   for (const keyPath of handlerKeys) {
@@ -63,6 +61,8 @@ const events: WindowEvents = {
     ipcRenderer.on(WindowEvent.EXIT_FULLSCREEN, () => callback()),
   onContextMenu: (callback: (data: NativeContextMenuData) => void) =>
     ipcRenderer.on(WindowEvent.CONTEXT_MENU, (_, data) => callback(data)),
+  onFileLinkCreated: (callback: (link: FileLinkMetadata) => void) =>
+    ipcRenderer.on(WindowEvent.FILE_LINK_CREATED, (_, link) => callback(link)),
   menu: {
     onCreateNote: (callback: () => void) =>
       ipcRenderer.on(AppMenuEvent.CREATE_NEW_NOTE, () => callback()),

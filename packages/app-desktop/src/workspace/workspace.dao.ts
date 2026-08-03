@@ -3,21 +3,21 @@ import { eq } from "drizzle-orm";
 import { ok } from "neverthrow";
 import { dbResult } from "@/db/db-result";
 import {
-  type NewWorkspace,
-  type PatchWorkspace,
-  type Workspace,
+  type NewWorkspaceRow,
+  type PatchWorkspaceRow,
+  type WorkspaceRow,
   workspace as workspaceTable,
 } from "@/db/schema";
 import type { TxResolver } from "@/db/transactional";
 
 export function WorkspaceDAO(tx: TxResolver) {
-  function create(workspace: NewWorkspace): DwResultAsync<Workspace> {
+  function create(workspace: NewWorkspaceRow): DwResultAsync<WorkspaceRow> {
     return dbResult(() =>
       tx().insert(workspaceTable).values(workspace).returning().get(),
     );
   }
 
-  function update(workspace: PatchWorkspace): DwResultAsync<Workspace> {
+  function update(workspace: PatchWorkspaceRow): DwResultAsync<WorkspaceRow> {
     return dbResult(() =>
       tx()
         .update(workspaceTable)
@@ -29,13 +29,13 @@ export function WorkspaceDAO(tx: TxResolver) {
     );
   }
 
-  function findById(id: string): DwResultAsync<Workspace> {
+  function findById(id: string): DwResultAsync<WorkspaceRow> {
     return dbResult(() =>
       tx().select().from(workspaceTable).where(eq(workspaceTable.id, id)).get(),
     ).andThen((row) => (row ? ok(row) : dwErr("Workspace not found.")));
   }
 
-  function findAll(): DwResultAsync<Workspace[]> {
+  function findAll(): DwResultAsync<WorkspaceRow[]> {
     return dbResult(() => tx().select().from(workspaceTable));
   }
 
@@ -45,7 +45,7 @@ export function WorkspaceDAO(tx: TxResolver) {
     ).andThen(() => ok());
   }
 
-  function deleteWorkspace(value: Workspace): DwResultAsync<void> {
+  function deleteWorkspace(value: WorkspaceRow): DwResultAsync<void> {
     return deleteById(value.id);
   }
 

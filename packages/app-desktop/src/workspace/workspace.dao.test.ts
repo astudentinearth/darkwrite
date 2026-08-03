@@ -1,8 +1,8 @@
 import { beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { applySqlMigrations, createDatabase, type DatabaseType } from "@/db";
 import {
-  type NewWorkspace,
-  type Workspace,
+  type NewWorkspaceRow,
+  type WorkspaceRow,
   workspace as workspaceTable,
 } from "@/db/schema";
 import { resolveTx } from "@/db/transactional";
@@ -24,8 +24,8 @@ describe("WorkspaceDAO", () => {
 
   const createTestWorkspace = async (
     name: string = "Test Workspace",
-  ): Promise<Workspace> => {
-    const draft: NewWorkspace = {
+  ): Promise<WorkspaceRow> => {
+    const draft: NewWorkspaceRow = {
       createdAt: new Date(),
       name,
     };
@@ -34,7 +34,7 @@ describe("WorkspaceDAO", () => {
 
   describe("create", () => {
     it("should create a workspace with required fields", async () => {
-      const draft: NewWorkspace = {
+      const draft: NewWorkspaceRow = {
         createdAt: new Date(),
         name: "My Workspace",
       };
@@ -47,7 +47,7 @@ describe("WorkspaceDAO", () => {
     });
 
     it("should create a workspace with optional fields", async () => {
-      const draft: NewWorkspace = {
+      const draft: NewWorkspaceRow = {
         createdAt: new Date(),
         name: "Workspace with Icon",
         iconUrl: "https://example.com/icon.png",

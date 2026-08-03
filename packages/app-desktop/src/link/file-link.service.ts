@@ -7,8 +7,9 @@ export function FileLinkService(db: DatabaseType) {
 
   const createFileLink = (filePath: string) => fileLinkDao.create({ filePath });
   const getFileLinkById = (id: string) => fileLinkDao.findById(id);
+  const getAll = fileLinkDao.findAll;
 
-  return { createFileLink, getFileLinkById };
+  return { createFileLink, getFileLinkById, getAll };
 }
 
 export type IFileLinkService = ReturnType<typeof FileLinkService>;

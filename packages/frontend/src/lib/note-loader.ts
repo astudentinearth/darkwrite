@@ -1,4 +1,4 @@
-import { DarkwriteAPIClient } from "@/api/api-client";
+import { selectNoteById } from "@/features/note/store/note-selectors";
 import { appSessionSlice } from "@/features/session/session-slice";
 import type { AppStore } from "@/features/store/types";
 
@@ -12,10 +12,8 @@ export const noteLoader = async ({ params, store }: NoteLoaderProps) => {
   const { pageId } = params;
   if (!pageId) throw new Error("Note id not found");
 
-  const result = await DarkwriteAPIClient.note.getById(pageId);
-  if (result.isErr()) throw new Error(`Note ${pageId} not found.`);
-  const note = result.value.note;
-  if (!note) throw new Error(`Note ${pageId} not found.`);
+  const note = selectNoteById(store.getState(), pageId);
+  if (!note) throw new Error("Note not found");
 
   const workspaceId = store.getState().session.workspaceId;
   if (note.workspaceId && note.workspaceId !== workspaceId) {

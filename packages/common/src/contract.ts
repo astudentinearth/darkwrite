@@ -1,47 +1,41 @@
-// This file contains the common interfaces for frontend API clients.
-// Electron-side handlers should implement these directly and expose it via the API bridge.
-// Clients talking to a cloud instance shall make the appropriate network requests instead.
-// Cloud-specific code should be kept separate from Electron to ensure browser portability.
 import type { ResultAsync } from "neverthrow";
 import type {
   DarkwriteDesktopClientInfo,
   UpdateServerResponse,
 } from "./client";
 import type { NativeContextMenuData } from "./context-menu";
-import type {
-  CreateNoteDTO,
-  MoveNoteDTO,
-  NoteContentResponseDTO,
-  NoteResponseDTO,
-  NotesResponseDTO,
-  ParentTreeResponseDTO,
-  UpdateNoteDTO,
-} from "./dto";
 import type { CreateEmbedDTO } from "./dto/request/embed.request";
 import type {
   CreateWorkspaceDTO,
   UpdateWorkspaceDTO,
 } from "./dto/request/workspace.request";
-import type { EmbedResponseDTO } from "./dto/response/embed.response";
 import type { ThemesResponseDTO } from "./dto/response/theme.response";
-import type {
-  WorkspaceResponseDTO,
-  WorkspacesResponseDTO,
-} from "./dto/response/workspace.response";
+import type { EmbedResponseDTO } from "./embed";
 import type { Font } from "./font";
 import type { FileLinkMetadata } from "./link";
-import type { NoteExportFormat, NoteImportResult, ParentId } from "./note";
+import type {
+  Note,
+  NoteContentResponseDTO,
+  NoteExportFormat,
+  NoteImportResult,
+  NotePartial,
+  NotesResponseDTO,
+} from "./note";
 import type { PageSize } from "./pdf";
 import type { DwError, DwResultAsync } from "./result";
 import type { DarkwriteUserSettings } from "./settings";
+import type { WorkspaceResponseDTO, WorkspacesResponseDTO } from "./workspace";
 
 export type ApiResult<T> = ResultAsync<T, DwError>;
 export type NoReturn = ResultAsync<void, never>;
 
 export interface INoteAPI {
-  create: (dto: CreateNoteDTO) => ApiResult<NoteResponseDTO>;
-  update: (id: string, dto: UpdateNoteDTO) => ApiResult<NoteResponseDTO>;
-  move: (dto: MoveNoteDTO) => ApiResult<NoteResponseDTO>;
+  /**
+   * Save a newly created note.
+   */
+  create: (note: Note) => ApiResult<void>;
+
+  patchAll: (notes: NotePartial[]) => ApiResult<void>;
 
   /**
    * **PERMANENTLY** deletes a note. This is **NOT** the same as moving to trash. If you
@@ -53,72 +47,24 @@ export interface INoteAPI {
   delete: (id: string) => ApiResult<void>;
 
   /**
-   * @deprecated This API is way too broad and should be avoided in favor of more specific queries. This can be removed in future releases.
    * @param workspaceId
-   * @returns
+   * @returns all notes in a workspace.
    */
   getAllByWorkspaceId: (workspaceId: string) => ApiResult<NotesResponseDTO>;
 
-  /**
-   * @param workspaceId
-   * @param parentId
-   * @returns notes that belong to the given parent (folder) in the specified workspace and that are NOT trashed.
-   */
-  getByParentId: (
-    workspaceId: string,
-    parentId: ParentId,
-  ) => ApiResult<NotesResponseDTO>;
-
-  /**
-   * @param workspaceId
-   * @param parentId
-   * @returns favorites in the given workspace, provided they are not trashed.
-   */
-  getFavorites: (workspaceId: string) => ApiResult<NotesResponseDTO>;
-
-  /**
-   * Returns notes that are in the trash for the given workspace.
-   * @param workspaceId
-   */
-  getTrashed: (workspaceId: string) => ApiResult<NotesResponseDTO>;
-
-  /**
-   *
-   * @param noteId
-   * @returns the parent tree of the note in sorted order.
-   */
-  getParentTree: (noteId: string) => ApiResult<ParentTreeResponseDTO>;
-
-  moveToTrash: (noteId: string) => ApiResult<NoteResponseDTO>;
-  restoreFromTrash: (noteId: string) => ApiResult<NoteResponseDTO>;
-
-  /**
-   * Favorites a note.
-   * @param noteId
-   * @param aboveNoteId undefined for list end, null for list start
-   * @returns
-   */
-  favorite: (
-    noteId: string,
-    aboveNoteId?: string | null,
-  ) => ApiResult<NoteResponseDTO>;
-
-  unfavorite: (noteId: string) => ApiResult<NoteResponseDTO>;
-
-  search: (workspaceId: string, query: string) => ApiResult<NotesResponseDTO>;
-  getRecents: (workspaceId: string) => ApiResult<NotesResponseDTO>;
-
-  getById: (id: string) => ApiResult<NoteResponseDTO>;
   getDocument: (id: string) => ApiResult<NoteContentResponseDTO>;
+
   setDocument: (id: string, serializedDocument: string) => ApiResult<void>;
-  duplicate: (id: string) => ApiResult<NoteResponseDTO>;
+
   clearTrash: (workspaceId: string) => ApiResult<void>;
+
   /** @returns the file path of the exported PDF, or undefined if the export was cancelled. */
   export: (
     fileContent: string,
     fileType: NoteExportFormat,
     title?: string,
   ) => ApiResult<string | undefined>;
+
   /** @returns the file path of the exported PDF, or undefined if the export was cancelled. */
   exportPdf: (
     html: string,
@@ -139,7 +85,6 @@ export interface IWorkspaceAPI {
 }
 
 export interface IEmbedAPI {
-  // HTTP clients should build a multipart request using this DTO for compatibility
   create: (dto: CreateEmbedDTO) => ApiResult<EmbedResponseDTO>;
   getById: (id: string) => ApiResult<EmbedResponseDTO>;
   getEncoded: (ids: string[]) => ApiResult<Record<string, string>>;
@@ -156,7 +101,6 @@ export interface IThemeAPI {
   importTheme: () => ApiResult<void>;
 }
 
-/** APIs for triggering native context menu actions. These are only relevant in the Electron environment, but defining them here allows us to keep the frontend code that interacts with it platform-agnostic. In the browser, these should not be implemented, and the browser's own context menu should be used. */
 export interface IContextMenuAPI {
   copy: () => NoReturn;
   cut: () => NoReturn;
@@ -206,6 +150,7 @@ export interface IFileLinkAPI {
   getById: (id: string) => ApiResult<FileLinkMetadata>;
   /** Opens the linked file in the OS default application. */
   openById: (id: string) => NoReturn;
+  getAll: () => ApiResult<FileLinkMetadata[]>;
 }
 
 /** Desktop specific bridge. This is decorated with IEmbedAPI on the frontend */
@@ -242,6 +187,9 @@ export interface WindowEvents {
   onEnterFullScreen: (callback: () => void) => void;
   onExitFullScreen: (callback: () => void) => void;
   onContextMenu: (callback: (data: NativeContextMenuData) => void) => void;
+  /** Fired whenever a file link is created in any window, so every
+   * window can keep its in-memory file link list in sync. */
+  onFileLinkCreated: (callback: (link: FileLinkMetadata) => void) => void;
   menu: {
     onCreateNote: (callback: () => void) => void;
   };

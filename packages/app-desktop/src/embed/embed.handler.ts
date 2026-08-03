@@ -34,9 +34,7 @@ export function EmbedAPI(
   const createFromLocalFile = handler((filePath: string, workspaceId: string) =>
     embedService
       .createFromFilePath(filePath, workspaceId)
-      .andThen((embed) =>
-        embedService.getEmbedUrl(embed.id).map((url) => embedToDto(embed, url)),
-      )
+      .map(embedToDto)
       .map((embed) => ({ embed })),
   );
 
@@ -44,19 +42,15 @@ export function EmbedAPI(
     (buffer: ArrayBuffer, fileType: string, workspaceId: string) =>
       embedService
         .createFromArrayBuffer(buffer, fileType, workspaceId)
-        .andThen((embed) =>
-          embedService
-            .getEmbedUrl(embed.id)
-            .map((url) => embedToDto(embed, url)),
-        )
+        .map(embedToDto)
         .map((embed) => ({ embed })),
   );
 
   const getById = handler((id: string) =>
-    ResultAsync.combine([
-      embedService.getEmbedById(id),
-      embedService.getEmbedUrl(id),
-    ]).map(([embed, url]) => ({ embed: embedToDto(embed, url) })),
+    embedService
+      .getEmbedById(id)
+      .map(embedToDto)
+      .map((embed) => ({ embed })),
   );
 
   const download = handler((id: string) =>

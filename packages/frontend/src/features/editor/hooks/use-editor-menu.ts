@@ -3,7 +3,16 @@ import { use } from "react";
 import { useNoteExport } from "@/features/export/note-exporter";
 import { useNoteById } from "@/features/note/hooks/use-note-by-id";
 import useNoteImport from "@/features/note/hooks/use-note-import";
-import { useNoteActions } from "@/features/note/store/note-actions";
+import {
+  restoreFailToast,
+  restoreSuccessToast,
+  trashFailToast,
+  trashSuccessToast,
+} from "@/features/note/note.toast";
+import {
+  moveToTrash,
+  restoreFromTrash,
+} from "@/features/note/store/note.thunk";
 import { MoveNoteDialogPortal } from "@/features/note/store/notes-ui-actions";
 import { useAppDispatch, useAppSelector } from "@/features/store/hooks";
 import { emitEditorEvent } from "../event/editor-bus";
@@ -46,7 +55,6 @@ export default function useEditorMenu(noteId: string): UseEditorMenuResult {
   const characterCount = useAppSelector((s) => selectCharacterCount(s, noteId));
   const canUndo = useAppSelector((s) => selectCanUndo(s, noteId));
   const canRedo = useAppSelector((s) => selectCanRedo(s, noteId));
-  const { moveToTrash, restoreFromTrash } = useNoteActions();
 
   const actions: EditorMenuActions = {
     exportHTML: () => NoteExporter.exportHTML(noteId),
@@ -69,8 +77,14 @@ export default function useEditorMenu(noteId: string): UseEditorMenuResult {
         targetInstanceId: instanceId,
       }),
     toggleTrash: () => {
-      if (note?.isTrashed) restoreFromTrash(noteId);
-      else moveToTrash(noteId);
+      if (note?.isTrashed)
+        dispatch(restoreFromTrash(noteId))
+          .andTee(restoreSuccessToast)
+          .orTee(restoreFailToast);
+      else
+        dispatch(moveToTrash(noteId))
+          .andTee(trashSuccessToast)
+          .orTee(trashFailToast);
     },
   };
 

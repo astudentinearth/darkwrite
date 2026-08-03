@@ -4,16 +4,17 @@ import { HeaderbarButton } from "@/components/headerbar-button";
 import { TextTooltip } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import { useNoteById } from "../note/hooks/use-note-by-id";
-import { useNoteActions } from "../note/store/note-actions";
+import { reorderFavorite, unfavorite } from "../note/store/note.thunk";
+import { useAppDispatch } from "../store/hooks";
 
 export default function FavoriteToggle({ id }: { id: string }) {
   const { note } = useNoteById(id);
   const { t } = useTranslation();
-  const { favorite, unfavorite } = useNoteActions();
+  const dispatch = useAppDispatch();
   if (!note) return null;
   const click = () => {
-    if (note.isFavorite) unfavorite(note.id);
-    else favorite({ noteId: note.id });
+    if (note.isFavorite) dispatch(unfavorite(note.id));
+    else dispatch(reorderFavorite(note.id));
   };
   return (
     <TextTooltip

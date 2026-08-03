@@ -1,16 +1,29 @@
-import { byUpdateTime, isDescendant, Rank } from "@darkwrite/common";
-import { createSelector } from "@reduxjs/toolkit";
+import {
+  byUpdateTime,
+  isDescendant,
+  type Note,
+  Rank,
+  stableSortByOrderKeyFn,
+} from "@darkwrite/common";
+import { createSelector, weakMapMemoize } from "@reduxjs/toolkit";
+import type { DragEvent } from "react";
+import { extractNoteDragData } from "@/features/dnd/datatransfer";
 import type { RootState } from "@/features/store/types";
 import { notesAdapter } from "./notes-adapter";
 import type { MoveNoteSearchArgs, SearchArgs } from "./types";
 
 const selectNotesState = (store: RootState) => store["notes-slice"];
+const adapterSelectors = notesAdapter.getSelectors(selectNotesState);
 
 export const {
   selectAll: selectAllNotes,
-  selectById: selectNoteById,
   selectEntities: selectAllNotesAsMap,
-} = notesAdapter.getSelectors(selectNotesState);
+} = adapterSelectors;
+
+export const selectNoteById: (
+  state: RootState,
+  id: string,
+) => Note | undefined = adapterSelectors.selectById;
 
 export const selectNotesByParentId = createSelector(
   [
@@ -27,9 +40,14 @@ export const selectNotesByParentId = createSelector(
           note.parentId === parentId &&
           !note.isTrashed,
       )
-      .toSorted((a, b) => Rank.sorter(a.orderHint, b.orderHint))
-      .map((n) => n.id);
+      .toSorted(stableSortByOrderKeyFn());
   },
+);
+
+export const selectNoteIdsByParentId = createSelector(
+  [selectNotesByParentId],
+  (notes) => notes.map((n) => n.id),
+  { memoize: weakMapMemoize },
 );
 
 /** This selector returns any and all notes associated with given workspace. */
@@ -49,6 +67,9 @@ export const selectRecentNotes = createSelector(
   },
 );
 
+/**
+ * Get favorite IDs in a workspace in stable sorted order.
+ */
 export const selectFavoriteIds = createSelector(
   [selectAllNotes, (_state: RootState, workspaceId: string) => workspaceId],
   (allNotes, workspaceId) => {
@@ -56,11 +77,14 @@ export const selectFavoriteIds = createSelector(
       .filter(
         (n) => n.workspaceId === workspaceId && n.isFavorite && !n.isTrashed,
       )
-      .toSorted((a, b) => Rank.sorter(a.favoriteOrderHint, b.favoriteOrderHint))
+      .toSorted(stableSortByOrderKeyFn("favoriteOrderHint"))
       .map((n) => n.id);
   },
 );
 
+/**
+ * Get favorites in a workspace in stable sorted order.
+ */
 export const selectFavorites = createSelector(
   [selectAllNotes, (_state: RootState, workspaceId: string) => workspaceId],
   (allNotes, workspaceId) => {
@@ -68,9 +92,7 @@ export const selectFavorites = createSelector(
       .filter(
         (n) => n.workspaceId === workspaceId && n.isFavorite && !n.isTrashed,
       )
-      .toSorted((a, b) =>
-        Rank.sorter(a.favoriteOrderHint, b.favoriteOrderHint),
-      );
+      .toSorted(stableSortByOrderKeyFn("favoriteOrderHint"));
   },
 );
 
@@ -146,3 +168,10 @@ export const selectNoteIdsInTrash = createSelector(
       .filter((n) => n.workspaceId === workspaceId && n.isTrashed)
       .map((n) => n.id),
 );
+
+export function getMovingNote(e: DragEvent<HTMLElement>, state: RootState) {
+  const sourceId = extractNoteDragData(e)?.noteId;
+  if (!sourceId) return;
+  const movingNote = selectNoteById(state, sourceId);
+  return movingNote ?? null;
+}

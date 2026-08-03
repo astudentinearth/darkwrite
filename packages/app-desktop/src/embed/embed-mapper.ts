@@ -1,10 +1,9 @@
-import type { EmbedDTO } from "@darkwrite/common";
-import type { Embed } from "@/db/schema";
+import type { Embed } from "@darkwrite/common";
+import type { EmbedRow } from "@/db/schema";
 
-export function embedToDto(embed: Embed, url: string): EmbedDTO {
+export function embedToDto(embed: EmbedRow): Embed {
   const {
     id,
-    ownerId,
     fileName,
     fileSize,
     fileType,
@@ -14,12 +13,10 @@ export function embedToDto(embed: Embed, url: string): EmbedDTO {
   } = embed;
   return {
     id,
-    ...(ownerId && { ownerId }),
     fileSize,
     fileType,
     uploadedAt,
     displayName: displayName || fileName,
     ...(workspaceId && { workspaceId }),
-    url,
   };
 }

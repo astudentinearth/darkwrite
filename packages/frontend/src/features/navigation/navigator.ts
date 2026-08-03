@@ -44,6 +44,17 @@ export function navigateHome() {
   notifyNoteChange(null);
 }
 
+/**
+ * Navigates back home if the current route is passed note ID. Useful when deleting notes
+ * @param noteId
+ */
+export function navigateOutOfNote(noteId: string) {
+  if (getCurrentNoteIdFromPath() === noteId) navigateHome();
+}
+
+export const navigateOutOfNotes = (noteIds: string[]) =>
+  noteIds.includes(getCurrentNoteIdFromPath() ?? "") && navigateHome();
+
 export function goBack() {
   window.history.back();
 }

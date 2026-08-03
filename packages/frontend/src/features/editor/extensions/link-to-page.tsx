@@ -69,7 +69,7 @@ const LinkComponent = ({
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
-  const { results, debouncedSearch } = useSearch(search);
+  const { results } = useSearch(search);
   const { showCenterView } = useEditorActions();
 
   const contextMenu = (e: MouseEvent<HTMLDivElement>) => {
@@ -166,7 +166,6 @@ const LinkComponent = ({
               value={search}
               onValueChange={(val) => {
                 setSearch(val);
-                debouncedSearch(search);
               }}
               placeholder={t("search.chooserPlaceholder")}
             />

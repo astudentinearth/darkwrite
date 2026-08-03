@@ -1,18 +1,19 @@
-export interface EmbedDTO {
+export interface Embed {
   id: string;
-  ownerId?: string;
   fileType: string;
   fileSize: number;
   displayName?: string;
   uploadedAt: Date;
   workspaceId?: string;
-  url: string;
 }
 
+/** @deprecated use `Embed` instead */
+export type EmbedDTO = Embed;
+
 export interface EmbedResponseDTO {
-  embed: EmbedDTO;
+  embed: Embed;
 }
 
 export interface EmbedsResponseDTO {
-  embeds: EmbedDTO[];
+  embeds: Embed[];
 }
