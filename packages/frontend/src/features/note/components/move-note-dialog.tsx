@@ -15,7 +15,6 @@ import { useMoveNoteDialog } from "../hooks/use-move-note-dialog";
 import { useNoteById } from "../hooks/use-note-by-id";
 import { moveFailToast, moveSuccessToast } from "../note.toast";
 import { moveNote } from "../store/note.thunk";
-import { useNoteActions } from "../store/note-actions";
 import { selectNoteIcon, selectNoteTitle } from "../store/note-selectors";
 import { MoveNoteDialogPortal } from "../store/notes-ui-actions";
 
@@ -69,15 +68,8 @@ const SearchItem = memo(function ({
 
 export default function MoveNoteDialog() {
   const { t } = useTranslation();
-  const {
-    hideMoveNoteDialog,
-    noteId,
-    open,
-    setQuery,
-    results,
-    isLoading,
-    query,
-  } = useMoveNoteDialog();
+  const { hideMoveNoteDialog, noteId, open, setQuery, results, query } =
+    useMoveNoteDialog();
 
   // biome-ignore lint/style/noNonNullAssertion: ref is always set
   const listRef = useRef<HTMLDivElement>(null!);
@@ -110,7 +102,6 @@ export default function MoveNoteDialog() {
             results.map((id) => (
               <SearchItem key={id} noteId={id} targetNoteId={noteId} />
             ))}
-          {isLoading && "Loading"}
         </CommandGroup>
       </CommandList>
     </CommandDialog>

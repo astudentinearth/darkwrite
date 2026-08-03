@@ -13,7 +13,6 @@ import {
   moveToTrash,
   restoreFromTrash,
 } from "@/features/note/store/note.thunk";
-import { useNoteActions } from "@/features/note/store/note-actions";
 import { MoveNoteDialogPortal } from "@/features/note/store/notes-ui-actions";
 import { useAppDispatch, useAppSelector } from "@/features/store/hooks";
 import { emitEditorEvent } from "../event/editor-bus";

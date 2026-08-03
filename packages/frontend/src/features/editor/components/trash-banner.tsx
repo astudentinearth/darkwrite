@@ -9,7 +9,6 @@ import {
   restoreSuccessToast,
 } from "@/features/note/note.toast";
 import { restoreFromTrash } from "@/features/note/store/note.thunk";
-import { useNoteActions } from "@/features/note/store/note-actions";
 import { useAppDispatch } from "@/features/store/hooks";
 import { EditorContext } from "../store/editor-context";
 

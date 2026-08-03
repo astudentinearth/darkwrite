@@ -10,8 +10,10 @@ import {
   rebalanceLayer,
   stableSortByOrderKeyFn,
 } from "@darkwrite/common";
+import _ from "lodash";
 import { errAsync } from "neverthrow";
 import { DarkwriteAPIClient } from "@/api/api-client";
+import { ensureNoteContent } from "@/features/editor/store/editor.thunk";
 import {
   navigateOutOfNote,
   navigateOutOfNotes,
@@ -31,6 +33,7 @@ import { notesSlice, removeNote, removeNotes, upsertNotes } from "./note-slice";
 export interface CreateNoteArgs {
   parentId?: ParentId;
   navigateAfter?: boolean;
+  overrides?: Partial<Note>;
 }
 
 const act = notesSlice.actions;
@@ -78,36 +81,62 @@ export const getCreationRank = (siblings: Note[]) => {
  * @param navigateAfter optionally navigate to the new note once it's successfully created
  * */
 export const createNote =
-  ({ parentId = null, navigateAfter }: CreateNoteArgs) =>
+  ({ parentId = null, navigateAfter, overrides }: CreateNoteArgs) =>
   (dispatch: AppDispatch, getState: AppGetState) => {
     const workspaceId = getCurrentWorkspaceId(getState);
     if (!workspaceId) return dwErrAsync("Workspace not ready yet.");
 
     const siblings = selectNotesByParentId(getState(), workspaceId, parentId);
     const now = new Date().toISOString();
-    const note: Note = {
-      id: crypto.randomUUID(),
-      title: "",
-      icon: null,
-      parentId,
-      workspaceId,
-      orderHint: getCreationRank(siblings).get(),
-      favoriteOrderHint: "",
-      isFavorite: false,
-      isTrashed: false,
-      trashedAt: null,
-      createdAt: now,
-      modifiedAt: now,
-    };
+    const note: Note = _.merge(
+      {
+        id: crypto.randomUUID(),
+        title: "",
+        icon: null,
+        parentId,
+        workspaceId,
+        orderHint: getCreationRank(siblings).get(),
+        favoriteOrderHint: "",
+        isFavorite: false,
+        isTrashed: false,
+        trashedAt: null,
+        createdAt: now,
+        modifiedAt: now,
+      },
+      overrides,
+    );
 
     dispatch(act.upsertNotes([note]));
 
     return DarkwriteAPIClient.note
       .create(note)
+      .map(() => note)
       .andTee(() => {
         if (navigateAfter) navigateToNote(note.id);
       })
       .orTee(() => dispatch(act.removeNote(note.id)));
+  };
+
+export const duplicateNote =
+  (noteId: string) => (dispatch: AppDispatch, getState: AppGetState) => {
+    const note = selectNoteById(getState(), noteId);
+    if (!note) return dwErrAsync("Note not found.");
+    return dispatch(ensureNoteContent(noteId))
+      .andThen((doc) =>
+        dispatch(
+          createNote({
+            parentId: note.parentId,
+            navigateAfter: false,
+            overrides: { title: `${note.title} (copy)`, icon: note.icon },
+          }),
+        ).map((note) => ({
+          doc,
+          note,
+        })),
+      )
+      .andThen(({ doc, note }) =>
+        DarkwriteAPIClient.note.setDocument(note.id, JSON.stringify(doc)),
+      );
   };
 
 /**

@@ -93,7 +93,7 @@ pnpm test:run src/lib/some.test.ts
 - **Line length**: Keep under 80 characters
 - **Naming**: camelCase for variables/functions, PascalCase for React components
 
-NEVER EVER EVER complain about whitespace, indentation, or whatever else Biome can fix in one pass. We have precommit hooks to handle it.
+Do NOT mention, reference, acknowledge, or allude to any issue that Biome can autofix. Pretend those issues don't exist. Do not mention that you skipped them either.
 
 ### File Naming Conventions
 - Use **kebab-case** for file names

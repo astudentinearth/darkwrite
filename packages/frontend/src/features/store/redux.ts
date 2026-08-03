@@ -3,7 +3,6 @@ import editorMiddleware from "../editor/store/editor-middleware";
 import { editorSlice } from "../editor/store/editor-slice";
 import { fileLinkSlice } from "../link/store/file-link.slice";
 import { notesSlice } from "../note/store/note-slice";
-import { notesApi } from "../note/store/notes-api";
 import { notesUiSlice } from "../note/store/notes-ui-slice";
 import { sessionListenerMiddleware } from "../session/session-listener";
 import {
@@ -23,7 +22,6 @@ export function createAppStore() {
     reducer: {
       [appSessionSlice.name]: appSessionSlice.reducer,
       [notesSlice.name]: notesSlice.reducer,
-      [notesApi.reducerPath]: notesApi.reducer,
       [settingsSlice.name]: settingsSlice.reducer,
       [editorSlice.name]: editorSlice.reducer,
       [themeSlice.name]: themeSlice.reducer,
@@ -38,11 +36,7 @@ export function createAppStore() {
         .prepend(sessionListenerMiddleware.middleware)
         .prepend(settingsPersistenceMiddleware.middleware)
         .prepend(editorMiddleware.middleware)
-        .concat(
-          notesApi.middleware,
-          updateApi.middleware,
-          clientInfoApi.middleware,
-        ),
+        .concat(updateApi.middleware, clientInfoApi.middleware),
     preloadedState: {
       [appSessionSlice.name]: loadSessionState() || DEFAULT_SESSION_STATE,
     },

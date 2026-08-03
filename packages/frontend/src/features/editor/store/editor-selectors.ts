@@ -1,3 +1,4 @@
+import type { NoteContent } from "@darkwrite/common";
 import type { RootState } from "@/features/store/types";
 
 export const selectEditorCustomizations = (state: RootState, noteId: string) =>
@@ -32,3 +33,8 @@ export const selectCenterViewState = (state: RootState) =>
 
 export const selectContentLoaded = (state: RootState, noteId: string) =>
   !!state.editor.docs[noteId];
+
+export const selectFullNoteContent: (
+  state: RootState,
+  noteId: string,
+) => NoteContent | undefined = (state, noteId) => state.editor.docs[noteId];

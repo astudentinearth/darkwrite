@@ -45,7 +45,6 @@ export function BubbleLink() {
     query,
     setQuery,
     results,
-    debouncedSearch,
     setLink,
     setLinkToNote,
     removeLink,
@@ -69,10 +68,7 @@ export function BubbleLink() {
         <Command shouldFilter={false} className="w-full px-0">
           <CommandInput
             value={query}
-            onValueChange={(value) => {
-              setQuery(value);
-              debouncedSearch(value);
-            }}
+            onValueChange={setQuery}
             ref={urlRef}
             className="bg-transparent h-9 w-full"
             placeholder={t("linkPlaceholder")}

@@ -3,7 +3,6 @@ import {
   selectCoverImageSource,
   selectIsWidePage,
 } from "@/features/editor/store/editor-selectors";
-import { useNoteActions } from "@/features/note/store/note-actions";
 import {
   selectNoteIcon,
   selectNoteTitle,

@@ -5,7 +5,6 @@ import { TextTooltip } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import { useNoteById } from "../note/hooks/use-note-by-id";
 import { reorderFavorite, unfavorite } from "../note/store/note.thunk";
-import { useNoteActions } from "../note/store/note-actions";
 import { useAppDispatch } from "../store/hooks";
 
 export default function FavoriteToggle({ id }: { id: string }) {

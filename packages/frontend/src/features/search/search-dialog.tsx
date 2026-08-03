@@ -36,7 +36,7 @@ export default function SearchDialog() {
   const open = useSearchState((s) => s.open);
   const query = useSearchState((s) => s.query);
   const { t } = useTranslation();
-  const { debouncedSearch, isLoading, results } = useSearch(query);
+  const { results } = useSearch(query);
 
   // biome-ignore lint/style/noNonNullAssertion: ref is always set
   const listRef = useRef<HTMLDivElement>(null!);
@@ -51,7 +51,6 @@ export default function SearchDialog() {
         value={query}
         onValueChange={(val) => {
           setSearchQuery(val);
-          debouncedSearch(val);
           listRef.current.scrollTo(0, 0);
         }}
       />
@@ -61,7 +60,6 @@ export default function SearchDialog() {
           {results.map((id) => (
             <SearchItem key={id} noteId={id} />
           ))}
-          {isLoading && "Loading"}
         </CommandGroup>
       </CommandList>
     </CommandDialog>

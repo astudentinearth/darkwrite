@@ -1,14 +1,22 @@
 // @vitest-environment jsdom
-import { dwErrAsync, type Note, Rank } from "@darkwrite/common";
+import {
+  dwErrAsync,
+  getDefaultNoteCustomization,
+  type Note,
+  type NoteContent,
+  Rank,
+} from "@darkwrite/common";
 import { okAsync } from "neverthrow";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { DarkwriteAPIClient } from "@/api/api-client";
+import { editorSlice } from "@/features/editor/store/editor-slice";
 import { NavigationEventBus } from "@/features/navigation/navigator";
 import { appSessionSlice } from "@/features/session/session-slice";
 import { type AppStore, createAppStore } from "@/features/store/redux";
 import {
   clearTrash,
   createNote,
+  duplicateNote,
   getCreationRank,
   moveNote,
   moveToTrash,
@@ -36,6 +44,8 @@ vi.mock("@/api/api-client", () => ({
       getAllByWorkspaceId: vi.fn(),
       delete: vi.fn(),
       clearTrash: vi.fn(),
+      getDocument: vi.fn(),
+      setDocument: vi.fn(),
     },
   },
 }));
@@ -46,6 +56,8 @@ const patchMock = vi.mocked(DarkwriteAPIClient.note.patchAll);
 const getAllMock = vi.mocked(DarkwriteAPIClient.note.getAllByWorkspaceId);
 const deleteMock = vi.mocked(DarkwriteAPIClient.note.delete);
 const clearTrashMock = vi.mocked(DarkwriteAPIClient.note.clearTrash);
+const getDocumentMock = vi.mocked(DarkwriteAPIClient.note.getDocument);
+const setDocumentMock = vi.mocked(DarkwriteAPIClient.note.setDocument);
 
 const makeNote = (over: Partial<Note> = {}): Note => ({
   id: crypto.randomUUID(),
@@ -60,6 +72,12 @@ const makeNote = (over: Partial<Note> = {}): Note => ({
   trashedAt: null,
   createdAt: new Date().toISOString(),
   modifiedAt: new Date().toISOString(),
+  ...over,
+});
+
+const makeContent = (over: Partial<NoteContent> = {}): NoteContent => ({
+  contents: { type: "doc", content: [] },
+  customizations: getDefaultNoteCustomization(),
   ...over,
 });
 
@@ -189,6 +207,152 @@ describe("createNote", () => {
 
     expect(seen).not.toHaveBeenCalled();
     unsubscribe();
+  });
+});
+
+describe("duplicateNote", () => {
+  let store: AppStore;
+
+  const seed = (...notes: Note[]) =>
+    store.dispatch(notesSlice.actions.upsertNotes(notes));
+
+  const seedContent = (noteId: string, document: NoteContent) =>
+    store.dispatch(
+      editorSlice.actions.initializeDocument({ noteId, document }),
+    );
+
+  const layer = (parentId: string | null = null) =>
+    selectNotesByParentId(store.getState(), WORKSPACE_ID, parentId);
+
+  beforeEach(() => {
+    localStorage.clear();
+    createMock.mockReset();
+    createMock.mockReturnValue(okAsync(undefined));
+    getDocumentMock.mockReset();
+    setDocumentMock.mockReset();
+    setDocumentMock.mockReturnValue(okAsync(undefined));
+    store = createAppStore();
+    store.dispatch(appSessionSlice.actions.switchWorkspace(WORKSPACE_ID));
+  });
+
+  it("copies the source into a new sibling, suffixing the title", async () => {
+    const source = makeNote({ id: "src", title: "Original", icon: "📄" });
+    seed(source);
+    seedContent("src", makeContent());
+
+    const result = await store.dispatch(duplicateNote("src"));
+
+    expect(result.isOk()).toBe(true);
+    // source + copy both live under the same (root) parent
+    const ids = layer(null).map((n) => n.id);
+    expect(ids).toContain("src");
+    expect(ids).toHaveLength(2);
+
+    const copy = layer(null).find((n) => n.id !== "src");
+    expect(copy).toMatchObject({
+      title: "Original (copy)",
+      icon: "📄",
+      parentId: null,
+      isFavorite: false,
+    });
+    // a copy is never born favorited
+    expect(copy?.favoriteOrderHint).toBe("");
+  });
+
+  it("nests the copy under the source's own parent", async () => {
+    const source = makeNote({ id: "src", parentId: "folder", title: "N" });
+    seed(source);
+    seedContent("src", makeContent());
+
+    await store.dispatch(duplicateNote("src"));
+
+    const copy = layer("folder").find((n) => n.id !== "src");
+    expect(copy?.parentId).toBe("folder");
+  });
+
+  it("persists the copied document under the new note id", async () => {
+    const source = makeNote({ id: "src", title: "N" });
+    const content = makeContent({
+      contents: { type: "doc", content: [{ type: "paragraph" }] },
+    });
+    seed(source);
+    seedContent("src", content);
+
+    await store.dispatch(duplicateNote("src"));
+
+    const created = createMock.mock.calls[0][0];
+    expect(setDocumentMock).toHaveBeenCalledTimes(1);
+    expect(setDocumentMock).toHaveBeenCalledWith(
+      created.id,
+      JSON.stringify(content),
+    );
+  });
+
+  it("reuses cached editor content without hitting the document API", async () => {
+    const source = makeNote({ id: "src", title: "N" });
+    seed(source);
+    seedContent("src", makeContent());
+
+    await store.dispatch(duplicateNote("src"));
+
+    expect(getDocumentMock).not.toHaveBeenCalled();
+  });
+
+  it("fetches the document when it is not loaded in the editor", async () => {
+    const source = makeNote({ id: "src", title: "N" });
+    const content = makeContent({
+      contents: { type: "doc", content: [{ type: "heading" }] },
+    });
+    seed(source);
+    // no seedContent — the editor has never loaded this note
+    getDocumentMock.mockReturnValue(okAsync({ document: content }));
+
+    const result = await store.dispatch(duplicateNote("src"));
+
+    expect(result.isOk()).toBe(true);
+    expect(getDocumentMock).toHaveBeenCalledWith("src");
+    const created = createMock.mock.calls[0][0];
+    expect(setDocumentMock).toHaveBeenCalledWith(
+      created.id,
+      JSON.stringify(content),
+    );
+  });
+
+  it("does not navigate to the duplicate", async () => {
+    const source = makeNote({ id: "src", title: "N" });
+    seed(source);
+    seedContent("src", makeContent());
+    const seen = vi.fn();
+    const unsubscribe = NavigationEventBus.subscribe("note", ({ data }) =>
+      seen(data.noteId),
+    );
+
+    await store.dispatch(duplicateNote("src"));
+
+    expect(seen).not.toHaveBeenCalled();
+    unsubscribe();
+  });
+
+  it("errors and persists nothing when the source does not exist", async () => {
+    const result = await store.dispatch(duplicateNote("ghost"));
+
+    expect(result.isErr()).toBe(true);
+    expect(createMock).not.toHaveBeenCalled();
+    expect(setDocumentMock).not.toHaveBeenCalled();
+  });
+
+  it("does not persist a document when creation fails", async () => {
+    const source = makeNote({ id: "src", title: "N" });
+    seed(source);
+    seedContent("src", makeContent());
+    createMock.mockReturnValue(dwErrAsync("boom"));
+
+    const result = await store.dispatch(duplicateNote("src"));
+
+    expect(result.isErr()).toBe(true);
+    expect(setDocumentMock).not.toHaveBeenCalled();
+    // createNote rolls its optimistic insert back out on failure
+    expect(layer(null).map((n) => n.id)).toEqual(["src"]);
   });
 });
 
