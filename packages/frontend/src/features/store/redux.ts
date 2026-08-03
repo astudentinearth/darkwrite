@@ -1,4 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
+import { clientSlice } from "../client/store/client-slice";
 import editorMiddleware from "../editor/store/editor-middleware";
 import { editorSlice } from "../editor/store/editor-slice";
 import { fileLinkSlice } from "../link/store/file-link.slice";
@@ -10,11 +11,9 @@ import {
   loadSessionState,
 } from "../session/session-persistence";
 import { appSessionSlice } from "../session/session-slice";
-import { clientInfoApi } from "../settings/store/client-info-api";
 import { settingsPersistenceMiddleware } from "../settings/store/settings-persistence";
 import { settingsSlice } from "../settings/store/settings-slice";
 import { themeSlice } from "../themes/store/theme-slice";
-import { updateApi } from "../update/store/update-api";
 import { workspaceSlice } from "../workspaces/store/workspace-slice";
 
 export function createAppStore() {
@@ -25,9 +24,8 @@ export function createAppStore() {
       [settingsSlice.name]: settingsSlice.reducer,
       [editorSlice.name]: editorSlice.reducer,
       [themeSlice.name]: themeSlice.reducer,
-      [updateApi.reducerPath]: updateApi.reducer,
       [workspaceSlice.name]: workspaceSlice.reducer,
-      [clientInfoApi.reducerPath]: clientInfoApi.reducer,
+      [clientSlice.name]: clientSlice.reducer,
       [notesUiSlice.name]: notesUiSlice.reducer,
       [fileLinkSlice.name]: fileLinkSlice.reducer,
     },
@@ -35,8 +33,7 @@ export function createAppStore() {
       getDefaultMiddleware()
         .prepend(sessionListenerMiddleware.middleware)
         .prepend(settingsPersistenceMiddleware.middleware)
-        .prepend(editorMiddleware.middleware)
-        .concat(updateApi.middleware, clientInfoApi.middleware),
+        .prepend(editorMiddleware.middleware),
     preloadedState: {
       [appSessionSlice.name]: loadSessionState() || DEFAULT_SESSION_STATE,
     },

@@ -7,8 +7,10 @@ import "./globals.css";
 import "./i18n";
 import { flushPendingEditorSaves } from "./features/editor/store/editor-middleware";
 import {
+  checkForUpdatesOnStartup,
   correctWorkspaceState,
   initializeUserPrefs,
+  loadInitialClientInfo,
   loadInitialFileLinks,
   loadInitialNotes,
 } from "./init";
@@ -20,7 +22,9 @@ const renderApp = () => {
   correctWorkspaceState(store)
     .andTee(() => ReactRootContainer.root.render(<App store={store} />))
     .andThen(loadInitialFileLinks)
-    .andThen(loadInitialNotes);
+    .andThen(loadInitialNotes)
+    .andThen(loadInitialClientInfo)
+    .andThen(checkForUpdatesOnStartup);
 };
 
 const renderOnboarding = () => {

@@ -1,7 +1,12 @@
 import type { DarkwriteUserSettings } from "@darkwrite/common";
 import { okAsync } from "neverthrow";
 import { DarkwriteAPIClient } from "./api/api-client";
+import { useLocalStore } from "./context/local-state";
 import { setupAppMenuEvents } from "./features/app-menu/app-menu-bus";
+import {
+  checkForUpdate,
+  loadClientInfo,
+} from "./features/client/store/client-thunk";
 import { setupContextMenuEvents } from "./features/context-menu/menu-event-bus";
 import { setupLayoutEvents } from "./features/layout/layout-store";
 import { loadFileLinks } from "./features/link/store/file-link.thunk";
@@ -13,6 +18,8 @@ import type { AppStore } from "./features/store/redux";
 import { initializeFonts, initializeThemes } from "./features/themes/init";
 import { reloadWorkspaces } from "./features/workspaces/store/workspace.thunk";
 import i18n from "./i18n";
+
+const UPDATE_CHECK_THROTTLE_MS = 1000 * 60 * 60;
 
 // biome-ignore lint/complexity/noStaticOnlyClass: will remove //FIXME
 export class InitialUserSettings {
@@ -54,6 +61,27 @@ export const loadInitialNotes = (store: AppStore) =>
 
 export const loadInitialFileLinks = (store: AppStore) =>
   store.dispatch(loadFileLinks()).map(() => store);
+
+export const loadInitialClientInfo = (store: AppStore) =>
+  store.dispatch(loadClientInfo()).map(() => store);
+
+/** Fires a single update check on startup when auto-update is enabled and the
+ * last check was over an hour ago. Fire-and-forget: the thunk owns its own
+ * error/toast handling, so a failure never blocks boot. */
+export const checkForUpdatesOnStartup = (store: AppStore) => {
+  if (store.getState().settings.client.autoUpdateCheck) {
+    const { lastUpdateCheck, setLastUpdateCheckTimestamp } =
+      useLocalStore.getState();
+    if (
+      Date.now() - new Date(lastUpdateCheck).valueOf() >=
+      UPDATE_CHECK_THROTTLE_MS
+    ) {
+      store.dispatch(checkForUpdate({ notify: true }));
+      setLastUpdateCheckTimestamp(new Date());
+    }
+  }
+  return okAsync(store);
+};
 
 export function initializeUserPrefs(store: AppStore) {
   return DarkwriteAPIClient.settings

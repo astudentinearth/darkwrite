@@ -6,9 +6,14 @@ import {
   Scale,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import {
+  selectClientInfo,
+  selectUpdateData,
+  selectUpdateStatus,
+} from "@/features/client/store/client-selectors";
+import { checkForUpdate } from "@/features/client/store/client-thunk";
+import { useAppDispatch, useAppSelector } from "@/features/store/hooks";
 import { cn } from "@/lib/utils";
-import { useUpdate } from "../update/use-update";
-import { useGetClientInfoQuery } from "./store/client-info-api";
 
 function AboutButton(props: { children: React.ReactNode; href: string }) {
   return (
@@ -24,11 +29,15 @@ function AboutButton(props: { children: React.ReactNode; href: string }) {
 }
 
 export default function About() {
-  const { data } = useGetClientInfoQuery();
-  const { data: updateData, refetch, isFetching } = useUpdate();
+  const dispatch = useAppDispatch();
+  const data = useAppSelector(selectClientInfo);
+  const updateData = useAppSelector(selectUpdateData);
+  const updateStatus = useAppSelector(selectUpdateStatus);
+  const isFetching = updateStatus === "loading";
   const { t } = useTranslation();
+
   const checkUpdate = () => {
-    refetch(undefined, true);
+    dispatch(checkForUpdate());
   };
   return (
     <div className="w-full h-full flex flex-col justify-center items-center pt-3 gap-1">
