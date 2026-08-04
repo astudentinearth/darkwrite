@@ -1,10 +1,13 @@
 import { ChevronRight, Plus } from "lucide-react";
 import type React from "react";
 import { useTranslation } from "react-i18next";
+import { navigateToNote } from "@/features/navigation/navigator";
 import { appSessionSlice } from "@/features/session/session-slice";
 import { useAppDispatch } from "@/features/store/hooks";
 import { cn, getNoteIcon } from "@/lib/utils";
 import { useNoteById } from "../hooks/use-note-by-id";
+import { useNoteFromURL } from "../hooks/use-note-from-url";
+import { DropPosition, useNoteItemDnD } from "../hooks/use-note-item-drag";
 import { NoteContextMenuContainer } from "../note-context-menu";
 import type { NoteTreeItem } from "../store/notes-ui-selectors";
 import { notesUiSlice } from "../store/notes-ui-slice";
@@ -27,7 +30,7 @@ function HeadingItem({ item, className, ...props }: NoteItemProps) {
   };
 
   return (
-    <button
+    <div
       tabIndex={0}
       onClick={handleClick}
       className={cn(
@@ -49,7 +52,7 @@ function HeadingItem({ item, className, ...props }: NoteItemProps) {
             : "sidebar.title.favorites",
         )}
       </span>
-    </button>
+    </div>
   );
 }
 
@@ -58,7 +61,7 @@ function CreateNew({ item, className, ...props }: NoteItemProps) {
   const handleClick = () => {};
 
   return (
-    <button
+    <div
       tabIndex={0}
       style={{ paddingLeft: `${6 + item.depth * 6}px` }}
       onClick={handleClick}
@@ -74,13 +77,30 @@ function CreateNew({ item, className, ...props }: NoteItemProps) {
         )}
       />
       <span>{t("home.createPage")}</span>
-    </button>
+    </div>
   );
 }
 
+const positionToClassName: Record<DropPosition, string> = {
+  [DropPosition.Top]: "dnd-top-edge",
+  [DropPosition.Center]: "bg-primary/20",
+  [DropPosition.Bottom]: "dnd-bottom-edge",
+};
+
 export function NoteItem({ item, className, ...props }: NoteItemProps) {
   const { note } = useNoteById(item.id);
+  const activeNoteId = useNoteFromURL();
   const dispatch = useAppDispatch();
+  const {
+    onDragLeave,
+    onDragEnter,
+    onDragOver,
+    endDragOver,
+    isDraggingOver,
+    position,
+    onDrag,
+    onDrop,
+  } = useNoteItemDnD(item);
   if (item.type === "allNotesHeading" || item.type === "favoriteHeading")
     return <HeadingItem {...{ item, className, ...props }} />;
   if (item.type === "spacer") return <div className="h-2" />;
@@ -105,10 +125,22 @@ export function NoteItem({ item, className, ...props }: NoteItemProps) {
   return (
     <NoteContextMenuContainer noteId={item.id}>
       <div
+        draggable
+        onDrop={onDrop}
+        onDragStart={onDrag}
+        onDragEnter={onDragEnter}
+        onDragLeave={(e) => {
+          endDragOver();
+          onDragLeave(e);
+        }}
+        onDragOver={onDragOver}
         tabIndex={0}
         style={{ paddingLeft: `${6 + item.depth * 6}px` }}
+        onClick={() => navigateToNote(item.id)}
         className={cn(
-          "group grid grid-cols-[20px_1fr] select-none active:pushdown-99% hover:grid-cols-[20px_1fr_20px] w-full items-center gap-2 rounded-md text-sm hover:bg-secondary/50 p-1.5",
+          "group grid grid-cols-[20px_1fr] select-none active:pushdown-99% hover:grid-cols-[20px_1fr_20px] w-full items-center gap-2 rounded-md text-sm hover:bg-secondary/50 p-1.5 ",
+          activeNoteId === item.id && "bg-secondary/40",
+          isDraggingOver && position ? positionToClassName[position] : null,
           className,
         )}
         {...props}
