@@ -1,3 +1,4 @@
+import { IconSettings } from "@tabler/icons-react";
 import { LayoutDashboard, PanelRightOpen, Search } from "lucide-react";
 import type React from "react";
 import { useTranslation } from "react-i18next";
@@ -10,6 +11,7 @@ import { cn } from "@/lib/utils";
 import { FlatNoteList } from "../note/components/flat-note-list";
 import { TrashWidget } from "../note/components/trash";
 import { showSearch } from "../search/search-state";
+import SettingsDialog from "../settings/settings-dialog";
 import AppMenu from "./app-menu";
 import { CreatePageButton } from "./create-page-button";
 import FavoritesContainer from "./favorites-container";
@@ -62,15 +64,30 @@ export function Sidebar(props: SidebarProps) {
           </HeaderbarButton>
         </TextTooltip>
       </div>
+      <div
+        style={{ boxShadow: "0px 2px 12px var(--background)" }}
+        className="flex flex-col z-1 px-2 pb-2 bg-background"
+      >
+        <CreatePageButton />
+        <SidebarNavigation />
+      </div>
       <div className="h-full w-full grow pl-2 pr-0 py-0 overflow-y-auto scroll-view gutter-stable">
-        <div className="flex gap-2 flex-col mb-16 max-w-full">
-          <WorkspaceSwitcher />
-          <CreatePageButton />
-          <SidebarNavigation />
-          <FlatNoteList />
-          <div className="flex flex-col gap-0.5"></div>
-          <TrashWidget />
-        </div>
+        <FlatNoteList />
+      </div>
+      <div
+        style={{ boxShadow: "0px -2px 12px var(--background)" }}
+        className="p-2 pb-2 gap-1 grid grid-cols-[1fr_auto] z-1 bg-background"
+      >
+        <TrashWidget />
+        <WorkspaceSwitcher />
+        <SettingsDialog>
+          <Button
+            variant="ghost"
+            className="w-8 h-8 text-muted-foreground hover:bg-secondary/40"
+          >
+            <IconSettings size={18} />
+          </Button>
+        </SettingsDialog>
       </div>
     </div>
   );
