@@ -1,6 +1,7 @@
 # Unreleased
 ## ✨ Improvements and fixes
 - Significantly improve trash performance
+- Sidebar no longer lags
 
 ## 🛠️ Technical changes
 - Move translations to a separate `@darkwrite/i18n` package, using gettext (.po) files

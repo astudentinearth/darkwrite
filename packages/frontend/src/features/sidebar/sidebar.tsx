@@ -71,9 +71,7 @@ export function Sidebar(props: SidebarProps) {
         <CreatePageButton />
         <SidebarNavigation />
       </div>
-      <div className="h-full w-full grow pl-2 pr-0 py-0 overflow-y-auto scroll-view gutter-stable">
-        <FlatNoteList />
-      </div>
+      <FlatNoteList />
       <div
         style={{ boxShadow: "0px -2px 12px var(--background)" }}
         className="p-2 pb-2 gap-1 grid grid-cols-[1fr_auto] z-1 bg-background"

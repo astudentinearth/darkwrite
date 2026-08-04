@@ -57,11 +57,15 @@ const setup = (opts: Setup): AppStore => {
   return store;
 };
 
-/** Split the flat tree into its two sections, dropping the heading rows. */
+/**
+ * Split the flat tree into its two sections, dropping the heading rows and the
+ * spacer that separates them.
+ */
 const sections = (tree: NoteTreeItem[]) => {
+  const spacerIdx = tree.findIndex((t) => t.type === "spacer");
   const allStart = tree.findIndex((t) => t.type === "allNotesHeading");
   return {
-    favorites: tree.slice(1, allStart),
+    favorites: tree.slice(1, spacerIdx),
     allNotes: tree.slice(allStart + 1),
   };
 };
@@ -81,8 +85,35 @@ describe("selectSidebarTree", () => {
     });
 
     expect(selectSidebarTree(store.getState())).toEqual([
-      { id: "favoriteHeading", type: "favoriteHeading", depth: 0 },
-      { id: "allNotesHeading", type: "allNotesHeading", depth: 0 },
+      {
+        id: "favoriteHeading",
+        type: "favoriteHeading",
+        depth: 0,
+        expanded: false,
+      },
+      { id: "spacer", type: "spacer", depth: 0 },
+      {
+        id: "allNotesHeading",
+        type: "allNotesHeading",
+        depth: 0,
+        expanded: false,
+      },
+    ]);
+  });
+
+  it("emits a createNew placeholder under an expanded childless parent", () => {
+    const store = setup({
+      notes: [makeNote({ id: "p" })],
+      allNotesOpen: true,
+      expandedNotes: ["p"],
+    });
+
+    const { allNotes } = sections(selectSidebarTree(store.getState()));
+    expect(
+      allNotes.map((t) => ({ id: t.id, type: t.type, depth: t.depth })),
+    ).toEqual([
+      { id: "p", type: "item", depth: 0 },
+      { id: "createnew-p-0-item", type: "createNew", depth: 1 },
     ]);
   });
 
