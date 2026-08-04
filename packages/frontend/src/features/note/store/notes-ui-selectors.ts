@@ -26,7 +26,13 @@ export const selectExpandedFavorites = (state: RootState) =>
 export type NoteTreeItem = {
   id: string;
   depth: number;
-  type: "item" | "favorite" | "favoriteHeading" | "allNotesHeading";
+  type:
+    | "item"
+    | "favorite"
+    | "favoriteHeading"
+    | "allNotesHeading"
+    | "spacer"
+    | "createNew";
   expanded?: boolean;
 };
 
@@ -76,6 +82,15 @@ const flattenNoteTree = (
   ids.flatMap((id) => {
     const item = { id, type, depth, expanded: expandedIds.has(id) };
     if (!expandedIds.has(id) || ancestors.has(id)) return [item];
+    if (childrenOf(id).length === 0)
+      return [
+        item,
+        {
+          id: `createnew-${item.id}-${item.depth}-${item.type}`,
+          type: "createNew",
+          depth: depth + 1,
+        },
+      ];
     return [
       item,
       ...flattenNoteTree(
@@ -130,12 +145,28 @@ const selectAllNotesView = createSelector(
 );
 
 export const selectSidebarTree = createSelector(
-  [selectFavoritesView, selectAllNotesView],
-  (favorites, allNotes): NoteTreeItem[] => {
+  [
+    selectFavoritesView,
+    selectAllNotesView,
+    selectAllNotesViewOpen,
+    selectFavoritesViewOpen,
+  ],
+  (favorites, allNotes, allNotesOpen, favoritesOpen): NoteTreeItem[] => {
     return [
-      { id: "favoriteHeading", type: "favoriteHeading", depth: 0 },
+      {
+        id: "favoriteHeading",
+        type: "favoriteHeading",
+        depth: 0,
+        expanded: favoritesOpen,
+      },
       ...favorites,
-      { id: "allNotesHeading", type: "allNotesHeading", depth: 0 },
+      { id: "spacer", type: "spacer", depth: 0 },
+      {
+        id: "allNotesHeading",
+        type: "allNotesHeading",
+        depth: 0,
+        expanded: allNotesOpen,
+      },
       ...allNotes,
     ];
   },

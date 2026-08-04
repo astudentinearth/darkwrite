@@ -7,6 +7,7 @@ import { TextTooltip } from "@/components/ui/tooltip";
 import { useSidebar } from "@/features/layout/hooks/use-sidebar";
 import NoteListRoot from "@/features/note/note-list-root";
 import { cn } from "@/lib/utils";
+import { FlatNoteList } from "../note/components/flat-note-list";
 import { TrashWidget } from "../note/components/trash";
 import { showSearch } from "../search/search-state";
 import AppMenu from "./app-menu";
@@ -66,8 +67,7 @@ export function Sidebar(props: SidebarProps) {
           <WorkspaceSwitcher />
           <CreatePageButton />
           <SidebarNavigation />
-          <FavoritesContainer />
-          <NoteListRoot />
+          <FlatNoteList />
           <div className="flex flex-col gap-0.5"></div>
           <TrashWidget />
         </div>
