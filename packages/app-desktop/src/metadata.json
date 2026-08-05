@@ -1,6 +1,8 @@
 {
   "preloadScriptPath": "preload.js",
   "webcontentsUrl": "../dist/index.html",
+  "websiteUrl": "https://darkwrite.app",
+  "reportBugsUrl": "https://github.com/astudentinearth/darkwrite/issues",
   "icons": {
     "development": "../resources/darkwrite_icon.png"
   },

@@ -2,6 +2,8 @@
 ## 🌟 Feature
 - Updated sidebar
 - Revamped parent tree dropdown
+- Menu bar now includes the `Help` section (macOS users can search the menu bar)
+    - Added links to website and issue tracker
 
 ## ✨ Improvements and fixes
 - Significantly improve trash performance
@@ -13,10 +15,11 @@
 - You can drop notes directly to the trash
 - Expanded notes now remember that they were expanded even if its parent note gets collapsed
 - Updated workspace switcher
+- Menu bar items are now localized
+
 
 ## 🛠️ Technical changes
 - Move translations to a separate `@darkwrite/i18n` package, using gettext (.po) files
-- Menu bar items are now localized
 
 # 1.2.3-beta.1
 ## 🌟 Features

@@ -5,6 +5,7 @@ import {
   type MenuItemConstructorOptions,
   shell,
 } from "electron";
+import meta from "@/metadata.json";
 import { t } from "./i18n";
 import { AppMenuEvent } from "./types/window-events";
 
@@ -13,7 +14,7 @@ const HistoryAccelerators = {
   forward: process.platform === "darwin" ? "Cmd+]" : "Alt+Right",
 };
 
-function buildTemplate(): Array<MenuItemConstructorOptions> {
+function buildTemplate(): MenuItemConstructorOptions[] {
   // carry the checkbox state over when the menu is rebuilt
   const alwaysOnTop =
     Menu.getApplicationMenu()?.getMenuItemById("alwaysontop")?.checked ?? false;
@@ -83,6 +84,19 @@ function buildTemplate(): Array<MenuItemConstructorOptions> {
       ],
     },
     { role: "windowMenu" },
+    {
+      role: "help",
+      submenu: [
+        {
+          label: t("menu.help.website"),
+          click: () => shell.openExternal(meta.websiteUrl),
+        },
+        {
+          label: t("menu.help.reportBugs"),
+          click: () => shell.openExternal(meta.reportBugsUrl),
+        },
+      ],
+    },
   ];
 
   if (process.platform === "darwin") {
