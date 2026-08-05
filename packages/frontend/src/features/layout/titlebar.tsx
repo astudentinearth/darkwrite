@@ -8,6 +8,7 @@ import { useWindowControlsOverlay } from "@/features/layout/hooks/use-window-con
 import { useNoteFromURL } from "@/features/note/hooks/use-note-from-url";
 import { cn } from "@/lib/utils";
 import { HistoryNavigation } from "./navigation";
+import NoteDropdown from "./note-dropdown";
 import PageTitle from "./page-title";
 import Toolbar from "./toolbar";
 import TrafficLightsPlaceholder from "./traffic-lights-placeholder";
@@ -44,7 +45,7 @@ export function Titlebar() {
         </HeaderbarButton>
       </TextTooltip>
       <HistoryNavigation />
-      <PageTitle />
+      {noteId ? <NoteDropdown id={noteId} /> : <PageTitle />}
       <div className="grow"></div>
       {noteId && <Toolbar noteId={noteId} />}
     </div>

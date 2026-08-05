@@ -1,7 +1,6 @@
-import { Home, Settings } from "lucide-react";
+import { Home } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
-import NoteDropdown from "./note-dropdown";
 import TitlebarNavTrigger from "./titlebar-nav-trigger";
 
 export default function PageTitle() {
@@ -17,14 +16,6 @@ export default function PageTitle() {
           </>
         </TitlebarNavTrigger>
       );
-
-    case "/settings":
-      return (
-        <TitlebarNavTrigger>
-          <Settings size={18} />
-          {t("sidebar.button.settings")}
-        </TitlebarNavTrigger>
-      );
   }
-  return <NoteDropdown />;
+  return null;
 }

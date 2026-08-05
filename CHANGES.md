@@ -1,6 +1,7 @@
 # Unreleased
 ## 🌟 Feature
 - Updated sidebar
+- Revamped parent tree dropdown
 
 ## ✨ Improvements and fixes
 - Significantly improve trash performance
@@ -11,6 +12,7 @@
     - Total drop area for a slot is now ~3x as large
 - You can drop notes directly to the trash
 - Expanded notes now remember that they were expanded even if its parent note gets collapsed
+- Updated workspace switcher
 
 ## 🛠️ Technical changes
 - Move translations to a separate `@darkwrite/i18n` package, using gettext (.po) files

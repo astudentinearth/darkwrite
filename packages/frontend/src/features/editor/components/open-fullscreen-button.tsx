@@ -1,4 +1,4 @@
-import { Expand } from "lucide-react";
+import { IconArrowsMaximize } from "@tabler/icons-react";
 import { use } from "react";
 import { HeaderbarButton } from "@/components/headerbar-button";
 import { TextTooltip } from "@/components/ui/tooltip";
@@ -13,12 +13,13 @@ export function OpenFullscreenButton() {
   return (
     <TextTooltip text="Expand">
       <HeaderbarButton
+        className="size-8"
         onClick={() => {
           actions.closeCenterView();
           navigateToNote(noteId);
         }}
       >
-        <Expand size={20} />
+        <IconArrowsMaximize size={20} />
       </HeaderbarButton>
     </TextTooltip>
   );

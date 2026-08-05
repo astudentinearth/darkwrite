@@ -1,3 +1,4 @@
+import { IconSlash } from "@tabler/icons-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
@@ -6,8 +7,7 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useNoteFromURL } from "@/features/note/hooks/use-note-from-url";
-import { getNoteIcon } from "@/lib/utils";
+import { cn, getNoteIcon } from "@/lib/utils";
 import { navigateToNote } from "../navigation/navigator";
 import { useNoteById } from "../note/hooks/use-note-by-id";
 import { selectParentIdTree } from "../note/store/note-selectors";
@@ -17,25 +17,31 @@ import TitlebarNavTrigger from "./titlebar-nav-trigger";
 function ParentItem(props: { id: string; setOpen: (open: boolean) => void }) {
   const { note } = useNoteById(props.id);
   const { setOpen } = props;
+  const { t } = useTranslation();
   if (!note) return null;
   return (
     <Button
       variant={"ghost"}
-      className="h-fit gap-2 w-full justify-start px-2"
+      className="h-fit gap-2 w-full justify-start px-1.5 py-1"
       onClick={() => {
         setOpen(false);
         navigateToNote(props.id);
       }}
     >
       <span>{getNoteIcon(note.icon)}</span>
-      <span>{note.title}</span>
+      <span>{note.title || t("defaults.pageTitle")}</span>
     </Button>
   );
 }
 
-export default function NoteDropdown() {
+export default function NoteDropdown({
+  id,
+  className,
+}: {
+  id: string;
+  className?: string;
+}) {
   const [open, setOpen] = useState(false);
-  const id = useNoteFromURL();
   const { t } = useTranslation();
   const currentNote = useNoteById(id).note;
   const tree = useAppSelector((state) => selectParentIdTree(state, id ?? ""));
@@ -43,21 +49,39 @@ export default function NoteDropdown() {
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
-        <TitlebarNavTrigger className="max-w-64 overflow-hidden">
+        <TitlebarNavTrigger
+          className={cn(
+            "max-w-64 overflow-hidden select-none h-fit",
+            open && "bg-secondary/50",
+            className,
+          )}
+        >
           <span>{getNoteIcon(currentNote.icon)}</span>
           <span className="overflow-hidden w-full text-ellipsis whitespace-nowrap wrap-break-word">
             {currentNote.title || t("defaults.pageTitle")}
           </span>
         </TitlebarNavTrigger>
       </DropdownMenuTrigger>
-      <DropdownMenuContent>
+      <DropdownMenuContent
+        side="bottom"
+        className="flex items-center max-w-screen"
+      >
         {tree?.map((n) => (
-          <ParentItem key={n} id={n} setOpen={setOpen} />
+          <>
+            <ParentItem key={n} id={n} setOpen={setOpen} />
+            <IconSlash
+              size={16}
+              key={`${n}-sep`}
+              className="shrink-0 text-muted-foreground opacity-50"
+            />
+          </>
         ))}
-        {tree.length === 0 && (
+        {tree.length === 0 ? (
           <span className="text-foreground/80 block px-4 py-2">
             {t("titlebar.noPagesAbove")}
           </span>
+        ) : (
+          <ParentItem id={currentNote.id} setOpen={setOpen} />
         )}
       </DropdownMenuContent>
     </DropdownMenu>
