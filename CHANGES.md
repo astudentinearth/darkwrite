@@ -1,7 +1,16 @@
 # Unreleased
+## 🌟 Feature
+- Updated sidebar
+
 ## ✨ Improvements and fixes
 - Significantly improve trash performance
 - Sidebar no longer lags
+- Removed the 4px gaps between note items
+    - Drag/drop is now proximity based, the drop gaps don't need to exist anymore
+- Notes are now easier to reorder
+    - Total drop area for a slot is now ~3x as large
+- You can drop notes directly to the trash
+- Expanded notes now remember that they were expanded even if its parent note gets collapsed
 
 ## 🛠️ Technical changes
 - Move translations to a separate `@darkwrite/i18n` package, using gettext (.po) files

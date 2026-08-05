@@ -1,6 +1,7 @@
 import { ChevronRight, Plus } from "lucide-react";
 import type React from "react";
 import { useTranslation } from "react-i18next";
+import { TextTooltip } from "@/components/ui/tooltip";
 import { navigateToNote } from "@/features/navigation/navigator";
 import { appSessionSlice } from "@/features/session/session-slice";
 import { useAppDispatch } from "@/features/store/hooks";
@@ -9,6 +10,7 @@ import { useNoteById } from "../hooks/use-note-by-id";
 import { useNoteFromURL } from "../hooks/use-note-from-url";
 import { DropPosition, useNoteItemDnD } from "../hooks/use-note-item-drag";
 import { NoteContextMenuContainer } from "../note-context-menu";
+import { createNote } from "../store/note.thunk";
 import type { NoteTreeItem } from "../store/notes-ui-selectors";
 import { notesUiSlice } from "../store/notes-ui-slice";
 import { NoteTitle } from "./note-title";
@@ -34,7 +36,7 @@ function HeadingItem({ item, className, ...props }: NoteItemProps) {
       tabIndex={0}
       onClick={handleClick}
       className={cn(
-        "group grid grid-cols-[20px_1fr] justify-start text-start place-items-start select-none active:pushdown-99% w-full items-center gap-2 rounded-md text-sm hover:bg-secondary/50 p-1.5",
+        "group grid grid-cols-[20px_1fr] justify-start text-start place-items-start select-none w-full items-center gap-2 rounded-md text-sm hover:bg-secondary/50 p-1.5  hover:opacity-100 opacity-75 duration-75 transition-opacity active:pushdown-98% active:opacity-90",
         className,
       )}
       {...props}
@@ -58,32 +60,24 @@ function HeadingItem({ item, className, ...props }: NoteItemProps) {
 
 function CreateNew({ item, className, ...props }: NoteItemProps) {
   const { t } = useTranslation();
-  const handleClick = () => {};
 
   return (
     <div
-      tabIndex={0}
       style={{ paddingLeft: `${6 + item.depth * 6}px` }}
-      onClick={handleClick}
       className={cn(
-        "group grid grid-cols-[20px_1fr] text-start select-none active:pushdown-99% w-full items-center gap-2 rounded-md text-sm hover:bg-secondary/50 p-1.5 opacity-70 hover:opacity-100",
+        "text-start select-none active:pushdown-99% w-full items-center gap-2 rounded-md text-sm p-1.5 opacity-50",
         className,
       )}
       {...props}
     >
-      <Plus
-        className={cn(
-          "size-4 transition-transform duration-100 place-self-center",
-        )}
-      />
-      <span>{t("home.createPage")}</span>
+      <span>{t("sidebar.notes.noPages")}</span>
     </div>
   );
 }
 
 const positionToClassName: Record<DropPosition, string> = {
   [DropPosition.Top]: "dnd-top-edge",
-  [DropPosition.Center]: "bg-primary/20",
+  [DropPosition.Center]: "bg-primary/10",
   [DropPosition.Bottom]: "dnd-bottom-edge",
 };
 
@@ -95,12 +89,12 @@ export function NoteItem({ item, className, ...props }: NoteItemProps) {
     onDragLeave,
     onDragEnter,
     onDragOver,
-    endDragOver,
     isDraggingOver,
     position,
     onDrag,
     onDrop,
   } = useNoteItemDnD(item);
+  const { t } = useTranslation();
   if (item.type === "allNotesHeading" || item.type === "favoriteHeading")
     return <HeadingItem {...{ item, className, ...props }} />;
   if (item.type === "spacer") return <div className="h-2" />;
@@ -129,16 +123,13 @@ export function NoteItem({ item, className, ...props }: NoteItemProps) {
         onDrop={onDrop}
         onDragStart={onDrag}
         onDragEnter={onDragEnter}
-        onDragLeave={(e) => {
-          endDragOver();
-          onDragLeave(e);
-        }}
+        onDragLeave={onDragLeave}
         onDragOver={onDragOver}
         tabIndex={0}
         style={{ paddingLeft: `${6 + item.depth * 6}px` }}
         onClick={() => navigateToNote(item.id)}
         className={cn(
-          "group grid grid-cols-[20px_1fr] select-none active:pushdown-99% hover:grid-cols-[20px_1fr_20px] w-full items-center gap-2 rounded-md text-sm hover:bg-secondary/50 p-1.5 ",
+          "group grid grid-cols-[20px_1fr] select-none active:pushdown-99% hover:grid-cols-[20px_1fr_20px] w-full items-center gap-2 rounded-md text-sm hover:bg-secondary/50 p-1.5 focus:outline-0 focus:bg-secondary/70",
           activeNoteId === item.id && "bg-secondary/40",
           isDraggingOver && position ? positionToClassName[position] : null,
           className,
@@ -162,10 +153,23 @@ export function NoteItem({ item, className, ...props }: NoteItemProps) {
             {getNoteIcon(note.icon, "size-4")}
           </span>
         </button>
-
         <NoteTitle className="flex-1 truncate text-left select-none opacity-75 group-hover:opacity-100">
           {note.title}
-        </NoteTitle>
+        </NoteTitle>{" "}
+        <TextTooltip text={t("sidebar.notes.contextmenu.newSubpage")}>
+          <button
+            onClick={() => {
+              dispatch(createNote({ parentId: item.id, navigateAfter: true }));
+              dispatch(notesUiSlice.actions.expandNote(item.id));
+            }}
+            className={cn(
+              "hover:bg-secondary/50 size-5 group-hover:opacity-100 rounded-[6px] group-hover:flex hidden justify-center items-center",
+              isDraggingOver && "hidden",
+            )}
+          >
+            <Plus className="size-4" />
+          </button>
+        </TextTooltip>
       </div>
     </NoteContextMenuContainer>
   );
