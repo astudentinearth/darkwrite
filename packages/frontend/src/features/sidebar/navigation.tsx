@@ -1,3 +1,4 @@
+import { IconHome } from "@tabler/icons-react";
 import { Home } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
@@ -15,7 +16,7 @@ export function SidebarNavigation() {
         onClick={() => !isHome && navigateHome()}
         className={cn(isHome && "bg-secondary/20")}
       >
-        <Home size={16} />
+        <IconHome size={18} />
         <span>{t("home")}</span>
       </SidebarItem>
     </div>

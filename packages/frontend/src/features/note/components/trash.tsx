@@ -1,6 +1,5 @@
-import { IconTrash } from "@tabler/icons-react";
+import { IconArrowBackUp, IconTrash } from "@tabler/icons-react";
 import { useVirtualizer } from "@tanstack/react-virtual";
-import { Trash, Undo2 } from "lucide-react";
 import { memo, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
@@ -54,7 +53,7 @@ const TrashItem = memo(function ({ noteId, className }: TrashItemProps) {
       )}
     >
       <span>{getNoteIcon(note.icon)}</span>
-      <NoteTitle className="whitespace-nowrap text-ellipsis overflow-hidden text-start">
+      <NoteTitle className="whitespace-nowrap text-ellipsis select-none overflow-hidden text-start">
         {note.title}
       </NoteTitle>
       <TextTooltip text={t("sidebar.trash.restore")}>
@@ -69,7 +68,7 @@ const TrashItem = memo(function ({ noteId, className }: TrashItemProps) {
           variant={"ghost"}
           className="w-6 h-6 p-0"
         >
-          <Undo2 className="size-4" />
+          <IconArrowBackUp className="size-4" />
         </Button>
       </TextTooltip>
       <TextTooltip text={t("sidebar.trash.delete")}>
@@ -82,7 +81,7 @@ const TrashItem = memo(function ({ noteId, className }: TrashItemProps) {
           variant={"destructive"}
           className="w-6 h-6 p-0 bg-transparent text-destructive hover:bg-destructive/25 border-none"
         >
-          <Trash className="size-4" />
+          <IconTrash className="size-4" />
         </Button>
       </TextTooltip>
     </div>

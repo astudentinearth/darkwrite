@@ -1,4 +1,4 @@
-import { Menu, Trash2 } from "lucide-react";
+import { IconMenu2, IconTrashOff } from "@tabler/icons-react";
 import { useTranslation } from "react-i18next";
 import {
   Button,
@@ -18,7 +18,7 @@ export function TrashMenu() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant={"ghost"} className="w-9 h-9 p-0 shrink-0">
-          <Menu className="size-4" />
+          <IconMenu2 className="size-4" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent
@@ -31,7 +31,7 @@ export function TrashMenu() {
           }}
           variant="destructive"
         >
-          <Trash2 className="size-4 mr-2" />
+          <IconTrashOff className="size-4" />
           {t("sidebar.trash.empty")}
         </DropdownMenuItem>
       </DropdownMenuContent>

@@ -1,4 +1,4 @@
-import { Star } from "lucide-react";
+import { IconStar } from "@tabler/icons-react";
 import { useTranslation } from "react-i18next";
 import { HeaderbarButton } from "@/components/headerbar-button";
 import { TextTooltip } from "@/components/ui/tooltip";
@@ -25,7 +25,7 @@ export default function FavoriteToggle({ id }: { id: string }) {
       }
     >
       <HeaderbarButton onClick={click}>
-        <Star
+        <IconStar
           size={20}
           className={cn(note.isFavorite && "text-star fill-star")}
         />

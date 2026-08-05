@@ -1,10 +1,10 @@
 import { TooltipTrigger } from "@radix-ui/react-tooltip";
+import { IconMenu2 } from "@tabler/icons-react";
 import {
   Download,
   FileCode,
   FileText,
   Forward,
-  Menu,
   Redo,
   Trash,
   Undo,
@@ -124,7 +124,7 @@ export default function EditorMenu({ noteId }: { noteId: string }) {
         <DropdownMenuTrigger asChild>
           <TooltipTrigger>
             <HeaderbarButton className={cn(open && "bg-secondary/50")}>
-              <Menu size={20} />
+              <IconMenu2 size={20} />
             </HeaderbarButton>
           </TooltipTrigger>
         </DropdownMenuTrigger>

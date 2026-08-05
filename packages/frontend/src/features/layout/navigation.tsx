@@ -1,3 +1,4 @@
+import { IconArrowLeft, IconArrowRight } from "@tabler/icons-react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -26,7 +27,7 @@ export function HistoryNavigation() {
           aria-label={t("ui.history.back")}
           onClick={goBack}
         >
-          <ArrowLeft size={18} />
+          <IconArrowLeft size={18} />
         </HeaderbarButton>
       </TextTooltip>
       <TextTooltip text={t("ui.history.forward")}>
@@ -36,7 +37,7 @@ export function HistoryNavigation() {
           aria-label={t("ui.history.forward")}
           onClick={goForward}
         >
-          <ArrowRight size={18} />
+          <IconArrowRight size={18} />
         </HeaderbarButton>
       </TextTooltip>
     </>

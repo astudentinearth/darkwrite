@@ -36,17 +36,11 @@ function HeadingItem({ item, className, ...props }: NoteItemProps) {
       tabIndex={0}
       onClick={handleClick}
       className={cn(
-        "group grid grid-cols-[20px_1fr] justify-start text-start place-items-start select-none w-full items-center gap-2 rounded-md text-sm hover:bg-secondary/50 p-1.5  hover:opacity-100 opacity-75 duration-75 transition-opacity active:pushdown-98% active:opacity-90",
+        "group flex justify-start text-start place-items-start select-none w-full items-center gap-2 rounded-md text-sm hover:bg-secondary/50 p-1.5 pl-2  hover:opacity-100 opacity-75 duration-75 transition-opacity active:pushdown-98% active:opacity-90",
         className,
       )}
       {...props}
     >
-      <ChevronRight
-        className={cn(
-          "size-4 transition-transform duration-100 place-self-center",
-          item.expanded && "rotate-90",
-        )}
-      />
       <span>
         {t(
           item.type === "allNotesHeading"
@@ -54,6 +48,12 @@ function HeadingItem({ item, className, ...props }: NoteItemProps) {
             : "sidebar.title.favorites",
         )}
       </span>
+      <ChevronRight
+        className={cn(
+          "size-4 transition-transform duration-100 place-self-center",
+          item.expanded && "rotate-90",
+        )}
+      />
     </div>
   );
 }

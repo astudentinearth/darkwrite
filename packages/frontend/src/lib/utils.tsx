@@ -1,6 +1,6 @@
+import { IconFileText } from "@tabler/icons-react";
 import { type ClassValue, clsx } from "clsx";
 import { hex } from "color-convert";
-import { FileText } from "lucide-react";
 import { nanoid } from "nanoid";
 import { twMerge } from "tailwind-merge";
 
@@ -15,7 +15,7 @@ export function fromUnicode(unicode: string) {
 }
 
 export function getNoteIcon(icon?: string | null, className?: string) {
-  if (!icon) return <FileText size={18} className={className} />;
+  if (!icon) return <IconFileText size={18} className={className} />;
   return fromUnicode(icon);
 }
 
