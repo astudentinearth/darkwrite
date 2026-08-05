@@ -129,7 +129,7 @@ export function NoteItem({ item, className, ...props }: NoteItemProps) {
         style={{ paddingLeft: `${6 + item.depth * 6}px` }}
         onClick={() => navigateToNote(item.id)}
         className={cn(
-          "group grid grid-cols-[20px_1fr] select-none active:pushdown-99% hover:grid-cols-[20px_1fr_20px] w-full items-center gap-2 rounded-md text-sm hover:bg-secondary/50 p-1.5 focus:outline-0 focus:bg-secondary/70",
+          "group grid grid-cols-[20px_1fr] select-none active:pushdown-99% hover:grid-cols-[20px_1fr_20px] w-full items-center gap-2 rounded-md text-sm hover:bg-secondary/50 p-1.5 focus:outline-0 focus-visible:bg-secondary/70",
           activeNoteId === item.id && "bg-secondary/40",
           isDraggingOver && position ? positionToClassName[position] : null,
           className,
