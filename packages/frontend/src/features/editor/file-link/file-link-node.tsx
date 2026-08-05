@@ -1,3 +1,4 @@
+import { IconPaperclip } from "@tabler/icons-react";
 import { NodeViewWrapper, type ReactNodeViewProps } from "@tiptap/react";
 import { AppWindow } from "lucide-react";
 import { type MouseEvent, use, useState } from "react";
@@ -78,7 +79,7 @@ export function FileLinkNode(props: ReactNodeViewProps) {
             onClick={handleClick}
             onDoubleClick={handleDoubleClick}
             className={cn(
-              "bg-transparent hover:bg-secondary/75 font-semibold text-(--dw-editor-foreground) cursor-pointer flex gap-2 rounded-md items-center px-1 py-0.5 my-2",
+              "bg-transparent hover:bg-secondary/75 font-semibold text-(--dw-editor-foreground) cursor-pointer grid grid-cols-[20px_1fr] gap-2 rounded-md items-center px-1 py-0.5 my-2 overflow-hidden text-ellipsis whitespace-nowrap wrap-break-word",
               (props.selected || contextMenuOpen) && "bg-primary/20",
             )}
           >
@@ -92,13 +93,19 @@ export function FileLinkNode(props: ReactNodeViewProps) {
                     className="size-5 shrink-0"
                   />
                 )}
-                <span>{filename(fileLink.filePath)}</span>
+
+                <span className="grow text-ellipsis overflow-hidden whitespace-nowrap">
+                  {filename(fileLink.filePath)}
+                </span>
               </>
             )}
             {!fileLink && (
-              <span className="text-muted-foreground">
-                {t("editor.blocks.fileLink.placeholder")}
-              </span>
+              <>
+                <IconPaperclip size={20} />
+                <span className="text-muted-foreground grow text-ellipsis overflow-hidden whitespace-nowrap">
+                  {t("editor.blocks.fileLink.placeholder")}
+                </span>
+              </>
             )}
           </div>
         </ContextMenuTrigger>

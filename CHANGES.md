@@ -18,6 +18,7 @@
 - Updated workspace switcher
 - Menu bar items are now localized
 - Add back missing bottom padding to the editor
+- Linked files no longer overflow horizontally
 
 
 ## 🛠️ Technical changes
