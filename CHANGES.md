@@ -17,6 +17,7 @@
 - Expanded notes now remember that they were expanded even if its parent note gets collapsed
 - Updated workspace switcher
 - Menu bar items are now localized
+- Add back missing bottom padding to the editor
 
 
 ## 🛠️ Technical changes

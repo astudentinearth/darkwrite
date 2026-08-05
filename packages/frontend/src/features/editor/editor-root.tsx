@@ -4,6 +4,7 @@ import { useAppSelector } from "@/features/store/hooks";
 import { DarkwriteEditorContext } from "./context";
 import { emitEditorEvent } from "./event/editor-bus";
 import { EditorEventType } from "./event/types";
+import { Padder } from "./extensions/padder";
 import useEditorBuilder from "./hooks/use-editor-builder";
 import { EditorContext } from "./store/editor-context";
 import { selectEditorEditable } from "./store/editor-selectors";
@@ -52,6 +53,7 @@ export function EditorRoot(props: { content: EditorContent }) {
     <Tiptap editor={editor}>
       <Tiptap.Content />
       {children}
+      <Padder />
     </Tiptap>
   );
 }
