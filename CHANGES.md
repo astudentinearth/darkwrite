@@ -4,6 +4,7 @@
 - Revamped parent tree dropdown
 - Menu bar now includes the `Help` section (macOS users can search the menu bar)
     - Added links to website and issue tracker
+- Add reader mode (#32)
 
 ## ✨ Improvements and fixes
 - Significantly improve trash performance

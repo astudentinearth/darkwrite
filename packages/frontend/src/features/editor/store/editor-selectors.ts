@@ -31,6 +31,8 @@ export const selectFormattingState = (state: RootState, noteId: string) =>
 export const selectCenterViewState = (state: RootState) =>
   state.editor.centerView;
 
+export const selectEditorEditable = (state: RootState) => state.editor.editable;
+
 export const selectContentLoaded = (state: RootState, noteId: string) =>
   !!state.editor.docs[noteId];
 

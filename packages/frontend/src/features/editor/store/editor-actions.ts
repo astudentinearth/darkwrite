@@ -79,6 +79,10 @@ export const getEditorActions = (dispatch: AppDispatch) => ({
   closeCenterView() {
     dispatch(editorSlice.actions.closeCenterView());
   },
+
+  setEditable(editable: boolean) {
+    dispatch(editorSlice.actions.setEditable(editable));
+  },
 });
 
 export function useEditorActions() {

@@ -27,13 +27,16 @@ import {
 } from "@/components/ui";
 import { Tooltip, TooltipContent } from "@/components/ui/tooltip";
 import { useLocalStore } from "@/context/local-state";
+import { useAppSelector } from "@/features/store/hooks";
 import { cn } from "@/lib/utils";
 import { PageSizeChooser } from "../export/page-size-chooser";
 import useEditorMenu from "./hooks/use-editor-menu";
+import { selectEditorEditable } from "./store/editor-selectors";
 
 function EditorMenuContent({ noteId }: { noteId: string }) {
   const spellcheck = useLocalStore((s) => s.useSpellcheck);
   const setSpellcheck = useLocalStore((s) => s.setSpellcheck);
+  const editable = useAppSelector(selectEditorEditable);
   const { actions, isTrashed, wordCount, canUndo, canRedo } =
     useEditorMenu(noteId);
   const { t } = useTranslation();
@@ -74,13 +77,13 @@ function EditorMenuContent({ noteId }: { noteId: string }) {
           <PageSizeChooser className="bg-view-1 top-highlight mt-small" />
         </DropdownMenuSubContent>
       </DropdownMenuSub>
-      <DropdownMenuItem onSelect={actions.importNotes}>
+      <DropdownMenuItem disabled={!editable} onSelect={actions.importNotes}>
         <Upload size={18} />
         {t("editor.menu.import")}
       </DropdownMenuItem>
       <DropdownMenuSeparator />
       <DropdownMenuItem
-        disabled={!canUndo}
+        disabled={!editable || !canUndo}
         onSelect={(e) => {
           actions.undo();
           e.preventDefault();
@@ -90,7 +93,7 @@ function EditorMenuContent({ noteId }: { noteId: string }) {
         {t("editor.menu.undo")}
       </DropdownMenuItem>
       <DropdownMenuItem
-        disabled={!canRedo}
+        disabled={!editable || !canRedo}
         onSelect={(e) => {
           actions.redo();
           e.preventDefault();

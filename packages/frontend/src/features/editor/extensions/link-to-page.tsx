@@ -1,6 +1,4 @@
 import { DarkwriteResource, resourceRefToUrl } from "@darkwrite/common";
-//FIXME: This will be moved to @/components/ui
-//import { getNoteIcon } from "@renderer/lib/utils";
 import { mergeAttributes, Node } from "@tiptap/core";
 import { Plugin } from "@tiptap/pm/state";
 import {
@@ -28,9 +26,11 @@ import {
 } from "@/features/dnd/datatransfer";
 import { useNoteById } from "@/features/note/hooks/use-note-by-id";
 import { useSearch } from "@/features/note/hooks/use-search";
+import { useAppSelector } from "@/features/store/hooks";
 import { cn, getNoteIcon } from "@/lib/utils";
 import { DarkwriteEditorContext } from "../context";
 import { useEditorActions } from "../store/editor-actions";
+import { selectEditorEditable } from "../store/editor-selectors";
 import { Block } from "../types";
 
 const LinkResult = memo(function ({
@@ -66,6 +66,7 @@ const LinkComponent = ({
   const context = use(DarkwriteEditorContext);
   const { note } = useNoteById(id);
   const navToNote = context.onNavigateToNote;
+  const editable = useAppSelector(selectEditorEditable);
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
@@ -74,6 +75,8 @@ const LinkComponent = ({
 
   const contextMenu = (e: MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
+    // In reader mode an unlinked placeholder has no read-only actions to show.
+    if (!editable && !note) return;
     setOpen(true);
   };
 
@@ -107,7 +110,7 @@ const LinkComponent = ({
             onClick={(e) => {
               e.preventDefault();
               if (note) navToNote?.call(undefined, id);
-              else setOpen(true);
+              else if (editable) setOpen(true);
             }}
             className={cn(
               "link-to-page hover:bg-secondary/75 cursor-pointer select-none rounded-md p-1 py-0.5 transition-colors flex items-center gap-2 my-1 text-(--dw-editor-foreground)",
@@ -136,16 +139,18 @@ const LinkComponent = ({
           {note && (
             <>
               <div className="p-1 w-full flex flex-col">
-                <Button
-                  variant="ghost"
-                  onClick={turnIntoInlineLink}
-                  className="h-fit px-2 py-1.5 w-full justify-start"
-                >
-                  <ArrowLeftRight size={16} />
-                  <span>
-                    {t("editor.blocks.linkToPage.turnIntoInlineLink")}
-                  </span>
-                </Button>
+                {editable && (
+                  <Button
+                    variant="ghost"
+                    onClick={turnIntoInlineLink}
+                    className="h-fit px-2 py-1.5 w-full justify-start"
+                  >
+                    <ArrowLeftRight size={16} />
+                    <span>
+                      {t("editor.blocks.linkToPage.turnIntoInlineLink")}
+                    </span>
+                  </Button>
+                )}
                 <Button
                   variant="ghost"
                   className="h-fit px-2 py-1.5 w-full justify-start"
@@ -158,31 +163,33 @@ const LinkComponent = ({
                   <span>{t("sidebar.notes.contextmenu.openInCenter")}</span>
                 </Button>
               </div>
-              <hr />
+              {editable && <hr />}
             </>
           )}
-          <Command className="h-full max-h-[30vh]">
-            <CommandInput
-              value={search}
-              onValueChange={(val) => {
-                setSearch(val);
-              }}
-              placeholder={t("search.chooserPlaceholder")}
-            />
-            <CommandList className="p-1 scroll-view">
-              <CommandEmpty>{t("search.noResult")}</CommandEmpty>
-              {results.map((n) => (
-                <LinkResult
-                  onSelect={() => {
-                    updateAttributes({ noteID: n });
-                    setOpen(false);
-                  }}
-                  key={n}
-                  id={n}
-                />
-              ))}
-            </CommandList>
-          </Command>
+          {editable && (
+            <Command className="h-full max-h-[30vh]">
+              <CommandInput
+                value={search}
+                onValueChange={(val) => {
+                  setSearch(val);
+                }}
+                placeholder={t("search.chooserPlaceholder")}
+              />
+              <CommandList className="p-1 scroll-view">
+                <CommandEmpty>{t("search.noResult")}</CommandEmpty>
+                {results.map((n) => (
+                  <LinkResult
+                    onSelect={() => {
+                      updateAttributes({ noteID: n });
+                      setOpen(false);
+                    }}
+                    key={n}
+                    id={n}
+                  />
+                ))}
+              </CommandList>
+            </Command>
+          )}
         </PopoverContent>
       </Popover>
     </NodeViewWrapper>

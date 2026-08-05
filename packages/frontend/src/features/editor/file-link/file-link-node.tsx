@@ -12,9 +12,10 @@ import {
   ContextMenuTrigger,
 } from "@/components/ui";
 import { pickAndCreateFileLink } from "@/features/link/store/file-link.thunk";
-import { useAppDispatch } from "@/features/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/features/store/hooks";
 import { cn } from "@/lib/utils";
 import { DarkwriteEditorContext } from "../context";
+import { selectEditorEditable } from "../store/editor-selectors";
 import type { FileLinkAttributesType } from "./file-link-extension";
 import { useFileLink } from "./use-file-link";
 
@@ -40,6 +41,7 @@ export function FileLinkNode(props: ReactNodeViewProps) {
   const { fileLink } = useFileLink(linkId);
   const { t } = useTranslation();
   const { openFilesOnDoubleClick } = use(DarkwriteEditorContext);
+  const editable = useAppSelector(selectEditorEditable);
   const dispatch = useAppDispatch();
 
   const openFile = () => {
@@ -56,8 +58,9 @@ export function FileLinkNode(props: ReactNodeViewProps) {
   const handleClick = (e: MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    if (!fileLink) changeFile();
-    else if (!openFilesOnDoubleClick) openFile();
+    if (!fileLink) {
+      if (editable) changeFile();
+    } else if (!openFilesOnDoubleClick) openFile();
   };
 
   const handleDoubleClick = (e: MouseEvent) => {
@@ -125,18 +128,22 @@ export function FileLinkNode(props: ReactNodeViewProps) {
               </ContextMenuItem>
             </>
           )}
-          <ContextMenuItem onSelect={changeFile}>
-            {t("editor.blocks.fileLink.changeFile")}
-          </ContextMenuItem>
-          <ContextMenuSeparator />
-          <ContextMenuItem
-            variant="destructive"
-            onSelect={() => {
-              props.deleteNode();
-            }}
-          >
-            {t("ui.contextmenu.delete")}
-          </ContextMenuItem>
+          {editable && (
+            <>
+              <ContextMenuItem onSelect={changeFile}>
+                {t("editor.blocks.fileLink.changeFile")}
+              </ContextMenuItem>
+              <ContextMenuSeparator />
+              <ContextMenuItem
+                variant="destructive"
+                onSelect={() => {
+                  props.deleteNode();
+                }}
+              >
+                {t("ui.contextmenu.delete")}
+              </ContextMenuItem>
+            </>
+          )}
         </ContextMenuContent>
       </ContextMenu>
     </NodeViewWrapper>

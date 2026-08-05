@@ -346,6 +346,15 @@ msgstr "Check for updates on startup"
 msgid "editor.menu.checkSpelling"
 msgstr "Check spelling"
 
+msgid "editor.menu.readerMode"
+msgstr "Reader mode"
+
+msgid "editor.readerMode.enable"
+msgstr "Enable reader mode"
+
+msgid "editor.readerMode.disable"
+msgstr "Disable reader mode"
+
 msgid "editor.menu.export"
 msgstr "Export"
 

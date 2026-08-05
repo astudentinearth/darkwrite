@@ -1,18 +1,22 @@
 import { Tiptap, useEditor } from "@tiptap/react";
-import { use } from "react";
+import { use, useEffect } from "react";
+import { useAppSelector } from "@/features/store/hooks";
 import { DarkwriteEditorContext } from "./context";
 import { emitEditorEvent } from "./event/editor-bus";
 import { EditorEventType } from "./event/types";
 import useEditorBuilder from "./hooks/use-editor-builder";
 import { EditorContext } from "./store/editor-context";
+import { selectEditorEditable } from "./store/editor-selectors";
 import { type EditorContent, TextDirection } from "./types";
 
 export function EditorRoot(props: { content: EditorContent }) {
   const context = use(DarkwriteEditorContext);
   const { instanceId } = use(EditorContext);
   const { extensions, children } = useEditorBuilder();
+  const editable = useAppSelector(selectEditorEditable);
   const editor = useEditor({
     extensions,
+    editable,
     content: props.content,
     onUpdate: ({ editor }) => {
       const updatedContent = editor.getJSON();
@@ -35,6 +39,15 @@ export function EditorRoot(props: { content: EditorContent }) {
       },
     },
   });
+
+  useEffect(() => {
+    if (editor && editor.isEditable !== editable) {
+      // emitUpdate: false so toggling doesn't fire onUpdate (which would emit a
+      // SYNC_CONTENT event and trigger autosave for a no-op change).
+      editor.setEditable(editable, false);
+    }
+  }, [editor, editable]);
+
   return (
     <Tiptap editor={editor}>
       <Tiptap.Content />

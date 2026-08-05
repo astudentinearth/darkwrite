@@ -10,10 +10,11 @@ export interface LanguageChooserProps {
   onValueChange: (value: string) => void;
   value: string;
   languages: string[];
+  disabled?: boolean;
 }
 
 export default function LanguageChooser(props: LanguageChooserProps) {
-  const { languages, value, onValueChange } = props;
+  const { languages, value, onValueChange, disabled } = props;
 
   const items = useMemo(
     () =>
@@ -26,7 +27,7 @@ export default function LanguageChooser(props: LanguageChooserProps) {
   );
 
   return (
-    <Select onValueChange={onValueChange} value={value}>
+    <Select disabled={disabled} onValueChange={onValueChange} value={value}>
       <SelectTrigger className="w-fit border-none opacity-60 group-hover:opacity-100 shrink-0 hover:bg-secondary h-fit transition-[background,opacity] text-xs aria-expanded:bg-secondary/80">
         {value}
       </SelectTrigger>

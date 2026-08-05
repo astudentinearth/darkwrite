@@ -351,6 +351,15 @@ msgstr "Başlangıçta güncelleştirmeleri denetle"
 msgid "editor.menu.checkSpelling"
 msgstr "Yazım denetimi"
 
+msgid "editor.menu.readerMode"
+msgstr "Okuyucu modu"
+
+msgid "editor.readerMode.enable"
+msgstr "Okuyucu modunu aç"
+
+msgid "editor.readerMode.disable"
+msgstr "Okuyucu modunu kapat"
+
 msgid "editor.menu.export"
 msgstr "Dışa aktar"
 

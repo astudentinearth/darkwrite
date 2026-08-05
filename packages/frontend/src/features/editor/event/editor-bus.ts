@@ -18,6 +18,7 @@ export function handleEditorEvent(editor: Editor, event: EditorEvent) {
     }
 
     case EditorEventType.INSERT_CONTENT: {
+      if (!editor.isEditable) break;
       const position = event.payload.position ?? util.getEndPos();
 
       // extract method and use switch/case if extension needed
@@ -31,6 +32,7 @@ export function handleEditorEvent(editor: Editor, event: EditorEvent) {
     }
 
     case EditorEventType.HISTORY: {
+      if (!editor.isEditable) break;
       if (event.payload === "undo") editor.chain().undo().run();
       else if (event.payload === "redo") editor.chain().redo().run();
       break;

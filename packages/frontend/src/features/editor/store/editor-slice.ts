@@ -31,9 +31,10 @@ export interface EditorState {
   canRedo: Record<string, boolean>;
   formattingState: Record<string, FormattingState>;
   centerView: CenterViewState;
+  editable: boolean;
 }
 
-const initialState: EditorState = {
+export const initialEditorState: EditorState = {
   docs: {},
   characterCount: {},
   wordCount: {},
@@ -41,6 +42,7 @@ const initialState: EditorState = {
   canUndo: {},
   formattingState: {},
   centerView: { open: false },
+  editable: true,
 };
 
 export const editorSlice = createSlice({
@@ -140,6 +142,14 @@ export const editorSlice = createSlice({
         open: false,
       };
     },
+
+    /**
+     * Toggles the editor between edit and reader (read-only) mode. Global and
+     * session-only; all editor instances share this flag.
+     */
+    setEditable: (state, action: PayloadAction<boolean>) => {
+      state.editable = action.payload;
+    },
   },
-  initialState,
+  initialState: initialEditorState,
 });

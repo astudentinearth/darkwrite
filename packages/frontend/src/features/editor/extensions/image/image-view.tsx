@@ -9,7 +9,9 @@ import {
   ContextMenuItem,
   ContextMenuTrigger,
 } from "@/components/ui";
+import { useAppSelector } from "@/features/store/hooks";
 import { cn } from "@/lib/utils";
+import { selectEditorEditable } from "../../store/editor-selectors";
 import { useEmbedSource } from "../../use-embed-source";
 
 enum GrabHandleSide {
@@ -37,6 +39,7 @@ export const DarkwriteImageView = (props: DarkwriteImageViewProps) => {
   const { embedId } = props.node.attrs;
   const { t } = useTranslation();
   const source = useEmbedSource(embedId ?? "");
+  const editable = useAppSelector(selectEditorEditable);
   const [menuOpen, setMenuOpen] = useState(false);
 
   const initialX = useRef(0);
@@ -140,14 +143,16 @@ export const DarkwriteImageView = (props: DarkwriteImageViewProps) => {
               />
             </ContextMenuTrigger>
             <ContextMenuContent>
-              <ContextMenuItem
-                onSelect={() => {
-                  setDisplayWidth(100);
-                  props.updateAttributes({ widthPercent: 100 });
-                }}
-              >
-                <RotateCcw size={18} /> {t("ui.contextmenu.resetImageSize")}
-              </ContextMenuItem>
+              {editable && (
+                <ContextMenuItem
+                  onSelect={() => {
+                    setDisplayWidth(100);
+                    props.updateAttributes({ widthPercent: 100 });
+                  }}
+                >
+                  <RotateCcw size={18} /> {t("ui.contextmenu.resetImageSize")}
+                </ContextMenuItem>
+              )}
               <ContextMenuItem
                 onSelect={() => {
                   DarkwriteAPIClient.embed.download(embedId);
@@ -158,18 +163,22 @@ export const DarkwriteImageView = (props: DarkwriteImageViewProps) => {
             </ContextMenuContent>
           </ContextMenu>
         )}
-        <div
-          onMouseDown={(e) => handleMouseDown(e, GrabHandleSide.LEFT)}
-          className="absolute p-0.5 top-1/2 opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-opacity -translate-y-1/2 left-1 cursor-ew-resize"
-        >
-          <div className="h-16 w-1.5 bg-white/80 border-border/50 shadow-sm shadow-black/50 rounded-full " />
-        </div>
-        <div
-          onMouseDown={(e) => handleMouseDown(e, GrabHandleSide.RIGHT)}
-          className="absolute p-0.5 top-1/2 opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-opacity -translate-y-1/2 right-1 cursor-ew-resize"
-        >
-          <div className="h-16 w-1.5 bg-white/80 border-border/50 shadow-sm shadow-black/50 rounded-full " />
-        </div>
+        {editable && (
+          <>
+            <div
+              onMouseDown={(e) => handleMouseDown(e, GrabHandleSide.LEFT)}
+              className="absolute p-0.5 top-1/2 opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-opacity -translate-y-1/2 left-1 cursor-ew-resize"
+            >
+              <div className="h-16 w-1.5 bg-white/80 border-border/50 shadow-sm shadow-black/50 rounded-full " />
+            </div>
+            <div
+              onMouseDown={(e) => handleMouseDown(e, GrabHandleSide.RIGHT)}
+              className="absolute p-0.5 top-1/2 opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-opacity -translate-y-1/2 right-1 cursor-ew-resize"
+            >
+              <div className="h-16 w-1.5 bg-white/80 border-border/50 shadow-sm shadow-black/50 rounded-full " />
+            </div>
+          </>
+        )}
       </div>
     </NodeViewWrapper>
   );
