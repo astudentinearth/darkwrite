@@ -1,5 +1,4 @@
 import { IconArrowLeft, IconArrowRight } from "@tabler/icons-react";
-import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
