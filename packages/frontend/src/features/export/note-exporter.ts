@@ -6,10 +6,12 @@ import { DarkwriteAPIClient } from "@/api/api-client";
 import type { EditorContent } from "@/features/editor/types";
 import { HtmlDocumentBuilder } from "@/features/export/html-document-builder";
 import { resolveDocument, resolveNote } from "../note/store/fetcher";
+import { selectNoteById } from "../note/store/note-selectors";
 import { getSettingsActions } from "../settings/store/settings-actions";
 import { useAppStore } from "../store/hooks";
 import type { AppStore } from "../store/types";
 import { showExportToast } from "./export-toast";
+import { generateMarkdown } from "./serializers";
 
 export async function documentBodyToHTML(
   content: EditorContent,
@@ -98,10 +100,22 @@ export function getNoteExporter(store: AppStore) {
       .andTee(showExportToast);
   }
 
+  const exportMarkdown = (noteId: string) =>
+    resolveDocument(noteId)
+      .andThen((content) =>
+        DarkwriteAPIClient.note.export(
+          generateMarkdown(content.contents),
+          "md",
+          selectNoteById(store.getState(), noteId)?.title,
+        ),
+      )
+      .andTee(showExportToast);
+
   return {
     exportJSON,
     exportHTML,
     exportPDF,
+    exportMarkdown,
   };
 }
 

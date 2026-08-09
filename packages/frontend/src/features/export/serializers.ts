@@ -1,9 +1,14 @@
 import { generateHTML as tiptapHTML } from "@tiptap/html";
+import { MarkdownManager } from "@tiptap/markdown";
 import _ from "lodash";
 import { DarkwriteAPIClient } from "@/api/api-client";
-import { CodeBlockExtension, ImageExtension } from "./extensions";
-import { DefaultEditorExtensions } from "./extensions/default";
-import { Block, type EditorContent } from "./types";
+import {
+  CodeBlockExtension,
+  DefaultEditorExtensions,
+  DefaultMarkdownOptions,
+  ImageExtension,
+} from "@/features/editor/extensions";
+import { Block, type EditorContent } from "@/features/editor/types";
 
 const defaultExtensions = [
   ...DefaultEditorExtensions,
@@ -45,9 +50,21 @@ export async function hydrateImages(content: EditorContent) {
   // biome-ignore-end lint/style/noNonNullAssertion: images cannot exist without it
 }
 
-export const generateHTML = (content: EditorContent) => {
+const safeDocument = (content: EditorContent): EditorContent => {
   const copy = _.cloneDeep(content);
   copy.type ??= "doc";
   copy.content ??= [];
-  return tiptapHTML(copy, defaultExtensions);
+  return copy;
+};
+
+export const generateHTML = (content: EditorContent) => {
+  return tiptapHTML(safeDocument(content), defaultExtensions);
+};
+
+export const generateMarkdown = (content: EditorContent) => {
+  const md = new MarkdownManager({
+    extensions: defaultExtensions,
+    ...DefaultMarkdownOptions,
+  });
+  return md.serialize(safeDocument(content));
 };

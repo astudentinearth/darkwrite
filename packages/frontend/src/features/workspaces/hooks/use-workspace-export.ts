@@ -1,7 +1,7 @@
 import { ResultAsync } from "neverthrow";
 import { useState } from "react";
 import { DarkwriteAPIClient } from "@/api/api-client";
-import { generateHTML } from "@/features/editor/html-export";
+import { generateHTML } from "@/features/export/serializers";
 import { useCurrentWorkspaceId } from "./use-workspace";
 
 function exportWorkspace(workspaceId: string, _generator = generateHTML) {

@@ -1,5 +1,5 @@
 import { TooltipTrigger } from "@radix-ui/react-tooltip";
-import { IconMenu2 } from "@tabler/icons-react";
+import { IconMarkdown, IconMenu2 } from "@tabler/icons-react";
 import {
   Download,
   FileCode,
@@ -68,6 +68,10 @@ function EditorMenuContent({ noteId }: { noteId: string }) {
           <DropdownMenuItem onSelect={actions.exportJSON}>
             <FileText size={18} />
             {t("editor.menu.jsonExport")}
+          </DropdownMenuItem>
+          <DropdownMenuItem onSelect={actions.exportMarkdown}>
+            <IconMarkdown size={18} />
+            Markdown
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem onSelect={actions.exportPDF}>

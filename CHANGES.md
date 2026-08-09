@@ -1,4 +1,7 @@
 # 1.2.5-beta.1
+## 🌟 Features
+- Add Markdown export (#32)
+
 ## ✨ Improvements and fixes
 - Security updates for dependencies
 
@@ -6,7 +9,7 @@
 - Upgrade to Electron 43
 
 # 1.2.4-beta.1
-## 🌟 Feature
+## 🌟 Features
 - Updated sidebar
 - Revamped parent tree dropdown
 - Menu bar now includes the `Help` section (macOS users can search the menu bar)

@@ -24,6 +24,8 @@ export const useNoteContextMenu = (noteId: string) => {
     exporter.exportJSON(noteId);
   };
 
+  const exportMarkdown = () => exporter.exportMarkdown(noteId);
+
   const newSubpage = () => {
     if (!note) return;
     dispatch(createNote({ navigateAfter: true, parentId: note.id }));
@@ -50,5 +52,6 @@ export const useNoteContextMenu = (noteId: string) => {
     exportPDF,
     move,
     openInCenter,
+    exportMarkdown,
   };
 };

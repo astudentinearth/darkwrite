@@ -29,6 +29,7 @@ export interface EditorMenuActions {
   exportHTML: () => DwResultAsync<string | undefined>;
   exportJSON: () => DwResultAsync<string | undefined>;
   exportPDF: () => DwResultAsync<string | undefined>;
+  exportMarkdown: () => DwResultAsync<string | undefined>;
   importNotes: () => void;
   undo: () => void;
   redo: () => void;
@@ -60,6 +61,7 @@ export default function useEditorMenu(noteId: string): UseEditorMenuResult {
     exportHTML: () => NoteExporter.exportHTML(noteId),
     exportJSON: () => NoteExporter.exportJSON(noteId),
     exportPDF: () => NoteExporter.exportPDF(noteId),
+    exportMarkdown: () => NoteExporter.exportMarkdown(noteId),
     importNotes: importer.importNotes,
     move: () => MoveNoteDialogPortal(dispatch).showMoveNoteDialog(noteId),
     undo: () =>

@@ -1,3 +1,4 @@
+import { IconMarkdown } from "@tabler/icons-react";
 import {
   Copy,
   FileCode,
@@ -74,6 +75,10 @@ export function NoteContextMenuContainer({
         <ContextMenuItem onSelect={actions.exportJSON}>
           <FileText size={18} />
           {_t("editor.menu.jsonExport")}
+        </ContextMenuItem>
+        <ContextMenuItem onSelect={actions.exportMarkdown}>
+          <IconMarkdown size={18} />
+          Markdown
         </ContextMenuItem>
         <ContextMenuItem onSelect={actions.exportPDF}>
           <FileText size={18} />

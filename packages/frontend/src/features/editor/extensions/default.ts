@@ -7,6 +7,7 @@ import { TaskList } from "@tiptap/extension-task-list";
 import { TextStyleKit } from "@tiptap/extension-text-style";
 import { Underline } from "@tiptap/extension-underline";
 import { CharacterCount } from "@tiptap/extensions";
+import { Markdown } from "@tiptap/markdown";
 import { ReactMarkViewRenderer } from "@tiptap/react";
 import { StarterKit } from "@tiptap/starter-kit";
 import AutoJoiner from "tiptap-extension-auto-joiner";
@@ -18,6 +19,12 @@ import { Block } from "../types";
 import { KeymapFixer } from "./keymap-patcher";
 import { LinkToPage } from "./link-to-page";
 import TableExtensions from "./table/table-extension";
+
+export const DefaultMarkdownOptions = {
+  indentation: { style: "space" as const, size: 2 },
+};
+
+const markdown = Markdown.configure(DefaultMarkdownOptions);
 
 export const starterKit = StarterKit.configure({
   bulletList: {
@@ -149,4 +156,5 @@ export const DefaultEditorExtensions = [
   characterCount,
   fileLink,
   ...TableExtensions,
+  markdown,
 ];
