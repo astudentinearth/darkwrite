@@ -53,5 +53,6 @@
     category: "Productivity",
     artifactName: "${productName}.${ext}",
     icon: "resources/icons/",
+    executableName: "darkwrite"
   },
 }
