@@ -42,3 +42,7 @@ export async function collectPackageLicenses() {
   }
   await fs.writeFile(OUTPUT_LICENSE_PATH, output, "utf-8");
 }
+
+//FIXME: doesn't work with tsx (transforms to cjs), run with bun until fixed
+if(import.meta.main) collectPackageLicenses();
+
