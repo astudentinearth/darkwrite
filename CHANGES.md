@@ -1,5 +1,9 @@
-# Unreleased
-`// todo`
+# 1.2.5-beta.1
+## ✨ Improvements and fixes
+- Security updates for dependencies
+
+## 🛠️ Technical changes
+- Upgrade to Electron 43
 
 # 1.2.4-beta.1
 ## 🌟 Feature

@@ -55,7 +55,7 @@
     "@types/semver": "^7.7.1",
     "@vitest/coverage-v8": "^4.1.7",
     "drizzle-kit": "^0.31.9",
-    "electron": "42.2.0",
+    "electron": "^43",
     "electron-builder": "^26.11.1",
     "electron-devtools-installer": "^3.2.1",
     "vite-plugin-electron": "^0.29.0"
