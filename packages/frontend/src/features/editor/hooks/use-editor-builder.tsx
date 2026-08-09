@@ -22,9 +22,10 @@ export default function useEditorBuilder() {
   const isDragging = useRef(false);
 
   const placeholder = Placeholder.configure({
-    includeChildren: true,
+    includeChildren: false,
     placeholder: () => t("editor.placeholder"),
     showOnlyCurrent: true,
+    showOnlyWhenEditable: true,
   });
 
   const extensions = useMemo(

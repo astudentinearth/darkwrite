@@ -1,5 +1,9 @@
 # Unreleased
-`// todo`
+## 🐛 Known issues
+- "Press '/' for commands" placeholder no longer renders in lists/tables/child nodes. This had to be turned off to fix a way more annoying issue introduced by the TipTap update. This might be fixed later, but it's not urgent.
+
+## 🛠️ Technical changes
+- Update TipTap (3.22 -> 3.29)
 
 # 1.2.4-beta.1
 ## 🌟 Feature
