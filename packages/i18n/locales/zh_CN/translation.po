@@ -1,0 +1,818 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: i18next-conv\n"
+"mime-version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"Language: zh_CN\n"
+
+msgid "sidebar.button.newPage"
+msgstr "新建笔记"
+
+msgid "sidebar.button.home"
+msgstr "主页"
+
+msgid "sidebar.button.settings"
+msgstr "设置"
+
+msgid "sidebar.button.trash"
+msgstr "回收站"
+
+msgid "sidebar.button.hideSidebar"
+msgstr "隐藏侧边栏"
+
+msgid "sidebar.button.showSidebar"
+msgstr "显示侧边栏"
+
+msgid "sidebar.button.editSidebar"
+msgstr "编辑侧边栏"
+
+msgid "sidebar.button.search"
+msgstr "搜索"
+
+msgid "sidebar.button.menu"
+msgstr "菜单"
+
+msgid "sidebar.workspace.offline"
+msgstr "本地设备"
+
+msgid "sidebar.workspace.cloud"
+msgstr "云端"
+
+msgid "sidebar.workspace.newWorkspace"
+msgstr "创建新工作区"
+
+msgid "sidebar.workspace.newWorkspaceError"
+msgstr "创建工作区失败"
+
+msgid "sidebar.workspace.offlineHeading"
+msgstr "本地设备工作区"
+
+msgid "sidebar.workspace.cloudHeading"
+msgstr "云端工作区"
+
+msgid "sidebar.workspace.currentWorkspace"
+msgstr "当前工作区"
+
+msgid "sidebar.title.favorites"
+msgstr "收藏夹"
+
+msgid "sidebar.title.allNotes"
+msgstr "全部笔记"
+
+msgid "sidebar.favorites.emptyHint"
+msgstr "暂无收藏笔记，点击星星 ⭐ 图标置顶笔记，或将笔记拖拽至此处。"
+
+msgid "sidebar.trash.title"
+msgstr "回收站"
+
+msgid "sidebar.trash.restore"
+msgstr "恢复"
+
+msgid "sidebar.trash.delete"
+msgstr "永久删除"
+
+msgid "sidebar.trash.search"
+msgstr "在回收站中搜索"
+
+msgid "sidebar.trash.empty"
+msgstr "清空回收站"
+
+msgid "sidebar.notes.contextmenu.addFavorite"
+msgstr "添加到收藏"
+
+msgid "sidebar.notes.contextmenu.removeFavorite"
+msgstr "取消收藏"
+
+msgid "sidebar.notes.contextmenu.newSubpage"
+msgstr "新建子页面"
+
+msgid "sidebar.notes.contextmenu.moveTo"
+msgstr "移动至"
+
+msgid "sidebar.notes.contextmenu.duplicate"
+msgstr "复制副本"
+
+msgid "sidebar.notes.contextmenu.export"
+msgstr "导出"
+
+msgid "sidebar.notes.contextmenu.trash"
+msgstr "移至回收站"
+
+msgid "sidebar.notes.contextmenu.lastModified"
+msgstr "上次编辑："
+
+msgid "sidebar.notes.contextmenu.openInCenter"
+msgstr "在中央视图打开"
+
+msgid "sidebar.notes.noPages"
+msgstr "暂无页面。"
+
+msgid "defaults.pageTitle"
+msgstr "无标题"
+
+msgid "home.welcome"
+msgstr "欢迎回来"
+
+msgid "home.recents"
+msgstr "最近笔记"
+
+msgid "home.noPages"
+msgstr "你还没有创建任何页面。"
+
+msgid "home.recentsEmpty"
+msgstr "这里空空如也，创建第一条笔记开始使用吧！"
+
+msgid "home.createPage"
+msgstr "新建页面"
+
+msgid "settings.workspace.title"
+msgstr "工作区"
+
+msgid "settings.workspace.exportAllText"
+msgstr "将全部笔记导出为 HTML"
+
+msgid "settings.workspace.exportAllButton"
+msgstr "导出所有笔记"
+
+msgid "settings.workspace.backupAndRestoreText"
+msgstr "数据备份与恢复"
+
+msgid "settings.workspace.backupButton"
+msgstr "备份"
+
+msgid "settings.workspace.restoreButton"
+msgstr "恢复"
+
+msgid "settings.workspace.exporting"
+msgstr "正在导出..."
+
+msgid "settings.workspace.restoreDialog.title"
+msgstr "恢复备份"
+
+msgid "settings.workspace.restoreDialog.description"
+msgstr "你可以恢复应用数据备份。"
+
+msgid "settings.workspace.restoreDialog.warningText"
+msgstr "恢复备份后，当前所有数据将被备份文件完全覆盖，不会合并新旧数据。"
+
+msgid "settings.workspace.restoreDialog.chooseFile"
+msgstr "选择文件"
+
+msgid "settings.workspace.restoreDialog.cancel"
+msgstr "取消"
+
+msgid "settings.workspace.restoreDialog.restore"
+msgstr "恢复"
+
+msgid "settings.workspace.languageText"
+msgstr "语言"
+
+msgid "settings.workspace.startupBehaviourText"
+msgstr "启动行为"
+
+msgid "settings.workspace.startupBehaviour.openHome"
+msgstr "始终打开主页"
+
+msgid "settings.workspace.startupBehaviour.openLastPage"
+msgstr "恢复上次浏览页面"
+
+msgid "settings.workspace.startupBehaviour.openSpecificPage"
+msgstr "打开指定页面"
+
+msgid "settings.workspace.deleteWorkspace"
+msgstr "删除工作区"
+
+msgid "settings.workspace.deleteWorkspaceDialog.title"
+msgstr "删除工作区"
+
+msgid "settings.workspace.deleteWorkspaceDialog.description"
+msgstr "此操作不可撤销，该工作区内全部笔记将被永久清除。"
+
+msgid "settings.workspace.deleteWorkspaceDialog.confirmLabel"
+msgstr "输入「{{name}}」确认："
+
+msgid "settings.workspace.deleteWorkspaceDialog.cancel"
+msgstr "取消"
+
+msgid "settings.workspace.deleteWorkspaceDialog.delete"
+msgstr "删除工作区"
+
+msgid "settings.workspace.deleteWorkspaceDialog.successMessage"
+msgstr "工作区删除成功。"
+
+msgid "settings.workspace.deleteWorkspaceDialog.errorMessage"
+msgstr "删除工作区失败。"
+
+msgid "settings.workspace.editWorkspace"
+msgstr "编辑工作区"
+
+msgid "settings.workspace.editWorkspaceDialog.title"
+msgstr "编辑工作区"
+
+msgid "settings.workspace.editWorkspaceDialog.changeIcon"
+msgstr "更换图标"
+
+msgid "settings.workspace.editWorkspaceDialog.removeIcon"
+msgstr "移除图标"
+
+msgid "settings.workspace.editWorkspaceDialog.workspaceName"
+msgstr "工作区名称"
+
+msgid "settings.workspace.editWorkspaceDialog.save"
+msgstr "保存"
+
+msgid "settings.workspace.editWorkspaceDialog.cancel"
+msgstr "取消"
+
+msgid "settings.workspace.alwaysShowWordCount"
+msgstr "始终显示字数统计"
+
+msgid "settings.workspace.codeBlockIndentSize"
+msgstr "代码块缩进空格数"
+
+msgid "settings.workspace.codeBlockIndentSizeDescription"
+msgstr "按下Tab⇥键时插入的空格数量。"
+
+msgid "settings.workspace.showRtlControls"
+msgstr "编辑器工具栏显示文字方向切换控件"
+
+msgid "settings.workspace.openFilesOnDoubleClick"
+msgstr "双击打开链接文件"
+
+msgid "settings.appearance.title"
+msgstr "外观"
+
+msgid "settings.appearance.colorThemeText"
+msgstr "色彩主题"
+
+msgid "settings.appearance.importTooltip"
+msgstr "导入主题"
+
+msgid "settings.appearance.accentColorText"
+msgstr "强调色"
+
+msgid "settings.appearance.useSystemWindowFrame"
+msgstr "使用系统窗口边框（重启生效）"
+
+msgid "settings.appearance.useSystemAccentColor"
+msgstr "跟随系统强调色（仅Windows/macOS可用）"
+
+msgid "settings.appearance.useSystemAccentColorDescription"
+msgstr "在 Windows 开启自动系统强调色时，该选项可能无法正常生效。"
+
+msgid "settings.appearance.lightMode"
+msgstr "浅色"
+
+msgid "settings.appearance.systemMode"
+msgstr "跟随系统"
+
+msgid "settings.appearance.darkMode"
+msgstr "深色"
+
+msgid "settings.appearance.lightColorScheme"
+msgstr "浅色主题配色"
+
+msgid "settings.appearance.darkColorScheme"
+msgstr "深色主题配色"
+
+msgid "settings.appearance.compactSidebar"
+msgstr "紧凑侧边栏布局"
+
+msgid "settings.appearance.compactSidebarDescription"
+msgstr "侧边栏可展示更多笔记条目"
+
+msgid "settings.fonts.title"
+msgstr "字体"
+
+msgid "settings.fonts.uiText"
+msgstr "界面字体"
+
+msgid "settings.fonts.sansText"
+msgstr "无衬线字体："
+
+msgid "settings.fonts.serifText"
+msgstr "衬线字体："
+
+msgid "settings.fonts.monoText"
+msgstr "等宽字体："
+
+msgid "settings.fonts.applyButton"
+msgstr "应用"
+
+msgid "settings.fonts.systemDefault"
+msgstr "系统默认"
+
+msgid "settings.experimental.title"
+msgstr "实验性功能"
+
+msgid "settings.experimental.enableCustomTitlebarOnMac"
+msgstr "macOS 启用自定义标题栏（重启生效）"
+
+msgid "settings.about.title"
+msgstr "关于"
+
+msgid "settings.about.sourceCode"
+msgstr "源代码"
+
+msgid "settings.about.reportBugs"
+msgstr "反馈Bug"
+
+msgid "settings.about.checkUpdates"
+msgstr "检查更新"
+
+msgid "settings.about.checkUpdatesPending"
+msgstr "正在检查更新..."
+
+msgid "settings.about.website"
+msgstr "官方网站"
+
+msgid "settings.about.privacy"
+msgstr "隐私政策"
+
+msgid "settings.about.license"
+msgstr "开源协议（AGPL v3）"
+
+msgid "settings.privacy.autoUpdateCheckLabel"
+msgstr "启动时自动检查更新"
+
+msgid "editor.menu.checkSpelling"
+msgstr "拼写检查"
+
+msgid "editor.menu.readerMode"
+msgstr "阅读模式"
+
+msgid "editor.readerMode.enable"
+msgstr "开启阅读模式"
+
+msgid "editor.readerMode.disable"
+msgstr "关闭阅读模式"
+
+msgid "editor.menu.export"
+msgstr "导出"
+
+msgid "editor.menu.import"
+msgstr "导入"
+
+msgid "editor.menu.duplicate"
+msgstr "复制页面"
+
+msgid "editor.menu.wordCount"
+msgstr "共 {{count}} 字"
+
+msgid "editor.menu.undo"
+msgstr "撤销"
+
+msgid "editor.menu.redo"
+msgstr "重做"
+
+msgid "editor.menu.imageWarning"
+msgstr "目前导出暂不支持包含图片。"
+
+msgid "editor.menu.jsonExport"
+msgstr "Darkwrite文档（JSON格式）"
+
+msgid "editor.menu.htmlExport"
+msgstr "纯 HTML 文件"
+
+msgid "editor.menu.tooltip"
+msgstr "更多选项"
+
+msgid "editor.database.newView.titleLabel"
+msgstr "视图名称"
+
+msgid "editor.database.newView.cancel"
+msgstr "取消"
+
+msgid "editor.database.newView.create"
+msgstr "创建"
+
+msgid "editor.database.newView.dataSource"
+msgstr "数据源"
+
+msgid "editor.database.picker.placeholder"
+msgstr "选择数据库"
+
+msgid "editor.slashCommand.text"
+msgstr "纯文本"
+
+msgid "editor.slashCommand.textDescription"
+msgstr "用于普通文字内容。"
+
+msgid "editor.slashCommand.toDoList"
+msgstr "待办清单"
+
+msgid "editor.slashCommand.toDoListDescription"
+msgstr "简易清单记录任务事项。"
+
+msgid "editor.slashCommand.heading1"
+msgstr "一级标题"
+
+msgid "editor.slashCommand.heading1Description"
+msgstr "用于章节大标题，字号最大。"
+
+msgid "editor.slashCommand.heading2"
+msgstr "二级标题"
+
+msgid "editor.slashCommand.heading2Description"
+msgstr "用于小节副标题。"
+
+msgid "editor.slashCommand.heading3"
+msgstr "三级标题"
+
+msgid "editor.slashCommand.heading3Description"
+msgstr "用于细分小标题。"
+
+msgid "editor.slashCommand.heading4"
+msgstr "四级标题"
+
+msgid "editor.slashCommand.heading4Description"
+msgstr "最小层级标题。"
+
+msgid "editor.slashCommand.bulletList"
+msgstr "无序列表"
+
+msgid "editor.slashCommand.bulletListDescription"
+msgstr "无需排序的条目列表。"
+
+msgid "editor.slashCommand.numberedList"
+msgstr "有序列表"
+
+msgid "editor.slashCommand.numberedListDescription"
+msgstr "带编号的有序条目清单。"
+
+msgid "editor.slashCommand.quote"
+msgstr "引用块"
+
+msgid "editor.slashCommand.quoteDescription"
+msgstr "插入引用内容。"
+
+msgid "editor.slashCommand.code"
+msgstr "代码块"
+
+msgid "editor.slashCommand.codeDescription"
+msgstr "在笔记中插入代码片段。"
+
+msgid "editor.slashCommand.divider"
+msgstr "分割线"
+
+msgid "editor.slashCommand.dividerDescription"
+msgstr "添加水平分割线分隔笔记内容。"
+
+msgid "editor.slashCommand.linkToPage"
+msgstr "页面内链"
+
+msgid "editor.slashCommand.linkToPageDescription"
+msgstr "添加可跳转至其他笔记的链接。"
+
+msgid "editor.slashCommand.image"
+msgstr "图片"
+
+msgid "editor.slashCommand.imageDescription"
+msgstr "嵌入图片。"
+
+msgid "editor.slashCommand.table"
+msgstr "表格"
+
+msgid "editor.slashCommand.tableDescription"
+msgstr "插入标准表格"
+
+msgid "editor.slashCommand.fileLink"
+msgstr "文件链接"
+
+msgid "editor.slashCommand.fileLinkDescription"
+msgstr "关联本地文件，方便快速打开。"
+
+msgid "editor.bubble.h1"
+msgstr "一级标题"
+
+msgid "editor.bubble.h2"
+msgstr "二级标题"
+
+msgid "editor.bubble.h3"
+msgstr "三级标题"
+
+msgid "editor.bubble.h4"
+msgstr "四级标题"
+
+msgid "editor.bubble.clearHeading"
+msgstr "清除标题格式"
+
+msgid "editor.bubble.removeLink"
+msgstr "移除链接"
+
+msgid "editor.bubble.saveLink"
+msgstr "保存链接"
+
+msgid "editor.bubble.linkPlaceholder"
+msgstr "粘贴链接或搜索页面"
+
+msgid "editor.bubble.bulletList"
+msgstr "无序列表"
+
+msgid "editor.bubble.numberedList"
+msgstr "有序列表"
+
+msgid "editor.bubble.toDoList"
+msgstr "待办清单"
+
+msgid "editor.bubble.bold"
+msgstr "加粗"
+
+msgid "editor.bubble.italic"
+msgstr "斜体"
+
+msgid "editor.bubble.underline"
+msgstr "下划线"
+
+msgid "editor.bubble.strike"
+msgstr "删除线"
+
+msgid "editor.bubble.code"
+msgstr "行内代码"
+
+msgid "editor.bubble.blockquote"
+msgstr "引用"
+
+msgid "editor.bubble.textDirection.label"
+msgstr "文字方向"
+
+msgid "editor.bubble.textDirection.ltr"
+msgstr "从左到右"
+
+msgid "editor.bubble.textDirection.rtl"
+msgstr "从右到左"
+
+msgid "editor.bubble.textDirection.auto"
+msgstr "自动"
+
+msgid "editor.table.addColBefore"
+msgstr "在左侧插入列"
+
+msgid "editor.table.addColAfter"
+msgstr "在右侧插入列"
+
+msgid "editor.table.deleteCol"
+msgstr "删除列"
+
+msgid "editor.table.addRowBefore"
+msgstr "在上方插入行"
+
+msgid "editor.table.addRowAfter"
+msgstr "在下方插入行"
+
+msgid "editor.table.deleteRow"
+msgstr "删除行"
+
+msgid "editor.table.headerRow"
+msgstr "切换表头行"
+
+msgid "editor.table.headerCol"
+msgstr "切换表头列"
+
+msgid "editor.table.delete"
+msgstr "删除表格"
+
+msgid "editor.customizations.sansText"
+msgstr "无衬线"
+
+msgid "editor.customizations.serifText"
+msgstr "衬线"
+
+msgid "editor.customizations.monoText"
+msgstr "等宽"
+
+msgid "editor.customizations.customText"
+msgstr "自定义"
+
+msgid "editor.customizations.backgroundColorText"
+msgstr "背景色"
+
+msgid "editor.customizations.foregroundColorText"
+msgstr "默认文字颜色"
+
+msgid "editor.customizations.customFontNamePlaceholer"
+msgstr "输入自定义字体名称"
+
+msgid "editor.customizations.widePage"
+msgstr "铺满页面宽度"
+
+msgid "editor.customizations.tooltip"
+msgstr "自定义页面外观"
+
+msgid "editor.blocks.linkToPage.placeholder"
+msgstr "选择一条笔记"
+
+msgid "editor.blocks.linkToPage.turnIntoInlineLink"
+msgstr "转为行内链接"
+
+msgid "editor.blocks.fileLink.placeholder"
+msgstr "选择文件以快速访问"
+
+msgid "editor.blocks.fileLink.open"
+msgstr "打开"
+
+msgid "editor.blocks.fileLink.copyPath"
+msgstr "复制完整路径"
+
+msgid "editor.blocks.fileLink.revealInFolder"
+msgstr "在文件夹中显示"
+
+msgid "editor.blocks.fileLink.changeFile"
+msgstr "更换文件"
+
+msgid "editor.cover.changeCover"
+msgstr "更换封面"
+
+msgid "editor.cover.removeCover"
+msgstr "移除封面"
+
+msgid "editor.cover.addIcon"
+msgstr "添加图标"
+
+msgid "editor.cover.removeIcon"
+msgstr "移除图标"
+
+msgid "editor.cover.addCover"
+msgstr "添加封面"
+
+msgid "editor.cover.trashWarning"
+msgstr "该页面目前存放在回收站中。"
+
+msgid "editor.placeholder"
+msgstr "输入 '/' 唤起命令菜单"
+
+msgid "search.placeholder"
+msgstr "搜索你的笔记"
+
+msgid "search.chooserPlaceholder"
+msgstr "选择一条笔记"
+
+msgid "search.noResult"
+msgstr "无搜索结果"
+
+msgid "toast.update.description"
+msgstr "有新版本可用：{{version}}"
+
+msgid "toast.update.releasePageButton"
+msgstr "查看更新详情"
+
+msgid "toast.update.upToDate"
+msgstr "Darkwrite 已是最新版本。"
+
+msgid "toast.movePage.success"
+msgstr "页面移动完成。"
+
+msgid "toast.movePage.error"
+msgstr "页面移动失败。"
+
+msgid "toast.clearTrash.success"
+msgstr "回收站已清空"
+
+msgid "toast.clearTrash.error"
+msgstr "清空回收站失败。"
+
+msgid "toast.restorePage.success"
+msgstr "页面已从回收站恢复。"
+
+msgid "toast.restorePage.error"
+msgstr "恢复页面失败。"
+
+msgid "toast.deletePage.success"
+msgstr "页面已删除。"
+
+msgid "toast.deletePage.error"
+msgstr "删除页面失败"
+
+msgid "toast.trashPage.success"
+msgstr "页面已移入回收站。"
+
+msgid "toast.trashPage.error"
+msgstr "将页面移入回收站失败。"
+
+msgid "toast.exportPage.success"
+msgstr "页面导出完成。"
+
+msgid "toast.exportPage.error"
+msgstr "页面导出失败。"
+
+msgid "titlebar.noPagesAbove"
+msgstr "上方无页面。"
+
+msgid "onboarding.chooseLanguage"
+msgstr "选择语言开始使用。"
+
+msgid "onboarding.welcome"
+msgstr "欢迎使用 Darkwrite"
+
+msgid "onboarding.welcomeDesc"
+msgstr "让我们创建你的第一个工作区"
+
+msgid "onboarding.nameWorkspaceHint"
+msgstr "为工作区命名"
+
+msgid "onboarding.themeTitle"
+msgstr "个性化你的界面"
+
+msgid "onboarding.themeDesc"
+msgstr "选择一个主题，你可随时在设置中更换。"
+
+msgid "onboarding.finishedHeading"
+msgstr "全部设置完成。"
+
+msgid "onboarding.finishedDesc"
+msgstr "专属个人工作区已准备就绪，祝你写作愉快！"
+
+msgid "onboarding.letsBegin"
+msgstr "开始使用"
+
+msgid "onboarding.checkForUpdates"
+msgstr "启动时自动检查更新"
+
+msgid "ui.font.typeFontName"
+msgstr "输入字体名称"
+
+msgid "ui.font.search"
+msgstr "搜索字体"
+
+msgid "ui.font.placeholder"
+msgstr "选择字体"
+
+msgid "ui.moveToDialog.title"
+msgstr "将 <0></0> 移动至："
+
+msgid "ui.clearTrashDialog.title"
+msgstr "清空回收站"
+
+msgid "ui.clearTrashDialog.description"
+msgstr "确定要永久删除回收站内所有笔记吗？此操作无法撤销。"
+
+msgid "ui.clearTrashDialog.cancel"
+msgstr "取消"
+
+msgid "ui.clearTrashDialog.clear"
+msgstr "清空回收站"
+
+msgid "ui.contextmenu.copy"
+msgstr "复制"
+
+msgid "ui.contextmenu.cut"
+msgstr "剪切"
+
+msgid "ui.contextmenu.paste"
+msgstr "粘贴"
+
+msgid "ui.contextmenu.delete"
+msgstr "删除"
+
+msgid "ui.contextmenu.downloadImage"
+msgstr "下载图片"
+
+msgid "ui.contextmenu.resetImageSize"
+msgstr "重置尺寸"
+
+msgid "ui.contextmenu.selectAll"
+msgstr "全选"
+
+msgid "ui.contextmenu.pasteWithoutFormatting"
+msgstr "无格式粘贴"
+
+msgid "ui.contextmenu.fixSpelling"
+msgstr "修正拼写"
+
+msgid "ui.showInFolder"
+msgstr "在文件管理器中打开"
+
+msgid "ui.history.back"
+msgstr "后退"
+
+msgid "ui.history.forward"
+msgstr "前进"
+
+msgid "menu.newNote"
+msgstr "新建笔记"
+
+msgid "menu.tools"
+msgstr "工具"
+
+msgid "menu.alwaysOnTop"
+msgstr "窗口置顶"
+
+msgid "menu.openDataDirectory"
+msgstr "打开数据目录"
+
+msgid "menu.history"
+msgstr "历史记录"
+
+msgid "menu.back"
+msgstr "后退"
+
+msgid "menu.forward"
+msgstr "前进"
+
+msgid "menu.help.reportBugs"
+msgstr "提交问题反馈"
+
+msgid "menu.help.website"
+msgstr "访问 Darkwrite 官网"
