@@ -66,7 +66,7 @@ For everything else, see [the docs folder](docs)
 
 ## Contributing
 
-We are not ready to accept code contributions yet, as the app is still evolving rapidly. However, feature requests, bug reports, or anything else you think could be helpful, are welcome and encouraged❤️
+See [CONTRIBUTING.md](./CONTRIBUTING.md) to get started❤️
 
 Feel free to raise an issue or discussion if you have any questions.
 
