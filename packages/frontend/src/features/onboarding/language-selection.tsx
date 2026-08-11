@@ -31,6 +31,10 @@ export default function LanguageSelection() {
       <OnboardingButton onClick={() => _continue("tr")} className="w-45">
         Türkçe
       </OnboardingButton>
+      <div className="h-2" />
+      <OnboardingButton onClick={() => _continue("zh-CN")} className="w-45">
+        简体中文
+      </OnboardingButton>
     </div>
   );
 }

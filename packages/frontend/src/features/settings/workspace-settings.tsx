@@ -1,4 +1,4 @@
-import type { WorkspaceDTO } from "@darkwrite/common";
+import type { Workspace } from "@darkwrite/common";
 import {
   Archive,
   Cloud,
@@ -9,7 +9,16 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Button, Input, Label, Switch } from "@/components/ui";
+import {
+  Button,
+  Input,
+  Label,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  Switch,
+} from "@/components/ui";
 import WorkspaceIcon from "@/components/workspace-icon";
 import useBackup from "@/features/backup/hooks/use-backup";
 import { useWorkspaceExport } from "@/features/workspaces/hooks/use-workspace-export";
@@ -24,6 +33,12 @@ import { RestoreDataDialog } from "./restore-dialog";
 import SettingsCard from "./settings-card";
 import { useSettingsActions } from "./store/settings-actions";
 
+const LocaleNameMap: Record<string, string> = {
+  en: "English",
+  tr: "Türkçe",
+  "zh-CN": "简体中文",
+};
+
 export default function WorkspaceSettings() {
   const currentWorkspace = useCurrentWorkspace();
   const workspaceCount = useAppSelector((state) => selectWorkspaceCount(state));
@@ -34,7 +49,7 @@ export default function WorkspaceSettings() {
   });
   const { t, i18n } = useTranslation();
   const dispatch = useAppDispatch();
-  const save = (w: WorkspaceDTO) => {
+  const save = (w: Workspace) => {
     dispatch(updateWorkspace(w.id, w)).map(() => setEditDialogOpen(false));
   };
   const settings = useSettings();
@@ -112,20 +127,19 @@ export default function WorkspaceSettings() {
             <Languages className="size-5" />
             {t("settings.workspace.languageText")}
           </Label>
-          <div className="flex gap-2">
-            <Button
-              onClick={() => i18n.changeLanguage("en")}
-              variant={i18n.language === "en" ? "default" : "secondary"}
-            >
-              English
-            </Button>
-            <Button
-              onClick={() => i18n.changeLanguage("tr")}
-              variant={i18n.language === "tr" ? "default" : "secondary"}
-            >
-              Türkçe
-            </Button>
-          </div>
+          <Select
+            value={i18n.language}
+            onValueChange={(value) => i18n.changeLanguage(value)}
+          >
+            <SelectTrigger className="w-fit bg-secondary/50 top-highlight">
+              {LocaleNameMap[i18n.language]}
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="en">English</SelectItem>
+              <SelectItem value="tr">Türkçe</SelectItem>
+              <SelectItem value="zh-CN">简体中文</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
       </SettingsCard>
       <SettingsCard>

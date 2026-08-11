@@ -1,5 +1,6 @@
 import en from "@darkwrite/i18n/locales/en/translation.json";
 import tr from "@darkwrite/i18n/locales/tr/translation.json";
+import zhCN from "@darkwrite/i18n/locales/zh_CN/translation.json";
 import { createInstance } from "i18next";
 
 const i18n = createInstance();
@@ -12,6 +13,7 @@ export function initI18n(language: string) {
     resources: {
       en: { translation: en },
       tr: { translation: tr },
+      "zh-CN": { translation: zhCN },
     },
   });
 }
