@@ -1,3 +1,7 @@
+# 1.2.5-beta.2
+## 🌟 Features
+- Add Simplified Chinese translations (by @wcxu21) (#37)
+
 # 1.2.5-beta.1
 ## 🌟 Features
 - Add Markdown export (#32)

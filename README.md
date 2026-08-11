@@ -70,6 +70,9 @@ See [CONTRIBUTING.md](./CONTRIBUTING.md) to get started❤️
 
 Feel free to raise an issue or discussion if you have any questions.
 
+### Translators
+- Simplified Chinese contributed by @wcxu21
+
 ## License
 
 Darkwrite is free and open source, licensed under GNU Affero General Public License, version 3 or any later version at your option.  
