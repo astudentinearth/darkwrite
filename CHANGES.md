@@ -2,6 +2,7 @@
 ## ✨ Improvements and fixes
 - Disable "Always on top" menu item on Wayland
     - [Wayland doesn't support it](https://github.com/electron/electron/pull/50560). Use the window menu of your desktop environment instead. For example, KDE users can hit `ALT+F3` or right click the titlebar and pick "Keep Above Others".
+- Fix disappearing workspace icon when the edit workspace dialog is closed and reopened
 
 # 1.2.5-beta.2
 ## 🌟 Features

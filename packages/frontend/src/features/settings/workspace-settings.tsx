@@ -99,6 +99,7 @@ export default function WorkspaceSettings() {
               onOpenChange={setEditDialogOpen}
               workspace={currentWorkspace}
               onSave={save}
+              key={`${currentWorkspace.id}:${editDialogOpen}`}
             >
               <Button variant={"secondary"} className="w-fit">
                 <PenLine size={18} />
