@@ -1,11 +1,12 @@
 import {
   app,
   BrowserWindow,
+  type MenuItemConstructorOptions as ElectronMenuItem,
   Menu,
-  type MenuItemConstructorOptions,
   shell,
 } from "electron";
 import meta from "@/metadata.json";
+import { isWayland } from "./desktop-integration/linux";
 import { t } from "./i18n";
 import { AppMenuEvent } from "./types/window-events";
 
@@ -14,12 +15,12 @@ const HistoryAccelerators = {
   forward: process.platform === "darwin" ? "Cmd+]" : "Alt+Right",
 };
 
-function buildTemplate(): MenuItemConstructorOptions[] {
+function buildTemplate(): ElectronMenuItem[] {
   // carry the checkbox state over when the menu is rebuilt
   const alwaysOnTop =
     Menu.getApplicationMenu()?.getMenuItemById("alwaysontop")?.checked ?? false;
 
-  const template: Array<MenuItemConstructorOptions> = [
+  const template: Array<ElectronMenuItem> = [
     {
       role: "fileMenu",
       submenu: [
@@ -49,6 +50,7 @@ function buildTemplate(): MenuItemConstructorOptions[] {
           },
           checked: alwaysOnTop,
           type: "checkbox",
+          enabled: !isWayland,
         },
         {
           label: t("menu.openDataDirectory"),
