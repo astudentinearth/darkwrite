@@ -6,8 +6,10 @@ import {
   stableSortByOrderKeyFn,
 } from "@darkwrite/common";
 import { createSelector, weakMapMemoize } from "@reduxjs/toolkit";
+import Fuse from "fuse.js";
 import type { DragEvent } from "react";
 import { extractNoteDragData } from "@/features/dnd/datatransfer";
+import { selectCurrentWorkspaceId } from "@/features/session/session-selectors";
 import type { RootState } from "@/features/store/types";
 import { notesAdapter } from "./notes-adapter";
 import type { MoveNoteSearchArgs, SearchArgs } from "./types";
@@ -48,6 +50,17 @@ export const selectNoteIdsByParentId = createSelector(
   [selectNotesByParentId],
   (notes) => notes.map((n) => n.id),
   { memoize: weakMapMemoize },
+);
+
+export const selectNotesForSearch = createSelector(
+  [selectCurrentWorkspaceId, selectAllNotes],
+  (workspaceId, notes) =>
+    notes.filter((n) => n.workspaceId === workspaceId && !n.isTrashed),
+);
+
+export const selectFuseInstance = createSelector(
+  [selectNotesForSearch],
+  (notes) => new Fuse(notes, { threshold: 0.4, keys: ["title"] }),
 );
 
 /** This selector returns any and all notes associated with given workspace. */
@@ -129,6 +142,11 @@ export const selectByWorkspaceAndSearchTerm = createSelector(
       .toSorted((a, b) => Rank.sorter(a.orderHint, b.orderHint))
       .map((n) => n.id);
   },
+);
+
+export const searchCurrentWorkspace = createSelector(
+  [selectFuseInstance, (_state: RootState, query: string) => query],
+  (fuse, query) => fuse.search(query).map((r) => r.item.id),
 );
 
 export const selectNoteTitle = createSelector(

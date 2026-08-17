@@ -4,3 +4,5 @@ export const selectAllNotesViewOpen = (state: RootState) =>
   state.session.allNotesViewOpen;
 export const selectFavoritesViewOpen = (state: RootState) =>
   state.session.favoritesViewOpen;
+export const selectCurrentWorkspaceId = (state: RootState) =>
+  state.session.workspaceId ?? "";

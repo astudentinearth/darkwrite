@@ -64,6 +64,7 @@
     "color-convert": "^2.0.1",
     "color-string": "^2.1.2",
     "emoji-mart": "^5.6.0",
+    "fuse.js": "^7.5.0",
     "i18next": "^25.5.3",
     "i18next-browser-languagedetector": "^8.2.0",
     "immer": "^10.1.3",
