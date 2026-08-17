@@ -10,7 +10,7 @@ type CancelledErr = typeof _cancelledError;
 function pickThemeFile(): Result<string, CancelledErr> {
   const path = dialog.showOpenDialogSync(BrowserWindow.getAllWindows()[0], {
     filters: [{ name: "Darkwrite theme", extensions: ["json"] }],
-    properties: ["dontAddToRecent"],
+    properties: ["dontAddToRecent", "openFile"],
   });
   if (!path) return err(_cancelledError);
   return ok(path[0]);
