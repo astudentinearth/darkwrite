@@ -30,7 +30,6 @@ export function useLinkOptions() {
   const { isLink } = useFormattingState(noteId);
   const externalUrl = url?.startsWith("darkwrite://") ? "" : (url ?? "");
   const [query, setQuery] = useState<string>(externalUrl);
-  const { results } = useSearch(query);
 
   const setOpen = (value: boolean) => {
     if (value) {
@@ -69,7 +68,6 @@ export function useLinkOptions() {
     isLink,
     query,
     setQuery,
-    results,
     setLink,
     setLinkToNote,
     removeLink,

@@ -13,6 +13,7 @@ import {
 } from "@/components/ui";
 import { NoteTitle } from "@/features/note/components/note-title";
 import { useNoteById } from "@/features/note/hooks/use-note-by-id";
+import { useSearch } from "@/features/note/hooks/use-search";
 import { cn, getNoteIcon } from "@/lib/utils";
 import { isValidLinkUrl, useLinkOptions } from "../../hooks/use-link-options";
 
@@ -37,6 +38,19 @@ function NoteItem({
   );
 }
 
+function Results({
+  query,
+  onSelect,
+}: {
+  query: string;
+  onSelect: (noteId: string) => void;
+}) {
+  const { results } = useSearch(query);
+  return results.map((noteId) => (
+    <NoteItem key={noteId} noteId={noteId} onSelect={() => onSelect(noteId)} />
+  ));
+}
+
 export function BubbleLink() {
   const { t } = useTranslation(undefined, { keyPrefix: "editor.bubble" });
   const {
@@ -46,7 +60,6 @@ export function BubbleLink() {
     isLink,
     query,
     setQuery,
-    results,
     setLink,
     setLinkToNote,
     removeLink,
@@ -90,13 +103,7 @@ export function BubbleLink() {
               </>
             )}
             <CommandGroup className="px-0">
-              {results.map((noteId) => (
-                <NoteItem
-                  key={noteId}
-                  noteId={noteId}
-                  onSelect={() => setLinkToNote(noteId)}
-                />
-              ))}
+              <Results query={query} onSelect={setLinkToNote} />
             </CommandGroup>
           </CommandList>
         </Command>

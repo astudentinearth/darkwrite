@@ -33,11 +33,16 @@ const SearchItem = memo(function ({ noteId }: { noteId: string }) {
   );
 });
 
+function Results() {
+  const query = useSearchState((s) => s.query);
+  const { results } = useSearch(query);
+  return results.map((id) => <SearchItem key={id} noteId={id} />);
+}
+
 export default function SearchDialog() {
   const open = useSearchState((s) => s.open);
   const query = useSearchState((s) => s.query);
   const { t } = useTranslation();
-  const { results } = useSearch(query);
 
   // biome-ignore lint/style/noNonNullAssertion: ref is always set
   const listRef = useRef<HTMLDivElement>(null!);
@@ -58,9 +63,7 @@ export default function SearchDialog() {
       <CommandList ref={listRef} className="scroll-view">
         <CommandEmpty>{t("search.noResult")}</CommandEmpty>
         <CommandGroup>
-          {results.map((id) => (
-            <SearchItem key={id} noteId={id} />
-          ))}
+          <Results />
         </CommandGroup>
       </CommandList>
     </CommandDialog>

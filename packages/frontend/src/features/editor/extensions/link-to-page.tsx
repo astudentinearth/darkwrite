@@ -55,6 +55,19 @@ const LinkResult = memo(function ({
   );
 });
 
+function Results({
+  query,
+  onSelect,
+}: {
+  query: string;
+  onSelect: (noteId: string) => void;
+}) {
+  const { results } = useSearch(query);
+  return results.map((noteId) => (
+    <LinkResult key={noteId} id={noteId} onSelect={() => onSelect(noteId)} />
+  ));
+}
+
 // TODO: make this type safe
 const LinkComponent = ({
   node,
@@ -71,7 +84,6 @@ const LinkComponent = ({
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
-  const { results } = useSearch(search);
   const { showCenterView } = useEditorActions();
 
   const contextMenu = (e: MouseEvent<HTMLDivElement>) => {
@@ -178,16 +190,13 @@ const LinkComponent = ({
               />
               <CommandList className="p-1 scroll-view">
                 <CommandEmpty>{t("search.noResult")}</CommandEmpty>
-                {results.map((n) => (
-                  <LinkResult
-                    onSelect={() => {
-                      updateAttributes({ noteID: n });
-                      setOpen(false);
-                    }}
-                    key={n}
-                    id={n}
-                  />
-                ))}
+                <Results
+                  onSelect={(noteID) => {
+                    updateAttributes({ noteID });
+                    setOpen(false);
+                  }}
+                  query={search}
+                />
               </CommandList>
             </Command>
           )}
