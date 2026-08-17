@@ -24,6 +24,7 @@ import {
   DRAG_DATA_TYPE,
   extractNoteIdFromDragData,
 } from "@/features/dnd/datatransfer";
+import { NoteTitle } from "@/features/note/components/note-title";
 import { useNoteById } from "@/features/note/hooks/use-note-by-id";
 import { useSearch } from "@/features/note/hooks/use-search";
 import { useAppSelector } from "@/features/store/hooks";
@@ -44,12 +45,12 @@ const LinkResult = memo(function ({
   if (!note) return null;
   return (
     <CommandItem
-      value={`${note.id}$${note.title}`}
+      value={`${note.id} ${note.title}`}
       className="flex gap-2"
       onSelect={onSelect}
     >
       <span className="flex">{getNoteIcon(note.icon)}</span>
-      <span className="flex">{note.title}</span>
+      <NoteTitle className="flex">{note.title}</NoteTitle>
     </CommandItem>
   );
 });
@@ -134,7 +135,7 @@ const LinkComponent = ({
         <PopoverContent
           sticky="always"
           align={"center"}
-          className="p-0 max-h-[30vh] overflow-clip border-border rounded-lg top-highlight bg-view-2/80 backdrop-blur-lg"
+          className="p-0 max-h-[50vh] overflow-clip border-border rounded-lg top-highlight bg-view-2/80 backdrop-blur-lg"
         >
           {note && (
             <>

@@ -10,6 +10,7 @@ import {
 } from "@/components/ui";
 import { getNoteIcon } from "@/lib/utils";
 import { navigateToNote } from "../navigation/navigator";
+import { NoteTitle } from "../note/components/note-title";
 import { useNoteById } from "../note/hooks/use-note-by-id";
 import { useSearch } from "../note/hooks/use-search";
 import { setSearchOpen, setSearchQuery, useSearchState } from "./search-state";
@@ -27,7 +28,7 @@ const SearchItem = memo(function ({ noteId }: { noteId: string }) {
       }}
     >
       <span>{getNoteIcon(note.icon)}</span>
-      {note.title}
+      <NoteTitle>{note.title}</NoteTitle>
     </CommandItem>
   );
 });

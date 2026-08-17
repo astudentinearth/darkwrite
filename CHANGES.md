@@ -4,6 +4,8 @@
     - [Wayland doesn't support it](https://github.com/electron/electron/pull/50560). Use the window menu of your desktop environment instead. For example, KDE users can hit `ALT+F3` or right click the titlebar and pick "Keep Above Others".
 - Fix disappearing workspace icon when the edit workspace dialog is closed and reopened
 - Fix "Import theme" button not letting you pick any files at all on macOS
+- Fix missing "Untitled" text in some search surfaces
+- Fix value collision in link selector that caused notes with the same title to get highlighted all at once
 
 # 1.2.5-beta.2
 ## 🌟 Features

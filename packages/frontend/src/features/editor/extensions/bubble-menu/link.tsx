@@ -11,6 +11,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui";
+import { NoteTitle } from "@/features/note/components/note-title";
 import { useNoteById } from "@/features/note/hooks/use-note-by-id";
 import { cn, getNoteIcon } from "@/lib/utils";
 import { isValidLinkUrl, useLinkOptions } from "../../hooks/use-link-options";
@@ -28,9 +29,10 @@ function NoteItem({
     <CommandItem
       className="px-2 py-1.5 flex items-center gap-2"
       onSelect={onSelect}
+      value={`${note.id} ${note.title}`}
     >
       <span>{getNoteIcon(note.icon)}</span>
-      <span>{note.title}</span>
+      <NoteTitle>{note.title}</NoteTitle>
     </CommandItem>
   );
 }
