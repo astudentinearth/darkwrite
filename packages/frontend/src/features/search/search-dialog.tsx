@@ -1,12 +1,16 @@
 import { memo, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import {
+  Command,
   CommandDialog,
   CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
   CommandList,
+  Dialog,
+  DialogContent,
+  ScrollArea,
 } from "@/components/ui";
 import { getNoteIcon } from "@/lib/utils";
 import { navigateToNote } from "../navigation/navigator";
@@ -20,7 +24,7 @@ const SearchItem = memo(function ({ noteId }: { noteId: string }) {
   if (!note) return <></>;
   return (
     <CommandItem
-      className="px-2 py-4 flex items-center gap-2"
+      className="px-2 py-1.5 flex items-center gap-2"
       value={`${note.id} ${note.title}`}
       onSelect={() => {
         setSearchOpen(false);
@@ -47,25 +51,31 @@ export default function SearchDialog() {
   // biome-ignore lint/style/noNonNullAssertion: ref is always set
   const listRef = useRef<HTMLDivElement>(null!);
   return (
-    <CommandDialog
-      className="max-w-120 backdrop-blur-lg"
-      open={open}
-      onOpenChange={setSearchOpen}
-    >
-      <CommandInput
-        placeholder={t("search.placeholder")}
-        value={query}
-        onValueChange={(val) => {
-          setSearchQuery(val);
-          listRef.current.scrollTo(0, 0);
-        }}
-      />
-      <CommandList ref={listRef} className="scroll-view">
-        <CommandEmpty>{t("search.noResult")}</CommandEmpty>
-        <CommandGroup>
-          <Results />
-        </CommandGroup>
-      </CommandList>
-    </CommandDialog>
+    <Dialog open={open} onOpenChange={setSearchOpen}>
+      <DialogContent
+        noOverlay
+        className="max-w-120 bg-view-1/80 backdrop-blur-lg p-0 origin-top top-16 translate-y-0 drop-shadow-2xl"
+      >
+        <Command>
+          <CommandInput
+            placeholder={t("search.placeholder")}
+            value={query}
+            onValueChange={(val) => {
+              setSearchQuery(val);
+              listRef.current.scrollTo(0, 0);
+            }}
+          />
+          <CommandList ref={listRef} className="w-full hide-scrollbar">
+            <CommandEmpty>{t("search.noResult")}</CommandEmpty>
+            <CommandGroup>
+              {query.trim() === "" && (
+                <span className="pl-2.5">{t("home.recents")}</span>
+              )}
+              <Results />
+            </CommandGroup>
+          </CommandList>
+        </Command>
+      </DialogContent>
+    </Dialog>
   );
 }

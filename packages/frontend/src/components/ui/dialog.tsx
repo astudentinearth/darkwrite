@@ -85,11 +85,15 @@ function DialogContent({
   className,
   children,
   hideX,
+  noOverlay,
   ...props
-}: React.ComponentProps<typeof DialogPrimitive.Content> & { hideX?: boolean }) {
+}: React.ComponentProps<typeof DialogPrimitive.Content> & {
+  hideX?: boolean;
+  noOverlay?: boolean;
+}) {
   return (
     <DialogPortal data-slot="dialog-portal">
-      <DialogOverlay />
+      {!noOverlay && <DialogOverlay />}
       <DialogContentContainer {...props} className={className}>
         {children}
         {!hideX && <DialogCloseButton />}

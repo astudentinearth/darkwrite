@@ -145,8 +145,16 @@ export const selectByWorkspaceAndSearchTerm = createSelector(
 );
 
 export const searchCurrentWorkspace = createSelector(
-  [selectFuseInstance, (_state: RootState, query: string) => query],
-  (fuse, query) => fuse.search(query).map((r) => r.item.id),
+  [
+    selectFuseInstance,
+    (state: RootState) =>
+      selectRecentNotes(state, selectCurrentWorkspaceId(state)),
+    (_state: RootState, query: string) => query,
+  ],
+  (fuse, recents, query) => {
+    if (query.trim() === "") return recents.map((r) => r.id);
+    return fuse.search(query).map((r) => r.item.id);
+  },
 );
 
 export const selectNoteTitle = createSelector(

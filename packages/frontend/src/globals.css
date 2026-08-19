@@ -309,6 +309,10 @@ body,
   .scroll-view:hover {
     scrollbar-color: var(--secondary) transparent;
   }
+
+  .hide-scrollbar {
+    scrollbar-width: none;
+  }
 }
 
 .hide-number-arrows {
