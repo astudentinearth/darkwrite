@@ -69,7 +69,7 @@ export default function SearchDialog() {
             <CommandEmpty>{t("search.noResult")}</CommandEmpty>
             <CommandGroup>
               {query.trim() === "" && (
-                <span className="pl-2.5">{t("home.recents")}</span>
+                <span className="pl-2.5 text-xs">{t("home.recents")}</span>
               )}
               <Results />
             </CommandGroup>
