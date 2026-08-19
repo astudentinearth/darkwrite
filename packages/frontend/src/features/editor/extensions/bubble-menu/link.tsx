@@ -1,4 +1,4 @@
-import { Link, Trash } from "lucide-react";
+import { IconLink, IconTrash } from "@tabler/icons-react";
 import { useTranslation } from "react-i18next";
 import {
   Button,
@@ -76,7 +76,7 @@ export function BubbleLink() {
             isLink && "text-primary-text",
           )}
         >
-          <Link size={18} />
+          <IconLink size={18} />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="bg-view-2/80 mt-2 backdrop-blur-lg w-80 rounded-xl flex flex-col gap-2 p-2 data-[state=closed]:animate-none! px-1 py-1">
@@ -96,7 +96,7 @@ export function BubbleLink() {
                   onSelect={setLink}
                   className="px-2 py-1.5 my-1 flex items-center gap-2"
                 >
-                  <Link size={18} />
+                  <IconLink size={18} />
                   <span>{query}</span>
                 </CommandItem>
                 <hr />
@@ -114,7 +114,7 @@ export function BubbleLink() {
             className="h-fit py-1.5"
             onClick={removeLink}
           >
-            <Trash size={18} />
+            <IconTrash size={18} />
             {t("removeLink")}
           </Button>
         </div>

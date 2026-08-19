@@ -1,12 +1,12 @@
-import { useCurrentEditor } from "@tiptap/react";
 import {
-  Bold,
-  Code,
-  Italic,
-  Quote,
-  Strikethrough,
-  Underline,
-} from "lucide-react";
+  IconBold,
+  IconCode,
+  IconItalic,
+  IconQuote,
+  IconStrikethrough,
+  IconUnderline,
+} from "@tabler/icons-react";
+import { useCurrentEditor } from "@tiptap/react";
 import { use } from "react";
 import { useTranslation } from "react-i18next";
 import { DarkwriteEditorContext } from "../../context";
@@ -26,7 +26,7 @@ export function FormattingButtons() {
         isActive={isBold}
         name="bold"
         title={t("editor.bubble.bold")}
-        icon={Bold}
+        icon={IconBold}
         editor={{ editor }}
         command={(editor) => {
           editor.chain().focus().toggleBold().run();
@@ -36,7 +36,7 @@ export function FormattingButtons() {
         isActive={isItalic}
         name="italic"
         title={t("editor.bubble.italic")}
-        icon={Italic}
+        icon={IconItalic}
         editor={{ editor }}
         command={(editor) => {
           editor.chain().focus().toggleItalic().run();
@@ -46,7 +46,7 @@ export function FormattingButtons() {
         isActive={isUnderline}
         name="underline"
         title={t("editor.bubble.underline")}
-        icon={Underline}
+        icon={IconUnderline}
         editor={{ editor }}
         command={(editor) => {
           editor.chain().focus().toggleUnderline().run();
@@ -56,7 +56,7 @@ export function FormattingButtons() {
         isActive={isStrikethrough}
         name="strike"
         title={t("editor.bubble.strike")}
-        icon={Strikethrough}
+        icon={IconStrikethrough}
         editor={{ editor }}
         command={(editor) => {
           editor.chain().focus().toggleStrike().run();
@@ -66,7 +66,7 @@ export function FormattingButtons() {
         isActive={isCode}
         name="code"
         title={t("editor.bubble.code")}
-        icon={Code}
+        icon={IconCode}
         editor={{ editor }}
         command={(editor) => {
           editor.chain().focus().toggleCode().run();
@@ -76,7 +76,7 @@ export function FormattingButtons() {
         isActive={isQuote}
         name="blockquote"
         title={t("editor.bubble.blockquote")}
-        icon={Quote}
+        icon={IconQuote}
         editor={{ editor }}
         command={(editor) => {
           editor.chain().focus().toggleBlockquote().run();

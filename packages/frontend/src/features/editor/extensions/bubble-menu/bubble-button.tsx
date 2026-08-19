@@ -35,8 +35,10 @@ export function BubbleButton(props: BubbleButtonProps) {
       )}
     >
       <props.icon
-        style={{ width: "20px", height: "20px" }}
-        className={cn("text-foreground", props.isActive && "text-primary-text")}
+        className={cn(
+          "text-foreground size-5",
+          props.isActive && "text-primary-text",
+        )}
       />
     </Button>
   );

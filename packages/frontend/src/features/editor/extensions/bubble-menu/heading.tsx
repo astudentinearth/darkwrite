@@ -1,12 +1,6 @@
+import { IconSelector } from "@tabler/icons-react";
 import { useCurrentEditor } from "@tiptap/react";
-import {
-  ChevronDown,
-  Heading1,
-  Heading2,
-  Heading3,
-  Heading4,
-  Pilcrow,
-} from "lucide-react";
+import { Heading1, Heading2, Heading3, Heading4, Pilcrow } from "lucide-react";
 import { type ReactNode, useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
@@ -83,10 +77,10 @@ export function HeadingSelector() {
           )}
         >
           {icon}
-          <ChevronDown size={16} />
+          <IconSelector size={16} />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="p-1 flex flex-col w-fit rounded-xl bg-view-2 text-foreground data-[state=closed]:animate-none!">
+      <PopoverContent className="p-1 mt-1 flex flex-col w-fit rounded-xl bg-view-2 text-foreground data-[state=closed]:animate-none!">
         {item(<Heading1 />, t("h1"), () => {
           editor?.chain().toggleHeading({ level: 1 }).run();
         })}
