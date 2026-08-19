@@ -24,7 +24,7 @@ const SearchItem = memo(function ({ noteId }: { noteId: string }) {
   if (!note) return <></>;
   return (
     <CommandItem
-      className="px-2 py-1.5 flex items-center gap-2"
+      className="px-2 py-1.5 flex items-center gap-2 rounded-lg"
       value={`${note.id} ${note.title}`}
       onSelect={() => {
         setSearchOpen(false);
@@ -56,7 +56,7 @@ export default function SearchDialog() {
         noOverlay
         className="max-w-120 bg-view-1/80 backdrop-blur-lg p-0 origin-top top-16 translate-y-0 drop-shadow-2xl"
       >
-        <Command>
+        <Command onKeyDown={(e) => e.stopPropagation()}>
           <CommandInput
             placeholder={t("search.placeholder")}
             value={query}
