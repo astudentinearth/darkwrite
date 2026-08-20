@@ -2,6 +2,8 @@
 ## 🌟 Features
 - Add fuzzy search (search should feel actually usable now)
 - Revamped search UI
+- Revamped onboarding
+  - It's now a single step you can immediately finish.
 
 ## ✨ Improvements and fixes
 - Disable "Always on top" menu item on Wayland
@@ -12,6 +14,8 @@
 - Fix value collision in link selector that caused notes with the same title to get highlighted all at once
 - `Ctrl-k` no longer turns the search UI off and correctly performs vi-style navigation
 - Search now shows recent notes by default, and doesn't lag on open
+- Onboarding now triggers a full page reload instead of force rendering the app root
+  - This should prevent invisible first use bugs
 
 # 1.2.5-beta.2
 ## 🌟 Features

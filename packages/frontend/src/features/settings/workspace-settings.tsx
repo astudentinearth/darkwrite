@@ -9,16 +9,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import {
-  Button,
-  Input,
-  Label,
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  Switch,
-} from "@/components/ui";
+import { Button, Input, Label, Switch } from "@/components/ui";
 import WorkspaceIcon from "@/components/workspace-icon";
 import useBackup from "@/features/backup/hooks/use-backup";
 import { useWorkspaceExport } from "@/features/workspaces/hooks/use-workspace-export";

@@ -1,27 +1,21 @@
 import { DEFAULT_THEME_LIST, DEFAULT_THEMES } from "@darkwrite/common";
 import { IconLanguage } from "@tabler/icons-react";
-import type React from "react";
-import type { ReactNode } from "react";
+import React, { type ReactNode, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   Button,
   Input,
   Label,
-  ScrollArea,
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   Switch,
 } from "@/components/ui";
-import { cn } from "@/lib/utils";
+import notify from "../notifications/notify";
 import { LanguageChooser } from "../settings/components/language-chooser";
-import { BackButton } from "./onboarding-button";
-import OnboardingPageRoot from "./onboarding-page-root";
 import {
   finishOnboarding,
-  getOnboardingPage,
-  pageProgress,
   setOnboardingTheme,
   useOnboardingState,
 } from "./onboarding-state";
@@ -61,6 +55,7 @@ const OnboardingUX = () => {
   const name = useOnboardingState((s) => s.workspaceName);
   const setName = useOnboardingState((s) => s.setWorkspaceName);
   const canContinue = name.trim().length > 0;
+  const [working, setWorking] = useState(false);
   const theme = useOnboardingState((s) => s.theme);
   const updateCheck = useOnboardingState((s) => s.enableUpdateCheck);
   return (
@@ -114,15 +109,21 @@ const OnboardingUX = () => {
             useOnboardingState.setState({ enableUpdateCheck: value })
           }
         />
-        <Label className="text-lg" htmlFor="updatecheckenabled">
+        <Label htmlFor="updatecheckenabled">
           {t("onboarding.checkForUpdates")}
         </Label>
       </div>
       <hr className="my-4" />
       <div className="flex justify-end w-full">
         <Button
-          disabled={!canContinue}
-          onClick={finishOnboarding}
+          disabled={!canContinue || working}
+          onClick={() => {
+            setWorking(true);
+            finishOnboarding().mapErr((err) => {
+              setWorking(false);
+              notify.error(`${err.message} (${err.cause})`);
+            });
+          }}
           variant="default"
           className="h-fit transition-opacity duration-150"
         >
