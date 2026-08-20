@@ -26,18 +26,13 @@ import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { useCurrentWorkspace } from "../workspaces/hooks/use-workspace";
 import { updateWorkspace } from "../workspaces/store/workspace.thunk";
 import { selectWorkspaceCount } from "../workspaces/store/workspace-selectors";
+import { LanguageChooser } from "./components/language-chooser";
 import { DeleteWorkspaceDialog } from "./delete-workspace-dialog";
 import EditWorkspaceDialog from "./edit-workspace-dialog";
 import { useSettings } from "./hooks/use-settings";
 import { RestoreDataDialog } from "./restore-dialog";
 import SettingsCard from "./settings-card";
 import { useSettingsActions } from "./store/settings-actions";
-
-const LocaleNameMap: Record<string, string> = {
-  en: "English",
-  tr: "Türkçe",
-  "zh-CN": "简体中文",
-};
 
 export default function WorkspaceSettings() {
   const currentWorkspace = useCurrentWorkspace();
@@ -128,19 +123,10 @@ export default function WorkspaceSettings() {
             <Languages className="size-5" />
             {t("settings.workspace.languageText")}
           </Label>
-          <Select
+          <LanguageChooser
             value={i18n.language}
-            onValueChange={(value) => i18n.changeLanguage(value)}
-          >
-            <SelectTrigger className="w-fit bg-secondary/50 top-highlight">
-              {LocaleNameMap[i18n.language]}
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="en">English</SelectItem>
-              <SelectItem value="tr">Türkçe</SelectItem>
-              <SelectItem value="zh-CN">简体中文</SelectItem>
-            </SelectContent>
-          </Select>
+            onValueChange={i18n.changeLanguage}
+          />
         </div>
       </SettingsCard>
       <SettingsCard>
