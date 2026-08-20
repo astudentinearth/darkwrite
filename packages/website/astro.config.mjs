@@ -8,6 +8,11 @@ import sitemap from "@astrojs/sitemap";
 export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
+    build: {
+      license: {
+        fileName: "licenses.md"
+      }
+    }
   },
   site: "https://darkwrite.app",
   integrations: [sitemap()],
