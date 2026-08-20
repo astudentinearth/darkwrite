@@ -1,4 +1,4 @@
-# Unreleased
+# 1.2.6-beta.1
 ## 🌟 Features
 - Add fuzzy search (search should feel actually usable now)
 - Revamped search UI
