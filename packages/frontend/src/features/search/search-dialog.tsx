@@ -67,10 +67,10 @@ export default function SearchDialog() {
           />
           <CommandList ref={listRef} className="w-full hide-scrollbar">
             <CommandEmpty>{t("search.noResult")}</CommandEmpty>
+            {query.trim() === "" && (
+              <span className="pl-2.5 text-xs">{t("home.recents")}</span>
+            )}
             <CommandGroup>
-              {query.trim() === "" && (
-                <span className="pl-2.5 text-xs">{t("home.recents")}</span>
-              )}
               <Results />
             </CommandGroup>
           </CommandList>
