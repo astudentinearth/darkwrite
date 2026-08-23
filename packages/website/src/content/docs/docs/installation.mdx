@@ -1,0 +1,82 @@
+---
+title: Installation
+---
+
+import { Aside, Tabs, TabItem } from '@astrojs/starlight/components';
+
+To install Darkwrite, go to our [downloads page,](/downloads) and follow the instructions below.
+
+## Install on Windows
+Download the installer .exe file, which will show up in your downloads as `"Darkwrite Installer.exe"`. Click and run it.
+
+Windows will try to stop you with a SmartScreen prompt. Click the **"More info"** option, and choose **"Run anyway"**. 
+
+<Aside type="note" title="Developer's note">This warning pops up because I'm running this project with a student budget, thus I can't pay for the expensive EV code signing certificates. All code that runs on your device is publicly available on the Git repository.</Aside>
+
+After the installation is complete, it might take a little while for it to launch, as Windows Defender probably scans the app for malware. It'll open relatively quickly after this initial sequence. If it doesn't launch after a long while, restart your computer and try running again.
+
+## Install on macOS
+Download the `.dmg` file and open it, then drag Darkwrite to your applications folder. You are good to go!
+
+macOS builds are notarized, so there's nothing else you need to do.
+
+<Aside type="note">
+If you are installing a release older than 1.1.0-beta.1, these builds are not notarized and you'll have to manually remove the quarantine attribute with:
+```bash
+xattrs -rd com.apple.quarantine /Applications/Darkwrite.app
+```
+(if you ever decide to install such an old version today, please let us know why😭)
+
+</Aside>
+
+## Install on Linux
+We provide `.deb` and `.AppImage` files for Linux. An unofficial AUR package is also available.
+
+### AppImage users
+It is strongly recommended to use something like [AppManager.](https://github.com/kem-a/AppManager) It handles creation of desktop files for you.
+
+If you want to just run the AppImage directly, make it executable first:
+```bash
+chmod +x Darkwrite.AppImage
+```
+and run it.
+
+<Aside type="caution">
+Electron AppImages are known to cause issues with AppArmor on Ubuntu. [This issue is tracked here.](https://github.com/astudentinearth/darkwrite/issues/10) It is recommended that you use the deb package instead.
+</Aside>
+
+### Ubuntu/Debian
+Install the provided `.deb` file:
+```bash
+sudo dpkg -i Darkwrite.deb
+```
+
+<Aside type="tip">Packages are built on Ubuntu 22.04, however we will stop supporting 22.04 late-2026/early-2027, as Canonical's support ends in May 2027.</Aside>
+
+<Aside type="caution">
+We don't provide a PPA/custom repository for Debian packages yet. If there's community interest for this, we might, so create an issue on GitHub if you want to see this happen.
+</Aside>
+
+### Arch and derivatives
+Install the unofficial `darkwrite-bin` AUR package. Thanks to zxp19821005 for maintaining this package for years! We really appreciate it❤️
+
+<Tabs>
+  <TabItem label="paru">
+    ```bash
+    paru -S darkwrite-bin
+    ```
+  </TabItem>
+  <TabItem label="yay">
+    ```bash
+    yay -S darkwrite-bin
+    ```
+  </TabItem>
+</Tabs>
+
+### Flatpak and Snap
+Neither Flatpak nor Snap is currently not supported, and we can't say when it will be supported either. Certain Darkwrite features like linked files probably won't work without full filesystem access, and I have no experience packaging a Flatpak. Packaging software for a sandboxed environment creates its own edge cases we currently don't have the time to deal with.
+
+
+
+
+

@@ -15,10 +15,10 @@
 }
 
 @theme inline {
-  --color-background: hsl(0 0% 3%);
+  --color-background: var(--background);
   --color-view-1: var(--view-1);
-  --color-card: hsl(228 14% 7%);
-  --color-secondary: hsl(230 12% 10%);
+  --color-card: var(--card);
+  --color-secondary: var(--secondary);
   --color-primary: var(--primary);
   --color-primary-text: var(--highlight);
   --color-border: var(--border);
@@ -33,4 +33,9 @@
 
 html {
   scroll-behavior: smooth;
+}
+
+@utility top-highlight-* {
+  box-shadow: 0 -0.5px 0 0 --value(--color-*);
+  box-shadow: 0 -0.5px 0 0 --value([color]);
 }
