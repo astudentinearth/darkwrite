@@ -72,6 +72,7 @@ const makeNote = (over: Partial<Note> = {}): Note => ({
   trashedAt: null,
   createdAt: new Date().toISOString(),
   modifiedAt: new Date().toISOString(),
+  properties: {},
   ...over,
 });
 

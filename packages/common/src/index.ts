@@ -6,7 +6,6 @@ export * from "./dto/request/workspace.request";
 export * from "./dto/response/theme.response";
 export * from "./embed";
 export * from "./event/bus";
-export * from "./field";
 export * from "./font";
 export * from "./id";
 export * from "./json-util";

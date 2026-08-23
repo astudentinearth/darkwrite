@@ -161,6 +161,7 @@ describe("note service tests", () => {
         trashedAt: null,
         createdAt: now,
         modifiedAt: now,
+        properties: {},
       };
       (await noteService.create(note))._unsafeUnwrap();
 

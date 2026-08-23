@@ -32,6 +32,7 @@ const makeNote = (over: Partial<Note> & { id: string }): Note => ({
   trashedAt: null,
   createdAt: "2026-01-01T00:00:00.000Z",
   modifiedAt: "2026-01-01T00:00:00.000Z",
+  properties: {},
   ...over,
 });
 

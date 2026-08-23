@@ -1,6 +1,24 @@
 import type { NoteContent } from "@/note-content";
 import { Rank } from "./rank";
 
+export enum PropertyType {
+  Text = "text",
+  Date = "date",
+  Checkbox = "checkbox",
+}
+
+export type NoteProperty =
+  | { type: PropertyType.Text; value: string }
+  | {
+      type: PropertyType.Date;
+      /** Must be stored as ISO date strings. */
+      value: string;
+    }
+  | { type: PropertyType.Checkbox; value: boolean };
+
+/** Key doubles down as the property name. */
+export type NotePropertyMap = Record<string, NoteProperty>;
+
 export interface Note {
   id: string;
   title: string;
@@ -13,6 +31,7 @@ export interface Note {
   favoriteOrderHint: string;
   isFavorite: boolean | null;
   isTrashed: boolean | null;
+  properties: NotePropertyMap;
 
   workspaceId: string; // ID of the workspace this note belongs to
 }

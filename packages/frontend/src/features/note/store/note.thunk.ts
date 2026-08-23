@@ -102,6 +102,7 @@ export const createNote =
         trashedAt: null,
         createdAt: now,
         modifiedAt: now,
+        properties: {},
       },
       overrides,
     );

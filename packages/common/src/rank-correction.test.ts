@@ -20,6 +20,7 @@ function makeNote(overrides: Partial<Note> = {}): Note {
     isFavorite: null,
     isTrashed: null,
     workspaceId: "ws",
+    properties: {},
     ...overrides,
   };
 }
