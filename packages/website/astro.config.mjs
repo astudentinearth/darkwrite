@@ -7,6 +7,7 @@ import sitemap from "@astrojs/sitemap";
 import react from "@astrojs/react";
 
 import starlight from "@astrojs/starlight";
+import { GIT_REPO_URL } from "./src/lib/resources";
 
 // https://astro.build/config
 export default defineConfig({
@@ -14,16 +15,37 @@ export default defineConfig({
     plugins: [tailwindcss()],
     build: {
       license: {
-        fileName: "licenses.md"
-      }
-    }
+        fileName: "licenses.md",
+      },
+    },
   },
   site: "https://darkwrite.app",
-  integrations: [sitemap(), react(), starlight({
-    title: "Darkwrite Docs",
-    sidebar: [
-      { autogenerate: {directory: "docs"} },
-      { label: "Return to main site", link: "/" }
-    ]
-  })],
+  integrations: [
+    sitemap(),
+    react(),
+    starlight({
+      title: "Docs",
+      sidebar: [
+        { autogenerate: { directory: "docs" } },
+      ],
+      social: [
+        {
+          icon: "github",
+          label: "GitHub",
+          href: GIT_REPO_URL,
+        },
+      ],
+      logo: { src: "./public/darkwrite_icon.svg", alt: "Darkwrite logo" },
+      customCss: [
+        "@fontsource/inter",
+        "@fontsource/inter/300",
+        "@fontsource/inter/400",
+        "@fontsource/inter/500",
+        "@fontsource/inter/600",
+        "@fontsource/inter/700",
+        "@fontsource/inter/800",
+        "./src/styles/docs.css"
+      ],
+    }),
+  ],
 });

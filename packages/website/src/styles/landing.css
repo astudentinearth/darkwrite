@@ -1,0 +1,81 @@
+@import "tailwindcss";
+@reference "../globals.css";
+
+* {
+  @apply border-border;
+}
+
+body {
+  @apply w-full h-full absolute left-0 top-0 m-0 p-0 bg-background text-foreground type-body;
+  box-sizing: border-box;
+  font-family: "Inter", sans-serif;
+}
+
+@utility type-h1 {
+  @apply font-medium text-5xl leading-12 md:text-[4rem] tracking-tighter md:leading-18;
+}
+
+@utility type-h2 {
+  @apply font-medium text-[2rem] leading-8 tracking-tighter;
+}
+
+@utility type-body-lg {
+  @apply font-normal text-2xl leading-8 tracking-tighter;
+  strong {
+    @apply font-medium;
+  }
+}
+
+@utility type-body {
+  @apply font-normal text-[1rem] leading-6 tracking-[-0.01em];
+}
+
+h2 {
+  @apply type-h2;
+}
+
+h1 {
+  @apply type-h1;
+}
+
+@utility top-highlight-* {
+  box-shadow: 0 -0.5px 0 0 --value(--color-*);
+  box-shadow: 0 -0.5px 0 0 --value([color]);
+}
+
+code {
+  @apply bg-white/5 p-3 rounded-lg;
+}
+
+header {
+  background: hsl(216 26% 4% / 0);
+  transition-property: background;
+  transition-duration: 100ms;
+}
+
+.scrolled header {
+  background: hsl(216 26% 4% / 0.8);
+}
+
+header a:not(.logo):not(.download-btn) {
+  @apply text-muted-foreground type-body hidden sm:flex px-3 py-2 cursor-pointer hover:bg-white/5 hover:no-underline rounded-lg shrink-0 font-light;
+}
+
+.docs-sidebar a {
+  @apply px-3 py-2 rounded-lg hover:bg-white/5 text-foreground;
+}
+
+.chip {
+  background-color: #101115;
+  filter: drop-shadow(0px 2px 12px rgba(0 0 0 / 0.25));
+  @apply rounded-full lg:px-5 lg:py-3 px-4 py-2 border border-border  text-sm lg:text-2xl flex items-center justify-center transition-colors hover:border-highlight;
+}
+
+.chip[data-state="active"] {
+  @apply bg-primary border-highlight;
+}
+
+hr {
+  @apply border-border w-full;
+}
+

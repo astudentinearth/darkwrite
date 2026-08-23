@@ -591,6 +591,9 @@ importers:
       '@astrojs/starlight':
         specifier: ^0.41.7
         version: 0.41.7(@astrojs/markdown-remark@7.2.4)(astro@7.2.4(@astrojs/markdown-remark@7.2.4)(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.2)(@types/node@26.2.0)(jiti@2.7.0)(tsx@4.21.0)(yaml@2.9.0))(typescript@5.9.3)
+      '@astrojs/starlight-tailwind':
+        specifier: ^5.0.0
+        version: 5.0.0(@astrojs/starlight@0.41.7(@astrojs/markdown-remark@7.2.4)(astro@7.2.4(@astrojs/markdown-remark@7.2.4)(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.2)(@types/node@26.2.0)(jiti@2.7.0)(tsx@4.21.0)(yaml@2.9.0))(typescript@5.9.3))(tailwindcss@4.2.1)
       '@fontsource/inter':
         specifier: ^5.2.8
         version: 5.2.8
@@ -748,6 +751,12 @@ packages:
 
   '@astrojs/sitemap@3.7.3':
     resolution: {integrity: sha512-f8euLVsyeAmAkSm/1M2Kb8sL8byQmfgbvBNaHFItCheTj/IpiJYSEWVcqDHZ/yEHxiS7+w87mQkzwZaPHmk5GA==}
+
+  '@astrojs/starlight-tailwind@5.0.0':
+    resolution: {integrity: sha512-VivF+bWg++4ma/ffr5sgHsd/ONtGdVJIKAaRZ6jmL4yqxy7bviu59MGNi5aW3nd8psP9i/aivBTrpwGxRM1XyA==}
+    peerDependencies:
+      '@astrojs/starlight': '>=0.38.0'
+      tailwindcss: ^4.0.0
 
   '@astrojs/starlight@0.41.7':
     resolution: {integrity: sha512-579VJuZgo20UpNQPm9EIez5W3DFSrD16uiV2YX6rUlpLtjgKSdnc69TxVTZXn4AtI2B731TI2qhW1O3K+vwtrQ==}
@@ -8388,6 +8397,11 @@ snapshots:
       sitemap: 9.0.1
       stream-replace-string: 2.0.0
       zod: 4.4.3
+
+  '@astrojs/starlight-tailwind@5.0.0(@astrojs/starlight@0.41.7(@astrojs/markdown-remark@7.2.4)(astro@7.2.4(@astrojs/markdown-remark@7.2.4)(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.2)(@types/node@26.2.0)(jiti@2.7.0)(tsx@4.21.0)(yaml@2.9.0))(typescript@5.9.3))(tailwindcss@4.2.1)':
+    dependencies:
+      '@astrojs/starlight': 0.41.7(@astrojs/markdown-remark@7.2.4)(astro@7.2.4(@astrojs/markdown-remark@7.2.4)(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.2)(@types/node@26.2.0)(jiti@2.7.0)(tsx@4.21.0)(yaml@2.9.0))(typescript@5.9.3)
+      tailwindcss: 4.2.1
 
   '@astrojs/starlight@0.41.7(@astrojs/markdown-remark@7.2.4)(astro@7.2.4(@astrojs/markdown-remark@7.2.4)(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.2)(@types/node@26.2.0)(jiti@2.7.0)(tsx@4.21.0)(yaml@2.9.0))(typescript@5.9.3)':
     dependencies:
