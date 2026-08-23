@@ -1,0 +1,68 @@
+---
+title: Troubleshooting guide
+description: Fix common problems with your Darkwrite installation and find ways to get help.
+---
+
+import { FileTree, Aside } from "@astrojs/starlight/components";
+
+## Peeking into Darkwrite's data
+
+Darkwrite stores your data in the app data storage folder designated by your operating system. These folders vary as such:
+
+| OS | App data directory |
+| --- | --- |
+| Windows | `%LOCALAPPDATA%`, usually ```C:\Users\your-username\AppData\Roaming``` |
+| Linux | `$XDG_CONFIG_HOME`, usually `~/.config` |
+| macOS | `~/Library/Application Support` |
+
+Darkwrite puts its data into the `Darkwrite` subdirectory on the folders listed in the table.
+
+### Easy access to data directory
+![Access data directory from the menu bar](/img-docs/menu-bar-data-dir.webp)
+
+If Darkwrite isn't in a corrupt state and is able to launch, you can easily open the data directory from inside the application. Choose `Tools > Open data directory` from the menu bar and a file manager window to that folder will appear.
+
+If you are on Windows or Linux, you can access the menu items by clicking the Darkwrite icon on the top left of the window.
+
+### Folder structure
+
+If you got into the Darkwrite data folder, you'll see many folders such as "Cache", "Code Cache", "logs", etc. The only ones you should care about are `logs` and `darkwrite-data`, and if you are running development builds, `darkwrite-data-nightly`.
+
+## Troubleshooting migration errors
+
+<Aside type="tip">
+These errors are rare but it will cause some trouble for both you and the developers when it happens. We absolutely don't want this and we'll be there to help if you are hit with this.
+
+Creating a backup from settings before installing an update mitigates any migration bugs we couldn't catch, as you can restore your data back easily.
+</Aside>
+
+If you saw a "Migration failed" popup when launching the app, this means something is wrong with the SQLite database that stores your workspace metadata. 
+
+To determine what is wrong, navigate to the data folder as explained in the previous section. Open the `logs` folder, and copy the `migration.log` file to your desktop/somewhere easily accessible.
+
+Then head over to our [bug tracker](https://github.com/astudentinearth/darkwrite/issues), and create an issue with the migration.log file attached.
+
+To get back to work, first make sure Darkwrite is fully closed (If you are on macOS, hit ⌘Q to quit fully). Back in the data folder, open `darkwrite-data`. You will see 2 files:
+
+<FileTree>
+- darkwrite.db
+- snapshot-&lt;timestamp&gt;.db such as snapshot-1787527246945.db
+</FileTree>
+
+The snapshot file is a copy of `darkwrite.db` before we attempt to migrate it. We normally delete it when migrations succeed, but we leave it there in case of failure so it can be recovered manually.
+
+In order:
+- Copy `darkwrite.db` to your desktop, so we have a snapshot of the broken state
+- Delete `darkwrite.db` from the data folder
+- Rename the snapshot file to `darkwrite.db`
+- Go to our [releases page](https://github.com/astudentinearth/darkwrite/releases), and download the release you previously had installed. Run the installer to downgrade the app.
+- You can get back to work by launching the old version. Don't update until we release a fix.
+
+<Aside type="note">
+Keep the broken database file on your desktop until we notify you that the issue is resolved. In cases where we can't determine the problem from the logs directly, you may opt to submit your database file privately as a last resort so we can figure out the problem. **This file doesn't have your actual note contents, it has workspace names, note titles, custom properties, absolute paths to your linked files, and the original filenames of your embeds.**
+
+We certainly don't want it to come to this though. This is a last resort to recover your data.
+</Aside>
+
+
+
