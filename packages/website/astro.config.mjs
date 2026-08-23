@@ -33,7 +33,11 @@ export default defineConfig({
           label: "Installation",
           link: "/docs/installation"
         },
-        {label: "Functionality", items: [{autogenerate: {directory: "docs/functionality"}}]}
+        {label: "Functionality", items: [{autogenerate: {directory: "docs/functionality"}}]}, 
+        {
+          label: "Troubleshooting guide",
+          link: "/docs/troubleshooting"
+        },
       ],
       social: [
         {
