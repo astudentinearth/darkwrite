@@ -16,6 +16,7 @@
     "@astrojs/react": "^6.0.4",
     "@astrojs/sitemap": "^3.7.3",
     "@astrojs/starlight": "^0.41.7",
+    "@astrojs/starlight-tailwind": "^5.0.0",
     "@fontsource/inter": "^5.2.8",
     "@lucide/astro": "^0.546.0",
     "@types/react": "^19.2.18",
