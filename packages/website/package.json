@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro build && tsx ./postbuild.mts",
     "preview": "astro preview",
     "astro": "astro",
     "test": "exit 0",
@@ -13,11 +13,16 @@
     "typecheck": "tsc --noEmit --project tsconfig.json"
   },
   "dependencies": {
+    "@astrojs/react": "^6.0.4",
     "@astrojs/sitemap": "^3.7.3",
     "@fontsource/inter": "^5.2.8",
     "@lucide/astro": "^0.546.0",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
     "astro": "7.2.4",
     "clsx": "^2.1.1",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
     "simple-icons-astro": "^15.17.0",
     "tailwind-merge": "^3.3.1"
   },
