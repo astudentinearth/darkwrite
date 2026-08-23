@@ -1,13 +1,70 @@
 @layer base, starlight, theme, components, utilities;
 
-@import '@astrojs/starlight-tailwind';
-@import 'tailwindcss/theme.css' layer(theme);
-@import 'tailwindcss/utilities.css' layer(utilities);
+@import "@astrojs/starlight-tailwind";
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
+@reference "../globals.css";
 
 :root {
   --sl-font: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI";
 }
 
-.site-title {
-  @apply tracking-tighter;
+@theme {
+  --color-accent-50: #f5f7fa;
+  --color-accent-100: #eaedf4;
+  --color-accent-200: #d0d9e7;
+  --color-accent-300: #a7b9d2;
+  --color-accent-400: #7794b9;
+  --color-accent-500: #5677a1;
+  --color-accent-600: #425e87;
+  --color-accent-700: #334766;
+  --color-accent-800: #30415c;
+  --color-accent-900: #2c394e;
+  --color-accent-950: #1d2534;
+
+  --color-gray-50: #fafafa;
+  --color-gray-100: #f5f5f5;
+  --color-gray-200: #e6e6e6;
+  --color-gray-300: #d6d6d6;
+  --color-gray-400: #a5a5a5;
+  --color-gray-500: #767676;
+  --color-gray-600: #575757;
+  --color-gray-700: #434343;
+  --color-gray-800: #292929;
+  --color-gray-900: #1a1a1a;
+  --color-gray-950: #080808;
+}
+
+:root[data-theme="dark"] {
+  .site-title {
+    @apply tracking-tighter;
+  }
+
+  body {
+    @apply bg-gray-950;
+  }
+
+  header {
+    @apply bg-gray-950/50 backdrop-blur-2xl;
+  }
+
+  mobile-starlight-toc nav {
+    @apply bg-gray-950/50 backdrop-blur-2xl;
+  }
+
+  .sidebar-pane {
+    @apply bg-gray-950;
+  }
+
+  a[aria-current="page"] {
+    @apply bg-accent-950/50 text-accent-200;
+  }
+
+  .sidebar-content a {
+    @apply hover:bg-gray-800;
+  }
+
+  .sl-link-card {
+    @apply border-none bg-gray-900 hover:brightness-110;
+  }
 }

@@ -38,10 +38,7 @@ h1 {
   @apply type-h1;
 }
 
-@utility top-highlight-* {
-  box-shadow: 0 -0.5px 0 0 --value(--color-*);
-  box-shadow: 0 -0.5px 0 0 --value([color]);
-}
+
 
 code {
   @apply bg-white/5 p-3 rounded-lg;

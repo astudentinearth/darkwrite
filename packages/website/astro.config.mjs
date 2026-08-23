@@ -25,8 +25,15 @@ export default defineConfig({
     react(),
     starlight({
       title: "Docs",
-      sidebar: [
-        { autogenerate: { directory: "docs" } },
+      sidebar: [        {
+          label: "Welcome",
+          link: "/docs"
+        },
+        {
+          label: "Installation",
+          link: "/docs/installation"
+        },
+        {label: "Functionality", items: [{autogenerate: {directory: "docs/functionality"}}]}
       ],
       social: [
         {
@@ -44,7 +51,7 @@ export default defineConfig({
         "@fontsource/inter/600",
         "@fontsource/inter/700",
         "@fontsource/inter/800",
-        "./src/styles/docs.css"
+        "./src/styles/docs.css",
       ],
     }),
   ],
