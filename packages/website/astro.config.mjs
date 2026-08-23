@@ -6,6 +6,8 @@ import sitemap from "@astrojs/sitemap";
 
 import react from "@astrojs/react";
 
+import starlight from "@astrojs/starlight";
+
 // https://astro.build/config
 export default defineConfig({
   vite: {
@@ -17,5 +19,11 @@ export default defineConfig({
     }
   },
   site: "https://darkwrite.app",
-  integrations: [sitemap(), react()],
+  integrations: [sitemap(), react(), starlight({
+    title: "Darkwrite Docs",
+    sidebar: [
+      { autogenerate: {directory: "docs"} },
+      { label: "Return to main site", link: "/" }
+    ]
+  })],
 });
