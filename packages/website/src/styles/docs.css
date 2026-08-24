@@ -3,6 +3,8 @@
 @import "@astrojs/starlight-tailwind";
 @import "tailwindcss/theme.css" layer(theme);
 @import "tailwindcss/utilities.css" layer(utilities);
+@import "../globals.css";
+@reference "../globals.css";
 
 :root {
   --sl-font: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI";
@@ -39,53 +41,89 @@
 }
 
 .expressive-code {
-  @apply rounded-xl!;
-}
+  @apply rounded-xl;
 
-:root[data-theme="dark"] {
-  body {
-    @apply bg-gray-950;
+  /* terminal shaped blocks */
+  figure.is-terminal {
+    figcaption.header {
+      @apply rounded-t-xl border-t-reflection border-reflection/50 border-b-0 dark:bg-gray-900 bg-gray-300;
+    }
+
+    pre {
+      @apply rounded-b-xl border-reflection/50 dark:bg-gray-900 border-t-0 bg-gray-200;
+    }
   }
 
-  header {
-    @apply bg-gray-950/50 backdrop-blur-2xl;
+  /* regular blocks */
+  figure:not(.is-terminal) {
+    pre {
+@apply rounded-xl border-reflection/50 border-t-reflection dark:bg-gray-900 border bg-gray-200;
+    }
   }
 
-  mobile-starlight-toc nav {
-    @apply bg-gray-950/50 backdrop-blur-2xl;
-  }
-
-  .sidebar-pane {
-    @apply bg-gray-950;
-  }
-
-  a[aria-current="page"] {
-    @apply bg-accent-950/50 text-accent-200;
-  }
-
-  .sidebar-content a {
-    @apply hover:bg-gray-800;
-  }
-
-  .sl-link-card {
-    @apply border-none bg-gray-900 hover:brightness-110;
+  div.copy button {
+    @apply rounded-lg border-reflection/50 border-t-reflection;
   }
 }
 
-:root[data-theme="light"] {
-  body {
-    @apply bg-gray-50;
+@custom-variant dark (&:where(
+  :root[data-theme="dark"],
+  :root[data-theme="dark"] *
+));
+
+body {
+  @apply dark:bg-gray-950 bg-gray-100;
+}
+
+header {
+  @apply dark:bg-gray-950/50 bg-gray-50/70 backdrop-blur-2xl;
+}
+
+mobile-starlight-toc nav {
+  @apply bg-gray-50/50 dark:bg-gray-950/50 backdrop-blur-2xl;
+}
+
+.sidebar-pane {
+  @apply dark:bg-gray-950 bg-gray-50;
+}
+
+.sidebar-content a {
+  @apply dark:hover:bg-gray-800 hover:bg-gray-200;
+}
+a[aria-current="page"] {
+  @apply dark:bg-accent-950/50 text-accent-200 hover:bg-accent-800 dark:hover:bg-accent-950;
+}
+.sl-link-card,
+.pagination-links > a {
+  @apply border-t-[0.5px] dark:bg-gray-800 hover:brightness-110 border-t-reflection hover:border-t-reflection-hover border-b-0 border-x-0 rounded-xl bg-gray-50;
+}
+
+.main-pane main {
+  aside.starlight-aside {
+    @apply rounded-xl border-l-0 dark:hover:brightness-105 hover:brightness-96;
   }
 
-  header {
-    @apply bg-gray-50/50 backdrop-blur-2xl;
+  aside.starlight-aside--note {
+    @apply bg-blue-200 border-t-[0.5px] border-t-blue-100 dark:bg-blue-950 dark:border-t-blue-200/30;
   }
 
-  mobile-starlight-toc nav {
-    @apply bg-gray-50/50 backdrop-blur-2xl;
+  aside.starlight-aside--tip {
+    @apply dark:border-t-[0.5px] dark:border-t-purple-100/30;
   }
 
-  .sidebar-pane {
-    @apply bg-gray-50;
+  aside.starlight-aside--caution {
+    @apply dark:border-t-[0.5px] dark:border-t-yellow-100/30;
+  }
+
+  aside.starlight-aside--danger {
+    @apply dark:border-t-[0.5px] dark:border-t-red-100/30;
+  }
+
+  .sl-markdown-content > p > img {
+    @apply rounded-xl;
+  }
+
+  p > code {
+    @apply rounded-lg dark:bg-gray-800;
   }
 }
