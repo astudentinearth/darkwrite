@@ -1,0 +1,10 @@
+{
+  "name": "@darkwrite/test-util",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+  },
+  "keywords": [],
+  "author": "",
+  "packageManager": "pnpm@10.26.2"
+}

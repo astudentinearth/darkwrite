@@ -109,7 +109,8 @@
     "typescript": "catalog:",
     "vite": "catalog:",
     "vite-plugin-svgr": "^5.2.0",
-    "vitest": "catalog:"
+    "vitest": "catalog:",
+    "@darkwrite/config": "workspace:*"
   },
   "packageManager": "pnpm@10.26.2"
 }

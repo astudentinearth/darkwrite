@@ -36,7 +36,8 @@
     "turbo": "catalog:",
     "typescript": "catalog:",
     "vite": "catalog:",
-    "vitest": "catalog:"
+    "vitest": "catalog:",
+    "@darkwrite/config": "workspace:*"
   },
   "dependencies": {
     "neverthrow": "^8.2.0"

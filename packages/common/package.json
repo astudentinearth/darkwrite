@@ -31,6 +31,7 @@
     "@types/lodash": "catalog:",
     "@types/node": "catalog:",
     "@types/showdown": "^2.0.6",
-    "vite-plugin-dts": "^4.5.4"
+    "vite-plugin-dts": "^4.5.4",
+    "@darkwrite/config": "workspace:*"
   }
 }
