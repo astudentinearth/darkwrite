@@ -6,7 +6,7 @@
     "lint": "turbo run lint",
     "format": "turbo run format",
     "typecheck": "turbo run typecheck",
-    "dev": "turbo run dev",
+    "check": "turbo run check",
     "knip": "knip",
     "knip:production": "knip --production",
     "build": "tsx tools/darkwrite-builder.js",

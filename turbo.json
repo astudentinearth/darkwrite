@@ -15,15 +15,15 @@
       "outputs": ["coverage/**"]
     },
     "lint": {
-      "outputs": []
+      "outputs": [],
+      "dependsOn": ["^build"]
     },
     "format": {
       "outputs": []
     },
-    "dev": {
-      "dependsOn": ["^build"],
-      "persistent": true,
-      "cache": false
+    "check": {
+      "dependsOn": ["^build", "^typecheck", "^lint"],
+      "outputs": []
     }
   }
 }
