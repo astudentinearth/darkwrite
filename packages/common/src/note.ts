@@ -7,14 +7,39 @@ export enum PropertyType {
   Checkbox = "checkbox",
 }
 
-export type NoteProperty =
-  | { type: PropertyType.Text; value: string }
-  | {
-      type: PropertyType.Date;
-      /** Must be stored as ISO date strings. */
-      value: string;
-    }
-  | { type: PropertyType.Checkbox; value: boolean };
+export type TextProperty = { type: PropertyType.Text; value: string };
+
+export type DateProperty = {
+  type: PropertyType.Date;
+  /** Must be stored as ISO date strings. */
+  value: string;
+};
+
+export type CheckboxProperty = { type: PropertyType.Checkbox; value: boolean };
+
+export type NoteProperty = TextProperty | DateProperty | CheckboxProperty;
+
+type propertyTypeMap = {
+  [PropertyType.Checkbox]: CheckboxProperty;
+  [PropertyType.Date]: DateProperty;
+  [PropertyType.Text]: TextProperty;
+};
+
+const propertyDefaults: { [K in PropertyType]: () => propertyTypeMap[K] } = {
+  [PropertyType.Text]: () => ({ type: PropertyType.Text, value: "" }),
+  [PropertyType.Date]: () => ({
+    type: PropertyType.Date,
+    value: new Date().toISOString(),
+  }),
+  [PropertyType.Checkbox]: () => ({
+    type: PropertyType.Checkbox,
+    value: false,
+  }),
+};
+
+export function getDefaultNoteProperty<T extends PropertyType>(type: T) {
+  return propertyDefaults[type]();
+}
 
 /** Key doubles down as the property name. */
 export type NotePropertyMap = Record<string, NoteProperty>;

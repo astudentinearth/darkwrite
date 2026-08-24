@@ -2,6 +2,10 @@
   "name": "@darkwrite/test-util",
   "version": "1.0.0",
   "description": "",
+  "type": "module",
+  "exports": {
+    
+  },
   "scripts": {
   },
   "keywords": [],

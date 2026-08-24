@@ -201,3 +201,21 @@ export function getMovingNote(e: DragEvent<HTMLElement>, state: RootState) {
   const movingNote = selectNoteById(state, sourceId);
   return movingNote ?? null;
 }
+
+export type NotePropertySelectorArg = { noteId: string; name: string };
+
+export const selectNotePropertyNames = (noteId: string) => (state: RootState) =>
+  Object.keys(selectNoteById(state, noteId)?.properties ?? {});
+
+/** Selects a note's property by its name.
+ * @returns `NoteProperty` or `null` */
+export const selectNoteProperty = createSelector(
+  [
+    (state: RootState, arg: NotePropertySelectorArg) =>
+      selectNoteById(state, arg.noteId)?.properties[arg.name] ?? null,
+  ],
+  (p) => p,
+  {
+    memoize: weakMapMemoize,
+  },
+);

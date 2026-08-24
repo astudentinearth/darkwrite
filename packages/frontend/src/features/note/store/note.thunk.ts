@@ -2,10 +2,13 @@ import {
   type DwError,
   dwErr,
   dwErrAsync,
+  getDefaultNoteProperty,
   isDescendant,
   type Note,
   type NotePartial,
+  type NoteProperty,
   type ParentId,
+  PropertyType,
   Rank,
   rebalanceLayer,
   stableSortByOrderKeyFn,
@@ -486,4 +489,14 @@ export const clearTrash =
     return DarkwriteAPIClient.note
       .clearTrash(workspaceId)
       .orElse((err) => reconcileOnFailedUpdate(err, dispatch));
+  };
+
+export const setNoteProperty =
+  (noteId: string, propertyName: string, property: NoteProperty) =>
+  (dispatch: AppDispatch, getState: AppGetState) => {
+    const note = selectNoteById(getState(), noteId);
+    if (!note) return dwErrAsync("Note not found.");
+    const copy = _.cloneDeep(note.properties);
+    copy[propertyName] = property;
+    return dispatch(updateNote({ id: noteId, properties: copy }));
   };
