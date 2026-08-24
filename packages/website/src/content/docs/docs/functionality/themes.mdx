@@ -1,0 +1,109 @@
+---
+title: Themes
+description: If you can't stand looking at an app, why use it?
+---
+
+import { Aside } from "@astrojs/starlight/components"
+
+
+
+![Appearance settings window](/img-docs/appearance-settings.webp)
+
+<Aside type="tip" title="Trivia" icon="star">
+Darkwrite was originally created in 2022 with a goal to make it easily customizable. It looked nothing like the Darkwrite you use today. (I didn't even know TypeScript back then)
+</Aside>
+
+Darkwrite supports full user-interface theming, including the text color and highlights in your documents. 
+
+We bundle a couple of themes by default:
+- Default (dark)
+- Dim (dark)
+- Catppuccin Mocha (dark)
+- Catppuccin Macchiato (dark)
+- Catppuccin Frappe (dark)
+- Catppuccin Latte (light)
+
+We plan to include more themes soon, but porting them takes us a little while so we don't actively prioritize porting themes.
+
+<Aside type="caution">
+If there is an issue with any of the built-in themes, **report the problem to us, not to Catppuccin developers.** Our built-in ports are not made by original creators of the color palette, we port and tweak them to fit Darkwrite.
+</Aside>
+
+## Theme modes
+
+You can choose different themes to use in light and dark mode respectively. If you choose "System" as your theme mode, Darkwrite will automatically follow your system color scheme. For example, if you have automatic dark mode after 6PM, it will switch at the same time as the rest of your operating system.
+
+## Creating themes
+Darkwrite themes are plain JSON files that assign colors to a bunch of CSS variables. That's it.
+
+You can use any valid CSS color function to define colors, including `#hex`, `oklch()`, `hsl()`, and `rgba()`.
+
+<Aside type="tip">
+You must assign a hardcoded CSS color function, as there's color validation right now. We plan to remove this limitation entirely to let you put whatever CSS you want into these variables.
+</Aside>
+
+Copy the template below to create your own theme. Make sure to put something unique in the ID field, no 2 themes should ever have the same ID.
+
+Pick `mode` appropriately, it's either "light" or "dark". This is necessary for compatibility.
+
+We recommend setting `--foreground`, `--popover-foreground` and `--card-foreground` to the same value, as they lost their semantic meanings over time. Nearly everything uses `--foreground` by default. We are sorry for taking technical debt on that front.
+
+`--editor-text-*` keys define the text color palette in the editor bubble menu. `--editor-highlight-*` define the highlight colors. If you have no custom colors in your notes, they will look fully coherent!
+
+`--star` is used only to color the favorite icon.
+
+`--ring` is used for focus outlines around inputs.
+
+`--background` is the color of the window root: sidebar + titlebar.
+
+```json
+{
+  "id": "your-unique-id-here",
+  "name": "My Custom Theme",
+  "mode": "dark",
+  "colors": {
+    "--foreground": "hsl(0 0% 100%)",
+    "--background": "hsl(0 0% 5%)",
+    "--view-1": "hsl(0 0% 6%)",
+    "--view-2": "hsl(0 0% 11%)",
+    "--card": "hsl(0 0% 13%)",
+    "--card-foreground": "hsl(0 0% 94%)",
+    "--popover": "hsl(0 0% 9%)",
+    "--popover-foreground": "hsl(0 0% 94%)",
+    "--secondary": "hsl(0 0% 20%)",
+    "--secondary-foreground": "hsl(0 0% 100%)",
+    "--muted": "hsl(0 0% 17%)",
+    "--muted-foreground": "hsl(0 0% 89%)",
+    "--destructive": "hsl(0 51% 55%)",
+    "--destructive-foreground": "hsl(210 40% 98%)",
+    "--disabled": "hsl(0 0% 22%)",
+    "--border": "hsl(0 0% 14%)",
+    "--ring": "hsl(212.7 26.8% 50%)",
+    "--star": "hsl(50 97% 63%)",
+    "--editor-text-red": "hsl(1 100% 66%)",
+    "--editor-text-orange": "hsl(26 97% 61%)",
+    "--editor-text-yellow": "hsl(54 100% 66%)",
+    "--editor-text-green": "hsl(119 100% 66%)",
+    "--editor-text-cyan": "hsl(166 100% 66%)",
+    "--editor-text-blue": "hsl(202 97% 61%)",
+    "--editor-text-indigo": "hsl(251 100% 60%)",
+    "--editor-text-purple": "hsl(280 100% 60%)",
+    "--editor-text-pink": "hsl(305 100% 60%)",
+    "--editor-highlight-red": "hsl(1 100% 66% / 0.4)",
+    "--editor-highlight-orange": "hsl(26 97% 61% / 0.4)",
+    "--editor-highlight-yellow": "hsl(54 100% 66% / 0.4)",
+    "--editor-highlight-green": "hsl(119 100% 66% / 0.4)",
+    "--editor-highlight-cyan": "hsl(166 100% 66% / 0.4)",
+    "--editor-highlight-blue": "hsl(202 97% 61% / 0.4)",
+    "--editor-highlight-indigo": "hsl(251 100% 60% / 0.4)",
+    "--editor-highlight-purple": "hsl(280 100% 60% / 0.4)",
+    "--editor-highlight-pink": "hsl(305 100% 60% / 0.4)"
+  }
+}
+```
+
+<Aside type="note" title="If you are a developer">
+and these variables gave you [flashbacks](https://ui.shadcn.com), please make sure you star our repository😁
+</Aside>
+
+
