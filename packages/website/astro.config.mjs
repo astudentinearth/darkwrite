@@ -8,6 +8,7 @@ import react from "@astrojs/react";
 
 import starlight from "@astrojs/starlight";
 import { GIT_REPO_URL } from "./src/lib/resources";
+import astroBrokenLinksChecker from "astro-broken-links-checker";
 
 // https://astro.build/config
 export default defineConfig({
@@ -62,5 +63,9 @@ export default defineConfig({
         "./src/styles/docs.css",
       ],
     }),
+    astroBrokenLinksChecker({
+        throwError: true,
+	checkExternalLinks: false
+    })	  
   ],
 });
