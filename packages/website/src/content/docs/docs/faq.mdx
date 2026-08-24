@@ -1,0 +1,92 @@
+---
+title: Frequently asked questions
+---
+
+import { Aside } from "@astrojs/starlight/components";
+
+## Is it really free? 
+
+Yes. Not a single feature is paywalled.
+
+## Is it really free? (as in freedom)
+
+Yes, Darkwrite is licensed under GNU AGPL-3.0. All source code is open, feel free to hack it to your liking :)
+
+## How can I contribute?
+
+See [CONTRIBUTING.md](https://github.com/astudentinearth/darkwrite/blob/dev/CONTRIBUTING.md)
+
+Don't hesitate to create issues on the repository if you have any questions❤️
+
+## How do I migrate from other apps?
+
+You can import anything that is HTML or Markdown. Your existing apps likely have these options already, export a Markdown file and import it to Darkwrite.
+
+Dedicated import guides will be added soon.
+
+## How do I sync?
+
+There's no sync yet, unfortunately.
+
+For now you can export a note from one device and import it back to the other. **Don't try to sync with Google Drive or similar as it may corrupt the database.**
+
+Sync is on the roadmap, so stay tuned for updates!
+
+## Will you add AI buttons?
+
+I won't unless the community wants it. Many apps are annoying to use now because of AI features.
+
+If you want to share your opinions, [you are encouraged to do so under this issue.](https://github.com/astudentinearth/darkwrite/issues/20) If there's an AI feature that genuinely provides value and doesn't ruin the app for everyone, it might be added :)
+
+In general I believe features should not beg to be used or distract the user.
+
+## Is my data encrypted?
+
+Your notes are stored unencrypted on your device, just like every other document or image. That's because **your notes never leave your device.** Darkwrite operates fully offline.
+
+If you want to protect your data against physical theft, a better option might be to [encrypt your disk instead.](https://en.wikipedia.org/wiki/Disk_encryption) Windows and macOS have been doing this by default for quite some time, and Linux users can turn it on during installation of most distributions.
+
+**Do not use Darkwrite or any other notes app to store your passwords.** Use an open-source password manager like [KeePassXC](https://keepassxc.org/) instead. It will also save you the trouble of memorizing passwords, or worse, using the same password on every website.
+
+## Windows thinks this app could be malware.
+
+<Aside type="note" title="What is code signing?">
+It's basically a way to cryptographically verify that a copy of the program hasn't been tampered with since the developer built it. [More on Wikipedia →](https://en.wikipedia.org/wiki/Code_signing)
+</Aside>
+
+I'm running this project with a student budget, and code signing certificates for Windows are really expensive (hundreds of dollars). SmartScreen is flagging the installer because I can't sign it. **This is common in many projects.**
+
+Every single line of code we ship to your device is available in our GitHub repository, open for audit by anyone.
+
+Always download your apps from official sources, like our downloads page.
+
+## Why do I have to create a workspace?
+
+Darkwrite can't store your notes without a workspace. You never have to create a 2nd workspace if you don't want to: keep using the app like that feature doesn't exist.
+
+## Some content is lost when exporting notes
+
+It's because we can't reliably embed everything into the supported export formats.
+- Darkwrite JSON will lose images, as we can't store it without encoding binary data.
+- HTML exports will encode images as data URLs
+- PDF exports are just HTML exports under the hood, but we use "Print to PDF" to generate a PDF
+- Markdown export will lose images, linked files, and links to pages
+
+A bundle format for exports is planned, but it's not our immediate priority.
+
+## When are databases coming?
+
+Very soon! We are currently working on custom properties, and databases will build directly on top of it.
+
+
+## Electron is using too much RAM
+
+I'm not a huge fan of it either, but it's the pragmatic solution for now. I'm the only maintainer and it probably saved months to years of work. Cross platform UI is a difficult problem.
+
+## Why are updates manual?
+
+Auto-update will be added soon.
+
+
+
+
