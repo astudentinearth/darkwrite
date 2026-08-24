@@ -128,7 +128,11 @@ export const duplicateNote =
           createNote({
             parentId: note.parentId,
             navigateAfter: false,
-            overrides: { title: `${note.title} (copy)`, icon: note.icon },
+            overrides: {
+              title: `${note.title} (copy)`,
+              icon: note.icon,
+              properties: _.cloneDeep(note.properties),
+            },
           }),
         ).map((note) => ({
           doc,
@@ -136,7 +140,9 @@ export const duplicateNote =
         })),
       )
       .andThen(({ doc, note }) =>
-        DarkwriteAPIClient.note.setDocument(note.id, JSON.stringify(doc)),
+        DarkwriteAPIClient.note
+          .setDocument(note.id, JSON.stringify(doc))
+          .map(() => note),
       );
   };
 
