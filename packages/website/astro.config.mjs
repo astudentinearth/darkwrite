@@ -32,6 +32,10 @@ export default defineConfig({
         {
           label: "Installation",
           link: "/docs/installation"
+        }, 
+        {
+          label: "Frequently asked questions",
+          link: "/docs/faq"
         },
         {label: "Functionality", items: [{autogenerate: {directory: "docs/functionality"}}]}, 
         {
