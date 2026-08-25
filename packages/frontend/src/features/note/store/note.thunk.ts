@@ -14,7 +14,7 @@ import {
   stableSortByOrderKeyFn,
 } from "@darkwrite/common";
 import _ from "lodash";
-import { errAsync } from "neverthrow";
+import { errAsync, okAsync } from "neverthrow";
 import { DarkwriteAPIClient } from "@/api/api-client";
 import { ensureNoteContent } from "@/features/editor/store/editor.thunk";
 import {
@@ -498,5 +498,16 @@ export const setNoteProperty =
     if (!note) return dwErrAsync("Note not found.");
     const copy = _.cloneDeep(note.properties);
     copy[propertyName] = property;
+    return dispatch(updateNote({ id: noteId, properties: copy }));
+  };
+
+export const deleteNoteProperty =
+  (noteId: string, propertyName: string) =>
+  (dispatch: AppDispatch, getState: AppGetState) => {
+    const note = selectNoteById(getState(), noteId);
+    if (!note) return dwErrAsync("Note not found.");
+    if (!(propertyName in note.properties)) return okAsync();
+    const copy = _.cloneDeep(note.properties);
+    delete copy[propertyName];
     return dispatch(updateNote({ id: noteId, properties: copy }));
   };

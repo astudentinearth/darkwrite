@@ -1,3 +1,4 @@
+import { IconTextPlus } from "@tabler/icons-react";
 import { Image } from "lucide-react";
 import { use } from "react";
 import { useTranslation } from "react-i18next";
@@ -8,15 +9,36 @@ import useEditorCover from "@/features/editor/hooks/use-editor-cover";
 import { EditorContext } from "@/features/editor/store/editor-context";
 import useMouseOver from "@/features/ui/hooks/use-mouse-over";
 import { cn, fromUnicode } from "@/lib/utils";
+import { selectNotePropertyNames } from "../note/store/note-selectors";
+import { useAppSelector } from "../store/hooks";
+import { CreatePropertyDropdown } from "./components/create-property-dropdown";
+import { NotePropertyEditor } from "./components/property-editor";
 import { TitleEditField } from "./components/title-edit-field";
 import TrashBanner from "./components/trash-banner";
 import ConstrainedWidth from "./constrained-width";
 import CoverImage from "./cover-image";
 
+function AddPropertyButton() {
+  const { noteId } = use(EditorContext);
+  const { t } = useTranslation();
+  const properties = useAppSelector(selectNotePropertyNames(noteId));
+  if (properties.length > 0) return null;
+
+  return (
+    <CreatePropertyDropdown>
+      <Button className="w-fit" variant="ghost">
+        <IconTextPlus size={18} />
+        {t("note.property.action.addProperty")}
+      </Button>
+    </CreatePropertyDropdown>
+  );
+}
+
 export function NoteMetadataEditors({ mouseOver }: { mouseOver?: boolean }) {
   const { t } = useTranslation();
   const { noteId } = use(EditorContext);
   const { addCover, updateIcon, hasCover, icon } = useEditorCover(noteId);
+
   return (
     <>
       <div className="flex gap-2 items-end mb-4 font-ui">
@@ -41,6 +63,7 @@ export function NoteMetadataEditors({ mouseOver }: { mouseOver?: boolean }) {
               {t("editor.cover.addCover")}
             </Button>
           )}
+          <AddPropertyButton />
         </div>
       </div>
 
@@ -75,7 +98,7 @@ export default function EditorHeader({
         noConstrain={alwaysFill}
       >
         <NoteMetadataEditors mouseOver={mouseOver.mouseOver} />
-
+        <NotePropertyEditor />
         <TrashBanner />
         <hr />
       </ConstrainedWidth>
