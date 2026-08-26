@@ -164,7 +164,7 @@ describe("note property tests", () => {
         dest,
       )._unsafeUnwrap();
 
-      expect(result).toEqual<PropertyDiff>({
+      expect(result).toStrictEqual<PropertyDiff>({
         id: note.id,
         propertyOrder: [dest],
         properties: { [dest]: property },
@@ -198,13 +198,57 @@ describe("note property tests", () => {
         src,
         dest,
       )._unsafeUnwrap();
-      expect(result).toEqual<PropertyDiff>({
+      expect(result).toStrictEqual<PropertyDiff>({
         id: note.id,
         properties: {
           [prop1]: note.properties[prop1],
           [dest]: note.properties[src],
         },
         propertyOrder: [prop1, dest],
+      });
+    });
+  });
+
+  describe("deleteNoteProperty", () => {
+    it("deletes a property", () => {
+      const name = "property";
+      const note = Note._test({
+        properties: { [name]: NoteProperty.default(PropertyType.Text) },
+        propertyOrder: [name],
+      });
+
+      const result = PropertyUpdater.deleteNoteProperty(
+        note,
+        name,
+      )._unsafeUnwrap();
+      expect(result).toStrictEqual<PropertyDiff>({
+        id: note.id,
+        propertyOrder: [],
+        properties: {},
+      });
+    });
+
+    it("errs on missing property", () => {
+      const result = PropertyUpdater.deleteNoteProperty(Note._test(), "67");
+
+      expect(result.isErr()).toBe(true);
+    });
+
+    it("doesnt touch other properties", () => {
+      const props = {
+        a: NoteProperty.default(PropertyType.Text),
+        b: NoteProperty.default(PropertyType.Text),
+      };
+
+      const note = Note._test({ properties: props, propertyOrder: ["a", "b"] });
+      const result = PropertyUpdater.deleteNoteProperty(
+        note,
+        "a",
+      )._unsafeUnwrap();
+      expect(result).toStrictEqual<PropertyDiff>({
+        id: note.id,
+        propertyOrder: ["b"],
+        properties: { b: props.b },
       });
     });
   });

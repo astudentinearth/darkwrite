@@ -370,7 +370,9 @@ function deleteNoteProperty(
 
   const diff = PropertyDiff.from(note);
   delete diff.properties[propertyName];
-  diff.propertyOrder.filter((name) => name !== propertyName);
+  diff.propertyOrder = diff.propertyOrder.filter(
+    (name) => name !== propertyName,
+  );
 
   return ok(diff);
 }
