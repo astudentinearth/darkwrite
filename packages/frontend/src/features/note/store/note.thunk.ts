@@ -2,20 +2,18 @@ import {
   type DwError,
   dwErr,
   dwErrAsync,
-  getDefaultNoteProperty,
   isDescendant,
-  type Note,
+  Note,
   type NotePartial,
   type NoteProperty,
   type ParentId,
-  PropertyType,
   PropertyUpdater,
   Rank,
   rebalanceLayer,
   stableSortByOrderKeyFn,
 } from "@darkwrite/common";
 import _ from "lodash";
-import { errAsync, okAsync } from "neverthrow";
+import { errAsync } from "neverthrow";
 import { DarkwriteAPIClient } from "@/api/api-client";
 import { ensureNoteContent } from "@/features/editor/store/editor.thunk";
 import {
@@ -91,26 +89,13 @@ export const createNote =
     if (!workspaceId) return dwErrAsync("Workspace not ready yet.");
 
     const siblings = selectNotesByParentId(getState(), workspaceId, parentId);
-    const now = new Date().toISOString();
-    const note: Note = _.merge(
-      {
-        id: crypto.randomUUID(),
-        title: "",
-        icon: null,
-        parentId,
-        workspaceId,
-        orderHint: getCreationRank(siblings).get(),
-        favoriteOrderHint: "",
-        isFavorite: false,
-        isTrashed: false,
-        trashedAt: null,
-        createdAt: now,
-        modifiedAt: now,
-        properties: {},
-        propertyOrder: [],
-      },
-      overrides,
-    );
+    const note: Note = Note.new({
+      id: crypto.randomUUID(),
+      parentId: parentId,
+      workspaceId,
+      orderHint: getCreationRank(siblings).get(),
+      ...overrides,
+    });
 
     dispatch(act.upsertNotes([note]));
 
@@ -133,12 +118,7 @@ export const duplicateNote =
           createNote({
             parentId: note.parentId,
             navigateAfter: false,
-            overrides: {
-              title: `${note.title} (copy)`,
-              icon: note.icon,
-              properties: _.cloneDeep(note.properties),
-              propertyOrder: [...note.propertyOrder],
-            },
+            overrides: Note.duplicate(note),
           }),
         ).map((note) => ({
           doc,

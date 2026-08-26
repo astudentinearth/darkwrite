@@ -87,6 +87,37 @@ export interface Note {
   workspaceId: string;
 }
 
+export type NewNoteArgs = Partial<Note> &
+  Pick<Note, "id" | "parentId" | "workspaceId" | "orderHint">;
+
+export const Note = {
+  duplicate: (note: Note) => ({
+    parentId: note.parentId,
+    title: `${note.title} (copy)`,
+    icon: note.icon,
+    properties: _.cloneDeep(note.properties),
+    propertyOrder: [...note.propertyOrder],
+  }),
+  new: (args: NewNoteArgs): Note => {
+    const now = new Date().toISOString();
+    return _.merge(
+      {
+        title: "",
+        icon: null,
+        favoriteOrderHint: "",
+        isFavorite: false,
+        isTrashed: false,
+        trashedAt: null,
+        createdAt: now,
+        modifiedAt: now,
+        properties: {},
+        propertyOrder: [],
+      },
+      _.cloneDeep(args),
+    );
+  },
+};
+
 export type NotePartial = Partial<Note> & { id: Note["id"] };
 
 /** @deprecated use `Note` instead */
