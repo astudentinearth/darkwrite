@@ -1,4 +1,5 @@
 import _ from "lodash";
+import { nanoid } from "nanoid";
 import { ok, Result } from "neverthrow";
 import type { NoteContent } from "@/note-content";
 import { Rank } from "./rank";
@@ -43,6 +44,8 @@ const propertyDefaults: { [K in PropertyType]: () => propertyTypeMap[K] } = {
 export function getDefaultNoteProperty<T extends PropertyType>(type: T) {
   return propertyDefaults[type]();
 }
+
+export const NoteProperty = { default: getDefaultNoteProperty };
 
 /** Key doubles down as the property name. */
 export type NotePropertyMap = Record<string, NoteProperty>;
@@ -91,13 +94,24 @@ export type NewNoteArgs = Partial<Note> &
   Pick<Note, "id" | "parentId" | "workspaceId" | "orderHint">;
 
 export const Note = {
+  /**
+   * Produce a duplicate draft to use with a new Note.
+   * @param note
+   * @returns Note fields that were duplicated.
+   */
   duplicate: (note: Note) => ({
     parentId: note.parentId,
     title: `${note.title} (copy)`,
     icon: note.icon,
     properties: _.cloneDeep(note.properties),
     propertyOrder: [...note.propertyOrder],
+    workspaceId: note.workspaceId,
   }),
+  /**
+   * Initialize a note with default fields. (all nested fields are copied.)
+   * @param args bare minimum required to produce a valid note.
+   * @returns a full note
+   */
   new: (args: NewNoteArgs): Note => {
     const now = new Date().toISOString();
     return _.merge(
@@ -116,6 +130,19 @@ export const Note = {
       _.cloneDeep(args),
     );
   },
+  /**
+   * Test constructor that pre-fills IDs by default.
+   * @param args fields to override
+   * @returns a full note
+   */
+  _test: (args: Partial<Note> = {}): Note =>
+    Note.new({
+      id: nanoid(),
+      orderHint: Rank.default().get(),
+      workspaceId: nanoid(),
+      parentId: null,
+      ...args,
+    }),
 };
 
 export type NotePartial = Partial<Note> & { id: Note["id"] };
