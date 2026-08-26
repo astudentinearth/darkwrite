@@ -3,6 +3,7 @@ import {
   isDescendant,
   Note,
   NoteProperty,
+  type PropertyDiff,
   PropertyType,
   PropertyUpdater,
   resolveUpperTree,
@@ -144,6 +145,67 @@ describe("note property tests", () => {
       expect(result.id).toBe(note.id);
       expect(result.properties[name]).toEqual(property);
       expect(result.propertyOrder).toEqual([name]);
+    });
+  });
+
+  describe("renameNoteProperty", () => {
+    it.each(testProperties)("should rename a property", (property) => {
+      const src = "src";
+      const dest = "dest";
+
+      const note = Note._test({
+        properties: { [src]: property },
+        propertyOrder: [src],
+      });
+
+      const result = PropertyUpdater.renameNoteProperty(
+        note,
+        src,
+        dest,
+      )._unsafeUnwrap();
+
+      expect(result).toEqual<PropertyDiff>({
+        id: note.id,
+        propertyOrder: [dest],
+        properties: { [dest]: property },
+      });
+
+      expect(result.properties).not.toHaveProperty(src);
+    });
+
+    it("should err on non-existent properties", () => {
+      const note = Note._test(); // no props
+      const result = PropertyUpdater.renameNoteProperty(note, "a", "b");
+
+      expect(result.isErr()).toBe(true);
+    });
+
+    it("should rename correctly when multiple props are present", () => {
+      const prop1 = "prop1";
+      const src = "src";
+      const dest = "dest";
+
+      const note = Note._test({
+        propertyOrder: [prop1, src],
+        properties: {
+          [prop1]: NoteProperty.default(PropertyType.Text),
+          [src]: NoteProperty.default(PropertyType.Text),
+        },
+      });
+
+      const result = PropertyUpdater.renameNoteProperty(
+        note,
+        src,
+        dest,
+      )._unsafeUnwrap();
+      expect(result).toEqual<PropertyDiff>({
+        id: note.id,
+        properties: {
+          [prop1]: note.properties[prop1],
+          [dest]: note.properties[src],
+        },
+        propertyOrder: [prop1, dest],
+      });
     });
   });
 });
