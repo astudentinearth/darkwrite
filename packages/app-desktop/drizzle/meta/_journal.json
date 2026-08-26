@@ -43,6 +43,13 @@
       "when": 1787522319405,
       "tag": "0005_elite_steve_rogers",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1787703177472,
+      "tag": "0006_classy_tag",
+      "breakpoints": true
     }
   ]
 }

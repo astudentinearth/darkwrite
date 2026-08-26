@@ -59,6 +59,7 @@ describe("NoteDAO", () => {
       isTrashed: null,
       trashedAt: null,
       properties: {},
+      propertyOrder: [],
     };
   };
 

@@ -9,6 +9,7 @@ import {
   type NoteProperty,
   type ParentId,
   PropertyType,
+  PropertyUpdater,
   Rank,
   rebalanceLayer,
   stableSortByOrderKeyFn,
@@ -106,6 +107,7 @@ export const createNote =
         createdAt: now,
         modifiedAt: now,
         properties: {},
+        propertyOrder: [],
       },
       overrides,
     );
@@ -135,6 +137,7 @@ export const duplicateNote =
               title: `${note.title} (copy)`,
               icon: note.icon,
               properties: _.cloneDeep(note.properties),
+              propertyOrder: [...note.propertyOrder],
             },
           }),
         ).map((note) => ({
@@ -496,9 +499,9 @@ export const setNoteProperty =
   (dispatch: AppDispatch, getState: AppGetState) => {
     const note = selectNoteById(getState(), noteId);
     if (!note) return dwErrAsync("Note not found.");
-    const copy = _.cloneDeep(note.properties);
-    copy[propertyName] = property;
-    return dispatch(updateNote({ id: noteId, properties: copy }));
+    return dispatch(
+      updateNote(PropertyUpdater.setNoteProperty(note, propertyName, property)),
+    );
   };
 
 export const deleteNoteProperty =
@@ -506,8 +509,18 @@ export const deleteNoteProperty =
   (dispatch: AppDispatch, getState: AppGetState) => {
     const note = selectNoteById(getState(), noteId);
     if (!note) return dwErrAsync("Note not found.");
-    if (!(propertyName in note.properties)) return okAsync();
-    const copy = _.cloneDeep(note.properties);
-    delete copy[propertyName];
-    return dispatch(updateNote({ id: noteId, properties: copy }));
+
+    return PropertyUpdater.deleteNoteProperty(note, propertyName).asyncAndThen(
+      (diff) => dispatch(updateNote(diff)),
+    );
+  };
+
+export const renameNoteProperty =
+  (noteId: string, src: string, dest: string) =>
+  (dispatch: AppDispatch, getState: AppGetState) => {
+    const note = selectNoteById(getState(), noteId);
+    if (!note) return dwErrAsync("Note not found.");
+    return PropertyUpdater.renameNoteProperty(note, src, dest).asyncAndThen(
+      (diff) => dispatch(updateNote(diff)),
+    );
   };

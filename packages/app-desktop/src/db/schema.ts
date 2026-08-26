@@ -26,6 +26,7 @@ export const note = sqliteTable("note", {
   id: generatedUuid(),
   parentId: text(), // FIXME: on delete set null here please
   properties: json().$type<NotePropertyMap>().default({}).notNull(),
+  propertyOrder: json().$type<string[]>().default([]).notNull(),
   title: text().notNull(),
   icon: text(),
   createdAt: timestamp().notNull(),

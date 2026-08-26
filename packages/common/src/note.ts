@@ -1,5 +1,8 @@
+import _ from "lodash";
+import { ok, Result } from "neverthrow";
 import type { NoteContent } from "@/note-content";
 import { Rank } from "./rank";
+import { type DwResult, dwErr } from "./result";
 
 export enum PropertyType {
   Text = "text",
@@ -44,21 +47,44 @@ export function getDefaultNoteProperty<T extends PropertyType>(type: T) {
 /** Key doubles down as the property name. */
 export type NotePropertyMap = Record<string, NoteProperty>;
 
+export type ParentId = string | null;
 export interface Note {
   id: string;
   title: string;
+
+  /** Unicode emoji to be displayed as an icon. `null` means no icon, and a default icon will be rendered in relevant spaces instead. */
   icon: string | null;
-  parentId: string | null;
+
+  /** The parent note of this note. `null` means the note is at in top layer of the tree. */
+  parentId: ParentId;
+
+  /** ISO-string date. */
   createdAt: string;
+
+  /** ISO-string date. */
   modifiedAt: string;
+
+  /** ISO-string date. */
   trashedAt: string | null;
+
+  /** A lexicographical hint to sort notes in the sidebar "All notes" section. */
   orderHint: string;
+
+  /** A lexicographical hint to sort notes in the sidebar "Favorites" section. */
   favoriteOrderHint: string;
   isFavorite: boolean | null;
   isTrashed: boolean | null;
+
+  /** The custom properties attached to this note. Properties
+   * are keyed by their name. */
   properties: NotePropertyMap;
 
-  workspaceId: string; // ID of the workspace this note belongs to
+  /** Defines an absolute order for the keys of the properties field.
+   * This list should be updated when a property is added or renamed. */
+  propertyOrder: string[];
+
+  /** ID of the workspace this note belongs to. */
+  workspaceId: string;
 }
 
 export type NotePartial = Partial<Note> & { id: Note["id"] };
@@ -78,6 +104,11 @@ export interface NoteContentResponseDTO {
   document: NoteContent;
 }
 
+/** Recursively walk up the tree to find the parent tree of a note.
+ * @param id the starting note id
+ * @param notes a map of all notes keyed by their ID
+ * @returns the parent tree: lowest node first, highest node last
+ */
 export function resolveUpperTree(id: string, notes: Record<string, Note>) {
   const list: Note[] = [];
   if (!notes[id] || !("parentId" in notes[id])) return [];
@@ -175,6 +206,8 @@ export async function isDescendantAsync(
 }
 
 export type NoteExportFormat = "md" | "html" | "json";
+
+//FIXME: Substitute this with translation keys
 export const FileFormatMap: Record<NoteExportFormat, string> = {
   html: "HTML document",
   json: "JSON document",
@@ -186,20 +219,106 @@ export type NoteImportResult = {
   content: string[];
 };
 
+/** Valid fields to order notes by. These keys must have valid ranks. */
 export type OrderKey = "orderHint" | "favoriteOrderHint";
-export type ParentId = string | null;
 export type MovePlacement = "inside-start" | "inside-end" | "below";
 
-/** 📄*/
+/** 📄 - Default icon to set when "Add icon" is clicked. */
 export const DEFAULT_NOTE_ICON = "1f4c4";
 
+/**
+ * Replaces newlines with spaces in note titles.
+ * @param title
+ * @returns title with newlines gone
+ */
 export function cleanNoteTitle(title: string) {
   return title.replace(/(\r\n|\n|\r)/gm, " ");
 }
 
+/** Generate a sorting function to sort notes by a key deterministically.
+ * Notes will always have the same order even if there are colliding keys.
+ * ID will be used as a fallback. */
 export const stableSortByOrderKeyFn =
   (key: OrderKey = "orderHint") =>
   (a: Note, b: Note) => {
     const result = Rank.sorter(a[key], b[key]);
     return result === 0 ? a.id.localeCompare(b.id) : result;
   };
+
+export type PropertyDiff = Pick<Note, "propertyOrder" | "properties" | "id">;
+export const PropertyDiff = {
+  from: (note: Note) => ({
+    id: note.id,
+    properties: _.cloneDeep(note.properties),
+    propertyOrder: [...note.propertyOrder],
+  }),
+};
+
+/**
+ * Sets a property on a note and ensures it exists in the order list.
+ * @param note
+ * @param propertyName name of the target property
+ * @param property the replacement value
+ * @returns a diff to perform updates.
+ */
+function setNoteProperty(
+  note: Note,
+  propertyName: string,
+  property: NoteProperty,
+) {
+  const diff = PropertyDiff.from(note);
+  diff.properties[propertyName] = property;
+  if (!diff.propertyOrder.includes(propertyName))
+    diff.propertyOrder.push(propertyName);
+  return diff;
+}
+
+/**
+ * Renames a note property
+ * @param note
+ * @param oldName
+ * @param newName
+ * @returns a diff to perform updates
+ */
+function renameNoteProperty(
+  note: Note,
+  oldName: string,
+  newName: string,
+): DwResult<PropertyDiff> {
+  if (!(oldName in note.properties))
+    return dwErr(`Property ${oldName} does not exist in "${note.title}"`);
+
+  const diff = PropertyDiff.from(note);
+
+  diff.properties[newName] = diff.properties[oldName];
+  delete diff.properties[oldName];
+
+  const idx = diff.propertyOrder.indexOf(oldName);
+  if (idx === -1)
+    diff.propertyOrder.push(newName); // it never existed in order
+  else diff.propertyOrder[idx] = newName;
+
+  return ok(diff);
+}
+
+function deleteNoteProperty(
+  note: Note,
+  propertyName: string,
+): DwResult<PropertyDiff> {
+  if (!(propertyName in note.properties))
+    return dwErr(
+      `Property "${propertyName}" does not exist in "${note.title}"`,
+    );
+
+  const diff = PropertyDiff.from(note);
+  delete diff.properties[propertyName];
+  diff.propertyOrder.filter((name) => name !== propertyName);
+
+  return ok(diff);
+}
+
+export const PropertyUpdater = {
+  renameNoteProperty,
+  deleteNoteProperty,
+  setNoteProperty,
+};

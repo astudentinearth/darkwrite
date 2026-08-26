@@ -1,0 +1,1 @@
+ALTER TABLE `note` ADD `propertyOrder` text DEFAULT '[]' NOT NULL;

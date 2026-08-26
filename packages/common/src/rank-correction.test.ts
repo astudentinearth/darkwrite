@@ -21,6 +21,7 @@ function makeNote(overrides: Partial<Note> = {}): Note {
     isTrashed: null,
     workspaceId: "ws",
     properties: {},
+    propertyOrder: [],
     ...overrides,
   };
 }
