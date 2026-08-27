@@ -21,7 +21,9 @@ import CoverImage from "./cover-image";
 function AddPropertyButton() {
   const { noteId } = use(EditorContext);
   const { t } = useTranslation();
-  const properties = useAppSelector(selectNotePropertyNames(noteId));
+  const properties = useAppSelector((state) =>
+    selectNotePropertyNames(state, noteId),
+  );
   if (properties.length > 0) return null;
 
   return (
