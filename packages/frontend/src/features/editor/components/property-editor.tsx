@@ -11,6 +11,7 @@ import { useAppDispatch, useAppSelector } from "@/features/store/hooks";
 import { cn } from "@/lib/utils";
 import { EditorContext } from "../store/editor-context";
 import { CreatePropertyDropdown } from "./create-property-dropdown";
+import { PropertyIcon } from "./property-icon";
 
 type PropertyRowProps = {
   name: string;
@@ -26,13 +27,15 @@ function PropertyRow({ name }: PropertyRowProps) {
     selectNotePropertyNames(state, noteId),
   );
 
+  const { t } = useTranslation();
+
   const [nameCollides, setNameCollides] = useState(false);
   const nameRef = useRef<HTMLInputElement>(null);
 
   if (!property) return null;
 
   const rename = (newName: string) => {
-    if (nameCollides) {
+    if (nameCollides || newName === name) {
       if (nameRef.current) nameRef.current.value = name;
       setNameCollides(false);
       return;
@@ -42,12 +45,16 @@ function PropertyRow({ name }: PropertyRowProps) {
 
   return (
     <tr className="border-b">
-      <td className="p-px">
+      <td className="p-1">
+        <PropertyIcon type={property.type} className="size-[18px]" />
+      </td>
+      <td className="p-px flex items-center">
         <Input
           ref={nameRef}
           defaultValue={name}
+          placeholder={t("note.property.placeholder")}
           className={cn(
-            "border-none rounded-none",
+            "border-none rounded-none pl-2",
             nameCollides && "bg-destructive/20",
           )}
           onBlur={(e) => rename(e.target.value)}
@@ -58,7 +65,7 @@ function PropertyRow({ name }: PropertyRowProps) {
           }}
         />
       </td>
-      <td className="border-l">{property.value}</td>
+      <td className="border-l w-2/3">{property.value}</td>
     </tr>
   );
 }
@@ -79,6 +86,7 @@ export function NotePropertyEditor() {
           <PropertyRow key={p} name={p} />
         ))}
         <tr>
+          <td />
           <td className="pt-2 px-1">
             <CreatePropertyDropdown>
               <Button

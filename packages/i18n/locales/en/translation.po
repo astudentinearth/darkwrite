@@ -842,3 +842,6 @@ msgstr "Add property"
 msgid "note.property.action.deleteProperty"
 msgstr "Delete property"
 
+msgid "note.property.placeholder"
+msgstr "New property"
+
