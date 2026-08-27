@@ -180,6 +180,19 @@ describe("note property tests", () => {
       expect(result.isErr()).toBe(true);
     });
 
+    it("should err when the new name already exists", () => {
+      const note = Note._test({
+        properties: {
+          a: NoteProperty.default(PropertyType.Text),
+          b: NoteProperty.default(PropertyType.Checkbox),
+        },
+        propertyOrder: ["a", "b"],
+      });
+
+      const result = PropertyUpdater.renameNoteProperty(note, "b", "a");
+      expect(result.isErr()).toBe(true);
+    });
+
     it("should rename correctly when multiple props are present", () => {
       const prop1 = "prop1";
       const src = "src";

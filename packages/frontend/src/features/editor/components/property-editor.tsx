@@ -1,5 +1,5 @@
 import { IconPlus } from "@tabler/icons-react";
-import { use, useState } from "react";
+import { use, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Button, Input } from "@/components/ui";
 import { renameNoteProperty } from "@/features/note/store/note.thunk";
@@ -27,11 +27,16 @@ function PropertyRow({ name }: PropertyRowProps) {
   );
 
   const [nameCollides, setNameCollides] = useState(false);
+  const nameRef = useRef<HTMLInputElement>(null);
 
   if (!property) return null;
 
   const rename = (newName: string) => {
-    if (properties.includes(newName)) return;
+    if (nameCollides) {
+      if (nameRef.current) nameRef.current.value = name;
+      setNameCollides(false);
+      return;
+    }
     dispatch(renameNoteProperty(noteId, name, newName));
   };
 
@@ -39,10 +44,11 @@ function PropertyRow({ name }: PropertyRowProps) {
     <tr className="border-b">
       <td className="p-px">
         <Input
+          ref={nameRef}
           defaultValue={name}
           className={cn(
-            "border-transparent rounded-none",
-            nameCollides && "border-destructive",
+            "border-none rounded-none",
+            nameCollides && "bg-destructive/20",
           )}
           onBlur={(e) => rename(e.target.value)}
           onChange={(e) => {
@@ -70,7 +76,7 @@ export function NotePropertyEditor() {
     <table>
       <tbody>
         {properties.map((p) => (
-          <PropertyRow name={p} />
+          <PropertyRow key={p} name={p} />
         ))}
         <tr>
           <td className="pt-2 px-1">
