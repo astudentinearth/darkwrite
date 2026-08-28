@@ -1,8 +1,16 @@
+import {
+  type NoteProperty,
+  PropertyType,
+  type TextProperty,
+} from "@darkwrite/common";
 import { IconPlus } from "@tabler/icons-react";
 import { use, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Button, Input } from "@/components/ui";
-import { renameNoteProperty } from "@/features/note/store/note.thunk";
+import {
+  renameNoteProperty,
+  setNoteProperty,
+} from "@/features/note/store/note.thunk";
 import {
   selectNoteProperty,
   selectNotePropertyNames,
@@ -16,6 +24,26 @@ import { PropertyIcon } from "./property-icon";
 type PropertyRowProps = {
   name: string;
 };
+
+type PropertyValueFieldProps<T extends NoteProperty> = {
+  property: T;
+  onValueChange: (value: TextProperty) => void;
+};
+
+function TextPropertyValue({
+  property,
+  onValueChange,
+}: PropertyValueFieldProps<TextProperty>) {
+  return (
+    <Input
+      className="border-none rounded-none"
+      value={property.value}
+      onChange={(e) =>
+        onValueChange({ type: PropertyType.Text, value: e.target.value })
+      }
+    />
+  );
+}
 
 function PropertyRow({ name }: PropertyRowProps) {
   const { noteId } = use(EditorContext);
@@ -43,6 +71,10 @@ function PropertyRow({ name }: PropertyRowProps) {
     dispatch(renameNoteProperty(noteId, name, newName));
   };
 
+  const update = (prop: NoteProperty) => {
+    dispatch(setNoteProperty(noteId, name, prop));
+  };
+
   return (
     <tr className="border-b">
       <td className="p-1">
@@ -65,7 +97,11 @@ function PropertyRow({ name }: PropertyRowProps) {
           }}
         />
       </td>
-      <td className="border-l w-2/3">{property.value}</td>
+      <td className="border-l w-2/3">
+        {property.type === PropertyType.Text && (
+          <TextPropertyValue property={property} onValueChange={update} />
+        )}
+      </td>
     </tr>
   );
 }
