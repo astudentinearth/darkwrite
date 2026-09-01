@@ -3,7 +3,7 @@ import {
   PropertyType,
   type TextProperty,
 } from "@darkwrite/common";
-import { IconPlus } from "@tabler/icons-react";
+import { IconCheck, IconPlus } from "@tabler/icons-react";
 import { use, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Button, Input } from "@/components/ui";
@@ -72,7 +72,9 @@ function PropertyRow({ name }: PropertyRowProps) {
   };
 
   const update = (prop: NoteProperty) => {
-    dispatch(setNoteProperty(noteId, name, prop));
+    dispatch(
+      setNoteProperty(noteId, name, prop, property.type === PropertyType.Text),
+    );
   };
 
   return (
@@ -80,7 +82,7 @@ function PropertyRow({ name }: PropertyRowProps) {
       <td className="p-1">
         <PropertyIcon type={property.type} className="size-[18px]" />
       </td>
-      <td className="p-px flex items-center">
+      <td className="p-px flex items-center relative">
         <Input
           ref={nameRef}
           defaultValue={name}

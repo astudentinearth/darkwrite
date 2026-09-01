@@ -48,6 +48,33 @@ it("should flush before unload", () => {
   expect(fn).toHaveBeenCalledWith("arg");
 });
 
+it("should flush only once", () => {
+  const fn = vi.fn(async (_val: string) => {});
+  const updater = DebouncedUpdater(fn, { delay: 500 });
+  updater.update("arg");
+
+  window.dispatchEvent(new Event("beforeunload"));
+  window.dispatchEvent(new Event("beforeunload"));
+  expect(fn).toHaveBeenCalledExactlyOnceWith("arg");
+});
+
+it("should not disconnect event handlers if another update happens mid flight", async () => {
+  const fn = vi.fn(() => new Promise((resolve) => setTimeout(resolve, 50)));
+  const updater = DebouncedUpdater(fn, { delay: 150 });
+  updater.update();
+  await vi.advanceTimersByTimeAsync(151);
+  expect(fn).toHaveBeenCalledTimes(1);
+
+  updater.update();
+
+  // resolve the promise
+  await vi.advanceTimersByTimeAsync(51);
+  // should flush if not disconnected
+  window.dispatchEvent(new Event("beforeunload"));
+
+  expect(fn).toHaveBeenCalledTimes(2);
+});
+
 // type tests
 
 const _updater = DebouncedUpdater(async (a: string, b: number) => 3);

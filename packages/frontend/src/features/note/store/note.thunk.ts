@@ -13,7 +13,7 @@ import {
   stableSortByOrderKeyFn,
 } from "@darkwrite/common";
 import _ from "lodash";
-import { errAsync } from "neverthrow";
+import { errAsync, okAsync } from "neverthrow";
 import { DarkwriteAPIClient } from "@/api/api-client";
 import { ensureNoteContent } from "@/features/editor/store/editor.thunk";
 import {
@@ -23,6 +23,7 @@ import {
 } from "@/features/navigation/navigator";
 import type { AppDispatch, AppGetState } from "@/features/store/types";
 import { getCurrentWorkspaceId } from "@/features/workspaces/store/workspace.thunk";
+import { KeyedDebouncedUpdater } from "@/lib/debounced-updater";
 import {
   selectAllNotesAsMap,
   selectFavorites,
@@ -474,14 +475,43 @@ export const clearTrash =
       .orElse((err) => reconcileOnFailedUpdate(err, dispatch));
   };
 
+const propertyDebouncer = KeyedDebouncedUpdater(
+  (dispatch: AppDispatch, noteId: string) =>
+    dispatch(persistNoteProperties(noteId)),
+);
+
+export const persistNoteProperties =
+  (noteId: string) => (dispatch: AppDispatch, getState: AppGetState) => {
+    const state = getState();
+    const note = selectNoteById(state, noteId);
+    if (!note) return dwErrAsync("Note not found.");
+    const { properties, propertyOrder } = note;
+    return DarkwriteAPIClient.note
+      .patchAll([{ id: noteId, properties, propertyOrder }])
+      .orElse((err) => reconcileOnFailedUpdate(err, dispatch))
+      .orTee(console.error);
+  };
+
 export const setNoteProperty =
-  (noteId: string, propertyName: string, property: NoteProperty) =>
+  (
+    noteId: string,
+    propertyName: string,
+    property: NoteProperty,
+    debounce = false,
+  ) =>
   (dispatch: AppDispatch, getState: AppGetState) => {
     const note = selectNoteById(getState(), noteId);
     if (!note) return dwErrAsync("Note not found.");
-    return dispatch(
-      updateNote(PropertyUpdater.setNoteProperty(note, propertyName, property)),
-    );
+
+    const diff = PropertyUpdater.setNoteProperty(note, propertyName, property);
+    dispatch(act.updateNote({ id: noteId, changes: diff }));
+
+    if (debounce) {
+      propertyDebouncer.for(noteId).update(dispatch, noteId);
+      return okAsync();
+    }
+
+    return dispatch(persistNoteProperties(noteId));
   };
 
 export const deleteNoteProperty =
@@ -491,7 +521,10 @@ export const deleteNoteProperty =
     if (!note) return dwErrAsync("Note not found.");
 
     return PropertyUpdater.deleteNoteProperty(note, propertyName).asyncAndThen(
-      (diff) => dispatch(updateNote(diff)),
+      (diff) => {
+        dispatch(act.updateNote({ id: noteId, changes: diff }));
+        return dispatch(persistNoteProperties(noteId));
+      },
     );
   };
 
@@ -501,6 +534,9 @@ export const renameNoteProperty =
     const note = selectNoteById(getState(), noteId);
     if (!note) return dwErrAsync("Note not found.");
     return PropertyUpdater.renameNoteProperty(note, src, dest).asyncAndThen(
-      (diff) => dispatch(updateNote(diff)),
+      (diff) => {
+        dispatch(act.updateNote({ id: noteId, changes: diff }));
+        return dispatch(persistNoteProperties(noteId));
+      },
     );
   };
