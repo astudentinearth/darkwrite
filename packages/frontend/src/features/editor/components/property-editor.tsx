@@ -3,10 +3,16 @@ import {
   PropertyType,
   type TextProperty,
 } from "@darkwrite/common";
-import { IconCheck, IconPlus } from "@tabler/icons-react";
+import { IconChevronRight, IconPlus } from "@tabler/icons-react";
 import { use, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Button, Input } from "@/components/ui";
+import {
+  Button,
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+  Input,
+} from "@/components/ui";
 import {
   renameNoteProperty,
   setNoteProperty,
@@ -18,6 +24,8 @@ import {
 import { useAppDispatch, useAppSelector } from "@/features/store/hooks";
 import { cn } from "@/lib/utils";
 import { EditorContext } from "../store/editor-context";
+import { selectPropertyVisibility } from "../store/editor-selectors";
+import { editorActions } from "../store/editor-slice";
 import { CreatePropertyDropdown } from "./create-property-dropdown";
 import { PropertyIcon } from "./property-icon";
 
@@ -108,7 +116,7 @@ function PropertyRow({ name }: PropertyRowProps) {
   );
 }
 
-export function NotePropertyEditor() {
+function NotePropertyEditorContent() {
   const { noteId } = use(EditorContext);
   const properties = useAppSelector((state) =>
     selectNotePropertyNames(state, noteId),
@@ -140,5 +148,44 @@ export function NotePropertyEditor() {
         </tr>
       </tbody>
     </table>
+  );
+}
+
+export function NotePropertyEditor() {
+  const { t } = useTranslation();
+  const open = useAppSelector(selectPropertyVisibility);
+  const dispatch = useAppDispatch();
+  const { noteId } = use(EditorContext);
+  const properties = useAppSelector((state) =>
+    selectNotePropertyNames(state, noteId),
+  );
+
+  if (properties.length === 0) return null;
+
+  const setOpen = (val: boolean) =>
+    dispatch(editorActions.setPropertyVisibility(val));
+
+  return (
+    <>
+      <Collapsible open={open} onOpenChange={setOpen}>
+        <CollapsibleTrigger asChild>
+          <Button
+            variant="ghost"
+            className="h-fit text-xs px-1.5 py-1 gap-1 text-muted-foreground -translate-x-2"
+          >
+            <IconChevronRight
+              className={cn(
+                "size-4 transition-transform duration-100 place-self-center",
+                open && "rotate-90",
+              )}
+            />
+            {t("note.property.showProperties")}
+          </Button>
+        </CollapsibleTrigger>
+        <CollapsibleContent>
+          <NotePropertyEditorContent />
+        </CollapsibleContent>
+      </Collapsible>
+    </>
   );
 }

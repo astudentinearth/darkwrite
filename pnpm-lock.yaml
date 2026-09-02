@@ -597,8 +597,6 @@ importers:
         specifier: ^17.0.0
         version: 17.0.0
 
-  packages/test-util: {}
-
   packages/website:
     dependencies:
       '@astrojs/react':
