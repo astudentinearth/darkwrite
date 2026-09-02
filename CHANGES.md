@@ -1,7 +1,12 @@
 # 1.3.0-beta.1
 
+## 🌟 Features
+- Add custom properties to notes
+
 ## ✨ Improvements and fixes
 - Fix global context menu catching focus in uneditable surfaces
+- Fix sidebar items touching the main pane on macOS when overlay scrollbars are enabled
+- Improved accessbility for "Remove icon" and "Add cover" buttons: they now stay visible when focused. They also fade in/out smoothly.
 
 # 1.2.6-beta.1
 ## 🌟 Features

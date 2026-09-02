@@ -848,3 +848,6 @@ msgstr "New property"
 msgid "note.property.showProperties"
 msgstr "Properties"
 
+msgid "ui.pickDate"
+msgstr "Pick date"
+

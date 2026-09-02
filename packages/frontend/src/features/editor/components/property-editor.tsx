@@ -1,7 +1,11 @@
 import {
   type CheckboxProperty,
+  type DateProperty,
+  type DateRange,
+  deserializeRange,
   type NoteProperty,
   PropertyType,
+  serializeRange,
   type TextProperty,
 } from "@darkwrite/common";
 import { IconChevronRight, IconPlus } from "@tabler/icons-react";
@@ -14,6 +18,7 @@ import {
   CollapsibleTrigger,
   Input,
 } from "@/components/ui";
+import { DatePicker, DatePickerCalendar } from "@/components/ui/calendar";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   renameNoteProperty,
@@ -70,6 +75,29 @@ function CheckboxPropertyValue({
             value: value === true, // handle indeterminate
           })
         }
+      />
+    </div>
+  );
+}
+
+function DatePropertyValue({
+  onValueChange,
+  property,
+}: PropertyValueFieldProps<DateProperty>) {
+  const range = deserializeRange(property.value).unwrapOr({
+    from: undefined,
+  } satisfies DateRange);
+
+  const change = (value: DateRange) =>
+    onValueChange({ type: PropertyType.Date, value: serializeRange(value) });
+
+  return (
+    <div className="pl-1 h-full items-center flex">
+      <DatePicker
+        value={range}
+        className="h-fit py-1.5 px-2 bg-transparent"
+        mode="multiple"
+        onChange={change}
       />
     </div>
   );
@@ -135,6 +163,9 @@ function PropertyRow({ name }: PropertyRowProps) {
         )}
         {property.type === PropertyType.Checkbox && (
           <CheckboxPropertyValue property={property} onValueChange={update} />
+        )}
+        {property.type === PropertyType.Date && (
+          <DatePropertyValue property={property} onValueChange={update} />
         )}
       </td>
     </tr>

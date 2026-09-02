@@ -1,0 +1,29 @@
+.rdp-root {
+  --rdp-accent-color: var(--primary);
+  --rdp-accent-background-color: color-mix(
+    in srgb,
+    var(--primary),
+    transparent 75%
+  );
+
+  --rdp-day-width: 20px;
+  --rdp-day-height: 20px;
+  --rdp-day_button-border-radius: 8px;
+  --rdp-day_button-height: 32px;
+  --rdp-day_button-width: 32px;
+
+  --rdp-nav_button-height: 1.75rem;
+  --rdp-nav_button-width: 1.75rem;
+  --rdp-nav-height: 2rem;
+}
+
+.rdp-root .rdp-chevron {
+  fill: currentColor;
+  color: var(--muted-foreground);
+  width: 18px;
+  height: 18px;
+}
+
+.rdp-root .rdp-month_caption {
+  font-size: 0.875rem;
+}

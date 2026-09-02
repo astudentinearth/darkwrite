@@ -2,6 +2,7 @@ import _ from "lodash";
 import { nanoid } from "nanoid";
 import { ok, Result } from "neverthrow";
 import type { NoteContent } from "@/note-content";
+import { parseJson } from "./json-util";
 import { Rank } from "./rank";
 import { type DwResult, dwErr } from "./result";
 
@@ -13,9 +14,31 @@ export enum PropertyType {
 
 export type TextProperty = { type: PropertyType.Text; value: string };
 
+export type DateRange = {
+  from: Date | undefined;
+  to?: Date | undefined;
+};
+
+export const serializeRange = (range: DateRange) =>
+  JSON.stringify({
+    from: range.from?.toISOString(),
+    to: range.to?.toISOString(),
+  });
+
+export const deserializeRange = (serialized: string) =>
+  parseJson<{ from: string | undefined; to: string | undefined }>(
+    serialized,
+  ).map(
+    (result) =>
+      ({
+        from: result.from ? new Date(result.from) : undefined,
+        to: result.to ? new Date(result.to) : undefined,
+      }) satisfies DateRange,
+  );
+
 export type DateProperty = {
   type: PropertyType.Date;
-  /** Must be stored as ISO date strings. */
+  /** Stringified date range. */
   value: string;
 };
 
@@ -33,7 +56,7 @@ const propertyDefaults: { [K in PropertyType]: () => propertyTypeMap[K] } = {
   [PropertyType.Text]: () => ({ type: PropertyType.Text, value: "" }),
   [PropertyType.Date]: () => ({
     type: PropertyType.Date,
-    value: new Date().toISOString(),
+    value: serializeRange({ from: undefined }),
   }),
   [PropertyType.Checkbox]: () => ({
     type: PropertyType.Checkbox,
