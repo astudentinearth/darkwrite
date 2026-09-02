@@ -35,7 +35,7 @@ export function FlatNoteList() {
   return (
     <div
       ref={container}
-      className="h-full w-full grow pl-2 pr-0 py-0 overflow-y-auto scroll-view gutter-stable"
+      className="h-full w-full grow pl-2 py-0 overflow-y-auto scroll-view gutter-stable gutter-compensated"
     >
       <div style={{ height: virtualizer.getTotalSize(), position: "relative" }}>
         {virtualizer.getVirtualItems().map((v) => (

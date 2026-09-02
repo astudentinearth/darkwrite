@@ -74,6 +74,9 @@
   --dw-editor-background: var(--view-1);
 
   --slide-distance: 32px;
+
+  --dw-scrollbar-width: 0px;
+  --dw-list-gutter: 0.5rem;
 }
 
 @theme inline {
@@ -347,6 +350,13 @@ body,
 
 @utility gutter-stable {
   scrollbar-gutter: stable;
+}
+
+/* Pads a scroll container up to --dw-list-gutter, minus whatever the
+   scrollbar already inset the content by. Pairs with gutter-stable so the
+   total inset stays constant no matter how the platform draws scrollbars. */
+@utility gutter-compensated {
+  padding-right: max(0px, var(--dw-list-gutter) - var(--dw-scrollbar-width));
 }
 
 @keyframes app-fade-in {
