@@ -20,6 +20,8 @@ function waitFocusRestoration(
   };
 }
 
+const shouldShow = (data: NativeContextMenuData) => data.editable;
+
 export function useNativeContextMenu() {
   const [open, setOpen] = useState(false);
   const [menuData, setMenuData] = useState<NativeContextMenuData | null>(null);
@@ -29,6 +31,7 @@ export function useNativeContextMenu() {
   useEffect(() => {
     const unsubscribe = ContextMenuEventBus.subscribe("onShow", ({ data }) => {
       setMenuData(data);
+      if (!shouldShow(data)) return;
       if (triggerRef.current) {
         if (open) {
           document.dispatchEvent(

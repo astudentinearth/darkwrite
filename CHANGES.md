@@ -1,3 +1,8 @@
+# 1.3.0-beta.1
+
+## ✨ Improvements and fixes
+- Fix global context menu catching focus in uneditable surfaces
+
 # 1.2.6-beta.1
 ## 🌟 Features
 - Add fuzzy search (search should feel actually usable now)
