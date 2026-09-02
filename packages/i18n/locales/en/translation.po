@@ -846,8 +846,5 @@ msgid "note.property.placeholder"
 msgstr "New property"
 
 msgid "note.property.showProperties"
-msgstr "Show properties"
-
-msgid "note.property.hideProperties"
-msgstr "Hide properties"
+msgstr "Properties"
 

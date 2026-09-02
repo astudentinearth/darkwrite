@@ -28,7 +28,10 @@ function AddPropertyButton() {
 
   return (
     <CreatePropertyDropdown>
-      <Button className="w-fit" variant="ghost">
+      <Button
+        className="w-fit h-fit px-2 p-1.5 hover:opacity-100 opacity-75"
+        variant="ghost"
+      >
         <IconTextPlus size={18} />
         {t("note.property.action.addProperty")}
       </Button>
@@ -36,40 +39,48 @@ function AddPropertyButton() {
   );
 }
 
-export function NoteMetadataEditors({ mouseOver }: { mouseOver?: boolean }) {
+export function NoteMetadataEditors() {
   const { t } = useTranslation();
   const { noteId } = use(EditorContext);
   const { addCover, updateIcon, hasCover, icon } = useEditorCover(noteId);
 
   return (
     <>
-      <div className="flex gap-2 items-end mb-4 font-ui">
+      <div className="flex gap-2 items-end font-ui select-none">
         {icon && (
           <EmojiPicker
             show={fromUnicode(icon ?? "")}
             closeOnSelect
             onSelect={updateIcon}
-            className={cn("z-30 -translate-x-1", hasCover && "-mt-8")}
+            className={cn(
+              "z-30 -translate-x-1 select-none",
+              hasCover && "-mt-8",
+            )}
           />
         )}
         <div
           className={cn(
-            "opacity-0 z-20 font-ui -translate-x-3",
-            mouseOver && "opacity-100",
+            "opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100 z-20 font-ui -translate-x-3",
+            "has-data-[state=open]:opacity-100",
           )}
         >
           <AddRemoveIconButton />
           {!hasCover && (
-            <Button onClick={addCover} className="w-fit" variant={"ghost"}>
-              <Image size={18} />
+            <Button
+              onClick={addCover}
+              className="w-fit hover:opacity-100 opacity-75 h-fit px-2 py-1.5"
+              variant={"ghost"}
+            >
+              <Image size={16} />
               {t("editor.cover.addCover")}
             </Button>
           )}
           <AddPropertyButton />
         </div>
       </div>
-
+      <div />
       <TitleEditField />
+      <hr className="border-(--dw-editor-foreground)/25" />
     </>
   );
 }
@@ -88,7 +99,7 @@ export default function EditorHeader({
   return (
     <div
       className={cn(
-        "w-full flex flex-col items-center pt-16",
+        "w-full flex flex-col items-center pt-16 group",
         hasCover && "pt-48",
       )}
       {...mouseOver.hoverProps}
@@ -99,7 +110,7 @@ export default function EditorHeader({
         fill={wide}
         noConstrain={alwaysFill}
       >
-        <NoteMetadataEditors mouseOver={mouseOver.mouseOver} />
+        <NoteMetadataEditors />
         <NotePropertyEditor />
         <TrashBanner />
       </ConstrainedWidth>

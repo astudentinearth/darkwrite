@@ -3,11 +3,9 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { useCoverImage } from "@/features/editor/hooks/use-cover-image";
 import { EditorContext } from "@/features/editor/store/editor-context";
-import useMouseOver from "@/features/ui/hooks/use-mouse-over";
 import { cn } from "@/lib/utils";
 
 export default function CoverImage() {
-  const { hoverProps, mouseOver } = useMouseOver();
   const { noteId } = use(EditorContext);
   const { chooseNewCover, imageSource, removeCover, backgroundStyle } =
     useCoverImage(noteId);
@@ -17,9 +15,8 @@ export default function CoverImage() {
 
   return (
     <div
-      {...hoverProps}
       className={cn(
-        "w-full h-48 shrink-0 flex items-end justify-end p-2 gap-2 absolute top-0 left-0 right-0 font-ui",
+        "w-full h-48 shrink-0 select-none flex items-end group/cover justify-end p-2 gap-2 absolute top-0 left-0 right-0 font-ui",
         !imageSource && "h-24",
       )}
       style={backgroundStyle}
@@ -28,8 +25,7 @@ export default function CoverImage() {
         onClick={removeCover}
         variant={"secondary"}
         className={cn(
-          "bg-view-1 hover:bg-secondary! drop-shadow-md",
-          !mouseOver && "hidden",
+          "bg-secondary/80 backdrop-blur-lg opacity-0 group-hover/cover:opacity-100 group-focus-within/cover:opacity-100 transition-opacity hover:bg-secondary! drop-shadow-md h-fit px-2 py-2",
         )}
       >
         {t("removeCover")}
@@ -38,8 +34,7 @@ export default function CoverImage() {
         onClick={chooseNewCover}
         variant={"secondary"}
         className={cn(
-          "bg-view-1 hover:bg-secondary! drop-shadow-md",
-          !mouseOver && "hidden",
+          "bg-secondary/80 backdrop-blur-lg opacity-0 group-hover/cover:opacity-100 group-focus-within/cover:opacity-100 transition-opacity hover:bg-secondary! drop-shadow-md h-fit px-2 py-2",
         )}
       >
         {t("changeCover")}
