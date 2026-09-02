@@ -1,4 +1,5 @@
 import {
+  type CheckboxProperty,
   type NoteProperty,
   PropertyType,
   type TextProperty,
@@ -13,6 +14,7 @@ import {
   CollapsibleTrigger,
   Input,
 } from "@/components/ui";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   renameNoteProperty,
   setNoteProperty,
@@ -35,7 +37,7 @@ type PropertyRowProps = {
 
 type PropertyValueFieldProps<T extends NoteProperty> = {
   property: T;
-  onValueChange: (value: TextProperty) => void;
+  onValueChange: (value: T) => void;
 };
 
 function TextPropertyValue({
@@ -44,12 +46,32 @@ function TextPropertyValue({
 }: PropertyValueFieldProps<TextProperty>) {
   return (
     <Input
-      className="border-none rounded-none"
+      className="border-none rounded-none ml-px"
       value={property.value}
       onChange={(e) =>
         onValueChange({ type: PropertyType.Text, value: e.target.value })
       }
     />
+  );
+}
+
+function CheckboxPropertyValue({
+  onValueChange,
+  property,
+}: PropertyValueFieldProps<CheckboxProperty>) {
+  return (
+    <div className="h-full flex items-center pl-3">
+      <Checkbox
+        checked={property.value}
+        className="border-(--dw-editor-foreground)"
+        onCheckedChange={(value) =>
+          onValueChange({
+            type: PropertyType.Checkbox,
+            value: value === true, // handle indeterminate
+          })
+        }
+      />
+    </div>
   );
 }
 
@@ -111,6 +133,9 @@ function PropertyRow({ name }: PropertyRowProps) {
         {property.type === PropertyType.Text && (
           <TextPropertyValue property={property} onValueChange={update} />
         )}
+        {property.type === PropertyType.Checkbox && (
+          <CheckboxPropertyValue property={property} onValueChange={update} />
+        )}
       </td>
     </tr>
   );
@@ -166,26 +191,24 @@ export function NotePropertyEditor() {
     dispatch(editorActions.setPropertyVisibility(val));
 
   return (
-    <>
-      <Collapsible open={open} onOpenChange={setOpen}>
-        <CollapsibleTrigger asChild>
-          <Button
-            variant="ghost"
-            className="h-fit text-xs px-1.5 py-1 gap-1 text-muted-foreground -translate-x-2"
-          >
-            <IconChevronRight
-              className={cn(
-                "size-4 transition-transform duration-100 place-self-center",
-                open && "rotate-90",
-              )}
-            />
-            {t("note.property.showProperties")}
-          </Button>
-        </CollapsibleTrigger>
-        <CollapsibleContent>
-          <NotePropertyEditorContent />
-        </CollapsibleContent>
-      </Collapsible>
-    </>
+    <Collapsible open={open} onOpenChange={setOpen}>
+      <CollapsibleTrigger asChild>
+        <Button
+          variant="ghost"
+          className="h-fit text-xs px-1.5 py-1 gap-1 text-muted-foreground -translate-x-2"
+        >
+          <IconChevronRight
+            className={cn(
+              "size-4 transition-transform duration-100 place-self-center",
+              open && "rotate-90",
+            )}
+          />
+          {t("note.property.showProperties")}
+        </Button>
+      </CollapsibleTrigger>
+      <CollapsibleContent>
+        <NotePropertyEditorContent />
+      </CollapsibleContent>
+    </Collapsible>
   );
 }

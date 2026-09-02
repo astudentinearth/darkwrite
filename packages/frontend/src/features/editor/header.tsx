@@ -88,7 +88,7 @@ export default function EditorHeader({
   return (
     <div
       className={cn(
-        "w-full flex flex-col items-center pt-24",
+        "w-full flex flex-col items-center pt-16",
         hasCover && "pt-48",
       )}
       {...mouseOver.hoverProps}
@@ -102,7 +102,6 @@ export default function EditorHeader({
         <NoteMetadataEditors mouseOver={mouseOver.mouseOver} />
         <NotePropertyEditor />
         <TrashBanner />
-        <hr />
       </ConstrainedWidth>
     </div>
   );
