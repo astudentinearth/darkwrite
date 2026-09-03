@@ -18,7 +18,7 @@
 }
 
 .rdp-root .rdp-chevron {
-  fill: currentColor;
+  fill: none;
   color: var(--muted-foreground);
   width: 18px;
   height: 18px;
@@ -26,4 +26,16 @@
 
 .rdp-root .rdp-month_caption {
   font-size: 0.875rem;
+}
+
+.rdp-root .rdp-day:not(.rdp-selected) {
+  cursor: default;
+  border-radius: 8px;
+  &:hover {
+    background: var(--secondary) !important;
+  }
+}
+
+.rdp-root .rdp-day .rdp-root .rdp-day.rdp-selected:hover {
+  background: var(--primary) !important;
 }

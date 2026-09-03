@@ -848,6 +848,14 @@ msgstr "New property"
 msgid "note.property.showProperties"
 msgstr "Properties"
 
-msgid "ui.pickDate"
+msgid "ui.datepicker.hint"
 msgstr "Pick date"
 
+msgid "ui.datepicker.today"
+msgstr "Today"
+
+msgid "ui.datepicker.tomorrow"
+msgstr "Tomorrow"
+
+msgid "ui.datepicker.nextWeek"
+msgstr "In a week"
