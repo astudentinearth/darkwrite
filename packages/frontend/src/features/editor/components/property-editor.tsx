@@ -160,12 +160,13 @@ function PropertyRow({ name }: PropertyRowProps) {
   if (!property) return null;
 
   const rename = (newName: string) => {
-    if (nameCollides || newName === name) {
+    const trimmed = newName.trim();
+    if (nameCollides || trimmed === "" || trimmed === name) {
       if (nameRef.current) nameRef.current.value = name;
       setNameCollides(false);
       return;
     }
-    dispatch(renameNoteProperty(noteId, name, newName));
+    dispatch(renameNoteProperty(noteId, name, trimmed));
   };
 
   const update = (prop: NoteProperty) => {

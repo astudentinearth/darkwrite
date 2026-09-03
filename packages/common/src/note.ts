@@ -369,6 +369,8 @@ function renameNoteProperty(
   if (!(oldName in note.properties))
     return dwErr(`Property ${oldName} does not exist in "${note.title}"`);
 
+  if (newName.trim() === "") return dwErr(`Property name cannot be empty.`);
+
   if (newName in note.properties || note.propertyOrder.includes(newName))
     return dwErr(`A property with this name already exists.`);
   const diff = PropertyDiff.from(note);
