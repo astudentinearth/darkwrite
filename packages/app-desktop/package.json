@@ -46,6 +46,7 @@
     "zip-a-folder": "^3.1.9"
   },
   "devDependencies": {
+    "@darkwrite/config": "workspace:*",
     "@electron/notarize": "^3.1.1",
     "@electron/rebuild": "^3.7.2",
     "@types/better-sqlite3": "^7.6.13",
@@ -55,10 +56,9 @@
     "@types/semver": "^7.7.1",
     "@vitest/coverage-v8": "^4.1.7",
     "drizzle-kit": "^0.31.9",
-    "electron": "^43",
+    "electron": "^44.1.1",
     "electron-builder": "^26.11.1",
     "electron-devtools-installer": "^3.2.1",
-    "vite-plugin-electron": "^0.29.0",
-    "@darkwrite/config": "workspace:*"
+    "vite-plugin-electron": "^0.29.0"
   }
 }
