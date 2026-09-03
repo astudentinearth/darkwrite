@@ -816,3 +816,38 @@ msgstr "提交问题反馈"
 
 msgid "menu.help.website"
 msgstr "访问 Darkwrite 官网"
+
+# untranslated
+
+msgid "note.property.type.text"
+msgstr "Text"
+
+msgid "note.property.type.date"
+msgstr "Date"
+
+msgid "note.property.type.checkbox"
+msgstr "Checkbox"
+
+msgid "note.property.action.addProperty"
+msgstr "Add property"
+
+msgid "note.property.action.deleteProperty"
+msgstr "Delete property"
+
+msgid "note.property.placeholder"
+msgstr "New property"
+
+msgid "note.property.showProperties"
+msgstr "Properties"
+
+msgid "ui.datepicker.hint"
+msgstr "Pick date"
+
+msgid "ui.datepicker.today"
+msgstr "Today"
+
+msgid "ui.datepicker.tomorrow"
+msgstr "Tomorrow"
+
+msgid "ui.datepicker.nextWeek"
+msgstr "In a week"

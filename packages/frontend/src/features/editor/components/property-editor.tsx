@@ -8,19 +8,24 @@ import {
   serializeRange,
   type TextProperty,
 } from "@darkwrite/common";
-import { IconChevronRight, IconPlus } from "@tabler/icons-react";
-import { use, useRef, useState } from "react";
+import { IconChevronRight, IconPlus, IconTrash } from "@tabler/icons-react";
+import { type ReactNode, use, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   Button,
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuTrigger,
   Input,
 } from "@/components/ui";
-import { DatePicker, DatePickerCalendar } from "@/components/ui/calendar";
+import { DatePicker } from "@/components/ui/calendar";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
+  deleteNoteProperty,
   renameNoteProperty,
   setNoteProperty,
 } from "@/features/note/store/note.thunk";
@@ -44,6 +49,40 @@ type PropertyValueFieldProps<T extends NoteProperty> = {
   property: T;
   onValueChange: (value: T) => void;
 };
+
+type PropertyContextMenuProps = {
+  name: string;
+  /** trigger */
+  children: ReactNode;
+};
+
+function PropertyContextMenu({ name, children }: PropertyContextMenuProps) {
+  const { noteId } = use(EditorContext);
+  const [open, setOpen] = useState(false);
+  const { t } = useTranslation();
+  const dispatch = useAppDispatch();
+
+  const _delete = () => {
+    dispatch(deleteNoteProperty(noteId, name));
+  };
+
+  return (
+    <ContextMenu onOpenChange={setOpen}>
+      <ContextMenuTrigger
+        asChild
+        className={cn(open && "bg-primary/20 rounded-md")}
+      >
+        {children}
+      </ContextMenuTrigger>
+      <ContextMenuContent>
+        <ContextMenuItem variant="destructive" onSelect={_delete}>
+          <IconTrash />
+          {t("note.property.action.deleteProperty")}
+        </ContextMenuItem>
+      </ContextMenuContent>
+    </ContextMenu>
+  );
+}
 
 function TextPropertyValue({
   property,
@@ -137,9 +176,11 @@ function PropertyRow({ name }: PropertyRowProps) {
 
   return (
     <tr className="border-b">
-      <td className="p-1">
-        <PropertyIcon type={property.type} className="size-[18px]" />
-      </td>
+      <PropertyContextMenu name={name}>
+        <td className="p-1">
+          <PropertyIcon type={property.type} className="size-[18px]" />
+        </td>
+      </PropertyContextMenu>
       <td className="p-px flex items-center relative">
         <Input
           ref={nameRef}
@@ -226,7 +267,7 @@ export function NotePropertyEditor() {
       <CollapsibleTrigger asChild>
         <Button
           variant="ghost"
-          className="h-fit text-xs px-1.5 py-1 gap-1 text-muted-foreground -translate-x-2"
+          className="h-fit text-xs px-1.5 py-1 gap-1 text-(--dw-editor-foreground)/70 -translate-x-2"
         >
           <IconChevronRight
             className={cn(
