@@ -35,7 +35,3 @@
     background: var(--secondary) !important;
   }
 }
-
-.rdp-root .rdp-day .rdp-root .rdp-day.rdp-selected:hover {
-  background: var(--primary) !important;
-}

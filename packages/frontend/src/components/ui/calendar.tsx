@@ -128,7 +128,7 @@ export function DatePicker({ className, ...props }: DatePickerProps) {
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger>
+      <PopoverTrigger asChild>
         <Button
           variant="ghost"
           className={cn(className, open && "bg-secondary/50")}

@@ -7,7 +7,6 @@ import { Button } from "@/components/ui";
 import { AddRemoveIconButton } from "@/features/editor/components/add-remove-icon";
 import useEditorCover from "@/features/editor/hooks/use-editor-cover";
 import { EditorContext } from "@/features/editor/store/editor-context";
-import useMouseOver from "@/features/ui/hooks/use-mouse-over";
 import { cn, fromUnicode } from "@/lib/utils";
 import { selectNotePropertyNames } from "../note/store/note-selectors";
 import { useAppSelector } from "../store/hooks";
@@ -95,14 +94,12 @@ export default function EditorHeader({
   const { noteId } = use(EditorContext);
   const { hasCover, wide } = useEditorCover(noteId);
 
-  const mouseOver = useMouseOver();
   return (
     <div
       className={cn(
         "w-full flex flex-col items-center pt-16 group",
         hasCover && "pt-48",
       )}
-      {...mouseOver.hoverProps}
     >
       <CoverImage />
       <ConstrainedWidth
