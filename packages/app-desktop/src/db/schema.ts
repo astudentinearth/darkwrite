@@ -1,4 +1,5 @@
 import { randomUUID } from "node:crypto";
+import type { NotePropertyMap } from "@darkwrite/common";
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import type { PatchPartial } from "./sql";
 
@@ -13,18 +14,8 @@ const timestamp = (name?: string) =>
   name ? integer(name, { mode: "timestamp" }) : integer({ mode: "timestamp" });
 const json = () => text({ mode: "json" });
 
-export const database = sqliteTable("database", {
-  id: generatedUuid(),
-  userId: text(),
-  name: text().notNull(),
-  workspaceId: text().notNull(),
-  createdAt: timestamp().notNull(),
-  propertySchema: json(),
-});
-
 export const workspace = sqliteTable("workspace", {
   id: generatedUuid(),
-  ownerId: text(),
   name: text().notNull(),
   iconUrl: text(),
   createdAt: timestamp().notNull(),
@@ -33,9 +24,9 @@ export const workspace = sqliteTable("workspace", {
 
 export const note = sqliteTable("note", {
   id: generatedUuid(),
-  userId: text(),
   parentId: text(), // FIXME: on delete set null here please
-  propertyValues: json(),
+  properties: json().$type<NotePropertyMap>().default({}).notNull(),
+  propertyOrder: json().$type<string[]>().default([]).notNull(),
   title: text().notNull(),
   icon: text(),
   createdAt: timestamp().notNull(),
@@ -45,7 +36,6 @@ export const note = sqliteTable("note", {
   isTrashed: bool(),
   favoriteOrderHint: text().notNull(),
   orderHint: text().notNull(),
-  databaseId: text().references(() => database.id),
   workspaceId: text()
     .references(() => workspace.id, { onDelete: "cascade" })
     .notNull(),
@@ -74,10 +64,6 @@ export type PatchWorkspaceRow = PatchPartial<WorkspaceRow, "id">;
 export type NoteRow = typeof note.$inferSelect;
 export type NewNoteRow = typeof note.$inferInsert;
 export type PatchNoteRow = PatchPartial<NoteRow, "id">;
-
-export type Database = typeof database.$inferSelect;
-export type NewDatabase = typeof database.$inferInsert;
-export type PatchDatabase = PatchPartial<Database, "id">;
 
 export type EmbedRow = typeof embed.$inferSelect;
 export type NewEmbedRow = typeof embed.$inferInsert;

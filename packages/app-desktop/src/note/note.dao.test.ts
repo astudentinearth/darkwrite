@@ -54,13 +54,12 @@ describe("NoteDAO", () => {
       favoriteOrderHint: Rank.default().get(),
       createdAt: new Date(),
       modifiedAt: new Date(),
-      userId: null,
-      propertyValues: null,
-      databaseId: null,
       icon: null,
       isFavorite: false,
       isTrashed: null,
       trashedAt: null,
+      properties: {},
+      propertyOrder: [],
     };
   };
 

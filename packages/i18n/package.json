@@ -13,6 +13,7 @@
   },
   "packageManager": "pnpm@10.26.2",
   "devDependencies": {
-    "i18next-conv": "^17.0.0"
+    "i18next-conv": "^17.0.0",
+    "@darkwrite/config": "workspace:*"
   }
 }

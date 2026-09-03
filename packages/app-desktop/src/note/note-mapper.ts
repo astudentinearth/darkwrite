@@ -22,7 +22,7 @@ export function notePartialToRowPatch(note: NotePartial): PatchNoteRow {
 }
 
 export function noteToDto(note: NoteRow): Note {
-  const { createdAt, modifiedAt, propertyValues, trashedAt, ...rest } = note;
+  const { createdAt, modifiedAt, trashedAt, ...rest } = note;
   return {
     ...rest,
     trashedAt: trashedAt?.toISOString() ?? null,

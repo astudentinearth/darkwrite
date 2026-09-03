@@ -831,3 +831,36 @@ msgstr "Hata bildir"
 
 msgid "menu.help.website"
 msgstr "Darkwrite internet sitesi"
+
+msgid "note.property.type.text"
+msgstr "Metin"
+
+msgid "note.property.type.date"
+msgstr "Tarih"
+
+msgid "note.property.type.checkbox"
+msgstr "Onay kutusu"
+
+msgid "note.property.action.addProperty"
+msgstr "Özellik ekle"
+
+msgid "note.property.action.deleteProperty"
+msgstr "Özelliği sil"
+
+msgid "note.property.placeholder"
+msgstr "Yeni özellik"
+
+msgid "note.property.showProperties"
+msgstr "Özellikler"
+
+msgid "ui.datepicker.hint"
+msgstr "Tarih seç"
+
+msgid "ui.datepicker.today"
+msgstr "Bugün"
+
+msgid "ui.datepicker.tomorrow"
+msgstr "Yarın"
+
+msgid "ui.datepicker.nextWeek"
+msgstr "Haftaya"

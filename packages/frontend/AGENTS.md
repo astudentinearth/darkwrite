@@ -22,7 +22,7 @@ src
 - context -> non-specific global stores
 - lib -> non-specific frontend modules
 - test -> vitest setup code and mocks
-
+```
 # Frontend architecture
 Darkwrite follows a feature-based architecture for the frontend code. Each feature has its own directory under `src/features`, which contains all the components, hooks, state management, and other related code for that feature. This helps to keep the code organized and makes it easier to maintain and scale the application.
 
@@ -37,8 +37,8 @@ Global state is managed with Redux slices. Do NOT directly subscribe to RTK Quer
 src/features/editor contains a rich text editor based on TipTap/ProseMirror.
 
 ## Feature folder structure
-```
 
+```
 feature-name
 
 - components # react components that belong to this feature

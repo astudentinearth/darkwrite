@@ -1,10 +1,8 @@
 {
   "$schema": "https://biomejs.dev/schemas/2.4.15/schema.json",
-  "vcs": {
-    "enabled": true,
-    "clientKind": "git",
-    "useIgnoreFile": true
-  },
+  "extends": [
+    "@darkwrite/config/biome/default"
+  ],
   "files": {
     "includes": [
       "**",
@@ -20,56 +18,26 @@
       "!!**/build"
     ]
   },
-  "formatter": {
-    "enabled": true,
-    "indentStyle": "space",
-    "indentWidth": 2,
-    "lineWidth": 80,
-    "lineEnding": "lf"
-  },
-  "javascript": {
-    "formatter": {
-      "trailingCommas": "all",
-      "arrowParentheses": "always",
-      "quoteStyle": "double",
-      "jsxQuoteStyle": "double",
-      "semicolons": "always",
-      "bracketSpacing": true
-    }
-  },
   "linter": {
     "enabled": true,
     "rules": {
       "recommended": true,
       "complexity": {
         "useArrowFunction": "off",
-	"noImportantStyles": "off",
-	"noUselessFragments": "off"
+        "noImportantStyles": "off",
+        "noUselessFragments": "off"
       },
       "suspicious": {
-	      "useIterableCallbackReturn": "off"
+        "useIterableCallbackReturn": "off"
       },
       "a11y": {
-	      "useAltText": "off",
-	      "useKeyWithClickEvents": "off",
-	      "noStaticElementInteractions": "off",
-	"noLabelWithoutControl": "off",
-	"noNoninteractiveTabindex": "off",
-	"useButtonType": "off",
-	"useValidAnchor": "off"
-      }
-    }
-  },
-  "css": {
-    "parser": {
-      "tailwindDirectives": true
-    }
-  },
-  "assist": {
-    "enabled": true,
-    "actions": {
-      "source": {
-        "organizeImports": "on"
+        "useAltText": "off",
+        "useKeyWithClickEvents": "off",
+        "noStaticElementInteractions": "off",
+        "noLabelWithoutControl": "off",
+        "noNoninteractiveTabindex": "off",
+        "useButtonType": "off",
+        "useValidAnchor": "off"
       }
     }
   },
@@ -85,29 +53,12 @@
             "noConsole": {
               "level": "error",
               "options": {
-                "allow": ["error"]
+                "allow": [
+                  "error"
+                ]
               }
             }
           }
-        }
-      }
-    },
-    {
-      "includes": [
-        "**/*.test.ts",
-        "**/*.test.tsx",
-        "**/test/**/*.ts",
-        "**/test/**/*.tsx"
-      ],
-      "linter": {
-        "rules": {
-          "suspicious": {
-            "noConsole": "off"
-          },
-	  "style": {
-		"noNonNullAssertion": "off"
-	  }
-
         }
       }
     }

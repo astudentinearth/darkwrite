@@ -1,0 +1,12 @@
+{
+  "name": "@darkwrite/config",
+  "type": "module",
+  "exports": {
+    "./biome/default": "./biome-default.json"
+  },
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [],
+  "author": "",
+  "packageManager": "pnpm@10.26.2"
+}

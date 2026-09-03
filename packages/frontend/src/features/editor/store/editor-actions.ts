@@ -5,6 +5,7 @@ import type { AppDispatch } from "@/features/store/types";
 import type { EditorContent } from "../types";
 import { editorSlice, type FormattingState } from "./editor-slice";
 
+/** @deprecated WHAT ABOUT JUST USING THE SLICE ACTIONS?? */
 export const getEditorActions = (dispatch: AppDispatch) => ({
   setEditorCustomizations(
     noteId: string,
@@ -85,6 +86,7 @@ export const getEditorActions = (dispatch: AppDispatch) => ({
   },
 });
 
+/** @deprecated WHAT ABOUT JUST USING THE SLICE ACTIONS?? */
 export function useEditorActions() {
   const dispatch = useAppDispatch();
   const actions = useMemo(() => getEditorActions(dispatch), [dispatch]);

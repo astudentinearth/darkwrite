@@ -6,7 +6,7 @@
     "lint": "turbo run lint",
     "format": "turbo run format",
     "typecheck": "turbo run typecheck",
-    "dev": "turbo run dev",
+    "check": "turbo run check",
     "knip": "knip",
     "knip:production": "knip --production",
     "build": "tsx tools/darkwrite-builder.js",
@@ -36,7 +36,8 @@
     "turbo": "catalog:",
     "typescript": "catalog:",
     "vite": "catalog:",
-    "vitest": "catalog:"
+    "vitest": "catalog:",
+    "@darkwrite/config": "workspace:*"
   },
   "dependencies": {
     "neverthrow": "^8.2.0"

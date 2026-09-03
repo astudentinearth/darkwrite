@@ -40,3 +40,6 @@ export const selectFullNoteContent: (
   state: RootState,
   noteId: string,
 ) => NoteContent | undefined = (state, noteId) => state.editor.docs[noteId];
+
+export const selectPropertyVisibility = (state: RootState) =>
+  state.editor.showProperties;

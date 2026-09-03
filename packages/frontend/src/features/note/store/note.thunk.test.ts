@@ -4,8 +4,11 @@ import {
   getDefaultNoteCustomization,
   type Note,
   type NoteContent,
+  type NotePropertyMap,
+  PropertyType,
   Rank,
 } from "@darkwrite/common";
+import { nanoid } from "nanoid";
 import { okAsync } from "neverthrow";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { DarkwriteAPIClient } from "@/api/api-client";
@@ -72,6 +75,8 @@ const makeNote = (over: Partial<Note> = {}): Note => ({
   trashedAt: null,
   createdAt: new Date().toISOString(),
   modifiedAt: new Date().toISOString(),
+  properties: {},
+  propertyOrder: [],
   ...over,
 });
 
@@ -353,6 +358,24 @@ describe("duplicateNote", () => {
     expect(setDocumentMock).not.toHaveBeenCalled();
     // createNote rolls its optimistic insert back out on failure
     expect(layer(null).map((n) => n.id)).toEqual(["src"]);
+  });
+
+  it("correctly carries properties over", async () => {
+    const properties: NotePropertyMap = {
+      Status: { type: PropertyType.Text, value: "Done" },
+      "Due date": { type: PropertyType.Date, value: new Date().toISOString() },
+      Reviewed: { type: PropertyType.Checkbox, value: false },
+    };
+    const src = makeNote({ id: nanoid(), title: "Note 1", properties });
+    store.dispatch(notesSlice.actions.upsertNotes([src]));
+
+    getDocumentMock.mockReturnValue(
+      okAsync({ document: { contents: {}, customizations: {} } }),
+    );
+    const duplicate = (
+      await store.dispatch(duplicateNote(src.id))
+    )._unsafeUnwrap();
+    expect(duplicate.properties).toEqual(properties);
   });
 });
 

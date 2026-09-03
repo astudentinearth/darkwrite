@@ -58,6 +58,7 @@
     "electron": "^43",
     "electron-builder": "^26.11.1",
     "electron-devtools-installer": "^3.2.1",
-    "vite-plugin-electron": "^0.29.0"
+    "vite-plugin-electron": "^0.29.0",
+    "@darkwrite/config": "workspace:*"
   }
 }
