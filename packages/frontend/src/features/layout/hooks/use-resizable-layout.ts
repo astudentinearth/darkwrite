@@ -1,23 +1,27 @@
 import { useEffect, useRef } from "react";
-import { isClamped } from "@/lib/utils";
+import { clampSidebarWidth } from "../sidebar-metrics";
 
 export interface ResizableSidebarOptions {
   min: number;
   max: number;
-  callback: (change: number) => void;
+  /** Receives the new sidebar width, already clamped to [min, max]. */
+  callback: (width: number) => void;
 }
 
-export const useResizableSidebar = (opts: ResizableSidebarOptions) => {
-  const initialX = useRef(0);
+export const useResizableSidebar = ({
+  min,
+  max,
+  callback,
+}: ResizableSidebarOptions) => {
   const isResizing = useRef(false);
+
   // add event listeners
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (!isResizing.current) return;
-      if (!isClamped(e.clientX, opts.min, opts.max)) return;
-      const change = e.clientX - initialX.current; // calculate change in position
-      opts.callback(change);
-      initialX.current = e.clientX; // update initial position for next event
+      // the sidebar is the first element in the row, so the cursor position
+      // is the width the user is asking for
+      callback(clampSidebarWidth(e.clientX, { min, max }));
     };
     const handleMouseUp = () => (isResizing.current = false);
     window.addEventListener("mousemove", handleMouseMove);
@@ -26,18 +30,15 @@ export const useResizableSidebar = (opts: ResizableSidebarOptions) => {
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseup", handleMouseUp);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [min, max, callback]);
 
   // enter resize mode if handle triggers mouse down
-  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
-    initialX.current = e.clientX;
+  const handleMouseDown = () => {
     isResizing.current = true;
   };
 
   return {
     isResizing,
-    initialX,
     handleMouseDown,
   };
 };

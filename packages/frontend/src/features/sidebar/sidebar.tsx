@@ -9,6 +9,7 @@ import { HeaderbarButton } from "@/components/headerbar-button";
 import { Button } from "@/components/ui/button";
 import { TextTooltip } from "@/components/ui/tooltip";
 import { useSidebar } from "@/features/layout/hooks/use-sidebar";
+import { useLayoutStore } from "@/features/layout/layout-store";
 import { cn } from "@/lib/utils";
 import { FlatNoteList } from "../note/components/flat-note-list";
 import { TrashWidget } from "../note/components/trash";
@@ -23,6 +24,10 @@ export type SidebarProps = React.HTMLAttributes<HTMLDivElement> & {};
 
 export function Sidebar(props: SidebarProps) {
   const { width, setSidebarCollapsed, isSidebarCollapsed } = useSidebar();
+  // the system may draw its window buttons over our header on the left
+  const insetLeft = useLayoutStore((s) =>
+    s.wco.visible ? s.wco.insetLeft : 0,
+  );
   const { t } = useTranslation();
   return (
     <div
@@ -34,7 +39,10 @@ export function Sidebar(props: SidebarProps) {
       )}
       style={{ width: `${width}px` }}
     >
-      <div className="titlebar w-full h-12 bg-background shrink-0 flex [&>button]:shrink-0 p-2 items-center gap-1">
+      <div
+        className="titlebar w-full h-12 bg-background shrink-0 flex [&>button]:shrink-0 p-2 items-center gap-1"
+        style={{ paddingLeft: Math.max(insetLeft, 8) }}
+      >
         <AppMenu />
         <div className="grow titlebar spacer"></div>
         <TextTooltip text={t("sidebar.button.search")}>

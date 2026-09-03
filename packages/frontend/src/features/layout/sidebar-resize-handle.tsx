@@ -1,14 +1,14 @@
 import { useResizableSidebar } from "@/features/layout/hooks/use-resizable-layout";
 import { useSidebar } from "@/features/layout/hooks/use-sidebar";
 import { cn } from "@/lib/utils";
-
-const [MIN_WIDTH, , MAX_WIDTH] = [180, 240, 300];
+import { useSidebarWidthRange } from "./hooks/use-sidebar-width-range";
 
 export default function SidebarResizeHandle() {
   const { setWidth, isSidebarCollapsed } = useSidebar();
+  const { min, max } = useSidebarWidthRange();
   const { handleMouseDown } = useResizableSidebar({
-    min: MIN_WIDTH,
-    max: MAX_WIDTH,
+    min,
+    max,
     callback: setWidth,
   });
   return (

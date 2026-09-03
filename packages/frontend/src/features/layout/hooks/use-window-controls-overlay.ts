@@ -1,29 +1,27 @@
-import { type RefObject, useEffect } from "react";
-import { useSidebar } from "./use-sidebar";
-import { useTitlebarWidth } from "./use-titlebar-width";
+import { useEffect } from "react";
+import { setWcoGeometry } from "../layout-store";
 
-export const useWindowControlsOverlay = (
-  headerRef: RefObject<HTMLDivElement | null>,
-) => {
-  const { isSidebarCollapsed, width } = useSidebar();
-  const adjustTitlebarWidth = useTitlebarWidth(
-    headerRef,
-    isSidebarCollapsed,
-    width,
-  );
-  // This effect must manage the event listener, or the event won't know about the sidebar. DO NOT REMOVE
+/** Mirrors Window Controls Overlay layout to a shared store. */
+export const useWindowControlsOverlay = () => {
   useEffect(() => {
-    adjustTitlebarWidth();
-    window.navigator.windowControlsOverlay?.addEventListener(
-      "geometrychange",
-      adjustTitlebarWidth,
-    );
-    return () => {
-      window.navigator.windowControlsOverlay?.removeEventListener(
-        "geometrychange",
-        adjustTitlebarWidth,
-      );
+    const overlay = window.navigator.windowControlsOverlay;
+    if (!overlay) return; // WCO not enabled / native frame
+    const sync = () => {
+      if (!overlay.visible) {
+        setWcoGeometry({ visible: false, insetLeft: 0, right: 0 });
+        return;
+      }
+      const rect = overlay.getTitlebarAreaRect();
+      setWcoGeometry({
+        visible: true,
+        insetLeft: rect.left,
+        right: rect.right,
+      });
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isSidebarCollapsed, width]);
+    sync();
+    overlay.addEventListener("geometrychange", sync);
+    return () => {
+      overlay.removeEventListener("geometrychange", sync);
+    };
+  }, []);
 };

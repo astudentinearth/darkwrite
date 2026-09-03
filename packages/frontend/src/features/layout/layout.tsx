@@ -13,15 +13,17 @@ import NavigationHelper from "../navigation/navigation-helper";
 import MoveNoteDialog from "../note/components/move-note-dialog";
 import SearchDialog from "../search/search-dialog";
 import { ClearTrashDialog } from "../trash/components/clear-trash-dialog";
+import { useClampedSidebarWidth } from "./hooks/use-sidebar-width-range";
+import { useWindowControlsOverlay } from "./hooks/use-window-controls-overlay";
 import SidebarResizeHandle from "./sidebar-resize-handle";
 import { Titlebar } from "./titlebar";
-
-//import { useStartup } from "@/hooks/use-startup";
 
 export function Layout() {
   const isSidebarCollapsed = useLocalStore((s) => s.isSidebarCollapsed);
 
   useShortcuts();
+  useWindowControlsOverlay();
+  useClampedSidebarWidth();
   return (
     <>
       <div

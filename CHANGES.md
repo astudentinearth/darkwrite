@@ -2,11 +2,19 @@
 
 ## 🌟 Features
 - Add custom properties to notes
+    - Text, checkbox and date properties supported
+- Window controls on Linux now follow your ordering, including left + right mixed setups
 
 ## ✨ Improvements and fixes
 - Fix global context menu catching focus in uneditable surfaces
 - Fix sidebar items touching the main pane on macOS when overlay scrollbars are enabled
 - Improved accessbility for "Remove icon" and "Add cover" buttons: they now stay visible when focused. They also fade in/out smoothly.
+- Window controls on Linux now follow the GTK theme
+    - The old ugly controls are gone thanks to the Electron 44 update
+- Minimum sidebar width now reacts to changing window decorations on Linux
+
+## 🛠️ Technical changes
+- Upgrade to Electron 44
 
 # 1.2.6-beta.1
 ## 🌟 Features
