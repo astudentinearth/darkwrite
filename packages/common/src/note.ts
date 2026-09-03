@@ -328,9 +328,10 @@ export const stableSortByOrderKeyFn =
 
 export type PropertyDiff = Pick<Note, "propertyOrder" | "properties" | "id">;
 export const PropertyDiff = {
+  // shallow copy by default to prevent excessive re-renders
   from: (note: Note) => ({
     id: note.id,
-    properties: _.cloneDeep(note.properties),
+    properties: { ...note.properties },
     propertyOrder: [...note.propertyOrder],
   }),
 };
