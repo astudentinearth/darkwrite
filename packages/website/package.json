@@ -10,7 +10,7 @@
     "test": "exit 0",
     "lint": "exit 0",
     "format": "prettier --check --write .",
-    "typecheck": "tsc --noEmit --project tsconfig.json"
+    "typecheck": "astro sync && tsc --noEmit --project tsconfig.json"
   },
   "dependencies": {
     "@astrojs/react": "^6.0.4",
