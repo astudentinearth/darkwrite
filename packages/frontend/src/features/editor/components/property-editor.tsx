@@ -176,7 +176,7 @@ function PropertyRow({ name }: PropertyRowProps) {
   };
 
   return (
-    <tr className="border-b">
+    <tr className="border-b border-(--dw-editor-foreground)/25">
       <PropertyContextMenu name={name}>
         <td className="p-1">
           <PropertyIcon type={property.type} className="size-[18px]" />
@@ -188,7 +188,7 @@ function PropertyRow({ name }: PropertyRowProps) {
           defaultValue={name}
           placeholder={t("note.property.placeholder")}
           className={cn(
-            "border-none rounded-none pl-2",
+            "border-none rounded-none pl-2 placeholder:text-(--dw-editor-foreground)/50",
             nameCollides && "bg-destructive/20",
           )}
           onBlur={(e) => rename(e.target.value)}
@@ -199,7 +199,7 @@ function PropertyRow({ name }: PropertyRowProps) {
           }}
         />
       </td>
-      <td className="border-l w-2/3">
+      <td className="border-l border-(--dw-editor-foreground)/25 w-2/3">
         {property.type === PropertyType.Text && (
           <TextPropertyValue property={property} onValueChange={update} />
         )}
@@ -235,7 +235,7 @@ function NotePropertyEditorContent() {
             <CreatePropertyDropdown>
               <Button
                 variant="ghost"
-                className="h-fit w-fit p-1 text-muted-foreground"
+                className="h-fit w-fit p-1 text-(--dw-editor-foreground)/70"
               >
                 <IconPlus size={18} />
                 {t("note.property.action.addProperty")}
