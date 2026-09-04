@@ -14,6 +14,8 @@ import { useEditorActions } from "../store/editor-actions";
 import { EditorContext } from "../store/editor-context";
 import { selectCenterViewState } from "../store/editor-selectors";
 import { OpenFullscreenButton } from "./open-fullscreen-button";
+import { NotePropertyEditor } from "./property-editor";
+import TrashBanner from "./trash-banner";
 
 export function EditorCenterView() {
   const { open, noteId } = useAppSelector(selectCenterViewState);
@@ -56,9 +58,10 @@ function CenterViewContent() {
         <Toolbar noteId={noteId} />
       </div>
       <div className="relative h-full overflow-y-auto scroll-view w-full">
-        <div className="px-20 w-full flex flex-col gap-2 mt-16">
+        <div className="px-20 w-full flex flex-col gap-2 mt-16 group/editor-header">
           <NoteMetadataEditors />
-          <hr />
+          <NotePropertyEditor />
+          <TrashBanner />
         </div>
         <div className="px-16 w-full pt-4">
           <EditorViewport

@@ -59,7 +59,7 @@ export function NoteMetadataEditors() {
         )}
         <div
           className={cn(
-            "opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100 z-20 font-ui -translate-x-3",
+            "opacity-0 transition-opacity group-hover/editor-header:opacity-100 group-focus-within/editor-header:opacity-100 z-20 font-ui -translate-x-3",
             "has-data-[state=open]:opacity-100",
           )}
         >
@@ -97,7 +97,7 @@ export default function EditorHeader({
   return (
     <div
       className={cn(
-        "w-full flex flex-col items-center pt-16 group",
+        "w-full flex flex-col items-center pt-16 group/editor-header",
         hasCover && "pt-48",
       )}
     >
