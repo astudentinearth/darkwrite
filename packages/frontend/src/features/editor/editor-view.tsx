@@ -80,7 +80,7 @@ export function EditorView({ noteId }: { noteId: string }) {
   return (
     <div
       data-editor-boundary="true"
-      className="flex items-center flex-col px-24 editor-fade-in min-h-full relative gap-2"
+      className="flex items-center flex-col px-16 editor-fade-in min-h-full relative gap-2"
       style={style}
       spellCheck={spellcheck}
     >

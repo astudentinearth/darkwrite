@@ -12,6 +12,7 @@
 - Window controls on Linux now follow the GTK theme
     - The old ugly controls are gone thanks to the Electron 44 update
 - Minimum sidebar width now reacts to changing window decorations on Linux
+- Reduce horizontal padding in the editor view (96px → 64px)
 
 ## 🛠️ Technical changes
 - Upgrade to Electron 44

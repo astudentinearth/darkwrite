@@ -4,6 +4,8 @@ import { useEditorStore } from "@/context/editor-store";
 import { useCenteredLayout } from "@/features/layout/hooks/use-centered-layout";
 import { cn } from "@/lib/utils";
 
+const PADDING_PX = 64;
+
 export default function ConstrainedWidth(
   props: {
     fill?: boolean;
@@ -24,8 +26,8 @@ export default function ConstrainedWidth(
           ? {}
           : ({
               width: `${width}px`,
-              maxWidth: `${width - 200}px`,
-              "--editor-max-width": `${width - 200}px`,
+              maxWidth: `${width - 2 * PADDING_PX}px`,
+              "--editor-max-width": `${width - 2 * PADDING_PX}px`,
             } as React.CSSProperties)
       }
     >
