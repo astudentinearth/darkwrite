@@ -166,6 +166,8 @@ export const Note = {
       parentId: null,
       ...args,
     }),
+  hasProperty: (note: Note, propertyName: string): boolean =>
+    Object.hasOwn(note.properties, propertyName),
 };
 
 export type NotePartial = Partial<Note> & { id: Note["id"] };
@@ -349,7 +351,10 @@ function setNoteProperty(
   property: NoteProperty,
 ) {
   const diff = PropertyDiff.from(note);
-  diff.properties[propertyName] = property;
+  diff.properties = {
+    ...diff.properties,
+    [propertyName]: property,
+  };
   if (!diff.propertyOrder.includes(propertyName))
     diff.propertyOrder.push(propertyName);
   return diff;
@@ -367,16 +372,19 @@ function renameNoteProperty(
   oldName: string,
   newName: string,
 ): DwResult<PropertyDiff> {
-  if (!(oldName in note.properties))
+  if (!Note.hasProperty(note, oldName))
     return dwErr(`Property ${oldName} does not exist in "${note.title}"`);
 
   if (newName.trim() === "") return dwErr(`Property name cannot be empty.`);
 
-  if (newName in note.properties || note.propertyOrder.includes(newName))
+  if (Note.hasProperty(note, newName) || note.propertyOrder.includes(newName))
     return dwErr(`A property with this name already exists.`);
   const diff = PropertyDiff.from(note);
 
-  diff.properties[newName] = diff.properties[oldName];
+  diff.properties = {
+    ...diff.properties,
+    [newName]: diff.properties[oldName],
+  };
   delete diff.properties[oldName];
 
   const idx = diff.propertyOrder.indexOf(oldName);
@@ -391,7 +399,7 @@ function deleteNoteProperty(
   note: Note,
   propertyName: string,
 ): DwResult<PropertyDiff> {
-  if (!(propertyName in note.properties))
+  if (!Note.hasProperty(note, propertyName))
     return dwErr(
       `Property "${propertyName}" does not exist in "${note.title}"`,
     );
@@ -405,8 +413,37 @@ function deleteNoteProperty(
   return ok(diff);
 }
 
+function reorderNoteProperty(
+  note: Note,
+  source: string,
+  dest: string,
+  placement: "before" | "after",
+): DwResult<PropertyDiff> {
+  if (source === dest) return dwErr("Cannot move against the same property.");
+  if (!Note.hasProperty(note, source) || !Note.hasProperty(note, dest))
+    return dwErr("Source or destination property doesn't exist.");
+
+  const diff = PropertyDiff.from(note);
+
+  if (!diff.propertyOrder.includes(source)) diff.propertyOrder.push(source);
+  if (!diff.propertyOrder.includes(dest)) diff.propertyOrder.push(dest);
+
+  // remove the source
+  diff.propertyOrder = diff.propertyOrder.filter((prop) => prop !== source);
+
+  const destIdx = diff.propertyOrder.indexOf(dest);
+  diff.propertyOrder.splice(
+    placement === "before" ? destIdx : destIdx + 1,
+    0,
+    source,
+  );
+
+  return ok(diff);
+}
+
 export const PropertyUpdater = {
   renameNoteProperty,
   deleteNoteProperty,
   setNoteProperty,
+  reorderNoteProperty,
 };

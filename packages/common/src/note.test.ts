@@ -265,4 +265,154 @@ describe("note property tests", () => {
       });
     });
   });
+
+  describe("reorderNoteProperty", () => {
+    it.each([
+      { src: "c", dest: "a", expected: ["c", "a", "b"] },
+      { src: "a", dest: "c", expected: ["b", "a", "c"] },
+      { src: "b", dest: "c", expected: ["a", "b", "c"] },
+    ])("should move before a property", ({ src, dest, expected }) => {
+      const note = Note._test({
+        propertyOrder: ["a", "b", "c"],
+        properties: {
+          a: NoteProperty.default(PropertyType.Text),
+          b: NoteProperty.default(PropertyType.Text),
+          c: NoteProperty.default(PropertyType.Text),
+        },
+      });
+
+      const diff = PropertyUpdater.reorderNoteProperty(
+        note,
+        src,
+        dest,
+        "before",
+      )._unsafeUnwrap();
+
+      expect(diff.propertyOrder).toEqual(expected);
+    });
+
+    it.each([
+      { src: "c", dest: "a", expected: ["a", "c", "b"] },
+      { src: "a", dest: "c", expected: ["b", "c", "a"] },
+      { src: "b", dest: "c", expected: ["a", "c", "b"] },
+    ])("should move after a property", ({ src, dest, expected }) => {
+      const note = Note._test({
+        propertyOrder: ["a", "b", "c"],
+        properties: {
+          a: NoteProperty.default(PropertyType.Text),
+          b: NoteProperty.default(PropertyType.Text),
+          c: NoteProperty.default(PropertyType.Text),
+        },
+      });
+
+      const diff = PropertyUpdater.reorderNoteProperty(
+        note,
+        src,
+        dest,
+        "after",
+      )._unsafeUnwrap();
+
+      expect(diff.propertyOrder).toEqual(expected);
+    });
+
+    it("should err when source = dest", () => {
+      const note = Note._test({
+        propertyOrder: ["a", "b", "c"],
+        properties: {
+          a: NoteProperty.default(PropertyType.Text),
+          b: NoteProperty.default(PropertyType.Text),
+          c: NoteProperty.default(PropertyType.Text),
+        },
+      });
+
+      const result = PropertyUpdater.reorderNoteProperty(
+        note,
+        "a",
+        "a",
+        "after",
+      );
+
+      expect(result.isErr()).toBe(true);
+    });
+
+    it("should reconcile when source doesn't exist in order", () => {
+      const note = Note._test({
+        propertyOrder: ["a", "b", "c"],
+        properties: {
+          a: NoteProperty.default(PropertyType.Text),
+          b: NoteProperty.default(PropertyType.Text),
+          c: NoteProperty.default(PropertyType.Text),
+          d: NoteProperty.default(PropertyType.Text),
+        },
+      });
+
+      const result = PropertyUpdater.reorderNoteProperty(
+        note,
+        "d",
+        "a",
+        "after",
+      )._unsafeUnwrap();
+
+      expect(result.propertyOrder).toEqual(["a", "d", "b", "c"]);
+    });
+
+    it("should err when source doesn't exist in properties", () => {
+      const note = Note._test({
+        propertyOrder: ["a", "b", "c", "d"],
+        properties: {
+          a: NoteProperty.default(PropertyType.Text),
+          b: NoteProperty.default(PropertyType.Text),
+          c: NoteProperty.default(PropertyType.Text),
+        },
+      });
+
+      const result = PropertyUpdater.reorderNoteProperty(
+        note,
+        "d",
+        "a",
+        "after",
+      );
+      expect(result.isErr()).toBe(true);
+    });
+
+    it("should reconcile when dest doesn't exist in order", () => {
+      const note = Note._test({
+        propertyOrder: ["a", "b", "c"],
+        properties: {
+          a: NoteProperty.default(PropertyType.Text),
+          b: NoteProperty.default(PropertyType.Text),
+          c: NoteProperty.default(PropertyType.Text),
+          d: NoteProperty.default(PropertyType.Text),
+        },
+      });
+
+      const result = PropertyUpdater.reorderNoteProperty(
+        note,
+        "a",
+        "d",
+        "after",
+      )._unsafeUnwrap();
+
+      expect(result.propertyOrder).toEqual(["b", "c", "d", "a"]);
+    });
+
+    it("should err when dest doesn't exist in properties", () => {
+      const note = Note._test({
+        propertyOrder: ["a", "b", "c", "d"],
+        properties: {
+          a: NoteProperty.default(PropertyType.Text),
+          b: NoteProperty.default(PropertyType.Text),
+          c: NoteProperty.default(PropertyType.Text),
+        },
+      });
+
+      const result = PropertyUpdater.reorderNoteProperty(
+        note,
+        "a",
+        "d",
+        "after",
+      );
+      expect(result.isErr()).toBe(true);
+    });
+  });
 });
