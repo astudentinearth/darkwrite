@@ -819,6 +819,9 @@ msgstr "访问 Darkwrite 官网"
 
 # untranslated
 
+msgid "menu.help.documentation"
+msgstr "Darkwrite documentation"
+
 msgid "note.property.type.text"
 msgstr "Text"
 

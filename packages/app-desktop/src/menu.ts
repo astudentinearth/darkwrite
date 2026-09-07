@@ -97,6 +97,10 @@ function buildTemplate(): ElectronMenuItem[] {
           label: t("menu.help.reportBugs"),
           click: () => shell.openExternal(meta.reportBugsUrl),
         },
+        {
+          label: t("menu.help.documentation"),
+          click: () => shell.openExternal(meta.documentationUrl),
+        },
       ],
     },
   ];

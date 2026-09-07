@@ -10,6 +10,7 @@
   - Rebuilt entirely with Starlight
   - Supports search
   - FAQ, Themes, Workspaces and troubleshooting guides covered with images
+- Add link to documentation under `Help` menu
 
 ## ✨ Improvements and fixes
 - Fix global context menu catching focus in uneditable surfaces

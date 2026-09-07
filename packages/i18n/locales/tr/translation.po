@@ -832,6 +832,9 @@ msgstr "Hata bildir"
 msgid "menu.help.website"
 msgstr "Darkwrite internet sitesi"
 
+msgid "menu.help.documentation"
+msgstr "Darkwrite yardım sayfası"
+
 msgid "note.property.type.text"
 msgstr "Metin"
 
