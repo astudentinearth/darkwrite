@@ -364,10 +364,10 @@ body,
 
 .dnd-top-edge::before {
   content: "";
-  @apply absolute h-1 left-0 right-0 top-0 bg-primary/25 rounded-full -translate-y-1/2;
+  @apply absolute h-1 left-0 right-0 top-0 bg-primary/25 rounded-full -translate-y-1/2 z-1;
 }
 
 .dnd-bottom-edge::before {
   content: "";
-  @apply absolute h-1 left-0 right-0 bottom-0 pointer-events-none bg-primary/25 rounded-full translate-y-1/2;
+  @apply absolute h-1 left-0 right-0 bottom-0 pointer-events-none bg-primary/25 rounded-full translate-y-1/2 z-1;
 }

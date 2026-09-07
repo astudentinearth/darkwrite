@@ -9,7 +9,7 @@ import {
   type TextProperty,
 } from "@darkwrite/common";
 import { IconChevronRight, IconPlus, IconTrash } from "@tabler/icons-react";
-import { type ReactNode, use, useRef, useState } from "react";
+import { type ReactNode, use, useCallback, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   Button,
@@ -25,8 +25,19 @@ import {
 import { DatePicker } from "@/components/ui/calendar";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
+  beginDrag,
+  DragType,
+  parseDragData,
+} from "@/features/dnd/datatransfer";
+import {
+  DropPosition,
+  positionToClassName,
+  useProximityDnD,
+} from "@/features/dnd/proximity-dnd";
+import {
   deleteNoteProperty,
   renameNoteProperty,
+  reorderNoteProperty,
   setNoteProperty,
 } from "@/features/note/store/note.thunk";
 import {
@@ -142,6 +153,9 @@ function DatePropertyValue({
   );
 }
 
+//FIXME: from devtools. band-aid until text props are multi-line
+const PROPERTY_ROW_HEIGHT = 36;
+
 function PropertyRow({ name }: PropertyRowProps) {
   const { noteId } = use(EditorContext);
   const property = useAppSelector((s) =>
@@ -156,6 +170,35 @@ function PropertyRow({ name }: PropertyRowProps) {
 
   const [nameCollides, setNameCollides] = useState(false);
   const nameRef = useRef<HTMLInputElement>(null);
+
+  const handleDrop = useCallback(
+    (e: React.DragEvent<HTMLElement>, pos: DropPosition | null) => {
+      if (pos === null || pos === DropPosition.Center) return;
+      const dragData = parseDragData(e);
+      if (
+        !dragData ||
+        dragData.type !== DragType.NoteProperty ||
+        dragData.propertyName === name
+      )
+        return;
+
+      dispatch(
+        reorderNoteProperty(
+          noteId,
+          dragData.propertyName,
+          name,
+          pos === DropPosition.Top ? "before" : "after",
+        ),
+      );
+    },
+    [dispatch, noteId, name],
+  );
+
+  const { position, isDraggingOver, ...dropProps } = useProximityDnD({
+    edgeHeight: PROPERTY_ROW_HEIGHT / 2,
+    dropEffect: "move",
+    onDrop: handleDrop,
+  });
 
   if (!property) return null;
 
@@ -176,9 +219,28 @@ function PropertyRow({ name }: PropertyRowProps) {
   };
 
   return (
-    <tr className="border-b border-(--dw-editor-foreground)/25">
+    <tr
+      className={cn("border-b border-(--dw-editor-foreground)/25 relative")}
+      {...dropProps}
+    >
       <PropertyContextMenu name={name}>
-        <td className="p-1">
+        <td
+          draggable
+          onDragStart={(e) =>
+            beginDrag(
+              { type: DragType.NoteProperty, propertyName: name },
+              e,
+              "move",
+            )
+          }
+          className={cn(
+            "p-1",
+            isDraggingOver &&
+              position &&
+              position !== DropPosition.Center &&
+              positionToClassName[position],
+          )}
+        >
           <PropertyIcon type={property.type} className="size-[18px]" />
         </td>
       </PropertyContextMenu>

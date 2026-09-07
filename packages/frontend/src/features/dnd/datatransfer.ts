@@ -5,7 +5,7 @@ export const DRAG_DATA_TYPE = "application/darkwrite-drag-internal";
 
 export enum DragType {
   NOTE = "note",
-  FAVORITE = "favorite",
+  NoteProperty = "note-property",
 }
 
 export interface NoteDragData {
@@ -13,9 +13,12 @@ export interface NoteDragData {
   noteId: string;
 }
 
-export type FavoriteDragData = NoteDragData;
+export interface NotePropertyDragData {
+  type: DragType.NoteProperty;
+  propertyName: string;
+}
 
-export type IDragData = NoteDragData | FavoriteDragData;
+export type IDragData = NoteDragData | NotePropertyDragData;
 
 export function beginDrag(
   data: IDragData,

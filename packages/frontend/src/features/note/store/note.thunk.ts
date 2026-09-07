@@ -540,3 +540,24 @@ export const renameNoteProperty =
       },
     );
   };
+
+export const reorderNoteProperty =
+  (
+    noteId: string,
+    source: string,
+    dest: string,
+    placement: "before" | "after",
+  ) =>
+  (dispatch: AppDispatch, getState: AppGetState) => {
+    const note = selectNoteById(getState(), noteId);
+    if (!note) return dwErrAsync("Note not found");
+    return PropertyUpdater.reorderNoteProperty(
+      note,
+      source,
+      dest,
+      placement,
+    ).asyncAndThen((diff) => {
+      dispatch(act.updateNote({ id: noteId, changes: diff }));
+      return dispatch(persistNoteProperties(noteId));
+    });
+  };

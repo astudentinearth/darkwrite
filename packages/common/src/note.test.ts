@@ -1,4 +1,3 @@
-import { nanoid } from "nanoid";
 import {
   isDescendant,
   Note,
@@ -8,7 +7,6 @@ import {
   PropertyUpdater,
   resolveUpperTree,
 } from "./note";
-import { Rank } from "./rank";
 
 test("should resolve the parent tree of a note", () => {
   const notes = {
@@ -315,7 +313,7 @@ describe("note property tests", () => {
       expect(diff.propertyOrder).toEqual(expected);
     });
 
-    it("should err when source = dest", () => {
+    it("should no-op when source = dest", () => {
       const note = Note._test({
         propertyOrder: ["a", "b", "c"],
         properties: {
@@ -325,14 +323,22 @@ describe("note property tests", () => {
         },
       });
 
-      const result = PropertyUpdater.reorderNoteProperty(
+      const result_after = PropertyUpdater.reorderNoteProperty(
         note,
         "a",
         "a",
         "after",
-      );
+      )._unsafeUnwrap();
 
-      expect(result.isErr()).toBe(true);
+      const result_before = PropertyUpdater.reorderNoteProperty(
+        note,
+        "a",
+        "a",
+        "before",
+      )._unsafeUnwrap();
+
+      expect(result_after.propertyOrder).toEqual(note.propertyOrder);
+      expect(result_before.propertyOrder).toEqual(note.propertyOrder);
     });
 
     it("should reconcile when source doesn't exist in order", () => {

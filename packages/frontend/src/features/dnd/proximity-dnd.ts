@@ -1,10 +1,16 @@
 import { type DragEvent, useCallback, useState } from "react";
+import { isDragging } from "./datatransfer";
 
 export enum DropPosition {
   Top = "top",
   Bottom = "bottom",
   Center = "center",
 }
+export const positionToClassName: Record<DropPosition, string> = {
+  [DropPosition.Top]: "dnd-top-edge",
+  [DropPosition.Center]: "bg-primary/10",
+  [DropPosition.Bottom]: "dnd-bottom-edge",
+};
 
 export type DropEffect = DataTransfer["dropEffect"];
 
@@ -39,6 +45,7 @@ export function useProximityDnD<T extends HTMLElement = HTMLElement>({
   const [position, setPosition] = useState<DropPosition | null>(null);
 
   const onDragEnter = useCallback((e: DragEvent<T>) => {
+    if (!isDragging(e)) return;
     e.preventDefault();
     e.stopPropagation();
     setIsDraggingOver(true);
@@ -46,6 +53,7 @@ export function useProximityDnD<T extends HTMLElement = HTMLElement>({
 
   const onDragOver = useCallback(
     (e: DragEvent<T>) => {
+      if (!isDragging(e)) return;
       e.preventDefault();
       e.stopPropagation();
       e.dataTransfer.dropEffect = dropEffect;
@@ -64,7 +72,7 @@ export function useProximityDnD<T extends HTMLElement = HTMLElement>({
 
   const onDragLeave = useCallback(
     (e: DragEvent<T>) => {
-      // A child crossing retargets the leave to the row; ignore it.
+      if (!isDragging(e)) return;
       const related = e.relatedTarget as Node | null;
       if (related && e.currentTarget.contains(related)) return;
       e.preventDefault();
@@ -76,6 +84,7 @@ export function useProximityDnD<T extends HTMLElement = HTMLElement>({
 
   const _onDrop = useCallback(
     (e: DragEvent<T>) => {
+      if (!isDragging(e)) return;
       e.preventDefault();
       e.stopPropagation();
       endDragOver();

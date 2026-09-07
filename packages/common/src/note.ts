@@ -395,6 +395,12 @@ function renameNoteProperty(
   return ok(diff);
 }
 
+/**
+ * Deletes a note property if it exists.
+ * @param note source note
+ * @param propertyName target property
+ * @returns `Ok<PropertyDiff>` on success, `DwErr` on non-existent property.
+ */
 function deleteNoteProperty(
   note: Note,
   propertyName: string,
@@ -419,7 +425,6 @@ function reorderNoteProperty(
   dest: string,
   placement: "before" | "after",
 ): DwResult<PropertyDiff> {
-  if (source === dest) return dwErr("Cannot move against the same property.");
   if (!Note.hasProperty(note, source) || !Note.hasProperty(note, dest))
     return dwErr("Source or destination property doesn't exist.");
 
@@ -427,6 +432,8 @@ function reorderNoteProperty(
 
   if (!diff.propertyOrder.includes(source)) diff.propertyOrder.push(source);
   if (!diff.propertyOrder.includes(dest)) diff.propertyOrder.push(dest);
+
+  if (source === dest) return ok(diff);
 
   // remove the source
   diff.propertyOrder = diff.propertyOrder.filter((prop) => prop !== source);
