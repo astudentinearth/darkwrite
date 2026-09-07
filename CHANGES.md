@@ -3,7 +3,13 @@
 ## 🌟 Features
 - Add custom properties to notes
     - Text, checkbox and date properties supported
+    - Properties can be reordered
+    - Properties can be collapsed to make them get out of the way
 - Window controls on Linux now follow your ordering, including left + right mixed setups
+- [New documentation site](https://darkwrite.app/docs)
+  - Rebuilt entirely with Starlight
+  - Supports search
+  - FAQ, Themes, Workspaces and troubleshooting guides covered with images
 
 ## ✨ Improvements and fixes
 - Fix global context menu catching focus in uneditable surfaces
@@ -16,6 +22,9 @@
 
 ## 🛠️ Technical changes
 - Upgrade to Electron 44
+- Drag-and-drop logic used to sort the tree can now be used to sort any list
+- Website builds are now analyzed for broken links before publish
+- Biome configurations are now shared across packages
 
 # 1.2.6-beta.1
 ## 🌟 Features
