@@ -1,6 +1,5 @@
 import { getEmbedUrl } from "@darkwrite/common";
-import { nanoid } from "nanoid";
-import { use, useRef } from "react";
+import { use } from "react";
 import { useLocalStore } from "@/context/local-state";
 import { useNoteFromURL } from "@/features/note/hooks/use-note-from-url";
 import { navigateToNote } from "../navigation/navigator";
@@ -21,14 +20,9 @@ import {
 export function EditorViewRouteHandler() {
   const noteId = useNoteFromURL();
   const { document } = useDocumentById(noteId ?? "");
-  const instanceId = useRef(nanoid()).current;
   if (!noteId) return null;
   return (
-    document && (
-      <EditorContext.Provider value={{ noteId, instanceId }}>
-        <EditorView key={`editor-root-${noteId}`} noteId={noteId} />
-      </EditorContext.Provider>
-    )
+    document && <EditorView key={`editor-root-${noteId}`} noteId={noteId} />
   );
 }
 

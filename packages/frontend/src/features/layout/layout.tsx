@@ -1,3 +1,5 @@
+import { nanoid } from "nanoid";
+import { useRef } from "react";
 import { Outlet } from "react-router-dom";
 import ThemeHandler from "@/components/theme-handler";
 import { Toaster } from "@/components/ui";
@@ -9,8 +11,10 @@ import { cn } from "@/lib/utils";
 import { AppMenuHandler } from "../app-menu/app-menu-handler";
 import { NativeContextMenuProvider } from "../context-menu/native-context-menu";
 import { EditorCenterView } from "../editor/components/center-view";
+import { EditorContext } from "../editor/store/editor-context";
 import NavigationHelper from "../navigation/navigation-helper";
 import MoveNoteDialog from "../note/components/move-note-dialog";
+import { useNoteFromURL } from "../note/hooks/use-note-from-url";
 import SearchDialog from "../search/search-dialog";
 import { ClearTrashDialog } from "../trash/components/clear-trash-dialog";
 import { useClampedSidebarWidth } from "./hooks/use-sidebar-width-range";
@@ -19,13 +23,15 @@ import SidebarResizeHandle from "./sidebar-resize-handle";
 import { Titlebar } from "./titlebar";
 
 export function Layout() {
+  const noteId = useNoteFromURL() ?? "";
+  const instanceId = useRef(nanoid()).current;
   const isSidebarCollapsed = useLocalStore((s) => s.isSidebarCollapsed);
 
   useShortcuts();
   useWindowControlsOverlay();
   useClampedSidebarWidth();
   return (
-    <>
+    <EditorContext.Provider value={{ noteId, instanceId }}>
       <div
         className={cn(
           "flex [&>div]:shrink-0 w-full h-full bg-background overflow-hidden [--slide-distance:32px]",
@@ -57,6 +63,6 @@ export function Layout() {
         </TooltipProvider>
       </div>
       <Toaster />
-    </>
+    </EditorContext.Provider>
   );
 }

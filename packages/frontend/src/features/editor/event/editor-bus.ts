@@ -18,6 +18,7 @@ export function handleEditorEvent(editor: Editor, event: EditorEvent) {
     }
 
     case EditorEventType.INSERT_CONTENT: {
+      console.log("inserting content");
       if (!editor.isEditable) break;
       const position = event.payload.position ?? util.getEndPos();
 

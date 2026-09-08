@@ -20,6 +20,7 @@
     - The old ugly controls are gone thanks to the Electron 44 update
 - Minimum sidebar width now reacts to changing window decorations on Linux
 - Reduce horizontal padding in the editor view (96px → 64px)
+- Fix regression causing import and undo not working in main editor view
 
 ## 🛠️ Technical changes
 - Upgrade to Electron 44
