@@ -5,6 +5,7 @@
     - Text, checkbox and date properties supported
     - Properties can be reordered
     - Properties can be collapsed to make them get out of the way
+    - Properties are exported into Markdown frontmatter
 - Window controls on Linux now follow your ordering, including left + right mixed setups
 - [New documentation site](https://darkwrite.app/docs)
   - Rebuilt entirely with Starlight

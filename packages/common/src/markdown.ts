@@ -9,7 +9,7 @@ import {
 } from "./note";
 
 const convertMarkdownToHTML = (markdown: string) => {
-  const converter = new showdown.Converter(),
+  const converter = new showdown.Converter({}),
     html = converter.makeHtml(markdown);
   return html;
 };
@@ -30,6 +30,12 @@ const getYamlExportValue = (prop: NoteProperty): YAMLExportValue => {
   }
 };
 
+/**
+ * Convert a note's properties into Markdown frontmatter, preserving order.
+ * @param properties
+ * @param order
+ * @returns complete frontmatter wrapped in `---` delimiters, with all strings wrapped in double quotes.
+ */
 const propertiesToFrontmatter = (
   properties: NotePropertyMap,
   order: string[],
@@ -40,7 +46,7 @@ const propertiesToFrontmatter = (
     if (!Object.hasOwn(properties, name)) continue;
     map.set(name, getYamlExportValue(properties[name]));
   }
-  return `---\n${stringify(map)}\n---\n`;
+  return `---\n${stringify(map, { defaultStringType: "QUOTE_DOUBLE" })}---\n`;
 };
 
 export const MarkdownConverter = {
