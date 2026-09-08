@@ -17,7 +17,6 @@
     "test:watch": "vitest watch",
     "build": "vite build"
   },
-  "packageManager": "pnpm@10.26.2",
   "dependencies": {
     "@tiptap/core": "catalog:",
     "color-string": "^2.1.4",

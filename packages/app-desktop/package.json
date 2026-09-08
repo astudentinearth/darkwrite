@@ -1,6 +1,5 @@
 {
   "name": "@darkwrite/app-desktop",
-  "packageManager": "pnpm@10.26.2",
   "author": {
     "name": "astudentinearth",
     "email": "burak.yn.dev@gmail.com"

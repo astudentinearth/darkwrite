@@ -15,7 +15,6 @@
     "bundle:desktop": "pnpm --filter=@darkwrite/app-desktop build:pre",
     "build:frontend": "pnpm --filter=@darkwrite/frontend build"
   },
-  "packageManager": "pnpm@10.26.2",
   "lint-staged": {
     "packages/{frontend,app-desktop,common,i18n}/**/*.{ts,tsx,js,jsx,json,css}": [
       "biome check --write"

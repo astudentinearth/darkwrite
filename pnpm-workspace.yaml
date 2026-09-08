@@ -1,6 +1,12 @@
 packages:
   - packages/*
 
+allowBuilds:
+  '@swc/core': true
+  better-sqlite3: true
+  electron-winstaller: true
+  esbuild: true
+
 catalog:
   '@tailwindcss/vite': ^4.2
   '@tiptap/core': ^3.22.4
@@ -17,14 +23,6 @@ catalog:
   typescript: ^5.9.3
   vite: ^8.1
   vitest: ^4.1.7
-
-onlyBuiltDependencies:
-  - '@swc/core'
-  - better-sqlite3
-  - electron
-  - electron-winstaller
-  - esbuild
-  - sharp
 
 overrides:
   '@xmldom/xmldom@>=0.9.0 <0.9.10': '>=0.9.10'

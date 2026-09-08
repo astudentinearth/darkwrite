@@ -5,7 +5,7 @@ import type { NoteContent } from "@/note-content";
 import { parseJson } from "./json-util";
 import { Rank } from "./rank";
 import { type DwResult, dwErr } from "./result";
-import { removeNewlines } from "./string";
+import { removeLinebreaks } from "./string";
 
 export enum PropertyType {
   Text = "text",
@@ -315,7 +315,7 @@ export const DEFAULT_NOTE_ICON = "1f4c4";
  * @param title
  * @returns title with newlines gone
  */
-export const cleanNoteTitle = (title: string) => removeNewlines(title);
+export const cleanNoteTitle = (title: string) => removeLinebreaks(title);
 
 /** Generate a sorting function to sort notes by a key deterministically.
  * Notes will always have the same order even if there are colliding keys.
