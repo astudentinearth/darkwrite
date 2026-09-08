@@ -33,5 +33,6 @@
     "@types/node": "catalog:",
     "@types/showdown": "^2.0.6",
     "vite-plugin-dts": "^4.5.4"
-  }
+  },
+  "packageManager": "pnpm@12.3.4"
 }

@@ -113,5 +113,6 @@
     "vite": "catalog:",
     "vite-plugin-svgr": "^5.2.0",
     "vitest": "catalog:"
-  }
+  },
+  "packageManager": "pnpm@12.3.4"
 }

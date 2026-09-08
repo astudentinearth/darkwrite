@@ -12,7 +12,8 @@
     "lint": "biome lint ."
   },
   "devDependencies": {
-    "i18next-conv": "^17.0.0",
-    "@darkwrite/config": "workspace:*"
-  }
+    "@darkwrite/config": "workspace:*",
+    "i18next-conv": "^17.0.0"
+  },
+  "packageManager": "pnpm@12.3.4"
 }
