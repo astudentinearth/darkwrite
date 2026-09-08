@@ -25,6 +25,7 @@ export * from "./sanitizer";
 export * from "./settings";
 export * from "./settings-migrator";
 export * from "./settings-v1-schema";
+export * from "./string";
 export * from "./theme";
 export * from "./themes/catppuccin";
 export * from "./themes/darkwrite-black";

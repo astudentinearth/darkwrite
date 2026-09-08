@@ -25,13 +25,14 @@
     "lodash": "catalog:",
     "nanoid": "^5.1.6",
     "showdown": "^2.1.0",
+    "yaml": "^2.9.0",
     "zod": "^4.3.6"
   },
   "devDependencies": {
+    "@darkwrite/config": "workspace:*",
     "@types/lodash": "catalog:",
     "@types/node": "catalog:",
     "@types/showdown": "^2.0.6",
-    "vite-plugin-dts": "^4.5.4",
-    "@darkwrite/config": "workspace:*"
+    "vite-plugin-dts": "^4.5.4"
   }
 }
