@@ -1,5 +1,5 @@
 import type { PageSize, ThemeSettings } from "@darkwrite/common";
-import { FontStyle } from "@darkwrite/common";
+import { dwErrAsync, FontStyle, MarkdownConverter } from "@darkwrite/common";
 import { ResultAsync } from "neverthrow";
 import { useMemo } from "react";
 import { DarkwriteAPIClient } from "@/api/api-client";
@@ -100,16 +100,19 @@ export function getNoteExporter(store: AppStore) {
       .andTee(showExportToast);
   }
 
-  const exportMarkdown = (noteId: string) =>
-    resolveDocument(noteId)
+  const exportMarkdown = (noteId: string) => {
+    const note = selectNoteById(store.getState(), noteId);
+    if (!note) return dwErrAsync("Note not found.");
+    return resolveDocument(noteId)
       .andThen((content) =>
         DarkwriteAPIClient.note.export(
-          generateMarkdown(content.contents),
+          generateMarkdown(note, content.contents),
           "md",
           selectNoteById(store.getState(), noteId)?.title,
         ),
       )
       .andTee(showExportToast);
+  };
 
   return {
     exportJSON,

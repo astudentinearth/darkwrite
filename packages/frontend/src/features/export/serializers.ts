@@ -1,3 +1,4 @@
+import { MarkdownConverter, type Note } from "@darkwrite/common";
 import { generateHTML as tiptapHTML } from "@tiptap/html";
 import { MarkdownManager } from "@tiptap/markdown";
 import _ from "lodash";
@@ -61,10 +62,20 @@ export const generateHTML = (content: EditorContent) => {
   return tiptapHTML(safeDocument(content), defaultExtensions);
 };
 
-export const generateMarkdown = (content: EditorContent) => {
-  const md = new MarkdownManager({
+export const generateMarkdown = (note: Note, content: EditorContent) => {
+  const markdownSerializer = new MarkdownManager({
     extensions: defaultExtensions,
     ...DefaultMarkdownOptions,
   });
-  return md.serialize(safeDocument(content));
+  const mdBody = markdownSerializer.serialize(safeDocument(content));
+
+  const mdFrontmatter =
+    note.propertyOrder.length > 0
+      ? MarkdownConverter.propertiesToFrontmatter(
+          note.properties,
+          note.propertyOrder,
+        )
+      : "";
+
+  return mdFrontmatter + mdBody;
 };
