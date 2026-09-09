@@ -50,10 +50,26 @@ describe("properties to markdown", () => {
           to: new Date("2026-09-07"),
         }),
       } satisfies NoteProperty,
-      yamlValue: {
-        from: new Date("2026-09-06").toISOString(),
-        to: new Date("2026-09-07").toISOString(),
-      },
+      yamlValue: `${new Date("2026-09-06").toISOString()} / ${new Date("2026-09-07").toISOString()}`,
+    },
+    {
+      property: {
+        type: PropertyType.Date,
+        value: serializeRange({
+          from: new Date("2026-09-06"),
+          to: new Date("2026-09-06"),
+        }),
+      } satisfies NoteProperty,
+      yamlValue: `${new Date("2026-09-06").toISOString()}`,
+    },
+    {
+      property: {
+        type: PropertyType.Date,
+        value: serializeRange({
+          from: new Date("2026-09-06"),
+        }),
+      } satisfies NoteProperty,
+      yamlValue: `${new Date("2026-09-06").toISOString()}`,
     },
   ])("exports $property.type frontmatter", ({ property, yamlValue }) => {
     const frontmatter = MarkdownConverter.propertiesToFrontmatter(

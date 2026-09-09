@@ -14,7 +14,15 @@ const convertMarkdownToHTML = (markdown: string) => {
   return html;
 };
 
-type YAMLExportValue = string | boolean | DateRange;
+type YAMLExportValue = string | boolean;
+
+const stringifyRange = (range: DateRange) => {
+  if (!range.from) return "";
+  if (!range.to || range.from.valueOf() === range.to?.valueOf())
+    return range.from.toISOString();
+
+  return `${range.from.toISOString()} / ${range.to.toISOString()}`;
+};
 
 const getYamlExportValue = (prop: NoteProperty): YAMLExportValue => {
   switch (prop.type) {
@@ -22,7 +30,7 @@ const getYamlExportValue = (prop: NoteProperty): YAMLExportValue => {
       return prop.value;
     case PropertyType.Date:
       return deserializeRange(prop.value).match(
-        (range) => range,
+        (range) => stringifyRange(range),
         () => prop.value,
       );
     case PropertyType.Checkbox:
