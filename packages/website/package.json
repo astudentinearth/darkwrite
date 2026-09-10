@@ -21,7 +21,7 @@
     "@lucide/astro": "^0.546.0",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.4",
-    "astro": "7.2.4",
+    "astro": "7.2.8",
     "clsx": "^2.1.1",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
