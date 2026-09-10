@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { nanoid } from "nanoid";
-import { ok, Result } from "neverthrow";
+import { ok } from "neverthrow";
 import type { NoteContent } from "@/note-content";
 import { parseJson } from "./json-util";
 import { Rank } from "./rank";
