@@ -9,7 +9,14 @@ import {
   type TextProperty,
 } from "@darkwrite/common";
 import { IconChevronRight, IconPlus, IconTrash } from "@tabler/icons-react";
-import { type ReactNode, use, useCallback, useRef, useState } from "react";
+import {
+  type DragEvent,
+  type ReactNode,
+  use,
+  useCallback,
+  useRef,
+  useState,
+} from "react";
 import { useTranslation } from "react-i18next";
 import {
   Button,
@@ -218,6 +225,18 @@ function PropertyRow({ name }: PropertyRowProps) {
     );
   };
 
+  const onDragStart = (e: DragEvent<HTMLTableCellElement>) => {
+    beginDrag({ type: DragType.NoteProperty, propertyName: name }, e, "move");
+    const row = e.currentTarget.closest("tr"),
+      rect = row?.getBoundingClientRect();
+    if (!rect || !row) return;
+    e.dataTransfer.setDragImage(
+      row,
+      e.clientX - rect.left,
+      e.clientY - rect.top,
+    );
+  };
+
   return (
     <tr
       className={cn("border-b border-(--dw-editor-foreground)/25 relative")}
@@ -226,13 +245,7 @@ function PropertyRow({ name }: PropertyRowProps) {
       <PropertyContextMenu name={name}>
         <td
           draggable
-          onDragStart={(e) =>
-            beginDrag(
-              { type: DragType.NoteProperty, propertyName: name },
-              e,
-              "move",
-            )
-          }
+          onDragStart={onDragStart}
           className={cn(
             "p-1",
             isDraggingOver &&
