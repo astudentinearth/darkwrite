@@ -12,6 +12,7 @@ on:
       - "!*.md"
       - "!./**/*.md"
       - ".github/workflows/test-unit.yml"
+  pull_request:
   workflow_dispatch:
 
 env:
@@ -32,9 +33,9 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Enable corepack
-        run: corepack enable
+      
+      - name: Setup pnpm
+        uses: pnpm/setup@v2
 
       - name: Install dependencies
         run: pnpm install
@@ -50,5 +51,4 @@ jobs:
       - name: Run tests
         run: pnpm test
         if: always()
-
 
