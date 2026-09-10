@@ -1,11 +1,6 @@
 import { parse as parseYaml } from "yaml";
 import { MarkdownConverter } from "./markdown";
-import {
-  NoteProperty,
-  PropertyType,
-  serializeRange,
-  TextProperty,
-} from "./note";
+import { NoteProperty, PropertyType, serializeRange } from "./note";
 
 it("converts markdown to html", () => {
   const markdown = "# Hello";

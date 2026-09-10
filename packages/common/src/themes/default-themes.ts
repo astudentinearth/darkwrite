@@ -1,9 +1,9 @@
 import type { Theme } from "../theme";
 import {
-  CatppuccinMocha,
+  CatppuccinFrappe,
   CatppuccinLatte,
   CatppuccinMacchiato,
-  CatppuccinFrappe,
+  CatppuccinMocha,
 } from "./catppuccin";
 import { DarkwriteDim } from "./darkwrite-black";
 import { DarkwriteDefault } from "./darkwrite-default";

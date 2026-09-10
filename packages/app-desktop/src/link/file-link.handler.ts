@@ -3,7 +3,7 @@ import {
   type FileLinkMetadata,
   type IFileLinkAPI,
 } from "@darkwrite/common";
-import { BrowserWindow, type IpcMainInvokeEvent, shell } from "electron";
+import { BrowserWindow, shell } from "electron";
 import { ok } from "neverthrow";
 import { showOpenDialog, whenDialogCancelled } from "@/api/dialog";
 import { type HandlerImplements, handler } from "@/types";

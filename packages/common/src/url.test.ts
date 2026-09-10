@@ -1,8 +1,8 @@
 import { randomUUID } from "node:crypto";
 import {
-  getResourceRefFromUrl,
-  type DarkwriteResourceRef,
   DarkwriteResource,
+  type DarkwriteResourceRef,
+  getResourceRefFromUrl,
   resourceRefToUrl,
 } from "./url";
 

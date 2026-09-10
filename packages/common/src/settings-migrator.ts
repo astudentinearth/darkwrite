@@ -1,4 +1,4 @@
-import { getDefaultUserSettings, type DarkwriteUserSettings } from "./settings";
+import { type DarkwriteUserSettings, getDefaultUserSettings } from "./settings";
 import type { SettingsV1Schema } from "./settings-v1-schema";
 
 function migrateToV2(v1: SettingsV1Schema) {
