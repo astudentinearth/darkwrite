@@ -2,7 +2,6 @@ import { memo, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import {
   Command,
-  CommandDialog,
   CommandEmpty,
   CommandGroup,
   CommandInput,
@@ -10,7 +9,6 @@ import {
   CommandList,
   Dialog,
   DialogContent,
-  ScrollArea,
 } from "@/components/ui";
 import { getNoteIcon } from "@/lib/utils";
 import { navigateToNote } from "../navigation/navigator";

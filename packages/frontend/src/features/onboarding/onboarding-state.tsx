@@ -11,7 +11,7 @@ export interface IOnboardingState {
   enableUpdateCheck: boolean;
 }
 
-export const useOnboardingState = create<IOnboardingState>()((set, get) => ({
+export const useOnboardingState = create<IOnboardingState>()((set, _get) => ({
   enableUpdateCheck: true,
   theme: "darkwrite-default",
   workspaceName: "",

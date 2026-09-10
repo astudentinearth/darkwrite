@@ -1,5 +1,4 @@
 import { IconHome } from "@tabler/icons-react";
-import { Home } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";

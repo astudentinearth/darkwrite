@@ -1,7 +1,6 @@
 import { DarkwriteResource, resourceRefToUrl } from "@darkwrite/common";
 import { useCurrentEditor } from "@tiptap/react";
 import { use, useRef, useState } from "react";
-import { useSearch } from "@/features/note/hooks/use-search";
 import { DarkwriteEditorContext } from "../context";
 import { useFormattingState } from "./use-formatting-state";
 

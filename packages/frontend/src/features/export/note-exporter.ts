@@ -1,5 +1,5 @@
 import type { PageSize, ThemeSettings } from "@darkwrite/common";
-import { dwErrAsync, FontStyle, MarkdownConverter } from "@darkwrite/common";
+import { dwErrAsync, FontStyle } from "@darkwrite/common";
 import { ResultAsync } from "neverthrow";
 import { useMemo } from "react";
 import { DarkwriteAPIClient } from "@/api/api-client";

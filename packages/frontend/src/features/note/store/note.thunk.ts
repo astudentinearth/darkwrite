@@ -12,7 +12,6 @@ import {
   rebalanceLayer,
   stableSortByOrderKeyFn,
 } from "@darkwrite/common";
-import _ from "lodash";
 import { errAsync, okAsync } from "neverthrow";
 import { DarkwriteAPIClient } from "@/api/api-client";
 import { ensureNoteContent } from "@/features/editor/store/editor.thunk";

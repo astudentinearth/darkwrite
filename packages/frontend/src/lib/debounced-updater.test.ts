@@ -77,5 +77,5 @@ it("should not disconnect event handlers if another update happens mid flight", 
 
 // type tests
 
-const _updater = DebouncedUpdater(async (a: string, b: number) => 3);
+const _updater = DebouncedUpdater(async (_a: string, _b: number) => 3);
 expectTypeOf(_updater.update).toEqualTypeOf<(a: string, b: number) => void>();
