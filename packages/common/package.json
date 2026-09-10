@@ -11,7 +11,7 @@
   },
   "scripts": {
     "format": "biome format --write .",
-    "lint": "biome lint .",
+    "lint": "biome lint --error-on-warnings .",
     "typecheck": "tsc --noEmit --project tsconfig.json",
     "test": "vitest run",
     "test:watch": "vitest watch",

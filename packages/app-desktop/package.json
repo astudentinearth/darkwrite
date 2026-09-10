@@ -15,7 +15,7 @@
   "scripts": {
     "dev": "vite",
     "preview": "vite preview",
-    "lint": "biome lint .",
+    "lint": "biome lint --error-on-warnings .",
     "format": "biome format --write .",
     "test": "vitest run",
     "test:run": "vitest run",
