@@ -1,3 +1,8 @@
+# Unreleased
+
+## ✨ Improvements and fixes
+- Drag-drop MIME types are now consistent. Dragging a note property into a note (or the inverse) no longer causes invalid highlighting.
+
 # 1.3.0-beta.1
 
 ## 🌟 Features

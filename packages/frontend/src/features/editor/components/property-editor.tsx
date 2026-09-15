@@ -205,6 +205,7 @@ function PropertyRow({ name }: PropertyRowProps) {
     edgeHeight: PROPERTY_ROW_HEIGHT / 2,
     dropEffect: "move",
     onDrop: handleDrop,
+    type: DragType.NoteProperty,
   });
 
   if (!property) return null;

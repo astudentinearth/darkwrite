@@ -15,7 +15,7 @@ export function useNoteItemDnD<T extends HTMLElement = HTMLElement>(
 
   const onDrag = useCallback(
     (event: DragEvent<T>) => {
-      beginDrag({ type: DragType.NOTE, noteId: id }, event, "move");
+      beginDrag({ type: DragType.Note, noteId: id }, event, "move");
     },
     [id],
   );
@@ -56,6 +56,7 @@ export function useNoteItemDnD<T extends HTMLElement = HTMLElement>(
   } = useProximityDnD<T>({
     dropEffect: "move",
     onDrop: handleDrop,
+    type: DragType.Note,
   });
 
   return {

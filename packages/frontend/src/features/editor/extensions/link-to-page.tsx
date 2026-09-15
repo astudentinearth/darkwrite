@@ -21,7 +21,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui";
 import {
-  DRAG_DATA_TYPE,
+  DragType,
   extractNoteIdFromDragData,
 } from "@/features/dnd/datatransfer";
 import { NoteTitle } from "@/features/note/components/note-title";
@@ -240,7 +240,7 @@ export const LinkToPage = Node.create({
       new Plugin({
         props: {
           handleDrop(view, event) {
-            if (event.dataTransfer?.types.includes(DRAG_DATA_TYPE)) {
+            if (event.dataTransfer?.types.includes(DragType.Note)) {
               const id = extractNoteIdFromDragData(event);
               if (!id) return false;
               const nodeType = view.state.schema.nodes.linkToPage;

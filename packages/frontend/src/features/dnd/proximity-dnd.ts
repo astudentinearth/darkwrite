@@ -1,5 +1,5 @@
 import { type DragEvent, useCallback, useState } from "react";
-import { isDragging } from "./datatransfer";
+import { type DragType, isDragging } from "./datatransfer";
 
 export enum DropPosition {
   Top = "top",
@@ -34,18 +34,20 @@ export type ProximityDnDOptions<T extends HTMLElement> = {
   onDrop: (e: DragEvent<T>, position: DropPosition | null) => void;
   dropEffect: DropEffect;
   edgeHeight?: number;
+  type: DragType;
 };
 
 export function useProximityDnD<T extends HTMLElement = HTMLElement>({
   onDrop,
   dropEffect,
   edgeHeight,
+  type,
 }: ProximityDnDOptions<T>) {
   const [isDraggingOver, setIsDraggingOver] = useState(false);
   const [position, setPosition] = useState<DropPosition | null>(null);
 
   const onDragEnter = useCallback((e: DragEvent<T>) => {
-    if (!isDragging(e)) return;
+    if (!isDragging(e, type)) return;
     e.preventDefault();
     e.stopPropagation();
     setIsDraggingOver(true);
@@ -53,7 +55,7 @@ export function useProximityDnD<T extends HTMLElement = HTMLElement>({
 
   const onDragOver = useCallback(
     (e: DragEvent<T>) => {
-      if (!isDragging(e)) return;
+      if (!isDragging(e, type)) return;
       e.preventDefault();
       e.stopPropagation();
       e.dataTransfer.dropEffect = dropEffect;
@@ -72,7 +74,7 @@ export function useProximityDnD<T extends HTMLElement = HTMLElement>({
 
   const onDragLeave = useCallback(
     (e: DragEvent<T>) => {
-      if (!isDragging(e)) return;
+      if (!isDragging(e, type)) return;
       const related = e.relatedTarget as Node | null;
       if (related && e.currentTarget.contains(related)) return;
       e.preventDefault();
@@ -84,7 +86,7 @@ export function useProximityDnD<T extends HTMLElement = HTMLElement>({
 
   const _onDrop = useCallback(
     (e: DragEvent<T>) => {
-      if (!isDragging(e)) return;
+      if (!isDragging(e, type)) return;
       e.preventDefault();
       e.stopPropagation();
       endDragOver();

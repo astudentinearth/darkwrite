@@ -25,7 +25,7 @@
     "nanoid": "^5.1.6",
     "showdown": "^2.1.0",
     "yaml": "^2.9.0",
-    "zod": "^4.3.6"
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@darkwrite/config": "workspace:*",
