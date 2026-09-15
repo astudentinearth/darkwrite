@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="res/cover.jpg"/>
+    <img src="res/readme.webp"/>
     <img src="https://img.shields.io/github/actions/workflow/status/astudentinearth/darkwrite/test-unit.yml?label=tests&style=for-the-badge"/>
     <img src="https://img.shields.io/github/license/astudentinearth/darkwrite?style=for-the-badge"/>
     <img src="https://img.shields.io/github/stars/astudentinearth/darkwrite?color=yellow&style=for-the-badge"/>
@@ -13,9 +13,14 @@
 </p>
 </strong>
 
-# 📓*Take notes the way you want.*
+# **Write without distractions.**
 
-✒️ Darkwrite lets you take notes without getting in your way.
+Darkwrite leaves you alone with your notes, **without noise.**
+- No forced AI features.
+- No subscriptions.
+- No internet needed, works fully offline.
+- No ads.
+- No tracking.
 
 **Head over to the [releases page](https://github.com/astudentinearth/darkwrite/releases) to get started.**
 
@@ -23,7 +28,7 @@
 
 ## 🖊️ Just start typing.
 
-🖋️ Unleash the power of a rich editor which supports formatting, headings, todo lists, numbered lists, links, images, tables and much more.
+Unleash the power of a rich editor which supports formatting, headings, todo lists, numbered lists, links to files, resizable images, colorful code blocks, tables, and custom properties.
 
 <p align="center">
 <img src="res/Editor.png">
@@ -31,11 +36,11 @@
 
 ## 🖌️ Make it yours.
 
-🎨 Choose from the selection of included themes - or create your own. Say goodbye to boring light and dark themes.
+Choose from the selection of included themes, [or create your own](https://darkwrite.app/docs/functionality/themes/). Say goodbye to boring light and dark themes.
 
-✒️ Pick the fonts you like. You can change the default styles for your notes or choose a font you like only for one specific note. You can also change the user interface font and everything else will follow suit.
+Pick the fonts you like. You can change the default styles for your notes or choose a font you like only for one specific note. You can also change the user interface font and everything else will follow suit.
 
-🖼️ Add cover images to your notes.
+Add icons or cover images to your notes.
 
 <p align="center">
 <img src="res/Customization.png">
@@ -43,11 +48,11 @@
 
 ## 🔒 Open and private.
 
-👨‍💻 Darkwrite's source code is right here. It does not collect **any of your data.** All your notes are stored locally on your device.
+Darkwrite's source code is right here. It does not collect **any of your data.** All your notes are stored locally on your device.
 
-🤖 Darkwrite doesn't need an AI bot to function.
+Darkwrite has no AI features [by design.](https://github.com/astudentinearth/darkwrite/issues/20#issuecomment-4058940266)
 
-📦 You are never locked in. Export all your notes as HTML files, and you can use them anywhere else. Need to backup your data? No problem. Get an archive with just one click and restore them later if you need it.
+You are never locked in. Export all your notes as HTML files, and you can use them anywhere else. Need to backup your data? Get an archive with just one click and restore them later if you need it.
 
 <p align="center">
 <img src="res/section3.png">
@@ -55,7 +60,7 @@
 
 ## 🖥️ Work offline.
 
-Everything stays on device. With Darkwrite you never depend on a server. An outage will never leave you without your notes.
+Everything stays on your device, and you never need an internet connection. Your thoughts are always available.
 
 ## Docs
 
