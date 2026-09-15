@@ -36,3 +36,4 @@ coverage
 
 vite.config.ts.timestamp-*
 .turbo
+.direnv/
