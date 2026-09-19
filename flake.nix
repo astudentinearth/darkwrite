@@ -23,6 +23,7 @@
             python312
             node-gyp
             zsh
+            pnpm_12
             imagemagick # frequently used for conversions
           ];
 

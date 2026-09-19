@@ -15,5 +15,5 @@
     "@darkwrite/config": "workspace:*",
     "i18next-conv": "^17.0.0"
   },
-  "packageManager": "pnpm@12.4.1"
+  "packageManager": "pnpm@12.3.4"
 }

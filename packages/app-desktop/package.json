@@ -60,5 +60,5 @@
     "electron-devtools-installer": "^3.2.1",
     "vite-plugin-electron": "^0.29.0"
   },
-  "packageManager": "pnpm@12.4.1"
+  "packageManager": "pnpm@12.3.4"
 }
