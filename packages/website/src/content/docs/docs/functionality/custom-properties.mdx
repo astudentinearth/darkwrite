@@ -1,0 +1,52 @@
+
+---
+title: Custom properties
+description: Add properties to your notes
+---
+
+import { Aside } from "@astrojs/starlight/components"
+
+Custom properties provide a structured way to embed certain types of easily accessible metadata to your notes. For example, you can store due dates or whether a document is reviewed or not.
+
+## Adding a property
+
+In the editor, hover over the header section, which has your icon and cover image among other things. An `Add property` button will appear if your note doesn't have any properties yet. When clicked, you can choose between the supported property types for your first property.
+
+
+## How properties work
+
+Each property has a name and a value. You can think of it like a simple table, with names on the left and values on the right.
+
+Each property also has a type, which determines how its value should look. A checkbox property shows a checkbox, while a date property shows a date picker.
+
+Each property must have a unique name. Two properties cannot share the same name. When you create a new property, it will initially have no name. If you create a new property while the unnamed property exists, it will be overwritten by the new property.
+
+## Property types
+
+Currently text, date and checkbox properties are supported. More types will be added in the future.
+
+Once you create a property, its type cannot be changed.
+
+## Reordering and deleting properties
+
+Drag a property from its icon to change its position. It feels just like reordering your notes!
+
+To delete a property, right click its icon, and choose `Delete property`
+
+## Exporting properties
+
+Properties are automatically exported into Markdown frontmatter in the same order you sorted them.
+
+- Text properties are exported as-is.
+- Checkbox properties are exported as booleans (`true` if checked, `false` if unchecked)
+- Date properties are exported as ISO dates. Individual dates are exported directly as an ISO date, while ranges are exported in the `<from> / <to>` format.
+
+<Aside type="note">
+Other export formats don't support properties yet, support will be added gradually.
+</Aside>
+
+## Tips
+
+- Duplicating a note duplicates its properties too. You can use this to create many notes based on one template.
+- You can hide properties if you need them out of the way. They won't show up until your next session.
+
