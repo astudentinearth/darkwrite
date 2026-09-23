@@ -1,13 +1,22 @@
 import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/features/store/hooks";
-import { useCurrentWorkspaceId } from "@/features/workspaces/hooks/use-workspace";
-import { selectNotesToMoveInto } from "../store/note-selectors";
+import { searchCurrentWorkspace } from "../store/note-selectors";
 import { MoveNoteDialogPortal } from "../store/notes-ui-actions";
 import { selectMoveNoteDialogState } from "../store/notes-ui-selectors";
+import { notesUiSlice } from "../store/notes-ui-slice";
+
+export const useMoveNoteDialogState = () => {
+  const dispatch = useAppDispatch();
+  const state = useAppSelector(selectMoveNoteDialogState);
+  const setQuery = (q: string) =>
+    dispatch(notesUiSlice.actions.setMoveNoteDialogQuery(q));
+  const hideMoveNoteDialog = () =>
+    dispatch(notesUiSlice.actions.closeMoveNoteDialog());
+  return { ...state, setQuery, hideMoveNoteDialog };
+};
 
 export function useMoveNoteDialog() {
   const { open, noteId } = useAppSelector(selectMoveNoteDialogState);
-  const workspaceId = useCurrentWorkspaceId() ?? "";
   const [query, setQuery] = useState("");
   const dispatch = useAppDispatch();
 
@@ -15,11 +24,7 @@ export function useMoveNoteDialog() {
     MoveNoteDialogPortal(dispatch);
 
   const results = useAppSelector((s) =>
-    selectNotesToMoveInto(s, {
-      query,
-      workspaceId,
-      targetNoteId: noteId ?? "",
-    }),
+    searchCurrentWorkspace(s, query).filter((id) => id !== noteId),
   );
 
   return {

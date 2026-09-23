@@ -5,6 +5,7 @@ export const NOTE_UI_SLICE_NAME = "noteUi";
 export type MoveNoteDialogState = {
   open: boolean;
   noteId: string | null;
+  query: string;
 };
 
 export type ClearTrashDialogState = {
@@ -26,6 +27,7 @@ export const initialNotesUiState: NotesUiState = {
   moveNoteDialog: {
     open: false,
     noteId: null,
+    query: "",
   },
   trashDialog: {
     open: false,
@@ -43,10 +45,15 @@ export const notesUiSlice = createSlice({
     showMoveNoteDialog(state, action: PayloadAction<{ noteId: string }>) {
       state.moveNoteDialog.open = true;
       state.moveNoteDialog.noteId = action.payload.noteId;
+      state.moveNoteDialog.query = "";
+    },
+    setMoveNoteDialogQuery(state, action: PayloadAction<string>) {
+      state.moveNoteDialog.query = action.payload;
     },
     closeMoveNoteDialog(state) {
       state.moveNoteDialog.open = false;
       state.moveNoteDialog.noteId = null;
+      state.moveNoteDialog.query = "";
     },
     showClearTrashDialog(state) {
       state.trashDialog.open = true;

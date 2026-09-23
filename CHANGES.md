@@ -1,5 +1,8 @@
 # Unreleased
 
+## 🌟 Features
+- Revamped move note dialog to match the main search dialog more closely
+
 ## ✨ Improvements and fixes
 - Drag-drop MIME types are now consistent. Dragging a note property into a note (or the inverse) no longer causes invalid highlighting.
 

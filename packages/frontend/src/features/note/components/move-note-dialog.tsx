@@ -1,21 +1,30 @@
+import { isDescendant } from "@darkwrite/common";
 import { memo, useRef } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import {
+  Command,
   CommandDialog,
   CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
   CommandList,
+  Dialog,
+  DialogContent,
   DialogTitle,
 } from "@/components/ui";
 import { useAppDispatch, useAppSelector } from "@/features/store/hooks";
 import { getNoteIcon } from "@/lib/utils";
-import { useMoveNoteDialog } from "../hooks/use-move-note-dialog";
+import { useMoveNoteDialogState } from "../hooks/use-move-note-dialog";
 import { useNoteById } from "../hooks/use-note-by-id";
 import { moveFailToast, moveSuccessToast } from "../note.toast";
 import { moveNote } from "../store/note.thunk";
-import { selectNoteIcon, selectNoteTitle } from "../store/note-selectors";
+import {
+  searchCurrentWorkspace,
+  selectAllNotesAsMap,
+  selectNoteIcon,
+  selectNoteTitle,
+} from "../store/note-selectors";
 import { MoveNoteDialogPortal } from "../store/notes-ui-actions";
 
 function LocalizedTitle({ noteId }: { noteId: string }) {
@@ -26,7 +35,7 @@ function LocalizedTitle({ noteId }: { noteId: string }) {
     <Trans
       i18nKey="ui.moveToDialog.title"
       components={[
-        <span className="font-semibold flex items-center gap-2 p-2 bg-secondary/50 max-w-1/2 overflow-hidden text-ellipsis whitespace-nowrap rounded-md">
+        <span className="font-semibold flex items-center gap-1 px-2 py-0.5 bg-secondary/50 max-w-1/2 overflow-hidden text-ellipsis whitespace-nowrap rounded-md">
           <span>{getNoteIcon(icon)}</span>
           <span className="w-full overflow-hidden text-ellipsis whitespace-nowrap">
             {title}
@@ -51,7 +60,7 @@ const SearchItem = memo(function ({
   if (!note) return <></>;
   return (
     <CommandItem
-      className="px-2 py-4 flex items-center gap-2"
+      className="px-2 py-1.5 flex items-center gap-2 rounded-lg"
       value={`${note.id} ${note.title}`}
       onSelect={() => {
         dispatch(moveNote(targetNoteId, noteId))
@@ -66,16 +75,31 @@ const SearchItem = memo(function ({
   );
 });
 
+function Results() {
+  const { query, noteId: src } = useMoveNoteDialogState();
+  const results = useAppSelector((s) =>
+    src
+      ? searchCurrentWorkspace(s, query).filter(
+          (dest) =>
+            dest !== src && !isDescendant(dest, src, selectAllNotesAsMap(s)),
+        )
+      : [],
+  );
+  if (!src) return null;
+  return results.map((id) => (
+    <SearchItem noteId={id} targetNoteId={src} key={id} />
+  ));
+}
+
 export default function MoveNoteDialog() {
   const { t } = useTranslation();
-  const { hideMoveNoteDialog, noteId, open, setQuery, results, query } =
-    useMoveNoteDialog();
+  const { noteId, open, query, setQuery, hideMoveNoteDialog } =
+    useMoveNoteDialogState();
 
   // biome-ignore lint/style/noNonNullAssertion: ref is always set
   const listRef = useRef<HTMLDivElement>(null!);
   return (
-    <CommandDialog
-      className="max-w-120 backdrop-blur-lg"
+    <Dialog
       open={open}
       onOpenChange={(show) => {
         if (!show) {
@@ -84,26 +108,30 @@ export default function MoveNoteDialog() {
         }
       }}
     >
-      <DialogTitle className="flex gap-2 pl-4 pt-2 items-center font-semibold">
-        {noteId && <LocalizedTitle noteId={noteId} />}
-      </DialogTitle>
-      <CommandInput
-        placeholder={t("search.placeholder")}
-        value={query}
-        onValueChange={(val) => {
-          setQuery(val);
-          listRef.current.scrollTo(0, 0);
-        }}
-      />
-      <CommandList ref={listRef} className="scroll-view">
-        <CommandEmpty>{t("search.noResult")}</CommandEmpty>
-        <CommandGroup>
-          {noteId &&
-            results.map((id) => (
-              <SearchItem key={id} noteId={id} targetNoteId={noteId} />
-            ))}
-        </CommandGroup>
-      </CommandList>
-    </CommandDialog>
+      <DialogContent
+        noOverlay
+        className="max-w-120 bg-view-1/80 backdrop-blur-lg p-0 origin-top top-16 translate-y-0 drop-shadow-2xl"
+      >
+        <DialogTitle className="flex gap-2 pl-3 pt-2 items-center text-base font-semibold">
+          {noteId && <LocalizedTitle noteId={noteId} />}
+        </DialogTitle>
+        <Command onKeyDown={(e) => e.stopPropagation()}>
+          <CommandInput
+            placeholder={t("search.placeholder")}
+            value={query}
+            onValueChange={(val) => {
+              setQuery(val);
+              listRef.current.scrollTo(0, 0);
+            }}
+          />
+          <CommandList ref={listRef} className="scroll-view">
+            <CommandEmpty>{t("search.noResult")}</CommandEmpty>
+            <CommandGroup>
+              <Results />
+            </CommandGroup>
+          </CommandList>
+        </Command>
+      </DialogContent>
+    </Dialog>
   );
 }

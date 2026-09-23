@@ -1,9 +1,11 @@
+import type { DwError } from "@darkwrite/common";
 import { t } from "i18next";
 import notify from "../notifications/notify";
 
 export const moveSuccessToast = () =>
   notify.success(t("toast.movePage.success"));
-export const moveFailToast = () => notify.error(t("toast.movePage.error"));
+export const moveFailToast = (err: DwError) =>
+  notify.error(`${t("toast.movePage.error")} ${err.message}`);
 
 export const clearTrashSuccessToast = () =>
   notify.success(t("toast.clearTrash.success"));
