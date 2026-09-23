@@ -3,7 +3,6 @@ import { memo, useRef } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import {
   Command,
-  CommandDialog,
   CommandEmpty,
   CommandGroup,
   CommandInput,
