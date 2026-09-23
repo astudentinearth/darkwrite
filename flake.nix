@@ -28,8 +28,11 @@
           ];
 
           env = {
-            # Electron 44 will be provided by Nix, no need to download extra
-            ELECTRON_OVERRIDE_DIST_PATH = "${pkgs.electron_44.dist}";
+            ELECTRON_OVERRIDE_DIST_PATH =
+              if pkgs.stdenv.hostPlatform.isDarwin then
+                "${pkgs.electron_44}/bin"
+              else
+                "${pkgs.electron_44.dist}";
             ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
           };
         };
