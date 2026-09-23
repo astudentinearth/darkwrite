@@ -9,7 +9,7 @@ import {
   type TextProperty,
 } from "@darkwrite/common";
 import { IconChevronRight, IconPlus, IconTrash } from "@tabler/icons-react";
-import React, {
+import {
   type DragEvent,
   type ReactNode,
   use,
@@ -73,11 +73,6 @@ type PropertyContextMenuProps = {
   /** trigger */
   children: ReactNode;
 };
-
-type PropertyRowContext = { name: string };
-const PropertyRowContext = React.createContext<PropertyRowContext>({
-  name: "",
-});
 
 function PropertyContextMenu({ name, children }: PropertyContextMenuProps) {
   const { noteId } = use(EditorContext);
@@ -165,48 +160,6 @@ function DatePropertyValue({
   );
 }
 
-function RenamePropertyInput({ name }: { name: string }) {
-  const [nameCollides, setNameCollides] = useState(false);
-  const nameRef = useRef<HTMLInputElement>(null);
-
-  const { noteId } = use(EditorContext);
-
-  const dispatch = useAppDispatch();
-
-  const properties = useAppSelector((state) =>
-    selectNotePropertyNames(state, noteId),
-  );
-
-  const rename = (newName: string) => {
-    const trimmed = newName.trim();
-    if (nameCollides || trimmed === "" || trimmed === name) {
-      if (nameRef.current) nameRef.current.value = name;
-      setNameCollides(false);
-      return;
-    }
-    dispatch(renameNoteProperty(noteId, name, trimmed));
-  };
-
-  const { t } = useTranslation();
-  return (
-    <Input
-      ref={nameRef}
-      defaultValue={name}
-      placeholder={t("note.property.placeholder")}
-      className={cn(
-        "border-none rounded-none pl-2 placeholder:text-(--dw-editor-foreground)/50",
-        nameCollides && "bg-destructive/20",
-      )}
-      onBlur={(e) => rename(e.target.value)}
-      onChange={(e) => {
-        setNameCollides(
-          name !== e.target.value && properties.includes(e.target.value),
-        );
-      }}
-    />
-  );
-}
-
 //FIXME: from devtools. band-aid until text props are multi-line
 const PROPERTY_ROW_HEIGHT = 36;
 
@@ -216,6 +169,14 @@ function PropertyRow({ name }: PropertyRowProps) {
     selectNoteProperty(s, { noteId, name }),
   );
   const dispatch = useAppDispatch();
+  const properties = useAppSelector((state) =>
+    selectNotePropertyNames(state, noteId),
+  );
+
+  const { t } = useTranslation();
+
+  const [nameCollides, setNameCollides] = useState(false);
+  const nameRef = useRef<HTMLInputElement>(null);
 
   const handleDrop = useCallback(
     (e: React.DragEvent<HTMLElement>, pos: DropPosition | null) => {
@@ -248,6 +209,16 @@ function PropertyRow({ name }: PropertyRowProps) {
   });
 
   if (!property) return null;
+
+  const rename = (newName: string) => {
+    const trimmed = newName.trim();
+    if (nameCollides || trimmed === "" || trimmed === name) {
+      if (nameRef.current) nameRef.current.value = name;
+      setNameCollides(false);
+      return;
+    }
+    dispatch(renameNoteProperty(noteId, name, trimmed));
+  };
 
   const update = (prop: NoteProperty) => {
     dispatch(
@@ -287,7 +258,23 @@ function PropertyRow({ name }: PropertyRowProps) {
           <PropertyIcon type={property.type} className="size-[18px]" />
         </td>
       </PropertyContextMenu>
-      <td className="p-px flex items-center relative"></td>
+      <td className="p-px flex items-center relative">
+        <Input
+          ref={nameRef}
+          defaultValue={name}
+          placeholder={t("note.property.placeholder")}
+          className={cn(
+            "border-none rounded-none pl-2 placeholder:text-(--dw-editor-foreground)/50",
+            nameCollides && "bg-destructive/20",
+          )}
+          onBlur={(e) => rename(e.target.value)}
+          onChange={(e) => {
+            setNameCollides(
+              name !== e.target.value && properties.includes(e.target.value),
+            );
+          }}
+        />
+      </td>
       <td className="border-l border-(--dw-editor-foreground)/25 w-2/3">
         {property.type === PropertyType.Text && (
           <TextPropertyValue property={property} onValueChange={update} />
