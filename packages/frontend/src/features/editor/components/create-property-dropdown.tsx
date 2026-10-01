@@ -16,7 +16,6 @@ import { setNoteProperty } from "@/features/note/store/note.thunk";
 import { appSessionSlice } from "@/features/session/session-slice";
 import { useAppDispatch } from "@/features/store/hooks";
 import { EditorContext } from "../store/editor-context";
-import { editorActions } from "../store/editor-slice";
 
 export function CreatePropertyDropdown({ children }: { children: ReactNode }) {
   const { noteId } = use(EditorContext);

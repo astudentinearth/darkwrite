@@ -56,7 +56,6 @@ import { useAppDispatch, useAppSelector } from "@/features/store/hooks";
 import { cn } from "@/lib/utils";
 import { EditorContext } from "../store/editor-context";
 import { selectPropertyVisibility } from "../store/editor-selectors";
-import { editorActions } from "../store/editor-slice";
 import { CreatePropertyDropdown } from "./create-property-dropdown";
 import { PropertyIcon } from "./property-icon";
 
