@@ -51,6 +51,7 @@ import {
   selectNoteProperty,
   selectNotePropertyNames,
 } from "@/features/note/store/note-selectors";
+import { appSessionSlice } from "@/features/session/session-slice";
 import { useAppDispatch, useAppSelector } from "@/features/store/hooks";
 import { cn } from "@/lib/utils";
 import { EditorContext } from "../store/editor-context";
@@ -337,7 +338,7 @@ export function NotePropertyEditor() {
   if (properties.length === 0) return null;
 
   const setOpen = (val: boolean) =>
-    dispatch(editorActions.setPropertyVisibility(val));
+    dispatch(appSessionSlice.actions.setPropertyVisibility(val));
 
   return (
     <Collapsible open={open} onOpenChange={setOpen}>

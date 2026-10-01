@@ -42,4 +42,4 @@ export const selectFullNoteContent: (
 ) => NoteContent | undefined = (state, noteId) => state.editor.docs[noteId];
 
 export const selectPropertyVisibility = (state: RootState) =>
-  state.editor.showProperties;
+  state.session.propertiesOpen;

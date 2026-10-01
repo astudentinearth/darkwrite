@@ -6,11 +6,7 @@ import { appSessionSlice } from "./session-slice";
 export const sessionListenerMiddleware = createListenerMiddleware();
 
 sessionListenerMiddleware.startListening.withTypes<RootState>()({
-  matcher: isAnyOf(
-    appSessionSlice.actions.setFavoritesViewOpen,
-    appSessionSlice.actions.setAllNotesViewOpen,
-    appSessionSlice.actions.switchWorkspace,
-  ),
+  matcher: isAnyOf(...Object.values(appSessionSlice.actions)),
   effect: async (_action, listenerApi) => {
     const state = listenerApi.getState();
     const sessionState = state[appSessionSlice.name];

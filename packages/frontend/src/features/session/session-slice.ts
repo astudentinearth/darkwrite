@@ -21,6 +21,9 @@ export const appSessionSlice = createSlice({
     setFavoritesViewOpen(state, action: PayloadAction<boolean>) {
       state.favoritesViewOpen = action.payload;
     },
+    setPropertyVisibility: (state, action: PayloadAction<boolean>) => {
+      state.propertiesOpen = action.payload;
+    },
   },
   name: SESSION_SLICE_NAME,
 });

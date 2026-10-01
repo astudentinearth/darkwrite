@@ -13,6 +13,7 @@ import {
   DropdownMenuItem,
 } from "@/components/ui";
 import { setNoteProperty } from "@/features/note/store/note.thunk";
+import { appSessionSlice } from "@/features/session/session-slice";
 import { useAppDispatch } from "@/features/store/hooks";
 import { EditorContext } from "../store/editor-context";
 import { editorActions } from "../store/editor-slice";
@@ -24,7 +25,7 @@ export function CreatePropertyDropdown({ children }: { children: ReactNode }) {
   const addProp = (type: PropertyType) => () => {
     dispatch(setNoteProperty(noteId, "", getDefaultNoteProperty(type))).map(
       () => {
-        dispatch(editorActions.setPropertyVisibility(true)); // auto expand properties
+        dispatch(appSessionSlice.actions.setPropertyVisibility(true)); // auto expand properties
       },
     );
   };

@@ -1,10 +1,14 @@
-# Unreleased
+# 1.3.1-beta.1
 
 ## 🌟 Features
 - Revamped move note dialog to match the main search dialog more closely
 
 ## ✨ Improvements and fixes
 - Drag-drop MIME types are now consistent. Dragging a note property into a note (or the inverse) no longer causes invalid highlighting.
+- We now remember whether you collapsed properties or not across reboots
+
+## 🐛 Known issues
+- There's a known ghost click bug when trying to edit a property value while the property name input still has focus (since `1.3.0-beta.1`). A fix will be released soon.
 
 # 1.3.0-beta.1
 

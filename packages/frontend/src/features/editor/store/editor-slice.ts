@@ -32,7 +32,6 @@ export interface EditorState {
   formattingState: Record<string, FormattingState>;
   centerView: CenterViewState;
   editable: boolean;
-  showProperties: boolean;
 }
 
 export const initialEditorState: EditorState = {
@@ -44,7 +43,6 @@ export const initialEditorState: EditorState = {
   formattingState: {},
   centerView: { open: false },
   editable: true,
-  showProperties: true,
 };
 
 export const editorSlice = createSlice({
@@ -151,10 +149,6 @@ export const editorSlice = createSlice({
      */
     setEditable: (state, action: PayloadAction<boolean>) => {
       state.editable = action.payload;
-    },
-
-    setPropertyVisibility: (state, action: PayloadAction<boolean>) => {
-      state.showProperties = action.payload;
     },
   },
   initialState: initialEditorState,
