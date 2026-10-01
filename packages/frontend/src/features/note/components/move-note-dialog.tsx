@@ -25,6 +25,7 @@ import {
   selectNoteTitle,
 } from "../store/note-selectors";
 import { MoveNoteDialogPortal } from "../store/notes-ui-actions";
+import { NoteTitle } from "./note-title";
 
 function LocalizedTitle({ noteId }: { noteId: string }) {
   const title = useAppSelector((s) => selectNoteTitle(s, noteId));
@@ -36,9 +37,9 @@ function LocalizedTitle({ noteId }: { noteId: string }) {
       components={[
         <span className="font-semibold flex items-center gap-1 px-2 py-0.5 bg-secondary/50 max-w-1/2 overflow-hidden text-ellipsis whitespace-nowrap rounded-md">
           <span>{getNoteIcon(icon)}</span>
-          <span className="w-full overflow-hidden text-ellipsis whitespace-nowrap">
+          <NoteTitle className="w-full overflow-hidden text-ellipsis whitespace-nowrap">
             {title}
-          </span>
+          </NoteTitle>
         </span>,
       ]}
     />
@@ -69,7 +70,7 @@ const SearchItem = memo(function ({
       }}
     >
       <span>{getNoteIcon(note.icon)}</span>
-      {note.title}
+      <NoteTitle>{note.title}</NoteTitle>
     </CommandItem>
   );
 });
