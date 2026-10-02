@@ -54,6 +54,7 @@ export default defineConfig({
                 "better-sqlite3",
                 "@libsql/client",
                 /^@libsql\/.*/,
+                "write-file-atomic",
               ],
             },
             license: {

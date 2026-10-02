@@ -1,4 +1,4 @@
-import { readFile, rm, writeFile } from "node:fs/promises";
+import { rm } from "node:fs/promises";
 import path from "node:path";
 import { type DwError, dwErr } from "@darkwrite/common";
 import { pathExists } from "fs-extra";
@@ -31,13 +31,11 @@ export function DocumentFileStore(directory: string): IDocumentStore {
   }
 
   function create(id: string) {
-    return getPath(id).asyncAndThen((p) => fslib.fsResult(writeFile(p, "{}")));
+    return getPath(id).asyncAndThen((p) => fslib.writeFileUtf8(p, "{}"));
   }
 
   function write(id: string, content: string) {
-    return getPath(id).asyncAndThen((p) =>
-      fslib.fsResult(writeFile(p, content)),
-    );
+    return getPath(id).asyncAndThen((p) => fslib.writeFileUtf8(p, content));
   }
 
   function read(id: string) {
@@ -47,7 +45,7 @@ export function DocumentFileStore(directory: string): IDocumentStore {
           e ? ok(path) : dwErr(`Document ${id} not found.`),
         ),
       )
-      .andThen((p) => fslib.fsResult(readFile(p, "utf-8")));
+      .andThen((p) => fslib.readFileUtf8(p));
   }
 
   function exists(id: string) {

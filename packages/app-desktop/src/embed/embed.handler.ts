@@ -1,9 +1,8 @@
-import { writeFile } from "node:fs/promises";
 import { buildDwError, type DesktopEmbedAPI } from "@darkwrite/common";
 import { net } from "electron";
 import { okAsync, ResultAsync } from "neverthrow";
 import { showSaveDialog } from "@/api/dialog";
-import { fsResult } from "@/lib/fs";
+import { writeBinaryFile } from "@/lib/fs";
 import { type HandlerImplements, handler } from "@/types";
 import type { IEmbedService } from "./embed.service";
 import { embedToDto } from "./embed-mapper";
@@ -70,7 +69,7 @@ export function EmbedAPI(
         ]),
       )
       .andThen(([buffer, filepath]) =>
-        fsResult(writeFile(filepath, Buffer.from(buffer))),
+        writeBinaryFile(filepath, Buffer.from(buffer)),
       )
       .orElse(() => okAsync()),
   );

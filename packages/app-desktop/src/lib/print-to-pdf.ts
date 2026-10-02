@@ -1,3 +1,4 @@
+import { randomUUID } from "node:crypto";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { PageMargins, type PageSize } from "@darkwrite/common";
@@ -7,7 +8,10 @@ import { writeFile } from "fs-extra";
 import { Paths } from "./paths";
 
 async function saveTempFile(html: string) {
-  const filePath = path.join(Paths.CACHE_DIR, "dw-pdf-export.html");
+  const filePath = path.join(
+    Paths.CACHE_DIR,
+    `dw-pdf-export-${randomUUID()}.html`,
+  );
   await writeFile(filePath, html, "utf-8");
   return pathToFileURL(filePath).href;
 }

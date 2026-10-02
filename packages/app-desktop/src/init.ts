@@ -34,7 +34,7 @@ import { NoteAPI } from "./note/note.handler";
 import { NoteService } from "./note/note.service";
 import { NoteQueryService } from "./note/note-query.service";
 import { DocumentService } from "./service/document.service";
-import { SettingsService } from "./service/settings.service";
+import { SettingsService } from "./settings/settings.service";
 import { ThemeAPI } from "./theme/theme.handler";
 import { ThemeService } from "./theme/theme.service";
 import { type HandlerImplements, handler } from "./types";

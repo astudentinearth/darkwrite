@@ -1,4 +1,3 @@
-import { readFile, writeFile } from "node:fs/promises";
 import {
   type DarkwriteUserSettings,
   getDefaultUserSettings,
@@ -8,7 +7,7 @@ import {
 import log from "electron-log";
 import _ from "lodash";
 import { ok } from "neverthrow";
-import { assertExists, fsResult } from "@/lib/fs";
+import { assertExists, readFileUtf8, writeFileUtf8 } from "@/lib/fs";
 
 const DEFAULT_SETTINGS_STR = JSON.stringify(getDefaultUserSettings());
 
@@ -17,12 +16,12 @@ export function SettingsService(settingsFilePath: string) {
 
   /** @internal */
   const _writeSettingsFile = (contents: string) =>
-    fsResult(writeFile(settingsFilePath, contents));
+    writeFileUtf8(settingsFilePath, contents);
 
   /** @internal */
   const _readSettingsFile = () =>
     assertExists(settingsFilePath)
-      .andThen(() => fsResult(readFile(settingsFilePath, "utf-8")))
+      .andThen(() => readFileUtf8(settingsFilePath))
       .orTee((error) =>
         log.error(
           "Could not read settings file. Attempting to re-create it.",

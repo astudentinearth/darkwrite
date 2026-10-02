@@ -3,8 +3,9 @@
 import { accessSync } from "node:fs";
 import path from "node:path";
 import { buildDwError, type DwError, dwErr } from "@darkwrite/common";
-import fse, { readFile, writeFile } from "fs-extra";
+import fse, { readFile } from "fs-extra";
 import { ok, Result, ResultAsync } from "neverthrow";
+import writeFile from "write-file-atomic";
 
 export async function rmIfExists(path: string) {
   if (await fse.pathExists(path)) {
@@ -68,13 +69,16 @@ export const pathExists = (filePath: string) =>
 export const readFileUtf8 = (filepath: string) =>
   fsResult(readFile(filepath, "utf8"));
 
+export const readBinaryFile = (filepath: string) =>
+  fsResult(readFile(filepath));
+
 export const writeFileUtf8 = (filepath: string, content: string) =>
   fsResult(writeFile(filepath, content, "utf8"));
 
 export const writeBinaryFile = (
   filepath: string,
   buffer: Buffer | Uint8Array,
-) => fsResult(writeFile(filepath, buffer));
+) => fsResult(writeFile(filepath, Buffer.from(buffer)));
 
 export const ensureDir = (path: string) => fsResult(fse.ensureDir(path));
 export const ensureDirs = (...paths: string[]) =>

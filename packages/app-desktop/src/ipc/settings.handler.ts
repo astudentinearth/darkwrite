@@ -1,6 +1,6 @@
 import type { DarkwriteUserSettings, ISettingsAPI } from "@darkwrite/common";
 import { ok } from "neverthrow";
-import type { ISettingsService } from "@/service/settings.service";
+import type { ISettingsService } from "@/settings/settings.service";
 import { type HandlerImplements, handler } from "@/types";
 
 export function SettingsAPI(

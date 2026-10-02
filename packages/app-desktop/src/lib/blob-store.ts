@@ -3,7 +3,7 @@ import { join } from "node:path";
 import { pathToFileURL } from "node:url";
 import type { DwResultAsync } from "@darkwrite/common";
 import { okAsync } from "neverthrow";
-import { fsResult, rmIfExists } from "./fs";
+import { fsResult, readBinaryFile, rmIfExists, writeBinaryFile } from "./fs";
 import { Paths } from "./paths";
 
 export interface IEmbedStore {
@@ -19,11 +19,11 @@ export function EmbedFileStore(): IEmbedStore {
   }
 
   function put(fileName: string, buf: Buffer) {
-    return fsResult(fse.writeFile(getBlobPath(fileName), buf));
+    return writeBinaryFile(getBlobPath(fileName), buf);
   }
 
   function get(fileName: string) {
-    return fsResult(fse.readFile(getBlobPath(fileName)));
+    return readBinaryFile(getBlobPath(fileName));
   }
 
   function deleteEmbed(fileName: string) {
