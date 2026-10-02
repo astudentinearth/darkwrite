@@ -1,4 +1,5 @@
 import path from "node:path";
+import chalk from "chalk";
 import { build, defineConfig, type InlineConfig } from "vite";
 import electron from "vite-plugin-electron";
 
@@ -21,7 +22,7 @@ const preloadConfig: InlineConfig = {
       formats: ["cjs"],
       fileName: () => "preload.js",
     },
-    rollupOptions: {
+    rolldownOptions: {
       external: ["electron"],
     },
     license: {
@@ -29,6 +30,8 @@ const preloadConfig: InlineConfig = {
     },
   },
 };
+
+let electronStarted: boolean = false;
 
 export default defineConfig({
   plugins: [
@@ -41,11 +44,23 @@ export default defineConfig({
     electron([
       {
         entry: "src/main.ts",
+        async onstart({ startup }) {
+          if (!electronStarted) {
+            electronStarted = await startup();
+            return;
+          }
+
+          console.warn(
+            chalk.yellow(
+              "[dev] ⚠️ Main process is running a stale build. Restart to apply changes.",
+            ),
+          );
+        },
         vite: {
           resolve,
           build: {
             outDir: path.resolve(DISTDIR),
-            rollupOptions: {
+            rolldownOptions: {
               platform: "node",
               external: [
                 "electron",

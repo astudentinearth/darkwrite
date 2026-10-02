@@ -78,11 +78,9 @@ async function showMainWindow(
   setupCsp();
   if (is.dev && DEV_SERVER_URL) {
     await win.loadURL(DEV_SERVER_URL);
-    win.webContents.openDevTools({ mode: "detach" });
   } else {
     win.loadFile(join(__dirname, webcontentsUrl));
   }
-  //  win.webContents.setZoomFactor(1.0);
   initAppMenu();
 }
 

@@ -60,7 +60,7 @@
     "electron": "^44.1.1",
     "electron-builder": "^26.15.3",
     "electron-devtools-installer": "^3.2.1",
-    "vite-plugin-electron": "^0.29.0"
+    "vite-plugin-electron": "^1.1.2"
   },
   "packageManager": "pnpm@12.3.4"
 }

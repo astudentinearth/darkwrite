@@ -329,8 +329,8 @@ importers:
         specifier: ^3.2.1
         version: 3.2.1
       vite-plugin-electron:
-        specifier: ^0.29.0
-        version: 0.29.0
+        specifier: ^1.1.2
+        version: 1.1.2(vite@8.1.0(@types/node@24.12.2)(esbuild@0.25.12)(jiti@2.7.0)(tsx@4.21.0)(yaml@2.9.0))
 
   packages/common:
     dependencies:
@@ -6050,6 +6050,10 @@ packages:
     resolution: {integrity: sha512-arhlxbFRmoQHl33a0Zkle/YWlmNwoyt6QNZEIJcqNbdrsix5Lvc4HyyI3EnwxTYlZYc32EbYrQ8SzEZ7dqgg9A==}
     engines: {node: '>=14'}
 
+  local-pkg@1.2.1:
+    resolution: {integrity: sha512-++gUqRDEvcnN6Zhqrr+y/CkVEHhlrR96vZn3nZZPYzMcBUyBtTKzB9NadClFIsIVSsu+3i9tfk/erqy9kAmt7Q==}
+    engines: {node: '>=14'}
+
   lodash@4.18.1:
     resolution: {integrity: sha512-dMInicTPVE8d1e5otfwmmjlxkZoUpiVLwyeTdUsi/Caj/gfzzblBcCE5sRHV/AsjuCmxWrte2TNGSYuCeCq+0Q==}
 
@@ -7945,9 +7949,10 @@ packages:
       vite:
         optional: true
 
-  vite-plugin-electron@0.29.0:
-    resolution: {integrity: sha512-HP0DI9Shg41hzt55IKYVnbrChWXHX95QtsEQfM+szQBpWjVhVGMlqRjVco6ebfQjWNr+Ga+PeoBjMIl8zMaufw==}
+  vite-plugin-electron@1.1.2:
+    resolution: {integrity: sha512-EAHs3zhK+33FhdasevCRVMMOFIHT+MDg5EcD47CCwxDcJ1REYqb7EeR0RHOjCKS7P2ip/q1ISzzMpK3H+p8uTA==}
     peerDependencies:
+      vite: '>=6'
       vite-plugin-electron-renderer: '*'
     peerDependenciesMeta:
       vite-plugin-electron-renderer:
@@ -13684,6 +13689,12 @@ snapshots:
       pkg-types: 2.3.0
       quansync: 0.2.11
 
+  local-pkg@1.2.1:
+    dependencies:
+      mlly: 1.8.1
+      pkg-types: 2.3.0
+      quansync: 0.2.11
+
   lodash@4.18.1: {}
 
   log-update@6.1.0:
@@ -16154,7 +16165,10 @@ snapshots:
       - rollup
       - supports-color
 
-  vite-plugin-electron@0.29.0: {}
+  vite-plugin-electron@1.1.2(vite@8.1.0(@types/node@24.12.2)(esbuild@0.25.12)(jiti@2.7.0)(tsx@4.21.0)(yaml@2.9.0)):
+    dependencies:
+      local-pkg: 1.2.1
+      vite: 8.1.0(@types/node@24.12.2)(esbuild@0.25.12)(jiti@2.7.0)(tsx@4.21.0)(yaml@2.9.0)
 
   vite-plugin-svgr@5.2.0(rollup@4.59.0)(supports-color@8.1.1)(typescript@5.9.3)(vite@8.1.0(@types/node@24.12.2)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.21.0)(yaml@2.9.0)):
     dependencies:
