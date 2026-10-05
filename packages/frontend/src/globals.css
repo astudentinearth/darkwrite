@@ -7,41 +7,58 @@
 
 :root {
   --background: hsl(0 0% 5%);
-  --foreground: hsl(0 0% 100%);
-
   --view-1: hsl(0 0% 6%);
   --view-2: hsl(0 0% 11%);
+  --secondary: hsl(0 0% 20%);
 
-  --card: hsl(0 0% 13%);
-  --card-foreground: hsl(0 0% 94%);
-
-  --popover: hsl(0 0% 9%);
-  --popover-foreground: hsl(0 0% 94%);
+  --foreground: hsl(0 0% 100%);
+  --muted-foreground: hsl(0 0% 89%);
 
   --primary: hsl(214 64% 44%);
   --primary-foreground: hsl(0 0% 100%);
   --primary-text: hsl(242 58% 62%);
 
-  --ring: hsl(242 42% 31%);
-
-  --secondary: hsl(0 0% 20%);
-  --secondary-foreground: hsl(0 0% 100%);
-
-  --muted: hsl(0 0% 17%);
-  --muted-foreground: hsl(0 0% 89%);
-
-  --accent: hsl(217.2 32.6% 17.5%);
-  --accent-foreground: hsl(210 40% 98%);
-
   --destructive: hsl(0 51% 55%);
   --destructive-foreground: hsl(210 40% 98%);
 
-  --disabled: hsl(0 0% 22%);
-
   --border: hsl(0 0% 14%);
-  --input: hsl(217.2 32.6% 17.5%);
-
   --star: hsl(50 97% 63%);
+
+  --frost-strength: 16px;
+  --frost-opacity: 0.85;
+
+  /* take the darker end in light mode */
+  --d-hover-brightness: -0.05;
+  --hover-base: var(--background);
+  --hover-opacity: 0.25;
+
+  /* take the brighter end in dark mode */
+  &.dark {
+    --d-hover-brightness: 0.05;
+    --hover-base: var(--secondary);
+  }
+
+  --ring: color-mix(in oklab, var(--primary) 50%, transparent);
+
+  /** make the accent color just a little bit brighter */
+  --hover-primary: oklch(from var(--primary) calc(l + 0.05) c h);
+  --hover-overlay: oklch(
+    from var(--hover-base) calc(l + var(--d-hover-brightness)) c h /
+    var(--hover-opacity)
+  );
+
+  /** deprecated */
+  --muted: hsl(0 0% 17%);
+  --secondary-foreground: hsl(0 0% 100%);
+  --accent: hsl(217.2 32.6% 17.5%);
+  --card: hsl(0 0% 13%);
+  --card-foreground: hsl(0 0% 94%);
+  --popover: hsl(0 0% 9%);
+  --popover-foreground: hsl(0 0% 94%);
+  --accent-foreground: hsl(210 40% 98%);
+  --disabled: hsl(0 0% 22%);
+  --input: hsl(217.2 32.6% 17.5%);
+  /** end deprecated */
 
   /* generic fonts until its loaded from settings */
   --darkwrite-sans: "Segoe UI", "Noto Sans", "Roboto", sans-serif;
@@ -149,6 +166,23 @@
   }
 }
 
+@utility hover-default {
+  background-image: linear-gradient(var(--hover-overlay), var(--hover-overlay));
+}
+
+@utility hover-primary {
+  background: var(--hover-primary);
+}
+
+@utility glass {
+  background-color: color-mix(
+    in oklab,
+    var(--view-2) calc(var(--frost-opacity) * 100%),
+    transparent
+  );
+  backdrop-filter: blur(var(--frost-strength));
+}
+
 @utility container {
   margin-inline: auto;
   padding-inline: 2rem;
@@ -179,10 +213,6 @@
 }
 
 @layer base {
-  :root .dark {
-    --border: 0 0% 26%;
-  }
-
   .darkwrite-sans {
     font-family: var(--darkwrite-sans);
   }
