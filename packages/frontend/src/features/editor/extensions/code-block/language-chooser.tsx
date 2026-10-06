@@ -28,7 +28,7 @@ export default function LanguageChooser(props: LanguageChooserProps) {
 
   return (
     <Select disabled={disabled} onValueChange={onValueChange} value={value}>
-      <SelectTrigger className="w-fit border-none opacity-60 group-hover:opacity-100 shrink-0 hover:bg-secondary h-fit transition-[background,opacity] text-xs aria-expanded:bg-secondary/80">
+      <SelectTrigger className="w-fit border-none opacity-60 bg-transparent top-highlight-none group-hover:opacity-100 shrink-0 hover:hover-default h-fit transition-[background,opacity] text-xs aria-expanded:bg-secondary/80">
         {value}
       </SelectTrigger>
       <SelectContent
