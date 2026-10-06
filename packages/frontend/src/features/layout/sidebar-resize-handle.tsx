@@ -17,7 +17,7 @@ export default function SidebarResizeHandle() {
       data-testid="sidebar-resize-handle"
       onMouseDown={handleMouseDown}
       className={cn(
-        "w-px h-full flex cursor-ew-resize resize-handle relative",
+        "w-px h-full flex cursor-ew-resize resize-handle relative shrink-0",
         isSidebarCollapsed && "hidden",
       )}
     ></div>

@@ -34,7 +34,7 @@ export function Layout() {
     <EditorContext.Provider value={{ noteId, instanceId }}>
       <div
         className={cn(
-          "flex [&>div]:shrink-0 w-full h-full bg-background overflow-hidden [--slide-distance:32px]",
+          "flex w-full h-full bg-background overflow-hidden [--slide-distance:32px]",
           isSidebarCollapsed && "bg-(--dw-editor-background)",
         )}
       >
@@ -45,7 +45,7 @@ export function Layout() {
           <NavigationHelper />
           <Sidebar></Sidebar>
           <SidebarResizeHandle />
-          <div className="h-full flex flex-col grow overflow-hidden">
+          <div className="h-full flex flex-col grow flex-1 overflow-hidden">
             <Titlebar></Titlebar>
             <div
               className={cn(

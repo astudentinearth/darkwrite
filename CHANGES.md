@@ -1,3 +1,8 @@
+# Unreleased
+
+## ✨ Improvements and fixes
+- Fix titlebar and editor overflowing slightly along the right edge
+
 # 1.3.1-beta.1
 
 ## 🌟 Features
