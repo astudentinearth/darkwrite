@@ -33,7 +33,7 @@ export function Sidebar(props: SidebarProps) {
     <div
       data-testid="container-sidebar"
       className={cn(
-        "bg-background h-full flex flex-col",
+        "bg-background h-full flex flex-col shrink-0",
         isSidebarCollapsed && "hidden",
         props.className,
       )}
