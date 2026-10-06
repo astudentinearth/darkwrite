@@ -108,7 +108,7 @@ function TextPropertyValue({
 }: PropertyValueFieldProps<TextProperty>) {
   return (
     <Input
-      className="border-none rounded-none ml-px"
+      className="border-none rounded-none ml-px bg-transparent top-highlight-none"
       value={property.value}
       onChange={(e) =>
         onValueChange({ type: PropertyType.Text, value: e.target.value })
@@ -264,7 +264,7 @@ function PropertyRow({ name }: PropertyRowProps) {
           defaultValue={name}
           placeholder={t("note.property.placeholder")}
           className={cn(
-            "border-none rounded-none pl-2 placeholder:text-(--dw-editor-foreground)/50",
+            "border-none rounded-none top-highlight-none bg-transparent pl-2 placeholder:text-(--dw-editor-foreground)/50",
             nameCollides && "bg-destructive/20",
           )}
           onBlur={(e) => rename(e.target.value)}

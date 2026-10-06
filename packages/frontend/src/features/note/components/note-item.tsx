@@ -37,7 +37,7 @@ function HeadingItem({ item, className, ...props }: NoteItemProps) {
       tabIndex={0}
       onClick={handleClick}
       className={cn(
-        "group flex justify-start text-start place-items-start select-none w-full items-center gap-2 rounded-md text-sm hover:bg-secondary/50 p-1.5 pl-2  hover:opacity-100 opacity-75 duration-75 transition-opacity active:pushdown-98% active:opacity-90",
+        "group flex justify-start text-start place-items-start select-none w-full items-center gap-2 rounded-md text-sm hover:hover-default p-1.5 pl-2  hover:opacity-100 opacity-75 duration-75 transition-opacity active:pushdown-98% active:opacity-90",
         className,
       )}
       {...props}
@@ -130,7 +130,7 @@ export function NoteItem({ item, className, ...props }: NoteItemProps) {
         style={{ paddingLeft: `${6 + item.depth * 6}px` }}
         onClick={() => navigateToNote(item.id)}
         className={cn(
-          "group grid grid-cols-[20px_1fr] select-none active:pushdown-99% hover:grid-cols-[20px_1fr_20px] w-full items-center gap-2 rounded-md text-sm hover:bg-secondary/50 p-1.5 focus:outline-0 focus-visible:bg-secondary/70",
+          "group grid grid-cols-[20px_1fr] select-none active:pushdown-99% hover:grid-cols-[20px_1fr_20px] w-full items-center gap-2 rounded-md text-sm hover:hover-default p-1.5 focus:outline-0 focus-visible:bg-secondary/70",
           activeNoteId === item.id && "bg-secondary/40",
           isDraggingOver && position ? positionToClassName[position] : null,
           className,
@@ -142,7 +142,7 @@ export function NoteItem({ item, className, ...props }: NoteItemProps) {
             e.stopPropagation();
             toggleCollapsed();
           }}
-          className="flex items-center gap-1 rounded-[6px] justify-center size-5 hover:bg-muted/50"
+          className="flex items-center gap-1 rounded-[6px] justify-center size-5 hover:hover-default"
         >
           <ChevronRight
             className={cn(

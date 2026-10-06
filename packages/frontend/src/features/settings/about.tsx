@@ -20,7 +20,7 @@ function AboutButton(props: { children: React.ReactNode; href: string }) {
     <a
       href={props.href}
       target="_blank"
-      className="flex gap-2 items-center top-highlight rounded-lg h-fit px-large text-foreground py-medium bg-view-2 hover:bg-view-2/80 w-full"
+      className="flex gap-2 items-center top-highlight rounded-lg h-fit px-large text-foreground py-medium bg-view-2 hover:hover-default w-full"
       rel="noopener"
     >
       {props.children}
@@ -77,7 +77,7 @@ export default function About() {
           </div>
         ) : (
           <a
-            className="cursor-pointer col-span-2 px-large py-medium bg-view-2 top-highlight rounded-lg hover:underline flex items-center gap-2 justify-center"
+            className="cursor-pointer hover:hover-default col-span-2 px-large py-medium bg-view-2 top-highlight rounded-lg hover:underline flex items-center gap-2 justify-center"
             onClick={checkUpdate}
           >
             <RotateCw className={cn(isFetching && "animate-spin")} size={18} />

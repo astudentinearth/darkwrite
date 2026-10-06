@@ -81,7 +81,7 @@ export function Sidebar(props: SidebarProps) {
         <SettingsDialog>
           <Button
             variant="ghost"
-            className="w-8 h-8 text-muted-foreground hover:bg-secondary/40 opacity-75 hover:opacity-100"
+            className="w-8 h-8 text-muted-foreground opacity-75 hover:opacity-100"
           >
             <IconSettings size={18} />
           </Button>

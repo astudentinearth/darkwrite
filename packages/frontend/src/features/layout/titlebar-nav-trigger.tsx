@@ -11,7 +11,7 @@ export default function TitlebarNavTrigger({
       variant={"ghost"}
       {...props}
       className={cn(
-        "h-fit justify-start px-2 py-2 hover:bg-secondary/50",
+        "h-fit justify-start px-2 py-2 hover:hover-default",
         className,
       )}
     >
