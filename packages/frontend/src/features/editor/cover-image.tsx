@@ -25,7 +25,7 @@ export default function CoverImage() {
         onClick={removeCover}
         variant={"secondary"}
         className={cn(
-          "bg-secondary/80 backdrop-blur-lg opacity-0 group-hover/cover:opacity-100 group-focus-within/cover:opacity-100 transition-opacity hover:bg-secondary! drop-shadow-md h-fit px-2 py-2",
+          "glass opacity-0 group-hover/cover:opacity-100 group-focus-within/cover:opacity-100 transition-opacity hover:hover-default drop-shadow-md h-fit px-2 py-2",
         )}
       >
         {t("removeCover")}
@@ -34,7 +34,7 @@ export default function CoverImage() {
         onClick={chooseNewCover}
         variant={"secondary"}
         className={cn(
-          "bg-secondary/80 backdrop-blur-lg opacity-0 group-hover/cover:opacity-100 group-focus-within/cover:opacity-100 transition-opacity hover:bg-secondary! drop-shadow-md h-fit px-2 py-2",
+          "glass opacity-0 group-hover/cover:opacity-100 group-focus-within/cover:opacity-100 transition-opacity hover:hover-default drop-shadow-md h-fit px-2 py-2",
         )}
       >
         {t("changeCover")}

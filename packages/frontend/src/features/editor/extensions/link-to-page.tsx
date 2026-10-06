@@ -147,7 +147,7 @@ const LinkComponent = ({
         <PopoverContent
           sticky="always"
           align={"center"}
-          className="p-0 max-h-[50vh] overflow-clip border-border rounded-lg top-highlight bg-view-2/80 backdrop-blur-lg"
+          className="p-0 max-h-[50vh] overflow-clip border-border rounded-lg top-highlight glass"
         >
           {note && (
             <>
