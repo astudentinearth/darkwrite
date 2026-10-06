@@ -1,4 +1,3 @@
-import fse from "node:fs/promises";
 import { join } from "node:path";
 import { pathToFileURL } from "node:url";
 import type { DwResultAsync } from "@darkwrite/common";
