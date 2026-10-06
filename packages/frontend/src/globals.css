@@ -47,6 +47,8 @@
     var(--hover-opacity)
   );
 
+  --top-highlight-tint: rgba(255, 255, 255, 0.25);
+
   /** deprecated */
   --muted: hsl(0 0% 17%);
   --secondary-foreground: hsl(0 0% 100%);
@@ -389,7 +391,11 @@ body,
 }
 
 @utility top-highlight {
-  box-shadow: inset 0 0.5px 0 0 rgba(255, 255, 255, 0.25);
+  box-shadow: inset 0 0.5px 0 0 var(--top-highlight-tint);
+}
+
+@utility top-highlight-none {
+  --top-highlight-tint: transparent;
 }
 
 @utility pushdown-* {

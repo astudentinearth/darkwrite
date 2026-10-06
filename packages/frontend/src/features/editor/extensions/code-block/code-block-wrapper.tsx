@@ -25,7 +25,7 @@ export default function CodeBlockNodeView(props: NodeViewProps) {
   const { t } = useTranslation(undefined, { keyPrefix: "ui.contextmenu" });
   return (
     <NodeViewWrapper>
-      <div className="flex flex-col group top-highlight [&>pre]:m-0 [&>pre]:pb-3 [&>pre]:px-3 [&>pre]:pt-0 [&>pre]:bg-transparent rounded-xl bg-view-2/75 border">
+      <div className="flex flex-col group top-highlight [&>pre]:m-0 [&>pre]:pb-3 [&>pre]:px-3 [&>pre]:pt-0 [&>pre]:bg-transparent rounded-lg bg-view-2/75 border">
         <div spellCheck={false} className="p-1 flex justify-start">
           <LanguageChooser
             disabled={!editable}
