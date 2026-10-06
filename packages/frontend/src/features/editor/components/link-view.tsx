@@ -27,7 +27,7 @@ function NotePreview(props: { noteId: string }) {
         e.preventDefault();
         navigateToNote(props.noteId);
       }}
-      className="flex gap-2 bg-view-2/85 hover:bg-view-2/75 cursor-pointer items-center"
+      className="flex gap-2 bg-view-2/85 hover:hover-default cursor-pointer items-center"
     >
       <span>{getNoteIcon(note?.icon)}</span>
       <Button
@@ -47,7 +47,7 @@ function ExternalLinkPreview(props: { url: string }) {
       sideOffset={0}
       side="bottom"
       align="start"
-      className="flex gap-1 bg-view-2/85 hover:bg-view-2/75 items-center overflow-x-hidden p-1 pl-2 cursor-pointer *:shrink-0 w-fit drop-shadow-xl border-border"
+      className="flex gap-1 bg-view-2/85 items-center overflow-x-hidden p-1 pl-2 cursor-pointer *:shrink-0 w-fit drop-shadow-xl border-border"
     >
       <Link size={16} />
       <a

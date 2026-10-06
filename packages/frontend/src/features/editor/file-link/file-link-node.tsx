@@ -79,7 +79,7 @@ export function FileLinkNode(props: ReactNodeViewProps) {
             onClick={handleClick}
             onDoubleClick={handleDoubleClick}
             className={cn(
-              "bg-transparent hover:bg-secondary/75 font-semibold text-(--dw-editor-foreground) cursor-pointer grid grid-cols-[20px_1fr] gap-2 rounded-md items-center px-1 py-0.5 my-2 overflow-hidden text-ellipsis whitespace-nowrap wrap-break-word",
+              "bg-transparent hover:hover-default font-semibold text-(--dw-editor-foreground) cursor-pointer grid grid-cols-[20px_1fr] gap-2 rounded-md items-center px-1 py-0.5 my-2 overflow-hidden text-ellipsis whitespace-nowrap wrap-break-word",
               (props.selected || contextMenuOpen) && "bg-primary/20",
             )}
           >

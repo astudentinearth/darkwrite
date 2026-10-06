@@ -48,7 +48,7 @@ const TrashItem = memo(function ({ noteId, className }: TrashItemProps) {
       tabIndex={0}
       onClick={() => navigateToNote(noteId)}
       className={cn(
-        "grid grid-cols-[24px_1fr_24px_24px] gap-1 items-center pr-1 pl-2 py-1 rounded-lg hover:bg-background/50 dark:hover:bg-secondary/50 transition-colors duration-100",
+        "grid grid-cols-[24px_1fr_24px_24px] gap-1 items-center pr-1 pl-2 py-1 rounded-lg hover:hover-default transition-colors duration-100",
         className,
       )}
     >

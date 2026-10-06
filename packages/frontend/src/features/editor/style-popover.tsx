@@ -158,7 +158,7 @@ export function StyleUI(props: {
       <hr className="opacity-50 mt-2" />
       <div
         onClick={() => setWide(!widePage)}
-        className="w-full flex items-center justify-between hover:bg-secondary/20 p-2 rounded-lg"
+        className="w-full flex items-center justify-between hover:hover-default p-2 rounded-lg"
         tabIndex={0}
       >
         <label className="">{t("widePage")}</label>

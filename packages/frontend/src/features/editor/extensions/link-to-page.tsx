@@ -126,7 +126,7 @@ const LinkComponent = ({
               else if (editable) setOpen(true);
             }}
             className={cn(
-              "link-to-page hover:bg-secondary/75 cursor-pointer select-none rounded-md p-1 py-0.5 transition-colors flex items-center gap-2 my-1 text-(--dw-editor-foreground)",
+              "link-to-page hover:hover-default cursor-pointer select-none rounded-md p-1 py-0.5 transition-colors flex items-center gap-2 my-1 text-(--dw-editor-foreground)",
               (open || selected) && "bg-primary/20",
             )}
           >

@@ -25,7 +25,7 @@ export function WorkspaceSwitcher() {
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <div className="flex items-center gap-1 text-muted-foreground hover:text-foreground w-full overflow-hidden text-ellipsis whitespace-nowrap opacity-80 p-1 hover:bg-secondary/50 hover:opacity-100 rounded-md select-none transition-[background,opacity] duration-75">
+        <div className="flex items-center gap-1 text-muted-foreground hover:text-foreground w-full overflow-hidden text-ellipsis whitespace-nowrap opacity-80 p-1 hover:hover-default hover:opacity-100 rounded-md select-none transition-[background,opacity] duration-75">
           {currentWorkspace && (
             <>
               <IconSelector className="shrink-0" size={18} />

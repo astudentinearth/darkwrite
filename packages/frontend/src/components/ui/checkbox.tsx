@@ -8,7 +8,7 @@ export function Checkbox({ className, ...props }: CheckboxProps) {
   return (
     <CheckboxPrimitive.Root
       className={cn(
-        "size-5 border rounded-sm data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground data-[state=checked]:border-none hover:bg-secondary/50 cursor-pointer",
+        "size-5 border rounded-sm data-[state=checked]:bg-primary data-[state=checked]:hover-primary data-[state=checked]:text-primary-foreground data-[state=checked]:border-none hover:hover-default cursor-pointer",
         className,
       )}
       {...props}

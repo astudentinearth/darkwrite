@@ -33,7 +33,7 @@ export function SettingsTabView() {
             <TabsTrigger
               key={key}
               value={key}
-              className="flex gap-2 data-[state=active]:bg-secondary/40 data-[state=active]:text-primary-text hover:bg-secondary/80 rounded-lg py-2 px-4"
+              className="flex gap-2 data-[state=active]:bg-secondary/40 data-[state=active]:text-primary-text hover:hover-default rounded-lg py-2 px-4"
             >
               <TabIcon size={18} />
               {/** biome-ignore lint/suspicious/noExplicitAny: complex type */}
