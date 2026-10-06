@@ -76,9 +76,8 @@ export default function TableMenu() {
     >
       <div
         ref={menuRef}
-        //data-animation="slide"
         className="flex w-fit h-fit max-w-[90vw] overflow-hidden gap-1 bubble-menu rounded-xl border border-border table-menu z-50
-                    bg-view-2/80 top-highlight backdrop-blur-lg shadow-xl p-1 slide-in-from-top-1 transition-[opacity,transform,translate,scale,rotate]"
+                    glass top-highlight shadow-xl p-1 slide-in-from-top-1 transition-[opacity,transform,translate,scale,rotate]"
       >
         <BubbleButton
           isActive={false}

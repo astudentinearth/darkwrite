@@ -52,7 +52,7 @@ export default function SearchDialog() {
     <Dialog open={open} onOpenChange={setSearchOpen}>
       <DialogContent
         noOverlay
-        className="max-w-120 bg-view-1/80 backdrop-blur-lg p-0 origin-top top-16 translate-y-0 drop-shadow-2xl"
+        className="max-w-120 p-0 origin-top top-16 translate-y-0 drop-shadow-2xl"
       >
         <Command onKeyDown={(e) => e.stopPropagation()}>
           <CommandInput

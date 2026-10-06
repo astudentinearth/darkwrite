@@ -42,7 +42,7 @@ function SlashCommandItem({
       }}
       value={`${item.title}`}
       className={cn(
-        "hover:bg-secondary/40 hover:top-highlight data-[selected=true]:bg-secondary/40 data-[selected=true]:top-highlight rounded-lg flex items-center p-1",
+        "hover:hover-default hover:top-highlight data-[selected=true]:hover-default data-[selected=true]:top-highlight rounded-lg flex items-center p-1",
       )}
     >
       <div
@@ -91,7 +91,7 @@ export const SlashCommandView = forwardRef(function (
   return (
     <div
       ref={containerRef}
-      className="max-h-[40vh] max-w-[600px] bg-view-2/80 backdrop-blur-lg top-highlight border rounded-xl drop-shadow-xl pl-1 pr-0 flex flex-col"
+      className="max-h-[40vh] max-w-[600px] glass top-highlight border rounded-xl drop-shadow-xl pl-1 pr-0 flex flex-col"
     >
       <Command
         className={

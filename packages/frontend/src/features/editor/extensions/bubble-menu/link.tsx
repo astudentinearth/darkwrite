@@ -79,7 +79,7 @@ export function BubbleLink() {
           <IconLink size={18} />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="bg-view-2/80 mt-2 backdrop-blur-lg w-80 rounded-xl flex flex-col gap-2 p-2 data-[state=closed]:animate-none! px-1 py-1">
+      <PopoverContent className="mt-2 w-80 rounded-xl flex flex-col gap-2 p-2 data-[state=closed]:animate-none! px-1 py-1">
         <Command shouldFilter={false} className="w-full px-0">
           <CommandInput
             value={query}
