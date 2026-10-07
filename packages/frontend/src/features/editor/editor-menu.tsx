@@ -78,7 +78,7 @@ function EditorMenuContent({ noteId }: { noteId: string }) {
             <FileText size={18} />
             PDF
           </DropdownMenuItem>
-          <PageSizeChooser className="bg-view-1 top-highlight mt-small" />
+          <PageSizeChooser className="bg-view-1 top-highlight mt-1" />
         </DropdownMenuSubContent>
       </DropdownMenuSub>
       <DropdownMenuItem disabled={!editable} onSelect={actions.importNotes}>

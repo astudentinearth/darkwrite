@@ -140,13 +140,6 @@
   --radius-2xl: 1.5rem;
   --radius-full: 9999px;
 
-  /* using sm, md, lg here overrides tailwind's scale, so we'll use longer names instead */
-  --spacing-small: 0.25rem;
-  --spacing-medium: 0.5rem;
-  --spacing-large: 0.75rem;
-  --spacing-xlarge: 1rem;
-  --spacing-2xlarge: 1.5rem;
-
   --animate-accordion-down: accordion-down 0.2s ease-out;
   --animate-accordion-up: accordion-up 0.2s ease-out;
 
