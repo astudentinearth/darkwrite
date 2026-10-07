@@ -20,7 +20,7 @@ function AboutButton(props: { children: React.ReactNode; href: string }) {
     <a
       href={props.href}
       target="_blank"
-      className="flex gap-2 items-center top-highlight rounded-lg h-fit px-large text-foreground py-medium bg-view-2 hover:hover-default w-full"
+      className="flex gap-2 items-center top-highlight rounded-lg h-fit px-3 text-foreground py-2 bg-view-2 hover:hover-default w-full"
       rel="noopener"
     >
       {props.children}
@@ -56,7 +56,7 @@ export default function About() {
       </span>
       <div className="gap-2 text-center grid w-120 grid-cols-[1fr_1fr] items-center mt-4">
         {updateData ? (
-          <div className="bg-view-2 top-highlight col-span-2 rounded-lg px-large py-medium flex justify-between items-center">
+          <div className="bg-view-2 top-highlight col-span-2 rounded-lg px-3 py-2 flex justify-between items-center">
             {!updateData.updateAvailable ? (
               t("toast.update.upToDate")
             ) : (
@@ -77,7 +77,7 @@ export default function About() {
           </div>
         ) : (
           <a
-            className="cursor-pointer hover:hover-default col-span-2 px-large py-medium bg-view-2 top-highlight rounded-lg hover:underline flex items-center gap-2 justify-center"
+            className="cursor-pointer hover:hover-default col-span-2 px-3 py-2 bg-view-2 top-highlight rounded-lg hover:underline flex items-center gap-2 justify-center"
             onClick={checkUpdate}
           >
             <RotateCw className={cn(isFetching && "animate-spin")} size={18} />

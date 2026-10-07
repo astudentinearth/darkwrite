@@ -52,7 +52,7 @@ export default function FontSelect(props: {
       placeholder={t("typeFontName")}
       ref={inputRef}
       className={cn(
-        "w-fit h-fit py-medium pl-large border-border/50 top-highlight",
+        "w-fit h-fit py-2 pl-3 border-border/50 top-highlight",
         props.className,
       )}
       onKeyDown={(e) => {
@@ -66,7 +66,7 @@ export default function FontSelect(props: {
         <Button
           variant={"ghost"}
           className={cn(
-            "w-fit h-fit outline-none outline-primary/50 py-medium pl-large pr-medium bg-secondary! dark:bg-secondary/50! border-border/50 top-highlight",
+            "w-fit h-fit outline-none outline-primary/50 py-2 pl-3 pr-2 bg-secondary! dark:bg-secondary/50! border-border/50 top-highlight",
             open && "outline outline-solid outline-primary/50",
             props.className,
           )}
