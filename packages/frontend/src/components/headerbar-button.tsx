@@ -15,10 +15,10 @@ export const HeaderbarButton = React.forwardRef<
       className={cn(
         "inline-flex items-center cursor-default justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
         "shrink-0 p-0",
-        "hover:bg-secondary hover:text-secondary-foreground active:bg-secondary/80",
+        "hover:hover-default hover:text-foreground active:active-default",
         "opacity-80 hover:opacity-100 transition-[background,opacity] duration-100",
         "h-8 w-8",
-
+        "ring-default [&_svg]:outline-none",
         props.className,
       )}
     >

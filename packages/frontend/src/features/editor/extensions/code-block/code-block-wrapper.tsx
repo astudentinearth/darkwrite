@@ -1,6 +1,6 @@
+import { IconCheck, IconCopy } from "@tabler/icons-react";
 import type { NodeViewProps } from "@tiptap/core";
 import { NodeViewContent, NodeViewWrapper } from "@tiptap/react";
-import { Check, Copy } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui";
@@ -39,7 +39,8 @@ export default function CodeBlockNodeView(props: NodeViewProps) {
             onClick={copy}
             className="justify-self-end opacity-0 transition-opacity group-hover:opacity-100 shrink-0 text-xs h-fit p-2 text-foreground/70 hover:text-foreground"
           >
-            {copied ? <Check size={16} /> : <Copy size={16} />} {t("copy")}
+            {copied ? <IconCheck size={16} /> : <IconCopy size={16} />}{" "}
+            {t("copy")}
           </Button>
         </div>
         <pre spellCheck={false} className={`language-${language}`}>

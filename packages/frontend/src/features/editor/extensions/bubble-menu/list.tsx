@@ -1,3 +1,4 @@
+import { IconList, IconListCheck, IconListNumbers } from "@tabler/icons-react";
 import { useCurrentEditor } from "@tiptap/react";
 import { ChevronDown, List, ListOrdered, ListTodo } from "lucide-react";
 import { type ReactNode, useCallback, useEffect, useState } from "react";
@@ -13,9 +14,9 @@ import EditorUtil from "../../editor-util";
 import { ListType } from "../../types";
 
 const listIcons: Record<ListType, ReactNode> = {
-  [ListType.Bullet]: <List />,
-  [ListType.Ordered]: <ListOrdered />,
-  [ListType.Task]: <ListTodo />,
+  [ListType.Bullet]: <IconList />,
+  [ListType.Ordered]: <IconListNumbers />,
+  [ListType.Task]: <IconListCheck />,
 };
 
 export function ListSelector() {
@@ -45,7 +46,7 @@ export function ListSelector() {
       return (
         <Button
           variant={"ghost"}
-          className="px-1 pr-2 py-0 justify-start"
+          className="px-1 pr-2 py-0 justify-start rounded-lg"
           onClick={() => {
             setOpen(false);
             callback();
@@ -77,14 +78,14 @@ export function ListSelector() {
           <ChevronDown size={16} />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="p-1 flex flex-col w-fit rounded-xl bg-view-2 text-foreground data-[state=closed]:animate-none!">
-        {item(<List />, t("bulletList"), () =>
+      <PopoverContent className="p-1 flex flex-col w-fit bg-view-2 text-foreground data-[state=closed]:animate-none!">
+        {item(listIcons[ListType.Bullet], t("bulletList"), () =>
           editor?.chain().focus().toggleBulletList().run(),
         )}
-        {item(<ListTodo />, t("toDoList"), () =>
+        {item(listIcons[ListType.Task], t("toDoList"), () =>
           editor?.chain().focus().toggleTaskList().run(),
         )}
-        {item(<ListOrdered />, t("numberedList"), () =>
+        {item(listIcons[ListType.Ordered], t("numberedList"), () =>
           editor?.chain().focus().toggleOrderedList().run(),
         )}
       </PopoverContent>

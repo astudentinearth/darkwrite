@@ -129,8 +129,8 @@ export default function EditorMenu({ noteId }: { noteId: string }) {
     <DropdownMenu open={open} onOpenChange={setOpen}>
       <Tooltip>
         <DropdownMenuTrigger asChild>
-          <TooltipTrigger>
-            <HeaderbarButton className={cn(open && "bg-secondary/50")}>
+          <TooltipTrigger asChild>
+            <HeaderbarButton className={cn(open && "active-default")}>
               <IconMenu2 size={20} />
             </HeaderbarButton>
           </TooltipTrigger>
