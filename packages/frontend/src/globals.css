@@ -68,7 +68,6 @@
 
   /** deprecated */
   --muted: hsl(0 0% 17%);
-  --secondary-foreground: hsl(0 0% 100%);
   --accent: hsl(217.2 32.6% 17.5%);
   --card: hsl(0 0% 13%);
   --card-foreground: hsl(0 0% 94%);
@@ -127,7 +126,6 @@
   --color-primary-text: var(--primary-text);
 
   --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
 
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
@@ -426,7 +424,7 @@ body,
 }
 
 @utility context-menu-item-global {
-  @apply focus:hover-default active:hover-default focus:text-secondary-foreground active:scale-[99%] transition-transform items-center gap-2 rounded-md px-1.5 py-1 text-sm outline-hidden select-none;
+  @apply focus:hover-default active:hover-default focus:text-foreground active:scale-[99%] transition-transform items-center gap-2 rounded-md px-1.5 py-1 text-sm outline-hidden select-none;
 }
 
 @utility dropdown-menu-item-global {

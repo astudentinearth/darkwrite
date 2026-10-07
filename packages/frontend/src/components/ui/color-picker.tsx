@@ -27,7 +27,7 @@ export function ColorPicker(props: ColorPickerProps) {
             props.className,
           )}
         >
-          <Pipette size={14} className="text-secondary-foreground" />
+          <Pipette size={14} className="text-foreground" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="p-1 w-fit drop-shadow-xl overflow-hidden flex flex-col rounded-xl m-2 gap-1">

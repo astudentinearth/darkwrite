@@ -51,7 +51,7 @@ export function WorkspaceSwitcher() {
                 ></WorkspaceIcon>
                 <div>
                   <span>{currentWorkspace.name}</span>
-                  <span className="flex gap-2 items-center text-sm text-popover-foreground/80">
+                  <span className="flex gap-2 items-center text-sm text-muted-foreground">
                     {t("currentWorkspace")}
                   </span>
                 </div>
