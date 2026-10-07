@@ -15,7 +15,12 @@ export default function ThemeHandler() {
     const setAccent = async () => {
       let accentColor = appearanceSettings.accentColor;
       if (appearanceSettings.useSystemAccentColor) {
-        accentColor = `#${await DarkwriteAPIClient.desktop.getSystemAccentColor()}`;
+        accentColor = (
+          await DarkwriteAPIClient.desktop.getSystemAccentColor()
+        ).match(
+          (str) => `#${str}`,
+          () => appearanceSettings.accentColor,
+        );
       }
       document.documentElement.style.setProperty("--primary", accentColor);
     };

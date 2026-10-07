@@ -2,6 +2,7 @@
 
 ## ✨ Improvements and fixes
 - Fix titlebar and editor overflowing slightly along the right edge
+- Fix system accent color feature
 - UI and theming refactor
   - Fix dirty theme colors when switching to an incomplete theme (partial themes now fall back to defaults depending on theme mode).
   - Automatically contrast text color on accent colored surfaces for better readability
