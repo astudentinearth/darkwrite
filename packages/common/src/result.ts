@@ -84,7 +84,9 @@ export function validateSchema<T extends z.ZodType>(schema: T) {
     else
       return dwErr(
         "Schema validation failed.",
-        result.error.issues.map((issue) => issue.message).join("\n"),
+        result.error.issues
+          .map((issue) => `${issue.path.join(".")}:${issue.message}`)
+          .join("\n"),
       );
   };
 }
