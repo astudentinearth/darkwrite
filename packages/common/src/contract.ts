@@ -99,6 +99,7 @@ export interface ISettingsAPI {
 export interface IThemeAPI {
   getThemes: () => ApiResult<ThemesResponseDTO>;
   importTheme: () => ApiResult<void>;
+  openThemeFolder: () => NoReturn;
 }
 
 export interface IContextMenuAPI {

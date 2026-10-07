@@ -862,3 +862,6 @@ msgstr "Tomorrow"
 
 msgid "ui.datepicker.nextWeek"
 msgstr "In a week"
+
+msgid "settings.appearance.openThemeFolder"
+msgstr "Open theme folder"

@@ -1,5 +1,8 @@
 # Unreleased
 
+## 🌟 Features
+- Open theme folder from settings
+
 ## ✨ Improvements and fixes
 - Fix titlebar and editor overflowing slightly along the right edge
 - Fix system accent color feature

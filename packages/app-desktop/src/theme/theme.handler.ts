@@ -1,6 +1,7 @@
 import type { IThemeAPI } from "@darkwrite/common";
-import { BrowserWindow, dialog } from "electron";
-import { err, ok, type Result } from "neverthrow";
+import { BrowserWindow, dialog, shell } from "electron";
+import { err, ok, type Result, ResultAsync } from "neverthrow";
+import { Paths } from "@/lib/paths";
 import { type HandlerImplements, handler } from "@/types";
 import type { IThemeService } from "./theme.service";
 
@@ -33,8 +34,13 @@ export function ThemeAPI(
     themeService.getThemes().map((themes) => ({ themes })),
   );
 
+  const openThemeFolder = handler(() =>
+    ResultAsync.fromSafePromise(shell.openPath(Paths.THEME_DIR)).map(() => {}),
+  );
+
   return {
     importTheme,
     getThemes,
+    openThemeFolder,
   };
 }
