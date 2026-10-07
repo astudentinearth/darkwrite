@@ -28,13 +28,17 @@
   --frost-opacity: 0.85;
 
   /* take the darker end in light mode */
-  --d-hover-brightness: -0.05;
+  --d-hover-brightness: -0.1;
+  --d-active-brightness: -0.15;
   --hover-base: var(--background);
+  --active-base: var(--hover-base);
   --hover-opacity: 0.25;
+  --active-opacity: 0.25;
 
   /* take the brighter end in dark mode */
   &.dark {
-    --d-hover-brightness: 0.05;
+    --d-hover-brightness: 0.08;
+    --d-active-brightness: 0.12;
     --hover-base: var(--secondary);
   }
 
@@ -45,6 +49,10 @@
   --hover-overlay: oklch(
     from var(--hover-base) calc(l + var(--d-hover-brightness)) c h /
     var(--hover-opacity)
+  );
+  --active-overlay: oklch(
+    from var(--active-base) calc(l + var(--d-active-brightness)) c h /
+    var(--active-opacity)
   );
 
   --top-highlight-tint: rgba(255, 255, 255, 0.25);
@@ -169,13 +177,24 @@
   background: var(--hover-primary);
 }
 
+@utility active-default {
+  background-image: linear-gradient(
+    var(--active-overlay),
+    var(--active-overlay)
+  );
+}
+
+@utility backdrop-blur-default {
+  backdrop-filter: blur(var(--frost-strength));
+}
+
 @utility glass {
   background-color: color-mix(
     in oklab,
     var(--view-2) calc(var(--frost-opacity) * 100%),
     transparent
   );
-  backdrop-filter: blur(var(--frost-strength));
+  @apply backdrop-blur-default;
 }
 
 @utility glass-low {

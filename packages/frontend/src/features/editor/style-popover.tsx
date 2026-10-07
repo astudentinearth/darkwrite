@@ -32,7 +32,7 @@ export default function StylePopover({ id }: { id: string }) {
     <Popover>
       <Tooltip>
         <PopoverTrigger asChild>
-          <TooltipTrigger>
+          <TooltipTrigger asChild>
             <HeaderbarButton>
               <IconBrush size={20} />
             </HeaderbarButton>
