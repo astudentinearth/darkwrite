@@ -16,13 +16,7 @@ export function CreatePageButton(props: { className?: string }) {
     dispatch(createNote({ navigateAfter: true, parentId: null }));
   };
   return (
-    <SidebarItem
-      onClick={handleClick}
-      className={cn(
-        //"p-1.5 w-8 h-8 bg-view-2 rounded-[8px] text-white/80 hover:text-white text-foreground shrink-0",
-        props.className,
-      )}
-    >
+    <SidebarItem onClick={handleClick} className={cn(props.className)}>
       <IconEdit size={18} />
       {t("sidebar.button.newPage")}
     </SidebarItem>

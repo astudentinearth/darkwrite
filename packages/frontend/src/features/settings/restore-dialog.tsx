@@ -67,7 +67,7 @@ export function RestoreDataDialog() {
             t("restoreDialog.chooseFile")
           )}
         </Button>
-        <AlertDialogFooter className="flex flex-row">
+        <AlertDialogFooter className="flex flex-row [&>button]:grow">
           <AlertDialogCancel disabled={pending}>
             {t("restoreDialog.cancel")}
           </AlertDialogCancel>
