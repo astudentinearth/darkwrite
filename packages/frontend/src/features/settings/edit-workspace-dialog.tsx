@@ -113,14 +113,14 @@ export default function EditWorkspaceDialog(props: EditWorkspaceDialogProps) {
           )}
         />
         <div className="w-full grid grid-cols-[1fr_1fr] gap-2">
-          <Button onClick={cancel} variant={"secondary"}>
+          <Button onClick={cancel} variant={"secondary"} className="w-full">
             <X size={18} />
             {t("settings.workspace.editWorkspaceDialog.cancel")}
           </Button>
           <Button
             variant={"default"}
             onClick={handleSave}
-            className="top-highlight"
+            className="top-highlight w-full"
           >
             <Check size={18} />
             {t("settings.workspace.editWorkspaceDialog.save")}
