@@ -22,7 +22,7 @@ export function HistoryNavigation() {
       <TextTooltip text={t("ui.history.back")}>
         <HeaderbarButton
           disabled={!canGoBack}
-          className="disabled:opacity-20"
+          className="disabled:opacity-disabled"
           aria-label={t("ui.history.back")}
           onClick={goBack}
         >
@@ -32,7 +32,7 @@ export function HistoryNavigation() {
       <TextTooltip text={t("ui.history.forward")}>
         <HeaderbarButton
           disabled={!canGoForward}
-          className="disabled:opacity-20"
+          className="disabled:opacity-disabled"
           aria-label={t("ui.history.forward")}
           onClick={goForward}
         >
