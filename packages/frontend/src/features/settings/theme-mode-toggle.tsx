@@ -11,35 +11,46 @@ export default function ThemeModeToggle() {
   const settings = useAppearanceSettings();
   const themeMode = settings.themeMode;
   const activeClassname =
-    "text-primary-text bg-secondary/40! hover:text-primary-text";
+    "bg-primary! text-primary-foreground hover:hover-primary";
   const { t } = useTranslation();
   const setMode = (mode: ThemeMode) => {
     if (mode === themeMode) return;
     updateSettings({ appearance: { themeMode: mode } });
   };
   return (
-    <div className="flex gap-2 [&>div]:flex [&>div]:flex-row [&>div]:justify-center [&_button]:w-24 [&_button]:h-24 [&_button]:p-4 [&_button]:flex-col [&_button]:bg-transparent">
-      <div className="gap-2">
+    <div className="flex gap-2 [&>div]:flex [&>div]:flex-row [&>div]:justify-center [&_button]:w-24 [&_button]:h-24 [&_button]:p-4 [&_button]:flex-col">
+      <div>
         <Button
           onClick={() => setMode("light")}
-          variant={"outline"}
-          className={cn(themeMode === "light" && activeClassname)}
+          variant={"secondary"}
+          className={cn(
+            themeMode === "light" && activeClassname,
+            "rounded-r-none rounded-l-xl",
+          )}
         >
           <Sun size={24} />
           {t("settings.appearance.lightMode")}
         </Button>
+        <div className="h-full w-px bg-border" />
         <Button
           onClick={() => setMode("system")}
-          variant={"outline"}
-          className={cn(themeMode === "system" && activeClassname)}
+          variant={"secondary"}
+          className={cn(
+            themeMode === "system" && activeClassname,
+            "rounded-none",
+          )}
         >
           <Monitor size={24} />
           {t("settings.appearance.systemMode")}
         </Button>
+        <div className="h-full w-px bg-border" />
         <Button
           onClick={() => setMode("dark")}
-          variant={"outline"}
-          className={cn(themeMode === "dark" && activeClassname)}
+          variant={"secondary"}
+          className={cn(
+            themeMode === "dark" && activeClassname,
+            "rounded-l-none rounded-r-xl",
+          )}
         >
           <Moon size={24} />
           {t("settings.appearance.darkMode")}

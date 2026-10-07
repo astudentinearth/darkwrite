@@ -14,6 +14,7 @@ import { useAppStore } from "../store/hooks";
 import { useThemes } from "../themes/hooks/use-themes";
 import { initializeThemes } from "../themes/init";
 import { useAppearanceSettings } from "./hooks/use-settings";
+import SettingsCard from "./settings-card";
 import { useSettingsActions } from "./store/settings-actions";
 
 export function ThemeDropdown(props: {
@@ -25,12 +26,7 @@ export function ThemeDropdown(props: {
   const entries = Object.values(themes);
   return (
     <Select value={props.value} onValueChange={props.onValueChange}>
-      <SelectTrigger
-        className={cn(
-          props.className,
-          "max-w-fit dark:bg-secondary/50 bg-secondary",
-        )}
-      >
+      <SelectTrigger className={cn(props.className, "max-w-fit")}>
         {themes[props.value].name}
       </SelectTrigger>
       <SelectContent>
@@ -71,16 +67,12 @@ export function ThemeChooser() {
   return (
     <>
       <div className="flex w-160 gap-2">
-        <Button
-          className="w-fit bg-view-2"
-          variant={"outline"}
-          onClick={importTheme}
-        >
+        <Button variant={"secondary"} onClick={importTheme}>
           <Folder size={18} />
           {t("settings.appearance.importTooltip")}
         </Button>
       </div>
-      <div className="flex flex-col bg-view-2 top-highlight rounded-lg p-4 w-160 gap-4 drop-shadow-sm">
+      <SettingsCard>
         <div className="flex justify-between items-center">
           <span className="font-medium">
             {t("settings.appearance.lightColorScheme")}
@@ -136,7 +128,7 @@ export function ThemeChooser() {
             id="switch-use-system-accent-color"
           />
         </div>
-      </div>
+      </SettingsCard>
     </>
   );
 }

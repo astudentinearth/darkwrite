@@ -25,9 +25,7 @@ export function LanguageChooser({
 }: LangaugeChooserProps) {
   return (
     <Select value={value} onValueChange={onValueChange}>
-      <SelectTrigger
-        className={cn("w-fit bg-secondary/50 top-highlight", className)}
-      >
+      <SelectTrigger className={cn("w-fit", className)}>
         {LocaleNameMap[value]}
       </SelectTrigger>
       <SelectContent>
