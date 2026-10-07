@@ -1,10 +1,4 @@
-import {
-  IconFolder,
-  IconHelp,
-  IconPlus,
-  IconQuestionMark,
-} from "@tabler/icons-react";
-import { Folder } from "lucide-react";
+import { IconFolder, IconPlus, IconQuestionMark } from "@tabler/icons-react";
 import { useTranslation } from "react-i18next";
 import { DarkwriteAPIClient } from "@/api/api-client";
 import { Button, Label, Switch } from "@/components/ui";
