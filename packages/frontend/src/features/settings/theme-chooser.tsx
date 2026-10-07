@@ -1,3 +1,9 @@
+import {
+  IconFolder,
+  IconHelp,
+  IconPlus,
+  IconQuestionMark,
+} from "@tabler/icons-react";
 import { Folder } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { DarkwriteAPIClient } from "@/api/api-client";
@@ -66,10 +72,31 @@ export function ThemeChooser() {
 
   return (
     <>
-      <div className="flex w-160 gap-2">
-        <Button variant={"secondary"} onClick={importTheme}>
-          <Folder size={18} />
+      <div className="flex w-160 gap-2 items-center">
+        <Button variant={"secondary"} onClick={importTheme} size="sm">
+          <IconPlus size={18} />
           {t("settings.appearance.importTooltip")}
+        </Button>
+        <Button
+          variant="secondary"
+          size="sm"
+          onClick={() => DarkwriteAPIClient.theme.openThemeFolder()}
+        >
+          <IconFolder size={18} />
+          {t("settings.appearance.openThemeFolder")}
+        </Button>
+        <div className="grow" />
+        <Button
+          variant="secondary"
+          className="p-1"
+          onClick={() =>
+            window.open(
+              "https://darkwrite.app/docs/functionality/themes/",
+              "_blank",
+            )
+          }
+        >
+          <IconQuestionMark size={20} />
         </Button>
       </div>
       <SettingsCard>

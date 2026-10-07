@@ -867,3 +867,6 @@ msgstr "Yarın"
 
 msgid "ui.datepicker.nextWeek"
 msgstr "Haftaya"
+
+msgid "settings.appearance.openThemeFolder"
+msgstr "Tema klasörünü aç"
