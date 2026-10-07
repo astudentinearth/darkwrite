@@ -1,12 +1,6 @@
 import type { Workspace } from "@darkwrite/common";
-import {
-  Archive,
-  Cloud,
-  FolderDown,
-  HardDrive,
-  Languages,
-  PenLine,
-} from "lucide-react";
+import { IconEdit } from "@tabler/icons-react";
+import { Archive, FolderDown, Languages } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Button, Input, Label, Switch } from "@/components/ui";
@@ -30,9 +24,6 @@ export default function WorkspaceSettings() {
   const workspaceCount = useAppSelector((state) => selectWorkspaceCount(state));
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const { t: tW } = useTranslation("translation", {
-    keyPrefix: "sidebar.workspace",
-  });
   const { t, i18n } = useTranslation();
   const dispatch = useAppDispatch();
   const save = (w: Workspace) => {
@@ -62,49 +53,41 @@ export default function WorkspaceSettings() {
     <div className="w-full flex flex-col items-center pt-3 gap-4">
       {currentWorkspace && (
         <SettingsCard>
-          <div className="flex gap-4">
+          <div className="flex gap-4 items-center">
             <WorkspaceIcon
-              className="size-16 rounded-md text-3xl"
+              className="size-18 rounded-md text-3xl"
               workspace={currentWorkspace}
             />
-            <div className="flex flex-col">
+            <div className="flex flex-col gap-2">
               <h1 className="text-2xl font-medium">{currentWorkspace.name}</h1>
-              <span className="flex gap-2 items-center text-sm text-popover-foreground/80">
-                {currentWorkspace.config.syncMode === "offline" ? (
-                  <HardDrive size={18}></HardDrive>
-                ) : (
-                  <Cloud size={18}></Cloud>
-                )}
-                {tW(currentWorkspace.config.syncMode)}
-              </span>
+              <div className="flex gap-1">
+                <EditWorkspaceDialog
+                  open={editDialogOpen}
+                  onOpenChange={setEditDialogOpen}
+                  workspace={currentWorkspace}
+                  onSave={save}
+                  key={`${currentWorkspace.id}:${editDialogOpen}`}
+                >
+                  <Button variant={"secondary"} size="sm">
+                    <IconEdit size={16} />
+                    {t("settings.workspace.editWorkspace")}
+                  </Button>
+                </EditWorkspaceDialog>
+                <DeleteWorkspaceDialog
+                  open={deleteDialogOpen}
+                  onOpenChange={setDeleteDialogOpen}
+                  workspace={currentWorkspace}
+                >
+                  <Button
+                    variant={"destructive"}
+                    disabled={workspaceCount <= 1}
+                    size="sm"
+                  >
+                    {t("settings.workspace.deleteWorkspace")}
+                  </Button>
+                </DeleteWorkspaceDialog>
+              </div>
             </div>
-          </div>
-          <div className="flex gap-2">
-            <EditWorkspaceDialog
-              open={editDialogOpen}
-              onOpenChange={setEditDialogOpen}
-              workspace={currentWorkspace}
-              onSave={save}
-              key={`${currentWorkspace.id}:${editDialogOpen}`}
-            >
-              <Button variant={"secondary"} className="w-fit">
-                <PenLine size={18} />
-                {t("settings.workspace.editWorkspace")}
-              </Button>
-            </EditWorkspaceDialog>
-            <DeleteWorkspaceDialog
-              open={deleteDialogOpen}
-              onOpenChange={setDeleteDialogOpen}
-              workspace={currentWorkspace}
-            >
-              <Button
-                variant={"destructive"}
-                disabled={workspaceCount <= 1}
-                className="w-fit bg-transparent"
-              >
-                {t("settings.workspace.deleteWorkspace")}
-              </Button>
-            </DeleteWorkspaceDialog>
           </div>
         </SettingsCard>
       )}
@@ -189,6 +172,7 @@ export default function WorkspaceSettings() {
             {t("settings.workspace.exportAllButton")}
           </Button>
         </div>
+        <hr />
         <div className="flex justify-between items-center">
           <span>{t("settings.workspace.backupAndRestoreText")}</span>
           <div className="flex gap-2">

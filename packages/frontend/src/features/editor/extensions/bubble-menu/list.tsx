@@ -1,6 +1,6 @@
 import { IconList, IconListCheck, IconListNumbers } from "@tabler/icons-react";
 import { useCurrentEditor } from "@tiptap/react";
-import { ChevronDown, List, ListOrdered, ListTodo } from "lucide-react";
+import { ChevronDown, List } from "lucide-react";
 import { type ReactNode, useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
