@@ -2,34 +2,26 @@ import {
   buildDwError,
   type DarkwriteUserSettings,
   DEFAULT_THEMES,
-  type DwResult,
-  dwErr,
-  isTheme,
   parseJson,
-  type Theme,
+  Theme,
 } from "@darkwrite/common";
 import { nativeTheme } from "electron";
 import log from "electron-log";
-import { readFile } from "fs-extra";
 import _ from "lodash";
 import { ok, okAsync, Result, ResultAsync } from "neverthrow";
-import { fsResult } from "@/lib/fs";
+import { readFileUtf8 } from "@/lib/fs";
 import type { IDocumentStore } from "../lib/document-store";
 
 const logInvalidTheme = (id?: string, message?: string) =>
   log.error(`Theme ${id} is invalid.`, message);
 
-const assertValidTheme = (obj: unknown): DwResult<Theme> =>
-  isTheme(obj) ? ok(obj) : dwErr("Invalid theme.");
-
-function parseTheme(themeString: string, id?: string) {
-  return parseJson(themeString)
+const parseTheme = (themeString: string, id?: string) =>
+  parseJson(themeString)
     .mapErr(() => buildDwError("Invalid JSON object"))
-    .andThen(assertValidTheme)
+    .andThen(Theme.parse)
     .orTee((err) => {
       logInvalidTheme(id, err.message);
     });
-}
 
 function mapThemes(themes: Theme[]) {
   const map: Record<string, Theme> = _.cloneDeep(DEFAULT_THEMES);
@@ -42,7 +34,7 @@ export function ThemeService(
   getSettings: () => DarkwriteUserSettings,
 ) {
   const importTheme = (filePath: string) =>
-    fsResult(readFile(filePath, "utf-8"))
+    readFileUtf8(filePath)
       .andThen(parseTheme)
       .andThen((json) => themeStore.write(json.id, JSON.stringify(json)));
 
