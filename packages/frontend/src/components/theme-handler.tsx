@@ -18,7 +18,6 @@ export default function ThemeHandler() {
         accentColor = `#${await DarkwriteAPIClient.desktop.getSystemAccentColor()}`;
       }
       document.documentElement.style.setProperty("--primary", accentColor);
-      document.documentElement.style.setProperty("--primary-text", accentColor);
     };
     setAccent();
   }, [appearanceSettings.accentColor, appearanceSettings.useSystemAccentColor]);

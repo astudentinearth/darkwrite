@@ -15,8 +15,11 @@
   --muted-foreground: hsl(0 0% 89%);
 
   --primary: hsl(214 64% 44%);
-  --primary-foreground: hsl(0 0% 100%);
-  --primary-text: hsl(242 58% 62%);
+
+  /* biome-ignore lint/correctness/noUnknownFunction: newly available color function, we can use it
+   * because we are always shipping a very recent Chromium version.
+   * https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/color_value/contrast-color */
+  --primary-foreground: contrast-color(var(--primary));
 
   --destructive: hsl(0 51% 55%);
   --destructive-foreground: hsl(210 40% 98%);
@@ -30,6 +33,7 @@
   /* take the darker end in light mode */
   --d-hover-brightness: -0.1;
   --d-active-brightness: -0.15;
+  --d-primary-text-brightness: -0.08; /* darken the accent color for text surfaces in light mode */
   --hover-base: var(--background);
   --active-base: var(--hover-base);
   --hover-opacity: 0.25;
@@ -39,9 +43,14 @@
   &.dark {
     --d-hover-brightness: 0.08;
     --d-active-brightness: 0.12;
+    --d-primary-text-brightness: 0.2; /* lighten the accent color for text surfaces in dark mode */
     --hover-base: var(--secondary);
   }
 
+  --primary-text: oklch(
+    from var(--primary) calc(l + var(--d-primary-text-brightness)) c h /
+    1
+  );
   --ring: color-mix(in oklab, var(--primary) 50%, transparent);
 
   /** make the accent color just a little bit brighter */
