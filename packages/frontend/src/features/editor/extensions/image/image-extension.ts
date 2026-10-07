@@ -39,7 +39,7 @@ export const ImageExtension = (config: ImageExtensionConfig) =>
     },
   }).configure({
     HTMLAttributes: {
-      class: cn("rounded-lg border border-muted"),
+      class: cn("rounded-lg border border-border"),
     },
     allowBase64: true,
   });

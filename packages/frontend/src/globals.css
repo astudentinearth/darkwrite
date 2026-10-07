@@ -66,18 +66,6 @@
 
   --top-highlight-tint: rgba(255, 255, 255, 0.25);
 
-  /** deprecated */
-  --muted: hsl(0 0% 17%);
-  --accent: hsl(217.2 32.6% 17.5%);
-  --card: hsl(0 0% 13%);
-  --card-foreground: hsl(0 0% 94%);
-  --popover: hsl(0 0% 9%);
-  --popover-foreground: hsl(0 0% 94%);
-  --accent-foreground: hsl(210 40% 98%);
-  --disabled: hsl(0 0% 22%);
-  --input: hsl(217.2 32.6% 17.5%);
-  /** end deprecated */
-
   /* generic fonts until its loaded from settings */
   --darkwrite-sans: "Segoe UI", "Noto Sans", "Roboto", sans-serif;
   --darkwrite-serif: "Times New Roman", "Noto Serif", "Liberation Serif", serif;
@@ -116,7 +104,6 @@
 
 @theme inline {
   --color-border: var(--border);
-  --color-input: var(--input);
   --color-ring: var(--ring);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -130,22 +117,11 @@
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
 
-  --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
-
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
 
   --color-view-1: var(--view-1);
   --color-view-2: var(--view-2);
 
-  --color-disabled: var(--disabled);
   --color-star: var(--star);
 
   --radius-sm: 0.25rem;
@@ -288,7 +264,7 @@
     accent-color: var(--primary);
   }
   progress::-webkit-progress-bar {
-    background-color: var(--muted);
+    background-color: var(--secondary);
     border-radius: var(--radius-full);
   }
   progress::-webkit-progress-value {
