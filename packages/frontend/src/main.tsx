@@ -6,6 +6,7 @@ import Onboarding from "./features/onboarding/onboarding";
 import "./globals.css";
 import "./i18n";
 import { flushPendingEditorSaves } from "./features/editor/store/editor-middleware";
+import { RootErrorBoundary } from "./features/error/root-error-boundary";
 import {
   checkForUpdatesOnStartup,
   correctWorkspaceState,
@@ -20,7 +21,13 @@ import store from "./store";
 
 const renderApp = () => {
   correctWorkspaceState(store)
-    .andTee(() => ReactRootContainer.root.render(<App store={store} />))
+    .andTee(() =>
+      ReactRootContainer.root.render(
+        <RootErrorBoundary>
+          <App store={store} />
+        </RootErrorBoundary>,
+      ),
+    )
     .andThen(loadInitialFileLinks)
     .andThen(loadInitialNotes)
     .andThen(loadInitialClientInfo)

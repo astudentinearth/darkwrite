@@ -865,3 +865,15 @@ msgstr "In a week"
 
 msgid "settings.appearance.openThemeFolder"
 msgstr "Open theme folder"
+
+msgid "error.root.title"
+msgstr "Darkwrite hit an error."
+
+msgid "error.root.description"
+msgstr "Unfortunately something went wrong, and we weren't able to recover. If the issue persists after a reload, please report the problem on GitHub with the following error information. Sorry for the inconvenience."
+
+msgid "error.action.reload"
+msgstr "Reload"
+
+msgid "error.action.report"
+msgstr "Report problem"

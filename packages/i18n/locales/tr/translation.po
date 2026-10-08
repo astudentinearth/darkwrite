@@ -870,3 +870,17 @@ msgstr "Haftaya"
 
 msgid "settings.appearance.openThemeFolder"
 msgstr "Tema klasörünü aç"
+
+
+msgid "error.root.title"
+msgstr "Darkwrite çöktü."
+
+msgid "error.root.description"
+msgstr "Maalesef bir şeyler ters gitti ve kurtaramadık. Eğer arayüzü yeniden yükledikten sonra sorun çıkmaya devam ederse, lütfen aşağıdaki hata bilgileriyle beraber GitHub'da durumu bildirin. Rahatsızlık için özür dileriz."
+
+msgid "error.action.reload"
+msgstr "Yeniden yükle"
+
+msgid "error.action.report"
+msgstr "Hata bildir"
+

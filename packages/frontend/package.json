@@ -78,6 +78,7 @@
     "react": "catalog:",
     "react-colorful": "^5.6.1",
     "react-dom": "catalog:",
+    "react-error-boundary": "^6.1.6",
     "react-i18next": "^15.7.4",
     "react-redux": "^9.2.0",
     "react-resizable-panels": "^2.1.9",
