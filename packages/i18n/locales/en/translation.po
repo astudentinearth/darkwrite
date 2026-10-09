@@ -877,3 +877,10 @@ msgstr "Reload"
 
 msgid "error.action.report"
 msgstr "Report problem"
+
+msgid "editor.error.title"
+msgstr "Editor crashed."
+
+msgid "editor.error.description"
+msgstr "There was a bug that caused the editor to crash. If the issue persists after a reload, please report the problem on GitHub with the following error information. Sorry for the inconvenience."
+

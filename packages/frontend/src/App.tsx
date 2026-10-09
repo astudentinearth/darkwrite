@@ -1,6 +1,7 @@
 import { Provider } from "react-redux";
 import { HashRouter, Route, Routes } from "react-router-dom";
 import { Layout } from "@/features/layout";
+import { EditorErrorBoundary } from "./features/editor/components/editor-error-boundary";
 import { EditorViewRouteHandler } from "./features/editor/editor-view";
 import HomePage from "./features/home/home-page";
 import type { AppStore } from "./features/store/redux";
@@ -17,7 +18,11 @@ function App({ store }: { store: AppStore }) {
               <Route
                 path="/page/:pageId"
                 loader={({ params }) => noteLoader({ params, store })}
-                element={<EditorViewRouteHandler />}
+                element={
+                  <EditorErrorBoundary>
+                    <EditorViewRouteHandler />
+                  </EditorErrorBoundary>
+                }
               ></Route>
               <Route path="settings" element={<></>}></Route>
             </Route>

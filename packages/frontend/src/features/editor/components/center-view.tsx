@@ -13,6 +13,7 @@ import { useEditorView } from "../hooks/use-editor-options";
 import { useEditorActions } from "../store/editor-actions";
 import { EditorContext } from "../store/editor-context";
 import { selectCenterViewState } from "../store/editor-selectors";
+import { EditorErrorBoundary } from "./editor-error-boundary";
 import { OpenFullscreenButton } from "./open-fullscreen-button";
 import { NotePropertyEditor } from "./property-editor";
 import TrashBanner from "./trash-banner";
@@ -57,22 +58,24 @@ function CenterViewContent() {
         <div className="grow" />
         <Toolbar noteId={noteId} />
       </div>
-      <div className="relative h-full overflow-y-auto scroll-view w-full">
-        <div className="px-20 w-full flex flex-col gap-2 mt-16 group/editor-header">
-          <NoteMetadataEditors />
-          <NotePropertyEditor />
-          <TrashBanner />
+      <EditorErrorBoundary>
+        <div className="relative h-full overflow-y-auto scroll-view w-full">
+          <div className="px-20 w-full flex flex-col gap-2 mt-16 group/editor-header">
+            <NoteMetadataEditors />
+            <NotePropertyEditor />
+            <TrashBanner />
+          </div>
+          <div className="px-16 w-full pt-4">
+            <EditorViewport
+              unconstrainedWidth
+              onNavigate={(id) => {
+                actions.closeCenterView();
+                navigateToNote(id);
+              }}
+            />
+          </div>
         </div>
-        <div className="px-16 w-full pt-4">
-          <EditorViewport
-            unconstrainedWidth
-            onNavigate={(id) => {
-              actions.closeCenterView();
-              navigateToNote(id);
-            }}
-          />
-        </div>
-      </div>
+      </EditorErrorBoundary>
     </DialogContentContainer>
   );
 }

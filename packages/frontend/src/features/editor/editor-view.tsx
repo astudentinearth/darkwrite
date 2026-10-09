@@ -6,6 +6,7 @@ import { navigateToNote } from "../navigation/navigator";
 import { useEditorSettings } from "../settings/hooks/use-settings";
 import { useAppSelector } from "../store/hooks";
 import DarkwriteEditor from ".";
+import { EditorErrorBoundary } from "./components/editor-error-boundary";
 import ConstrainedWidth from "./constrained-width";
 import { useSlashCommand } from "./extensions";
 import EditorHeader from "./header";
@@ -44,26 +45,28 @@ export function EditorViewport({
   const { items } = useSlashCommand(options.imageConfig);
   if (!content || !customizations) return null;
   return (
-    <ConstrainedWidth
-      fill={customizations?.widePage}
-      noConstrain={unconstrainedWidth}
-    >
-      <DarkwriteEditor
-        content={content}
-        noteId={noteId}
-        commandItems={items}
-        onContentChange={options.handleContentChange}
-        onUpdate={options.onUpdate}
-        onCreate={options.onCreate}
-        imageUploadConfig={options.imageConfig}
-        showTextDirectionControls={settings.showTextDirectionControls}
-        openFilesOnDoubleClick={settings.openFilesOnDoubleClick}
-        codeBlockIndentSize={settings.codeIndentSize}
-        embedSourceResolver={async (id) => getEmbedUrl(id)}
-        key={noteId}
-        onNavigateToNote={onNavigate ?? navigateToNote}
-      />
-    </ConstrainedWidth>
+    <EditorErrorBoundary>
+      <ConstrainedWidth
+        fill={customizations?.widePage}
+        noConstrain={unconstrainedWidth}
+      >
+        <DarkwriteEditor
+          content={content}
+          noteId={noteId}
+          commandItems={items}
+          onContentChange={options.handleContentChange}
+          onUpdate={options.onUpdate}
+          onCreate={options.onCreate}
+          imageUploadConfig={options.imageConfig}
+          showTextDirectionControls={settings.showTextDirectionControls}
+          openFilesOnDoubleClick={settings.openFilesOnDoubleClick}
+          codeBlockIndentSize={settings.codeIndentSize}
+          embedSourceResolver={async (id) => getEmbedUrl(id)}
+          key={noteId}
+          onNavigateToNote={onNavigate ?? navigateToNote}
+        />
+      </ConstrainedWidth>
+    </EditorErrorBoundary>
   );
 }
 

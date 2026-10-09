@@ -6,6 +6,7 @@ import "@/globals.css";
 import "@/i18n";
 import React, { use } from "react";
 import { useTranslation } from "react-i18next";
+import { cn } from "@/lib/utils";
 
 interface ErrorContext {
   error: unknown;
@@ -31,17 +32,20 @@ export type DwErrorBoundaryProps = {
   errorTitle: string;
   errorDescription: string;
   defaultAction: ErrorAction;
+  className?: string;
+  resetKeys?: string[];
 };
 
 const ErrorView = ({
   errorTitle,
   defaultAction,
   errorDescription,
+  className,
 }: Omit<DwErrorBoundaryProps, "children">) => {
   const { error, resetErrorBoundary } = use(ErrorContext);
   const { t } = useTranslation();
   return (
-    <div className="bg-background fixed titlebar inset-0 flex justify-center items-center">
+    <div className={cn("flex justify-center items-center", className)}>
       <div className="flex flex-col no-window-drag justify-start w-2/3 items-start gap-2">
         <h1 className="text-2xl font-semibold pl-0.5">{errorTitle}</h1>
         <p className="text-muted-foreground text-sm pl-0.5">
@@ -88,9 +92,10 @@ const wrapBoundary =
 
 export const DwErrorBoundary = ({
   children,
+  resetKeys,
   ...props
 }: DwErrorBoundaryProps) => (
-  <ErrorBoundary FallbackComponent={wrapBoundary(props)}>
+  <ErrorBoundary resetKeys={resetKeys} FallbackComponent={wrapBoundary(props)}>
     {children}
   </ErrorBoundary>
 );
@@ -102,6 +107,7 @@ export const RootErrorBoundary = ({ children }: RootErrorBoundaryProps) => {
       errorTitle={t("error.root.title")}
       errorDescription={t("error.root.description")}
       defaultAction={ErrorAction.PageReload}
+      className="bg-background fixed titlebar inset-0 "
     >
       {children}
     </DwErrorBoundary>

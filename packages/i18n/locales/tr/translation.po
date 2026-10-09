@@ -884,3 +884,9 @@ msgstr "Yeniden yükle"
 msgid "error.action.report"
 msgstr "Hata bildir"
 
+msgid "editor.error.title"
+msgstr "Düzenleyici çöktü."
+
+msgid "editor.error.description"
+msgstr "Bir hatadan dolayı düzenleyici çöktü. Eğer düzenleyici yeniden yükledikten sonra sorun çıkmaya devam ederse, lütfen aşağıdaki hata bilgileriyle beraber GitHub'da durumu bildirin. Rahatsızlık için özür dileriz."
+
