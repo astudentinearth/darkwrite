@@ -66,4 +66,9 @@ export const DesktopApiBridge: HandlerImplements<IDesktopAPI> = {
   getSystemAccentColor: handler(getSystemAccentColor),
   contextMenu: ContextMenuApiBridge,
   shell: ShellApiBridge,
+  relaunch: handler(() => {
+    app.relaunch();
+    app.quit();
+    return ok();
+  }),
 };

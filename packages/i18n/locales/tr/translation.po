@@ -878,11 +878,20 @@ msgstr "Darkwrite çöktü."
 msgid "error.root.description"
 msgstr "Maalesef bir şeyler ters gitti ve kurtaramadık. Eğer arayüzü yeniden yükledikten sonra sorun çıkmaya devam ederse, lütfen aşağıdaki hata bilgileriyle beraber GitHub'da durumu bildirin. Rahatsızlık için özür dileriz."
 
+msgid "error.init.title"
+msgstr "Darkwrite başlatılamadı."
+
+msgid "error.init.description"
+msgstr "Çalışma alanınızı yüklerken beklenmedik bir hatayla karşılaştık. Darkwrite yeniden başlatıldıktan sonra sorun çözülmezse, lütfen aşağıdaki hata bilgileriyle beraber GitHub'dan bize ulaşın. Rahatsızlık için özür dileriz."
+
 msgid "error.action.reload"
 msgstr "Yeniden yükle"
 
 msgid "error.action.report"
 msgstr "Hata bildir"
+
+msgid "error.action.relaunch"
+msgstr "Darkwrite'ı yeniden başlat"
 
 msgid "editor.error.title"
 msgstr "Düzenleyici çöktü."

@@ -123,6 +123,7 @@ export interface IDesktopAPI {
   getClientInfo: () => ApiResult<DarkwriteDesktopClientInfo>;
   contextMenu: IContextMenuAPI;
   shell: IShellAPI;
+  relaunch: () => NoReturn;
 }
 
 export interface IBackupAPI {

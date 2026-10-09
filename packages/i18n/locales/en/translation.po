@@ -872,11 +872,20 @@ msgstr "Darkwrite hit an error."
 msgid "error.root.description"
 msgstr "Unfortunately something went wrong, and we weren't able to recover. If the issue persists after a reload, please report the problem on GitHub with the following error information. Sorry for the inconvenience."
 
+msgid "error.init.title"
+msgstr "Darkwrite failed to start."
+
+msgid "error.init.description"
+msgstr "We hit an unexpected error while loading your workspace. If the issue persists after restarting Darkwrite, please reach out to us on GitHub with the following error information. Sorry for the inconvenience."
+
 msgid "error.action.reload"
 msgstr "Reload"
 
 msgid "error.action.report"
 msgstr "Report problem"
+
+msgid "error.action.relaunch"
+msgstr "Relaunch Darkwrite"
 
 msgid "editor.error.title"
 msgstr "Editor crashed."

@@ -5,8 +5,12 @@ import { DarkwriteAPIClient } from "./api/api-client";
 import Onboarding from "./features/onboarding/onboarding";
 import "./globals.css";
 import "./i18n";
+import { okAsync } from "neverthrow";
 import { flushPendingEditorSaves } from "./features/editor/store/editor-middleware";
-import { RootErrorBoundary } from "./features/error/root-error-boundary";
+import {
+  InitializationFailureScreen,
+  RootErrorBoundary,
+} from "./features/error/root-error-boundary";
 import {
   checkForUpdatesOnStartup,
   correctWorkspaceState,
@@ -19,39 +23,43 @@ import { initalizePlatform } from "./lib/platform";
 import { ReactRootContainer } from "./react-root-helper";
 import store from "./store";
 
-const renderApp = () => {
+const renderApp = () =>
   correctWorkspaceState(store)
+    .andThen(loadInitialFileLinks)
+    .andThen(loadInitialNotes)
+    .andThen(loadInitialClientInfo)
+    .andThen(checkForUpdatesOnStartup)
     .andTee(() =>
       ReactRootContainer.root.render(
         <RootErrorBoundary>
           <App store={store} />
         </RootErrorBoundary>,
       ),
-    )
-    .andThen(loadInitialFileLinks)
-    .andThen(loadInitialNotes)
-    .andThen(loadInitialClientInfo)
-    .andThen(checkForUpdatesOnStartup);
-};
+    );
 
 const renderOnboarding = () => {
   ReactRootContainer.root.render(<Onboarding />);
 };
 
 const initialize = async () => {
-  if (window.isElectron) {
-    await window.initPreload();
-  }
+  await window.initPreload();
   DarkwriteAPIClient.initialize();
   window.addEventListener("beforeunload", flushPendingEditorSaves);
   init({ data });
   initializeUserPrefs(store)
     .andThen(initalizePlatform)
     .andThen(DarkwriteAPIClient.onboarding.isNewUser)
-    .map((isNew) => {
-      if (isNew) renderOnboarding();
-      else renderApp();
-    });
+    .andThen((isNew) => {
+      if (isNew) {
+        renderOnboarding();
+        return okAsync();
+      } else return renderApp();
+    })
+    .orTee((err) =>
+      ReactRootContainer.root.render(
+        <InitializationFailureScreen error={err} />,
+      ),
+    );
 };
 
 initialize();

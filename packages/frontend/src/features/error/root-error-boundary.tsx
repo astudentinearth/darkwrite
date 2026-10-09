@@ -4,45 +4,58 @@ import { Button } from "@/components/ui";
 import { ErrorTrace } from "./error-trace";
 import "@/globals.css";
 import "@/i18n";
-import React, { use } from "react";
+import type { DwError } from "@darkwrite/common";
+import { t } from "i18next";
 import { useTranslation } from "react-i18next";
+import { DarkwriteAPIClient } from "@/api/api-client";
 import { cn } from "@/lib/utils";
 
-interface ErrorContext {
-  error: unknown;
-  resetErrorBoundary: (...args: unknown[]) => unknown;
-}
-
-const ErrorContext = React.createContext<ErrorContext>({
-  error: null,
-  resetErrorBoundary: () => {},
-});
+// Redux/stateful logic should not get imported in this file.
+// If the error screen also fails, who handles that?
 
 export enum ErrorAction {
   PageReload = "reload",
+  /** Attempts to call a reset function to potentially reach a healthy state. */
   ComponentReset = "reset",
+  AppRelaunch = "app-restart",
 }
+
+const ErrorScreenStyle = {
+  Fullscreen: "bg-background fixed titlebar inset-0",
+  Default: "bg-transparent",
+};
 
 export type RootErrorBoundaryProps = {
   children: ReactNode | ReactNode[];
 };
 
-export type DwErrorBoundaryProps = {
-  children: ReactNode | ReactNode[];
+export type DwErrorViewProps = {
   errorTitle: string;
   errorDescription: string;
   defaultAction: ErrorAction;
   className?: string;
+  error: Error | DwError | unknown;
+  resetFn?: (...args: unknown[]) => unknown;
+};
+
+export type DwErrorBoundaryProps = Omit<
+  DwErrorViewProps,
+  "resetFn" | "error"
+> & {
+  children: ReactNode | ReactNode[];
+  /** A change in these keys automatically resets the error boundary.
+   * Use this to prevent an error in Note A from staying through Note B. */
   resetKeys?: string[];
 };
 
-const ErrorView = ({
+const DwErrorView = ({
   errorTitle,
   defaultAction,
   errorDescription,
   className,
-}: Omit<DwErrorBoundaryProps, "children">) => {
-  const { error, resetErrorBoundary } = use(ErrorContext);
+  error,
+  resetFn,
+}: DwErrorViewProps) => {
   const { t } = useTranslation();
   return (
     <div className={cn("flex justify-center items-center", className)}>
@@ -73,8 +86,14 @@ const ErrorView = ({
           )}
 
           {defaultAction === ErrorAction.ComponentReset && (
-            <Button onClick={() => resetErrorBoundary()}>
+            <Button onClick={() => resetFn?.()}>
               {t("error.action.reload")}
+            </Button>
+          )}
+
+          {defaultAction === ErrorAction.AppRelaunch && (
+            <Button onClick={() => DarkwriteAPIClient.desktop.relaunch()}>
+              {t("error.action.relaunch")}
             </Button>
           )}
         </div>
@@ -83,13 +102,18 @@ const ErrorView = ({
   );
 };
 
+/** Wrapper to keep error screen independent from react-error-boundary logic. */
 const wrapBoundary =
   (opts: Omit<DwErrorBoundaryProps, "children">) => (props: FallbackProps) => (
-    <ErrorContext.Provider value={props}>
-      <ErrorView {...opts} />
-    </ErrorContext.Provider>
+    <DwErrorView
+      {...opts}
+      resetFn={props.resetErrorBoundary}
+      error={props.error}
+    />
   );
 
+/** Generic error boundary component that captures thrown render-time errors and automatically
+ * displays a message, accompanied by traces if available. */
 export const DwErrorBoundary = ({
   children,
   resetKeys,
@@ -107,9 +131,19 @@ export const RootErrorBoundary = ({ children }: RootErrorBoundaryProps) => {
       errorTitle={t("error.root.title")}
       errorDescription={t("error.root.description")}
       defaultAction={ErrorAction.PageReload}
-      className="bg-background fixed titlebar inset-0 "
+      className={ErrorScreenStyle.Fullscreen}
     >
       {children}
     </DwErrorBoundary>
   );
 };
+
+export const InitializationFailureScreen = ({ error }: { error: unknown }) => (
+  <DwErrorView
+    defaultAction={ErrorAction.AppRelaunch}
+    error={error}
+    errorTitle={t("error.init.title")}
+    errorDescription={t("error.init.description")}
+    className={ErrorScreenStyle.Fullscreen}
+  ></DwErrorView>
+);

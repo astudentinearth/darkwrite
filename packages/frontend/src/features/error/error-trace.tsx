@@ -1,10 +1,11 @@
+import { DwError } from "@darkwrite/common";
 import { getErrorMessage as _getMessage } from "react-error-boundary";
 import { cn } from "@/lib/utils";
 
 export const getErrorMessage = (error: unknown) =>
   error instanceof Error
     ? `${error.name}\n${error.message}\n---\nStack trace: \n${error.stack}`
-    : _getMessage(error);
+    : DwError.stringifyOrElse(error, _getMessage(error) ?? String(error));
 
 export const ErrorTrace = ({
   error,

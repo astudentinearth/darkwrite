@@ -1,10 +1,20 @@
 import { err, errAsync, ok, type Result, ResultAsync } from "neverthrow";
-import type z from "zod";
+import z from "zod";
 
-export interface DwError {
-  message: string;
-  cause?: string;
-}
+export const DwErrorSchema = z.object({
+  message: z.string(),
+  cause: z.string().optional(),
+});
+
+export type DwError = z.output<typeof DwErrorSchema>;
+export const DwError = {
+  stringify: (e: DwError) => `${e.message}${e.cause ? `\n${e.cause}` : ""}`,
+  stringifyOrElse: (error: unknown, fallback: string) =>
+    validateSchema(DwErrorSchema)(error).match(
+      DwError.stringify,
+      () => fallback,
+    ),
+};
 
 export const buildDwError = (message: string, cause?: string) =>
   ({ message, cause }) satisfies DwError;
