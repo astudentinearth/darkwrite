@@ -46,6 +46,7 @@ export default defineConfig({
         entry: "src/main.ts",
         async onstart({ startup }) {
           if (!electronStarted) {
+            process.env.DARKWRITE_IS_DEV = "1";
             electronStarted = await startup();
             return;
           }

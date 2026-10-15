@@ -1,7 +1,7 @@
 import http from "node:http";
-import { is } from "@electron-toolkit/utils";
 import { app, BrowserWindow } from "electron";
 import log from "electron-log";
+import { isDev } from "@/lib/dev";
 
 // we could utilize this server to test APIs without a frontend
 
@@ -10,7 +10,6 @@ let server: http.Server;
 function getRuntimeInfo() {
   const electronVersion = process.versions.electron;
   const nodeVersion = process.versions.node;
-  const isDev = is.dev;
   const { commandLine, isPackaged } = app;
   const metrics = app.getAppMetrics();
   const windows = BrowserWindow.getAllWindows().map((w) => ({
@@ -25,7 +24,7 @@ function getRuntimeInfo() {
     nodeVersion,
     commandLine,
     isPackaged,
-    isDev,
+    isDev: isDev(),
     metrics,
     windows,
   };

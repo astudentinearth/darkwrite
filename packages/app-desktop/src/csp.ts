@@ -1,9 +1,9 @@
-import { is } from "@electron-toolkit/utils";
 import { session } from "electron";
+import { isDev } from "./lib/dev";
 
 export function getCSP() {
   // unsafe-eval is enabled in development only, otherwise vite will explode!
-  if (is.dev) {
+  if (isDev()) {
     return [
       "default-src 'self' chrome-extension://*",
       "script-src 'self' 'unsafe-eval' 'unsafe-inline' blob: chrome-extension://*", // Vite needs eval for HMR

@@ -1,11 +1,11 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { is } from "@electron-toolkit/utils";
 import { migrate } from "drizzle-orm/libsql/migrator";
 import { app, dialog } from "electron";
 import { default as _log } from "electron-log";
 import { copy, pathExists, remove } from "fs-extra";
 import { ResultAsync } from "neverthrow";
+import { isDev } from "@/lib/dev";
 import { DB_PATH, Paths } from "@/lib/paths";
 import type { DatabaseType } from "./data-source";
 
@@ -17,7 +17,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 /** The drizzle migrations folder. In development, it's located in the project root. In production, it's located in the app's resources folder, relative to main.js */
-const MIGRATIONS_FOLDER = is.dev
+const MIGRATIONS_FOLDER = isDev()
   ? "drizzle"
   : path.join(__dirname, "../drizzle");
 

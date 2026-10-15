@@ -1,8 +1,8 @@
 import { join } from "node:path";
-import { is } from "@electron-toolkit/utils";
 import { app } from "electron";
 import log from "electron-log";
 import { pathConfig } from "../metadata.json";
+import { isDev } from "./dev";
 import { assertAccessibleSync, ensureDirs } from "./fs";
 
 //TODO: Refactor all IO into separate classes and deprecate this override later.
@@ -21,7 +21,7 @@ const inRoot = (_path: string) => join(DATA_ROOT, _path);
  * It will point to `darkwrite-data/` on production and `darkwrite-data-nightly/` on development. */
 export const DATA_DIR = join(
   DATA_ROOT,
-  is.dev ? pathConfig.dir.data.development : pathConfig.dir.data.production,
+  isDev() ? pathConfig.dir.data.development : pathConfig.dir.data.production,
 );
 
 const inData = (_path: string) => join(DATA_DIR, _path);
@@ -67,7 +67,7 @@ export const MIGRATION_CACHE_DIR = inCache(pathConfig.dir.migration);
 
 export const SESSION_DATA_DIR = join(
   DATA_ROOT,
-  is.dev
+  isDev()
     ? pathConfig.dir.session.development
     : pathConfig.dir.session.production,
 );

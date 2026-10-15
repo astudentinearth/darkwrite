@@ -4,8 +4,8 @@ import type {
   DarkwriteUserSettings,
   NativeContextMenuData,
 } from "@darkwrite/common";
-import { is } from "@electron-toolkit/utils";
 import type { BrowserWindowConstructorOptions } from "electron";
+import { isDev } from "./lib/dev";
 import metadata from "./metadata.json";
 import { WindowEvent } from "./types/window-events";
 
@@ -31,7 +31,7 @@ export function constructWindow(
       preload: join(__dirname, metadata.preloadScriptPath),
       devTools: true,
     },
-    icon: is.dev ? join(__dirname, metadata.icons.development) : undefined,
+    icon: isDev() ? join(__dirname, metadata.icons.development) : undefined,
     titleBarStyle,
     trafficLightPosition: {
       x: 15,

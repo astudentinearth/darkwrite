@@ -6,7 +6,6 @@ import {
   type DwError,
   panic,
 } from "@darkwrite/common";
-import { is } from "@electron-toolkit/utils";
 import { app, BrowserWindow, dialog, protocol, shell } from "electron";
 import log from "electron-log/main.js";
 import { okAsync } from "neverthrow";
@@ -22,6 +21,7 @@ import { setupAPI } from "./ipc/api";
 import { SettingsAPI } from "./ipc/settings.handler";
 import { EmbedFileStore } from "./lib/blob-store";
 import { DesktopApiBridge } from "./lib/desktop-integration";
+import { isDev } from "./lib/dev";
 import { DocumentFileStore } from "./lib/document-store";
 import { CURRENT_VERSION, OnboardingService } from "./lib/onboarding-state";
 import { Paths } from "./lib/paths";
@@ -76,7 +76,7 @@ async function showMainWindow(
     return { action: "deny" };
   });
   setupCsp();
-  if (is.dev && DEV_SERVER_URL) {
+  if (isDev()) {
     await win.loadURL(DEV_SERVER_URL);
   } else {
     win.loadFile(join(__dirname, webcontentsUrl));
@@ -103,7 +103,7 @@ function setupWindowEvents() {
 
 export async function init() {
   log.initialize();
-  log.transports.file.level = is.dev ? "debug" : "info";
+  log.transports.file.level = isDev() ? "debug" : "info";
 
   const onboardingService = OnboardingService(
     Paths.ONBOARD_FLAG_PATH,
@@ -171,8 +171,7 @@ export async function init() {
     settingsService.getSettings(),
     themeService.getDefaultWindowBackground(),
   );
-  if (is.dev) initDevtools(1200);
-
+  if (isDev()) initDevtools(1200);
   app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0)
       showMainWindow(
