@@ -16,6 +16,9 @@ const electronConfig: TestProjectConfiguration = {
     pool: "forks",
     maxWorkers: 1,
     isolate: false,
+    env: {
+      DARKWRITE_IS_DEV: "1",
+    },
   },
   resolve: {
     alias: appAliases,
