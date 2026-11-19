@@ -10,6 +10,7 @@ const LocaleNameMap: Record<string, string> = {
   en: "English",
   tr: "Türkçe",
   "zh-CN": "简体中文",
+  ru: "Русский",
 };
 
 export type LangaugeChooserProps = {
@@ -32,6 +33,7 @@ export function LanguageChooser({
         <SelectItem value="en">English</SelectItem>
         <SelectItem value="tr">Türkçe</SelectItem>
         <SelectItem value="zh-CN">简体中文</SelectItem>
+        <SelectItem value="ru">Русский</SelectItem>
       </SelectContent>
     </Select>
   );

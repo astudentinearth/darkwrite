@@ -7,7 +7,7 @@ const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 
 /** Languages to compile. Add new languages here after creating
  * locales/<lang>/translation.po */
-const LANGUAGES = ["en", "tr", "zh_CN"];
+const LANGUAGES = ["en", "tr", "zh_CN", "ru"];
 
 for (const lang of LANGUAGES) {
   const source = path.join(root, "locales", lang, "translation.po");
