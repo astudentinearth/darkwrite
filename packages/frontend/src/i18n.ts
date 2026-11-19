@@ -1,4 +1,5 @@
 import en from "@darkwrite/i18n/locales/en/translation.json";
+import ru from "@darkwrite/i18n/locales/ru/translation.json";
 import tr from "@darkwrite/i18n/locales/tr/translation.json";
 import zhCN from "@darkwrite/i18n/locales/zh_CN/translation.json";
 import i18n from "i18next";
@@ -10,11 +11,12 @@ i18n
   .use(initReactI18next)
   .init({
     fallbackLng: "en",
-    supportedLngs: ["en", "tr", "zh-CN"],
+    supportedLngs: ["en", "tr", "zh-CN", "ru"],
     resources: {
       en: { translation: en },
       tr: { translation: tr },
       "zh-CN": { translation: zhCN },
+      ru: { translation: ru },
     },
     detection: {
       caches: ["localStorage"],

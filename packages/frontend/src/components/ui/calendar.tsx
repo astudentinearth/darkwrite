@@ -13,6 +13,7 @@ import { Button } from "./button";
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 import "./calendar.css";
 import { enUS } from "@daypicker/react/locale/en-US";
+import { ru } from "@daypicker/react/locale/ru";
 import { tr } from "@daypicker/react/locale/tr";
 import { zhCN } from "@daypicker/react/locale/zh-CN";
 import {
@@ -32,6 +33,7 @@ const lngToLocaleMap: Record<string, DayPickerLocale> = {
   tr: tr,
   en: enUS,
   "zh-CN": zhCN,
+  ru: ru,
 };
 
 const ONE_DAY_MS = 24 * 60 * 60 * 1000;
