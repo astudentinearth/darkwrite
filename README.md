@@ -76,7 +76,8 @@ See [CONTRIBUTING.md](./CONTRIBUTING.md) to get started❤️
 Feel free to raise an issue or discussion if you have any questions.
 
 ### Translators
-- Simplified Chinese contributed by @wcxu21
+- Russian contributed by [@Nikitamce](https://github.com/Nikitamce)
+- Simplified Chinese contributed by [@wcxu21](https://github.com/wcxu21)
 
 ## License
 
