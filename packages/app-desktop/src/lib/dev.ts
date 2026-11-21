@@ -1,1 +1,3 @@
-export const isDev = () => process.env.DARKWRITE_IS_DEV === "1";
+import { app } from "electron";
+
+export const isDev = () => !app.isPackaged;
