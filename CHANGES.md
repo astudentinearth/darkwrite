@@ -1,6 +1,7 @@
-# Unreleased
+# 1.3.2-beta.1
 
 ## 🌟 Features
+- Russian translations (by @Nikitamce) (#43)
 - Open theme folder from settings
 
 ## ✨ Improvements and fixes
