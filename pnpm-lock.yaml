@@ -248,7 +248,7 @@ importers:
         version: link:../i18n
       '@electron-toolkit/utils':
         specifier: ^3.0.0
-        version: 3.0.0(electron@44.1.1(supports-color@8.1.1))
+        version: 3.0.0(electron@44.11.5(supports-color@8.1.1))
       '@libsql/client':
         specifier: ^0.17.0
         version: 0.17.0(encoding@0.1.13)
@@ -320,8 +320,8 @@ importers:
         specifier: ^0.31.9
         version: 0.31.9(supports-color@8.1.1)
       electron:
-        specifier: ^44.1.1
-        version: 44.1.1(supports-color@8.1.1)
+        specifier: ^44.11.5
+        version: 44.11.5(supports-color@8.1.1)
       electron-builder:
         specifier: ^26.15.3
         version: 26.15.3(electron-builder-squirrel-windows@26.15.3)(supports-color@8.1.1)
@@ -4914,8 +4914,8 @@ packages:
     resolution: {integrity: sha512-bO3y10YikuUwUuDUQRM4KfwNkKhnpVO7IPdbsrejwN9/AABJzzTQ4GeHwyzNSrVO+tEH3/Np255a3sVZpZDjvg==}
     engines: {node: '>=8.0.0'}
 
-  electron@44.1.1:
-    resolution: {integrity: sha512-N2WCq2sbOkqQgvXJYx2lS6UiO8bF+Yr67trDnS6JKa2WxTCRQsAjGl57SUtdW9h6r5PlduBFjIhxhgd3dzv1hg==}
+  electron@44.11.5:
+    resolution: {integrity: sha512-FgtBBAgWRyT/k2LbXDvlnHQRtc35sfp4UaWjYvktsh2HWWYSnfA/DnYGEOxQUZXpcp4EELj37x5zSSrh585nwg==}
     engines: {node: '>= 22.12.0'}
     hasBin: true
 
@@ -8819,9 +8819,9 @@ snapshots:
 
   '@electron-internal/extract-zip@1.0.5': {}
 
-  '@electron-toolkit/utils@3.0.0(electron@44.1.1(supports-color@8.1.1))':
+  '@electron-toolkit/utils@3.0.0(electron@44.11.5(supports-color@8.1.1))':
     dependencies:
-      electron: 44.1.1(supports-color@8.1.1)
+      electron: 44.11.5(supports-color@8.1.1)
 
   '@electron/asar@3.4.1':
     dependencies:
@@ -12304,7 +12304,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  electron@44.1.1(supports-color@8.1.1):
+  electron@44.11.5(supports-color@8.1.1):
     dependencies:
       '@electron-internal/extract-zip': 1.0.5
       '@electron/get': 5.1.0(supports-color@8.1.1)
