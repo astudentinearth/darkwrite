@@ -24,15 +24,13 @@
             node-gyp
             zsh
             pnpm_12
+            fpm
             imagemagick # frequently used for conversions
           ];
 
           env = {
             ELECTRON_OVERRIDE_DIST_PATH =
-              if pkgs.stdenv.hostPlatform.isDarwin then
-                "${pkgs.electron_44}/bin"
-              else
-                "${pkgs.electron_44.dist}";
+              if pkgs.stdenv.hostPlatform.isDarwin then "${pkgs.electron_44}/bin" else "${pkgs.electron_44.dist}";
             ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
           };
         };
