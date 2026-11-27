@@ -21,13 +21,12 @@ export const InternalLinks = {
   Privacy: "/privacy",
   Roadmap: "/#roadmap",
   Downloads: "/downloads",
-  Docs: "/docs"
-}
+  Docs: "/docs",
+};
 
 export const ExternalLinks = {
-  AGPL: "https://www.gnu.org/licenses/agpl-3.0.en.html#license-text",
+  License: "https://mozilla.org/MPL/2.0/",
   Releases: github("releases"),
   Changelog: github("blob/dev/CHANGES.md"),
-  BugTracker: github("issues")
-}
-
+  BugTracker: github("issues"),
+};

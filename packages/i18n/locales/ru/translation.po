@@ -338,7 +338,7 @@ msgid "settings.about.privacy"
 msgstr "Конфиденциальность"
 
 msgid "settings.about.license"
-msgstr "Лицензия (AGPL v3)"
+msgstr "Лицензия (MPL 2.0)"
 
 msgid "settings.privacy.autoUpdateCheckLabel"
 msgstr "Проверять обновления при запуске"

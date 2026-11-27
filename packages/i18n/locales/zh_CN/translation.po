@@ -332,7 +332,7 @@ msgid "settings.about.privacy"
 msgstr "隐私政策"
 
 msgid "settings.about.license"
-msgstr "开源协议（AGPL v3）"
+msgstr "开源协议（MPL 2.0）"
 
 msgid "settings.privacy.autoUpdateCheckLabel"
 msgstr "启动时自动检查更新"

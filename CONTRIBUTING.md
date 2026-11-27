@@ -24,7 +24,7 @@ Non-code patches you can submit include:
   - Our user guide has been lacking since forever by the way, you can easily make your first contribution by submitting doc pages.🙂 Create an issue if you want to submit new documentation and I'll be here to help❤️
 - if something's off with the readme or issue templates, you can propose changes as well
 
-Your submissions will be recognized in the changelog, if you want you can add your changes to the top of [CHANGES.md](./CHANGES.md) as part of your submission yourself. (if you don't, I'll manually add it, so don't feel pressured).
+Your submissions will be recognized in the changelog. If you want you can add your changes to the top of [CHANGES.md](./CHANGES.md) as part of your submission yourself. (if you don't, I'll manually add it, so don't feel pressured).
 
 If you submit translations, you'll be recognized in the README as well.
 

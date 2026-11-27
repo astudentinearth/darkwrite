@@ -24,7 +24,7 @@ export default function Footer() {
       </div>
       <div className="flex flex-col gap-5">
         <a href={InternalLinks.Privacy}>Privacy</a>
-        <a href={ExternalLinks.AGPL}>License</a>
+        <a href={ExternalLinks.License}>License</a>
         <a href="/licenses.md">Acknowledgements</a>
         <span>
           built with ☕ by&nbsp;

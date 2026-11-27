@@ -81,5 +81,13 @@ Feel free to raise an issue or discussion if you have any questions.
 
 ## License
 
-Darkwrite is free and open source, licensed under GNU Affero General Public License, version 3 or any later version at your option.  
+```
+This Source Code Form is subject to the terms of the Mozilla Public
+License, v. 2.0. If a copy of the MPL was not distributed with this
+file, You can obtain one at https://mozilla.org/MPL/2.0/.
+```
+
+Releases [v1.3.2-beta.1](https://github.com/astudentinearth/darkwrite/releases/tag/v1.3.2-beta.1) and prior are licensed under the GNU AGPLv3 or later.
+
 Licenses for 3rd party packages used to make Darkwrite possible can be found [here.](https://github.com/astudentinearth/darkwrite/blob/dev/packages/app-desktop/THIRDPARTY.md)
+

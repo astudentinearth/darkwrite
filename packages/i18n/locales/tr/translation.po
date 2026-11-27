@@ -343,7 +343,7 @@ msgid "settings.about.privacy"
 msgstr "Gizlilik"
 
 msgid "settings.about.license"
-msgstr "Lisans (AGPL v3)"
+msgstr "Lisans (MPL 2.0)"
 
 msgid "settings.privacy.autoUpdateCheckLabel"
 msgstr "Başlangıçta güncelleştirmeleri denetle"
